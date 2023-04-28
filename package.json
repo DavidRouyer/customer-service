@@ -24,6 +24,7 @@
     "@babel/preset-typescript": "^7.21.4",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^14.0.0",
+    "@trivago/prettier-plugin-sort-imports": "^4.1.1",
     "@types/node": "^18.16.2",
     "@types/react": "^18.2.0",
     "@types/react-dom": "^18.2.1",
