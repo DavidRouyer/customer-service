@@ -5,6 +5,9 @@
   "private": true,
   "author": "David Rouyer <rouyer.david@gmail.com>",
   "dependencies": {
+    "class-variance-authority": "^0.6.0",
+    "clsx": "^1.2.1",
+    "lucide-react": "^0.188.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
@@ -44,7 +47,9 @@
     "jsdom": "^21.1.1",
     "postcss": "^8.4.23",
     "prettier": "^2.8.8",
+    "tailwind-merge": "^1.12.0",
     "tailwindcss": "^3.3.2",
+    "tailwindcss-animate": "^1.0.5",
     "typescript": "^5.0.4",
     "vite": "^4.3.3",
     "vite-tsconfig-paths": "^4.2.0",
