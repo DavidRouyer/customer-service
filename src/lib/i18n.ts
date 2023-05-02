@@ -17,9 +17,14 @@ i18n
         translation: French,
       },
     },
+    detection: { order: ['navigator'] },
     fallbackLng: 'en',
 
     interpolation: {
       escapeValue: false,
     },
   });
+
+i18n.on('languageChanged', (lng) => {
+  document.documentElement.setAttribute('lang', lng);
+});
