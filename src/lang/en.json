@@ -1,0 +1,18 @@
+{
+  "app": {
+    "content": "Content"
+  },
+  "layout": {
+    "open_sidebar": "Open sidebar",
+    "reports": "Reports",
+    "settings": "Settings",
+    "team": "Team",
+    "tickets": {
+      "all_tickets": "Tous les tickets",
+      "my_tickets": "My tickets",
+      "tickets": "Tickets",
+      "unassigned_tickets": "Unassigned tickets"
+    }
+  },
+  "your_profile": "Your profile"
+}

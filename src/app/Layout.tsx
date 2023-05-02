@@ -1,4 +1,5 @@
 import { FC, useState } from 'react';
+import { Trans } from 'react-i18next';
 
 import { Logo } from '@/components/Logo';
 import {
@@ -26,12 +27,20 @@ const navigation = [
         defaultValue="item-1"
       >
         <AccordionItem value="item-1">
-          <AccordionTrigger>Tickets</AccordionTrigger>
+          <AccordionTrigger>
+            <Trans i18nKey="layout.tickets.tickets" />
+          </AccordionTrigger>
           <AccordionContent>
             <ul role="list" className="flex flex-col gap-y-1">
-              <li>My Tickets</li>
-              <li>All Tickets</li>
-              <li>Unassigned Tickets</li>
+              <li>
+                <Trans i18nKey="layout.tickets.my_tickets" />
+              </li>
+              <li>
+                <Trans i18nKey="layout.tickets.all_tickets" />
+              </li>
+              <li>
+                <Trans i18nKey="layout.tickets.unassigned_tickets" />
+              </li>
             </ul>
           </AccordionContent>
         </AccordionItem>
@@ -44,7 +53,9 @@ const navigation = [
     content: (
       <Accordion type="single" collapsible className="w-full">
         <AccordionItem value="item-1">
-          <AccordionTrigger>Team</AccordionTrigger>
+          <AccordionTrigger>
+            <Trans i18nKey="layout.team" />
+          </AccordionTrigger>
           <AccordionContent>
             <ul role="list" className="flex flex-col gap-y-1">
               <li>Meriadoc Brandybuck</li>
@@ -64,7 +75,7 @@ const navigation = [
         href="#"
         className="flex flex-1 items-center justify-between py-4 font-medium transition-all hover:underline"
       >
-        Reports
+        <Trans i18nKey="layout.reports" />
       </a>
     ),
     current: false,
@@ -76,7 +87,7 @@ const navigation = [
         href="#"
         className="flex flex-1 items-center justify-between py-4 font-medium transition-all hover:underline"
       >
-        Settings
+        <Trans i18nKey="layout.settings" />
       </a>
     ),
     current: false,
@@ -128,7 +139,9 @@ export const Layout: FC<LayoutProps> = ({ children }) => {
                     <AvatarImage src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" />
                     <AvatarFallback>TC</AvatarFallback>
                   </Avatar>
-                  <span className="sr-only">Your profile</span>
+                  <span className="sr-only">
+                    <Trans i18nKey="layout.your_profile" />
+                  </span>
                   <span aria-hidden="true">Tom Cook</span>
                 </a>
               </li>
@@ -142,14 +155,18 @@ export const Layout: FC<LayoutProps> = ({ children }) => {
           className="-m-2.5 p-2.5 text-gray-700 lg:hidden"
           onClick={() => setSidebarOpen(true)}
         >
-          <span className="sr-only">Open sidebar</span>
+          <span className="sr-only">
+            <Trans i18nKey="layout.open_sidebar" />
+          </span>
           <AlignJustify className="h-6 w-6" aria-hidden="true" />
         </button>
         <div className="flex-1 text-sm font-semibold leading-6 text-gray-900">
           Help Desk
         </div>
         <a href="#">
-          <span className="sr-only">Your profile</span>
+          <span className="sr-only">
+            <Trans i18nKey="layout.your_profile" />
+          </span>
           <Avatar className="h-8 w-8">
             <AvatarImage src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" />
             <AvatarFallback>TC</AvatarFallback>

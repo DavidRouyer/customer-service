@@ -1,0 +1,18 @@
+{
+  "app": {
+    "content": "Contenu"
+  },
+  "layout": {
+    "open_sidebar": "Ouvrir la barre latérale",
+    "reports": "Rapports",
+    "settings": "Paramètres",
+    "team": "Équipe",
+    "tickets": {
+      "all_tickets": "Tous les tickets",
+      "my_tickets": "Mes tickets",
+      "tickets": "Tickets",
+      "unassigned_tickets": "Tickets non assignés"
+    },
+    "your_profile": "Votre profil"
+  }
+}

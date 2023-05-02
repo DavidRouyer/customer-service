@@ -10,9 +10,12 @@
     "@radix-ui/react-dialog": "^1.0.3",
     "class-variance-authority": "^0.6.0",
     "clsx": "^1.2.1",
+    "i18next": "^22.4.15",
+    "i18next-browser-languagedetector": "^7.0.1",
     "lucide-react": "^0.192.0",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "react-i18next": "^12.2.2"
   },
   "scripts": {
     "dev": "vite",
