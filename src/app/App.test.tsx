@@ -6,11 +6,6 @@ describe('<App />', () => {
   it('should render the App', () => {
     render(<App />);
 
-    expect(
-      screen.getByRole('heading', {
-        name: /App/i,
-        level: 1,
-      })
-    ).toBeInTheDocument();
+    expect(screen.getByAltText('Help Desk')).toBeInTheDocument();
   });
 });

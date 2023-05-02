@@ -1,10 +1,12 @@
 import { FC } from 'react';
 
+import { Layout } from '@/app/Layout';
+
 export const App: FC = () => {
   return (
-    <div>
-      <h1>App</h1>
-    </div>
+    <Layout>
+      <div>Content</div>
+    </Layout>
   );
 };
 
