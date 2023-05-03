@@ -1,7 +1,4 @@
 {
-  "app": {
-    "content": "Content"
-  },
   "layout": {
     "open_sidebar": "Open sidebar",
     "reports": "Reports",
@@ -12,7 +9,10 @@
       "my_tickets": "My tickets",
       "tickets": "Tickets",
       "unassigned_tickets": "Unassigned tickets"
-    }
+    },
+    "your_profile": "Your profile"
   },
-  "your_profile": "Your profile"
+  "ticket":{
+    "ticket_for_name": "Ticket pour {{name}}"
+  }
 }

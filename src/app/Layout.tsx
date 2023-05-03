@@ -1,5 +1,6 @@
 import { FC, useState } from 'react';
 import { Trans } from 'react-i18next';
+import { NavLink, Outlet } from 'react-router-dom';
 
 import { Logo } from '@/components/Logo';
 import {
@@ -11,10 +12,6 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/Avatar';
 import { Sheet, SheetContent } from '@/components/ui/Sheet';
 import { AlignJustify } from 'lucide-react';
-
-export type LayoutProps = {
-  children: React.ReactNode;
-};
 
 const navigation = [
   {
@@ -33,13 +30,19 @@ const navigation = [
           <AccordionContent>
             <ul role="list" className="flex flex-col gap-y-1">
               <li>
-                <Trans i18nKey="layout.tickets.my_tickets" />
+                <NavLink to="/tickets/me">
+                  <Trans i18nKey="layout.tickets.my_tickets" />
+                </NavLink>
               </li>
               <li>
-                <Trans i18nKey="layout.tickets.all_tickets" />
+                <NavLink to="/tickets/all">
+                  <Trans i18nKey="layout.tickets.all_tickets" />
+                </NavLink>
               </li>
               <li>
-                <Trans i18nKey="layout.tickets.unassigned_tickets" />
+                <NavLink to="/tickets/unassigned">
+                  <Trans i18nKey="layout.tickets.unassigned_tickets" />
+                </NavLink>
               </li>
             </ul>
           </AccordionContent>
@@ -58,9 +61,17 @@ const navigation = [
           </AccordionTrigger>
           <AccordionContent>
             <ul role="list" className="flex flex-col gap-y-1">
-              <li>Meriadoc Brandybuck</li>
-              <li>Frodo Baggins</li>
-              <li>Samwise Gamgee</li>
+              <li>
+                <NavLink to="/tickets/Meriadoc Brandybuck">
+                  Meriadoc Brandybuck
+                </NavLink>
+              </li>
+              <li>
+                <NavLink to="/tickets/Frodo Baggins">Frodo Baggins</NavLink>
+              </li>
+              <li>
+                <NavLink to="/tickets/Samwise Gamgee">Samwise Gamgee</NavLink>
+              </li>
             </ul>
           </AccordionContent>
         </AccordionItem>
@@ -71,30 +82,30 @@ const navigation = [
   {
     name: 'Reports',
     content: (
-      <a
-        href="#"
+      <NavLink
+        to="/reports"
         className="flex flex-1 items-center justify-between py-4 font-medium transition-all hover:underline"
       >
         <Trans i18nKey="layout.reports" />
-      </a>
+      </NavLink>
     ),
     current: false,
   },
   {
     name: 'Settings',
     content: (
-      <a
-        href="#"
+      <NavLink
+        to="/settings"
         className="flex flex-1 items-center justify-between py-4 font-medium transition-all hover:underline"
       >
         <Trans i18nKey="layout.settings" />
-      </a>
+      </NavLink>
     ),
     current: false,
   },
 ];
 
-export const Layout: FC<LayoutProps> = ({ children }) => {
+export const Layout: FC = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
@@ -174,15 +185,7 @@ export const Layout: FC<LayoutProps> = ({ children }) => {
         </a>
       </div>
 
-      <main className="lg:pl-72">
-        <div className="xl:pl-96">
-          <div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6">{children}</div>
-        </div>
-      </main>
-
-      <aside className="fixed inset-y-0 left-72 hidden w-96 overflow-y-auto border-r border-gray-200 px-4 py-6 sm:px-6 lg:px-8 xl:block">
-        {/* Secondary column (hidden on smaller screens) */}
-      </aside>
+      <Outlet />
     </div>
   );
 };
