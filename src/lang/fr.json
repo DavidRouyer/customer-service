@@ -1,7 +1,4 @@
 {
-  "app": {
-    "content": "Contenu"
-  },
   "layout": {
     "open_sidebar": "Ouvrir la barre latérale",
     "reports": "Rapports",
@@ -14,5 +11,8 @@
       "unassigned_tickets": "Tickets non assignés"
     },
     "your_profile": "Votre profil"
+  },
+  "ticket":{
+    "ticket_for_name": "Ticket pour {{name}}"
   }
 }
