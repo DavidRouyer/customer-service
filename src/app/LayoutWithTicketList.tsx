@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { Outlet } from 'react-router-dom';
 
-export const TicketListLayout: FC = () => {
+export const LayoutWithTicketList: FC = () => {
   return (
     <>
       <main className="lg:pl-72">
@@ -18,3 +18,5 @@ export const TicketListLayout: FC = () => {
     </>
   );
 };
+
+LayoutWithTicketList.displayName = 'LayoutWithTicketList';

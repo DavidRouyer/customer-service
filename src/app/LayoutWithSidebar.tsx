@@ -105,7 +105,7 @@ const navigation = [
   },
 ];
 
-export const Layout: FC = () => {
+export const LayoutWithSidebar: FC = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
@@ -189,3 +189,5 @@ export const Layout: FC = () => {
     </div>
   );
 };
+
+LayoutWithSidebar.displayName = 'LayoutWithSidebar';

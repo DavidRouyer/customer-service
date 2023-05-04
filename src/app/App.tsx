@@ -3,14 +3,14 @@ import { Trans } from 'react-i18next';
 import { Navigate, RouterProvider } from 'react-router';
 import { createBrowserRouter } from 'react-router-dom';
 
-import { Layout } from '@/app/Layout';
-import { TicketListLayout } from '@/app/TicketListLayout';
+import { LayoutWithSidebar } from '@/app/LayoutWithSidebar';
+import { LayoutWithTicketList } from '@/app/LayoutWithTicketList';
 import '@/lib/i18n';
 
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <Layout />,
+    element: <LayoutWithSidebar />,
     children: [
       {
         index: true,
@@ -18,7 +18,7 @@ const router = createBrowserRouter([
       },
       {
         path: 'tickets',
-        element: <TicketListLayout />,
+        element: <LayoutWithTicketList />,
         children: [
           {
             path: ':id',
