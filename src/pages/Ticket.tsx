@@ -1,16 +1,21 @@
 import { FC } from 'react';
-import { Trans } from 'react-i18next';
-import { useParams } from 'react-router-dom';
+
+import { MessageList } from '@/components/MessageList/MessageList';
 
 export async function loader() {
   return true;
 }
 
 export const Component: FC = () => {
-  const { id } = useParams();
   return (
     <div>
-      <Trans i18nKey="ticket.ticket_for_name" values={{ name: id }} />
+      <div className="border-b border-gray-200 pb-5">
+        <h3 className="text-base font-semibold leading-6 text-gray-900">
+          John Doe
+        </h3>
+      </div>
+
+      <MessageList />
     </div>
   );
 };
