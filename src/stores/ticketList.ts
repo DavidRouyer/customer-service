@@ -5,7 +5,7 @@ export type TicketSummary = {
   name: string;
   imageUrl: string;
   content: string;
-  dateTime: string;
+  openingDate: string;
 };
 
 export const ticketListState = atom<TicketSummary[]>({

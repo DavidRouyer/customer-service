@@ -21,8 +21,8 @@ export const Ticket: FC<TicketProps> = ({ ticket }) => {
             {ticket.name}
           </p>
           <p className="flex-none text-xs text-gray-600">
-            <time dateTime={ticket.dateTime}>
-              <RelativeTime dateTime={ticket.dateTime} />
+            <time dateTime={ticket.openingDate}>
+              <RelativeTime dateTime={ticket.openingDate} />
             </time>
           </p>
         </div>
