@@ -16,3 +16,5 @@ export const AgentList: FC = () => {
     </ul>
   );
 };
+
+AgentList.displayName = 'AgentList';

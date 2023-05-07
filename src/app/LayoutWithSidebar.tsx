@@ -3,6 +3,7 @@ import { Trans } from 'react-i18next';
 import { NavLink, Outlet } from 'react-router-dom';
 
 import { AgentList } from '@/components/AgentList/AgentList';
+import { CurrentUser } from '@/components/CurrentUser/CurrentUser';
 import { Logo } from '@/components/Logo';
 import {
   Accordion,
@@ -131,19 +132,7 @@ export const LayoutWithSidebar: FC = () => {
                 <li key={item.name}>{item.content}</li>
               ))}
               <li className="-mx-6 mt-auto">
-                <a
-                  href="#"
-                  className="flex items-center gap-x-4 px-6 py-3 text-sm font-semibold leading-6 text-gray-900 hover:bg-gray-50"
-                >
-                  <Avatar className="h-8 w-8">
-                    <AvatarImage src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" />
-                    <AvatarFallback>TC</AvatarFallback>
-                  </Avatar>
-                  <span className="sr-only">
-                    <Trans i18nKey="layout.your_profile" />
-                  </span>
-                  <span aria-hidden="true">Tom Cook</span>
-                </a>
+                <CurrentUser />
               </li>
             </ul>
           </nav>
