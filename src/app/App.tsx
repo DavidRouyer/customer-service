@@ -22,7 +22,7 @@ const router = createBrowserRouter([
         children: [
           {
             path: ':id',
-            lazy: () => import('@/pages/Ticket'),
+            lazy: () => import('@/app/Ticket'),
           },
           {
             path: 'all',
@@ -44,11 +44,11 @@ const router = createBrowserRouter([
       },
       {
         path: 'reports',
-        lazy: () => import('@/pages/Reports'),
+        lazy: () => import('@/app/Reports'),
       },
       {
         path: 'settings',
-        lazy: () => import('@/pages/Settings'),
+        lazy: () => import('@/app/Settings'),
       },
     ],
   },
