@@ -2,6 +2,7 @@ import { FC, useState } from 'react';
 import { Trans } from 'react-i18next';
 import { NavLink, Outlet } from 'react-router-dom';
 
+import { AgentList } from '@/components/AgentList/AgentList';
 import { Logo } from '@/components/Logo';
 import {
   Accordion,
@@ -60,19 +61,7 @@ const navigation = [
             <Trans i18nKey="layout.team" />
           </AccordionTrigger>
           <AccordionContent>
-            <ul role="list" className="flex flex-col gap-y-1">
-              <li>
-                <NavLink to="/tickets/Meriadoc Brandybuck">
-                  Meriadoc Brandybuck
-                </NavLink>
-              </li>
-              <li>
-                <NavLink to="/tickets/Frodo Baggins">Frodo Baggins</NavLink>
-              </li>
-              <li>
-                <NavLink to="/tickets/Samwise Gamgee">Samwise Gamgee</NavLink>
-              </li>
-            </ul>
+            <AgentList />
           </AccordionContent>
         </AccordionItem>
       </Accordion>

@@ -7,6 +7,7 @@ import { RecoilRoot } from 'recoil';
 import { LayoutWithSidebar } from '@/app/LayoutWithSidebar';
 import { LayoutWithTicketList } from '@/app/LayoutWithTicketList';
 import '@/lib/i18n';
+import { useSetupAgentList } from '@/stores/useSetupAgentList';
 import { useSetupMessageList } from '@/stores/useSetupMessageList';
 import { useSetupTicketList } from '@/stores/useSetupTicketList';
 
@@ -58,6 +59,7 @@ const router = createBrowserRouter([
 ]);
 
 export const SetupStores = () => {
+  useSetupAgentList();
   useSetupTicketList();
   useSetupMessageList();
 
