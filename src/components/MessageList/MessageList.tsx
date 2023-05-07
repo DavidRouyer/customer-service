@@ -6,6 +6,7 @@ import { messageListState } from '@/stores/messageList';
 
 export const MessageList: FC = () => {
   const messageList = useRecoilValue(messageListState);
+
   return (
     <div id="messages" className="flex flex-col space-y-4 overflow-y-auto p-3">
       {messageList.map((message) => (
@@ -13,14 +14,13 @@ export const MessageList: FC = () => {
           <div
             className={cn(
               'flex items-end',
-              message.user.name !== 'Tom Cook' && 'justify-end'
+              !message.user.isAgent && 'justify-end'
             )}
           >
             <div
               className={cn(
                 'order-2 mx-2 flex max-w-xs flex-col space-y-2 text-sm',
-                message.user.name === 'Tom Cook' && 'items-start',
-                message.user.name !== 'Tom Cook' && 'items-end'
+                message.user.isAgent ? 'items-start' : 'items-end'
               )}
             >
               {typeof message.content === 'string' && (
@@ -28,10 +28,9 @@ export const MessageList: FC = () => {
                   <span
                     className={cn(
                       'inline-block rounded-lg px-4 py-2',
-                      message.user.name === 'Tom Cook' &&
-                        'rounded-bl-none bg-gray-300 text-gray-600',
-                      message.user.name !== 'Tom Cook' &&
-                        'rounded-br-none bg-blue-600 text-white'
+                      message.user.isAgent
+                        ? 'rounded-bl-none bg-gray-300 text-gray-600'
+                        : 'rounded-br-none bg-blue-600 text-white'
                     )}
                   >
                     {message.content}
@@ -44,14 +43,13 @@ export const MessageList: FC = () => {
                     <span
                       className={cn(
                         'inline-block rounded-lg px-4 py-2',
-                        message.user.name === 'Tom Cook' &&
-                          'bg-gray-300 text-gray-600',
-                        message.user.name !== 'Tom Cook' &&
-                          'bg-blue-600 text-white',
-                        message.user.name === 'Tom Cook' &&
+                        message.user.isAgent
+                          ? 'bg-gray-300 text-gray-600'
+                          : 'bg-blue-600 text-white',
+                        message.user.isAgent &&
                           index === message.content.length - 1 &&
                           'rounded-bl-none',
-                        message.user.name !== 'Tom Cook' &&
+                        !message.user.isAgent &&
                           index === message.content.length - 1 &&
                           'rounded-br-none'
                       )}
@@ -66,8 +64,7 @@ export const MessageList: FC = () => {
               alt={message.user.name}
               className={cn(
                 'h-6 w-6 rounded-full',
-                message.user.name === 'Tom Cook' && 'order-1',
-                message.user.name !== 'Tom Cook' && 'order-2'
+                message.user.isAgent ? 'order-1' : 'order-2'
               )}
             />
           </div>

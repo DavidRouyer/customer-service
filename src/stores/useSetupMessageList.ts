@@ -10,6 +10,7 @@ const initialMessageList: Message[] = [
       name: 'Tom Cook',
       imageUrl:
         'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=144&h=144&q=80',
+      isAgent: true,
     },
     content: 'Can be verified on any platform using docker',
     dateTime: '2020-12-09T12:34:00',
@@ -20,6 +21,7 @@ const initialMessageList: Message[] = [
       name: 'John Doe',
       imageUrl:
         'https://images.unsplash.com/photo-1590031905470-a1a1feacbb0b?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=facearea&amp;facepad=3&amp;w=144&amp;h=144',
+      isAgent: false,
     },
     content:
       'Your error message says permission denied, npm global installs must be given root privileges.',
@@ -31,6 +33,7 @@ const initialMessageList: Message[] = [
       name: 'Tom Cook',
       imageUrl:
         'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=144&h=144&q=80',
+      isAgent: true,
     },
     content: [
       "Command was run with root privileges. I'm sure about that.",

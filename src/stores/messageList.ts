@@ -5,6 +5,7 @@ export type Message = {
   user: {
     name: string;
     imageUrl: string;
+    isAgent: boolean;
   };
   content: string | string[];
   dateTime: string;
