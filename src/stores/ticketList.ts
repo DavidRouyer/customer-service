@@ -2,8 +2,10 @@ import { atom } from 'recoil';
 
 export type TicketSummary = {
   id: number;
-  name: string;
-  imageUrl: string;
+  user: {
+    name: string;
+    imageUrl: string;
+  };
   content: string;
   openingDate: string;
 };
