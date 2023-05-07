@@ -1,5 +1,4 @@
 import { FC } from 'react';
-import { useParams } from 'react-router-dom';
 
 import { MessageList } from '@/components/MessageList/MessageList';
 
@@ -8,7 +7,6 @@ export async function loader() {
 }
 
 export const Component: FC = () => {
-  const { id } = useParams();
   return (
     <div>
       <div className="border-b border-gray-200 pb-5">
