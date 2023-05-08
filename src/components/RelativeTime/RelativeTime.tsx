@@ -53,3 +53,5 @@ export const RelativeTime: FC<RelativeTimeProps> = ({ dateTime }) => {
 
   return <>{relativeTime}</>;
 };
+
+RelativeTime.displayName = 'RelativeTime';

@@ -1,6 +1,7 @@
 import { FC } from 'react';
 import { Trans } from 'react-i18next';
 
+import { CurrentTime } from '@/components/CurrentTime/CurrentTime';
 import { DisplayLanguageName } from '@/components/DisplayLanguageName/DisplayLanguageName';
 import { Android } from '@/components/Icons/Android';
 import { ActivityPanel } from '@/components/InfoPanel/ActivityPanel';
@@ -53,7 +54,9 @@ export const InfoPanel: FC = () => {
               <svg viewBox="0 0 2 2" className="h-0.5 w-0.5 fill-current">
                 <circle cx={1} cy={1} r={1} />
               </svg>
-              <p>20:50 (GMT+2)</p>
+              <p>
+                <CurrentTime timezone={user.timezone} />
+              </p>
             </p>
           </div>
         </div>
