@@ -14,13 +14,13 @@ export const MessageList: FC = () => {
           <div
             className={cn(
               'flex items-end',
-              !message.user.isAgent && 'justify-end'
+              message.user.isAgent && 'justify-end'
             )}
           >
             <div
               className={cn(
                 'order-2 mx-2 flex max-w-xs flex-col space-y-2 text-sm',
-                message.user.isAgent ? 'items-start' : 'items-end'
+                message.user.isAgent ? 'items-end' : 'items-start'
               )}
             >
               {typeof message.content === 'string' && (
@@ -29,8 +29,8 @@ export const MessageList: FC = () => {
                     className={cn(
                       'inline-block rounded-lg px-4 py-2',
                       message.user.isAgent
-                        ? 'rounded-bl-none bg-gray-300 text-gray-600'
-                        : 'rounded-br-none bg-blue-600 text-white'
+                        ? 'rounded-br-none bg-blue-600 text-white'
+                        : 'rounded-bl-none bg-gray-300 text-gray-600'
                     )}
                   >
                     {message.content}
@@ -44,14 +44,14 @@ export const MessageList: FC = () => {
                       className={cn(
                         'inline-block rounded-lg px-4 py-2',
                         message.user.isAgent
-                          ? 'bg-gray-300 text-gray-600'
-                          : 'bg-blue-600 text-white',
+                          ? 'bg-blue-600 text-white'
+                          : 'bg-gray-300 text-gray-600',
                         message.user.isAgent &&
                           index === message.content.length - 1 &&
-                          'rounded-bl-none',
+                          'rounded-br-none',
                         !message.user.isAgent &&
                           index === message.content.length - 1 &&
-                          'rounded-br-none'
+                          'rounded-bl-none'
                       )}
                     >
                       {content}
@@ -64,7 +64,7 @@ export const MessageList: FC = () => {
               alt={message.user.name}
               className={cn(
                 'h-6 w-6 rounded-full',
-                message.user.isAgent ? 'order-1' : 'order-2'
+                message.user.isAgent ? 'order-2' : 'order-1'
               )}
             />
           </div>
