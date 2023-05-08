@@ -1,4 +1,10 @@
 {
+  "date": "{{val, datetime}}",
+  "info_panel": {
+    "activity": "Activité",
+    "contact_information": "Informations de contact",
+    "conversations": "Conversations"
+  },
   "layout": {
     "open_sidebar": "Ouvrir la barre latérale",
     "reports": "Rapports",
@@ -13,5 +19,16 @@
     "your_profile": "Votre profil"
   },
   "ticket":{
+    "opened_on": "Ouvert le",
+    "resolved_on": "Résolu le",
+    "statuses": {
+      "open": "Ouvert",
+      "resolved": "Résolu"
+    }
+  },
+  "user": {
+    "email": "Adresse e-mail",
+    "phone": "Téléphone",
+    "platform": "Plateforme"
   }
 }
