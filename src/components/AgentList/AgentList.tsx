@@ -10,7 +10,7 @@ export const AgentList: FC = () => {
     <ul role="list" className="flex flex-col gap-y-1">
       {agentList.map((agent) => (
         <li key={agent.id}>
-          <NavLink to={`/tickets/${agent.name}`}>{agent.name}</NavLink>
+          <NavLink to={`/tickets/1?filter=${agent.name}`}>{agent.name}</NavLink>
         </li>
       ))}
     </ul>

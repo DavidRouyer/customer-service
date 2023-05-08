@@ -1,5 +1,4 @@
 import { FC } from 'react';
-import { Trans } from 'react-i18next';
 import { Navigate, RouterProvider } from 'react-router';
 import { createBrowserRouter } from 'react-router-dom';
 import { RecoilRoot } from 'recoil';
@@ -19,31 +18,15 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <Navigate to="/tickets/me" />,
+        element: <Navigate to="/tickets/1&filter=me" />,
       },
       {
         path: 'tickets',
         element: <LayoutWithTicketList />,
         children: [
           {
-            path: ':id',
+            path: ':ticketId?',
             lazy: () => import('@/app/Ticket'),
-          },
-          {
-            path: 'all',
-            element: (
-              <div>
-                <Trans i18nKey="layout.tickets.all_tickets" />
-              </div>
-            ),
-          },
-          {
-            path: 'unassigned',
-            element: (
-              <div>
-                <Trans i18nKey="layout.tickets.unassigned_tickets" />
-              </div>
-            ),
           },
         ],
       },
