@@ -1,4 +1,10 @@
 {
+  "date": "{{val, datetime}}",
+  "info_panel": {
+    "activity": "Activity",
+    "contact_information": "Contact information",
+    "conversations": "Conversations"
+  },
   "layout": {
     "open_sidebar": "Open sidebar",
     "reports": "Reports",
@@ -13,5 +19,16 @@
     "your_profile": "Your profile"
   },
   "ticket":{
+    "opened_on": "Opened on",
+    "resolved_on": "Resolved on",
+    "statuses": {
+      "open": "Open",
+      "resolved": "Resolved"
+    }
+  },
+  "user": {
+    "email": "Email address",
+    "phone": "Phone",
+    "platform": "Platform"
   }
 }
