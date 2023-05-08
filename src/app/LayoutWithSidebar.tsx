@@ -32,17 +32,17 @@ const navigation = [
           <AccordionContent>
             <ul role="list" className="flex flex-col gap-y-1">
               <li>
-                <NavLink to="/tickets/me">
+                <NavLink to="/tickets/1?filter=me">
                   <Trans i18nKey="layout.tickets.my_tickets" />
                 </NavLink>
               </li>
               <li>
-                <NavLink to="/tickets/all">
+                <NavLink to="/tickets/1?filter=all">
                   <Trans i18nKey="layout.tickets.all_tickets" />
                 </NavLink>
               </li>
               <li>
-                <NavLink to="/tickets/unassigned">
+                <NavLink to="/tickets/1?filter=unassigned">
                   <Trans i18nKey="layout.tickets.unassigned_tickets" />
                 </NavLink>
               </li>
@@ -51,7 +51,6 @@ const navigation = [
         </AccordionItem>
       </Accordion>
     ),
-    current: true,
   },
   {
     name: 'Team',
@@ -67,7 +66,6 @@ const navigation = [
         </AccordionItem>
       </Accordion>
     ),
-    current: false,
   },
   {
     name: 'Reports',
@@ -79,7 +77,6 @@ const navigation = [
         <Trans i18nKey="layout.reports" />
       </NavLink>
     ),
-    current: false,
   },
   {
     name: 'Settings',
@@ -91,7 +88,6 @@ const navigation = [
         <Trans i18nKey="layout.settings" />
       </NavLink>
     ),
-    current: false,
   },
 ];
 
