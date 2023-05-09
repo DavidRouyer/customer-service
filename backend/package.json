@@ -1,0 +1,24 @@
+{
+  "name": "customer-service-backend",
+  "description": "Prototyping a Customer Service Software",
+  "type": "module",
+  "main": "dist/index.js",
+  "version": "0.0.0",
+  "private": true,
+  "author": "David Rouyer <rouyer.david@gmail.com>",
+  "dependencies": {
+    "fastify": "^4.17.0"
+  },
+  "scripts": {
+    "dev": "nodemon src/index.ts",
+    "build": "tsc",
+    "lint": "eslint src --max-warnings=0",
+    "typecheck": "tsc --project tsconfig.json --noEmit"
+  },
+  "devDependencies": {
+    "@types/node": "^20.1.1",
+    "nodemon": "^2.0.22",
+    "ts-node": "^10.9.1"
+  },
+  "license": "MIT"
+}
