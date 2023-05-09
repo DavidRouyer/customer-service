@@ -18,9 +18,6 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: "yarn"
 
-      - name: Move to subdirectory
-        run: cd frontend
-
       - name: Install dependencies
         run: yarn
 

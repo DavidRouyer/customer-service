@@ -10,7 +10,9 @@
     "packages/*"
   ],
   "scripts": {
-    "dev": "yarn --cwd backend dev && yarn --cwd frontend dev"
+    "dev": "yarn --cwd frontend dev",
+    "build": "yarn --cwd frontend build",
+    "test": "yarn --cwd frontend test"
   },
   "license": "MIT"
 }
