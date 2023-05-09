@@ -1,6 +1,6 @@
 on:
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   build:
@@ -8,7 +8,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [ 20.x ]
+        node-version: [20.x]
 
     steps:
       - uses: actions/checkout@v3
@@ -17,6 +17,9 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: "yarn"
+
+      - name: Move to subdirectory
+        run: cd frontend
 
       - name: Install dependencies
         run: yarn
@@ -30,6 +33,6 @@ jobs:
       - name: Deploy to Firebase
         uses: FirebaseExtended/action-hosting-deploy@v0
         with:
-          repoToken: '${{ secrets.GITHUB_TOKEN }}'
-          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_CUSTOMER_SERVICE_DEFEA }}'
+          repoToken: "${{ secrets.GITHUB_TOKEN }}"
+          firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_CUSTOMER_SERVICE_DEFEA }}"
           projectId: customer-service-defea
