@@ -60,6 +60,8 @@ jobs:
         with:
           image: "gcr.io/${{ secrets.GCP_PROJECT_ID }}/customer-service"
           service: "customer-service"
+          region: "europe-west9"
+          flags: "--max-instances=1 --allow-unauthenticated"
 
       - name: Deploy to Firebase
         uses: FirebaseExtended/action-hosting-deploy@v0
