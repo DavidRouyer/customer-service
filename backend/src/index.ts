@@ -24,7 +24,7 @@ server.get('/ping', opts, async (request, reply) => {
 const start = async () => {
   try {
     const port = parseInt(process.env.PORT as string) || 8080;
-    await server.listen({ port });
+    await server.listen({ port, host: '0.0.0.0' });
   } catch (err) {
     server.log.error(err);
     process.exit(1);
