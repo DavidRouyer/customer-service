@@ -27,7 +27,15 @@ jobs:
         name: "Authenticate to Google Cloud"
         uses: "google-github-actions/auth@v1"
         with:
+          token_format: access_token
           credentials_json: "${{ secrets.GCP_SA_KEY }}"
+
+      - name: Login to Docker
+        uses: "docker/login-action@v1"
+        with:
+          registry: "gcr.io"
+          username: "oauth2accesstoken"
+          password: "${{ steps.auth.outputs.access_token }}"
 
       - name: Configure Docker
         run: |-
