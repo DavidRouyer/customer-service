@@ -23,10 +23,8 @@ server.get('/ping', opts, async (request, reply) => {
 
 const start = async () => {
   try {
-    await server.listen({ port: 3000 });
-
-    const address = server.server.address();
-    const port = typeof address === 'string' ? address : address?.port;
+    const port = parseInt(process.env.PORT as string) || 8080;
+    await server.listen({ port });
   } catch (err) {
     server.log.error(err);
     process.exit(1);
