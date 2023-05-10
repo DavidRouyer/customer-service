@@ -55,6 +55,12 @@ jobs:
         run: |
           docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/customer-service:latest
 
+      - name: Deploy to Cloud Run
+        uses: "google-github-actions/deploy-cloudrun@v1"
+        with:
+          image: "gcr.io/${{ secrets.GCP_PROJECT_ID }}/customer-service"
+          service: "customer-service"
+
       - name: Deploy to Firebase
         uses: FirebaseExtended/action-hosting-deploy@v0
         with:
