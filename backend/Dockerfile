@@ -16,5 +16,7 @@ RUN yarn --prod
 # Copy local code to the container image.
 COPY . ./
 
+EXPOSE 8080
+
 # Run the web service on container startup.
 CMD [ "yarn", "start" ]
