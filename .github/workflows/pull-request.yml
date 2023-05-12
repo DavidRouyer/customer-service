@@ -23,6 +23,44 @@ jobs:
       - name: Build application
         run: yarn build
 
+      - id: "auth"
+        name: "Authenticate to Google Cloud"
+        uses: "google-github-actions/auth@v1"
+        with:
+          token_format: access_token
+          workload_identity_provider: "${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}"
+          service_account: "${{ secrets.GCP_SA_EMAIL }}"
+
+      - name: Login to Docker
+        uses: "docker/login-action@v1"
+        with:
+          registry: "gcr.io"
+          username: "oauth2accesstoken"
+          password: "${{ steps.auth.outputs.access_token }}"
+
+      - name: Configure Docker
+        run: |-
+          echo '${{ steps.auth.outputs.access_token }}' | docker login -u oauth2accesstoken --password-stdin https://gcr.io
+
+      - name: Build Docker image
+        run: |
+          cd backend
+          docker build -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/customer-service:${{ github.event.number }} .
+
+      - name: Push Docker image
+        run: |
+          docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/customer-service:${{ github.event.number }}
+
+      - name: Deploy to Cloud Run
+        uses: "google-github-actions/deploy-cloudrun@v1"
+        with:
+          image: "gcr.io/${{ secrets.GCP_PROJECT_ID }}/customer-service:${{ github.event.number }}"
+          service: "customer-service"
+          region: "europe-west9"
+          flags: "--max-instances=1 --allow-unauthenticated"
+          tag: "pr-${{ github.event.number }}"
+          no_traffic: true
+
       - name: Deploy to Firebase
         uses: FirebaseExtended/action-hosting-deploy@v0
         with:
