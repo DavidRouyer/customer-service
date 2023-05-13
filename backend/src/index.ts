@@ -1,32 +1,53 @@
-import Fastify, { FastifyInstance, RouteShorthandOptions } from 'fastify';
+import { ApolloServer, BaseContext } from '@apollo/server';
+import fastifyApollo, {
+  fastifyApolloDrainPlugin,
+} from '@as-integrations/fastify';
+import Fastify from 'fastify';
 
-const server: FastifyInstance = Fastify({});
+import { ticketsMock } from './ticketsMock';
 
-const opts: RouteShorthandOptions = {
-  schema: {
-    response: {
-      200: {
-        type: 'object',
-        properties: {
-          pong: {
-            type: 'string',
-          },
-        },
-      },
-    },
+const fastify = Fastify({});
+
+const typeDefs = `
+  type User {
+    name: String!
+    imageUrl: String
+  }
+
+  type Ticket {
+    id: ID!
+    user: User!
+    content: String!
+    openingDate: String!
+  }
+
+  type Query {
+    allTickets: [Ticket!]!
+  }
+`;
+
+const resolvers = {
+  Query: {
+    allTickets: () => ticketsMock,
   },
 };
 
-server.get('/ping', opts, async (request, reply) => {
-  return { pong: 'it worked!' };
+const apollo = new ApolloServer<BaseContext>({
+  typeDefs,
+  resolvers,
+  plugins: [fastifyApolloDrainPlugin(fastify)],
 });
+
+await apollo.start();
+
+await fastify.register(fastifyApollo(apollo));
 
 const start = async () => {
   try {
-    const port = parseInt(process.env.PORT as string) || 8080;
-    await server.listen({ port, host: '0.0.0.0' });
+    const port = parseInt(process.env.PORT || '') || 8080;
+    await fastify.listen({ port, host: '0.0.0.0' });
   } catch (err) {
-    server.log.error(err);
+    fastify.log.error(err);
     process.exit(1);
   }
 };

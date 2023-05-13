@@ -7,7 +7,10 @@
   "private": true,
   "author": "David Rouyer <rouyer.david@gmail.com>",
   "dependencies": {
-    "fastify": "^4.17.0"
+    "@apollo/server": "^4.7.1",
+    "@as-integrations/fastify": "^2.0.0",
+    "fastify": "^4.17.0",
+    "graphql": "^16.6.0"
   },
   "scripts": {
     "dev": "nodemon src/index.ts",
