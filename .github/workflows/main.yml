@@ -24,15 +24,18 @@ jobs:
       - name: Execute unit tests
         run: yarn test
 
+      - name: Setup environment variables
+        run: |
+          touch backend/.env
+          echo DATABASE_URL="${{ secrets.DATABASE_URL }}" >> backend/.env
+          echo DIRECT_DATABASE_URL="${{ secrets.DIRECT_DATABASE_URL }}" >> backend/.env
+          echo CORS_ORIGIN=https://customer-service-defea.web.app >> backend/.env
+
       - name: Build backend
         run: yarn build:backend
 
       - name: Run Prisma Migrate
         run: |
-          cd backend
-          touch .env
-          echo DATABASE_URL="${{ secrets.DATABASE_URL }}" >> .env
-          echo DIRECT_DATABASE_URL="${{ secrets.DIRECT_DATABASE_URL }}" >> .env
           yarn db:migrate deploy
 
       - id: "auth"
@@ -63,13 +66,19 @@ jobs:
         run: |
           docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/customer-service:latest
 
-      - name: Deploy to Cloud Run
+      - id: "deploy"
+        name: Deploy to Cloud Run
         uses: "google-github-actions/deploy-cloudrun@v1"
         with:
           image: "gcr.io/${{ secrets.GCP_PROJECT_ID }}/customer-service"
           service: "customer-service"
           region: "europe-west9"
           flags: "--max-instances=1 --allow-unauthenticated"
+
+      - name: Setup environment variables
+        run: |
+          touch frontend/.env
+          echo VITE_ENDPOINT_URL="${{ steps.deploy.outputs.url }}" >> frontend/.env
 
       - name: Build front-end
         run: yarn build:frontend

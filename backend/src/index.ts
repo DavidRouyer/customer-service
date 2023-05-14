@@ -51,7 +51,9 @@ await apollo.start();
 
 await fastify.register(rateLimit);
 await fastify.register(helmet);
-await fastify.register(cors);
+await fastify.register(cors, {
+  origin: process.env.NODE_ENV === 'production' ? process.env.CORS_ORIGIN : '*',
+});
 await fastify.register(compress);
 
 await fastify.register(fastifyApollo(apollo));
