@@ -7,7 +7,10 @@ import cors from '@fastify/cors';
 import helmet from '@fastify/helmet';
 import rateLimit from '@fastify/rate-limit';
 import { PrismaClient } from '@prisma/client';
+import * as dotenv from 'dotenv';
 import Fastify from 'fastify';
+
+dotenv.config();
 
 const fastify = Fastify({});
 

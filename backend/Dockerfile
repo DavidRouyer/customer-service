@@ -1,6 +1,7 @@
 # Use the official lightweight Node.js 20 image.
 # https://hub.docker.com/_/node
 FROM node:20-slim
+ENV NODE_ENV=production
 
 # Create and change to the app directory.
 WORKDIR /usr/src/app
@@ -14,7 +15,7 @@ COPY package.json ./
 RUN yarn --prod
 
 # Copy local code to the container image.
-COPY ./dist ./dist
+COPY . .
 
 # Run the web service on container startup.
 CMD [ "yarn", "start" ]
