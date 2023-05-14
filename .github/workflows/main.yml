@@ -37,6 +37,7 @@ jobs:
       - name: Run Prisma Migrate
         run: |
           cd backend
+          yarn db:generate
           yarn db:migrate deploy
 
       - id: "auth"
