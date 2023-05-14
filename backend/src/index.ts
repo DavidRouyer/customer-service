@@ -2,11 +2,12 @@ import { ApolloServer, BaseContext } from '@apollo/server';
 import fastifyApollo, {
   fastifyApolloDrainPlugin,
 } from '@as-integrations/fastify';
+import { PrismaClient } from '@prisma/client';
 import Fastify from 'fastify';
 
-import { ticketsMock } from './ticketsMock';
-
 const fastify = Fastify({});
+
+const prisma = new PrismaClient();
 
 const typeDefs = `
   type User {
@@ -28,7 +29,7 @@ const typeDefs = `
 
 const resolvers = {
   Query: {
-    allTickets: () => ticketsMock,
+    allTickets: async () => await prisma.ticket.findMany(),
   },
 };
 

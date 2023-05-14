@@ -17,7 +17,7 @@
     "resolveJsonModule": true,
     "isolatedModules": true
   },
-  "include": ["src"],
+  "include": ["src", "prisma"],
   "exclude": ["node_modules"],
   "ts-node": {
     "esm": true,

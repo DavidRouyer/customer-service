@@ -24,6 +24,13 @@ jobs:
       - name: Execute unit tests
         run: yarn test
 
+      - name: Run Prisma Migrate
+        run: |
+          touch .env
+          echo DATABASE_URL="${{ secrets.DATABASE_URL}}" >> .env
+          echo DIRECT_DATABASE_URL="${{ secrets.DIRECT_DATABASE_URL}}" >> .env
+          npx prisma migrate deploy
+
       - name: Build application
         run: yarn build
 

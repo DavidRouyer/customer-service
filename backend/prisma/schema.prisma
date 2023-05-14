@@ -1,0 +1,31 @@
+// prisma/schema.prisma
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_DATABASE_URL")
+  // If you want to use Prisma Migrate, you will need to manually create a shadow database
+  // https://neon.tech/docs/guides/prisma-migrate#configure-a-shadow-database-for-prisma-migrate
+  // make sure to append ?connect_timeout=10 to the connection string
+  // shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  email     String?
+  name      String?
+  imageUrl  String?
+  tickets   Ticket[]
+}
+
+model Ticket {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  content   String?
+  user      User     @relation(fields: [userId], references: [id])
+  userId    Int
+}
