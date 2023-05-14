@@ -10,7 +10,10 @@ const fastify = Fastify({});
 const prisma = new PrismaClient();
 
 const typeDefs = `
+  scalar Date
+
   type User {
+    id: ID!
     name: String!
     imageUrl: String
   }
@@ -19,7 +22,7 @@ const typeDefs = `
     id: ID!
     user: User!
     content: String!
-    openingDate: String!
+    createdAt: Date!
   }
 
   type Query {
@@ -29,7 +32,8 @@ const typeDefs = `
 
 const resolvers = {
   Query: {
-    allTickets: async () => await prisma.ticket.findMany(),
+    allTickets: async () =>
+      await prisma.ticket.findMany({ include: { user: true } }),
   },
 };
 
