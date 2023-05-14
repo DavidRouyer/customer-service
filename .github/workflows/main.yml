@@ -24,8 +24,8 @@ jobs:
       - name: Execute unit tests
         run: yarn test
 
-      - name: Build application
-        run: yarn build
+      - name: Build backend
+        run: yarn build:backend
 
       - name: Run Prisma Migrate
         run: |
@@ -70,6 +70,9 @@ jobs:
           service: "customer-service"
           region: "europe-west9"
           flags: "--max-instances=1 --allow-unauthenticated"
+
+      - name: Build front-end
+        run: yarn build:frontend
 
       - name: Deploy to Firebase
         uses: FirebaseExtended/action-hosting-deploy@v0

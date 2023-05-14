@@ -52,8 +52,8 @@ jobs:
           yarn db:generate
           yarn db:migrate deploy
 
-      - name: Build application
-        run: yarn build
+      - name: Build backend
+        run: yarn build:backend
 
       - id: "auth"
         name: "Authenticate to Google Cloud"
@@ -92,6 +92,9 @@ jobs:
           flags: "--max-instances=1 --allow-unauthenticated"
           tag: "pr-${{ github.event.number }}"
           no_traffic: true
+
+      - name: Build front-end
+        run: yarn build:frontend
 
       - name: Deploy to Firebase
         uses: FirebaseExtended/action-hosting-deploy@v0
