@@ -1,16 +1,8 @@
 import { atom } from 'recoil';
 
-export type TicketSummary = {
-  id: number;
-  user: {
-    name: string;
-    imageUrl: string;
-  };
-  content: string;
-  openingDate: string;
-};
+import { Ticket } from '@/gql/graphql';
 
-export const ticketListState = atom<TicketSummary[]>({
+export const ticketListState = atom<Ticket[]>({
   key: 'TicketList',
   default: [],
 });
