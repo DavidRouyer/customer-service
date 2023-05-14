@@ -24,16 +24,16 @@ jobs:
       - name: Execute unit tests
         run: yarn test
 
+      - name: Build application
+        run: yarn build
+
       - name: Run Prisma Migrate
         run: |
           cd backend
           touch .env
-          echo DATABASE_URL="${{ secrets.DATABASE_URL}}" >> .env
-          echo DIRECT_DATABASE_URL="${{ secrets.DIRECT_DATABASE_URL}}" >> .env
-          npx prisma migrate deploy
-
-      - name: Build application
-        run: yarn build
+          echo DATABASE_URL="${{ secrets.DATABASE_URL }}" >> .env
+          echo DIRECT_DATABASE_URL="${{ secrets.DIRECT_DATABASE_URL }}" >> .env
+          yarn db:migrate deploy
 
       - id: "auth"
         name: "Authenticate to Google Cloud"
