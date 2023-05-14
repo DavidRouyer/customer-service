@@ -2,6 +2,10 @@ import { ApolloServer, BaseContext } from '@apollo/server';
 import fastifyApollo, {
   fastifyApolloDrainPlugin,
 } from '@as-integrations/fastify';
+import compress from '@fastify/compress';
+import cors from '@fastify/cors';
+import helmet from '@fastify/helmet';
+import rateLimit from '@fastify/rate-limit';
 import { PrismaClient } from '@prisma/client';
 import Fastify from 'fastify';
 
@@ -44,6 +48,11 @@ const apollo = new ApolloServer<BaseContext>({
 });
 
 await apollo.start();
+
+await fastify.register(rateLimit);
+await fastify.register(helmet);
+await fastify.register(cors);
+await fastify.register(compress);
 
 await fastify.register(fastifyApollo(apollo));
 
