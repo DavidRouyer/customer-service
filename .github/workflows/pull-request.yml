@@ -43,17 +43,21 @@ jobs:
           username: ${{ secrets.PG_USERNAME }}
           password: ${{ secrets.PG_PASSWORD }}
 
-      - name: Run Prisma Migrate
+      - name: Setup environment variables
         run: |
-          cd backend
-          touch .env
+          touch backend/.env
           echo DATABASE_URL="${{ steps.create_branch.outputs.db_url_with_pooler }}/neondb?pgbouncer=true&connect_timeout=10" >> .env
           echo DIRECT_DATABASE_URL="${{ steps.create_branch.outputs.db_url }}/neondb?connect_timeout=10" >> .env
-          yarn db:generate
-          yarn db:migrate deploy
+          echo CORS_ORIGIN=* >> backend/.env
 
       - name: Build backend
         run: yarn build:backend
+
+      - name: Run Prisma Migrate
+        run: |
+          cd backend
+          yarn db:generate
+          yarn db:migrate deploy
 
       - id: "auth"
         name: "Authenticate to Google Cloud"
@@ -76,6 +80,7 @@ jobs:
 
       - name: Build Docker image
         run: |
+          cp yarn.lock backend/yarn.lock
           cd backend
           docker build -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/customer-service:${{ github.event.number }} .
 
@@ -83,7 +88,8 @@ jobs:
         run: |
           docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/customer-service:${{ github.event.number }}
 
-      - name: Deploy to Cloud Run
+      - id: "deploy"
+        name: Deploy to Cloud Run
         uses: "google-github-actions/deploy-cloudrun@v1"
         with:
           image: "gcr.io/${{ secrets.GCP_PROJECT_ID }}/customer-service:${{ github.event.number }}"
@@ -92,6 +98,11 @@ jobs:
           flags: "--max-instances=1 --allow-unauthenticated"
           tag: "pr-${{ github.event.number }}"
           no_traffic: true
+
+      - name: Setup environment variables
+        run: |
+          touch frontend/.env
+          echo VITE_ENDPOINT_URL="${{ steps.deploy.outputs.url }}" >> frontend/.env
 
       - name: Build front-end
         run: yarn build:frontend

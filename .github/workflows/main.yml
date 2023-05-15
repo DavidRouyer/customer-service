@@ -91,5 +91,5 @@ jobs:
         with:
           repoToken: "${{ secrets.GITHUB_TOKEN }}"
           firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_CUSTOMER_SERVICE_DEFEA }}"
-          channelId: live
           projectId: customer-service-defea
+          channelId: live
