@@ -10,7 +10,7 @@ export const AllTicketsQuery = graphql(/* GraphQL */ `
     allTickets {
       id
       createdAt
-      user {
+      contact {
         id
         imageUrl
         name

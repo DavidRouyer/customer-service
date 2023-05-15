@@ -19,13 +19,13 @@ export const Ticket: FC<TicketProps> = ({ ticket }) => {
         className="flex gap-x-4 py-5"
       >
         <Avatar className="h-12 w-12">
-          <AvatarImage src={ticket.user.imageUrl || undefined} />
-          <AvatarFallback>{getInitials(ticket.user.name)}</AvatarFallback>
+          <AvatarImage src={ticket.contact.imageUrl || undefined} />
+          <AvatarFallback>{getInitials(ticket.contact.name)}</AvatarFallback>
         </Avatar>
         <div className="flex-auto">
           <div className="flex items-baseline justify-between gap-x-4">
             <p className="text-sm font-semibold leading-6 text-gray-900">
-              {ticket.user.name}
+              {ticket.contact.name}
             </p>
             <p className="flex-none text-xs text-gray-600">
               <time dateTime={ticket.createdAt}>

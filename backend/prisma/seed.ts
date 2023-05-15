@@ -2,7 +2,7 @@ import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 async function main() {
-  const leslie = await prisma.user.upsert({
+  const leslie = await prisma.contact.upsert({
     where: { id: 1 },
     update: {},
     create: {
@@ -18,7 +18,7 @@ async function main() {
       },
     },
   });
-  const michael = await prisma.user.upsert({
+  const michael = await prisma.contact.upsert({
     where: { id: 2 },
     update: {},
     create: {
@@ -34,7 +34,7 @@ async function main() {
       },
     },
   });
-  const dries = await prisma.user.upsert({
+  const dries = await prisma.contact.upsert({
     where: { id: 3 },
     update: {},
     create: {
@@ -50,7 +50,7 @@ async function main() {
       },
     },
   });
-  const lindsay = await prisma.user.upsert({
+  const lindsay = await prisma.contact.upsert({
     where: { id: 4 },
     update: {},
     create: {
@@ -66,7 +66,7 @@ async function main() {
       },
     },
   });
-  const courtney = await prisma.user.upsert({
+  const courtney = await prisma.contact.upsert({
     where: { id: 5 },
     update: {},
     create: {
@@ -82,7 +82,7 @@ async function main() {
       },
     },
   });
-  const tom = await prisma.user.upsert({
+  const tom = await prisma.contact.upsert({
     where: { id: 6 },
     update: {},
     create: {
@@ -98,7 +98,7 @@ async function main() {
       },
     },
   });
-  const lawrence = await prisma.user.upsert({
+  const lawrence = await prisma.contact.upsert({
     where: { id: 7 },
     update: {},
     create: {
@@ -114,7 +114,7 @@ async function main() {
       },
     },
   });
-  const jeffrey = await prisma.user.upsert({
+  const jeffrey = await prisma.contact.upsert({
     where: { id: 8 },
     update: {},
     create: {

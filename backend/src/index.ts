@@ -19,7 +19,7 @@ const prisma = new PrismaClient();
 const typeDefs = `
   scalar Date
 
-  type User {
+  type Contact {
     id: ID!
     name: String!
     imageUrl: String
@@ -27,7 +27,7 @@ const typeDefs = `
 
   type Ticket {
     id: ID!
-    user: User!
+    contact: Contact!
     content: String!
     createdAt: Date!
   }
@@ -40,7 +40,7 @@ const typeDefs = `
 const resolvers = {
   Query: {
     allTickets: async () =>
-      await prisma.ticket.findMany({ include: { user: true } }),
+      await prisma.ticket.findMany({ include: { contact: true } }),
   },
 };
 
@@ -53,7 +53,9 @@ const apollo = new ApolloServer<BaseContext>({
 await apollo.start();
 
 await fastify.register(rateLimit);
-await fastify.register(helmet);
+await fastify.register(helmet, {
+  global: process.env.NODE_ENV === 'production' ? true : false,
+});
 await fastify.register(cors, {
   origin: process.env.NODE_ENV === 'production' ? process.env.CORS_ORIGIN : '*',
 });
