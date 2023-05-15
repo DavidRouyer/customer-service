@@ -1,3 +1,4 @@
+import { Resolvers } from '@/gql/resolvers-types';
 import { ApolloServer, BaseContext } from '@apollo/server';
 import fastifyApollo, {
   fastifyApolloDrainPlugin,
@@ -9,6 +10,7 @@ import rateLimit from '@fastify/rate-limit';
 import { PrismaClient } from '@prisma/client';
 import * as dotenv from 'dotenv';
 import Fastify from 'fastify';
+import { readFileSync } from 'node:fs';
 
 dotenv.config();
 
@@ -16,31 +18,20 @@ const fastify = Fastify({});
 
 const prisma = new PrismaClient();
 
-const typeDefs = `
-  scalar Date
+const typeDefs = readFileSync('./src/schema.graphql', 'utf8');
 
-  type Contact {
-    id: ID!
-    name: String!
-    imageUrl: String
-  }
-
-  type Ticket {
-    id: ID!
-    contact: Contact!
-    content: String!
-    createdAt: Date!
-  }
-
-  type Query {
-    allTickets: [Ticket!]!
-  }
-`;
-
-const resolvers = {
+const resolvers: Resolvers = {
   Query: {
-    allTickets: async () =>
-      await prisma.ticket.findMany({ include: { contact: true } }),
+    allTickets: async () => {
+      const tickets = await prisma.ticket.findMany({
+        include: { contact: true },
+      });
+      return tickets.map((ticket) => ({
+        ...ticket,
+        id: ticket.id.toString(),
+        contact: { ...ticket.contact, id: ticket.contact.id.toString() },
+      }));
+    },
   },
 };
 

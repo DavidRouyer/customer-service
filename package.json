@@ -10,16 +10,21 @@
     "packages/*"
   ],
   "scripts": {
-    "dev": "concurrently \"yarn --cwd frontend dev\" \"yarn --cwd backend dev\"",
+    "dev": "concurrently \"yarn --cwd frontend dev\" \"yarn --cwd backend dev\" \"yarn graphql-codegen\"",
     "build": "yarn build:backend && yarn build:frontend",
     "build:backend": "yarn --cwd backend build",
     "build:frontend": "yarn --cwd frontend build",
     "test": "vitest",
     "test:ui": "vitest --ui",
-    "lint": "yarn --cwd backend lint && yarn --cwd frontend lint"
+    "lint": "yarn --cwd backend lint && yarn --cwd frontend lint",
+    "graphql-codegen": "graphql-codegen --config codegen/codegen.ts --watch"
   },
   "license": "MIT",
   "devDependencies": {
+    "@graphql-codegen/cli": "^3.3.1",
+    "@graphql-codegen/client-preset": "^3.0.1",
+    "@graphql-codegen/typescript": "^3.0.4",
+    "@graphql-codegen/typescript-resolvers": "^3.2.1",
     "@typescript-eslint/eslint-plugin": "^5.59.6",
     "@typescript-eslint/parser": "^5.59.6",
     "@vitest/coverage-c8": "^0.31.0",

@@ -26,7 +26,7 @@ export type Contact = {
   __typename?: 'Contact';
   id: Scalars['ID'];
   imageUrl?: Maybe<Scalars['String']>;
-  name: Scalars['String'];
+  name?: Maybe<Scalars['String']>;
 };
 
 export type Query = {
@@ -37,7 +37,7 @@ export type Query = {
 export type Ticket = {
   __typename?: 'Ticket';
   contact: Contact;
-  content: Scalars['String'];
+  content?: Maybe<Scalars['String']>;
   createdAt: Scalars['Date'];
   id: Scalars['ID'];
 };
@@ -50,12 +50,12 @@ export type AllTicketsQuery = {
     __typename?: 'Ticket';
     id: string;
     createdAt: any;
-    content: string;
+    content?: string | null;
     contact: {
       __typename?: 'Contact';
       id: string;
       imageUrl?: string | null;
-      name: string;
+      name?: string | null;
     };
   }>;
 };

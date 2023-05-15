@@ -20,7 +20,9 @@ export const Ticket: FC<TicketProps> = ({ ticket }) => {
       >
         <Avatar className="h-12 w-12">
           <AvatarImage src={ticket.contact.imageUrl || undefined} />
-          <AvatarFallback>{getInitials(ticket.contact.name)}</AvatarFallback>
+          <AvatarFallback>
+            {getInitials(ticket.contact.name || '')}
+          </AvatarFallback>
         </Avatar>
         <div className="flex-auto">
           <div className="flex items-baseline justify-between gap-x-4">

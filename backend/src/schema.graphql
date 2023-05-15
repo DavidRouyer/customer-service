@@ -1,0 +1,18 @@
+scalar Date
+
+type Contact {
+  id: ID!
+  name: String
+  imageUrl: String
+}
+
+type Ticket {
+  id: ID!
+  contact: Contact!
+  content: String
+  createdAt: Date!
+}
+
+type Query {
+  allTickets: [Ticket!]!
+}
