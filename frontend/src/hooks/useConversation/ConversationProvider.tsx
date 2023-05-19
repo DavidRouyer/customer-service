@@ -12,12 +12,15 @@ import {
 } from '@/hooks/useConversation/Conversation';
 import { ConversationState } from '@/hooks/useConversation/ConversationState';
 import { ConversationStorage } from '@/hooks/useConversation/ConversationStorage';
+import { Message } from '@/hooks/useConversation/Message';
 
 export type ConversationContextType = ConversationState & {
+  currentMessages: Message[];
   addConversation: (conversation: Conversation) => void;
   removeConversation: (conversationId: ConversationId) => boolean;
   getConversation: (conversationId: ConversationId) => Conversation | undefined;
   setActiveConversation: (conversationId: ConversationId) => void;
+  addMessage: (conversationId: ConversationId, message: Message) => void;
 };
 
 const ConversationContext = createContext<ConversationContextType | undefined>(
@@ -83,9 +86,25 @@ export const ConversationProvider: React.FC<ConversationProviderProps> = ({
     [storage, updateState]
   );
 
+  const addMessage = useCallback(
+    (conversationId: ConversationId, message: Message) => {
+      storage.addMessage(conversationId, message);
+      updateState();
+    },
+    [storage, updateState]
+  );
+
   const contextValue = useMemo<ConversationContextType>(
     () => ({
       addConversation,
+      addMessage,
+      currentMessages:
+        state.activeConversation &&
+        state.messagesByConversationId.has(state.activeConversation.id)
+          ? (state.messagesByConversationId.get(
+              state.activeConversation.id
+            ) as Message[])
+          : [],
       removeConversation,
       getConversation,
       setActiveConversation,
@@ -93,6 +112,7 @@ export const ConversationProvider: React.FC<ConversationProviderProps> = ({
     }),
     [
       addConversation,
+      addMessage,
       getConversation,
       removeConversation,
       setActiveConversation,

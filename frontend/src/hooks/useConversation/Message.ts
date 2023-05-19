@@ -1,5 +1,3 @@
-import { atom } from 'recoil';
-
 export type Message = {
   id: number;
   user: {
@@ -8,10 +6,5 @@ export type Message = {
     isAgent: boolean;
   };
   content: string | string[];
-  dateTime: string;
+  createdAt: string;
 };
-
-export const messageListState = atom<Message[]>({
-  key: 'MessageList',
-  default: [],
-});

@@ -1,15 +1,14 @@
 import { FC } from 'react';
-import { useRecoilValue } from 'recoil';
 
+import { useConversation } from '@/hooks/useConversation/ConversationProvider';
 import { cn } from '@/lib/utils';
-import { messageListState } from '@/stores/messageList';
 
 export const MessageList: FC = () => {
-  const messageList = useRecoilValue(messageListState);
+  const { currentMessages } = useConversation();
 
   return (
     <div id="messages" className="flex flex-col space-y-4 overflow-y-auto p-3">
-      {messageList.map((message) => (
+      {currentMessages.map((message) => (
         <div key={message.id}>
           <div
             className={cn(

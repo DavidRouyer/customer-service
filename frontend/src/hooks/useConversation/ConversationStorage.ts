@@ -3,12 +3,14 @@ import {
   ConversationId,
 } from '@/hooks/useConversation/Conversation';
 import { ConversationState } from '@/hooks/useConversation/ConversationState';
+import { Message } from '@/hooks/useConversation/Message';
 import { User } from '@/hooks/useConversation/User';
 
 export class ConversationStorage {
   private currentUser?: User;
   private conversations: Conversation[] = [];
   private activeConversationId?: ConversationId;
+  private messagesByConversationId: Map<string, Message[]> = new Map();
 
   /**
    * Sets current user
@@ -52,7 +54,7 @@ export class ConversationStorage {
   addConversation(conversation: Conversation) {
     const notExists = !this.conversationExists(conversation.id);
     if (notExists) {
-      this.conversations.slice().unshift(conversation);
+      this.conversations.unshift(conversation);
     }
 
     return notExists;
@@ -71,6 +73,10 @@ export class ConversationStorage {
         .slice(0, conversationIdx)
         .concat(this.conversations.slice(conversationIdx + 1));
 
+      if (this.messagesByConversationId.has(conversationId)) {
+        this.messagesByConversationId.delete(conversationId);
+      }
+
       return true;
     }
 
@@ -86,6 +92,27 @@ export class ConversationStorage {
   }
 
   /**
+   * Adds message to conversation
+   * @param conversationId
+   * @param message
+   * @returns added message
+   */
+  addMessage(conversationId: ConversationId, message: Message) {
+    if (!this.messagesByConversationId.has(conversationId)) {
+      this.messagesByConversationId.set(conversationId, [message]);
+
+      return message;
+    }
+
+    // TODO: refactor
+    const newMessage = { ...message, id: Date.now() };
+    const messages = this.messagesByConversationId.get(conversationId);
+    messages?.push(newMessage);
+
+    return newMessage;
+  }
+
+  /**
    * Gets current state
    * @returns current state
    */
@@ -96,6 +123,7 @@ export class ConversationStorage {
       activeConversation: this.activeConversationId
         ? this.getConversation(this.activeConversationId)
         : undefined,
+      messagesByConversationId: this.messagesByConversationId,
     };
   }
 }

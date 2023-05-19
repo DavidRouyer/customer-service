@@ -1,14 +1,13 @@
 import { FC } from 'react';
-import { useRecoilValue } from 'recoil';
 
 import { Ticket } from '@/components/TicketList/Ticket';
-import { ticketListState } from '@/stores/ticketList';
+import { useConversation } from '@/hooks/useConversation/ConversationProvider';
 
 export const TicketList: FC = () => {
-  const ticketList = useRecoilValue(ticketListState);
+  const { conversations } = useConversation();
   return (
     <ul role="list" className="divide-y divide-gray-100">
-      {ticketList.map((ticket) => (
+      {conversations.map((ticket) => (
         <Ticket key={ticket.id} ticket={ticket} />
       ))}
     </ul>
