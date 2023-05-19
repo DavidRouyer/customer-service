@@ -46,8 +46,8 @@ jobs:
       - name: Setup environment variables
         run: |
           touch backend/.env
-          echo DATABASE_URL="${{ steps.create_branch.outputs.db_url_with_pooler }}/neondb?pgbouncer=true&connect_timeout=10" >> .env
-          echo DIRECT_DATABASE_URL="${{ steps.create_branch.outputs.db_url }}/neondb?connect_timeout=10" >> .env
+          echo DATABASE_URL="${{ steps.create_branch.outputs.db_url_with_pooler }}/neondb?pgbouncer=true&connect_timeout=10" >> backend/.env
+          echo DIRECT_DATABASE_URL="${{ steps.create_branch.outputs.db_url }}/neondb?connect_timeout=10" >> backend/.env
           echo CORS_ORIGIN=* >> backend/.env
 
       - name: Build backend
