@@ -5,7 +5,7 @@ import { RecoilRoot } from 'recoil';
 
 import { LayoutWithSidebar } from '@/app/LayoutWithSidebar';
 import { LayoutWithTicketList } from '@/app/LayoutWithTicketList';
-import { ConversationProvider } from '@/hooks/useConversation/ConversationProvider';
+import { TicketProvider } from '@/hooks/useTicket/TicketProvider';
 import '@/lib/i18n';
 import { useSetupAgentList } from '@/stores/useSetupAgentList';
 import { useSetupCurrentUser } from '@/stores/useSetupCurrentUser';
@@ -51,10 +51,10 @@ export const SetupStores = () => {
 export const App: FC = () => {
   return (
     <RecoilRoot>
-      <ConversationProvider>
+      <TicketProvider>
         <SetupStores />
         <RouterProvider router={router} />
-      </ConversationProvider>
+      </TicketProvider>
     </RecoilRoot>
   );
 };

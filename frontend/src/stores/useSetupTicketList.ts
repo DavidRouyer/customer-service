@@ -3,8 +3,8 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
 import { graphql } from '@/gql/gql';
 import { useGraphQL } from '@/hooks/use-query';
-import { useConversation } from '@/hooks/useConversation/ConversationProvider';
-import { Message } from '@/hooks/useConversation/Message';
+import { Message } from '@/hooks/useTicket/Message';
+import { useTicket } from '@/hooks/useTicket/TicketProvider';
 
 export const AllTicketsQuery = graphql(/* GraphQL */ `
   query allTickets {
@@ -64,8 +64,7 @@ const initialMessageList: Message[] = [
 ];
 
 export const useSetupTicketList = () => {
-  const { addConversation, addMessage, setActiveConversation } =
-    useConversation();
+  const { addTicket, addMessage, setActiveTicket } = useTicket();
   const { ticketId } = useParams<{ ticketId?: string }>();
   const navigate = useNavigate();
   const { search } = useLocation();
@@ -76,23 +75,23 @@ export const useSetupTicketList = () => {
   useEffect(() => {
     if (!data) return;
 
-    (data.data?.allTickets ?? []).forEach((ticket) => addConversation(ticket));
+    (data.data?.allTickets ?? []).forEach((ticket) => addTicket(ticket));
     if (ticketId) {
-      setActiveConversation(ticketId);
+      setActiveTicket(ticketId);
       initialMessageList.forEach((message) => addMessage('9', message));
     } else {
-      const firstConversationIdFromList = data?.data?.allTickets[0]?.id;
-      if (!firstConversationIdFromList) return;
+      const firstTicketIdFromList = data?.data?.allTickets[0]?.id;
+      if (!firstTicketIdFromList) return;
 
-      navigate(`/tickets/${firstConversationIdFromList}${search}`, {
+      navigate(`/tickets/${firstTicketIdFromList}${search}`, {
         replace: true,
       });
     }
   }, [
     data,
     ticketId,
-    addConversation,
-    setActiveConversation,
+    addTicket,
+    setActiveTicket,
     navigate,
     search,
     addMessage,

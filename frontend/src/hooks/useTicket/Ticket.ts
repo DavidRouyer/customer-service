@@ -1,15 +1,15 @@
 import { Contact } from '@/gql/graphql';
 
-export type ConversationId = string;
+export type TicketId = string;
 
-export class Conversation {
-  readonly id: ConversationId;
+export class Ticket {
+  readonly id: TicketId;
   content?: string | null;
   contact: Contact;
   createdAt: Date;
 
   constructor(
-    id: ConversationId,
+    id: TicketId,
     contact: Contact,
     createdAt: Date,
     content?: string

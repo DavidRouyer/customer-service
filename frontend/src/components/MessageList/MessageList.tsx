@@ -1,10 +1,10 @@
 import { FC } from 'react';
 
-import { useConversation } from '@/hooks/useConversation/ConversationProvider';
+import { useTicket } from '@/hooks/useTicket/TicketProvider';
 import { cn } from '@/lib/utils';
 
 export const MessageList: FC = () => {
-  const { currentMessages } = useConversation();
+  const { currentMessages } = useTicket();
 
   return (
     <div id="messages" className="flex flex-col space-y-4 overflow-y-auto p-3">
