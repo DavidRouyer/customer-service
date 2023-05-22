@@ -15,6 +15,9 @@ export type MakeOptional<T, K extends keyof T> = Omit<T, K> & {
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & {
   [SubKey in K]: Maybe<T[SubKey]>;
 };
+export type RequireFields<T, K extends keyof T> = Omit<T, K> & {
+  [P in K]-?: NonNullable<T[P]>;
+};
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -23,6 +26,7 @@ export type Scalars = {
   Int: number;
   Float: number;
   Date: any;
+  Json: any;
 };
 
 export type Contact = {
@@ -32,9 +36,42 @@ export type Contact = {
   name?: Maybe<Scalars['String']>;
 };
 
+export type Message = {
+  __typename?: 'Message';
+  content: Scalars['Json'];
+  contentType: MessageContentType;
+  createdAt: Scalars['Date'];
+  direction: MessageDirection;
+  id: Scalars['ID'];
+  sender: Contact;
+  status: MessageStatus;
+};
+
+export enum MessageContentType {
+  TextPlain = 'TextPlain',
+}
+
+export enum MessageDirection {
+  Inbound = 'Inbound',
+  Outbound = 'Outbound',
+}
+
+export enum MessageStatus {
+  DeliveredToCloud = 'DeliveredToCloud',
+  DeliveredToDevice = 'DeliveredToDevice',
+  Pending = 'Pending',
+  Seen = 'Seen',
+  Sent = 'Sent',
+}
+
 export type Query = {
   __typename?: 'Query';
+  allMessages: Array<Message>;
   allTickets: Array<Ticket>;
+};
+
+export type QueryAllMessagesArgs = {
+  ticketId: Scalars['ID'];
 };
 
 export type Ticket = {
@@ -159,6 +196,11 @@ export type ResolversTypes = ResolversObject<{
   Contact: ResolverTypeWrapper<Contact>;
   Date: ResolverTypeWrapper<Scalars['Date']>;
   ID: ResolverTypeWrapper<Scalars['ID']>;
+  Json: ResolverTypeWrapper<Scalars['Json']>;
+  Message: ResolverTypeWrapper<Message>;
+  MessageContentType: MessageContentType;
+  MessageDirection: MessageDirection;
+  MessageStatus: MessageStatus;
   Query: ResolverTypeWrapper<{}>;
   String: ResolverTypeWrapper<Scalars['String']>;
   Ticket: ResolverTypeWrapper<Ticket>;
@@ -170,6 +212,8 @@ export type ResolversParentTypes = ResolversObject<{
   Contact: Contact;
   Date: Scalars['Date'];
   ID: Scalars['ID'];
+  Json: Scalars['Json'];
+  Message: Message;
   Query: {};
   String: Scalars['String'];
   Ticket: Ticket;
@@ -190,10 +234,43 @@ export interface DateScalarConfig
   name: 'Date';
 }
 
+export interface JsonScalarConfig
+  extends GraphQLScalarTypeConfig<ResolversTypes['Json'], any> {
+  name: 'Json';
+}
+
+export type MessageResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['Message'] = ResolversParentTypes['Message']
+> = ResolversObject<{
+  content?: Resolver<ResolversTypes['Json'], ParentType, ContextType>;
+  contentType?: Resolver<
+    ResolversTypes['MessageContentType'],
+    ParentType,
+    ContextType
+  >;
+  createdAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
+  direction?: Resolver<
+    ResolversTypes['MessageDirection'],
+    ParentType,
+    ContextType
+  >;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  sender?: Resolver<ResolversTypes['Contact'], ParentType, ContextType>;
+  status?: Resolver<ResolversTypes['MessageStatus'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
 export type QueryResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']
 > = ResolversObject<{
+  allMessages?: Resolver<
+    Array<ResolversTypes['Message']>,
+    ParentType,
+    ContextType,
+    RequireFields<QueryAllMessagesArgs, 'ticketId'>
+  >;
   allTickets?: Resolver<
     Array<ResolversTypes['Ticket']>,
     ParentType,
@@ -215,6 +292,8 @@ export type TicketResolvers<
 export type Resolvers<ContextType = any> = ResolversObject<{
   Contact?: ContactResolvers<ContextType>;
   Date?: GraphQLScalarType;
+  Json?: GraphQLScalarType;
+  Message?: MessageResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   Ticket?: TicketResolvers<ContextType>;
 }>;

@@ -14,18 +14,50 @@ generator client {
 }
 
 model Contact {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
+  id        Int       @id @default(autoincrement())
+  createdAt DateTime  @default(now())
   email     String?
   name      String?
   imageUrl  String?
   tickets   Ticket[]
+  messages  Message[]
 }
 
 model Ticket {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
+  id        Int       @id @default(autoincrement())
+  createdAt DateTime  @default(now())
   content   String?
-  contact   Contact  @relation(fields: [contactId], references: [id])
+  contact   Contact   @relation(fields: [contactId], references: [id])
   contactId Int
+  messages  Message[]
+}
+
+enum MessageDirection {
+  Inbound
+  Outbound
+}
+
+enum MessageContentType {
+  TextPlain
+}
+
+enum MessageStatus {
+  Pending // Message is waiting in client for sending
+  Sent // Message was sent to the cloud
+  DeliveredToCloud // The cloud acknowledged the receipt of the message
+  DeliveredToDevice // The message has been delivered to at least one client device
+  Seen // The message was seen by the recipient
+}
+
+model Message {
+  id          Int                @id @default(autoincrement())
+  createdAt   DateTime           @default(now())
+  status      MessageStatus
+  contentType MessageContentType
+  content     Json
+  direction   MessageDirection
+  sender      Contact            @relation(fields: [senderId], references: [id])
+  senderId    Int
+  ticket      Ticket             @relation(fields: [ticketId], references: [id])
+  ticketId    Int
 }

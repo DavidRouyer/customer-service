@@ -16,6 +16,8 @@ import * as types from './graphql';
 const documents = {
   '\n  query allTickets {\n    allTickets {\n      id\n      createdAt\n      contact {\n        id\n        imageUrl\n        name\n      }\n      content\n    }\n  }\n':
     types.AllTicketsDocument,
+  '\n  query allMessages($ticketId: ID!) {\n    allMessages(ticketId: $ticketId) {\n      id\n      createdAt\n      content\n      contentType\n      direction\n      status\n      sender {\n        id\n        imageUrl\n        name\n      }\n    }\n  }\n':
+    types.AllMessagesDocument,
 };
 
 /**
@@ -38,6 +40,12 @@ export function graphql(source: string): unknown;
 export function graphql(
   source: '\n  query allTickets {\n    allTickets {\n      id\n      createdAt\n      contact {\n        id\n        imageUrl\n        name\n      }\n      content\n    }\n  }\n'
 ): (typeof documents)['\n  query allTickets {\n    allTickets {\n      id\n      createdAt\n      contact {\n        id\n        imageUrl\n        name\n      }\n      content\n    }\n  }\n'];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  query allMessages($ticketId: ID!) {\n    allMessages(ticketId: $ticketId) {\n      id\n      createdAt\n      content\n      contentType\n      direction\n      status\n      sender {\n        id\n        imageUrl\n        name\n      }\n    }\n  }\n'
+): (typeof documents)['\n  query allMessages($ticketId: ID!) {\n    allMessages(ticketId: $ticketId) {\n      id\n      createdAt\n      content\n      contentType\n      direction\n      status\n      sender {\n        id\n        imageUrl\n        name\n      }\n    }\n  }\n'];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};

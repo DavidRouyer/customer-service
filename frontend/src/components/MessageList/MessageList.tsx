@@ -1,5 +1,6 @@
 import { FC } from 'react';
 
+import { MessageDirection } from '@/gql/graphql';
 import { useTicket } from '@/hooks/useTicket/TicketProvider';
 import { cn } from '@/lib/utils';
 
@@ -13,13 +14,15 @@ export const MessageList: FC = () => {
           <div
             className={cn(
               'flex items-end',
-              message.user.isAgent && 'justify-end'
+              message.direction === MessageDirection.Outbound && 'justify-end'
             )}
           >
             <div
               className={cn(
                 'order-2 mx-2 flex max-w-xs flex-col space-y-2 text-sm',
-                message.user.isAgent ? 'items-end' : 'items-start'
+                message.direction === MessageDirection.Outbound
+                  ? 'items-end'
+                  : 'items-start'
               )}
             >
               {typeof message.content === 'string' && (
@@ -27,7 +30,7 @@ export const MessageList: FC = () => {
                   <span
                     className={cn(
                       'inline-block rounded-lg px-4 py-2',
-                      message.user.isAgent
+                      message.direction === MessageDirection.Outbound
                         ? 'rounded-br-none bg-blue-600 text-white'
                         : 'rounded-bl-none bg-gray-300 text-gray-600'
                     )}
@@ -36,34 +39,15 @@ export const MessageList: FC = () => {
                   </span>
                 </div>
               )}
-              {typeof message.content !== 'string' &&
-                message.content.map((content, index) => (
-                  <div key={content}>
-                    <span
-                      className={cn(
-                        'inline-block rounded-lg px-4 py-2',
-                        message.user.isAgent
-                          ? 'bg-blue-600 text-white'
-                          : 'bg-gray-300 text-gray-600',
-                        message.user.isAgent &&
-                          index === message.content.length - 1 &&
-                          'rounded-br-none',
-                        !message.user.isAgent &&
-                          index === message.content.length - 1 &&
-                          'rounded-bl-none'
-                      )}
-                    >
-                      {content}
-                    </span>
-                  </div>
-                ))}
             </div>
             <img
-              src={message.user.imageUrl}
-              alt={message.user.name}
+              src={message.sender.imageUrl ?? undefined}
+              alt={message.sender.name ?? undefined}
               className={cn(
                 'h-6 w-6 rounded-full',
-                message.user.isAgent ? 'order-2' : 'order-1'
+                message.direction === MessageDirection.Outbound
+                  ? 'order-2'
+                  : 'order-1'
               )}
             />
           </div>

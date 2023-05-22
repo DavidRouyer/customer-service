@@ -20,6 +20,7 @@ export type Scalars = {
   Int: number;
   Float: number;
   Date: any;
+  Json: any;
 };
 
 export type Contact = {
@@ -29,9 +30,42 @@ export type Contact = {
   name?: Maybe<Scalars['String']>;
 };
 
+export type Message = {
+  __typename?: 'Message';
+  content: Scalars['Json'];
+  contentType: MessageContentType;
+  createdAt: Scalars['Date'];
+  direction: MessageDirection;
+  id: Scalars['ID'];
+  sender: Contact;
+  status: MessageStatus;
+};
+
+export enum MessageContentType {
+  TextPlain = 'TextPlain',
+}
+
+export enum MessageDirection {
+  Inbound = 'Inbound',
+  Outbound = 'Outbound',
+}
+
+export enum MessageStatus {
+  DeliveredToCloud = 'DeliveredToCloud',
+  DeliveredToDevice = 'DeliveredToDevice',
+  Pending = 'Pending',
+  Seen = 'Seen',
+  Sent = 'Sent',
+}
+
 export type Query = {
   __typename?: 'Query';
+  allMessages: Array<Message>;
   allTickets: Array<Ticket>;
+};
+
+export type QueryAllMessagesArgs = {
+  ticketId: Scalars['ID'];
 };
 
 export type Ticket = {
@@ -52,6 +86,29 @@ export type AllTicketsQuery = {
     createdAt: any;
     content?: string | null;
     contact: {
+      __typename?: 'Contact';
+      id: string;
+      imageUrl?: string | null;
+      name?: string | null;
+    };
+  }>;
+};
+
+export type AllMessagesQueryVariables = Exact<{
+  ticketId: Scalars['ID'];
+}>;
+
+export type AllMessagesQuery = {
+  __typename?: 'Query';
+  allMessages: Array<{
+    __typename?: 'Message';
+    id: string;
+    createdAt: any;
+    content: any;
+    contentType: MessageContentType;
+    direction: MessageDirection;
+    status: MessageStatus;
+    sender: {
       __typename?: 'Contact';
       id: string;
       imageUrl?: string | null;
@@ -102,3 +159,71 @@ export const AllTicketsDocument = {
     },
   ],
 } as unknown as DocumentNode<AllTicketsQuery, AllTicketsQueryVariables>;
+export const AllMessagesDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'allMessages' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'ticketId' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: { kind: 'NamedType', name: { kind: 'Name', value: 'ID' } },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'allMessages' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'ticketId' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'ticketId' },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'content' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'contentType' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'direction' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'status' } },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'sender' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'imageUrl' },
+                      },
+                      { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<AllMessagesQuery, AllMessagesQueryVariables>;

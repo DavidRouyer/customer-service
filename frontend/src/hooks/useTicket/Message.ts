@@ -1,10 +1,16 @@
+import {
+  Contact,
+  MessageContentType,
+  MessageDirection,
+  MessageStatus,
+} from '@/gql/graphql';
+
 export type Message = {
-  id: number;
-  user: {
-    name: string;
-    imageUrl: string;
-    isAgent: boolean;
-  };
-  content: string | string[];
+  id: string;
   createdAt: string;
+  content: any;
+  contentType: MessageContentType;
+  direction: MessageDirection;
+  status: MessageStatus;
+  sender: Contact;
 };

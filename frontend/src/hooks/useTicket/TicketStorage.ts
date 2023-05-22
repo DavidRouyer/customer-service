@@ -102,9 +102,17 @@ export class TicketStorage {
     }
 
     // TODO: refactor
-    const newMessage = { ...message, id: Date.now() };
+    const newMessage = { ...message };
     const messages = this.messagesByTicketId.get(ticketId);
-    messages?.push(newMessage);
+
+    if (!messages) return;
+
+    const foundMessageId = messages.findIndex((m) => m.id === newMessage.id);
+    if (foundMessageId === -1) {
+      messages.push(newMessage);
+    } else {
+      messages.splice(foundMessageId, 1, newMessage);
+    }
 
     return newMessage;
   }

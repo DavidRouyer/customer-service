@@ -1,4 +1,9 @@
-import { Resolvers } from '@/gql/resolvers-types';
+import {
+  MessageContentType,
+  MessageDirection,
+  MessageStatus,
+  Resolvers,
+} from '@/gql/resolvers-types';
 import { ApolloServer, BaseContext } from '@apollo/server';
 import fastifyApollo, {
   fastifyApolloDrainPlugin,
@@ -30,6 +35,20 @@ const resolvers: Resolvers = {
         ...ticket,
         id: ticket.id.toString(),
         contact: { ...ticket.contact, id: ticket.contact.id.toString() },
+      }));
+    },
+    allMessages: async (_, { ticketId }) => {
+      const messages = await prisma.message.findMany({
+        where: { ticketId: parseInt(ticketId) },
+        include: { sender: true },
+      });
+      return messages.map((message) => ({
+        ...message,
+        id: message.id.toString(),
+        contentType: <MessageContentType>message.contentType,
+        direction: <MessageDirection>message.direction,
+        status: <MessageStatus>message.status,
+        sender: { ...message.sender, id: message.sender.id.toString() },
       }));
     },
   },

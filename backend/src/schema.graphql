@@ -1,4 +1,5 @@
 scalar Date
+scalar Json
 
 type Contact {
   id: ID!
@@ -13,6 +14,34 @@ type Ticket {
   createdAt: Date!
 }
 
+enum MessageDirection {
+  Inbound
+  Outbound
+}
+
+enum MessageContentType {
+  TextPlain
+}
+
+enum MessageStatus {
+  Pending
+  Sent
+  DeliveredToCloud
+  DeliveredToDevice
+  Seen
+}
+
+type Message {
+  id: ID!
+  contentType: MessageContentType!
+  direction: MessageDirection!
+  status: MessageStatus!
+  content: Json!
+  sender: Contact!
+  createdAt: Date!
+}
+
 type Query {
   allTickets: [Ticket!]!
+  allMessages(ticketId: ID!): [Message!]!
 }
