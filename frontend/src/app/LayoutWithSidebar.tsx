@@ -32,17 +32,17 @@ const navigation = [
           <AccordionContent>
             <ul role="list" className="flex flex-col gap-y-1">
               <li>
-                <NavLink to="/tickets/1?filter=me">
+                <NavLink to="/tickets?filter=me">
                   <Trans i18nKey="layout.tickets.my_tickets" />
                 </NavLink>
               </li>
               <li>
-                <NavLink to="/tickets/1?filter=all">
+                <NavLink to="/tickets?filter=all">
                   <Trans i18nKey="layout.tickets.all_tickets" />
                 </NavLink>
               </li>
               <li>
-                <NavLink to="/tickets/1?filter=unassigned">
+                <NavLink to="/tickets?filter=unassigned">
                   <Trans i18nKey="layout.tickets.unassigned_tickets" />
                 </NavLink>
               </li>

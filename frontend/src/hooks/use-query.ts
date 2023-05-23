@@ -17,18 +17,19 @@ const isOperationDefinition = (def: ASTNode): def is OperationDefinitionNode =>
 
 export function useGraphQL<TResult, TVariables>(
   document: TypedDocumentNode<TResult, TVariables>,
-  ...[variables]: TVariables extends Record<string, never> ? [] : [TVariables]
+  variables?: TVariables | null
 ) {
+  const shouldFetch = variables !== null;
+
   return useSWR(
-    [
-      // This logic can be customized as desired
-      document.definitions.find(isOperationDefinition)?.name,
-      variables,
-    ] as const,
-    async (
-      _key: TypedDocumentNode<TResult, TVariables>,
-      variables: TVariables | undefined
-    ) =>
+    shouldFetch
+      ? ([
+          // This logic can be customized as desired
+          document.definitions.find(isOperationDefinition)?.name,
+          variables,
+        ] as const)
+      : null,
+    async (_key: TypedDocumentNode<TResult, TVariables>) =>
       executor({
         document: document as any,
         variables: variables as any,

@@ -5,11 +5,10 @@ import { RecoilRoot } from 'recoil';
 
 import { LayoutWithSidebar } from '@/app/LayoutWithSidebar';
 import { LayoutWithTicketList } from '@/app/LayoutWithTicketList';
+import { TicketProvider } from '@/hooks/useTicket/TicketProvider';
 import '@/lib/i18n';
 import { useSetupAgentList } from '@/stores/useSetupAgentList';
 import { useSetupCurrentUser } from '@/stores/useSetupCurrentUser';
-import { useSetupMessageList } from '@/stores/useSetupMessageList';
-import { useSetupTicketList } from '@/stores/useSetupTicketList';
 
 const router = createBrowserRouter([
   {
@@ -18,7 +17,7 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <Navigate to="/tickets/1&filter=me" />,
+        element: <Navigate to="/tickets?filter=me" />,
       },
       {
         path: 'tickets',
@@ -45,8 +44,6 @@ const router = createBrowserRouter([
 export const SetupStores = () => {
   useSetupAgentList();
   useSetupCurrentUser();
-  useSetupMessageList();
-  useSetupTicketList();
 
   return null;
 };
@@ -54,8 +51,10 @@ export const SetupStores = () => {
 export const App: FC = () => {
   return (
     <RecoilRoot>
-      <SetupStores />
-      <RouterProvider router={router} />
+      <TicketProvider>
+        <SetupStores />
+        <RouterProvider router={router} />
+      </TicketProvider>
     </RecoilRoot>
   );
 };

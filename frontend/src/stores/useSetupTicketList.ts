@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
-import { useSetRecoilState } from 'recoil';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
 import { graphql } from '@/gql/gql';
 import { useGraphQL } from '@/hooks/use-query';
-import { ticketListState } from '@/stores/ticketList';
+import { useTicket } from '@/hooks/useTicket/TicketProvider';
 
 export const AllTicketsQuery = graphql(/* GraphQL */ `
   query allTickets {
@@ -20,12 +20,66 @@ export const AllTicketsQuery = graphql(/* GraphQL */ `
   }
 `);
 
-export const useSetupTicketList = () => {
-  const setTicketList = useSetRecoilState(ticketListState);
+export const AllMessagesQuery = graphql(/* GraphQL */ `
+  query allMessages($ticketId: ID!) {
+    allMessages(ticketId: $ticketId) {
+      id
+      createdAt
+      content
+      contentType
+      direction
+      status
+      sender {
+        id
+        imageUrl
+        name
+      }
+    }
+  }
+`);
 
-  const { data } = useGraphQL(AllTicketsQuery);
+export const useSetupTicketList = () => {
+  const { addTicket, addMessage, setActiveTicket } = useTicket();
+  const { ticketId } = useParams<{ ticketId?: string }>();
+  const navigate = useNavigate();
+  const { search } = useLocation();
+
+  const { data: ticketsData } = useGraphQL(AllTicketsQuery);
+  const { data: messagesData } = useGraphQL(
+    AllMessagesQuery,
+    ticketId ? { ticketId } : null
+  );
+
+  // TODO: refactor
+  useEffect(() => {
+    if (!ticketsData) return;
+
+    (ticketsData.data?.allTickets ?? []).forEach((ticket) => addTicket(ticket));
+    if (ticketId) {
+      setActiveTicket(ticketId);
+    } else {
+      const firstTicketIdFromList = ticketsData?.data?.allTickets[0]?.id;
+      if (!firstTicketIdFromList) return;
+
+      navigate(`/tickets/${firstTicketIdFromList}${search}`, {
+        replace: true,
+      });
+    }
+  }, [
+    ticketsData,
+    ticketId,
+    addTicket,
+    setActiveTicket,
+    navigate,
+    search,
+    addMessage,
+  ]);
 
   useEffect(() => {
-    setTicketList(data?.data?.allTickets ?? []);
-  }, [data, setTicketList]);
+    if (!messagesData || !ticketId) return;
+
+    (messagesData.data?.allMessages ?? []).forEach((message) =>
+      addMessage(ticketId, message)
+    );
+  }, [messagesData, addMessage, ticketId]);
 };
