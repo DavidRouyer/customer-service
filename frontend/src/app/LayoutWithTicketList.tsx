@@ -15,7 +15,7 @@ export const LayoutWithTicketList: FC = () => {
       </aside>
 
       <main className="lg:pl-72">
-        <div className="xl:pl-96 2xl:pr-96">
+        <div className="xl:pl-96 2xl:mr-96 2xl:h-[100dvh] 2xl:overflow-y-auto">
           <div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6">
             <Outlet />
           </div>
