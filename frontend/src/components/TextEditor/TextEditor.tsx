@@ -14,9 +14,14 @@ import { PlainTextPlugin } from '@lexical/react/LexicalPlainTextPlugin';
 export const TextEditor: FC = () => {
   return (
     <LexicalComposer initialConfig={editorConfig}>
-      <div className="editor-container">
+      <div className="relative bg-transparent text-left font-normal leading-5 text-black">
         <PlainTextPlugin
-          contentEditable={<ContentEditable className="editor-input" />}
+          contentEditable={
+            <ContentEditable
+              className="relative min-h-[150px] resize-none px-2 py-4 text-[15px] caret-gray-800"
+              style={{ tabSize: '1' }}
+            />
+          }
           placeholder={<Placeholder />}
           ErrorBoundary={LexicalErrorBoundary}
         />
@@ -30,5 +35,9 @@ export const TextEditor: FC = () => {
 };
 
 function Placeholder() {
-  return <div className="editor-placeholder">Enter some plain text...</div>;
+  return (
+    <div className="pointer-events-none absolute left-2 top-4 inline-block select-none overflow-hidden text-ellipsis text-[15px] text-gray-400">
+      Enter some plain text...
+    </div>
+  );
 }

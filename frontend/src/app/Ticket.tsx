@@ -1,6 +1,7 @@
 import { FC } from 'react';
 
 import { MessageList } from '@/components/MessageList/MessageList';
+import { TextEditor } from '@/components/TextEditor/TextEditor';
 import { useTicket } from '@/hooks/useTicket/TicketProvider';
 
 export const Component: FC = () => {
@@ -18,6 +19,9 @@ export const Component: FC = () => {
       </div>
 
       <MessageList />
+      <div className="overflow-hidden rounded-lg shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-indigo-600">
+        <TextEditor />
+      </div>
     </div>
   );
 };
