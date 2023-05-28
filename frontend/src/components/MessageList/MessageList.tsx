@@ -8,7 +8,10 @@ export const MessageList: FC = () => {
   const { currentMessages } = useTicket();
 
   return (
-    <div id="messages" className="flex flex-col space-y-4 overflow-y-auto p-3">
+    <div
+      id="messages"
+      className="flex flex-1 flex-col space-y-4 overflow-y-auto p-3"
+    >
       {currentMessages.map((message) => (
         <div key={message.id}>
           <div
