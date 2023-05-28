@@ -39,7 +39,7 @@ const resolvers: Resolvers = {
     },
     allMessages: async (_, { ticketId }) => {
       const messages = await prisma.message.findMany({
-        where: { ticketId: parseInt(ticketId) },
+        where: { ticketId: typeof ticketId === 'number' ? ticketId : parseInt(ticketId) },
         include: { sender: true },
       });
       return messages.map((message) => ({

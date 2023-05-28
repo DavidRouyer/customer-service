@@ -15,34 +15,43 @@ export type MakeOptional<T, K extends keyof T> = Omit<T, K> & {
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & {
   [SubKey in K]: Maybe<T[SubKey]>;
 };
+export type MakeEmpty<
+  T extends { [key: string]: unknown },
+  K extends keyof T
+> = { [_ in K]?: never };
+export type Incremental<T> =
+  | T
+  | {
+      [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never;
+    };
 export type RequireFields<T, K extends keyof T> = Omit<T, K> & {
   [P in K]-?: NonNullable<T[P]>;
 };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
-  ID: string;
-  String: string;
-  Boolean: boolean;
-  Int: number;
-  Float: number;
-  Date: any;
-  Json: any;
+  ID: { input: string | number; output: string };
+  String: { input: string; output: string };
+  Boolean: { input: boolean; output: boolean };
+  Int: { input: number; output: number };
+  Float: { input: number; output: number };
+  Date: { input: any; output: any };
+  Json: { input: any; output: any };
 };
 
 export type Contact = {
   __typename?: 'Contact';
-  id: Scalars['ID'];
-  imageUrl?: Maybe<Scalars['String']>;
-  name?: Maybe<Scalars['String']>;
+  id: Scalars['ID']['output'];
+  imageUrl?: Maybe<Scalars['String']['output']>;
+  name?: Maybe<Scalars['String']['output']>;
 };
 
 export type Message = {
   __typename?: 'Message';
-  content: Scalars['Json'];
+  content: Scalars['Json']['output'];
   contentType: MessageContentType;
-  createdAt: Scalars['Date'];
+  createdAt: Scalars['Date']['output'];
   direction: MessageDirection;
-  id: Scalars['ID'];
+  id: Scalars['ID']['output'];
   sender: Contact;
   status: MessageStatus;
 };
@@ -71,15 +80,15 @@ export type Query = {
 };
 
 export type QueryAllMessagesArgs = {
-  ticketId: Scalars['ID'];
+  ticketId: Scalars['ID']['input'];
 };
 
 export type Ticket = {
   __typename?: 'Ticket';
   contact: Contact;
-  content?: Maybe<Scalars['String']>;
-  createdAt: Scalars['Date'];
-  id: Scalars['ID'];
+  content?: Maybe<Scalars['String']['output']>;
+  createdAt: Scalars['Date']['output'];
+  id: Scalars['ID']['output'];
 };
 
 export type WithIndex<TObject> = TObject & Record<string, any>;
@@ -192,30 +201,30 @@ export type DirectiveResolverFn<
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = ResolversObject<{
-  Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
+  Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
   Contact: ResolverTypeWrapper<Contact>;
-  Date: ResolverTypeWrapper<Scalars['Date']>;
-  ID: ResolverTypeWrapper<Scalars['ID']>;
-  Json: ResolverTypeWrapper<Scalars['Json']>;
+  Date: ResolverTypeWrapper<Scalars['Date']['output']>;
+  ID: ResolverTypeWrapper<Scalars['ID']['output']>;
+  Json: ResolverTypeWrapper<Scalars['Json']['output']>;
   Message: ResolverTypeWrapper<Message>;
   MessageContentType: MessageContentType;
   MessageDirection: MessageDirection;
   MessageStatus: MessageStatus;
   Query: ResolverTypeWrapper<{}>;
-  String: ResolverTypeWrapper<Scalars['String']>;
+  String: ResolverTypeWrapper<Scalars['String']['output']>;
   Ticket: ResolverTypeWrapper<Ticket>;
 }>;
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = ResolversObject<{
-  Boolean: Scalars['Boolean'];
+  Boolean: Scalars['Boolean']['output'];
   Contact: Contact;
-  Date: Scalars['Date'];
-  ID: Scalars['ID'];
-  Json: Scalars['Json'];
+  Date: Scalars['Date']['output'];
+  ID: Scalars['ID']['output'];
+  Json: Scalars['Json']['output'];
   Message: Message;
   Query: {};
-  String: Scalars['String'];
+  String: Scalars['String']['output'];
   Ticket: Ticket;
 }>;
 
