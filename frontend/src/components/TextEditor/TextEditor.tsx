@@ -1,4 +1,5 @@
 import { FC } from 'react';
+import { Trans } from 'react-i18next';
 
 import editorConfig from '@/components/TextEditor/editorConfig';
 import onChange from '@/components/TextEditor/onChange';
@@ -34,10 +35,14 @@ export const TextEditor: FC = () => {
   );
 };
 
-function Placeholder() {
+TextEditor.displayName = 'TextEditor';
+
+const Placeholder: FC = () => {
   return (
     <div className="pointer-events-none absolute left-2 top-4 inline-block select-none overflow-hidden text-ellipsis text-[15px] text-gray-400">
-      Enter some plain text...
+      <Trans i18nKey="text_editor.placeholder" />
     </div>
   );
-}
+};
+
+Placeholder.displayName = 'Placeholder';

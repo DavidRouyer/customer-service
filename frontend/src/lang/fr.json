@@ -18,6 +18,9 @@
     },
     "your_profile": "Votre profil"
   },
+  "text_editor": {
+    "placeholder": "Écrivez votre réponse ici ..."
+  },
   "ticket":{
     "opened_on": "Ouvert le",
     "resolved_on": "Résolu le",

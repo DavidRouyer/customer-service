@@ -18,6 +18,9 @@
     },
     "your_profile": "Your profile"
   },
+  "text_editor": {
+    "placeholder": "Type your message here..."
+  },
   "ticket":{
     "opened_on": "Opened on",
     "resolved_on": "Resolved on",
