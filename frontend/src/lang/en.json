@@ -19,7 +19,10 @@
     "your_profile": "Your profile"
   },
   "text_editor": {
-    "placeholder": "Type your message here..."
+    "add_emoticons": "Add emoticons",
+    "attach_files": "Attach files",
+    "placeholder": "Type your message here...",
+    "send": "Send"
   },
   "ticket":{
     "opened_on": "Opened on",

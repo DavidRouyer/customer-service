@@ -19,7 +19,7 @@ export const TextEditor: FC = () => {
         <PlainTextPlugin
           contentEditable={
             <ContentEditable
-              className="relative min-h-[150px] resize-none px-2 py-4 text-[15px] caret-gray-800"
+              className="relative min-h-[128px] resize-none px-2 py-4 text-[15px] caret-gray-800 outline-none"
               style={{ tabSize: '1' }}
             />
           }

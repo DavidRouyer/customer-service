@@ -19,7 +19,10 @@
     "your_profile": "Votre profil"
   },
   "text_editor": {
-    "placeholder": "Écrivez votre réponse ici ..."
+    "add_emoticons": "Ajouter des émoticônes",
+    "attach_files": "Joindre des fichiers",
+    "placeholder": "Écrivez votre réponse ici ...",
+    "send": "Envoyer"
   },
   "ticket":{
     "opened_on": "Ouvert le",
