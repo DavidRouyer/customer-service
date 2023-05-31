@@ -6,7 +6,13 @@ import { PaperclipIcon, SmilePlusIcon } from 'lucide-react';
 
 export const MessageForm: FC = () => {
   return (
-    <form action="#" className="relative">
+    <form
+      onSubmit={(e) => {
+        e.preventDefault();
+        console.log('submitted');
+      }}
+      className="relative"
+    >
       <div className="overflow-hidden rounded-lg shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-indigo-600">
         <TextEditor />
         {/* Spacer element to match the height of the toolbar */}

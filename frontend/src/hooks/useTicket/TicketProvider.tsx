@@ -6,6 +6,7 @@ import {
   useState,
 } from 'react';
 
+import { useAddMessage } from '@/hooks/useAddMessage';
 import { Message } from '@/hooks/useTicket/Message';
 import { Ticket, TicketId } from '@/hooks/useTicket/Ticket';
 import { TicketState } from '@/hooks/useTicket/TicketState';
@@ -24,6 +25,7 @@ export type TicketContextType = TicketState & {
   getTicket: (ticketId: TicketId) => Ticket | undefined;
   setActiveTicket: (ticketId: TicketId) => void;
   addMessage: (ticketId: TicketId, message: Message) => void;
+  sendMessage: (params: SendMessageParams) => void;
 };
 
 const TicketContext = createContext<TicketContextType | undefined>(undefined);
@@ -47,6 +49,7 @@ export type TicketProviderProps = {
 export const TicketProvider: React.FC<TicketProviderProps> = ({ children }) => {
   const [storage] = useState<TicketStorage>(new TicketStorage());
   const [state, setState] = useState<TicketState>(storage.getState());
+  const { trigger: sendRemoteMessage } = useAddMessage();
 
   const updateState = useCallback(() => {
     const newState = storage.getState();
@@ -97,18 +100,9 @@ export const TicketProvider: React.FC<TicketProviderProps> = ({ children }) => {
 
       updateState();
 
-      const messageEvent = new CustomEvent('chat-protocol', {
-        detail: {
-          type: 'message',
-          storedMessage,
-          ticketId,
-          sender: senderId,
-        },
-      });
-
-      window.dispatchEvent(messageEvent);
+      sendRemoteMessage();
     },
-    [storage]
+    [sendRemoteMessage, storage, updateState]
   );
 
   const contextValue = useMemo<TicketContextType>(
@@ -123,9 +117,18 @@ export const TicketProvider: React.FC<TicketProviderProps> = ({ children }) => {
       removeTicket: removeTicket,
       getTicket: getTicket,
       setActiveTicket: setActiveTicket,
+      sendMessage: sendMessage,
       ...state,
     }),
-    [addTicket, addMessage, getTicket, removeTicket, setActiveTicket, state]
+    [
+      addTicket,
+      addMessage,
+      state,
+      removeTicket,
+      getTicket,
+      setActiveTicket,
+      sendMessage,
+    ]
   );
 
   return (

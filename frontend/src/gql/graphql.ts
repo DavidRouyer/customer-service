@@ -104,6 +104,16 @@ export type Ticket = {
   id: Scalars['ID']['output'];
 };
 
+export type AddMessageMutationVariables = Exact<{
+  ticketId: Scalars['ID']['input'];
+  message: AddMessageInput;
+}>;
+
+export type AddMessageMutation = {
+  __typename?: 'Mutation';
+  addMessage: string;
+};
+
 export type AllTicketsQueryVariables = Exact<{ [key: string]: never }>;
 
 export type AllTicketsQuery = {
@@ -145,6 +155,70 @@ export type AllMessagesQuery = {
   }>;
 };
 
+export const AddMessageDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'mutation',
+      name: { kind: 'Name', value: 'AddMessage' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'ticketId' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: { kind: 'NamedType', name: { kind: 'Name', value: 'ID' } },
+          },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'message' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'AddMessageInput' },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'addMessage' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'ticketId' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'ticketId' },
+                },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'message' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'message' },
+                },
+              },
+            ],
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<AddMessageMutation, AddMessageMutationVariables>;
 export const AllTicketsDocument = {
   kind: 'Document',
   definitions: [
