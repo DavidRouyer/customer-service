@@ -38,8 +38,9 @@ const resolvers: Resolvers = {
       }));
     },
     allMessages: async (_, { ticketId }) => {
+      const sanitizedTicketId = typeof ticketId === 'number' ? ticketId : parseInt(ticketId);
       const messages = await prisma.message.findMany({
-        where: { ticketId: typeof ticketId === 'number' ? ticketId : parseInt(ticketId) },
+        where: { ticketId: sanitizedTicketId },
         include: { sender: true },
       });
       return messages.map((message) => ({
