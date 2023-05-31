@@ -38,6 +38,15 @@ export type Scalars = {
   Json: { input: any; output: any };
 };
 
+export type AddMessageInput = {
+  content: Scalars['Json']['input'];
+  contentType: MessageContentType;
+  createdAt: Scalars['Date']['input'];
+  direction: MessageDirection;
+  senderId: Scalars['ID']['input'];
+  status: MessageStatus;
+};
+
 export type Contact = {
   __typename?: 'Contact';
   id: Scalars['ID']['output'];
@@ -72,6 +81,16 @@ export enum MessageStatus {
   Seen = 'Seen',
   Sent = 'Sent',
 }
+
+export type Mutation = {
+  __typename?: 'Mutation';
+  addMessage: Scalars['ID']['output'];
+};
+
+export type MutationAddMessageArgs = {
+  message: AddMessageInput;
+  ticketId: Scalars['ID']['input'];
+};
 
 export type Query = {
   __typename?: 'Query';
@@ -201,6 +220,7 @@ export type DirectiveResolverFn<
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = ResolversObject<{
+  AddMessageInput: AddMessageInput;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
   Contact: ResolverTypeWrapper<Contact>;
   Date: ResolverTypeWrapper<Scalars['Date']['output']>;
@@ -210,6 +230,7 @@ export type ResolversTypes = ResolversObject<{
   MessageContentType: MessageContentType;
   MessageDirection: MessageDirection;
   MessageStatus: MessageStatus;
+  Mutation: ResolverTypeWrapper<{}>;
   Query: ResolverTypeWrapper<{}>;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
   Ticket: ResolverTypeWrapper<Ticket>;
@@ -217,12 +238,14 @@ export type ResolversTypes = ResolversObject<{
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = ResolversObject<{
+  AddMessageInput: AddMessageInput;
   Boolean: Scalars['Boolean']['output'];
   Contact: Contact;
   Date: Scalars['Date']['output'];
   ID: Scalars['ID']['output'];
   Json: Scalars['Json']['output'];
   Message: Message;
+  Mutation: {};
   Query: {};
   String: Scalars['String']['output'];
   Ticket: Ticket;
@@ -270,6 +293,18 @@ export type MessageResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
+export type MutationResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']
+> = ResolversObject<{
+  addMessage?: Resolver<
+    ResolversTypes['ID'],
+    ParentType,
+    ContextType,
+    RequireFields<MutationAddMessageArgs, 'message' | 'ticketId'>
+  >;
+}>;
+
 export type QueryResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']
@@ -303,6 +338,7 @@ export type Resolvers<ContextType = any> = ResolversObject<{
   Date?: GraphQLScalarType;
   Json?: GraphQLScalarType;
   Message?: MessageResolvers<ContextType>;
+  Mutation?: MutationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   Ticket?: TicketResolvers<ContextType>;
 }>;

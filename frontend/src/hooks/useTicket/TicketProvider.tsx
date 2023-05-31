@@ -11,6 +11,12 @@ import { Ticket, TicketId } from '@/hooks/useTicket/Ticket';
 import { TicketState } from '@/hooks/useTicket/TicketState';
 import { TicketStorage } from '@/hooks/useTicket/TicketStorage';
 
+export interface SendMessageParams {
+  message: Message;
+  ticketId: TicketId;
+  senderId: string;
+}
+
 export type TicketContextType = TicketState & {
   currentMessages: Message[];
   addTicket: (ticket: Ticket) => void;
@@ -83,6 +89,26 @@ export const TicketProvider: React.FC<TicketProviderProps> = ({ children }) => {
       updateState();
     },
     [storage, updateState]
+  );
+
+  const sendMessage = useCallback(
+    ({ message, senderId, ticketId }: SendMessageParams) => {
+      const storedMessage = storage.addMessage(ticketId, message);
+
+      updateState();
+
+      const messageEvent = new CustomEvent('chat-protocol', {
+        detail: {
+          type: 'message',
+          storedMessage,
+          ticketId,
+          sender: senderId,
+        },
+      });
+
+      window.dispatchEvent(messageEvent);
+    },
+    [storage]
   );
 
   const contextValue = useMemo<TicketContextType>(

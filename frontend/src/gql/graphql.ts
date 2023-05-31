@@ -32,6 +32,15 @@ export type Scalars = {
   Json: { input: any; output: any };
 };
 
+export type AddMessageInput = {
+  content: Scalars['Json']['input'];
+  contentType: MessageContentType;
+  createdAt: Scalars['Date']['input'];
+  direction: MessageDirection;
+  senderId: Scalars['ID']['input'];
+  status: MessageStatus;
+};
+
 export type Contact = {
   __typename?: 'Contact';
   id: Scalars['ID']['output'];
@@ -66,6 +75,16 @@ export enum MessageStatus {
   Seen = 'Seen',
   Sent = 'Sent',
 }
+
+export type Mutation = {
+  __typename?: 'Mutation';
+  addMessage: Scalars['ID']['output'];
+};
+
+export type MutationAddMessageArgs = {
+  message: AddMessageInput;
+  ticketId: Scalars['ID']['input'];
+};
 
 export type Query = {
   __typename?: 'Query';
