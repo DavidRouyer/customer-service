@@ -39,19 +39,14 @@ export function useGraphQL<TResult, TVariables>(
 }
 
 export function useMutation<TResult, TVariables>(
-  document: TypedDocumentNode<TResult, TVariables>,
-  variables?: TVariables | null
+  document: TypedDocumentNode<TResult, TVariables>
 ) {
   return useSWRMutation(
-    [
-      // This logic can be customized as desired
-      document.definitions.find(isOperationDefinition)?.name,
-      variables,
-    ],
-    async () =>
+    document,
+    async (document, { arg }: { arg: TVariables }) =>
       executor({
         document: document as any,
-        variables: variables as any,
+        variables: arg as any,
       }) as Promise<ExecutionResult<TResult>>
   );
 }

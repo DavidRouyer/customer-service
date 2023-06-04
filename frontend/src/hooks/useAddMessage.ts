@@ -1,9 +1,4 @@
 import { graphql } from '@/gql/gql';
-import {
-  MessageContentType,
-  MessageDirection,
-  MessageStatus,
-} from '@/gql/graphql';
 import { useMutation } from '@/hooks/use-query';
 
 export const AddMessageMutation = graphql(/* GraphQL */ `
@@ -13,17 +8,7 @@ export const AddMessageMutation = graphql(/* GraphQL */ `
 `);
 
 export const useAddMessage = () => {
-  const { trigger } = useMutation(AddMessageMutation, {
-    ticketId: '1',
-    message: {
-      senderId: 1,
-      direction: MessageDirection.Outbound,
-      contentType: MessageContentType.TextPlain,
-      status: MessageStatus.Pending,
-      content: 'Hello',
-      createdAt: new Date().toISOString(),
-    },
-  });
+  const { trigger } = useMutation(AddMessageMutation);
 
   return { trigger };
 };

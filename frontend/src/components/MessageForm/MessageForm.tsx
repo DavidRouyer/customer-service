@@ -2,14 +2,35 @@ import { FC } from 'react';
 import { Trans } from 'react-i18next';
 
 import { TextEditor } from '@/components/TextEditor/TextEditor';
+import {
+  MessageContentType,
+  MessageDirection,
+  MessageStatus,
+} from '@/gql/graphql';
+import { useTicket } from '@/hooks/useTicket/TicketProvider';
 import { PaperclipIcon, SmilePlusIcon } from 'lucide-react';
 
 export const MessageForm: FC = () => {
+  const { sendMessage, currentUser } = useTicket();
   return (
     <form
       onSubmit={(e) => {
         e.preventDefault();
-        console.log('submitted');
+        sendMessage({
+          ticketId: '1',
+          message: {
+            direction: MessageDirection.Outbound,
+            contentType: MessageContentType.TextPlain,
+            status: MessageStatus.Pending,
+            content: 'Hello',
+            createdAt: new Date().toISOString(),
+            sender: {
+              id: currentUser?.id ?? '',
+              name: `${currentUser?.firstName} ${currentUser?.lastName}`,
+              imageUrl: currentUser?.imageUrl,
+            },
+          },
+        });
       }}
       className="relative"
     >

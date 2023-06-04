@@ -57,14 +57,14 @@ const resolvers: Resolvers = {
     addMessage: async (_, { ticketId, message }) => {
       const sanitizedTicketId = typeof ticketId === 'number' ? ticketId : parseInt(ticketId);
       const sanitizedSenderId = typeof message.senderId === 'number' ? message.senderId : parseInt(message.senderId);
-      await prisma.message.create({
+      const createdMessage = await prisma.message.create({
         data: {
           ...message,
           ticketId: sanitizedTicketId,
           senderId: sanitizedSenderId,
         }
       });
-      return '';
+      return createdMessage.id.toString();
     }
   }
 };

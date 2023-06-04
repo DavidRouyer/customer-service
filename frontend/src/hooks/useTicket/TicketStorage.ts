@@ -105,7 +105,11 @@ export class TicketStorage {
     const newMessage = { ...message };
     const messages = this.messagesByTicketId.get(ticketId);
 
-    if (!messages) return;
+    if (!messages) {
+      this.messagesByTicketId.set(ticketId, [newMessage]);
+
+      return newMessage;
+    }
 
     const foundMessageId = messages.findIndex((m) => m.id === newMessage.id);
     if (foundMessageId === -1) {
@@ -115,6 +119,22 @@ export class TicketStorage {
     }
 
     return newMessage;
+  }
+
+  updateMessage(
+    ticketId: TicketId,
+    messageIdToUpdate: string,
+    message: Message
+  ) {
+    const messages = this.messagesByTicketId.get(ticketId);
+    if (!messages) return;
+
+    const foundMessageId = messages.findIndex(
+      (m) => m.id === messageIdToUpdate
+    );
+    if (foundMessageId === -1) return;
+
+    messages.splice(foundMessageId, 1, message);
   }
 
   /**
