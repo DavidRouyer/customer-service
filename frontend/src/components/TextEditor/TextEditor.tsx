@@ -2,17 +2,23 @@ import { FC } from 'react';
 import { Trans } from 'react-i18next';
 
 import editorConfig from '@/components/TextEditor/editorConfig';
-import onChange from '@/components/TextEditor/onChange';
 import EmoticonPlugin from '@/components/TextEditor/plugins/EmoticonPlugin';
 import MyCustomAutoFocusPlugin from '@/components/TextEditor/plugins/MyCustomAutoFocusPlugin';
+import MyCustomOnChangePlugin from '@/components/TextEditor/plugins/MyCustomOnChangePlugin';
+import MyCustomValuePlugin from '@/components/TextEditor/plugins/MyCustomValuePlugin';
+import { ClearEditorPlugin } from '@lexical/react/LexicalClearEditorPlugin';
 import { LexicalComposer } from '@lexical/react/LexicalComposer';
 import { ContentEditable } from '@lexical/react/LexicalContentEditable';
 import LexicalErrorBoundary from '@lexical/react/LexicalErrorBoundary';
 import { HistoryPlugin } from '@lexical/react/LexicalHistoryPlugin';
-import { OnChangePlugin } from '@lexical/react/LexicalOnChangePlugin';
 import { PlainTextPlugin } from '@lexical/react/LexicalPlainTextPlugin';
 
-export const TextEditor: FC = () => {
+type TextEditorProps = {
+  value?: string;
+  onChange: (value: string) => void;
+};
+
+export const TextEditor: FC<TextEditorProps> = ({ value, onChange }) => {
   return (
     <LexicalComposer initialConfig={editorConfig}>
       <div className="relative bg-transparent text-left font-normal leading-5 text-black">
@@ -26,9 +32,11 @@ export const TextEditor: FC = () => {
           placeholder={<Placeholder />}
           ErrorBoundary={LexicalErrorBoundary}
         />
-        <OnChangePlugin onChange={onChange} />
+        <MyCustomValuePlugin value={value} />
+        <MyCustomOnChangePlugin onChange={onChange} />
         <HistoryPlugin />
         <EmoticonPlugin />
+        <ClearEditorPlugin />
         <MyCustomAutoFocusPlugin />
       </div>
     </LexicalComposer>
