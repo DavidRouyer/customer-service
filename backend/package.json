@@ -7,7 +7,7 @@
   "private": true,
   "author": "David Rouyer <rouyer.david@gmail.com>",
   "dependencies": {
-    "@apollo/server": "^4.7.1",
+    "@apollo/server": "^4.7.2",
     "@as-integrations/fastify": "^2.0.0",
     "@fastify/compress": "^6.4.0",
     "@fastify/cors": "^8.3.0",
