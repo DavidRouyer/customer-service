@@ -2,6 +2,9 @@
 # https://hub.docker.com/_/node
 FROM node:20-slim
 
+RUN apt-get update -y
+RUN apt-get install -y openssl
+
 ENV NODE_ENV=production
 
 # Create and change to the app directory.
