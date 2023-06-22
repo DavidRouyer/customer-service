@@ -30,7 +30,7 @@
     "@vitest/coverage-c8": "^0.32.2",
     "@vitest/ui": "^0.32.2",
     "concurrently": "^8.2.0",
-    "eslint": "^8.42.0",
+    "eslint": "^8.43.0",
     "eslint-config-prettier": "^8.8.0",
     "eslint-plugin-prettier": "^4.2.1",
     "prettier": "^2.8.8",
