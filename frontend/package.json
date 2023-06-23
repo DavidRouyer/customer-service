@@ -10,7 +10,7 @@
     "@radix-ui/react-dialog": "^1.0.4",
     "class-variance-authority": "^0.6.0",
     "clsx": "^1.2.1",
-    "graphql": "^16.6.0",
+    "graphql": "^16.7.1",
     "i18next": "^23.2.3",
     "i18next-browser-languagedetector": "^7.0.2",
     "lucide-react": "^0.244.0",
