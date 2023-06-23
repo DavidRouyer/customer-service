@@ -12,31 +12,49 @@ export type MakeOptional<T, K extends keyof T> = Omit<T, K> & {
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & {
   [SubKey in K]: Maybe<T[SubKey]>;
 };
+export type MakeEmpty<
+  T extends { [key: string]: unknown },
+  K extends keyof T
+> = { [_ in K]?: never };
+export type Incremental<T> =
+  | T
+  | {
+      [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never;
+    };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
-  ID: string;
-  String: string;
-  Boolean: boolean;
-  Int: number;
-  Float: number;
-  Date: any;
-  Json: any;
+  ID: { input: string | number; output: string };
+  String: { input: string; output: string };
+  Boolean: { input: boolean; output: boolean };
+  Int: { input: number; output: number };
+  Float: { input: number; output: number };
+  Date: { input: any; output: any };
+  Json: { input: any; output: any };
+};
+
+export type AddMessageInput = {
+  content: Scalars['Json']['input'];
+  contentType: MessageContentType;
+  createdAt: Scalars['Date']['input'];
+  direction: MessageDirection;
+  senderId: Scalars['ID']['input'];
+  status: MessageStatus;
 };
 
 export type Contact = {
   __typename?: 'Contact';
-  id: Scalars['ID'];
-  imageUrl?: Maybe<Scalars['String']>;
-  name?: Maybe<Scalars['String']>;
+  id: Scalars['ID']['output'];
+  imageUrl?: Maybe<Scalars['String']['output']>;
+  name?: Maybe<Scalars['String']['output']>;
 };
 
 export type Message = {
   __typename?: 'Message';
-  content: Scalars['Json'];
+  content: Scalars['Json']['output'];
   contentType: MessageContentType;
-  createdAt: Scalars['Date'];
+  createdAt: Scalars['Date']['output'];
   direction: MessageDirection;
-  id: Scalars['ID'];
+  id: Scalars['ID']['output'];
   sender: Contact;
   status: MessageStatus;
 };
@@ -58,6 +76,16 @@ export enum MessageStatus {
   Sent = 'Sent',
 }
 
+export type Mutation = {
+  __typename?: 'Mutation';
+  addMessage: Scalars['ID']['output'];
+};
+
+export type MutationAddMessageArgs = {
+  message: AddMessageInput;
+  ticketId: Scalars['ID']['input'];
+};
+
 export type Query = {
   __typename?: 'Query';
   allMessages: Array<Message>;
@@ -65,15 +93,25 @@ export type Query = {
 };
 
 export type QueryAllMessagesArgs = {
-  ticketId: Scalars['ID'];
+  ticketId: Scalars['ID']['input'];
 };
 
 export type Ticket = {
   __typename?: 'Ticket';
   contact: Contact;
-  content?: Maybe<Scalars['String']>;
-  createdAt: Scalars['Date'];
-  id: Scalars['ID'];
+  content?: Maybe<Scalars['String']['output']>;
+  createdAt: Scalars['Date']['output'];
+  id: Scalars['ID']['output'];
+};
+
+export type AddMessageMutationVariables = Exact<{
+  ticketId: Scalars['ID']['input'];
+  message: AddMessageInput;
+}>;
+
+export type AddMessageMutation = {
+  __typename?: 'Mutation';
+  addMessage: string;
 };
 
 export type AllTicketsQueryVariables = Exact<{ [key: string]: never }>;
@@ -95,7 +133,7 @@ export type AllTicketsQuery = {
 };
 
 export type AllMessagesQueryVariables = Exact<{
-  ticketId: Scalars['ID'];
+  ticketId: Scalars['ID']['input'];
 }>;
 
 export type AllMessagesQuery = {
@@ -117,6 +155,70 @@ export type AllMessagesQuery = {
   }>;
 };
 
+export const AddMessageDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'mutation',
+      name: { kind: 'Name', value: 'AddMessage' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'ticketId' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: { kind: 'NamedType', name: { kind: 'Name', value: 'ID' } },
+          },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'message' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'AddMessageInput' },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'addMessage' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'ticketId' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'ticketId' },
+                },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'message' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'message' },
+                },
+              },
+            ],
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<AddMessageMutation, AddMessageMutationVariables>;
 export const AllTicketsDocument = {
   kind: 'Document',
   definitions: [

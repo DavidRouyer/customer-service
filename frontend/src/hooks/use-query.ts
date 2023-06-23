@@ -7,6 +7,7 @@ import {
   OperationDefinitionNode,
 } from 'graphql';
 import useSWR from 'swr';
+import useSWRMutation from 'swr/mutation';
 
 const executor = buildHTTPExecutor({
   endpoint: `${import.meta.env.VITE_ENDPOINT_URL}/graphql`,
@@ -33,6 +34,19 @@ export function useGraphQL<TResult, TVariables>(
       executor({
         document: document as any,
         variables: variables as any,
+      }) as Promise<ExecutionResult<TResult>>
+  );
+}
+
+export function useMutation<TResult, TVariables>(
+  document: TypedDocumentNode<TResult, TVariables>
+) {
+  return useSWRMutation(
+    document,
+    async (document, { arg }: { arg: TVariables }) =>
+      executor({
+        document: document as any,
+        variables: arg as any,
       }) as Promise<ExecutionResult<TResult>>
   );
 }

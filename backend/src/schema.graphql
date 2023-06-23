@@ -45,3 +45,16 @@ type Query {
   allTickets: [Ticket!]!
   allMessages(ticketId: ID!): [Message!]!
 }
+
+input AddMessageInput {
+  contentType: MessageContentType!
+  direction: MessageDirection!
+  status: MessageStatus!
+  content: Json!
+  senderId: ID!
+  createdAt: Date!
+}
+
+type Mutation {
+  addMessage(ticketId: ID!, message: AddMessageInput!): ID!
+}

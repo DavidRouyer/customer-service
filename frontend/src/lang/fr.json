@@ -18,6 +18,12 @@
     },
     "your_profile": "Votre profil"
   },
+  "text_editor": {
+    "add_emoticons": "Ajouter des émoticônes",
+    "attach_files": "Joindre des fichiers",
+    "placeholder": "Écrivez votre réponse ici ...",
+    "send": "Envoyer"
+  },
   "ticket":{
     "opened_on": "Ouvert le",
     "resolved_on": "Résolu le",
