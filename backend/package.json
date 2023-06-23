@@ -7,16 +7,16 @@
   "private": true,
   "author": "David Rouyer <rouyer.david@gmail.com>",
   "dependencies": {
-    "@apollo/server": "^4.7.3",
+    "@apollo/server": "^4.7.4",
     "@as-integrations/fastify": "^2.0.0",
     "@fastify/compress": "^6.4.0",
     "@fastify/cors": "^8.3.0",
     "@fastify/helmet": "^10.1.1",
     "@fastify/rate-limit": "^8.0.1",
-    "@prisma/client": "^4.15.0",
-    "dotenv": "^16.1.4",
+    "@prisma/client": "^4.16.1",
+    "dotenv": "^16.3.1",
     "fastify": "^4.18.0",
-    "graphql": "^16.6.0"
+    "graphql": "^16.7.1"
   },
   "scripts": {
     "dev": "nodemon src/index.ts",
@@ -31,7 +31,7 @@
   "devDependencies": {
     "@types/node": "^20.3.1",
     "nodemon": "^2.0.22",
-    "prisma": "^4.15.0",
+    "prisma": "^4.16.1",
     "ts-node": "^10.9.1"
   },
   "license": "MIT",
