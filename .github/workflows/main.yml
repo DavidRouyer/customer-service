@@ -26,17 +26,17 @@ jobs:
 
       - name: Setup environment variables
         run: |
-          touch backend/.env
-          echo DATABASE_URL="${{ secrets.DATABASE_URL }}" >> backend/.env
-          echo DIRECT_DATABASE_URL="${{ secrets.DIRECT_DATABASE_URL }}" >> backend/.env
-          echo CORS_ORIGIN=https://customer-service-defea.web.app >> backend/.env
+          touch apps/backend/.env
+          echo DATABASE_URL="${{ secrets.DATABASE_URL }}" >> apps/backend/.env
+          echo DIRECT_DATABASE_URL="${{ secrets.DIRECT_DATABASE_URL }}" >> apps/backend/.env
+          echo CORS_ORIGIN=https://customer-service-defea.web.app >> apps/backend/.env
 
       - name: Build backend
         run: yarn build:backend
 
       - name: Run Prisma Migrate
         run: |
-          cd backend
+          cd apps/backend
           yarn db:generate
           yarn db:migrate deploy
 
@@ -61,8 +61,8 @@ jobs:
 
       - name: Build Docker image
         run: |
-          cp yarn.lock backend/yarn.lock
-          cd backend
+          cp yarn.lock apps/backend/yarn.lock
+          cd apps/backend
           docker build -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/customer-service:latest .
 
       - name: Push Docker image
@@ -80,8 +80,8 @@ jobs:
 
       - name: Setup environment variables
         run: |
-          touch frontend/.env
-          echo VITE_ENDPOINT_URL="${{ steps.deploy.outputs.url }}" >> frontend/.env
+          touch apps/frontend/.env
+          echo VITE_ENDPOINT_URL="${{ steps.deploy.outputs.url }}" >> apps/frontend/.env
 
       - name: Build front-end
         run: yarn build:frontend
