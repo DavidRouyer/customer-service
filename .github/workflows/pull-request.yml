@@ -43,15 +43,12 @@ jobs:
           username: ${{ secrets.PG_USERNAME }}
           password: ${{ secrets.PG_PASSWORD }}
 
-      - name: Setup environment variables
-        run: |
-          touch apps/backend/.env
-          echo DATABASE_URL="${{ steps.create_branch.outputs.db_url_with_pooler }}/neondb?pgbouncer=true&connect_timeout=10" >> apps/backend/.env
-          echo DIRECT_DATABASE_URL="${{ steps.create_branch.outputs.db_url }}/neondb?connect_timeout=10" >> apps/backend/.env
-          echo CORS_ORIGIN=* >> apps/backend/.env
-
       - name: Build backend
         run: yarn build:backend
+        env:
+          DATABASE_URL: "${{ steps.create_branch.outputs.db_url_with_pooler }}/neondb?pgbouncer=true&connect_timeout=10"
+          DIRECT_DATABASE_URL: "${{ steps.create_branch.outputs.db_url }}/neondb?connect_timeout=10"
+          CORS_ORIGIN: "*"
 
       - name: Run Prisma Migrate
         run: |
@@ -99,13 +96,10 @@ jobs:
           tag: "pr-${{ github.event.number }}"
           no_traffic: true
 
-      - name: Setup environment variables
-        run: |
-          touch apps/frontend/.env
-          echo VITE_ENDPOINT_URL="${{ steps.deploy.outputs.url }}" >> apps/frontend/.env
-
       - name: Build front-end
         run: yarn build:frontend
+        env:
+          VITE_ENDPOINT_URL: "${{ steps.deploy.outputs.url }}"
 
       - name: Deploy to Firebase
         uses: FirebaseExtended/action-hosting-deploy@v0
