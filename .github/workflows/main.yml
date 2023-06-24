@@ -36,6 +36,9 @@ jobs:
           cd apps/backend
           yarn db:generate
           yarn db:migrate deploy
+        env:
+          DATABASE_URL: "${{ secrets.DATABASE_URL }}"
+          DIRECT_DATABASE_URL: "${{ secrets.DIRECT_DATABASE_URL }}"
 
       - id: "auth"
         name: "Authenticate to Google Cloud"
