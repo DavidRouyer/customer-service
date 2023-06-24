@@ -6,6 +6,7 @@ dist-ssr
 /node_modules
 /.pnp
 .pnp.js
+.turbo
 
 # testing
 /coverage
