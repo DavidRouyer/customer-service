@@ -38,7 +38,8 @@ const resolvers: Resolvers = {
       }));
     },
     allMessages: async (_, { ticketId }) => {
-      const sanitizedTicketId = typeof ticketId === 'number' ? ticketId : parseInt(ticketId);
+      const sanitizedTicketId =
+        typeof ticketId === 'number' ? ticketId : parseInt(ticketId);
       const messages = await prisma.message.findMany({
         where: { ticketId: sanitizedTicketId },
         include: { sender: true },
@@ -55,18 +56,22 @@ const resolvers: Resolvers = {
   },
   Mutation: {
     addMessage: async (_, { ticketId, message }) => {
-      const sanitizedTicketId = typeof ticketId === 'number' ? ticketId : parseInt(ticketId);
-      const sanitizedSenderId = typeof message.senderId === 'number' ? message.senderId : parseInt(message.senderId);
+      const sanitizedTicketId =
+        typeof ticketId === 'number' ? ticketId : parseInt(ticketId);
+      const sanitizedSenderId =
+        typeof message.senderId === 'number'
+          ? message.senderId
+          : parseInt(message.senderId);
       const createdMessage = await prisma.message.create({
         data: {
           ...message,
           ticketId: sanitizedTicketId,
           senderId: sanitizedSenderId,
-        }
+        },
       });
       return createdMessage.id.toString();
-    }
-  }
+    },
+  },
 };
 
 const apollo = new ApolloServer<BaseContext>({

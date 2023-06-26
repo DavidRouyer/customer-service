@@ -43,21 +43,21 @@ jobs:
           username: ${{ secrets.PG_USERNAME }}
           password: ${{ secrets.PG_PASSWORD }}
 
-      - name: Setup environment variables
-        run: |
-          touch backend/.env
-          echo DATABASE_URL="${{ steps.create_branch.outputs.db_url_with_pooler }}/neondb?pgbouncer=true&connect_timeout=10" >> backend/.env
-          echo DIRECT_DATABASE_URL="${{ steps.create_branch.outputs.db_url }}/neondb?connect_timeout=10" >> backend/.env
-          echo CORS_ORIGIN=* >> backend/.env
-
       - name: Build backend
         run: yarn build:backend
+        env:
+          DATABASE_URL: "${{ steps.create_branch.outputs.db_url_with_pooler }}/neondb?pgbouncer=true&connect_timeout=10"
+          DIRECT_DATABASE_URL: "${{ steps.create_branch.outputs.db_url }}/neondb?connect_timeout=10"
+          CORS_ORIGIN: "*"
 
       - name: Run Prisma Migrate
         run: |
-          cd backend
+          cd apps/backend
           yarn db:generate
           yarn db:migrate deploy
+        env:
+          DATABASE_URL: "${{ steps.create_branch.outputs.db_url_with_pooler }}/neondb?pgbouncer=true&connect_timeout=10"
+          DIRECT_DATABASE_URL: "${{ steps.create_branch.outputs.db_url }}/neondb?connect_timeout=10"
 
       - id: "auth"
         name: "Authenticate to Google Cloud"
@@ -80,8 +80,8 @@ jobs:
 
       - name: Build Docker image
         run: |
-          cp yarn.lock backend/yarn.lock
-          cd backend
+          cp yarn.lock apps/backend/yarn.lock
+          cd apps/backend
           docker build -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/customer-service:${{ github.event.number }} .
 
       - name: Push Docker image
@@ -99,13 +99,10 @@ jobs:
           tag: "pr-${{ github.event.number }}"
           no_traffic: true
 
-      - name: Setup environment variables
-        run: |
-          touch frontend/.env
-          echo VITE_ENDPOINT_URL="${{ steps.deploy.outputs.url }}" >> frontend/.env
-
       - name: Build front-end
         run: yarn build:frontend
+        env:
+          VITE_ENDPOINT_URL: "${{ steps.deploy.outputs.url }}"
 
       - name: Deploy to Firebase
         uses: FirebaseExtended/action-hosting-deploy@v0

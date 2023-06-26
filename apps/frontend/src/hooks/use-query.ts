@@ -30,9 +30,10 @@ export function useGraphQL<TResult, TVariables>(
           variables,
         ] as const)
       : null,
-    async (_key: TypedDocumentNode<TResult, TVariables>) =>
+    async () =>
       executor({
-        document: document as any,
+        document: document,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         variables: variables as any,
       }) as Promise<ExecutionResult<TResult>>
   );
@@ -45,7 +46,8 @@ export function useMutation<TResult, TVariables>(
     document,
     async (document, { arg }: { arg: TVariables }) =>
       executor({
-        document: document as any,
+        document: document,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         variables: arg as any,
       }) as Promise<ExecutionResult<TResult>>
   );

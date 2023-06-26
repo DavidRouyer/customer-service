@@ -24,21 +24,21 @@ jobs:
       - name: Execute unit tests
         run: yarn test
 
-      - name: Setup environment variables
-        run: |
-          touch backend/.env
-          echo DATABASE_URL="${{ secrets.DATABASE_URL }}" >> backend/.env
-          echo DIRECT_DATABASE_URL="${{ secrets.DIRECT_DATABASE_URL }}" >> backend/.env
-          echo CORS_ORIGIN=https://customer-service-defea.web.app >> backend/.env
-
       - name: Build backend
         run: yarn build:backend
+        env:
+          DATABASE_URL: "${{ secrets.DATABASE_URL }}"
+          DIRECT_DATABASE_URL: "${{ secrets.DIRECT_DATABASE_URL }}"
+          CORS_ORIGIN: "https://customer-service-defea.web.app"
 
       - name: Run Prisma Migrate
         run: |
-          cd backend
+          cd apps/backend
           yarn db:generate
           yarn db:migrate deploy
+        env:
+          DATABASE_URL: "${{ secrets.DATABASE_URL }}"
+          DIRECT_DATABASE_URL: "${{ secrets.DIRECT_DATABASE_URL }}"
 
       - id: "auth"
         name: "Authenticate to Google Cloud"
@@ -61,8 +61,8 @@ jobs:
 
       - name: Build Docker image
         run: |
-          cp yarn.lock backend/yarn.lock
-          cd backend
+          cp yarn.lock apps/backend/yarn.lock
+          cd apps/backend
           docker build -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/customer-service:latest .
 
       - name: Push Docker image
@@ -78,13 +78,10 @@ jobs:
           region: "europe-west9"
           flags: "--max-instances=1 --allow-unauthenticated"
 
-      - name: Setup environment variables
-        run: |
-          touch frontend/.env
-          echo VITE_ENDPOINT_URL="${{ steps.deploy.outputs.url }}" >> frontend/.env
-
       - name: Build front-end
         run: yarn build:frontend
+        env:
+          VITE_ENDPOINT_URL: ${{ steps.deploy.outputs.url }}
 
       - name: Deploy to Firebase
         uses: FirebaseExtended/action-hosting-deploy@v0

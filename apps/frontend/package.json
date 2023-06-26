@@ -1,6 +1,5 @@
 {
-  "name": "customer-service-frontend",
-  "description": "Prototyping a Customer Service Software",
+  "name": "@cs/frontend",
   "version": "0.0.0",
   "private": true,
   "author": "David Rouyer <rouyer.david@gmail.com>",

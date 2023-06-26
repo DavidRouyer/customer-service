@@ -139,7 +139,7 @@ export const TicketProvider: React.FC<TicketProviderProps> = ({ children }) => {
 
           updateState();
         })
-        .catch((error) => {
+        .catch(() => {
           // TODO: Handle error
         });
     },
@@ -169,6 +169,7 @@ export const TicketProvider: React.FC<TicketProviderProps> = ({ children }) => {
       removeTicket,
       getTicket,
       setActiveTicket,
+      setCurrentUser,
       sendMessage,
     ]
   );

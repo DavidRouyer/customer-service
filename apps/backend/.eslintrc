@@ -24,5 +24,6 @@
       }
     ],
     "semi": ["warn", "always"]
-  }
+  },
+  "ignorePatterns": ["src/gql/*.ts"]
 }
