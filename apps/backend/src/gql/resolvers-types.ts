@@ -29,7 +29,7 @@ export type RequireFields<T, K extends keyof T> = Omit<T, K> & {
 };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
-  ID: { input: string | number; output: string };
+  ID: { input: string; output: string };
   String: { input: string; output: string };
   Boolean: { input: boolean; output: boolean };
   Int: { input: number; output: number };
@@ -49,9 +49,12 @@ export type AddMessageInput = {
 
 export type Contact = {
   __typename?: 'Contact';
+  avatarUrl?: Maybe<Scalars['String']['output']>;
   id: Scalars['ID']['output'];
-  imageUrl?: Maybe<Scalars['String']['output']>;
+  language?: Maybe<Scalars['String']['output']>;
   name?: Maybe<Scalars['String']['output']>;
+  phone?: Maybe<Scalars['String']['output']>;
+  timezone?: Maybe<Scalars['String']['output']>;
 };
 
 export type Message = {
@@ -255,9 +258,16 @@ export type ContactResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['Contact'] = ResolversParentTypes['Contact']
 > = ResolversObject<{
+  avatarUrl?: Resolver<
+    Maybe<ResolversTypes['String']>,
+    ParentType,
+    ContextType
+  >;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  imageUrl?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  language?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  phone?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  timezone?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 

@@ -18,7 +18,10 @@ model Contact {
   createdAt DateTime  @default(now())
   email     String?
   name      String?
-  imageUrl  String?
+  phone     String?
+  avatarUrl String?
+  language  String?
+  timezone  String?
   tickets   Ticket[]
   messages  Message[]
 }

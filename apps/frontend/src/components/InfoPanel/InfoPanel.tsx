@@ -17,7 +17,7 @@ import { Mail, Phone } from 'lucide-react';
 const user = {
   id: 1,
   name: 'Leslie Alexander',
-  imageUrl:
+  avatarUrl:
     'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
   email: 'leslie.alexander@gmail.com',
   phone: '+33 6 06 06 06 06',
@@ -37,7 +37,7 @@ export const InfoPanel: FC = () => {
           <div className="shrink-0">
             <img
               className="h-10 w-10 rounded-full"
-              src={user.imageUrl}
+              src={user.avatarUrl}
               alt=""
             />
           </div>

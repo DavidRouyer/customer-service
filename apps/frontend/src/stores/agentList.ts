@@ -4,7 +4,7 @@ export type Agent = {
   id: number;
   name: string;
   email: string;
-  imageUrl: string;
+  avatarUrl: string;
 };
 
 export const agentListState = atom<Agent[]>({

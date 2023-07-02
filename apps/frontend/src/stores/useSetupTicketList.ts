@@ -12,7 +12,7 @@ export const AllTicketsQuery = graphql(/* GraphQL */ `
       createdAt
       contact {
         id
-        imageUrl
+        avatarUrl
         name
       }
       content
@@ -31,7 +31,7 @@ export const AllMessagesQuery = graphql(/* GraphQL */ `
       status
       sender {
         id
-        imageUrl
+        avatarUrl
         name
       }
     }

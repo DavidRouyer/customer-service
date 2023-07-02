@@ -24,7 +24,7 @@ const activity = [
     type: 'commented',
     person: {
       name: 'Sophie Radcliff',
-      imageUrl:
+      avatarUrl:
         'https://images.unsplash.com/photo-1550525811-e5869dd03032?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
     },
     comment: 'Called client, they are not happy with the product.',
@@ -56,7 +56,7 @@ export const ActivityPanel: FC = () => {
           {activityItem.type === 'commented' ? (
             <>
               <img
-                src={activityItem.person.imageUrl}
+                src={activityItem.person.avatarUrl}
                 alt=""
                 className="relative mt-3 h-6 w-6 flex-none rounded-full bg-gray-50"
               />

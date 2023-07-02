@@ -5,20 +5,20 @@ export class User {
   firstName: string;
   lastName: string;
   email: string;
-  imageUrl?: string;
+  avatarUrl?: string;
 
   constructor(
     id: UserId,
     firstName: string,
     lastName: string,
     email: string,
-    imageUrl?: string
+    avatarUrl?: string
   ) {
     this.id = id;
     this.firstName = firstName;
     this.lastName = lastName;
     this.email = email;
-    this.imageUrl = imageUrl;
+    this.avatarUrl = avatarUrl;
   }
 
   get fullName() {

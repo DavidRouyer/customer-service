@@ -44,7 +44,7 @@ export const MessageList: FC = () => {
               )}
             </div>
             <img
-              src={message.sender.imageUrl ?? undefined}
+              src={message.sender.avatarUrl ?? undefined}
               alt={message.sender.name ?? undefined}
               className={cn(
                 'h-6 w-6 rounded-full',

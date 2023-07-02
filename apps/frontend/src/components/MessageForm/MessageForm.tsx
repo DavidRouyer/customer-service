@@ -31,7 +31,7 @@ export const MessageForm: FC = () => {
         sender: {
           id: currentUser?.id ?? '',
           name: `${currentUser?.firstName} ${currentUser?.lastName}`,
-          imageUrl: currentUser?.imageUrl,
+          avatarUrl: currentUser?.avatarUrl,
         },
       },
     });

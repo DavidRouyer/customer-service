@@ -19,9 +19,9 @@ export const Ticket: FC<TicketProps> = ({ ticket }) => {
         className="flex gap-x-4 py-5"
       >
         <Avatar className="h-12 w-12">
-          <AvatarImage src={ticket.contact.imageUrl || undefined} />
+          <AvatarImage src={ticket.contact.avatarUrl ?? undefined} />
           <AvatarFallback>
-            {getInitials(ticket.contact.name || '')}
+            {getInitials(ticket.contact.name ?? '')}
           </AvatarFallback>
         </Avatar>
         <div className="flex-auto">

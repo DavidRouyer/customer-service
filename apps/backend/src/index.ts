@@ -95,7 +95,7 @@ await fastify.register(fastifyApollo(apollo));
 
 const start = async () => {
   try {
-    const port = parseInt(process.env.PORT || '') || 8080;
+    const port = parseInt(process.env.PORT ?? '') || 8080;
     await fastify.listen({ port, host: '0.0.0.0' });
   } catch (err) {
     fastify.log.error(err);

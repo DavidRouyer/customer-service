@@ -16,7 +16,7 @@ export const CurrentUser: FC = () => {
       className="flex items-center gap-x-4 px-6 py-3 text-sm font-semibold leading-6 text-gray-900 hover:bg-gray-50"
     >
       <Avatar className="h-8 w-8">
-        <AvatarImage src={currentUser.imageUrl} />
+        <AvatarImage src={currentUser.avatarUrl} />
         <AvatarFallback>{getInitials(currentUser.fullName)}</AvatarFallback>
       </Avatar>
       <span className="sr-only">

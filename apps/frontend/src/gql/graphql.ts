@@ -23,7 +23,7 @@ export type Incremental<T> =
     };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
-  ID: { input: string | number; output: string };
+  ID: { input: string; output: string };
   String: { input: string; output: string };
   Boolean: { input: boolean; output: boolean };
   Int: { input: number; output: number };
@@ -43,9 +43,12 @@ export type AddMessageInput = {
 
 export type Contact = {
   __typename?: 'Contact';
+  avatarUrl?: Maybe<Scalars['String']['output']>;
   id: Scalars['ID']['output'];
-  imageUrl?: Maybe<Scalars['String']['output']>;
+  language?: Maybe<Scalars['String']['output']>;
   name?: Maybe<Scalars['String']['output']>;
+  phone?: Maybe<Scalars['String']['output']>;
+  timezone?: Maybe<Scalars['String']['output']>;
 };
 
 export type Message = {
@@ -126,7 +129,7 @@ export type AllTicketsQuery = {
     contact: {
       __typename?: 'Contact';
       id: string;
-      imageUrl?: string | null;
+      avatarUrl?: string | null;
       name?: string | null;
     };
   }>;
@@ -149,7 +152,7 @@ export type AllMessagesQuery = {
     sender: {
       __typename?: 'Contact';
       id: string;
-      imageUrl?: string | null;
+      avatarUrl?: string | null;
       name?: string | null;
     };
   }>;
@@ -246,7 +249,7 @@ export const AllTicketsDocument = {
                       { kind: 'Field', name: { kind: 'Name', value: 'id' } },
                       {
                         kind: 'Field',
-                        name: { kind: 'Name', value: 'imageUrl' },
+                        name: { kind: 'Name', value: 'avatarUrl' },
                       },
                       { kind: 'Field', name: { kind: 'Name', value: 'name' } },
                     ],
@@ -315,7 +318,7 @@ export const AllMessagesDocument = {
                       { kind: 'Field', name: { kind: 'Name', value: 'id' } },
                       {
                         kind: 'Field',
-                        name: { kind: 'Name', value: 'imageUrl' },
+                        name: { kind: 'Name', value: 'avatarUrl' },
                       },
                       { kind: 'Field', name: { kind: 'Name', value: 'name' } },
                     ],
