@@ -1,16 +1,16 @@
 import { CodegenConfig } from "@graphql-codegen/cli";
 
 const config: CodegenConfig = {
-  schema: "backend/src/**/*.graphql",
-  documents: ["frontend/src/**/*.{ts,tsx}"],
+  schema: "apps/backend/src/**/*.graphql",
+  documents: ["apps/frontend/src/**/*.{ts,tsx}"],
   generates: {
-    "backend/src/gql/resolvers-types.ts": {
+    "apps/backend/src/gql/resolvers-types.ts": {
       config: {
         useIndexSignature: true,
       },
       plugins: ["typescript", "typescript-resolvers"],
     },
-    "frontend/src/gql/": {
+    "apps/frontend/src/gql/": {
       preset: "client",
     },
   },
