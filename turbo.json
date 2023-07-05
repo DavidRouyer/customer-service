@@ -16,5 +16,6 @@
     "db:push": {
       "cache": false
     }
-  }
+  },
+  "globalEnv": ["NODE_ENV", "CORS_ORIGIN", "PORT"]
 }

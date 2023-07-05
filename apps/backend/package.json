@@ -27,6 +27,7 @@
   },
   "devDependencies": {
     "@types/node": "^20.4.0",
+    "eslint-config-custom": "*",
     "nodemon": "^2.0.22",
     "ts-node": "^10.9.1"
   },

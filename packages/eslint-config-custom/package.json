@@ -1,0 +1,13 @@
+{
+  "name": "eslint-config-custom",
+  "version": "0.0.0",
+  "private": true,
+  "author": "David Rouyer <rouyer.david@gmail.com>",
+  "main": "index.js",
+  "dependencies": {
+    "eslint": "^8.44.0",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-plugin-react": "^7.32.2",
+    "eslint-config-turbo": "^1.10.7"
+  }
+}
