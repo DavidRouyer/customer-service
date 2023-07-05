@@ -8,6 +8,7 @@
   "scripts": {
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate",
+    "db:migrate:deploy": "prisma migrate deploy",
     "db:push": "prisma db push --skip-generate",
     "db:seed": "prisma db seed",
     "lint": "eslint . --max-warnings=0"

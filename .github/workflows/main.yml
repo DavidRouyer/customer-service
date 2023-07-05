@@ -33,7 +33,7 @@ jobs:
 
       - name: Run Prisma Migrate
         run: |
-          yarn turbo db:migrate deploy
+          yarn turbo db:migrate:deploy
         env:
           DATABASE_URL: "${{ secrets.DATABASE_URL }}"
           DIRECT_DATABASE_URL: "${{ secrets.DIRECT_DATABASE_URL }}"
