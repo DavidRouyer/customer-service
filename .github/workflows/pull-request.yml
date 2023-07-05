@@ -52,9 +52,7 @@ jobs:
 
       - name: Run Prisma Migrate
         run: |
-          cd apps/backend
-          yarn db:generate
-          yarn db:migrate deploy
+          yarn turbo db:migrate deploy
         env:
           DATABASE_URL: "${{ steps.create_branch.outputs.db_url_with_pooler }}/neondb?pgbouncer=true&connect_timeout=10"
           DIRECT_DATABASE_URL: "${{ steps.create_branch.outputs.db_url }}/neondb?connect_timeout=10"
