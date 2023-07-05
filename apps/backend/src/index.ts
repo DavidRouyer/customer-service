@@ -12,7 +12,7 @@ import compress from '@fastify/compress';
 import cors from '@fastify/cors';
 import helmet from '@fastify/helmet';
 import rateLimit from '@fastify/rate-limit';
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient } from 'database';
 import * as dotenv from 'dotenv';
 import Fastify from 'fastify';
 import { readFileSync } from 'node:fs';

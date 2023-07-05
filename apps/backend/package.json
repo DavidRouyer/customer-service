@@ -13,7 +13,7 @@
     "@fastify/cors": "^8.3.0",
     "@fastify/helmet": "^11.0.0",
     "@fastify/rate-limit": "^8.0.1",
-    "@prisma/client": "^4.16.2",
+    "database": "*",
     "dotenv": "^16.3.1",
     "fastify": "^4.19.2",
     "graphql": "^16.7.1"
@@ -23,19 +23,12 @@
     "build": "tsc --outDir dist",
     "start": "node dist/index.js",
     "lint": "eslint src --max-warnings=0",
-    "typecheck": "tsc --project tsconfig.json --noEmit",
-    "db:generate": "prisma generate",
-    "db:migrate": "prisma migrate",
-    "db:seed": "prisma db seed"
+    "typecheck": "tsc --project tsconfig.json --noEmit"
   },
   "devDependencies": {
     "@types/node": "^20.4.0",
     "nodemon": "^2.0.22",
-    "prisma": "^4.16.2",
     "ts-node": "^10.9.1"
   },
-  "license": "MIT",
-  "prisma": {
-    "seed": "node --no-warnings=ExperimentalWarning --loader ts-node/esm prisma/seed.ts"
-  }
+  "license": "MIT"
 }

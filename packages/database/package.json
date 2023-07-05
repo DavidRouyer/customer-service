@@ -1,0 +1,23 @@
+{
+  "name": "database",
+  "version": "0.0.0",
+  "private": true,
+  "author": "David Rouyer <rouyer.david@gmail.com>",
+  "main": "./index.ts",
+  "types": "./index.ts",
+  "scripts": {
+    "db:generate": "prisma generate",
+    "db:push": "prisma db push --skip-generate",
+    "db:seed": "prisma db seed",
+    "lint": "eslint . --max-warnings=0"
+  },
+  "dependencies": {
+    "@prisma/client": "^4.16.2"
+  },
+  "devDependencies": {
+    "prisma": "^4.16.2"
+  },
+  "prisma": {
+    "seed": "node --no-warnings=ExperimentalWarning --loader ts-node/esm prisma/seed.ts"
+  }
+}
