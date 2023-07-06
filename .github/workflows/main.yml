@@ -59,9 +59,7 @@ jobs:
 
       - name: Build Docker image
         run: |
-          cp yarn.lock apps/backend/yarn.lock
-          cd apps/backend
-          docker build -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/customer-service:latest .
+          docker build -f apps/backend/Dockerfile -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/customer-service:latest .
 
       - name: Push Docker image
         run: |
