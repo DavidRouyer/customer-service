@@ -1,5 +1,5 @@
 {
-  "name": "@cs/backend",
+  "name": "backend",
   "description": "Prototyping a Customer Service Software",
   "type": "module",
   "main": "dist/index.js",

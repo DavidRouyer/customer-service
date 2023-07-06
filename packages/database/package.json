@@ -3,9 +3,15 @@
   "version": "0.0.0",
   "private": true,
   "author": "David Rouyer <rouyer.david@gmail.com>",
-  "main": "./index.ts",
-  "types": "./index.ts",
+  "main": "./dist/index.js",
+  "source": "./index.ts",
+  "types": "./index.d.ts",
+  "files": [
+    "dist/**"
+  ],
   "scripts": {
+    "dev": "tsc -w",
+    "build": "tsc",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate",
     "db:migrate:deploy": "prisma migrate deploy",
@@ -18,7 +24,9 @@
   },
   "devDependencies": {
     "eslint-config-custom": "*",
-    "prisma": "^4.16.2"
+    "prisma": "^4.16.2",
+    "tsconfig": "*",
+    "typescript": "^5.1.6"
   },
   "prisma": {
     "seed": "node --no-warnings=ExperimentalWarning --loader ts-node/esm prisma/seed.ts"
