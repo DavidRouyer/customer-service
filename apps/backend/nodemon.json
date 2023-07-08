@@ -1,5 +1,5 @@
 {
   "execMap": {
-      "ts": "node --no-warnings=ExperimentalWarning --loader ts-node/esm"
+      "ts": "node --no-warnings=ExperimentalWarning --experimental-specifier-resolution=node --loader ./loader.js"
   }
 }
