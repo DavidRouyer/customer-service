@@ -20,7 +20,7 @@
   },
   "scripts": {
     "dev": "nodemon src/index.ts",
-    "build": "tsc --outDir dist",
+    "build": "tsc && tsc-alias -p tsconfig.json",
     "start": "node dist/index.js",
     "lint": "eslint src --max-warnings=0",
     "typecheck": "tsc --project tsconfig.json --noEmit"
@@ -29,7 +29,8 @@
     "@types/node": "^20.4.0",
     "eslint-config-custom": "*",
     "nodemon": "^2.0.22",
-    "ts-node": "^10.9.1"
+    "ts-node": "^10.9.1",
+    "tsc-alias": "^1.8.7"
   },
   "license": "MIT"
 }

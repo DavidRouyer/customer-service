@@ -29,6 +29,10 @@ RUN yarn install
 COPY --from=builder /app/out/full/ .
 COPY turbo.json turbo.json
 
+# TODO: remove workaround
+# Workaround for error when building database package
+RUN yarn turbo run db:generate
+
 RUN yarn turbo run build --filter=backend...
 
 FROM base AS runner

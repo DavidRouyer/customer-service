@@ -4,6 +4,7 @@ import {
   MessageStatus,
   Resolvers,
 } from '@/gql/resolvers-types';
+import { typeDefs } from '@/schema';
 import { ApolloServer, BaseContext } from '@apollo/server';
 import fastifyApollo, {
   fastifyApolloDrainPlugin,
@@ -15,15 +16,12 @@ import rateLimit from '@fastify/rate-limit';
 import { PrismaClient } from 'database';
 import * as dotenv from 'dotenv';
 import Fastify from 'fastify';
-import { readFileSync } from 'node:fs';
 
 dotenv.config();
 
 const fastify = Fastify({});
 
 const prisma = new PrismaClient();
-
-const typeDefs = readFileSync('./src/schema.graphql', 'utf8');
 
 const resolvers: Resolvers = {
   Query: {

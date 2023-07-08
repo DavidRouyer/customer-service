@@ -1,9 +1,10 @@
 {
   "compilerOptions": {
-    "baseUrl": "./src",
+    "baseUrl": "src",
     "paths": {
-      "@/*": ["./*"]
+      "@/*": ["*"]
     },
+    "outDir": "dist",
     "target": "esnext",
     "lib": ["esnext"],
     "allowJs": true,
@@ -22,5 +23,8 @@
   "ts-node": {
     "esm": true,
     "experimentalSpecifierResolution": "node"
+  },
+  "tsc-alias": {
+    "resolveFullPaths": true
   }
 }
