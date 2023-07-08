@@ -29,7 +29,7 @@
     "db:seed": "prisma db seed"
   },
   "devDependencies": {
-    "@types/node": "^20.4.0",
+    "@types/node": "^20.4.1",
     "nodemon": "^2.0.22",
     "prisma": "^4.16.2",
     "ts-node": "^10.9.1"
