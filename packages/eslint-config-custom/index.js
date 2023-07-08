@@ -1,21 +1,22 @@
-{
-  "env": {
-    "es2020": true,
-    "node": true
+module.exports = {
+  env: {
+    es2020: true,
+    node: true
   },
-  "extends": [
+  extends: [
+    "turbo",
     "eslint:recommended",
     "plugin:prettier/recommended",
     "plugin:@typescript-eslint/eslint-recommended",
     "plugin:@typescript-eslint/recommended"
   ],
-  "parser": "@typescript-eslint/parser",
-  "parserOptions": {
+  parser: "@typescript-eslint/parser",
+  parserOptions: {
     "ecmaVersion": 11,
     "sourceType": "module"
   },
-  "plugins": ["prettier", "@typescript-eslint"],
-  "rules": {
+  plugins: ["prettier", "@typescript-eslint"],
+  rules: {
     "quotes": [
       "warn",
       "single",
@@ -25,5 +26,4 @@
     ],
     "semi": ["warn", "always"]
   },
-  "ignorePatterns": ["src/gql/*.ts"]
-}
+};

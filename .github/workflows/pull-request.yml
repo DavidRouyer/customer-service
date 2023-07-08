@@ -52,9 +52,7 @@ jobs:
 
       - name: Run Prisma Migrate
         run: |
-          cd apps/backend
-          yarn db:generate
-          yarn db:migrate deploy
+          yarn turbo db:migrate:deploy
         env:
           DATABASE_URL: "${{ steps.create_branch.outputs.db_url_with_pooler }}/neondb?pgbouncer=true&connect_timeout=10"
           DIRECT_DATABASE_URL: "${{ steps.create_branch.outputs.db_url }}/neondb?connect_timeout=10"
@@ -80,9 +78,7 @@ jobs:
 
       - name: Build Docker image
         run: |
-          cp yarn.lock apps/backend/yarn.lock
-          cd apps/backend
-          docker build -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/customer-service:${{ github.event.number }} .
+          docker build -f apps/backend/Dockerfile -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/customer-service:${{ github.event.number }} .
 
       - name: Push Docker image
         run: |
@@ -98,11 +94,14 @@ jobs:
           flags: "--max-instances=1 --allow-unauthenticated"
           tag: "pr-${{ github.event.number }}"
           no_traffic: true
+          env_vars: |
+            DATABASE_URL=${{ steps.create_branch.outputs.db_url_with_pooler }}/neondb?pgbouncer=true&connect_timeout=10
+            DIRECT_DATABASE_URL=${{ steps.create_branch.outputs.db_url }}/neondb?connect_timeout=10
 
       - name: Build front-end
         run: yarn build:frontend
         env:
-          VITE_ENDPOINT_URL: "${{ steps.deploy.outputs.url }}"
+          VITE_ENDPOINT_URL: ${{ steps.deploy.outputs.url }}
 
       - name: Deploy to Firebase
         uses: FirebaseExtended/action-hosting-deploy@v0

@@ -33,9 +33,7 @@ jobs:
 
       - name: Run Prisma Migrate
         run: |
-          cd apps/backend
-          yarn db:generate
-          yarn db:migrate deploy
+          yarn turbo db:migrate:deploy
         env:
           DATABASE_URL: "${{ secrets.DATABASE_URL }}"
           DIRECT_DATABASE_URL: "${{ secrets.DIRECT_DATABASE_URL }}"
@@ -61,9 +59,7 @@ jobs:
 
       - name: Build Docker image
         run: |
-          cp yarn.lock apps/backend/yarn.lock
-          cd apps/backend
-          docker build -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/customer-service:latest .
+          docker build -f apps/backend/Dockerfile -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/customer-service:latest .
 
       - name: Push Docker image
         run: |
@@ -77,6 +73,9 @@ jobs:
           service: "customer-service"
           region: "europe-west9"
           flags: "--max-instances=1 --allow-unauthenticated"
+          env_vars: |
+            DATABASE_URL=${{ secrets.DATABASE_URL }}
+            DIRECT_DATABASE_URL=${{ secrets.DIRECT_DATABASE_URL }}
 
       - name: Build front-end
         run: yarn build:frontend
