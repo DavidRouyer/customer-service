@@ -101,7 +101,7 @@ jobs:
       - name: Build front-end
         run: yarn build:frontend
         env:
-          VITE_ENDPOINT_URL: "${{ steps.deploy.outputs.url }}"
+          VITE_ENDPOINT_URL: ${{ steps.deploy.outputs.url }}
 
       - name: Deploy to Firebase
         uses: FirebaseExtended/action-hosting-deploy@v0
