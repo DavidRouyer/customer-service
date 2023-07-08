@@ -94,6 +94,9 @@ jobs:
           flags: "--max-instances=1 --allow-unauthenticated"
           tag: "pr-${{ github.event.number }}"
           no_traffic: true
+          env_vars: |
+            DATABASE_URL=${{ steps.create_branch.outputs.db_url_with_pooler }}/neondb?pgbouncer=true&connect_timeout=10
+            DIRECT_DATABASE_URL=${{ steps.create_branch.outputs.db_url }}/neondb?connect_timeout=10
 
       - name: Build front-end
         run: yarn build:frontend
