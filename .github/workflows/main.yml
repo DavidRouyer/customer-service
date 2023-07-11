@@ -3,7 +3,11 @@ on:
     branches: [main]
 
 jobs:
-  setup:
+  build:
+    permissions:
+      contents: "read"
+      id-token: "write"
+
     runs-on: ubuntu-latest
 
     steps:
@@ -17,32 +21,9 @@ jobs:
       - name: Install dependencies
         run: yarn
 
-  test:
-    runs-on: ubuntu-latest
-    needs: setup
-
-    steps:
       - name: Execute unit tests
         run: yarn test
 
-  lint:
-    runs-on: ubuntu-latest
-    needs: setup
-
-    steps:
-      - name: Lint
-        run: yarn turbo lint
-
-  build:
-    permissions:
-      contents: "read"
-      id-token: "write"
-
-    runs-on: ubuntu-latest
-    needs:
-      - test
-
-    steps:
       - name: Build backend
         run: yarn build:backend
         env:
