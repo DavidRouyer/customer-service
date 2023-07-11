@@ -42,6 +42,7 @@ enum MessageDirection {
 
 enum MessageContentType {
   TextPlain
+  TextHtml
 }
 
 enum MessageStatus {

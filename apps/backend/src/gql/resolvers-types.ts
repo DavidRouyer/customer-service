@@ -3,7 +3,6 @@ import {
   GraphQLScalarType,
   GraphQLScalarTypeConfig,
 } from 'graphql';
-
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = {
@@ -17,7 +16,7 @@ export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & {
 };
 export type MakeEmpty<
   T extends { [key: string]: unknown },
-  K extends keyof T
+  K extends keyof T,
 > = { [_ in K]?: never };
 export type Incremental<T> =
   | T
@@ -34,8 +33,8 @@ export type Scalars = {
   Boolean: { input: boolean; output: boolean };
   Int: { input: number; output: number };
   Float: { input: number; output: number };
-  Date: { input: any; output: any };
-  Json: { input: any; output: any };
+  Date: { input: string; output: string };
+  Json: { input: string; output: string };
 };
 
 export type AddMessageInput = {
@@ -69,6 +68,7 @@ export type Message = {
 };
 
 export enum MessageContentType {
+  TextHtml = 'TextHtml',
   TextPlain = 'TextPlain',
 }
 
@@ -151,7 +151,7 @@ export interface SubscriptionSubscriberObject<
   TKey extends string,
   TParent,
   TContext,
-  TArgs
+  TArgs,
 > {
   subscribe: SubscriptionSubscribeFn<
     { [key in TKey]: TResult },
@@ -177,7 +177,7 @@ export type SubscriptionObject<
   TKey extends string,
   TParent,
   TContext,
-  TArgs
+  TArgs,
 > =
   | SubscriptionSubscriberObject<TResult, TKey, TParent, TContext, TArgs>
   | SubscriptionResolverObject<TResult, TParent, TContext, TArgs>;
@@ -187,7 +187,7 @@ export type SubscriptionResolver<
   TKey extends string,
   TParent = {},
   TContext = {},
-  TArgs = {}
+  TArgs = {},
 > =
   | ((
       ...args: any[]
@@ -212,7 +212,7 @@ export type DirectiveResolverFn<
   TResult = {},
   TParent = {},
   TContext = {},
-  TArgs = {}
+  TArgs = {},
 > = (
   next: NextResolverFn<TResult>,
   parent: TParent,
@@ -256,7 +256,8 @@ export type ResolversParentTypes = ResolversObject<{
 
 export type ContactResolvers<
   ContextType = any,
-  ParentType extends ResolversParentTypes['Contact'] = ResolversParentTypes['Contact']
+  ParentType extends
+    ResolversParentTypes['Contact'] = ResolversParentTypes['Contact'],
 > = ResolversObject<{
   avatarUrl?: Resolver<
     Maybe<ResolversTypes['String']>,
@@ -283,7 +284,8 @@ export interface JsonScalarConfig
 
 export type MessageResolvers<
   ContextType = any,
-  ParentType extends ResolversParentTypes['Message'] = ResolversParentTypes['Message']
+  ParentType extends
+    ResolversParentTypes['Message'] = ResolversParentTypes['Message'],
 > = ResolversObject<{
   content?: Resolver<ResolversTypes['Json'], ParentType, ContextType>;
   contentType?: Resolver<
@@ -305,7 +307,8 @@ export type MessageResolvers<
 
 export type MutationResolvers<
   ContextType = any,
-  ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']
+  ParentType extends
+    ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation'],
 > = ResolversObject<{
   addMessage?: Resolver<
     ResolversTypes['ID'],
@@ -317,7 +320,8 @@ export type MutationResolvers<
 
 export type QueryResolvers<
   ContextType = any,
-  ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']
+  ParentType extends
+    ResolversParentTypes['Query'] = ResolversParentTypes['Query'],
 > = ResolversObject<{
   allMessages?: Resolver<
     Array<ResolversTypes['Message']>,
@@ -334,7 +338,8 @@ export type QueryResolvers<
 
 export type TicketResolvers<
   ContextType = any,
-  ParentType extends ResolversParentTypes['Ticket'] = ResolversParentTypes['Ticket']
+  ParentType extends
+    ResolversParentTypes['Ticket'] = ResolversParentTypes['Ticket'],
 > = ResolversObject<{
   contact?: Resolver<ResolversTypes['Contact'], ParentType, ContextType>;
   content?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;

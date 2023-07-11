@@ -6,7 +6,7 @@ export class EmojiNode extends TextNode {
   }
 
   static clone(node: TextNode) {
-    return new EmojiNode(node.__className, node.__text, node.__key);
+    return new EmojiNode(node.__className as string, node.__text, node.__key);
   }
 
   constructor(className: string, text: string, key?: string) {
@@ -17,7 +17,7 @@ export class EmojiNode extends TextNode {
   createDOM(config: EditorConfig) {
     const dom = document.createElement('span');
     const inner = super.createDOM(config);
-    dom.className = this.__className;
+    dom.className = this.__className as string;
     inner.className = 'emoji-inner';
     dom.appendChild(inner);
     return dom;

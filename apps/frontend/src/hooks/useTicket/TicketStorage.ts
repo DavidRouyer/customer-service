@@ -7,7 +7,7 @@ export class TicketStorage {
   private currentUser?: User;
   private tickets: Ticket[] = [];
   private activeTicketId?: TicketId;
-  private messagesByTicketId: Map<string, Message[]> = new Map();
+  private messagesByTicketId = new Map<string, Message[]>();
 
   /**
    * Sets current user

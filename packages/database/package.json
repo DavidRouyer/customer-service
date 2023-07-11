@@ -14,6 +14,7 @@
     "build": "tsc",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate",
+    "db:migrate:dev": "prisma migrate dev",
     "db:migrate:deploy": "prisma migrate deploy",
     "db:push": "prisma db push --skip-generate",
     "db:seed": "prisma db seed",

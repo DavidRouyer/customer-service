@@ -1,9 +1,4 @@
-import {
-  MessageContentType,
-  MessageDirection,
-  MessageStatus,
-  Resolvers,
-} from '@/gql/resolvers-types';
+import { Resolvers } from '@/gql/resolvers-types';
 import { typeDefs } from '@/schema';
 import { ApolloServer, BaseContext } from '@apollo/server';
 import fastifyApollo, {
@@ -32,6 +27,7 @@ const resolvers: Resolvers = {
       return tickets.map((ticket) => ({
         ...ticket,
         id: ticket.id.toString(),
+        createdAt: ticket.createdAt.toISOString(),
         contact: { ...ticket.contact, id: ticket.contact.id.toString() },
       }));
     },
@@ -44,9 +40,11 @@ const resolvers: Resolvers = {
       return messages.map((message) => ({
         ...message,
         id: message.id.toString(),
-        contentType: <MessageContentType>message.contentType,
-        direction: <MessageDirection>message.direction,
-        status: <MessageStatus>message.status,
+        contentType: message.contentType,
+        direction: message.direction,
+        status: message.status,
+        createdAt: message.createdAt.toISOString(),
+        content: message.content as string,
         sender: { ...message.sender, id: message.sender.id.toString() },
       }));
     },

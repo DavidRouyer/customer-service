@@ -14,10 +14,10 @@ import { TicketState } from '@/hooks/useTicket/TicketState';
 import { TicketStorage } from '@/hooks/useTicket/TicketStorage';
 import { User } from '@/hooks/useTicket/User';
 
-export interface SendMessageParams {
+export type SendMessageParams = {
   message: Omit<Message, 'id'>;
   ticketId: TicketId;
-}
+};
 
 export type TicketContextType = TicketState & {
   currentMessages: Message[];
@@ -154,7 +154,7 @@ export const TicketProvider: React.FC<TicketProviderProps> = ({ children }) => {
       currentMessages:
         state.activeTicket &&
         state.messagesByTicketId.has(state.activeTicket.id)
-          ? (state.messagesByTicketId.get(state.activeTicket.id) as Message[])
+          ? state.messagesByTicketId.get(state.activeTicket.id)!
           : [],
       removeTicket: removeTicket,
       getTicket: getTicket,

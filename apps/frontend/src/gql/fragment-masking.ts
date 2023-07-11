@@ -1,14 +1,13 @@
 import {
-  DocumentTypeDecoration,
   ResultOf,
+  DocumentTypeDecoration,
   TypedDocumentNode,
 } from '@graphql-typed-document-node/core';
 import { FragmentDefinitionNode } from 'graphql';
-
 import { Incremental } from './graphql';
 
 export type FragmentType<
-  TDocumentType extends DocumentTypeDecoration<any, any>
+  TDocumentType extends DocumentTypeDecoration<any, any>,
 > = TDocumentType extends DocumentTypeDecoration<infer TType, any>
   ? [TType] extends [{ ' $fragmentName'?: infer TKey }]
     ? TKey extends string
@@ -56,7 +55,7 @@ export function useFragment<TType>(
 
 export function makeFragmentData<
   F extends DocumentTypeDecoration<any, any>,
-  FT extends ResultOf<F>
+  FT extends ResultOf<F>,
 >(data: FT, _fragment: F): FragmentType<F> {
   return data as FragmentType<F>;
 }

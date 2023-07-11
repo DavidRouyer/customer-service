@@ -14,6 +14,10 @@ module.exports = {
       version: 'detect',
     },
   },
+  parserOptions: {
+    project: 'tsconfig.json',
+    tsconfigRootDir: __dirname,
+  },
   plugins: ['react', 'react-hooks', 'tailwindcss'],
   rules: {
     'react-hooks/rules-of-hooks': 'error',

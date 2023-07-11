@@ -1,10 +1,6 @@
 import { FC } from 'react';
 import { Trans } from 'react-i18next';
 
-export async function loader() {
-  return true;
-}
-
 export const Component: FC = () => {
   return (
     <main className="py-10 lg:pl-72">

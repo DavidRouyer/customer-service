@@ -27,6 +27,7 @@ export const typeDefs = gql`
 
   enum MessageContentType {
     TextPlain
+    TextHtml
   }
 
   enum MessageStatus {
