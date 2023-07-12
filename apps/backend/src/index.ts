@@ -40,9 +40,6 @@ const resolvers: Resolvers = {
       return messages.map((message) => ({
         ...message,
         id: message.id.toString(),
-        contentType: message.contentType,
-        direction: message.direction,
-        status: message.status,
         createdAt: message.createdAt.toISOString(),
         content: message.content as string,
         sender: { ...message.sender, id: message.sender.id.toString() },

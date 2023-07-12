@@ -7,6 +7,7 @@ const config: CodegenConfig = {
     "apps/backend/src/gql/resolvers-types.ts": {
       config: {
         useIndexSignature: true,
+        enumsAsTypes: true,
         scalars: {
           Json: "string",
           Date: "string",

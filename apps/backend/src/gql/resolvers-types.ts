@@ -67,23 +67,16 @@ export type Message = {
   status: MessageStatus;
 };
 
-export enum MessageContentType {
-  TextHtml = 'TextHtml',
-  TextPlain = 'TextPlain',
-}
+export type MessageContentType = 'TextHtml' | 'TextPlain';
 
-export enum MessageDirection {
-  Inbound = 'Inbound',
-  Outbound = 'Outbound',
-}
+export type MessageDirection = 'Inbound' | 'Outbound';
 
-export enum MessageStatus {
-  DeliveredToCloud = 'DeliveredToCloud',
-  DeliveredToDevice = 'DeliveredToDevice',
-  Pending = 'Pending',
-  Seen = 'Seen',
-  Sent = 'Sent',
-}
+export type MessageStatus =
+  | 'DeliveredToCloud'
+  | 'DeliveredToDevice'
+  | 'Pending'
+  | 'Seen'
+  | 'Sent';
 
 export type Mutation = {
   __typename?: 'Mutation';
