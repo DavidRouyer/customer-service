@@ -1,6 +1,6 @@
 import { FC } from 'react';
 
-import { Ticket } from '@/components/TicketList/Ticket';
+import { TicketListItem } from '@/components/TicketList/TicketListItem';
 import { useTicket } from '@/hooks/useTicket/TicketProvider';
 
 export const TicketList: FC = () => {
@@ -8,7 +8,7 @@ export const TicketList: FC = () => {
   return (
     <ul role="list" className="divide-y divide-gray-100">
       {tickets.map((ticket) => (
-        <Ticket key={ticket.id} ticket={ticket} />
+        <TicketListItem key={ticket.id} ticket={ticket} />
       ))}
     </ul>
   );

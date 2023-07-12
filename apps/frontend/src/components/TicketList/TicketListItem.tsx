@@ -3,14 +3,14 @@ import { NavLink, useLocation } from 'react-router-dom';
 
 import { RelativeTime } from '@/components/RelativeTime/RelativeTime';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/Avatar';
-import { Ticket as TicketType } from '@/hooks/useTicket/Ticket';
+import { Ticket } from '@/hooks/useTicket/Ticket';
 import { getInitials } from '@/lib/string';
 
-export type TicketProps = {
-  ticket: TicketType;
+export type TicketListItemProps = {
+  ticket: Ticket;
 };
 
-export const Ticket: FC<TicketProps> = ({ ticket }) => {
+export const TicketListItem: FC<TicketListItemProps> = ({ ticket }) => {
   const { search } = useLocation();
   return (
     <li key={ticket.id}>
