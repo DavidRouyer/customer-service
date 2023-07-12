@@ -54,7 +54,9 @@ export const useSetupTicketList = () => {
   useEffect(() => {
     if (!ticketsData) return;
 
-    (ticketsData.data?.allTickets ?? []).forEach((ticket) => addTicket(ticket));
+    (ticketsData.data?.allTickets ?? []).forEach((ticket) =>
+      addTicket({ ...ticket, createdAt: new Date(ticket.createdAt) })
+    );
     if (ticketId) {
       setActiveTicket(ticketId);
     } else {

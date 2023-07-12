@@ -72,7 +72,7 @@ export const ActivityPanel: FC = () => {
                     dateTime={activityItem.dateTime}
                     className="flex-none py-0.5 text-xs leading-5 text-gray-500"
                   >
-                    <RelativeTime dateTime={activityItem.dateTime} />
+                    <RelativeTime dateTime={new Date(activityItem.dateTime)} />
                   </time>
                 </div>
                 <p className="text-sm leading-6 text-gray-500">
@@ -102,7 +102,7 @@ export const ActivityPanel: FC = () => {
                 dateTime={activityItem.dateTime}
                 className="flex-none py-0.5 text-xs leading-5 text-gray-500"
               >
-                <RelativeTime dateTime={activityItem.dateTime} />
+                <RelativeTime dateTime={new Date(activityItem.dateTime)} />
               </time>
             </>
           )}

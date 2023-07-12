@@ -2,7 +2,7 @@ import { FC, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 type RelativeTimeProps = {
-  dateTime: string;
+  dateTime: Date;
 };
 
 const formatRelativeTime = (prevDate: Date, locale: string) => {
@@ -38,12 +38,12 @@ const formatRelativeTime = (prevDate: Date, locale: string) => {
 export const RelativeTime: FC<RelativeTimeProps> = ({ dateTime }) => {
   const { i18n } = useTranslation();
   const [relativeTime, setRelativeTime] = useState(
-    formatRelativeTime(new Date(dateTime), i18n.language)
+    formatRelativeTime(dateTime, i18n.language)
   );
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setRelativeTime(formatRelativeTime(new Date(dateTime), i18n.language));
+      setRelativeTime(formatRelativeTime(dateTime, i18n.language));
     }, 1000);
 
     return () => {

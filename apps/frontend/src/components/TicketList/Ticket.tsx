@@ -3,7 +3,7 @@ import { NavLink, useLocation } from 'react-router-dom';
 
 import { RelativeTime } from '@/components/RelativeTime/RelativeTime';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/Avatar';
-import { Ticket as TicketType } from '@/gql/graphql';
+import { Ticket as TicketType } from '@/hooks/useTicket/Ticket';
 import { getInitials } from '@/lib/string';
 
 export type TicketProps = {
@@ -30,7 +30,7 @@ export const Ticket: FC<TicketProps> = ({ ticket }) => {
               {ticket.contact.name}
             </p>
             <p className="flex-none text-xs text-gray-600">
-              <time dateTime={ticket.createdAt}>
+              <time dateTime={ticket.createdAt.toUTCString()}>
                 <RelativeTime dateTime={ticket.createdAt} />
               </time>
             </p>
