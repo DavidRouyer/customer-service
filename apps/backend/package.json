@@ -26,7 +26,7 @@
     "typecheck": "tsc --project tsconfig.json --noEmit"
   },
   "devDependencies": {
-    "@types/node": "^20.4.1",
+    "@types/node": "^20.4.2",
     "eslint-config-custom": "*",
     "ts-node": "^10.9.1",
     "tsconfig-paths": "^4.2.0",
