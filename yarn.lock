@@ -5913,10 +5913,10 @@ levn@^0.4.1:
     prelude-ls "^1.2.1"
     type-check "~0.4.0"
 
-lexical@^0.11.2:
-  version "0.11.2"
-  resolved "https://registry.yarnpkg.com/lexical/-/lexical-0.11.2.tgz#fe930c1cbeea1bec497a7d53c3e5543b6adb67d5"
-  integrity sha512-9pvMhn28Liac6uRVwhedIy7iw9IYTR6J1A2Ic+sfgdc5GbLBVZm1obCxazdbJzprRoQdrRUh7M4JJfQdCxC0MQ==
+lexical@^0.11.3:
+  version "0.11.3"
+  resolved "https://registry.yarnpkg.com/lexical/-/lexical-0.11.3.tgz#1ad1a56a657eb55d1b9644733f271bf75a65cbe9"
+  integrity sha512-xsMKgx/Fa+QHg/nweemU04lCy7TnEr8LyeDtsKUC7fIDN9wH3GqbnQ0+e3Hbg4FmxlhDCiPPt0GcZAROq3R8uw==
 
 light-my-request@^5.9.1:
   version "5.10.0"
