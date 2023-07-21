@@ -13,7 +13,7 @@
     "graphql": "^16.7.1",
     "i18next": "^23.2.11",
     "i18next-browser-languagedetector": "^7.1.0",
-    "lexical": "^0.11.2",
+    "lexical": "^0.11.3",
     "lucide-react": "^0.261.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
