@@ -1,5 +1,3 @@
-import { Resolvers } from '@/gql/resolvers-types';
-import { typeDefs } from '@/schema';
 import { ApolloServer, BaseContext } from '@apollo/server';
 import fastifyApollo, {
   fastifyApolloDrainPlugin,
@@ -11,6 +9,9 @@ import rateLimit from '@fastify/rate-limit';
 import { PrismaClient } from 'database';
 import * as dotenv from 'dotenv';
 import Fastify from 'fastify';
+
+import { Resolvers } from '@/gql/resolvers-types';
+import { typeDefs } from '@/schema';
 
 dotenv.config();
 

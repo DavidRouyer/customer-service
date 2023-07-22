@@ -26,6 +26,7 @@
     "typecheck": "tsc --project tsconfig.json --noEmit"
   },
   "devDependencies": {
+    "@trivago/prettier-plugin-sort-imports": "4.2.0",
     "@types/node": "^20.4.2",
     "eslint-config-custom": "*",
     "ts-node": "^10.9.1",

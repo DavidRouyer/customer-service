@@ -1,6 +1,8 @@
 import { FC } from 'react';
 import { Trans } from 'react-i18next';
 
+import { Mail, Phone } from 'lucide-react';
+
 import { CurrentTime } from '@/components/CurrentTime/CurrentTime';
 import { DisplayLanguageName } from '@/components/DisplayLanguageName/DisplayLanguageName';
 import { Android } from '@/components/Icons/Android';
@@ -12,7 +14,6 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/Accordion';
-import { Mail, Phone } from 'lucide-react';
 
 const user = {
   id: 1,

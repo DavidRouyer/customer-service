@@ -2,6 +2,8 @@ import { FC, useState } from 'react';
 import { Trans } from 'react-i18next';
 import { NavLink, Outlet } from 'react-router-dom';
 
+import { AlignJustify } from 'lucide-react';
+
 import { AgentList } from '@/components/AgentList/AgentList';
 import { CurrentUser } from '@/components/CurrentUser/CurrentUser';
 import { Logo } from '@/components/Logo';
@@ -13,7 +15,6 @@ import {
 } from '@/components/ui/Accordion';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/Avatar';
 import { Sheet, SheetContent } from '@/components/ui/Sheet';
-import { AlignJustify } from 'lucide-react';
 
 const navigation = [
   {

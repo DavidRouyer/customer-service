@@ -4,9 +4,11 @@
   "importOrder": [
     "^(react(.*)|recoil)$",
     "<THIRD_PARTY_MODULES>",
+    "^@/(.(?!.(css|scss)))*$",
     "^(\\.|\\.\\.)/(.(?!.(css|scss)))*$",
     "\\.(css|scss)$"
   ],
   "importOrderSeparation": true,
-  "importOrderSortSpecifiers": true
+  "importOrderSortSpecifiers": true,
+  "plugins": ["@trivago/prettier-plugin-sort-imports"]
 }
