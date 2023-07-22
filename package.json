@@ -13,8 +13,8 @@
     "build:backend": "yarn turbo build --filter=backend",
     "build:frontend": "yarn turbo build --filter=frontend",
     "dev": "yarn turbo dev --parallel",
-    "test": "vitest",
-    "test:ui": "vitest --ui",
+    "test": "LC_ALL=en_US.UTF-8 vitest",
+    "test:ui": "LC_ALL=en_US.UTF-8 vitest --ui",
     "graphql-codegen": "graphql-codegen --config codegen/codegen.ts --watch"
   },
   "license": "MIT",

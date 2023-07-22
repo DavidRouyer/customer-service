@@ -2,6 +2,7 @@ import { FC, useMemo } from 'react';
 
 import { MessageListItem } from '@/components/MessageList/MessageListItem';
 import { MessageSeparator } from '@/components/MessageSeparator/MessageSeparator';
+import { RelativeDate } from '@/components/RelativeDate/RelativeDate';
 import { Message } from '@/hooks/useTicket/Message';
 import { useTicket } from '@/hooks/useTicket/TicketProvider';
 
@@ -10,7 +11,7 @@ export const MessageList: FC = () => {
   const groupedMessagesByDate = useMemo(
     () =>
       currentMessages.reduce<Record<string, Message[]>>((acc, message) => {
-        const date = new Date(message.createdAt).toLocaleDateString();
+        const date = new Date(message.createdAt).toDateString();
         const messages = acc[date] ?? [];
 
         return {
@@ -28,7 +29,9 @@ export const MessageList: FC = () => {
     >
       {Object.entries(groupedMessagesByDate).map(([date, messages]) => (
         <>
-          <MessageSeparator>{date}</MessageSeparator>
+          <MessageSeparator>
+            <RelativeDate dateTime={new Date(date)} />
+          </MessageSeparator>
           {messages.map((message) => (
             <MessageListItem key={message.id} message={message} />
           ))}

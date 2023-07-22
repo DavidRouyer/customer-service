@@ -42,6 +42,8 @@ export const RelativeTime: FC<RelativeTimeProps> = ({ dateTime }) => {
   );
 
   useEffect(() => {
+    setRelativeTime(formatRelativeTime(dateTime, i18n.language));
+
     const interval = setInterval(() => {
       setRelativeTime(formatRelativeTime(dateTime, i18n.language));
     }, 1000);
