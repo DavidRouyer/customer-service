@@ -1,7 +1,8 @@
 import { FC } from 'react';
+
+import { MessageDirection } from '@/gql/graphql';
 import { Message } from '@/hooks/useTicket/Message';
 import { cn } from '@/lib/utils';
-import { MessageDirection } from '@/gql/graphql';
 
 export type MessageListItemProps = {
   message: Message;

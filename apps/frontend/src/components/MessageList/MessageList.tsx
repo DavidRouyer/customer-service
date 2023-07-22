@@ -1,9 +1,9 @@
 import { FC, useMemo } from 'react';
 
-import { useTicket } from '@/hooks/useTicket/TicketProvider';
+import { MessageListItem } from '@/components/MessageList/MessageListItem';
 import { MessageSeparator } from '@/components/MessageSeparator/MessageSeparator';
 import { Message } from '@/hooks/useTicket/Message';
-import { MessageListItem } from '@/components/MessageList/MessageListItem';
+import { useTicket } from '@/hooks/useTicket/TicketProvider';
 
 export const MessageList: FC = () => {
   const { currentMessages } = useTicket();
