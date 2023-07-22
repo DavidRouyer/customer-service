@@ -13,7 +13,7 @@ export type TicketListItemProps = {
 export const TicketListItem: FC<TicketListItemProps> = ({ ticket }) => {
   const { search } = useLocation();
   return (
-    <li key={ticket.id}>
+    <section key={ticket.id}>
       <NavLink
         to={`/tickets/${ticket.id}${search}`}
         className="flex gap-x-4 py-5"
@@ -40,6 +40,6 @@ export const TicketListItem: FC<TicketListItemProps> = ({ ticket }) => {
           </p>
         </div>
       </NavLink>
-    </li>
+    </section>
   );
 };
