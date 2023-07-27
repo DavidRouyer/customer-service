@@ -7,6 +7,6 @@
   "dependencies": {
     "eslint": "^8.45.0",
     "eslint-config-prettier": "^8.8.0",
-    "eslint-config-turbo": "^1.10.11"
+    "eslint-config-turbo": "^1.10.12"
   }
 }
