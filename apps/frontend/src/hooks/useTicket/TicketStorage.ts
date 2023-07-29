@@ -148,6 +148,10 @@ export class TicketStorage {
       activeTicket: this.activeTicketId
         ? this.getTicket(this.activeTicketId)
         : undefined,
+      currentMessages:
+        this.activeTicketId && this.messagesByTicketId.has(this.activeTicketId)
+          ? this.messagesByTicketId.get(this.activeTicketId)!
+          : [],
       messagesByTicketId: this.messagesByTicketId,
     };
   }

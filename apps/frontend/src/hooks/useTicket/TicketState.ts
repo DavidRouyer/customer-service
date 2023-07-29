@@ -7,4 +7,5 @@ export type TicketState = {
   tickets: Ticket[];
   activeTicket?: Ticket;
   messagesByTicketId: Map<string, Message[]>;
+  currentMessages: Message[];
 };

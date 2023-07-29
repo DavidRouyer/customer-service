@@ -8,7 +8,7 @@ import {
 
 import { MessageStatus } from '@/gql/graphql';
 import { useAddMessage } from '@/hooks/useAddMessage';
-import { Message } from '@/hooks/useTicket/Message';
+import { FailedMessageStatus, Message } from '@/hooks/useTicket/Message';
 import { Ticket, TicketId } from '@/hooks/useTicket/Ticket';
 import { TicketState } from '@/hooks/useTicket/TicketState';
 import { TicketStorage } from '@/hooks/useTicket/TicketStorage';
@@ -20,7 +20,6 @@ export type SendMessageParams = {
 };
 
 export type TicketContextType = TicketState & {
-  currentMessages: Message[];
   setCurrentUser: (user: User) => void;
   addTicket: (ticket: Ticket) => void;
   removeTicket: (ticketId: TicketId) => boolean;
@@ -122,7 +121,7 @@ export const TicketProvider: React.FC<TicketProviderProps> = ({ children }) => {
           contentType: storedMessage.contentType,
           createdAt: storedMessage.createdAt,
           direction: storedMessage.direction,
-          status: storedMessage.status,
+          status: storedMessage.status as MessageStatus,
           senderId: storedMessage.sender.id,
         },
       })
@@ -140,39 +139,38 @@ export const TicketProvider: React.FC<TicketProviderProps> = ({ children }) => {
           updateState();
         })
         .catch(() => {
-          // TODO: Handle error
+          storage.updateMessage(ticketId, storedMessage.id, {
+            ...storedMessage,
+            status: FailedMessageStatus.Failed,
+          });
+
+          updateState();
         });
     },
     [sendRemoteMessage, storage, updateState]
   );
 
-  const contextValue = useMemo<TicketContextType>(
-    () => ({
-      setCurrentUser: setCurrentUser,
+  const contextValue = useMemo<TicketContextType>(() => {
+    return {
+      addMessage,
       addTicket: addTicket,
-      addMessage,
-      currentMessages:
-        state.activeTicket &&
-        state.messagesByTicketId.has(state.activeTicket.id)
-          ? state.messagesByTicketId.get(state.activeTicket.id)!
-          : [],
-      removeTicket: removeTicket,
       getTicket: getTicket,
-      setActiveTicket: setActiveTicket,
+      removeTicket: removeTicket,
       sendMessage: sendMessage,
+      setActiveTicket: setActiveTicket,
+      setCurrentUser: setCurrentUser,
       ...state,
-    }),
-    [
-      addTicket,
-      addMessage,
-      state,
-      removeTicket,
-      getTicket,
-      setActiveTicket,
-      setCurrentUser,
-      sendMessage,
-    ]
-  );
+    };
+  }, [
+    addMessage,
+    addTicket,
+    getTicket,
+    removeTicket,
+    sendMessage,
+    setActiveTicket,
+    setCurrentUser,
+    state,
+  ]);
 
   return (
     <TicketContext.Provider value={contextValue}>
