@@ -1,16 +1,18 @@
 import { FC } from 'react';
 
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/Avatar';
 import { MessageDirection } from '@/gql/graphql';
-import { Message } from '@/hooks/useTicket/Message';
+import { Message as MessageType } from '@/hooks/useTicket/Message';
+import { getInitials } from '@/lib/string';
 import { cn } from '@/lib/utils';
 
-export type MessageListItemProps = {
-  message: Message;
+export type MessageProps = {
+  message: MessageType;
 };
 
-export const MessageListItem: FC<MessageListItemProps> = ({ message }) => {
+export const Message: FC<MessageProps> = ({ message }) => {
   return (
-    <div key={message.id}>
+    <section>
       <div
         className={cn(
           'flex items-end',
@@ -40,17 +42,25 @@ export const MessageListItem: FC<MessageListItemProps> = ({ message }) => {
             </div>
           )}
         </div>
-        <img
-          src={message.sender.avatarUrl ?? undefined}
-          alt={message.sender.name ?? undefined}
+        <Avatar
           className={cn(
             'h-6 w-6 rounded-full',
             message.direction === MessageDirection.Outbound
               ? 'order-2'
               : 'order-1'
           )}
-        />
+        >
+          <AvatarImage
+            src={message.sender.avatarUrl ?? undefined}
+            alt={message.sender.name ?? ''}
+          />
+          <AvatarFallback className="text-xs">
+            {getInitials(message.sender.name ?? '')}
+          </AvatarFallback>
+        </Avatar>
       </div>
-    </div>
+    </section>
   );
 };
+
+Message.displayName = 'Message';
