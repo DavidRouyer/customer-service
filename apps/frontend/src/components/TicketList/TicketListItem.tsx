@@ -19,7 +19,10 @@ export const TicketListItem: FC<TicketListItemProps> = ({ ticket }) => {
         className="flex gap-x-4 py-5"
       >
         <Avatar className="h-12 w-12">
-          <AvatarImage src={ticket.contact.avatarUrl ?? undefined} />
+          <AvatarImage
+            src={ticket.contact.avatarUrl ?? undefined}
+            alt={ticket.contact.name ?? ''}
+          />
           <AvatarFallback>
             {getInitials(ticket.contact.name ?? '')}
           </AvatarFallback>
