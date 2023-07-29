@@ -12,7 +12,7 @@ export type MessageProps = {
 
 export const Message: FC<MessageProps> = ({ message }) => {
   return (
-    <section>
+    <section key={message.id}>
       <div
         className={cn(
           'flex items-end',
