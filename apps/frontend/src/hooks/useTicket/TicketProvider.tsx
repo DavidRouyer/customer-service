@@ -126,6 +126,10 @@ export const TicketProvider: React.FC<TicketProviderProps> = ({ children }) => {
         },
       })
         .then((result) => {
+          if (result.errors) {
+            throw result.errors;
+          }
+
           if (!result?.data?.addMessage) {
             return;
           }
