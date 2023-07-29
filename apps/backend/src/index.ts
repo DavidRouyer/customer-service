@@ -6,7 +6,7 @@ import compress from '@fastify/compress';
 import cors from '@fastify/cors';
 import helmet from '@fastify/helmet';
 import rateLimit from '@fastify/rate-limit';
-import { PrismaClient } from 'database';
+import { MessageStatus, PrismaClient } from 'database';
 import * as dotenv from 'dotenv';
 import Fastify from 'fastify';
 
@@ -56,6 +56,7 @@ const resolvers: Resolvers = {
           ...message,
           ticketId: sanitizedTicketId,
           senderId: sanitizedSenderId,
+          status: MessageStatus.Sent,
         },
       });
       return createdMessage.id.toString();
