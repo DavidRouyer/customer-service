@@ -1,8 +1,12 @@
 import { FC } from 'react';
+import { useTranslation } from 'react-i18next';
 
+import { MessageStatus } from '@/components/Message/MessageStatus';
+import { MessageTextContent } from '@/components/Message/MessageTextContent';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/Avatar';
-import { MessageDirection } from '@/gql/graphql';
+import { MessageContentType, MessageDirection } from '@/gql/graphql';
 import { Message as MessageType } from '@/hooks/useTicket/Message';
+import { formatHours } from '@/lib/date';
 import { getInitials } from '@/lib/string';
 import { cn } from '@/lib/utils';
 
@@ -11,6 +15,14 @@ export type MessageProps = {
 };
 
 export const Message: FC<MessageProps> = ({ message }) => {
+  const { i18n } = useTranslation();
+
+  const messageContent = (() => {
+    if (message.contentType === MessageContentType.TextPlain)
+      return <MessageTextContent text={message.content} />;
+    return null;
+  })();
+
   return (
     <section key={message.id}>
       <div
@@ -27,20 +39,31 @@ export const Message: FC<MessageProps> = ({ message }) => {
               : 'items-start'
           )}
         >
-          {typeof message.content === 'string' && (
-            <div>
-              <span
+          <div>
+            <span
+              className={cn(
+                'inline-block rounded-lg space-y-2 px-4 py-2',
+                message.direction === MessageDirection.Outbound
+                  ? 'rounded-br-none bg-blue-600 text-white'
+                  : 'rounded-bl-none bg-gray-300 text-gray-600'
+              )}
+            >
+              <div>{messageContent}</div>
+              <div
                 className={cn(
-                  'inline-block rounded-lg px-4 py-2',
+                  'flex items-center justify-end gap-x-2 text-xs',
                   message.direction === MessageDirection.Outbound
-                    ? 'rounded-br-none bg-blue-600 text-white'
-                    : 'rounded-bl-none bg-gray-300 text-gray-600'
+                    ? 'text-blue-100'
+                    : 'text-gray-500'
                 )}
               >
-                {message.content}
-              </span>
-            </div>
-          )}
+                {formatHours(new Date(message.createdAt), i18n.language)}
+                {message.direction === MessageDirection.Outbound && (
+                  <MessageStatus status={message.status} />
+                )}
+              </div>
+            </span>
+          </div>
         </div>
         <Avatar
           className={cn(
