@@ -3050,12 +3050,12 @@
   dependencies:
     tinyspy "^2.1.1"
 
-"@vitest/ui@^0.33.0":
-  version "0.33.0"
-  resolved "https://registry.yarnpkg.com/@vitest/ui/-/ui-0.33.0.tgz#6ee8f1149d5398f929c5dd2697fd2096ecfe9c47"
-  integrity sha512-7gbAjLqt30R4bodkJAutdpy4ncv+u5IKTHYTow1c2q+FOxZUC9cKOSqMUxjwaaTwLN+EnDnmXYPtg3CoahaUzQ==
+"@vitest/ui@^0.34.0":
+  version "0.34.0"
+  resolved "https://registry.yarnpkg.com/@vitest/ui/-/ui-0.34.0.tgz#7c175a8f9e88dc13119937355027317430bd41bb"
+  integrity sha512-+MPvbOiKrOWm1JL8hfROybzTB0Y6gWbMCQZlEI67M1+a1iTjaowXTeYSN4pGu0SubeGJw0JTrZ/Z/sRLmb9wLw==
   dependencies:
-    "@vitest/utils" "0.33.0"
+    "@vitest/utils" "0.34.0"
     fast-glob "^3.3.0"
     fflate "^0.8.0"
     flatted "^3.2.7"
@@ -3067,6 +3067,15 @@
   version "0.33.0"
   resolved "https://registry.yarnpkg.com/@vitest/utils/-/utils-0.33.0.tgz#6b9820cb8f128d649da6f78ecaa9b73d6222b277"
   integrity sha512-pF1w22ic965sv+EN6uoePkAOTkAPWM03Ri/jXNyMIKBb/XHLDPfhLvf/Fa9g0YECevAIz56oVYXhodLvLQ/awA==
+  dependencies:
+    diff-sequences "^29.4.3"
+    loupe "^2.3.6"
+    pretty-format "^29.5.0"
+
+"@vitest/utils@0.34.0":
+  version "0.34.0"
+  resolved "https://registry.yarnpkg.com/@vitest/utils/-/utils-0.34.0.tgz#828bd05e94a70561368343c3c39eba91e7d06180"
+  integrity sha512-IktrDLhBKf3dEUUxH+lcHiPnaw952+GdGvoxg99liMscgP6IePf6LuMY7B9dEIHkFunB1R8VMR/wmI/4UGg1aw==
   dependencies:
     diff-sequences "^29.4.3"
     loupe "^2.3.6"
@@ -6703,12 +6712,7 @@ path-type@^4.0.0:
   resolved "https://registry.yarnpkg.com/path-type/-/path-type-4.0.0.tgz#84ed01c0a7ba380afe09d90a8c180dcd9d03043b"
   integrity sha512-gDKb8aZMDeD/tZWs9P6+q0J9Mwkdl6xMV8TjnGP3qJVJ06bdMgkbBlLU8IdfOsIsFz2BW1rNVT3XuNEl8zPAvw==
 
-pathe@^1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/pathe/-/pathe-1.1.0.tgz#e2e13f6c62b31a3289af4ba19886c230f295ec03"
-  integrity sha512-ODbEPR0KKHqECXW1GoxdDb+AZvULmXjVPy4rt+pGo2+TnjJTIPJQSVS6N63n8T2Ip+syHhbn52OewKicV0373w==
-
-pathe@^1.1.1:
+pathe@^1.1.0, pathe@^1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/pathe/-/pathe-1.1.1.tgz#1dd31d382b974ba69809adc9a7a347e65d84829a"
   integrity sha512-d+RQGp0MAYTIaDBIMmOfMwz3E+LOZnxx1HZd5R18mmCZY0QBlK0LDZfPc8FW8Ed2DlvsuE6PRjroDY+wg4+j/Q==
