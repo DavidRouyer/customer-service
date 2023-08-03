@@ -1375,7 +1375,7 @@ const handlers = {
   touch: touch,
 };
 
-type PerfectScrollbarOptions = {
+export type PerfectScrollbarOptions = {
   handlers: (keyof typeof handlers)[];
   maxScrollbarLength: number | null;
   minScrollbarLength: number | null;
@@ -1434,6 +1434,7 @@ type PerfectScrollbar = {
   removePsClasses: () => void;
   onScroll(): void;
   update(disableOnYReachWhenNoScroll?: boolean): void;
+  destroy(): void;
 };
 
 const PerfectScrollbar = function PerfectScrollbar(
