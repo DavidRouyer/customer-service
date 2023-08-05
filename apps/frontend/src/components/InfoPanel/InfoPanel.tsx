@@ -49,15 +49,15 @@ export const InfoPanel: FC = () => {
               </a>
             </p>
             <p className="flex items-center gap-x-2 text-xs leading-5 text-gray-500">
-              <p>
+              <span>
                 <DisplayLanguageName language={user.language.substring(0, 2)} />
-              </p>
+              </span>
               <svg viewBox="0 0 2 2" className="h-0.5 w-0.5 fill-current">
                 <circle cx={1} cy={1} r={1} />
               </svg>
-              <p>
+              <span>
                 <CurrentTime timezone={user.timezone} />
-              </p>
+              </span>
             </p>
           </div>
         </div>
