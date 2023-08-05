@@ -3,18 +3,22 @@ import { useTranslation } from 'react-i18next';
 
 import { MessageStatus } from '@/components/Message/MessageStatus';
 import { MessageTextContent } from '@/components/Message/MessageTextContent';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/Avatar';
 import { MessageContentType, MessageDirection } from '@/gql/graphql';
 import { Message as MessageType } from '@/hooks/useTicket/Message';
 import { formatHours } from '@/lib/date';
-import { getInitials } from '@/lib/string';
 import { cn } from '@/lib/utils';
 
 export type MessageProps = {
   message: MessageType;
+  showStatus?: boolean;
+  children?: React.ReactNode;
 };
 
-export const Message: FC<MessageProps> = ({ message }) => {
+export const Message: FC<MessageProps> = ({
+  message,
+  showStatus = true,
+  children,
+}) => {
   const { i18n } = useTranslation();
 
   const messageContent = (() => {
@@ -49,38 +53,25 @@ export const Message: FC<MessageProps> = ({ message }) => {
               )}
             >
               <div>{messageContent}</div>
-              <div
-                className={cn(
-                  'flex items-center justify-end gap-x-2 text-xs',
-                  message.direction === MessageDirection.Outbound
-                    ? 'text-blue-100'
-                    : 'text-gray-500'
-                )}
-              >
-                {formatHours(new Date(message.createdAt), i18n.language)}
-                {message.direction === MessageDirection.Outbound && (
-                  <MessageStatus status={message.status} />
-                )}
-              </div>
+              {showStatus && (
+                <div
+                  className={cn(
+                    'flex items-center justify-end gap-x-2 text-xs',
+                    message.direction === MessageDirection.Outbound
+                      ? 'text-blue-100'
+                      : 'text-gray-500'
+                  )}
+                >
+                  {formatHours(new Date(message.createdAt), i18n.language)}
+                  {message.direction === MessageDirection.Outbound && (
+                    <MessageStatus status={message.status} />
+                  )}
+                </div>
+              )}
             </span>
           </div>
         </div>
-        <Avatar
-          className={cn(
-            'h-6 w-6 rounded-full',
-            message.direction === MessageDirection.Outbound
-              ? 'order-2'
-              : 'order-1'
-          )}
-        >
-          <AvatarImage
-            src={message.sender.avatarUrl ?? undefined}
-            alt={message.sender.name ?? ''}
-          />
-          <AvatarFallback className="text-xs">
-            {getInitials(message.sender.name ?? '')}
-          </AvatarFallback>
-        </Avatar>
+        {children}
       </div>
     </section>
   );
