@@ -43,32 +43,30 @@ export const Message: FC<MessageProps> = ({
               : 'items-start'
           )}
         >
-          <div>
-            <span
-              className={cn(
-                'inline-block rounded-lg space-y-2 px-4 py-2',
-                message.direction === MessageDirection.Outbound
-                  ? 'rounded-br-none bg-blue-600 text-white'
-                  : 'rounded-bl-none bg-gray-300 text-gray-600'
-              )}
-            >
-              <div>{messageContent}</div>
-              {showStatus && (
-                <div
-                  className={cn(
-                    'flex items-center justify-end gap-x-2 text-xs',
-                    message.direction === MessageDirection.Outbound
-                      ? 'text-blue-100'
-                      : 'text-gray-500'
-                  )}
-                >
-                  {formatHours(new Date(message.createdAt), i18n.language)}
-                  {message.direction === MessageDirection.Outbound && (
-                    <MessageStatus status={message.status} />
-                  )}
-                </div>
-              )}
-            </span>
+          <div
+            className={cn(
+              'inline-block rounded-lg space-y-2 px-4 py-2',
+              message.direction === MessageDirection.Outbound
+                ? 'rounded-br-none bg-blue-600 text-white'
+                : 'rounded-bl-none bg-gray-300 text-gray-600'
+            )}
+          >
+            {messageContent}
+            {showStatus && (
+              <div
+                className={cn(
+                  'flex items-center justify-end gap-x-2 text-xs',
+                  message.direction === MessageDirection.Outbound
+                    ? 'text-blue-100'
+                    : 'text-gray-500'
+                )}
+              >
+                {formatHours(new Date(message.createdAt), i18n.language)}
+                {message.direction === MessageDirection.Outbound && (
+                  <MessageStatus status={message.status} />
+                )}
+              </div>
+            )}
           </div>
         </div>
         {children}
