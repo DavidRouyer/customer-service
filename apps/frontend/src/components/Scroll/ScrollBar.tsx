@@ -42,12 +42,12 @@ const handlerNameByEvent: {
 };
 Object.freeze(handlerNameByEvent);
 
-export type ScrollBarProps = {
+export type ScrollbarProps = {
   children: React.ReactNode;
   className: string;
   style: CSSProperties;
-  options: PerfectScrollbarOptions;
-  containerRef: (ref: HTMLDivElement | null) => void;
+  options: Partial<PerfectScrollbarOptions>;
+  containerRef: (ref: HTMLDivElement) => void;
   onScrollY: (element: HTMLElement) => void;
   onScrollX: (element: HTMLElement) => void;
   onScrollUp: (element: HTMLElement) => void;
@@ -64,8 +64,8 @@ export type ScrollBarProps = {
   >;
 };
 
-export default class ScrollBar extends React.Component<ScrollBarProps> {
-  static defaultProps: Partial<ScrollBarProps> = {
+export default class Scrollbar extends React.Component<ScrollbarProps> {
+  static defaultProps: Partial<ScrollbarProps> = {
     className: '',
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     containerRef: () => {},
@@ -79,7 +79,7 @@ export default class ScrollBar extends React.Component<ScrollBarProps> {
   _ps: PerfectScrollbar | null = null;
   _container: HTMLElement | null = null;
 
-  constructor(props: ScrollBarProps) {
+  constructor(props: ScrollbarProps) {
     super(props);
 
     this.handleRef = this.handleRef.bind(this);
@@ -93,7 +93,7 @@ export default class ScrollBar extends React.Component<ScrollBarProps> {
     this._updateClassName();
   }
 
-  componentDidUpdate(prevProps: ScrollBarProps) {
+  componentDidUpdate(prevProps: ScrollbarProps) {
     this._updateEventHook(prevProps);
 
     this.updateScroll();
@@ -117,7 +117,7 @@ export default class ScrollBar extends React.Component<ScrollBarProps> {
     this._ps = null;
   }
 
-  _updateEventHook(prevProps: Partial<ScrollBarProps> = {}) {
+  _updateEventHook(prevProps: Partial<ScrollbarProps> = {}) {
     // hook up events
     Object.keys(handlerNameByEvent).forEach((key) => {
       const typedKey = key as keyof typeof handlerNameByEvent;
@@ -156,7 +156,7 @@ export default class ScrollBar extends React.Component<ScrollBarProps> {
     this.props.onSync(this._ps!);
   }
 
-  handleRef(ref: HTMLDivElement | null) {
+  handleRef(ref: HTMLDivElement) {
     this._container = ref;
     this.props.containerRef?.(ref);
   }

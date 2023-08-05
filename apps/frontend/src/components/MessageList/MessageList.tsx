@@ -3,8 +3,11 @@ import { FC, Fragment } from 'react';
 import { Message } from '@/components/Message/Message';
 import { MessageSeparator } from '@/components/MessageSeparator/MessageSeparator';
 import { RelativeDate } from '@/components/RelativeDate/RelativeDate';
+import { ScrollableMessageList } from '@/components/Scroll/ScrollableMessageList';
 import { Message as MessageType } from '@/hooks/useTicket/Message';
 import { useTicket } from '@/hooks/useTicket/TicketProvider';
+
+import '@/components/MessageList/message-list.css';
 
 export const MessageList: FC = () => {
   const { currentMessages } = useTicket();
@@ -21,10 +24,7 @@ export const MessageList: FC = () => {
   }, {});
 
   return (
-    <div
-      id="messages"
-      className="flex flex-1 flex-col space-y-4 overflow-y-auto p-3"
-    >
+    <ScrollableMessageList className="relative h-full w-full overflow-hidden py-3">
       {Object.entries(groupedMessagesByDate).map(([date, messages]) => (
         <Fragment key={date}>
           <MessageSeparator>
@@ -35,7 +35,7 @@ export const MessageList: FC = () => {
           ))}
         </Fragment>
       ))}
-    </div>
+    </ScrollableMessageList>
   );
 };
 

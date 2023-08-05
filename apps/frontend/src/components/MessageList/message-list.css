@@ -1,0 +1,3 @@
+div[data-message-separator]:not(:last-child), section[data-message]:not(:last-child) {
+  margin-top: 1rem;
+}

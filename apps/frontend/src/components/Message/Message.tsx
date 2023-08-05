@@ -24,7 +24,7 @@ export const Message: FC<MessageProps> = ({ message }) => {
   })();
 
   return (
-    <section key={message.id}>
+    <section key={message.id} {...{ ['data-message']: '' }}>
       <div
         className={cn(
           'flex items-end',
