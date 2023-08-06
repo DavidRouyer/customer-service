@@ -1,10 +1,9 @@
 import { FC } from 'react';
 
 import { Message } from '@/components/Message/Message';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/Avatar';
+import { MessageAvatar } from '@/components/Message/MessageAvatar';
 import { Contact, MessageDirection } from '@/gql/graphql';
 import { Message as MessageType } from '@/hooks/useTicket/Message';
-import { getInitials } from '@/lib/string';
 import { cn } from '@/lib/utils';
 
 export type MessageGroupProps = {
@@ -42,20 +41,7 @@ export const MessageGroup: FC<MessageGroupProps> = ({
             />
           ))}
         </div>
-        <Avatar
-          className={cn(
-            'h-6 w-6 rounded-full',
-            direction === MessageDirection.Outbound ? 'order-2' : 'order-1'
-          )}
-        >
-          <AvatarImage
-            src={sender.avatarUrl ?? undefined}
-            alt={sender.name ?? ''}
-          />
-          <AvatarFallback className="text-xs">
-            {getInitials(sender.name ?? '')}
-          </AvatarFallback>
-        </Avatar>
+        <MessageAvatar direction={direction} sender={sender} />
       </div>
     </section>
   );

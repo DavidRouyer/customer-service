@@ -1,16 +1,13 @@
 import { FC, Fragment } from 'react';
 
 import { Message } from '@/components/Message/Message';
+import { MessageAvatar } from '@/components/Message/MessageAvatar';
 import { MessageGroup } from '@/components/MessageGroup/MessageGroup';
 import { MessageSeparator } from '@/components/MessageSeparator/MessageSeparator';
 import { RelativeDate } from '@/components/RelativeDate/RelativeDate';
 import { ScrollableMessageList } from '@/components/Scroll/ScrollableMessageList';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/Avatar';
-import { MessageDirection } from '@/gql/graphql';
 import { Message as MessageType } from '@/hooks/useTicket/Message';
 import { useTicket } from '@/hooks/useTicket/TicketProvider';
-import { getInitials } from '@/lib/string';
-import { cn } from '@/lib/utils';
 
 import '@/components/MessageList/message-list.css';
 
@@ -59,22 +56,10 @@ export const MessageList: FC = () => {
             if (messages.length === 1)
               return (
                 <Message key={messages[0].id} message={messages[0]}>
-                  <Avatar
-                    className={cn(
-                      'h-6 w-6 rounded-full',
-                      messages[0].direction === MessageDirection.Outbound
-                        ? 'order-2'
-                        : 'order-1'
-                    )}
-                  >
-                    <AvatarImage
-                      src={messages[0].sender.avatarUrl ?? undefined}
-                      alt={messages[0].sender.name ?? ''}
-                    />
-                    <AvatarFallback className="text-xs">
-                      {getInitials(messages[0].sender.name ?? '')}
-                    </AvatarFallback>
-                  </Avatar>
+                  <MessageAvatar
+                    direction={messages[0].direction}
+                    sender={messages[0].sender}
+                  />
                 </Message>
               );
 
