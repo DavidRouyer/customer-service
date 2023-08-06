@@ -1,10 +1,16 @@
 import { FC, Fragment } from 'react';
 
 import { Message } from '@/components/Message/Message';
+import { MessageAvatar } from '@/components/Message/MessageAvatar';
+import { MessageGroup } from '@/components/MessageGroup/MessageGroup';
 import { MessageSeparator } from '@/components/MessageSeparator/MessageSeparator';
 import { RelativeDate } from '@/components/RelativeDate/RelativeDate';
+import { ScrollableMessageList } from '@/components/Scroll/ScrollableMessageList';
 import { Message as MessageType } from '@/hooks/useTicket/Message';
 import { useTicket } from '@/hooks/useTicket/TicketProvider';
+import { groupMessagesByDateAndUser } from '@/lib/message';
+
+import '@/components/MessageList/message-list.css';
 
 export const MessageList: FC = () => {
   const { currentMessages } = useTicket();
@@ -21,21 +27,32 @@ export const MessageList: FC = () => {
   }, {});
 
   return (
-    <div
-      id="messages"
-      className="flex flex-1 flex-col space-y-4 overflow-y-auto p-3"
-    >
+    <ScrollableMessageList className="relative h-full w-full overflow-hidden py-3">
       {Object.entries(groupedMessagesByDate).map(([date, messages]) => (
         <Fragment key={date}>
           <MessageSeparator>
             <RelativeDate dateTime={new Date(date)} />
           </MessageSeparator>
-          {messages.map((message) => (
-            <Message key={message.id} message={message} />
-          ))}
+          {groupMessagesByDateAndUser(messages).map((messages) =>
+            messages.length === 1 ? (
+              <Message key={messages[0].id} message={messages[0]}>
+                <MessageAvatar
+                  direction={messages[0].direction}
+                  sender={messages[0].sender}
+                />
+              </Message>
+            ) : (
+              <MessageGroup
+                key={messages[0].id}
+                direction={messages[0].direction}
+                sender={messages[0].sender}
+                messages={messages}
+              />
+            )
+          )}
         </Fragment>
       ))}
-    </div>
+    </ScrollableMessageList>
   );
 };
 

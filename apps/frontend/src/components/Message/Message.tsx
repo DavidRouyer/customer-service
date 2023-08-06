@@ -3,18 +3,24 @@ import { useTranslation } from 'react-i18next';
 
 import { MessageStatus } from '@/components/Message/MessageStatus';
 import { MessageTextContent } from '@/components/Message/MessageTextContent';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/Avatar';
 import { MessageContentType, MessageDirection } from '@/gql/graphql';
 import { Message as MessageType } from '@/hooks/useTicket/Message';
 import { formatHours } from '@/lib/date';
-import { getInitials } from '@/lib/string';
 import { cn } from '@/lib/utils';
 
 export type MessageProps = {
   message: MessageType;
+  showStatus?: boolean;
+  position?: 'single' | 'first' | 'normal' | 'last';
+  children?: React.ReactNode;
 };
 
-export const Message: FC<MessageProps> = ({ message }) => {
+export const Message: FC<MessageProps> = ({
+  message,
+  showStatus = true,
+  position = 'single',
+  children,
+}) => {
   const { i18n } = useTranslation();
 
   const messageContent = (() => {
@@ -24,7 +30,7 @@ export const Message: FC<MessageProps> = ({ message }) => {
   })();
 
   return (
-    <section key={message.id}>
+    <section key={message.id} {...{ ['data-message']: '' }}>
       <div
         className={cn(
           'flex items-end',
@@ -39,16 +45,30 @@ export const Message: FC<MessageProps> = ({ message }) => {
               : 'items-start'
           )}
         >
-          <div>
-            <span
-              className={cn(
-                'inline-block rounded-lg space-y-2 px-4 py-2',
-                message.direction === MessageDirection.Outbound
-                  ? 'rounded-br-none bg-blue-600 text-white'
-                  : 'rounded-bl-none bg-gray-300 text-gray-600'
-              )}
-            >
-              <div>{messageContent}</div>
+          <div
+            className={cn(
+              'inline-block rounded-lg space-y-2 px-4 py-2',
+              message.direction === MessageDirection.Outbound
+                ? 'bg-blue-600 text-white'
+                : 'bg-gray-300 text-gray-600',
+              (position === 'single' ||
+                position === 'first' ||
+                position === 'last') &&
+                message.direction === MessageDirection.Outbound &&
+                'rounded-br-none',
+              (position === 'single' || position === 'first') &&
+                message.direction === MessageDirection.Inbound &&
+                'rounded-bl-none',
+              (position === 'normal' || position === 'last') &&
+                message.direction === MessageDirection.Outbound &&
+                'rounded-r-none',
+              (position === 'normal' || position === 'last') &&
+                message.direction === MessageDirection.Inbound &&
+                'rounded-l-none'
+            )}
+          >
+            {messageContent}
+            {showStatus && (
               <div
                 className={cn(
                   'flex items-center justify-end gap-x-2 text-xs',
@@ -62,25 +82,10 @@ export const Message: FC<MessageProps> = ({ message }) => {
                   <MessageStatus status={message.status} />
                 )}
               </div>
-            </span>
+            )}
           </div>
         </div>
-        <Avatar
-          className={cn(
-            'h-6 w-6 rounded-full',
-            message.direction === MessageDirection.Outbound
-              ? 'order-2'
-              : 'order-1'
-          )}
-        >
-          <AvatarImage
-            src={message.sender.avatarUrl ?? undefined}
-            alt={message.sender.name ?? ''}
-          />
-          <AvatarFallback className="text-xs">
-            {getInitials(message.sender.name ?? '')}
-          </AvatarFallback>
-        </Avatar>
+        {children}
       </div>
     </section>
   );
