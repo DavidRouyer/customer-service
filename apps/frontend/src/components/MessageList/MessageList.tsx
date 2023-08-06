@@ -8,6 +8,7 @@ import { RelativeDate } from '@/components/RelativeDate/RelativeDate';
 import { ScrollableMessageList } from '@/components/Scroll/ScrollableMessageList';
 import { Message as MessageType } from '@/hooks/useTicket/Message';
 import { useTicket } from '@/hooks/useTicket/TicketProvider';
+import { groupMessagesByDateAndUser } from '@/lib/message';
 
 import '@/components/MessageList/message-list.css';
 
@@ -25,26 +26,6 @@ export const MessageList: FC = () => {
     };
   }, {});
 
-  const groupMessagesByStatusAndDate = (messages: MessageType[]) => {
-    const groupedMessages = messages.reduce<Record<string, MessageType[]>>(
-      (acc, message) => {
-        const date = new Date(message.createdAt);
-        date.setUTCMilliseconds(0);
-        date.setUTCSeconds(0);
-        const dateStr = date.toISOString();
-        const messages = acc[dateStr] ?? [];
-
-        return {
-          ...acc,
-          [dateStr]: [...messages, message],
-        };
-      },
-      {}
-    );
-
-    return Object.values(groupedMessages);
-  };
-
   return (
     <ScrollableMessageList className="relative h-full w-full overflow-hidden py-3">
       {Object.entries(groupedMessagesByDate).map(([date, messages]) => (
@@ -52,7 +33,7 @@ export const MessageList: FC = () => {
           <MessageSeparator>
             <RelativeDate dateTime={new Date(date)} />
           </MessageSeparator>
-          {groupMessagesByStatusAndDate(messages).map((messages) => {
+          {groupMessagesByDateAndUser(messages).map((messages) => {
             if (messages.length === 1)
               return (
                 <Message key={messages[0].id} message={messages[0]}>
