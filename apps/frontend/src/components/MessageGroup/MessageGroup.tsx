@@ -32,6 +32,13 @@ export const MessageGroup: FC<MessageGroupProps> = ({
               key={message.id}
               message={message}
               showStatus={idx === messages.length - 1}
+              position={
+                idx === 0
+                  ? 'first'
+                  : idx === messages.length - 1
+                  ? 'last'
+                  : 'normal'
+              }
             />
           ))}
         </div>

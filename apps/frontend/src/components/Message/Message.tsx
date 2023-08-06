@@ -11,12 +11,14 @@ import { cn } from '@/lib/utils';
 export type MessageProps = {
   message: MessageType;
   showStatus?: boolean;
+  position?: 'single' | 'first' | 'normal' | 'last';
   children?: React.ReactNode;
 };
 
 export const Message: FC<MessageProps> = ({
   message,
   showStatus = true,
+  position = 'single',
   children,
 }) => {
   const { i18n } = useTranslation();
@@ -47,8 +49,22 @@ export const Message: FC<MessageProps> = ({
             className={cn(
               'inline-block rounded-lg space-y-2 px-4 py-2',
               message.direction === MessageDirection.Outbound
-                ? 'rounded-br-none bg-blue-600 text-white'
-                : 'rounded-bl-none bg-gray-300 text-gray-600'
+                ? 'bg-blue-600 text-white'
+                : 'bg-gray-300 text-gray-600',
+              (position === 'single' ||
+                position === 'first' ||
+                position === 'last') &&
+                message.direction === MessageDirection.Outbound &&
+                'rounded-br-none',
+              (position === 'single' || position === 'first') &&
+                message.direction === MessageDirection.Inbound &&
+                'rounded-bl-none',
+              (position === 'normal' || position === 'last') &&
+                message.direction === MessageDirection.Outbound &&
+                'rounded-r-none',
+              (position === 'normal' || position === 'last') &&
+                message.direction === MessageDirection.Inbound &&
+                'rounded-l-none'
             )}
           >
             {messageContent}
