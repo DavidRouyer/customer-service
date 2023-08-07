@@ -74,7 +74,7 @@ await apollo.start();
 
 await fastify.register(rateLimit);
 await fastify.register(helmet, {
-  global: process.env.NODE_ENV === 'production' ? true : false,
+  global: process.env.NODE_ENV === 'production',
 });
 await fastify.register(cors, {
   origin: process.env.NODE_ENV === 'production' ? process.env.CORS_ORIGIN : '*',
