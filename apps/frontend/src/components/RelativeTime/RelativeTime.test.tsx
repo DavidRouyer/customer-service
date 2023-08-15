@@ -19,7 +19,6 @@ describe('<RelativeTime />', () => {
   it('should render relative time on current year', () => {
     const sevenMonthsAgo = new Date();
     sevenMonthsAgo.setMonth(sevenMonthsAgo.getMonth() - 7);
-    sevenMonthsAgo.setDate(1);
 
     render(<RelativeTime dateTime={sevenMonthsAgo} />);
 
