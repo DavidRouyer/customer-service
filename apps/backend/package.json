@@ -27,7 +27,7 @@
   },
   "devDependencies": {
     "@trivago/prettier-plugin-sort-imports": "4.2.0",
-    "@types/node": "^20.4.9",
+    "@types/node": "^20.5.0",
     "eslint-config-custom": "*",
     "ts-node": "^10.9.1",
     "tsconfig-paths": "^4.2.0",
