@@ -9,9 +9,10 @@
     "allowSyntheticDefaultImports": true,
     "module": "esnext",
     "noEmit": true,
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
+    "types": ["vitest/globals", "@testing-library/jest-dom/vitest"]
   },
   "exclude": ["node_modules"],
   "extends": "tsconfig/base.json",
-  "include": ["src"]
+  "include": ["src", ".vitest/setup.ts"]
 }
