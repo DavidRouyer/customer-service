@@ -17,18 +17,19 @@ describe('<RelativeTime />', () => {
     expect(screen.getByText('yesterday')).toBeInTheDocument();
   });
   it('should render relative time on current year', () => {
-    const januaryFirst = new Date();
-    januaryFirst.setMonth(0);
-    januaryFirst.setDate(1);
+    const sevenMonthsAgo = new Date();
+    sevenMonthsAgo.setMonth(sevenMonthsAgo.getMonth() - 7);
+    sevenMonthsAgo.setDate(1);
 
-    render(<RelativeTime dateTime={januaryFirst} />);
+    render(<RelativeTime dateTime={sevenMonthsAgo} />);
 
     expect(screen.getByText('7 months ago')).toBeInTheDocument();
   });
   it('should render relative time on previous year', () => {
-    const januaryFirst = new Date('2021-01-01');
+    const threeYearsAgo = new Date();
+    threeYearsAgo.setFullYear(threeYearsAgo.getFullYear() - 3);
 
-    render(<RelativeTime dateTime={januaryFirst} />);
+    render(<RelativeTime dateTime={threeYearsAgo} />);
 
     expect(screen.getByText('3 years ago')).toBeInTheDocument();
   });
