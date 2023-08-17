@@ -11,7 +11,7 @@ export const AddMessageMutation = graphql(/* GraphQL */ `
 `);
 
 export const useAddMessage = () => {
-  const { mutate } = useMutation({
+  const { mutateAsync } = useMutation({
     mutationFn: ({
       ticketId,
       message,
@@ -29,5 +29,5 @@ export const useAddMessage = () => {
       ),
   });
 
-  return { mutate };
+  return { mutateAsync };
 };
