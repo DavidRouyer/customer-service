@@ -1,8 +1,10 @@
 import { useEffect } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
+import { useQuery } from '@tanstack/react-query';
+import request from 'graphql-request';
+
 import { graphql } from '@/gql/gql';
-import { useGraphQL } from '@/hooks/use-query';
 import { useTicket } from '@/hooks/useTicket/TicketProvider';
 
 export const AllTicketsQuery = graphql(/* GraphQL */ `
@@ -44,23 +46,35 @@ export const useSetupTicketList = () => {
   const navigate = useNavigate();
   const { search } = useLocation();
 
-  const { data: ticketsData } = useGraphQL(AllTicketsQuery);
-  const { data: messagesData } = useGraphQL(
-    AllMessagesQuery,
-    ticketId ? { ticketId } : null
-  );
+  const { data: ticketsData } = useQuery({
+    queryKey: ['allTickets'],
+    queryFn: () =>
+      request(`${import.meta.env.VITE_ENDPOINT_URL}/graphql`, AllTicketsQuery),
+  });
+  const { data: messagesData } = useQuery({
+    queryKey: ['allMessages', ticketId],
+    queryFn: () =>
+      request(
+        `${import.meta.env.VITE_ENDPOINT_URL}/graphql`,
+        AllMessagesQuery,
+        {
+          ticketId: ticketId ?? '',
+        }
+      ),
+    enabled: !!ticketId,
+  });
 
   // TODO: refactor
   useEffect(() => {
     if (!ticketsData) return;
 
-    (ticketsData.data?.allTickets ?? []).forEach((ticket) =>
+    (ticketsData.allTickets ?? []).forEach((ticket) =>
       addTicket({ ...ticket, createdAt: new Date(ticket.createdAt) })
     );
     if (ticketId) {
       setActiveTicket(ticketId);
     } else {
-      const firstTicketIdFromList = ticketsData?.data?.allTickets[0]?.id;
+      const firstTicketIdFromList = ticketsData?.allTickets[0]?.id;
       if (!firstTicketIdFromList) return;
 
       navigate(`/tickets/${firstTicketIdFromList}${search}`, {
@@ -80,7 +94,7 @@ export const useSetupTicketList = () => {
   useEffect(() => {
     if (!messagesData || !ticketId) return;
 
-    (messagesData.data?.allMessages ?? []).forEach((message) =>
+    (messagesData.allMessages ?? []).forEach((message) =>
       addMessage(ticketId, message)
     );
   }, [messagesData, addMessage, ticketId]);

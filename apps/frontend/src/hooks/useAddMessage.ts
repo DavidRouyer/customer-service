@@ -1,5 +1,8 @@
+import { useMutation } from '@tanstack/react-query';
+import request from 'graphql-request';
+
 import { graphql } from '@/gql/gql';
-import { useMutation } from '@/hooks/use-query';
+import { AddMessageInput } from '@/gql/graphql';
 
 export const AddMessageMutation = graphql(/* GraphQL */ `
   mutation AddMessage($ticketId: ID!, $message: AddMessageInput!) {
@@ -8,7 +11,23 @@ export const AddMessageMutation = graphql(/* GraphQL */ `
 `);
 
 export const useAddMessage = () => {
-  const { trigger } = useMutation(AddMessageMutation);
+  const { mutate } = useMutation({
+    mutationFn: ({
+      ticketId,
+      message,
+    }: {
+      ticketId: string;
+      message: AddMessageInput;
+    }) =>
+      request(
+        `${import.meta.env.VITE_ENDPOINT_URL}/graphql`,
+        AddMessageMutation,
+        {
+          ticketId,
+          message,
+        }
+      ),
+  });
 
-  return { trigger };
+  return { mutate };
 };

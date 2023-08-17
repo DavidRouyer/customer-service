@@ -3,6 +3,8 @@ import { Navigate, RouterProvider } from 'react-router';
 import { createBrowserRouter } from 'react-router-dom';
 import { RecoilRoot } from 'recoil';
 
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+
 import { LayoutWithSidebar } from '@/app/LayoutWithSidebar';
 import { LayoutWithTicketList } from '@/app/LayoutWithTicketList';
 import { TicketProvider, useTicket } from '@/hooks/useTicket/TicketProvider';
@@ -60,14 +62,18 @@ export const SetupStores = () => {
   return null;
 };
 
+const queryClient = new QueryClient();
+
 export const App: FC = () => {
   return (
-    <RecoilRoot>
-      <TicketProvider>
-        <SetupStores />
-        <RouterProvider router={router} />
-      </TicketProvider>
-    </RecoilRoot>
+    <QueryClientProvider client={queryClient}>
+      <RecoilRoot>
+        <TicketProvider>
+          <SetupStores />
+          <RouterProvider router={router} />
+        </TicketProvider>
+      </RecoilRoot>
+    </QueryClientProvider>
   );
 };
 
