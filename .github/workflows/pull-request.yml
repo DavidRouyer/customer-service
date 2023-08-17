@@ -38,10 +38,10 @@ jobs:
         id: create_branch
         with:
           project_id: ${{ secrets.NEON_PROJECT_ID }}
+          parent: dev
           branch_name: ${{steps.get_pull_request_sha.outputs.pull_request_sha}}
           api_key: ${{ secrets.NEON_API_KEY }}
           username: ${{ secrets.PG_USERNAME }}
-          password: ${{ secrets.PG_PASSWORD }}
 
       - name: Build backend
         run: yarn build:backend

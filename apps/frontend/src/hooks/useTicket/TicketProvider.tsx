@@ -50,7 +50,7 @@ export type TicketProviderProps = {
 export const TicketProvider: React.FC<TicketProviderProps> = ({ children }) => {
   const [storage] = useState<TicketStorage>(new TicketStorage());
   const [state, setState] = useState<TicketState>(storage.getState());
-  const { trigger: sendRemoteMessage } = useAddMessage();
+  const { mutateAsync: sendRemoteMessage } = useAddMessage();
 
   const updateState = useCallback(() => {
     const newState = storage.getState();
@@ -126,23 +126,20 @@ export const TicketProvider: React.FC<TicketProviderProps> = ({ children }) => {
         },
       })
         .then((result) => {
-          if (result.errors) {
-            throw result.errors;
-          }
-
-          if (!result?.data?.addMessage) {
+          if (!result?.addMessage) {
             return;
           }
 
           storage.updateMessage(ticketId, storedMessage.id, {
             ...storedMessage,
-            id: result.data.addMessage,
+            id: result.addMessage,
             status: MessageStatus.DeliveredToCloud,
           });
 
           updateState();
         })
         .catch(() => {
+          // TODO: Handle error with Tanstack query
           storage.updateMessage(ticketId, storedMessage.id, {
             ...storedMessage,
             status: FailedMessageStatus.Failed,
