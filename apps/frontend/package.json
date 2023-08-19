@@ -29,7 +29,7 @@
     "clean": "rm -rf .turbo node_modules",
     "format": "prettier --check \"**/*.{js,cjs,mjs,ts,tsx,md,json}\"",
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "vite build",
     "serve": "vite preview",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit"

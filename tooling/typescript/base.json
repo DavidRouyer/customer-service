@@ -9,7 +9,6 @@
     "jsx": "preserve",
     "module": "esnext",
     "moduleResolution": "node",
-    "noEmit": true,
     "noUncheckedIndexedAccess": true,
     "noUnusedLocals": false,
     "noUnusedParameters": false,

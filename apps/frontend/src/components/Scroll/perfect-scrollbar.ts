@@ -165,7 +165,7 @@ EventElement.prototype.bind = function bind(
   if (typeof this.handlers[eventName] === 'undefined') {
     this.handlers[eventName] = [];
   }
-  this.handlers[eventName].push(handler);
+  this.handlers[eventName]!.push(handler);
 
   const evts = ['touchstart', 'wheel', 'touchmove'];
   if (evts.indexOf(eventName) !== -1) {
@@ -183,7 +183,7 @@ EventElement.prototype.unbind = function unbind(
   // eslint-disable-next-line @typescript-eslint/no-this-alias
   const this$1 = this;
 
-  this.handlers[eventName] = this.handlers[eventName].filter(
+  this.handlers[eventName] = this.handlers[eventName]!.filter(
     function (handler) {
       if (target && handler !== target) {
         return true;
@@ -200,12 +200,12 @@ EventElement.prototype.unbindAll = function unbindAll(this: EventElement) {
   }
 };
 
-prototypeAccessors.isEmpty.get = function (this: EventElement) {
+prototypeAccessors.isEmpty!.get = function (this: EventElement) {
   // eslint-disable-next-line @typescript-eslint/no-this-alias
   const this$1 = this;
 
   return Object.keys(this.handlers).every(function (key) {
-    return this$1.handlers[key].length === 0;
+    return this$1.handlers[key]!.length === 0;
   });
 };
 
@@ -745,7 +745,7 @@ function bindMouseScrollHandler(
   }
 
   function touchMoveHandler(e: TouchEvent) {
-    moveHandler(e, e.touches?.[0]?.[pageY]);
+    moveHandler(e, e.touches?.[0]?.[pageY] ?? 0);
   }
 
   function moveHandler(e: MouseEvent | TouchEvent, pageY: number) {
@@ -791,7 +791,7 @@ function bindMouseScrollHandler(
     bindMoves(e, e[pageY]);
   });
   i.event.bind(i[scrollbarY]!, 'touchstart', function (e: TouchEvent) {
-    bindMoves(e, e.touches?.[0]?.[pageY], true);
+    bindMoves(e, e.touches?.[0]?.[pageY] ?? 0, true);
   });
 }
 
@@ -1059,8 +1059,8 @@ function wheel(i: PerfectScrollbar) {
     if (
       shouldBeConsumedByChild(
         (e as unknown as { target: Element }).target,
-        deltaX,
-        deltaY
+        deltaX!,
+        deltaY!
       )
     ) {
       return;
@@ -1070,15 +1070,15 @@ function wheel(i: PerfectScrollbar) {
     if (!i.settings.useBothWheelAxes) {
       // deltaX will only be used for horizontal scrolling and deltaY will
       // only be used for vertical scrolling - this is the default
-      element!.scrollTop -= deltaY * i.settings.wheelSpeed;
-      element!.scrollLeft += deltaX * i.settings.wheelSpeed;
+      element!.scrollTop -= deltaY! * i.settings.wheelSpeed;
+      element!.scrollLeft += deltaX! * i.settings.wheelSpeed;
     } else if (i.scrollbarYActive && !i.scrollbarXActive) {
       // only vertical scrollbar is active and useBothWheelAxes option is
       // active, so let's scroll vertical bar using both mouse wheel axes
       if (deltaY) {
         element!.scrollTop -= deltaY * i.settings.wheelSpeed;
       } else {
-        element!.scrollTop += deltaX * i.settings.wheelSpeed;
+        element!.scrollTop += deltaX! * i.settings.wheelSpeed;
       }
       shouldPrevent = true;
     } else if (i.scrollbarXActive && !i.scrollbarYActive) {
@@ -1087,14 +1087,14 @@ function wheel(i: PerfectScrollbar) {
       if (deltaX) {
         element!.scrollLeft += deltaX * i.settings.wheelSpeed;
       } else {
-        element!.scrollLeft -= deltaY * i.settings.wheelSpeed;
+        element!.scrollLeft -= deltaY! * i.settings.wheelSpeed;
       }
       shouldPrevent = true;
     }
 
     updateGeometry(i);
 
-    shouldPrevent = shouldPrevent || shouldPreventDefault(deltaX, deltaY);
+    shouldPrevent = shouldPrevent || shouldPreventDefault(deltaX!, deltaY!);
     if (shouldPrevent && !e.ctrlKey) {
       e.stopPropagation();
       e.preventDefault();

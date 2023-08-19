@@ -35,17 +35,17 @@ export const MessageList: FC = () => {
           </MessageSeparator>
           {groupMessagesByDateAndUser(messages).map((messages) =>
             messages.length === 1 ? (
-              <Message key={messages[0].id} message={messages[0]}>
+              <Message key={messages[0]!.id} message={messages[0]!}>
                 <MessageAvatar
-                  direction={messages[0].direction}
-                  sender={messages[0].sender}
+                  direction={messages[0]!.direction}
+                  sender={messages[0]!.sender}
                 />
               </Message>
             ) : (
               <MessageGroup
-                key={messages[0].id}
-                direction={messages[0].direction}
-                sender={messages[0].sender}
+                key={messages[0]?.id}
+                direction={messages[0]!.direction}
+                sender={messages[0]!.sender}
                 messages={messages}
               />
             )
