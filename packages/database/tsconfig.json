@@ -1,7 +1,8 @@
 {
   "extends": "@cs/tsconfig/base.json",
   "compilerOptions": {
-    "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json"
+    "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json",
+    "outDir": "dist"
   },
   "include": ["."],
   "exclude": ["node_modules"]

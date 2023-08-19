@@ -3,13 +3,18 @@
   "version": "0.0.0",
   "private": true,
   "author": "David Rouyer <rouyer.david@gmail.com>",
-  "main": "./index.js",
+  "main": "./dist/index.js",
+  "source": "./index.ts",
   "types": "./index.ts",
+  "files": [
+    "dist/**"
+  ],
   "scripts": {
     "clean": "rm -rf .turbo node_modules",
     "lint": "eslint .",
     "format": "prettier --check \"**/*.{mjs,ts,md,json}\"",
     "typecheck": "tsc --noEmit",
+    "build": "tsc",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate",
     "db:migrate:dev": "prisma migrate dev",
