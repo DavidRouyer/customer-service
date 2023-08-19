@@ -1,16 +1,17 @@
 {
   "$schema": "https://turbo.build/schema.json",
   "pipeline": {
+    "topo": {
+      "dependsOn": ["^topo"]
+    },
     "dev": {
       "dependsOn": ["^db:generate"],
+      "persistent": true,
       "cache": false
     },
     "build": {
       "dependsOn": ["^db:generate"],
       "outputs": ["dist/**"]
-    },
-    "lint": {
-      "cache": false
     },
     "db:generate": {
       "cache": false
@@ -22,6 +23,24 @@
       "cache": false
     },
     "db:migrate:deploy": {
+      "cache": false
+    },
+    "format": {
+      "outputs": ["node_modules/.cache/.prettiercache"],
+      "outputMode": "new-only"
+    },
+    "lint": {
+      "dependsOn": ["^topo"],
+      "outputs": ["node_modules/.cache/.eslintcache"]
+    },
+    "typecheck": {
+      "dependsOn": ["^topo"],
+      "outputs": ["node_modules/.cache/tsbuildinfo.json"]
+    },
+    "clean": {
+      "cache": false
+    },
+    "//#clean": {
       "cache": false
     }
   },

@@ -1,9 +1,9 @@
 import { FC } from 'react';
 import { Trans } from 'react-i18next';
 
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/Avatar';
-import { useTicket } from '@/hooks/useTicket/TicketProvider';
-import { getInitials } from '@/lib/string';
+import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/Avatar';
+import { useTicket } from '~/hooks/useTicket/TicketProvider';
+import { getInitials } from '~/lib/string';
 
 export const CurrentUser: FC = () => {
   const { currentUser } = useTicket();
@@ -11,6 +11,7 @@ export const CurrentUser: FC = () => {
   if (!currentUser) return null;
 
   return (
+    // eslint-disable-next-line jsx-a11y/anchor-is-valid
     <a
       href="#"
       className="flex items-center gap-x-4 px-6 py-3 text-sm font-semibold leading-6 text-gray-900 hover:bg-gray-50"

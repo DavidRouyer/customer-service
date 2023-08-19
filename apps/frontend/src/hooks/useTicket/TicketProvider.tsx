@@ -6,13 +6,13 @@ import {
   useState,
 } from 'react';
 
-import { MessageStatus } from '@/gql/graphql';
-import { useAddMessage } from '@/hooks/useAddMessage';
-import { FailedMessageStatus, Message } from '@/hooks/useTicket/Message';
-import { Ticket, TicketId } from '@/hooks/useTicket/Ticket';
-import { TicketState } from '@/hooks/useTicket/TicketState';
-import { TicketStorage } from '@/hooks/useTicket/TicketStorage';
-import { User } from '@/hooks/useTicket/User';
+import { MessageStatus } from '~/gql/graphql';
+import { useAddMessage } from '~/hooks/useAddMessage';
+import { FailedMessageStatus, Message } from '~/hooks/useTicket/Message';
+import { Ticket, TicketId } from '~/hooks/useTicket/Ticket';
+import { TicketState } from '~/hooks/useTicket/TicketState';
+import { TicketStorage } from '~/hooks/useTicket/TicketStorage';
+import { User } from '~/hooks/useTicket/User';
 
 export type SendMessageParams = {
   message: Omit<Message, 'id'>;

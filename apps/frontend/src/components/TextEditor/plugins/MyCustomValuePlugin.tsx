@@ -1,5 +1,4 @@
 import { FC, useEffect } from 'react';
-
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
 import { CLEAR_EDITOR_COMMAND } from 'lexical';
 

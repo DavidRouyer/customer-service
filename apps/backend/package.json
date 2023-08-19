@@ -1,38 +1,50 @@
 {
   "name": "backend",
   "description": "Prototyping a Customer Service Software",
-  "type": "module",
-  "main": "dist/index.js",
   "version": "0.0.0",
   "private": true,
+  "license": "MIT",
+  "type": "module",
+  "main": "dist/index.js",
   "author": "David Rouyer <rouyer.david@gmail.com>",
   "dependencies": {
     "@apollo/server": "^4.9.1",
     "@as-integrations/fastify": "^2.1.0",
+    "@cs/database": "*",
     "@fastify/compress": "^6.4.0",
     "@fastify/cors": "^8.3.0",
     "@fastify/helmet": "^11.0.0",
     "@fastify/rate-limit": "^8.0.3",
-    "database": "*",
     "dotenv": "^16.3.1",
     "fastify": "^4.21.0",
     "graphql": "^16.8.0"
   },
   "scripts": {
+    "clean": "rm -rf .turbo node_modules",
+    "format": "prettier --check \"**/*.{js,cjs,mjs,ts,tsx,md,json}\"",
     "dev": "node --no-warnings --loader ./loader.js --watch src/index.ts",
     "build": "tsc && tsc-alias -p tsconfig.json",
     "start": "node dist/index.js",
-    "lint": "eslint src --max-warnings=0",
-    "typecheck": "tsc --project tsconfig.json --noEmit"
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
+    "@cs/eslint-config": "*",
+    "@cs/prettier-config": "*",
+    "@cs/tsconfig": "*",
     "@trivago/prettier-plugin-sort-imports": "4.2.0",
     "@types/node": "^20.5.0",
-    "eslint-config-custom": "*",
+    "nodemon": "^3.0.1",
     "ts-node": "^10.9.1",
-    "tsconfig-paths": "^4.2.0",
     "tsc-alias": "^1.8.7",
-    "tsconfig": "*"
+    "tsconfig-paths": "^4.2.0"
   },
-  "license": "MIT"
+  "eslintConfig": {
+    "root": true,
+    "extends": [
+      "@cs/eslint-config/base"
+    ],
+    "ignorePatterns": ["src/gql/*.ts", "loader.js"]
+  },
+  "prettier": "@cs/prettier-config"
 }

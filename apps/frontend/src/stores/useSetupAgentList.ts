@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useSetRecoilState } from 'recoil';
 
-import { Agent, agentListState } from '@/stores/agentList';
+import { Agent, agentListState } from '~/stores/agentList';
 
 const initialAgentList: Agent[] = [
   {

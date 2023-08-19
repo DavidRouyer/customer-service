@@ -1,6 +1,6 @@
 import { FC } from 'react';
 
-import { useTicket } from '@/hooks/useTicket/TicketProvider';
+import { useTicket } from '~/hooks/useTicket/TicketProvider';
 
 export const TicketHeader: FC = () => {
   const { activeTicket } = useTicket();

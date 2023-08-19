@@ -1,16 +1,15 @@
 import { FC } from 'react';
+import { PaperclipIcon, SmilePlusIcon } from 'lucide-react';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
 import { Trans } from 'react-i18next';
 
-import { PaperclipIcon, SmilePlusIcon } from 'lucide-react';
-
-import { TextEditor } from '@/components/TextEditor/TextEditor';
+import { TextEditor } from '~/components/TextEditor/TextEditor';
 import {
   MessageContentType,
   MessageDirection,
   MessageStatus,
-} from '@/gql/graphql';
-import { useTicket } from '@/hooks/useTicket/TicketProvider';
+} from '~/gql/graphql';
+import { useTicket } from '~/hooks/useTicket/TicketProvider';
 
 type MessageFormSchema = {
   content: string;

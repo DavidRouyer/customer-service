@@ -1,4 +1,4 @@
-import { Contact } from '@/gql/graphql';
+import { Contact } from '~/gql/graphql';
 
 export type TicketId = string;
 

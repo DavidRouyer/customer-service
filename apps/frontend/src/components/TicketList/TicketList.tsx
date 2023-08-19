@@ -1,7 +1,7 @@
 import { FC } from 'react';
 
-import { TicketListItem } from '@/components/TicketList/TicketListItem';
-import { useTicket } from '@/hooks/useTicket/TicketProvider';
+import { TicketListItem } from '~/components/TicketList/TicketListItem';
+import { useTicket } from '~/hooks/useTicket/TicketProvider';
 
 export const TicketList: FC = () => {
   const { tickets } = useTicket();

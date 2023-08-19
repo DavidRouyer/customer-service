@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 
-import { cn } from '@/lib/utils';
+import { cn } from '~/lib/utils';
 import * as SheetPrimitive from '@radix-ui/react-dialog';
 import { VariantProps, cva } from 'class-variance-authority';
 import { X } from 'lucide-react';
@@ -23,6 +23,7 @@ const portalVariants = cva('fixed inset-0 z-50 flex', {
   defaultVariants: { position: 'right' },
 });
 
+// eslint-disable-next-line @typescript-eslint/consistent-type-definitions
 interface SheetPortalProps
   extends SheetPrimitive.DialogPortalProps,
     VariantProps<typeof portalVariants> {}
@@ -142,6 +143,7 @@ const sheetVariants = cva(
   }
 );
 
+// eslint-disable-next-line @typescript-eslint/consistent-type-definitions
 export interface DialogContentProps
   extends React.ComponentPropsWithoutRef<typeof SheetPrimitive.Content>,
     VariantProps<typeof sheetVariants> {}

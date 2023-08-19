@@ -1,11 +1,10 @@
 import { useEffect } from 'react';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
-
 import { useQuery } from '@tanstack/react-query';
 import request from 'graphql-request';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
-import { graphql } from '@/gql/gql';
-import { useTicket } from '@/hooks/useTicket/TicketProvider';
+import { graphql } from '~/gql/gql';
+import { useTicket } from '~/hooks/useTicket/TicketProvider';
 
 export const AllTicketsQuery = graphql(/* GraphQL */ `
   query allTickets {

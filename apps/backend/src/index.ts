@@ -6,12 +6,13 @@ import compress from '@fastify/compress';
 import cors from '@fastify/cors';
 import helmet from '@fastify/helmet';
 import rateLimit from '@fastify/rate-limit';
-import { MessageStatus, PrismaClient } from 'database';
 import * as dotenv from 'dotenv';
 import Fastify from 'fastify';
 
-import { Resolvers } from '@/gql/resolvers-types';
-import { typeDefs } from '@/schema';
+import { MessageStatus, PrismaClient } from '@cs/database';
+
+import { Resolvers } from '~/gql/resolvers-types';
+import { typeDefs } from '~/schema';
 
 dotenv.config();
 

@@ -1,24 +1,16 @@
 {
+  "extends": "@cs/tsconfig/base.json",
   "compilerOptions": {
-    "baseUrl": "src",
+    "baseUrl": ".",
     "paths": {
-      "@/*": ["*"]
+      "~/*": ["./src/*"]
     },
-    "lib": ["esnext"],
-    "target": "esnext",
-    "allowSyntheticDefaultImports": true,
-    "module": "esnext",
-    "outDir": "dist",
+    "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json"
   },
+  "include": ["."],
   "exclude": ["node_modules"],
-  "extends": "tsconfig/base.json",
-  "include": ["src"],
   "ts-node": {
     "esm": true,
-    "experimentalSpecifierResolution": "node",
-    "require": ["tsconfig-paths/register"]
-  },
-  "tsc-alias": {
-    "resolveFullPaths": true
+    "experimentalSpecifierResolution": "node"
   }
 }

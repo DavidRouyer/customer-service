@@ -1,9 +1,8 @@
 import { FC } from 'react';
-
 import { CheckCircle2 } from 'lucide-react';
 
-import { RelativeTime } from '@/components/RelativeTime/RelativeTime';
-import { cn } from '@/lib/utils';
+import { RelativeTime } from '~/components/RelativeTime/RelativeTime';
+import { cn } from '~/lib/utils';
 
 const activity = [
   {
@@ -43,7 +42,7 @@ const activity = [
 
 export const ActivityPanel: FC = () => {
   return (
-    <ul role="list" className="space-y-6">
+    <ul className="space-y-6">
       {activity.map((activityItem, activityItemIdx) => (
         <li key={activityItem.id} className="relative flex gap-x-4">
           <div

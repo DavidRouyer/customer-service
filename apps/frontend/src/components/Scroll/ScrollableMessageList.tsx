@@ -1,9 +1,9 @@
 import React, { forwardRef, useImperativeHandle, useRef } from 'react';
 
-import Scrollbar from '@/components/Scroll/Scrollbar';
-import { cn } from '@/lib/utils';
+import Scrollbar from '~/components/Scroll/Scrollbar';
+import { cn } from '~/lib/utils';
 
-import '@/components/Scroll/perfect-scrollbar.css';
+import '~/components/Scroll/perfect-scrollbar.css';
 
 type MessageListInnerSnapshot = {
   sticky: boolean;

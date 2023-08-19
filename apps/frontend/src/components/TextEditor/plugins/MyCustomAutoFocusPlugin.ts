@@ -1,5 +1,4 @@
 import { useEffect } from 'react';
-
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
 
 // Lexical React plugins are React components, which makes them

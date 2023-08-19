@@ -1,12 +1,12 @@
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { MessageStatus } from '@/components/Message/MessageStatus';
-import { MessageTextContent } from '@/components/Message/MessageTextContent';
-import { MessageContentType, MessageDirection } from '@/gql/graphql';
-import { Message as MessageType } from '@/hooks/useTicket/Message';
-import { formatHours } from '@/lib/date';
-import { cn } from '@/lib/utils';
+import { MessageStatus } from '~/components/Message/MessageStatus';
+import { MessageTextContent } from '~/components/Message/MessageTextContent';
+import { MessageContentType, MessageDirection } from '~/gql/graphql';
+import { Message as MessageType } from '~/hooks/useTicket/Message';
+import { formatHours } from '~/lib/date';
+import { cn } from '~/lib/utils';
 
 export type MessageProps = {
   message: MessageType;
@@ -47,7 +47,7 @@ export const Message: FC<MessageProps> = ({
         >
           <div
             className={cn(
-              'inline-block rounded-lg space-y-2 px-4 py-2',
+              'inline-block space-y-2 rounded-lg px-4 py-2',
               message.direction === MessageDirection.Outbound
                 ? 'bg-blue-600 text-white'
                 : 'bg-gray-300 text-gray-600',

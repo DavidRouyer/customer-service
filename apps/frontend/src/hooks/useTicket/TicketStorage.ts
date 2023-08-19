@@ -1,7 +1,7 @@
-import { Message } from '@/hooks/useTicket/Message';
-import { Ticket, TicketId } from '@/hooks/useTicket/Ticket';
-import { TicketState } from '@/hooks/useTicket/TicketState';
-import { User } from '@/hooks/useTicket/User';
+import { Message } from '~/hooks/useTicket/Message';
+import { Ticket, TicketId } from '~/hooks/useTicket/Ticket';
+import { TicketState } from '~/hooks/useTicket/TicketState';
+import { User } from '~/hooks/useTicket/User';
 
 export class TicketStorage {
   private currentUser?: User;

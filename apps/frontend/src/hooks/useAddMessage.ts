@@ -1,8 +1,8 @@
 import { useMutation } from '@tanstack/react-query';
 import request from 'graphql-request';
 
-import { graphql } from '@/gql/gql';
-import { AddMessageInput } from '@/gql/graphql';
+import { graphql } from '~/gql/gql';
+import { AddMessageInput } from '~/gql/graphql';
 
 export const AddMessageMutation = graphql(/* GraphQL */ `
   mutation AddMessage($ticketId: ID!, $message: AddMessageInput!) {

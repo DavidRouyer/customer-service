@@ -2,9 +2,9 @@ import {
   MessageContentType,
   MessageDirection,
   MessageStatus,
-} from '@/gql/graphql';
-import { Message } from '@/hooks/useTicket/Message';
-import { groupMessagesByDateAndUser } from '@/lib/message';
+} from '~/gql/graphql';
+import { Message } from '~/hooks/useTicket/Message';
+import { groupMessagesByDateAndUser } from '~/lib/message';
 
 describe('groupMessagesByDateAndUser', () => {
   it('should correctly group messages', () => {

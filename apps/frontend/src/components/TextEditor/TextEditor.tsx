@@ -1,18 +1,17 @@
 import { FC } from 'react';
-import { Trans } from 'react-i18next';
-
 import { ClearEditorPlugin } from '@lexical/react/LexicalClearEditorPlugin';
 import { LexicalComposer } from '@lexical/react/LexicalComposer';
 import { ContentEditable } from '@lexical/react/LexicalContentEditable';
 import LexicalErrorBoundary from '@lexical/react/LexicalErrorBoundary';
 import { HistoryPlugin } from '@lexical/react/LexicalHistoryPlugin';
 import { PlainTextPlugin } from '@lexical/react/LexicalPlainTextPlugin';
+import { Trans } from 'react-i18next';
 
-import editorConfig from '@/components/TextEditor/editorConfig';
-import EmoticonPlugin from '@/components/TextEditor/plugins/EmoticonPlugin';
-import MyCustomAutoFocusPlugin from '@/components/TextEditor/plugins/MyCustomAutoFocusPlugin';
-import MyCustomOnChangePlugin from '@/components/TextEditor/plugins/MyCustomOnChangePlugin';
-import MyCustomValuePlugin from '@/components/TextEditor/plugins/MyCustomValuePlugin';
+import editorConfig from '~/components/TextEditor/editorConfig';
+import EmoticonPlugin from '~/components/TextEditor/plugins/EmoticonPlugin';
+import MyCustomAutoFocusPlugin from '~/components/TextEditor/plugins/MyCustomAutoFocusPlugin';
+import MyCustomOnChangePlugin from '~/components/TextEditor/plugins/MyCustomOnChangePlugin';
+import MyCustomValuePlugin from '~/components/TextEditor/plugins/MyCustomValuePlugin';
 
 type TextEditorProps = {
   value?: string;

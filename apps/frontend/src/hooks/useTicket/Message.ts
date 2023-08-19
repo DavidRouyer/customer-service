@@ -3,7 +3,7 @@ import {
   MessageContentType,
   MessageDirection,
   MessageStatus,
-} from '@/gql/graphql';
+} from '~/gql/graphql';
 
 export enum FailedMessageStatus {
   Failed = 'Failed',

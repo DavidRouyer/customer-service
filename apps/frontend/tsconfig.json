@@ -1,18 +1,13 @@
 {
+  "extends": "@cs/tsconfig/base.json",
   "compilerOptions": {
-    "baseUrl": "src",
+    "baseUrl": ".",
     "paths": {
-      "@/*": ["*"]
+      "~/*": ["./src/*"]
     },
-    "lib": ["dom", "dom.iterable", "esnext"],
-    "target": "esnext",
-    "allowSyntheticDefaultImports": true,
-    "module": "esnext",
-    "noEmit": true,
-    "jsx": "react-jsx",
+    "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json",
     "types": ["vitest/globals", "@testing-library/jest-dom/vitest"]
   },
-  "exclude": ["node_modules"],
-  "extends": "tsconfig/base.json",
-  "include": ["src", ".vitest/setup.ts"]
+  "include": [".", ".vitest/setup.ts"],
+  "exclude": ["node_modules"]
 }

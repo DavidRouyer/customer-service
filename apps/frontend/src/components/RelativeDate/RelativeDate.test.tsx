@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 
-import { RelativeDate } from '@/components/RelativeDate/RelativeDate';
+import { RelativeDate } from '~/components/RelativeDate/RelativeDate';
 
 describe('<RelativeDate />', () => {
   it('should render today', () => {

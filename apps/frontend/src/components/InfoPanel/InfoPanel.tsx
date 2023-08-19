@@ -1,19 +1,18 @@
 import { FC } from 'react';
+import { Mail, Phone } from 'lucide-react';
 import { Trans } from 'react-i18next';
 
-import { Mail, Phone } from 'lucide-react';
-
-import { CurrentTime } from '@/components/CurrentTime/CurrentTime';
-import { DisplayLanguageName } from '@/components/DisplayLanguageName/DisplayLanguageName';
-import { Android } from '@/components/Icons/Android';
-import { ActivityPanel } from '@/components/InfoPanel/ActivityPanel';
-import { UserTicketsPanel } from '@/components/InfoPanel/UserTicketsPanel';
+import { CurrentTime } from '~/components/CurrentTime/CurrentTime';
+import { DisplayLanguageName } from '~/components/DisplayLanguageName/DisplayLanguageName';
+import { Android } from '~/components/Icons/Android';
+import { ActivityPanel } from '~/components/InfoPanel/ActivityPanel';
+import { UserTicketsPanel } from '~/components/InfoPanel/UserTicketsPanel';
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from '@/components/ui/Accordion';
+} from '~/components/ui/Accordion';
 
 const user = {
   id: 1,
@@ -44,6 +43,7 @@ export const InfoPanel: FC = () => {
           </div>
           <div className="min-w-0 flex-1">
             <p className="text-sm font-semibold text-gray-900">
+              {/* eslint-disable-next-line jsx-a11y/anchor-is-valid*/}
               <a href="#" className="hover:underline">
                 {user.name}
               </a>

@@ -1,12 +1,11 @@
 import { FC } from 'react';
-
 import { Badge, BadgeAlert, BadgeCheck, CheckCircle2 } from 'lucide-react';
 
-import { MessageStatus as MessageStatusType } from '@/gql/graphql';
+import { MessageStatus as MessageStatusType } from '~/gql/graphql';
 import {
   ExtendedMessageStatus,
   FailedMessageStatus,
-} from '@/hooks/useTicket/Message';
+} from '~/hooks/useTicket/Message';
 
 export type MessageStatusProps = {
   status: ExtendedMessageStatus;

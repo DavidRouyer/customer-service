@@ -1,10 +1,10 @@
 import { FC } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 
-import { RelativeTime } from '@/components/RelativeTime/RelativeTime';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/Avatar';
-import { Ticket } from '@/hooks/useTicket/Ticket';
-import { getInitials } from '@/lib/string';
+import { RelativeTime } from '~/components/RelativeTime/RelativeTime';
+import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/Avatar';
+import { Ticket } from '~/hooks/useTicket/Ticket';
+import { getInitials } from '~/lib/string';
 
 export type TicketListItemProps = {
   ticket: Ticket;

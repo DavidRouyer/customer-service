@@ -1,9 +1,9 @@
 import { FC } from 'react';
 import { Outlet } from 'react-router-dom';
 
-import { InfoPanel } from '@/components/InfoPanel/InfoPanel';
-import { TicketList } from '@/components/TicketList/TicketList';
-import { useSetupTicketList } from '@/stores/useSetupTicketList';
+import { InfoPanel } from '~/components/InfoPanel/InfoPanel';
+import { TicketList } from '~/components/TicketList/TicketList';
+import { useSetupTicketList } from '~/stores/useSetupTicketList';
 
 export const LayoutWithTicketList: FC = () => {
   useSetupTicketList();

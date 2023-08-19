@@ -1,9 +1,9 @@
 import { FC } from 'react';
 
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/Avatar';
-import { Contact, MessageDirection } from '@/gql/graphql';
-import { getInitials } from '@/lib/string';
-import { cn } from '@/lib/utils';
+import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/Avatar';
+import { Contact, MessageDirection } from '~/gql/graphql';
+import { getInitials } from '~/lib/string';
+import { cn } from '~/lib/utils';
 
 type MessageAvatarProps = {
   direction: MessageDirection;

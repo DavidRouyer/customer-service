@@ -1,20 +1,19 @@
 import { FC, useState } from 'react';
+import { AlignJustify } from 'lucide-react';
 import { Trans } from 'react-i18next';
 import { NavLink, Outlet } from 'react-router-dom';
 
-import { AlignJustify } from 'lucide-react';
-
-import { AgentList } from '@/components/AgentList/AgentList';
-import { CurrentUser } from '@/components/CurrentUser/CurrentUser';
-import { Logo } from '@/components/Logo';
+import { AgentList } from '~/components/AgentList/AgentList';
+import { CurrentUser } from '~/components/CurrentUser/CurrentUser';
+import { Logo } from '~/components/Logo';
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from '@/components/ui/Accordion';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/Avatar';
-import { Sheet, SheetContent } from '@/components/ui/Sheet';
+} from '~/components/ui/Accordion';
+import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/Avatar';
+import { Sheet, SheetContent } from '~/components/ui/Sheet';
 
 const navigation = [
   {
@@ -31,7 +30,7 @@ const navigation = [
             <Trans i18nKey="layout.tickets.tickets" />
           </AccordionTrigger>
           <AccordionContent>
-            <ul role="list" className="flex flex-col gap-y-1">
+            <ul className="flex flex-col gap-y-1">
               <li>
                 <NavLink to="/tickets?filter=me">
                   <Trans i18nKey="layout.tickets.my_tickets" />
@@ -104,9 +103,9 @@ export const LayoutWithSidebar: FC = () => {
               <Logo />
             </div>
             <nav className="flex flex-1 flex-col">
-              <ul role="list" className="flex flex-1 flex-col gap-y-7">
+              <ul className="flex flex-1 flex-col gap-y-7">
                 <li>
-                  <ul role="list" className="-mx-2 space-y-1">
+                  <ul className="-mx-2 space-y-1">
                     {navigation.map((item) => (
                       <li key={item.name}>{item.content}</li>
                     ))}
@@ -124,7 +123,7 @@ export const LayoutWithSidebar: FC = () => {
             <Logo />
           </div>
           <nav className="flex flex-1 flex-col">
-            <ul role="list" className="flex flex-1 flex-col gap-y-7">
+            <ul className="flex flex-1 flex-col gap-y-7">
               {navigation.map((item) => (
                 <li key={item.name}>{item.content}</li>
               ))}
@@ -149,6 +148,7 @@ export const LayoutWithSidebar: FC = () => {
         <div className="flex-1 text-sm font-semibold leading-6 text-gray-900">
           Help Desk
         </div>
+        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid*/}
         <a href="#">
           <span className="sr-only">
             <Trans i18nKey="layout.your_profile" />

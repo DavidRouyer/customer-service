@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { Trans } from 'react-i18next';
 
-import { cn } from '@/lib/utils';
+import { cn } from '~/lib/utils';
 
 type UserTicket = {
   id: number;
@@ -31,7 +31,7 @@ const statuses = {
 
 export const UserTicketsPanel: FC = () => {
   return (
-    <ul role="list" className="flex flex-col gap-y-1">
+    <ul className="flex flex-col gap-y-1">
       {userTickets.map((ticket) => (
         <li key={ticket.id}>
           <div className="flex-auto rounded-md p-3 ring-1 ring-inset ring-gray-200">
@@ -42,7 +42,7 @@ export const UserTicketsPanel: FC = () => {
               <p
                 className={cn(
                   statuses[ticket.status],
-                  'rounded-md whitespace-nowrap mt-0.5 px-1.5 py-0.5 text-xs font-medium ring-1 ring-inset'
+                  'mt-0.5 whitespace-nowrap rounded-md px-1.5 py-0.5 text-xs font-medium ring-1 ring-inset'
                 )}
               >
                 {ticket.status === 'open' ? (

@@ -1,35 +1,42 @@
 {
-  "name": "database",
+  "name": "@cs/database",
   "version": "0.0.0",
   "private": true,
   "author": "David Rouyer <rouyer.david@gmail.com>",
-  "main": "./dist/index.js",
-  "source": "./index.ts",
-  "types": "./index.d.ts",
-  "files": [
-    "dist/**"
-  ],
+  "main": "./index.js",
+  "types": "./index.ts",
   "scripts": {
-    "dev": "tsc -w",
-    "build": "tsc",
+    "clean": "rm -rf .turbo node_modules",
+    "lint": "eslint .",
+    "format": "prettier --check \"**/*.{mjs,ts,md,json}\"",
+    "typecheck": "tsc --noEmit",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate",
     "db:migrate:dev": "prisma migrate dev",
     "db:migrate:deploy": "prisma migrate deploy",
     "db:push": "prisma db push --skip-generate",
-    "db:seed": "prisma db seed",
-    "lint": "eslint . --max-warnings=0"
+    "db:seed": "prisma db seed"
   },
   "dependencies": {
     "@prisma/client": "^5.1.1"
   },
   "devDependencies": {
-    "eslint-config-custom": "*",
+    "@cs/eslint-config": "*",
+    "@cs/prettier-config": "*",
+    "@cs/tsconfig": "*",
+    "eslint": "^8.47.0",
     "prisma": "^5.1.1",
-    "tsconfig": "*",
+    "prettier": "^3.0.2",
     "typescript": "^5.1.6"
   },
   "prisma": {
     "seed": "node --no-warnings=ExperimentalWarning --loader ts-node/esm prisma/seed.ts"
-  }
+  },
+  "eslintConfig": {
+    "root": true,
+    "extends": [
+      "@cs/eslint-config/base"
+    ]
+  },
+  "prettier": "@cs/prettier-config"
 }
