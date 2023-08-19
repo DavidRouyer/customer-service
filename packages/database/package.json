@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "author": "David Rouyer <rouyer.david@gmail.com>",
+  "type":"module",
   "main": "./dist/index.js",
   "source": "./index.ts",
   "types": "./index.ts",
