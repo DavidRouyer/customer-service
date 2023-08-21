@@ -1,5 +1,5 @@
 {
-  "name": "@cs/database",
+  "name": "@cs/api",
   "version": "0.0.0",
   "private": true,
   "main": "./index.ts",
@@ -9,22 +9,23 @@
     "clean": "rm -rf .turbo node_modules",
     "lint": "eslint .",
     "format": "prettier --check \"**/*.{mjs,ts,md,json}\"",
-    "push": "drizzle-kit push:pg",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@neondatabase/serverless": "^0.6.0",
-    "drizzle-orm": "^0.28.2"
+    "@cs/auth": "*",
+    "@cs/database": "*",
+    "@trpc/client": "^10.37.1",
+    "@trpc/server": "^10.37.1",
+    "superjson": "^1.13.1",
+    "zod": "^3.22.2"
   },
   "devDependencies": {
     "@cs/eslint-config": "*",
     "@cs/prettier-config": "*",
     "@cs/tsconfig": "*",
-    "dotenv-cli": "^7.3.0",
-    "drizzle-kit": "^0.19.13",
-    "eslint": "^8.48.0",
-    "prettier": "^3.0.3",
-    "typescript": "^5.2.2"
+    "eslint": "^8.47.0",
+    "prettier": "^3.0.2",
+    "typescript": "^5.1.6"
   },
   "eslintConfig": {
     "root": true,

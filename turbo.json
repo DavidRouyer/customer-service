@@ -1,5 +1,6 @@
 {
   "$schema": "https://turbo.build/schema.json",
+  "globalDependencies": ["**/.env"],
   "pipeline": {
     "topo": {
       "dependsOn": ["^topo"]
@@ -44,5 +45,13 @@
       "cache": false
     }
   },
-  "globalEnv": ["NODE_ENV", "CORS_ORIGIN", "PORT"]
+  "globalEnv": [
+    "AUTH_SECRET",
+    "DATABASE_URL",
+    "AUTH_GITHUB_ID",
+    "AUTH_GITHUB_SECRET",
+    "NODE_ENV",
+    "PORT",
+    "VERCEL_URL"
+  ]
 }
