@@ -6,15 +6,15 @@
   "license": "MIT",
   "scripts": {
     "build": "tsc",
+    "db:push": "drizzle-kit push:pg",
     "clean": "rm -rf .turbo node_modules",
     "lint": "eslint .",
     "format": "prettier --check \"**/*.{mjs,ts,md,json}\"",
-    "push": "drizzle-kit push:pg",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@neondatabase/serverless": "^0.6.0",
-    "drizzle-orm": "^0.28.2"
+    "drizzle-orm": "^0.28.3"
   },
   "devDependencies": {
     "@cs/eslint-config": "*",
