@@ -55,7 +55,7 @@
   dependencies:
     node-fetch "^2.6.1"
 
-"@auth/core@0.12.0":
+"@auth/core@0.12.0", "@auth/core@^0.12.0":
   version "0.12.0"
   resolved "https://registry.yarnpkg.com/@auth/core/-/core-0.12.0.tgz#f4bb41c7619c960be3940cf3244f23edd263b7f6"
   integrity sha512-XYipdAc/nKu014VOgpcPyLlj1ghWlnwyloaB1UjQd9ElZRZQ9YpSizzXGLON23t/a0FyabOBBl0/awD2tW58Rg==

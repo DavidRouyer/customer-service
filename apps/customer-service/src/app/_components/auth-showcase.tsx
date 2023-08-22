@@ -10,10 +10,10 @@ export async function AuthShowcase() {
   if (!session) {
     return (
       <SignIn
-        provider="email"
+        provider="github"
         className="rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20"
       >
-        Sign in with Email
+        Sign in with GitHub
       </SignIn>
     );
   }

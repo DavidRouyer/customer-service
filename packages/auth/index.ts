@@ -8,7 +8,7 @@ import { db, tableCreator } from '@cs/database';
 export type { Session } from 'next-auth';
 
 // Update this whenever adding new providers so that the client can
-export const providers = ['email'] as const;
+export const providers = ['github'] as const;
 export type OAuthProviders = (typeof providers)[number];
 
 declare module 'next-auth' {
