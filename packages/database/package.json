@@ -24,7 +24,7 @@
     "db:seed": "prisma db seed"
   },
   "dependencies": {
-    "@prisma/client": "^5.1.1"
+    "@prisma/client": "^5.2.0"
   },
   "devDependencies": {
     "@cs/eslint-config": "*",
