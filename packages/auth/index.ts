@@ -42,17 +42,17 @@ export const {
     }),
 
     // @TODO - if you wanna have auth on the edge
-    // jwt: ({ token, profile }) => {
-    //   if (profile?.id) {
-    //     token.id = profile.id;
-    //     token.image = profile.picture;
-    //   }
-    //   return token;
-    // },
+    jwt: ({ token, profile }) => {
+      if (profile?.id) {
+        token.id = profile.id;
+        token.image = profile.picture;
+      }
+      return token;
+    },
 
     // @TODO
-    // authorized({ request, auth }) {
-    //   return !!auth?.user
-    // }
+    authorized({ auth }) {
+      return !!auth?.user;
+    },
   },
 });
