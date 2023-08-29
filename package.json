@@ -27,12 +27,12 @@
     "@graphql-codegen/typescript-resolvers": "^4.0.1",
     "@typescript-eslint/eslint-plugin": "^6.5.0",
     "@typescript-eslint/parser": "^6.5.0",
-    "@vitest/coverage-v8": "^0.34.2",
-    "@vitest/ui": "^0.34.2",
+    "@vitest/coverage-v8": "^0.34.3",
+    "@vitest/ui": "^0.34.3",
     "prettier": "^3.0.2",
     "turbo": "^1.10.13",
     "typescript": "^5.2.2",
-    "vitest": "^0.34.2"
+    "vitest": "^0.34.3"
   },
   "prettier": "@acme/prettier-config"
 }
