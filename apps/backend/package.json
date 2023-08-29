@@ -33,7 +33,7 @@
     "@cs/prettier-config": "*",
     "@cs/tsconfig": "*",
     "@trivago/prettier-plugin-sort-imports": "4.2.0",
-    "@types/node": "^20.5.6",
+    "@types/node": "^20.5.7",
     "nodemon": "^3.0.1",
     "ts-node": "^10.9.1",
     "tsc-alias": "^1.8.7",
