@@ -1,7 +1,8 @@
 import { FC } from 'react';
 import { Badge, BadgeAlert, BadgeCheck, CheckCircle2 } from 'lucide-react';
 
-import { MessageStatus as MessageStatusType } from '~/gql/graphql';
+import { MessageStatus as MessageStatusType } from '@cs/database/schema/message';
+
 import {
   ExtendedMessageStatus,
   FailedMessageStatus,

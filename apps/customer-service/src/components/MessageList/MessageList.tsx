@@ -8,7 +8,7 @@ import { RelativeDate } from '~/components/RelativeDate/RelativeDate';
 import { ScrollableMessageList } from '~/components/Scroll/ScrollableMessageList';
 import { Message as MessageType } from '~/hooks/useTicket/Message';
 import { useTicket } from '~/hooks/useTicket/TicketProvider';
-import { groupMessagesByDateAndUser } from '~/lib/message';
+import { groupMessagesByDateAndUser } from '~/utils/message';
 
 import '~/components/MessageList/message-list.css';
 

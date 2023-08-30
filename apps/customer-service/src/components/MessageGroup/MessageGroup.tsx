@@ -2,9 +2,8 @@ import { FC } from 'react';
 
 import { Message } from '~/components/Message/Message';
 import { MessageAvatar } from '~/components/Message/MessageAvatar';
-import { Contact, MessageDirection } from '~/gql/graphql';
 import { Message as MessageType } from '~/hooks/useTicket/Message';
-import { cn } from '~/lib/utils';
+import { cn } from '~/utils/utils';
 
 export type MessageGroupProps = {
   direction: MessageDirection;

@@ -11,7 +11,7 @@ const translations = {
     settings: 'Settings',
     team: 'Team',
     tickets: {
-      all_tickets: 'Tous les tickets',
+      all_tickets: 'All tickets',
       my_tickets: 'My tickets',
       tickets: 'Tickets',
       unassigned_tickets: 'Unassigned tickets',

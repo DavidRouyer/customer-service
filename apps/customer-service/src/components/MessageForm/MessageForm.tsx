@@ -1,14 +1,17 @@
+'use client';
+
 import { FC } from 'react';
 import { PaperclipIcon, SmilePlusIcon } from 'lucide-react';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
 import { Trans } from 'react-i18next';
 
-import { TextEditor } from '~/components/TextEditor/TextEditor';
 import {
   MessageContentType,
   MessageDirection,
   MessageStatus,
-} from '~/gql/graphql';
+} from '@cs/database/schema/message';
+
+import { TextEditor } from '~/components/TextEditor/TextEditor';
 import { useTicket } from '~/hooks/useTicket/TicketProvider';
 
 type MessageFormSchema = {
@@ -21,17 +24,17 @@ export const MessageForm: FC = () => {
 
   const onSubmit = (data: MessageFormSchema) => {
     sendMessage({
-      ticketId: activeTicket?.id ?? '',
+      ticketId: activeTicket?.id ?? 0,
       message: {
         direction: MessageDirection.Outbound,
         contentType: MessageContentType.TextPlain,
         status: MessageStatus.Pending,
         content: data.content,
-        createdAt: new Date().toISOString(),
+        createdAt: new Date(),
         sender: {
           id: currentUser?.id ?? '',
-          name: `${currentUser?.firstName} ${currentUser?.lastName}`,
-          avatarUrl: currentUser?.avatarUrl,
+          name: currentUser?.fullName,
+          avatarUrl: currentUser?.image,
         },
       },
     });

@@ -16,16 +16,11 @@
     "db:push": "yarn --cwd packages/database db:push",
     "dev": "yarn turbo dev --parallel",
     "test": "LC_ALL=en_US.UTF-8 vitest",
-    "test:ui": "LC_ALL=en_US.UTF-8 vitest --ui",
-    "graphql-codegen": "graphql-codegen --config codegen/codegen.ts --watch"
+    "test:ui": "LC_ALL=en_US.UTF-8 vitest --ui"
   },
   "license": "MIT",
   "dependencies": {
     "@cs/prettier-config": "*",
-    "@graphql-codegen/cli": "^5.0.0",
-    "@graphql-codegen/client-preset": "^4.1.0",
-    "@graphql-codegen/typescript": "^4.0.0",
-    "@graphql-codegen/typescript-resolvers": "^4.0.1",
     "@typescript-eslint/eslint-plugin": "^6.5.0",
     "@typescript-eslint/parser": "^6.5.0",
     "@vitest/coverage-v8": "^0.34.3",

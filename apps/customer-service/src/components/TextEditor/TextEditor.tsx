@@ -1,3 +1,5 @@
+'use client';
+
 import { FC } from 'react';
 import { ClearEditorPlugin } from '@lexical/react/LexicalClearEditorPlugin';
 import { LexicalComposer } from '@lexical/react/LexicalComposer';

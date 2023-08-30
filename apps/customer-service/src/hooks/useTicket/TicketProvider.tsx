@@ -1,3 +1,5 @@
+'use client';
+
 import {
   createContext,
   useCallback,
@@ -6,13 +8,14 @@ import {
   useState,
 } from 'react';
 
-import { MessageStatus } from '~/gql/graphql';
-import { useAddMessage } from '~/hooks/useAddMessage';
+import { MessageStatus } from '@cs/database/schema/message';
+
 import { FailedMessageStatus, Message } from '~/hooks/useTicket/Message';
 import { Ticket, TicketId } from '~/hooks/useTicket/Ticket';
 import { TicketState } from '~/hooks/useTicket/TicketState';
 import { TicketStorage } from '~/hooks/useTicket/TicketStorage';
 import { User } from '~/hooks/useTicket/User';
+import { api } from '~/utils/api';
 
 export type SendMessageParams = {
   message: Omit<Message, 'id'>;
@@ -50,7 +53,7 @@ export type TicketProviderProps = {
 export const TicketProvider: React.FC<TicketProviderProps> = ({ children }) => {
   const [storage] = useState<TicketStorage>(new TicketStorage());
   const [state, setState] = useState<TicketState>(storage.getState());
-  const { mutateAsync: sendRemoteMessage } = useAddMessage();
+  const { mutateAsync: sendRemoteMessage } = api.message.create.useMutation();
 
   const updateState = useCallback(() => {
     const newState = storage.getState();
@@ -106,9 +109,10 @@ export const TicketProvider: React.FC<TicketProviderProps> = ({ children }) => {
 
   const sendMessage = useCallback(
     ({ message, ticketId }: SendMessageParams) => {
+      const array = new Uint32Array(1);
       const newMessage: Message = {
         ...message,
-        id: self.crypto.randomUUID(),
+        id: self.crypto.getRandomValues(array)[0] ?? 0,
       };
       const storedMessage = storage.addMessage(ticketId, newMessage);
 
@@ -116,23 +120,21 @@ export const TicketProvider: React.FC<TicketProviderProps> = ({ children }) => {
 
       sendRemoteMessage({
         ticketId: ticketId,
-        message: {
-          content: storedMessage.content,
-          contentType: storedMessage.contentType,
-          createdAt: storedMessage.createdAt,
-          direction: storedMessage.direction,
-          status: storedMessage.status as MessageStatus,
-          senderId: storedMessage.sender.id,
-        },
+        content: storedMessage.content,
+        contentType: storedMessage.contentType,
+        createdAt: storedMessage.createdAt,
+        direction: storedMessage.direction,
+        status: storedMessage.status as MessageStatus,
+        senderId: storedMessage.sender.id,
       })
         .then((result) => {
-          if (!result?.addMessage) {
+          if (!result) {
             return;
           }
 
           storage.updateMessage(ticketId, storedMessage.id, {
             ...storedMessage,
-            id: result.addMessage,
+            id: result?.[0]?.id ?? 0,
             status: MessageStatus.DeliveredToCloud,
           });
 

@@ -1,8 +1,10 @@
-import { FC, useState } from 'react';
-import { AlignJustify } from 'lucide-react';
-import { Trans } from 'react-i18next';
-import { NavLink, Outlet } from 'react-router-dom';
+'use client';
 
+import { FC, useEffect, useState } from 'react';
+import Link from 'next/link';
+import { AlignJustify } from 'lucide-react';
+
+import { useTranslation } from '~/app/i18n/client';
 import { AgentList } from '~/components/AgentList/AgentList';
 import { CurrentUser } from '~/components/CurrentUser/CurrentUser';
 import { Logo } from '~/components/Logo';
@@ -14,85 +16,113 @@ import {
 } from '~/components/ui/Accordion';
 import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/Avatar';
 import { Sheet, SheetContent } from '~/components/ui/Sheet';
+import { useTicket } from '~/hooks/useTicket/TicketProvider';
+import { User } from '~/hooks/useTicket/User';
 
-const navigation = [
-  {
-    name: 'Tickets',
-    content: (
-      <Accordion
-        type="single"
-        collapsible
-        className="w-full"
-        defaultValue="item-1"
-      >
-        <AccordionItem value="item-1">
-          <AccordionTrigger>
-            <Trans i18nKey="layout.tickets.tickets" />
-          </AccordionTrigger>
-          <AccordionContent>
-            <ul className="flex flex-col gap-y-1">
-              <li>
-                <NavLink to="/tickets?filter=me">
-                  <Trans i18nKey="layout.tickets.my_tickets" />
-                </NavLink>
-              </li>
-              <li>
-                <NavLink to="/tickets?filter=all">
-                  <Trans i18nKey="layout.tickets.all_tickets" />
-                </NavLink>
-              </li>
-              <li>
-                <NavLink to="/tickets?filter=unassigned">
-                  <Trans i18nKey="layout.tickets.unassigned_tickets" />
-                </NavLink>
-              </li>
-            </ul>
-          </AccordionContent>
-        </AccordionItem>
-      </Accordion>
-    ),
-  },
-  {
-    name: 'Team',
-    content: (
-      <Accordion type="single" collapsible className="w-full">
-        <AccordionItem value="item-1">
-          <AccordionTrigger>
-            <Trans i18nKey="layout.team" />
-          </AccordionTrigger>
-          <AccordionContent>
-            <AgentList />
-          </AccordionContent>
-        </AccordionItem>
-      </Accordion>
-    ),
-  },
-  {
-    name: 'Reports',
-    content: (
-      <NavLink
-        to="/reports"
-        className="flex flex-1 items-center justify-between py-4 font-medium transition-all hover:underline"
-      >
-        <Trans i18nKey="layout.reports" />
-      </NavLink>
-    ),
-  },
-  {
-    name: 'Settings',
-    content: (
-      <NavLink
-        to="/settings"
-        className="flex flex-1 items-center justify-between py-4 font-medium transition-all hover:underline"
-      >
-        <Trans i18nKey="layout.settings" />
-      </NavLink>
-    ),
-  },
-];
+const useNavigationLinks = () => {
+  const { t } = useTranslation();
+  return [
+    {
+      name: 'Tickets',
+      content: (
+        <Accordion
+          type="single"
+          collapsible
+          className="w-full"
+          defaultValue="item-1"
+        >
+          <AccordionItem value="item-1">
+            <AccordionTrigger>{t('layout.tickets.tickets')}</AccordionTrigger>
+            <AccordionContent>
+              <ul className="flex flex-col gap-y-1">
+                <li>
+                  <Link href="/tickets?filter=me">
+                    {t('layout.tickets.my_tickets')}
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/tickets?filter=all">
+                    {t('layout.tickets.all_tickets')}
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/tickets?filter=unassigned">
+                    {t('layout.tickets.unassigned_tickets')}
+                  </Link>
+                </li>
+              </ul>
+            </AccordionContent>
+          </AccordionItem>
+        </Accordion>
+      ),
+    },
+    {
+      name: 'Team',
+      content: (
+        <Accordion type="single" collapsible className="w-full">
+          <AccordionItem value="item-1">
+            <AccordionTrigger>{t('layout.team')}</AccordionTrigger>
+            <AccordionContent>
+              <AgentList />
+            </AccordionContent>
+          </AccordionItem>
+        </Accordion>
+      ),
+    },
+    {
+      name: 'Reports',
+      content: (
+        <Link
+          href="/reports"
+          className="flex flex-1 items-center justify-between py-4 font-medium transition-all hover:underline"
+        >
+          {t('layout.reports')}
+        </Link>
+      ),
+    },
+    {
+      name: 'Settings',
+      content: (
+        <Link
+          href="/settings"
+          className="flex flex-1 items-center justify-between py-4 font-medium transition-all hover:underline"
+        >
+          {t('layout.settings')}
+        </Link>
+      ),
+    },
+  ];
+};
 
-export const LayoutWithSidebar: FC = () => {
+export const LayoutWithSidebar: FC<{
+  children: React.ReactNode;
+  user: {
+    id: string;
+    name: string;
+    email: string;
+    image: string;
+  };
+}> = ({
+  children,
+  user,
+}: {
+  children: React.ReactNode;
+  user: {
+    id: string;
+    name: string;
+    email: string;
+    image: string;
+  };
+}) => {
+  const { t } = useTranslation();
+  const navigation = useNavigationLinks();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  const { setCurrentUser } = useTicket();
+  useEffect(() => {
+    if (user)
+      setCurrentUser(new User(user.id, user.name, user.email, user.image));
+  }, [setCurrentUser, user]);
 
   return (
     <div>
@@ -140,9 +170,7 @@ export const LayoutWithSidebar: FC = () => {
           className="-m-2.5 p-2.5 text-gray-700 lg:hidden"
           onClick={() => setSidebarOpen(true)}
         >
-          <span className="sr-only">
-            <Trans i18nKey="layout.open_sidebar" />
-          </span>
+          <span className="sr-only">{t('layout.open_sidebar')}</span>
           <AlignJustify className="h-6 w-6" aria-hidden="true" />
         </button>
         <div className="flex-1 text-sm font-semibold leading-6 text-gray-900">
@@ -150,9 +178,7 @@ export const LayoutWithSidebar: FC = () => {
         </div>
         {/* eslint-disable-next-line jsx-a11y/anchor-is-valid*/}
         <a href="#">
-          <span className="sr-only">
-            <Trans i18nKey="layout.your_profile" />
-          </span>
+          <span className="sr-only">{t('layout.your_profile')}</span>
           <Avatar className="h-8 w-8">
             <AvatarImage src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" />
             <AvatarFallback>TC</AvatarFallback>
@@ -160,7 +186,7 @@ export const LayoutWithSidebar: FC = () => {
         </a>
       </div>
 
-      <Outlet />
+      {children}
     </div>
   );
 };

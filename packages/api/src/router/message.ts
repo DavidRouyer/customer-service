@@ -8,9 +8,9 @@ export const messageRouter = createTRPCRouter({
   all: protectedProcedure
     .input(z.object({ ticketId: z.number() }))
     .query(({ ctx, input }) => {
-      return ctx.db.query.message.findMany({
-        where: eq(schema.ticket.id, input.ticketId),
-        orderBy: asc(schema.message.createdAt),
+      return ctx.db.query.messages.findMany({
+        where: eq(schema.tickets.id, input.ticketId),
+        orderBy: asc(schema.messages.createdAt),
         with: { sender: true },
       });
     }),
@@ -19,22 +19,22 @@ export const messageRouter = createTRPCRouter({
     .input(
       z.object({
         content: z.string().min(1),
-        contentType: z.enum(schema.message.contentType.enumValues),
+        contentType: z.enum(schema.messages.contentType.enumValues),
         createdAt: z.date(),
-        direction: z.enum(schema.message.direction.enumValues),
+        direction: z.enum(schema.messages.direction.enumValues),
         senderId: z.number(),
         ticketId: z.number(),
-        status: z.enum(schema.message.status.enumValues),
+        status: z.enum(schema.messages.status.enumValues),
       })
     )
     .mutation(({ ctx, input }) => {
       return ctx.db
-        .insert(schema.message)
+        .insert(schema.messages)
         .values({
           ...input,
-          createdAt: input.createdAt.toISOString(),
+          createdAt: input.createdAt,
         })
-        .returning({ id: schema.message.id });
+        .returning({ id: schema.messages.id });
     }),
 
   /*delete: publicProcedure.input(z.number()).mutation(({ ctx, input }) => {

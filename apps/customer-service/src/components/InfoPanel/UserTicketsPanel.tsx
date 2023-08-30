@@ -1,7 +1,9 @@
+'use client';
+
 import { FC } from 'react';
 import { Trans } from 'react-i18next';
 
-import { cn } from '~/lib/utils';
+import { cn } from '~/utils/utils';
 
 type UserTicket = {
   id: number;

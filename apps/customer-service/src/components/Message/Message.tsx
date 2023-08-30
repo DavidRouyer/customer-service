@@ -1,12 +1,18 @@
+'use client';
+
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import {
+  MessageContentType,
+  MessageDirection,
+} from '@cs/database/schema/message';
+
 import { MessageStatus } from '~/components/Message/MessageStatus';
 import { MessageTextContent } from '~/components/Message/MessageTextContent';
-import { MessageContentType, MessageDirection } from '~/gql/graphql';
 import { Message as MessageType } from '~/hooks/useTicket/Message';
-import { formatHours } from '~/lib/date';
-import { cn } from '~/lib/utils';
+import { formatHours } from '~/utils/date';
+import { cn } from '~/utils/utils';
 
 export type MessageProps = {
   message: MessageType;

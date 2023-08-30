@@ -3,7 +3,7 @@ import React, { CSSProperties } from 'react';
 
 import PerfectScrollbar, {
   PerfectScrollbarOptions,
-} from './perfect-scrollbar.js';
+} from './perfect-scrollbar';
 
 type handlerEvent =
   | 'onScrollY'

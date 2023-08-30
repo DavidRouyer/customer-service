@@ -1,5 +1,8 @@
+"use client"
+
 import { FC } from 'react';
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from '~/app/i18n/client';
+
 
 const formatLanguageName = (language: string, locale: string) => {
   const languageNames = new Intl.DisplayNames([locale], { type: 'language' });

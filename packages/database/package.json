@@ -7,6 +7,7 @@
   "scripts": {
     "build": "tsc",
     "db:push": "drizzle-kit push:pg",
+    "db:seed": "dotenv -e ../../.env tsx seed.ts",
     "clean": "rm -rf .turbo node_modules",
     "lint": "eslint .",
     "format": "prettier --check \"**/*.{mjs,ts,md,json}\"",
@@ -14,7 +15,7 @@
   },
   "dependencies": {
     "@neondatabase/serverless": "^0.6.0",
-    "drizzle-orm": "^0.28.3"
+    "drizzle-orm": "^0.28.5"
   },
   "devDependencies": {
     "@cs/eslint-config": "*",
@@ -24,6 +25,7 @@
     "drizzle-kit": "^0.19.13",
     "eslint": "^8.48.0",
     "prettier": "^3.0.3",
+    "tsx": "^3.12.7",
     "typescript": "^5.2.2"
   },
   "eslintConfig": {

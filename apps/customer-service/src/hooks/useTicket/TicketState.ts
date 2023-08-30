@@ -6,6 +6,6 @@ export type TicketState = {
   currentUser?: User;
   tickets: Ticket[];
   activeTicket?: Ticket;
-  messagesByTicketId: Map<string, Message[]>;
+  messagesByTicketId: Map<number, Message[]>;
   currentMessages: Message[];
 };

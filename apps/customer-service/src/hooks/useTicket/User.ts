@@ -2,26 +2,18 @@ export type UserId = string;
 
 export class User {
   readonly id: UserId;
-  firstName: string;
-  lastName: string;
+  name: string;
   email: string;
-  avatarUrl?: string;
+  image?: string;
 
-  constructor(
-    id: UserId,
-    firstName: string,
-    lastName: string,
-    email: string,
-    avatarUrl?: string
-  ) {
+  constructor(id: UserId, name: string, email: string, image?: string) {
     this.id = id;
-    this.firstName = firstName;
-    this.lastName = lastName;
+    this.name = name;
     this.email = email;
-    this.avatarUrl = avatarUrl;
+    this.image = image;
   }
 
   get fullName() {
-    return `${this.firstName} ${this.lastName}`;
+    return this.name;
   }
 }

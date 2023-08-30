@@ -6,8 +6,8 @@ import { createTRPCRouter, protectedProcedure } from '../trpc';
 
 export const ticketRouter = createTRPCRouter({
   all: protectedProcedure.query(({ ctx }) => {
-    return ctx.db.query.ticket.findMany({
-      orderBy: desc(schema.ticket.id),
+    return ctx.db.query.tickets.findMany({
+      orderBy: desc(schema.tickets.id),
       with: { contact: true },
     });
   }),
@@ -15,8 +15,8 @@ export const ticketRouter = createTRPCRouter({
   byId: protectedProcedure
     .input(z.object({ id: z.number() }))
     .query(({ ctx, input }) => {
-      return ctx.db.query.ticket.findFirst({
-        where: eq(schema.ticket.id, input.id),
+      return ctx.db.query.tickets.findFirst({
+        where: eq(schema.tickets.id, input.id),
       });
     }),
 

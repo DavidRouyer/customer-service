@@ -1,11 +1,14 @@
-import { FC } from 'react';
-import { Trans } from 'react-i18next';
+'use client';
 
+import { FC } from 'react';
+
+import { useTranslation } from '~/app/i18n/client';
 import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/Avatar';
 import { useTicket } from '~/hooks/useTicket/TicketProvider';
-import { getInitials } from '~/lib/string';
+import { getInitials } from '~/utils/string';
 
 export const CurrentUser: FC = () => {
+  const { t } = useTranslation();
   const { currentUser } = useTicket();
 
   if (!currentUser) return null;
@@ -17,12 +20,10 @@ export const CurrentUser: FC = () => {
       className="flex items-center gap-x-4 px-6 py-3 text-sm font-semibold leading-6 text-gray-900 hover:bg-gray-50"
     >
       <Avatar className="h-8 w-8">
-        <AvatarImage src={currentUser.avatarUrl} />
+        <AvatarImage src={currentUser.image} />
         <AvatarFallback>{getInitials(currentUser.fullName)}</AvatarFallback>
       </Avatar>
-      <span className="sr-only">
-        <Trans i18nKey="layout.your_profile" />
-      </span>
+      <span className="sr-only">{t('layout.your_profile')}</span>
       <span aria-hidden="true">{currentUser.fullName}</span>
     </a>
   );

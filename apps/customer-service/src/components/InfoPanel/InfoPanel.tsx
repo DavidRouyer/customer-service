@@ -1,3 +1,5 @@
+'use client';
+
 import { FC } from 'react';
 import { Mail, Phone } from 'lucide-react';
 import { Trans } from 'react-i18next';

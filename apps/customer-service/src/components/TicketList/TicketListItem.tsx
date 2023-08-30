@@ -1,21 +1,22 @@
 import { FC } from 'react';
-import { NavLink, useLocation } from 'react-router-dom';
+import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 
 import { RelativeTime } from '~/components/RelativeTime/RelativeTime';
 import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/Avatar';
 import { Ticket } from '~/hooks/useTicket/Ticket';
-import { getInitials } from '~/lib/string';
+import { getInitials } from '~/utils/string';
 
 export type TicketListItemProps = {
   ticket: Ticket;
 };
 
 export const TicketListItem: FC<TicketListItemProps> = ({ ticket }) => {
-  const { search } = useLocation();
+  const searchParams = useSearchParams();
   return (
     <section key={ticket.id}>
-      <NavLink
-        to={`/tickets/${ticket.id}${search}`}
+      <Link
+        href={`/tickets/${ticket.id}${searchParams.toString()}`}
         className="flex gap-x-4 py-5"
       >
         <Avatar className="h-12 w-12">
@@ -42,7 +43,7 @@ export const TicketListItem: FC<TicketListItemProps> = ({ ticket }) => {
             {ticket.content}
           </p>
         </div>
-      </NavLink>
+      </Link>
     </section>
   );
 };

@@ -7,7 +7,7 @@ export class TicketStorage {
   private currentUser?: User;
   private tickets: Ticket[] = [];
   private activeTicketId?: TicketId;
-  private messagesByTicketId = new Map<string, Message[]>();
+  private messagesByTicketId = new Map<number, Message[]>();
 
   /**
    * Sets current user
@@ -123,7 +123,7 @@ export class TicketStorage {
 
   updateMessage(
     ticketId: TicketId,
-    messageIdToUpdate: string,
+    messageIdToUpdate: number,
     message: Message
   ) {
     const messages = this.messagesByTicketId.get(ticketId);

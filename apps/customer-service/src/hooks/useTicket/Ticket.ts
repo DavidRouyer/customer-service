@@ -1,6 +1,6 @@
-import { Contact } from '~/gql/graphql';
+import { Contact } from '~/hooks/useTicket/Contact';
 
-export type TicketId = string;
+export type TicketId = number;
 
 export class Ticket {
   readonly id: TicketId;

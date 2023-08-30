@@ -1,11 +1,11 @@
 'use client';
 
 import * as React from 'react';
-
-import { cn } from '~/lib/utils';
 import * as SheetPrimitive from '@radix-ui/react-dialog';
-import { VariantProps, cva } from 'class-variance-authority';
+import { cva, VariantProps } from 'class-variance-authority';
 import { X } from 'lucide-react';
+
+import { cn } from '~/utils/utils';
 
 const Sheet = SheetPrimitive.Root;
 
@@ -56,14 +56,14 @@ const SheetOverlay = React.forwardRef<
 SheetOverlay.displayName = SheetPrimitive.Overlay.displayName;
 
 const sheetVariants = cva(
-  'bg-background fixed z-50 scale-100 gap-4 border p-6 opacity-100 shadow-lg',
+  'fixed z-50 scale-100 gap-4 border bg-background p-6 opacity-100 shadow-lg',
   {
     variants: {
       position: {
-        top: 'animate-in slide-in-from-top w-full duration-300',
-        bottom: 'animate-in slide-in-from-bottom w-full duration-300',
-        left: 'animate-in slide-in-from-left h-full duration-300',
-        right: 'animate-in slide-in-from-right h-full duration-300',
+        top: 'w-full duration-300 animate-in slide-in-from-top',
+        bottom: 'w-full duration-300 animate-in slide-in-from-bottom',
+        left: 'h-full duration-300 animate-in slide-in-from-left',
+        right: 'h-full duration-300 animate-in slide-in-from-right',
       },
       size: {
         content: '',
@@ -160,8 +160,8 @@ const SheetContent = React.forwardRef<
       {...props}
     >
       {children}
-      {/*eslint-disable-next-line tailwindcss/no-custom-classname*/}
-      <SheetPrimitive.Close className="ring-offset-background focus:ring-ring data-[state=open]:bg-secondary absolute right-4 top-4 rounded-sm opacity-70 transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:pointer-events-none">
+      {}
+      <SheetPrimitive.Close className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-secondary">
         <X className="h-4 w-4" />
         <span className="sr-only">Close</span>
       </SheetPrimitive.Close>
