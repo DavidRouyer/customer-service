@@ -18,18 +18,13 @@ export function generateStaticParams() {
 }
 
 export const metadata: Metadata = {
-  title: 'Create T3 Turbo',
-  description: 'Simple monorepo with shared backend for web & mobile apps',
+  title: 'Customer Service',
+  description: 'Prototyping a Customer Service Software',
   openGraph: {
-    title: 'Create T3 Turbo',
-    description: 'Simple monorepo with shared backend for web & mobile apps',
-    url: 'https://create-t3-turbo.vercel.app',
-    siteName: 'Create T3 Turbo',
-  },
-  twitter: {
-    card: 'summary_large_image',
-    site: '@jullerino',
-    creator: '@jullerino',
+    title: 'Customer Service',
+    description: 'Prototyping a Customer Service Software',
+    url: 'https://github.com/DavidRouyer/customer-service',
+    siteName: 'Customer Service',
   },
 };
 
