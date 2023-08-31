@@ -3,8 +3,8 @@
 import { FC, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { AlignJustify } from 'lucide-react';
+import { FormattedMessage } from 'react-intl';
 
-import { useTranslation } from '~/app/i18n/client';
 import { AgentList } from '~/components/AgentList/AgentList';
 import { CurrentUser } from '~/components/CurrentUser/CurrentUser';
 import { Logo } from '~/components/Logo';
@@ -20,7 +20,6 @@ import { useTicket } from '~/hooks/useTicket/TicketProvider';
 import { User } from '~/hooks/useTicket/User';
 
 const useNavigationLinks = () => {
-  const { t } = useTranslation();
   return [
     {
       name: 'Tickets',
@@ -32,22 +31,24 @@ const useNavigationLinks = () => {
           defaultValue="item-1"
         >
           <AccordionItem value="item-1">
-            <AccordionTrigger>{t('layout.tickets.tickets')}</AccordionTrigger>
+            <AccordionTrigger>
+              <FormattedMessage id="layout.tickets.tickets" />
+            </AccordionTrigger>
             <AccordionContent>
               <ul className="flex flex-col gap-y-1">
                 <li>
                   <Link href="/tickets?filter=me">
-                    {t('layout.tickets.my_tickets')}
+                    <FormattedMessage id="layout.tickets.my_tickets" />
                   </Link>
                 </li>
                 <li>
                   <Link href="/tickets?filter=all">
-                    {t('layout.tickets.all_tickets')}
+                    <FormattedMessage id="layout.tickets.all_tickets" />
                   </Link>
                 </li>
                 <li>
                   <Link href="/tickets?filter=unassigned">
-                    {t('layout.tickets.unassigned_tickets')}
+                    <FormattedMessage id="layout.tickets.unassigned_tickets" />
                   </Link>
                 </li>
               </ul>
@@ -61,7 +62,9 @@ const useNavigationLinks = () => {
       content: (
         <Accordion type="single" collapsible className="w-full">
           <AccordionItem value="item-1">
-            <AccordionTrigger>{t('layout.team')}</AccordionTrigger>
+            <AccordionTrigger>
+              <FormattedMessage id="layout.team" />
+            </AccordionTrigger>
             <AccordionContent>
               <AgentList />
             </AccordionContent>
@@ -76,7 +79,7 @@ const useNavigationLinks = () => {
           href="/reports"
           className="flex flex-1 items-center justify-between py-4 font-medium transition-all hover:underline"
         >
-          {t('layout.reports')}
+          <FormattedMessage id="layout.reports" />
         </Link>
       ),
     },
@@ -87,7 +90,7 @@ const useNavigationLinks = () => {
           href="/settings"
           className="flex flex-1 items-center justify-between py-4 font-medium transition-all hover:underline"
         >
-          {t('layout.settings')}
+          <FormattedMessage id="layout.settings" />
         </Link>
       ),
     },
@@ -114,7 +117,6 @@ export const LayoutWithSidebar: FC<{
     image: string;
   };
 }) => {
-  const { t } = useTranslation();
   const navigation = useNavigationLinks();
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
@@ -170,7 +172,9 @@ export const LayoutWithSidebar: FC<{
           className="-m-2.5 p-2.5 text-gray-700 lg:hidden"
           onClick={() => setSidebarOpen(true)}
         >
-          <span className="sr-only">{t('layout.open_sidebar')}</span>
+          <span className="sr-only">
+            <FormattedMessage id="layout.open_sidebar" />
+          </span>
           <AlignJustify className="h-6 w-6" aria-hidden="true" />
         </button>
         <div className="flex-1 text-sm font-semibold leading-6 text-gray-900">
@@ -178,7 +182,9 @@ export const LayoutWithSidebar: FC<{
         </div>
         {/* eslint-disable-next-line jsx-a11y/anchor-is-valid*/}
         <a href="#">
-          <span className="sr-only">{t('layout.your_profile')}</span>
+          <span className="sr-only">
+            <FormattedMessage id="layout.your_profile" />
+          </span>
           <Avatar className="h-8 w-8">
             <AvatarImage src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" />
             <AvatarFallback>TC</AvatarFallback>

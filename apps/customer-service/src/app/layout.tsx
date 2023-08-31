@@ -6,16 +6,15 @@ import { TRPCReactProvider } from './providers';
 
 import '~/styles/globals.css';
 
-import { languages } from '~/app/i18n/settings';
+import { currentLocale } from 'next-i18n-router';
+
+import getIntl from '~/app/i18n/server';
+import ServerIntlProvider from '~/app/i18n/ServerIntlProvider';
 
 const fontSans = Inter({
   subsets: ['latin'],
   variable: '--font-sans',
 });
-
-export function generateStaticParams() {
-  return languages.map((lang) => ({ lang }));
-}
 
 export const metadata: Metadata = {
   title: 'Customer Service',
@@ -28,19 +27,22 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
-  params: { lang },
 }: {
   children: React.ReactNode;
-  params: {
-    lang: string;
-  };
 }) {
+  const intl = await getIntl();
+  const lang = currentLocale();
+
   return (
-    <html lang={lang} className="h-full">
+    <html lang={lang ?? 'en'} className="h-full">
       <body className={['font-sans', 'h-full', fontSans.variable].join(' ')}>
-        <TRPCReactProvider headers={headers()}>{children}</TRPCReactProvider>
+        <ServerIntlProvider
+          intl={{ messages: intl.messages, locale: intl.locale }}
+        >
+          <TRPCReactProvider headers={headers()}>{children}</TRPCReactProvider>
+        </ServerIntlProvider>
       </body>
     </html>
   );

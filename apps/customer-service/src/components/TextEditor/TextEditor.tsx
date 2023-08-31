@@ -7,7 +7,7 @@ import { ContentEditable } from '@lexical/react/LexicalContentEditable';
 import LexicalErrorBoundary from '@lexical/react/LexicalErrorBoundary';
 import { HistoryPlugin } from '@lexical/react/LexicalHistoryPlugin';
 import { PlainTextPlugin } from '@lexical/react/LexicalPlainTextPlugin';
-import { Trans } from 'react-i18next';
+import { FormattedMessage } from 'react-intl';
 
 import editorConfig from '~/components/TextEditor/editorConfig';
 import EmoticonPlugin from '~/components/TextEditor/plugins/EmoticonPlugin';
@@ -50,7 +50,7 @@ TextEditor.displayName = 'TextEditor';
 const Placeholder: FC = () => {
   return (
     <div className="pointer-events-none absolute left-2 top-4 inline-block select-none overflow-hidden text-ellipsis text-[15px] text-gray-400">
-      <Trans i18nKey="text_editor.placeholder" />
+      <FormattedMessage id="text_editor.placeholder" />
     </div>
   );
 };

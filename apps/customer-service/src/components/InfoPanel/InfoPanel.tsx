@@ -2,7 +2,7 @@
 
 import { FC } from 'react';
 import { Mail, Phone } from 'lucide-react';
-import { Trans } from 'react-i18next';
+import { FormattedMessage } from 'react-intl';
 
 import { CurrentTime } from '~/components/CurrentTime/CurrentTime';
 import { DisplayLanguageName } from '~/components/DisplayLanguageName/DisplayLanguageName';
@@ -71,14 +71,14 @@ export const InfoPanel: FC = () => {
       >
         <AccordionItem value="item-0">
           <AccordionTrigger>
-            <Trans i18nKey="info_panel.contact_information" />
+            <FormattedMessage id="info_panel.contact_information" />
           </AccordionTrigger>
           <AccordionContent>
             <dl>
               <div className="flex w-full flex-none gap-x-4">
                 <dt className="flex-none">
                   <span className="sr-only">
-                    <Trans i18nKey="user.email" />
+                    <FormattedMessage id="user.email" />
                   </span>
                   <Mail className="h-6 w-5 text-gray-400" aria-hidden="true" />
                 </dt>
@@ -89,7 +89,7 @@ export const InfoPanel: FC = () => {
               <div className="mt-4 flex w-full flex-none gap-x-4">
                 <dt className="flex-none">
                   <span className="sr-only">
-                    <Trans i18nKey="user.phone" />
+                    <FormattedMessage id="user.phone" />
                   </span>
                   <Phone className="h-6 w-5 text-gray-400" aria-hidden="true" />
                 </dt>
@@ -100,7 +100,7 @@ export const InfoPanel: FC = () => {
               <div className="mt-4 flex w-full flex-none gap-x-4">
                 <dt className="flex-none">
                   <span className="sr-only">
-                    <Trans i18nKey="user.platform" />
+                    <FormattedMessage id="user.platform" />
                   </span>
                   <Android
                     className="h-6 w-5 text-gray-400"
@@ -116,7 +116,7 @@ export const InfoPanel: FC = () => {
         </AccordionItem>
         <AccordionItem value="item-1">
           <AccordionTrigger>
-            <Trans i18nKey="info_panel.conversations" />
+            <FormattedMessage id="info_panel.conversations" />
           </AccordionTrigger>
           <AccordionContent>
             <UserTicketsPanel />
@@ -124,7 +124,7 @@ export const InfoPanel: FC = () => {
         </AccordionItem>
         <AccordionItem value="item-2">
           <AccordionTrigger>
-            <Trans i18nKey="info_panel.activity" />
+            <FormattedMessage id="info_panel.activity" />
           </AccordionTrigger>
           <AccordionContent>
             <ActivityPanel />

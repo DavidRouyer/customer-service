@@ -1,13 +1,14 @@
 'use client';
 
 import { FC } from 'react';
-import { useTranslation } from 'react-i18next';
+import { useCurrentLocale } from 'next-i18n-router/client';
 
 import {
   MessageContentType,
   MessageDirection,
 } from '@cs/database/schema/message';
 
+import i18nConfig from '~/app/i18n/config.mjs';
 import { MessageStatus } from '~/components/Message/MessageStatus';
 import { MessageTextContent } from '~/components/Message/MessageTextContent';
 import { Message as MessageType } from '~/hooks/useTicket/Message';
@@ -27,7 +28,7 @@ export const Message: FC<MessageProps> = ({
   position = 'single',
   children,
 }) => {
-  const { i18n } = useTranslation();
+  const locale = useCurrentLocale(i18nConfig);
 
   const messageContent = (() => {
     if (message.contentType === MessageContentType.TextPlain)
@@ -83,7 +84,7 @@ export const Message: FC<MessageProps> = ({
                     : 'text-gray-500'
                 )}
               >
-                {formatHours(new Date(message.createdAt), i18n.language)}
+                {formatHours(new Date(message.createdAt), locale!)}
                 {message.direction === MessageDirection.Outbound && (
                   <MessageStatus status={message.status} />
                 )}

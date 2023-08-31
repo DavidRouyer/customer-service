@@ -3,7 +3,7 @@
 import { FC } from 'react';
 import { PaperclipIcon, SmilePlusIcon } from 'lucide-react';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
-import { Trans } from 'react-i18next';
+import { FormattedMessage } from 'react-intl';
 
 import {
   MessageContentType,
@@ -69,7 +69,7 @@ export const MessageForm: FC = () => {
               >
                 <PaperclipIcon className="h-5 w-5" aria-hidden="true" />
                 <span className="sr-only">
-                  <Trans i18nKey="text_editor.attach_files" />
+                  <FormattedMessage id="text_editor.attach_files" />
                 </span>
               </button>
             </div>
@@ -80,7 +80,7 @@ export const MessageForm: FC = () => {
               >
                 <SmilePlusIcon className="h-5 w-5" aria-hidden="true" />
                 <span className="sr-only">
-                  <Trans i18nKey="text_editor.add_emoticons" />
+                  <FormattedMessage id="text_editor.add_emoticons" />
                 </span>
               </button>
             </div>
@@ -90,7 +90,7 @@ export const MessageForm: FC = () => {
               type="submit"
               className="inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
             >
-              <Trans i18nKey="text_editor.send" />
+              <FormattedMessage id="text_editor.send" />
             </button>
           </div>
         </div>

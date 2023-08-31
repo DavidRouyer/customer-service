@@ -1,7 +1,9 @@
 'use client';
 
 import { FC, useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { useCurrentLocale } from 'next-i18n-router/client';
+
+import i18nConfig from '~/app/i18n/config.mjs';
 
 type RelativeDateProps = {
   dateTime: Date;
@@ -47,22 +49,22 @@ const formatRelativeDate = (prevDate: Date, locale: string) => {
 };
 
 export const RelativeDate: FC<RelativeDateProps> = ({ dateTime }) => {
-  const { i18n } = useTranslation();
+  const locale = useCurrentLocale(i18nConfig);
   const [relativeDate, setRelativeDate] = useState(
-    formatRelativeDate(dateTime, i18n.language)
+    formatRelativeDate(dateTime, locale!)
   );
 
   useEffect(() => {
-    setRelativeDate(formatRelativeDate(dateTime, i18n.language));
+    setRelativeDate(formatRelativeDate(dateTime, locale!));
 
     const interval = setInterval(() => {
-      setRelativeDate(formatRelativeDate(dateTime, i18n.language));
+      setRelativeDate(formatRelativeDate(dateTime, locale!));
     }, 1000);
 
     return () => {
       clearInterval(interval);
     };
-  }, [dateTime, i18n.language, setRelativeDate]);
+  }, [dateTime, locale, setRelativeDate]);
 
   return <>{relativeDate}</>;
 };

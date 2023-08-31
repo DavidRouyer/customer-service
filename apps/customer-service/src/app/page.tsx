@@ -1,4 +1,4 @@
-import { AuthShowcase } from '../_components/auth-showcase';
+import { AuthShowcase } from '~/app/_components/auth-showcase';
 
 export const runtime = 'nodejs';
 

@@ -1,4 +1,4 @@
-import { LayoutWithSidebar } from '~/app/[lang]/tickets/LayoutWithSidebar';
+import { LayoutWithSidebar } from '~/app/tickets/LayoutWithSidebar';
 import { InfoPanel } from '~/components/InfoPanel/InfoPanel';
 import { TicketList } from '~/components/TicketList/TicketList';
 import { getCurrentUser } from '~/utils/session';

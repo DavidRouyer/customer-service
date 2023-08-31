@@ -1,8 +1,9 @@
-"use client"
+'use client';
 
 import { FC } from 'react';
-import { useTranslation } from '~/app/i18n/client';
+import { useCurrentLocale } from 'next-i18n-router/client';
 
+import i18nConfig from '~/app/i18n/config.mjs';
 
 const formatLanguageName = (language: string, locale: string) => {
   const languageNames = new Intl.DisplayNames([locale], { type: 'language' });
@@ -17,7 +18,7 @@ type DisplayLanguageNameProps = {
 export const DisplayLanguageName: FC<DisplayLanguageNameProps> = ({
   language,
 }) => {
-  const { i18n } = useTranslation();
+  const locale = useCurrentLocale(i18nConfig);
 
-  return <>{formatLanguageName(language, i18n.language)}</>;
+  return <>{formatLanguageName(language, locale!)}</>;
 };

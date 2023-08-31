@@ -1,14 +1,13 @@
 'use client';
 
 import { FC } from 'react';
+import { FormattedMessage } from 'react-intl';
 
-import { useTranslation } from '~/app/i18n/client';
 import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/Avatar';
 import { useTicket } from '~/hooks/useTicket/TicketProvider';
 import { getInitials } from '~/utils/string';
 
 export const CurrentUser: FC = () => {
-  const { t } = useTranslation();
   const { currentUser } = useTicket();
 
   if (!currentUser) return null;
@@ -23,7 +22,9 @@ export const CurrentUser: FC = () => {
         <AvatarImage src={currentUser.image} />
         <AvatarFallback>{getInitials(currentUser.fullName)}</AvatarFallback>
       </Avatar>
-      <span className="sr-only">{t('layout.your_profile')}</span>
+      <span className="sr-only">
+        <FormattedMessage id="layout.your_profile" />
+      </span>
       <span aria-hidden="true">{currentUser.fullName}</span>
     </a>
   );

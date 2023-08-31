@@ -1,7 +1,7 @@
 'use client';
 
 import { FC } from 'react';
-import { Trans } from 'react-i18next';
+import { FormattedDate, FormattedMessage } from 'react-intl';
 
 import { cn } from '~/utils/utils';
 
@@ -48,9 +48,9 @@ export const UserTicketsPanel: FC = () => {
                 )}
               >
                 {ticket.status === 'open' ? (
-                  <Trans i18nKey="ticket.statuses.open" />
+                  <FormattedMessage id="ticket.statuses.open" />
                 ) : (
-                  <Trans i18nKey="ticket.statuses.resolved" />
+                  <FormattedMessage id="ticket.statuses.resolved" />
                 )}
               </p>
             </div>
@@ -58,39 +58,25 @@ export const UserTicketsPanel: FC = () => {
               <p className="whitespace-nowrap">
                 {!ticket.resolvedDate ? (
                   <>
-                    <Trans i18nKey="ticket.opened_on" />{' '}
+                    <FormattedMessage id="ticket.opened_on" />{' '}
                     <time dateTime={ticket.openedDate}>
-                      <Trans
-                        i18nKey="date"
-                        values={{
-                          val: new Date(ticket.openedDate),
-                          formatParams: {
-                            val: {
-                              year: 'numeric',
-                              month: 'long',
-                              day: 'numeric',
-                            },
-                          },
-                        }}
+                      <FormattedDate
+                        value={new Date(ticket.openedDate)}
+                        year="numeric"
+                        month="long"
+                        day="numeric"
                       />
                     </time>
                   </>
                 ) : (
                   <>
-                    <Trans i18nKey="ticket.resolved_on" />{' '}
+                    <FormattedMessage id="ticket.resolved_on" />{' '}
                     <time dateTime={ticket.resolvedDate}>
-                      <Trans
-                        i18nKey="date"
-                        values={{
-                          val: new Date(ticket.resolvedDate),
-                          formatParams: {
-                            val: {
-                              year: 'numeric',
-                              month: 'long',
-                              day: 'numeric',
-                            },
-                          },
-                        }}
+                      <FormattedDate
+                        value={new Date(new Date(ticket.resolvedDate))}
+                        year="numeric"
+                        month="long"
+                        day="numeric"
                       />
                     </time>
                   </>

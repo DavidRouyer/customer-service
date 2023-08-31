@@ -7,6 +7,7 @@ import { ReactQueryStreamedHydration } from '@tanstack/react-query-next-experime
 import { loggerLink, unstable_httpBatchStreamLink } from '@trpc/client';
 import superjson from 'superjson';
 
+import ServerIntlProvider from '~/app/i18n/ServerIntlProvider';
 import { TicketProvider } from '~/hooks/useTicket/TicketProvider';
 import { api } from '~/utils/api';
 
