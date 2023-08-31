@@ -45,10 +45,6 @@
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
-    "@babel/core": "^7.22.11",
-    "@babel/preset-env": "^7.22.10",
-    "@babel/preset-react": "^7.22.5",
-    "@babel/preset-typescript": "^7.22.11",
     "@cs/eslint-config": "*",
     "@cs/prettier-config": "*",
     "@cs/tailwind-config": "*",
@@ -58,13 +54,10 @@
     "@types/node": "^20.5.7",
     "@types/react": "^18.2.21",
     "@types/react-dom": "^18.2.7",
-    "@vitejs/plugin-react": "^4.0.4",
     "dotenv-cli": "^7.3.0",
     "jsdom": "^22.1.0",
     "tailwindcss": "^3.3.3",
-    "tailwind-merge": "^1.14.0",
-    "vite": "^4.4.9",
-    "vite-tsconfig-paths": "^4.2.0"
+    "tailwind-merge": "^1.14.0"
   },
   "eslintConfig": {
     "root": true,
