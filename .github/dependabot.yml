@@ -11,6 +11,9 @@ updates:
       interval: "daily"
     open-pull-requests-limit: 10
     groups:
+      trpc:
+        patterns:
+          - '@trpc*'
       typescript-eslint:
         patterns:
           - '@typescript-eslint*'
