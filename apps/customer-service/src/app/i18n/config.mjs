@@ -1,7 +1,7 @@
-/** @type {import("next-i18n-router/dist/types").Config} */
+/** @type {import("./Config").Config} */
 const i18nConfig = {
   locales: ['en', 'fr'],
-  defaultLocale: 'fr',
+  defaultLocale: 'en',
 };
 
 export default i18nConfig;

@@ -1,7 +1,4 @@
 import * as dotenv from 'dotenv';
-import { i18nRewriter } from 'next-i18n-router';
-
-import i18nConfig from './src/app/i18n/config.mjs';
 
 dotenv.config({
   path: '../../.env',
@@ -17,11 +14,6 @@ const config = {
   typescript: { ignoreBuildErrors: true },
   experimental: {
     serverActions: true,
-  },
-  rewrites() {
-    return {
-      afterFiles: i18nRewriter(i18nConfig),
-    };
   },
 };
 

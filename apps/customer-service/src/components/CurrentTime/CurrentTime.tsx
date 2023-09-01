@@ -1,19 +1,17 @@
 'use client';
 
 import { FC, useEffect, useState } from 'react';
-import { useCurrentLocale } from 'next-i18n-router/client';
-
-import i18nConfig from '~/app/i18n/config.mjs';
+import { useIntl } from 'react-intl';
 
 type CurrentTimeProps = {
   timezone: string;
 };
 
 export const CurrentTime: FC<CurrentTimeProps> = ({ timezone }) => {
-  const locale = useCurrentLocale(i18nConfig);
+  const { locale } = useIntl();
 
   const [currentTime, setCurrentTime] = useState(
-    new Intl.DateTimeFormat(locale!, {
+    new Intl.DateTimeFormat(locale, {
       hour: 'numeric',
       minute: 'numeric',
       timeZoneName: 'short',
@@ -24,7 +22,7 @@ export const CurrentTime: FC<CurrentTimeProps> = ({ timezone }) => {
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentTime(
-        new Intl.DateTimeFormat(locale!, {
+        new Intl.DateTimeFormat(locale, {
           hour: 'numeric',
           minute: 'numeric',
           timeZoneName: 'short',

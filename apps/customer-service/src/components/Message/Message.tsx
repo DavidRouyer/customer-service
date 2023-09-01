@@ -1,14 +1,13 @@
 'use client';
 
 import { FC } from 'react';
-import { useCurrentLocale } from 'next-i18n-router/client';
+import { useIntl } from 'react-intl';
 
 import {
   MessageContentType,
   MessageDirection,
 } from '@cs/database/schema/message';
 
-import i18nConfig from '~/app/i18n/config.mjs';
 import { MessageStatus } from '~/components/Message/MessageStatus';
 import { MessageTextContent } from '~/components/Message/MessageTextContent';
 import { Message as MessageType } from '~/hooks/useTicket/Message';
@@ -28,7 +27,7 @@ export const Message: FC<MessageProps> = ({
   position = 'single',
   children,
 }) => {
-  const locale = useCurrentLocale(i18nConfig);
+  const { locale } = useIntl();
 
   const messageContent = (() => {
     if (message.contentType === MessageContentType.TextPlain)
@@ -84,7 +83,7 @@ export const Message: FC<MessageProps> = ({
                     : 'text-gray-500'
                 )}
               >
-                {formatHours(new Date(message.createdAt), locale!)}
+                {formatHours(new Date(message.createdAt), locale)}
                 {message.direction === MessageDirection.Outbound && (
                   <MessageStatus status={message.status} />
                 )}

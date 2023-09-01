@@ -2,10 +2,9 @@
 
 import { FC } from 'react';
 import { Mail, Phone } from 'lucide-react';
-import { FormattedMessage } from 'react-intl';
+import { FormattedDisplayName, FormattedMessage } from 'react-intl';
 
 import { CurrentTime } from '~/components/CurrentTime/CurrentTime';
-import { DisplayLanguageName } from '~/components/DisplayLanguageName/DisplayLanguageName';
 import { Android } from '~/components/Icons/Android';
 import { ActivityPanel } from '~/components/InfoPanel/ActivityPanel';
 import { UserTicketsPanel } from '~/components/InfoPanel/UserTicketsPanel';
@@ -52,7 +51,10 @@ export const InfoPanel: FC = () => {
             </p>
             <p className="flex items-center gap-x-2 text-xs leading-5 text-gray-500">
               <span>
-                <DisplayLanguageName language={user.language.substring(0, 2)} />
+                <FormattedDisplayName
+                  value={user.language.substring(0, 2)}
+                  type="language"
+                />
               </span>
               <svg viewBox="0 0 2 2" className="h-0.5 w-0.5 fill-current">
                 <circle cx={1} cy={1} r={1} />

@@ -725,13 +725,6 @@
   dependencies:
     tslib "^2.4.0"
 
-"@formatjs/intl-localematcher@^0.2.32":
-  version "0.2.32"
-  resolved "https://registry.yarnpkg.com/@formatjs/intl-localematcher/-/intl-localematcher-0.2.32.tgz#00d4d307cd7d514b298e15a11a369b86c8933ec1"
-  integrity sha512-k/MEBstff4sttohyEpXxCmC3MqbUn9VvHGlZ8fauLzkbwXmVrEeyzS+4uhrvAk9DWU9/7otYWxyDox4nT/KVLQ==
-  dependencies:
-    tslib "^2.4.0"
-
 "@formatjs/intl@2.9.0":
   version "2.9.0"
   resolved "https://registry.yarnpkg.com/@formatjs/intl/-/intl-2.9.0.tgz#e1335572af3ca8a53e136a78e866f1851a9718c2"
@@ -1452,6 +1445,11 @@
   version "7.0.12"
   resolved "https://registry.yarnpkg.com/@types/json-schema/-/json-schema-7.0.12.tgz#d70faba7039d5fca54c83c7dbab41051d2b6f6cb"
   integrity sha512-Hr5Jfhc9eYOQNPYO5WLDq/n4jqijdHNlDXjuAQkkt+mWdQR+XJToOHrsD4cPaMXpn6KO7y2+wM8AZEs8VpBLVA==
+
+"@types/negotiator@^0.6.1":
+  version "0.6.1"
+  resolved "https://registry.yarnpkg.com/@types/negotiator/-/negotiator-0.6.1.tgz#4c75543f6ef87f427f4705e731a933595b7397f5"
+  integrity sha512-c4mvXFByghezQ/eVGN5HvH/jI63vm3B7FiE81BUzDAWmuiohRecCO6ddU60dfq29oKUMiQujsoB2h0JQC7JHKA==
 
 "@types/node@*":
   version "20.5.0"
@@ -4162,14 +4160,6 @@ next-auth@0.0.0-manual.83c4ebd1:
   integrity sha512-6nUXtVrZqTWvVz2NhUB/xbMyzxUSQycQWOquACwdpk63AcnZ3g01v+W0UX9paqkGIdqLPtI/pL6rA2N+MT58SQ==
   dependencies:
     "@auth/core" experimental
-
-next-i18n-router@^3.1.1:
-  version "3.1.1"
-  resolved "https://registry.yarnpkg.com/next-i18n-router/-/next-i18n-router-3.1.1.tgz#c3d7f7856fc60eeb27cac9d2b1a7f6d71b4c89e4"
-  integrity sha512-Ud4Upcz8yYZPbNPoldzQFVs+LMuquuRqj8npbVObAKiaGC0tBX7+N0kQToZR/tFNCc5/R1stNpE1dlJBibhjWg==
-  dependencies:
-    "@formatjs/intl-localematcher" "^0.2.32"
-    negotiator "^0.6.3"
 
 next-tick@1, next-tick@^1.1.0:
   version "1.1.0"
