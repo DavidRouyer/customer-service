@@ -30,11 +30,9 @@ jobs:
         run: yarn build
         env:
           DATABASE_URL: "${{ secrets.DATABASE_URL }}"
-          DIRECT_DATABASE_URL: "${{ secrets.DIRECT_DATABASE_URL }}"
 
       - name: Run Drizzle migrate
         run: |
           yarn db:push
         env:
           DATABASE_URL: "${{ secrets.DATABASE_URL }}"
-          DIRECT_DATABASE_URL: "${{ secrets.DIRECT_DATABASE_URL }}"
