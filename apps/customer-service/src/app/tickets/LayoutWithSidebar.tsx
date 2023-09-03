@@ -6,7 +6,6 @@ import { AlignJustify } from 'lucide-react';
 import { FormattedMessage } from 'react-intl';
 
 import { AgentList } from '~/components/AgentList/AgentList';
-import { CurrentUser } from '~/components/CurrentUser/CurrentUser';
 import { Logo } from '~/components/Logo';
 import {
   Accordion,
@@ -14,8 +13,8 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '~/components/ui/Accordion';
-import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/Avatar';
 import { Sheet, SheetContent } from '~/components/ui/Sheet';
+import { UserNav } from '~/components/UserNav/UserNav';
 import { useTicket } from '~/hooks/useTicket/TicketProvider';
 import { User } from '~/hooks/useTicket/User';
 
@@ -160,7 +159,7 @@ export const LayoutWithSidebar: FC<{
                 <li key={item.name}>{item.content}</li>
               ))}
               <li className="-mx-6 mt-auto">
-                <CurrentUser />
+                <UserNav showLabel />
               </li>
             </ul>
           </nav>
@@ -180,16 +179,7 @@ export const LayoutWithSidebar: FC<{
         <div className="flex-1 text-sm font-semibold leading-6 text-gray-900">
           Help Desk
         </div>
-        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid*/}
-        <a href="#">
-          <span className="sr-only">
-            <FormattedMessage id="layout.your_profile" />
-          </span>
-          <Avatar className="h-8 w-8">
-            <AvatarImage src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" />
-            <AvatarFallback>TC</AvatarFallback>
-          </Avatar>
-        </a>
+        <UserNav />
       </div>
 
       {children}
