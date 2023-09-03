@@ -1,6 +1,7 @@
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 
 import { RelativeTime } from '~/components/RelativeTime/RelativeTime';
+import { render } from '../../../.vitest/test-utils';
 
 describe('<RelativeTime />', () => {
   it('should render now', () => {
