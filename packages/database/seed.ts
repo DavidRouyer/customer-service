@@ -12,24 +12,38 @@ async function main() {
     avatarUrl:
       'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
   });
-  await db.insert(schema.contacts).values({
-    name: 'Tom Cook',
-    email: 'tom.cook@example.com',
-    avatarUrl:
-      'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-  });
+
+  const tom = await db
+    .insert(schema.contacts)
+    .values({
+      name: 'Tom Cook',
+      email: 'tom.cook@example.com',
+      avatarUrl:
+        'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
+    })
+    .returning({ id: schema.contacts.id });
+
+  if (!tom[0]?.id) throw new Error('Could not create contact');
+
   await db.insert(schema.contacts).values({
     name: 'Lawrence Brooks',
     email: 'lawrence.brooks@example.com',
     avatarUrl:
       'https://images.unsplash.com/photo-1513910367299-bce8d8a0ebf6?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
   });
-  await db.insert(schema.contacts).values({
-    name: 'Jeffrey Clark',
-    email: 'jeffrey.clark@example.com',
-    avatarUrl:
-      'https://images.unsplash.com/photo-1517070208541-6ddc4d3efbcb?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-  });
+
+  const jeffrey = await db
+    .insert(schema.contacts)
+    .values({
+      name: 'Jeffrey Clark',
+      email: 'jeffrey.clark@example.com',
+      avatarUrl:
+        'https://images.unsplash.com/photo-1517070208541-6ddc4d3efbcb?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
+    })
+    .returning({ id: schema.contacts.id });
+
+  if (!jeffrey[0]?.id) throw new Error('Could not create contact');
+
   const leslie = await db
     .insert(schema.contacts)
     .values({
@@ -65,7 +79,7 @@ async function main() {
         createdAt: new Date('2023-05-04T20:54:41.389Z'),
         direction: MessageDirection.Inbound,
         status: MessageStatus.Seen,
-        senderId: 1,
+        senderId: leslie[0].id,
         ticketId: leslieTicket[0].id,
       },
       {
@@ -75,7 +89,7 @@ async function main() {
         createdAt: new Date('2023-05-11T10:33:56.231Z'),
         direction: MessageDirection.Outbound,
         status: MessageStatus.Seen,
-        senderId: 5,
+        senderId: tom[0].id,
         ticketId: leslieTicket[0].id,
       },
     ])
@@ -113,7 +127,7 @@ async function main() {
         createdAt: new Date('2023-03-03T14:02Z'),
         direction: MessageDirection.Inbound,
         status: MessageStatus.Seen,
-        senderId: 2,
+        senderId: michael[0].id,
         ticketId: michaelTicket[0].id,
       },
       {
@@ -123,7 +137,7 @@ async function main() {
         createdAt: new Date('2023-03-12T17:20Z'),
         direction: MessageDirection.Outbound,
         status: MessageStatus.Seen,
-        senderId: 6,
+        senderId: jeffrey[0].id,
         ticketId: michaelTicket[0].id,
       },
     ])
@@ -161,7 +175,7 @@ async function main() {
         createdAt: new Date('2023-03-03T13:23Z'),
         direction: MessageDirection.Inbound,
         status: MessageStatus.Seen,
-        senderId: 3,
+        senderId: dries[0].id,
         ticketId: driesTicket[0].id,
       },
       {
@@ -171,7 +185,7 @@ async function main() {
         createdAt: new Date('2023-04-01T06:06Z'),
         direction: MessageDirection.Outbound,
         status: MessageStatus.DeliveredToDevice,
-        senderId: 7,
+        senderId: jeffrey[0].id,
         ticketId: driesTicket[0].id,
       },
     ])
@@ -210,7 +224,7 @@ async function main() {
         createdAt: new Date('2023-03-02T21:13Z'),
         direction: MessageDirection.Inbound,
         status: MessageStatus.Seen,
-        senderId: 4,
+        senderId: lindsay[0].id,
         ticketId: lindsayTicket[0].id,
       },
       {
@@ -220,7 +234,7 @@ async function main() {
         createdAt: new Date('2023-03-03T22:40Z'),
         direction: MessageDirection.Outbound,
         status: MessageStatus.DeliveredToDevice,
-        senderId: 8,
+        senderId: tom[0].id,
         ticketId: lindsayTicket[0].id,
       },
     ])

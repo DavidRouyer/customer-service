@@ -50,9 +50,9 @@ jobs:
           DIRECT_DATABASE_URL: "${{ steps.create_branch.outputs.db_url }}/neondb?connect_timeout=10"
           CORS_ORIGIN: "*"
 
-      - name: Run Prisma Migrate
+      - name: Run Drizzle migrate
         run: |
-          yarn turbo db:migrate:deploy
+          yarn db:push
         env:
           DATABASE_URL: "${{ steps.create_branch.outputs.db_url_with_pooler }}/neondb?pgbouncer=true&connect_timeout=10"
           DIRECT_DATABASE_URL: "${{ steps.create_branch.outputs.db_url }}/neondb?connect_timeout=10"

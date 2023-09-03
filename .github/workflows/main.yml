@@ -33,9 +33,9 @@ jobs:
           DIRECT_DATABASE_URL: "${{ secrets.DIRECT_DATABASE_URL }}"
           CORS_ORIGIN: "https://customer-service-defea.web.app"
 
-      - name: Run Prisma Migrate
+      - name: Run Drizzle migrate
         run: |
-          yarn turbo db:migrate:deploy
+          yarn db:push
         env:
           DATABASE_URL: "${{ secrets.DATABASE_URL }}"
           DIRECT_DATABASE_URL: "${{ secrets.DIRECT_DATABASE_URL }}"

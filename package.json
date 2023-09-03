@@ -10,13 +10,13 @@
     "tooling/*"
   ],
   "scripts": {
-    "build": "yarn build:backend && yarn build:frontend",
-    "build:backend": "yarn turbo build --filter=backend",
-    "build:frontend": "yarn turbo build --filter=frontend",
-    "db:push": "yarn --cwd packages/database db:push",
+    "build": "turbo build",
+    "clean:workspaces": "turbo clean",
+    "db:push": "yarn workspace @cs/database db:push",
     "dev": "yarn turbo dev --parallel",
     "test": "LC_ALL=en_US.UTF-8 vitest",
-    "test:ui": "LC_ALL=en_US.UTF-8 vitest --ui"
+    "test:ui": "LC_ALL=en_US.UTF-8 vitest --ui",
+    "typecheck": "turbo typecheck"
   },
   "license": "MIT",
   "dependencies": {
