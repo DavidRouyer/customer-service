@@ -1,0 +1,32 @@
+{
+  "extends": "@cs/tsconfig/base.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "~/*": [
+        "./src/*"
+      ]
+    },
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json",
+    "types": [
+      "vitest/globals",
+      "@testing-library/jest-dom/vitest"
+    ],
+    "allowJs": true,
+    "noEmit": true,
+    "strictNullChecks": true
+  },
+  "include": [
+    ".",
+    ".next/types/**/*.ts",
+    ".vitest/setup.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}

@@ -2,41 +2,31 @@
   "name": "@cs/database",
   "version": "0.0.0",
   "private": true,
-  "author": "David Rouyer <rouyer.david@gmail.com>",
-  "type":"module",
-  "main": "./dist/index.js",
-  "source": "./index.ts",
-  "types": "./index.ts",
-  "files": [
-    "dist/**"
-  ],
+  "main": "./index.ts",
+  "license": "MIT",
   "scripts": {
+    "build": "tsc",
+    "db:push": "drizzle-kit push:pg",
+    "db:seed": "dotenv -e ../../.env tsx seed.ts",
     "clean": "rm -rf .turbo node_modules",
     "lint": "eslint .",
     "format": "prettier --check \"**/*.{mjs,ts,md,json}\"",
-    "typecheck": "tsc --noEmit",
-    "build": "tsc",
-    "db:generate": "prisma generate",
-    "db:migrate": "prisma migrate",
-    "db:migrate:dev": "prisma migrate dev",
-    "db:migrate:deploy": "prisma migrate deploy",
-    "db:push": "prisma db push --skip-generate",
-    "db:seed": "prisma db seed"
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@prisma/client": "^5.1.1"
+    "@neondatabase/serverless": "^0.6.0",
+    "drizzle-orm": "^0.28.5"
   },
   "devDependencies": {
     "@cs/eslint-config": "*",
     "@cs/prettier-config": "*",
     "@cs/tsconfig": "*",
+    "dotenv-cli": "^7.3.0",
+    "drizzle-kit": "^0.19.13",
     "eslint": "^8.48.0",
-    "prisma": "^5.1.1",
     "prettier": "^3.0.3",
+    "tsx": "^3.12.7",
     "typescript": "^5.2.2"
-  },
-  "prisma": {
-    "seed": "node --no-warnings=ExperimentalWarning --loader ts-node/esm prisma/seed.ts"
   },
   "eslintConfig": {
     "root": true,

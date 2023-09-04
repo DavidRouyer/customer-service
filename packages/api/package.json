@@ -1,0 +1,37 @@
+{
+  "name": "@cs/api",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./index.ts",
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc",
+    "clean": "rm -rf .turbo node_modules",
+    "lint": "eslint .",
+    "format": "prettier --check \"**/*.{mjs,ts,md,json}\"",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@cs/auth": "*",
+    "@cs/database": "*",
+    "@trpc/client": "^10.38.1",
+    "@trpc/server": "^10.38.1",
+    "superjson": "^1.13.1",
+    "zod": "^3.22.2"
+  },
+  "devDependencies": {
+    "@cs/eslint-config": "*",
+    "@cs/prettier-config": "*",
+    "@cs/tsconfig": "*",
+    "eslint": "^8.47.0",
+    "prettier": "^3.0.2",
+    "typescript": "^5.1.6"
+  },
+  "eslintConfig": {
+    "root": true,
+    "extends": [
+      "@cs/eslint-config/base"
+    ]
+  },
+  "prettier": "@cs/prettier-config"
+}
