@@ -25,14 +25,6 @@ jobs:
       - name: Execute unit tests
         run: yarn test
 
-      - name: Build backend
-        run: yarn build
-        env:
-          AUTH_GITHUB_ID: "${{ secrets.AUTH_GITHUB_ID }}"
-          AUTH_GITHUB_SECRET: "${{ secrets.AUTH_GITHUB_SECRET }}"
-          AUTH_SECRET: "${{ secrets.AUTH_SECRET }}"
-          DATABASE_URL: "${{ secrets.DATABASE_URL }}"
-
       - name: Run Drizzle migrate
         run: |
           yarn db:push
@@ -47,6 +39,11 @@ jobs:
 
       - name: Build Project Artifacts
         run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
+        env:
+          AUTH_GITHUB_ID: "${{ secrets.AUTH_GITHUB_ID }}"
+          AUTH_GITHUB_SECRET: "${{ secrets.AUTH_GITHUB_SECRET }}"
+          AUTH_SECRET: "${{ secrets.AUTH_SECRET }}"
+          DATABASE_URL: "${{ secrets.DATABASE_URL }}"
 
       - name: Deploy Project Artifacts to Vercel
         run: vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
