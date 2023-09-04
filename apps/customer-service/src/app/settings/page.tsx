@@ -1,3 +1,5 @@
+'use client';
+
 import { FormattedMessage } from 'react-intl';
 
 export default function SettingsPage() {
