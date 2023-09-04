@@ -3,9 +3,7 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "~/*": [
-        "./src/*"
-      ]
+      "~/*": ["./src/*"]
     },
     "plugins": [
       {
@@ -13,20 +11,8 @@
       }
     ],
     "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json",
-    "types": [
-      "vitest/globals",
-      "@testing-library/jest-dom/vitest"
-    ],
-    "allowJs": true,
-    "noEmit": true,
-    "strictNullChecks": true
+    "types": ["vitest/globals", "@testing-library/jest-dom/vitest"]
   },
-  "include": [
-    ".",
-    ".next/types/**/*.ts",
-    ".vitest/setup.ts"
-  ],
-  "exclude": [
-    "node_modules"
-  ]
+  "include": [".", ".next/types/**/*.ts", ".vitest/setup.ts"],
+  "exclude": ["node_modules"]
 }
