@@ -4,7 +4,7 @@ import { auth } from '@cs/auth';
 
 import { SignIn } from '~/components/SignIn/SignIn';
 
-export const runtime = 'nodejs';
+export const runtime = 'edge';
 
 export default async function HomePage() {
   const session = await auth();
