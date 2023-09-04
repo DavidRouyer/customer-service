@@ -34,9 +34,9 @@
   },
   "globalEnv": [
     "AUTH_SECRET",
-    "DATABASE_URL",
     "AUTH_GITHUB_ID",
     "AUTH_GITHUB_SECRET",
+    "DATABASE_URL",
     "NODE_ENV",
     "PORT",
     "VERCEL_URL"
