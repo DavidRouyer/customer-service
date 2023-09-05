@@ -11,6 +11,7 @@ import ServerIntlProvider from '~/app/i18n/ServerIntlProvider';
 
 const fontSans = Inter({
   subsets: ['latin'],
+  weight: ['400', '700'],
   variable: '--font-sans',
 });
 
