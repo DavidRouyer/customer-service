@@ -36,7 +36,7 @@
   },
   "scripts": {
     "build": "next build",
-    "clean": "rm -rf .turbo node_modules",
+    "clean": "git clean -xdf .next .turbo node_modules",
     "format": "prettier --check \"**/*.{js,cjs,mjs,ts,tsx,md,json}\"",
     "dev": "next dev",
     "lint": "eslint .",
