@@ -11,6 +11,9 @@ updates:
       interval: "daily"
     open-pull-requests-limit: 10
     groups:
+      tanstack-query:
+        patterns:
+          - '@tanstack/react-query*'
       trpc:
         patterns:
           - '@trpc*'
