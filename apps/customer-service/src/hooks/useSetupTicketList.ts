@@ -16,7 +16,7 @@ export const useSetupTicketList = () => {
   const { data: ticketsData } = api.ticket.all.useQuery();
   const { data: messagesData } = api.message.all.useQuery(
     {
-      ticketId: ticketId ?? '',
+      ticketId: ticketId,
     },
     {
       enabled: !!ticketId,

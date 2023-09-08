@@ -9,7 +9,7 @@ export const messageRouter = createTRPCRouter({
     .input(z.object({ ticketId: z.number() }))
     .query(({ ctx, input }) => {
       return ctx.db.query.messages.findMany({
-        where: eq(schema.tickets.id, input.ticketId),
+        where: eq(schema.messages.ticketId, input.ticketId),
         orderBy: asc(schema.messages.createdAt),
         with: { sender: true },
       });
