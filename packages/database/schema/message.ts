@@ -63,7 +63,11 @@ export const messages = pgTable('Message', {
 });
 
 export const messagesRelations = relations(messages, ({ one }) => ({
-  sender: one(tickets, {
+  sender: one(contacts, {
+    fields: [messages.senderId],
+    references: [contacts.id],
+  }),
+  ticket: one(tickets, {
     fields: [messages.ticketId],
     references: [tickets.id],
   }),
