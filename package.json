@@ -13,6 +13,7 @@
     "build": "turbo build",
     "clean:workspaces": "turbo clean",
     "db:push": "yarn workspace @cs/database db:push",
+    "db:seed": "yarn workspace @cs/database db:seed",
     "dev": "yarn turbo dev --parallel",
     "test": "LC_ALL=en_US.UTF-8 vitest",
     "test:ui": "LC_ALL=en_US.UTF-8 vitest --ui",
