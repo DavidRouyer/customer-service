@@ -1,6 +1,6 @@
 import { screen } from '@testing-library/react';
 
-import { RelativeTime } from '~/components/RelativeTime/RelativeTime';
+import { RelativeTime } from '~/components/ui/relative-time';
 import { render } from '~/utils/test-utils';
 
 describe('<RelativeTime />', () => {
