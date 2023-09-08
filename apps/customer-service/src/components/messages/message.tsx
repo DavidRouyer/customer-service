@@ -1,7 +1,7 @@
 'use client';
 
 import { FC } from 'react';
-import { FormattedDate, useIntl } from 'react-intl';
+import { FormattedDate } from 'react-intl';
 
 import {
   MessageContentType,
@@ -26,8 +26,6 @@ export const Message: FC<MessageProps> = ({
   position = 'single',
   children,
 }) => {
-  const { locale } = useIntl();
-
   const messageContent = (() => {
     if (message.contentType === MessageContentType.TextPlain)
       return <MessageTextContent text={message.content} />;
