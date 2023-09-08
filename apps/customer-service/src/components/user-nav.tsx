@@ -1,8 +1,8 @@
 import { signOut } from 'next-auth/react';
 import { FormattedMessage } from 'react-intl';
 
-import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/Avatar';
-import { Button } from '~/components/ui/Button';
+import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/avatar';
+import { Button } from '~/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,7 +11,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuShortcut,
   DropdownMenuTrigger,
-} from '~/components/ui/DropdownMenu';
+} from '~/components/ui/dropdown-menu';
 import { useTicket } from '~/hooks/useTicket/TicketProvider';
 import { getInitials } from '~/utils/string';
 

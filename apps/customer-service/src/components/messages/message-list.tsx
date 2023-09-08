@@ -1,16 +1,16 @@
 import { FC, Fragment } from 'react';
 
-import { Message } from '~/components/Message/Message';
-import { MessageAvatar } from '~/components/Message/MessageAvatar';
-import { MessageGroup } from '~/components/MessageGroup/MessageGroup';
-import { MessageSeparator } from '~/components/MessageSeparator/MessageSeparator';
-import { RelativeDate } from '~/components/RelativeDate/RelativeDate';
-import { ScrollableMessageList } from '~/components/Scroll/ScrollableMessageList';
+import { Message } from '~/components/messages/message';
+import { MessageAvatar } from '~/components/messages/message-avatar';
+import { MessageGroup } from '~/components/messages/message-group';
+import { MessageSeparator } from '~/components/messages/message-separator';
+import { ScrollableMessageList } from '~/components/scroll/scrollable-message-list';
+import { RelativeDate } from '~/components/ui/relative-date';
 import { Message as MessageType } from '~/hooks/useTicket/Message';
 import { useTicket } from '~/hooks/useTicket/TicketProvider';
 import { groupMessagesByDateAndUser } from '~/utils/message';
 
-import '~/components/MessageList/message-list.css';
+import '~/components/messages/message-list.css';
 
 export const MessageList: FC = () => {
   const { currentMessages } = useTicket();

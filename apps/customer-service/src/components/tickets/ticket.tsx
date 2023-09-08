@@ -2,9 +2,9 @@
 
 import { FC } from 'react';
 
-import { MessageForm } from '~/components/MessageForm/MessageForm';
-import { MessageList } from '~/components/MessageList/MessageList';
-import { TicketHeader } from '~/components/TicketHeader/TicketHeader';
+import { MessageForm } from '~/components/messages/message-form';
+import { MessageList } from '~/components/messages/message-list';
+import { TicketHeader } from '~/components/tickets/ticket-header';
 import { useSetupTicketList } from '~/hooks/useSetupTicketList';
 import { useTicket } from '~/hooks/useTicket/TicketProvider';
 

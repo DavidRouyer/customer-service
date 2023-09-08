@@ -9,11 +9,11 @@ import { HistoryPlugin } from '@lexical/react/LexicalHistoryPlugin';
 import { PlainTextPlugin } from '@lexical/react/LexicalPlainTextPlugin';
 import { FormattedMessage } from 'react-intl';
 
-import editorConfig from '~/components/TextEditor/editorConfig';
-import EmoticonPlugin from '~/components/TextEditor/plugins/EmoticonPlugin';
-import MyCustomAutoFocusPlugin from '~/components/TextEditor/plugins/MyCustomAutoFocusPlugin';
-import MyCustomOnChangePlugin from '~/components/TextEditor/plugins/MyCustomOnChangePlugin';
-import MyCustomValuePlugin from '~/components/TextEditor/plugins/MyCustomValuePlugin';
+import editorConfig from '~/components/text-editor/editorConfig';
+import EmoticonPlugin from '~/components/text-editor/plugins/emoticon-plugin';
+import MyCustomAutoFocusPlugin from '~/components/text-editor/plugins/my-custom-auto-focus-plugin';
+import MyCustomOnChangePlugin from '~/components/text-editor/plugins/my-custom-on-change-plugin';
+import MyCustomValuePlugin from '~/components/text-editor/plugins/my-custom-value-plugin';
 
 type TextEditorProps = {
   value?: string;

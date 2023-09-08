@@ -4,16 +4,16 @@ import { FC } from 'react';
 import { Mail, Phone } from 'lucide-react';
 import { FormattedDisplayName, FormattedMessage } from 'react-intl';
 
-import { CurrentTime } from '~/components/CurrentTime/CurrentTime';
-import { Android } from '~/components/Icons/Android';
-import { ActivityPanel } from '~/components/InfoPanel/ActivityPanel';
-import { UserTicketsPanel } from '~/components/InfoPanel/UserTicketsPanel';
+import { Android } from '~/components/icons/android';
+import { ActivityPanel } from '~/components/infos/activity-panel';
+import { UserTicketsPanel } from '~/components/infos/user-tickets-panel';
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from '~/components/ui/Accordion';
+} from '~/components/ui/accordion';
+import { CurrentTime } from '~/components/ui/current-time';
 
 const user = {
   id: 1,

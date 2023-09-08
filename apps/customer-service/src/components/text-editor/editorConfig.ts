@@ -1,7 +1,7 @@
 import { InitialConfigType } from '@lexical/react/LexicalComposer';
 
-import { EmojiNode } from './nodes/EmojiNode';
-import ExampleTheme from './themes/ExampleTheme';
+import { EmojiNode } from './nodes/emoji-node';
+import ExampleTheme from './themes/example-theme';
 
 const editorConfig: InitialConfigType = {
   namespace: 'CSEditor',

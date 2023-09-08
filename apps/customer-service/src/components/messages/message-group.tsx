@@ -1,7 +1,7 @@
 import { FC } from 'react';
 
-import { Message } from '~/components/Message/Message';
-import { MessageAvatar } from '~/components/Message/MessageAvatar';
+import { MessageAvatar } from '~/components/messages/message-avatar';
+import { Message } from '~/components/messages/message';
 import { Message as MessageType } from '~/hooks/useTicket/Message';
 import { cn } from '~/utils/utils';
 

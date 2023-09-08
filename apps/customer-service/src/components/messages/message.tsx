@@ -8,8 +8,8 @@ import {
   MessageDirection,
 } from '@cs/database/schema/message';
 
-import { MessageStatus } from '~/components/Message/MessageStatus';
-import { MessageTextContent } from '~/components/Message/MessageTextContent';
+import { MessageStatus } from '~/components/messages/message-status';
+import { MessageTextContent } from '~/components/messages/message-text-content';
 import { Message as MessageType } from '~/hooks/useTicket/Message';
 import { formatHours } from '~/utils/date';
 import { cn } from '~/utils/utils';

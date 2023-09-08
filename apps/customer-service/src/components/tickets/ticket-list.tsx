@@ -2,7 +2,7 @@
 
 import { FC } from 'react';
 
-import { TicketListItem } from '~/components/TicketList/TicketListItem';
+import { TicketListItem } from '~/components/tickets/ticket-list-item';
 import { useTicket } from '~/hooks/useTicket/TicketProvider';
 
 export const TicketList: FC = () => {

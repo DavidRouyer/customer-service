@@ -5,16 +5,16 @@ import Link from 'next/link';
 import { AlignJustify } from 'lucide-react';
 import { FormattedMessage } from 'react-intl';
 
-import { AgentList } from '~/components/AgentList/AgentList';
-import { Logo } from '~/components/Logo';
+import { AgentList } from '~/components/agents/agent-list';
+import { Logo } from '~/components/logo';
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from '~/components/ui/Accordion';
-import { Sheet, SheetContent } from '~/components/ui/Sheet';
-import { UserNav } from '~/components/UserNav/UserNav';
+} from '~/components/ui/accordion';
+import { Sheet, SheetContent } from '~/components/ui/sheet';
+import { UserNav } from '~/components/user-nav';
 import { useTicket } from '~/hooks/useTicket/TicketProvider';
 import { User } from '~/hooks/useTicket/User';
 

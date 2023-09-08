@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { CheckCircle2 } from 'lucide-react';
 
-import { RelativeTime } from '~/components/RelativeTime/RelativeTime';
+import { RelativeTime } from '~/components/ui/relative-time';
 import { cn } from '~/utils/utils';
 
 const activity = [

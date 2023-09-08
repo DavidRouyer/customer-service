@@ -2,8 +2,8 @@ import { FC } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 
-import { RelativeTime } from '~/components/RelativeTime/RelativeTime';
-import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/Avatar';
+import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/avatar';
+import { RelativeTime } from '~/components/ui/relative-time';
 import { Ticket } from '~/hooks/useTicket/Ticket';
 import { getInitials } from '~/utils/string';
 

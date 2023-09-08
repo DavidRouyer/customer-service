@@ -2,9 +2,9 @@ import { redirect } from 'next/navigation';
 
 import { auth } from '@cs/auth';
 
-import { SignIn } from '~/components/SignIn/SignIn';
+import { SignIn } from '~/components/sign-in';
 
-export const runtime = 'edge';
+export const runtime = 'nodejs';
 
 export default async function HomePage() {
   const session = await auth();

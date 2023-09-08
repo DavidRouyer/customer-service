@@ -11,7 +11,7 @@ import {
   MessageStatus,
 } from '@cs/database/schema/message';
 
-import { TextEditor } from '~/components/TextEditor/TextEditor';
+import { TextEditor } from '~/components/text-editor/text-editor';
 import { useTicket } from '~/hooks/useTicket/TicketProvider';
 
 type MessageFormSchema = {

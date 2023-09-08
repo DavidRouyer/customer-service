@@ -1,6 +1,6 @@
 import { LayoutWithSidebar } from '~/app/tickets/LayoutWithSidebar';
-import { InfoPanel } from '~/components/InfoPanel/InfoPanel';
-import { TicketList } from '~/components/TicketList/TicketList';
+import { InfoPanel } from '~/components/infos/info-panel';
+import { TicketList } from '~/components/tickets/ticket-list';
 import { getCurrentUser } from '~/utils/session';
 
 export default async function TicketsLayout({
