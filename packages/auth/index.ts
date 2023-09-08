@@ -3,7 +3,7 @@ import type { DefaultSession } from '@auth/core/types';
 import { DrizzleAdapter } from '@auth/drizzle-adapter';
 import NextAuth from 'next-auth';
 
-import { db, tableCreator } from '@cs/database';
+import { db, schema, tableCreator } from '@cs/database';
 
 export type { Session } from 'next-auth';
 
@@ -32,6 +32,16 @@ export const {
       clientSecret: process.env.AUTH_GITHUB_SECRET,
     }),
   ],
+  events: {
+    createUser: async (message) => {
+      await db.insert(schema.contacts).values({
+        name: message.user.name,
+        email: message.user.email,
+        avatarUrl: message.user.image,
+        userId: message.user.id,
+      });
+    },
+  },
   callbacks: {
     session: ({ session, user }) => ({
       ...session,

@@ -2,6 +2,7 @@ import { relations } from 'drizzle-orm';
 import { serial, text, timestamp } from 'drizzle-orm/pg-core';
 
 import { pgTable } from './_table';
+import { users } from './auth';
 import { tickets } from './ticket';
 
 export const contacts = pgTable('Contact', {
@@ -15,8 +16,13 @@ export const contacts = pgTable('Contact', {
   avatarUrl: text('avatarUrl'),
   language: text('language'),
   timezone: text('timezone'),
+  userId: text('userId'),
 });
 
-export const contactsRelations = relations(contacts, ({ many }) => ({
+export const contactsRelations = relations(contacts, ({ one, many }) => ({
   tickets: many(tickets),
+  sender: one(users, {
+    fields: [contacts.userId],
+    references: [users.id],
+  }),
 }));
