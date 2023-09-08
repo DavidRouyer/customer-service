@@ -1,7 +1,7 @@
 'use client';
 
 import { FC } from 'react';
-import { useIntl } from 'react-intl';
+import { FormattedDate, useIntl } from 'react-intl';
 
 import {
   MessageContentType,
@@ -11,7 +11,6 @@ import {
 import { MessageStatus } from '~/components/messages/message-status';
 import { MessageTextContent } from '~/components/messages/message-text-content';
 import { Message as MessageType } from '~/hooks/useTicket/Message';
-import { formatHours } from '~/utils/date';
 import { cn } from '~/utils/utils';
 
 export type MessageProps = {
@@ -83,7 +82,11 @@ export const Message: FC<MessageProps> = ({
                     : 'text-gray-500'
                 )}
               >
-                {formatHours(new Date(message.createdAt), locale)}
+                <FormattedDate
+                  value={new Date(message.createdAt)}
+                  hour="numeric"
+                  minute="numeric"
+                />
                 {message.direction === MessageDirection.Outbound && (
                   <MessageStatus status={message.status} />
                 )}
