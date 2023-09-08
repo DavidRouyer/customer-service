@@ -25,10 +25,10 @@
     "@jridgewell/gen-mapping" "^0.3.0"
     "@jridgewell/trace-mapping" "^0.3.9"
 
-"@auth/core@0.12.0", "@auth/core@0.13.0", "@auth/core@^0.14.0", "@auth/core@experimental":
-  version "0.13.0"
-  resolved "https://registry.yarnpkg.com/@auth/core/-/core-0.13.0.tgz#87566254a103a9b6dcc43177fd50c9ab4ac2238f"
-  integrity sha512-StjrzUenaKfMr68kmvhiqfY0xvxRvg8wllmem9JAULpPAAAt3uwRUDXICWOP/PfWB4OZ2wQT7rgfm0n42b+Mjg==
+"@auth/core@0.12.0", "@auth/core@0.14.0", "@auth/core@^0.14.0", "@auth/core@experimental":
+  version "0.14.0"
+  resolved "https://registry.yarnpkg.com/@auth/core/-/core-0.14.0.tgz#d898cd87b47b4354d42e81e7d74c6274a19ad170"
+  integrity sha512-kZMwjFWDGxSI/e4+HO6KeTmuMFMWu6qIzgF1k87HbKdxNFis3K1PXz7md3fCB4+5ije93Uld1ZNUdlmB2rAHww==
   dependencies:
     "@panva/hkdf" "^1.0.4"
     cookie "0.5.0"
