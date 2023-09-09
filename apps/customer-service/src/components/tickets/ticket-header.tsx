@@ -8,9 +8,9 @@ export const TicketHeader: FC = () => {
   if (!activeTicket) return null;
 
   return (
-    <div className="border-b border-gray-200 pb-5">
-      <h3 className="text-base font-semibold leading-6 text-gray-900">
-        <span className="text-gray-500">#{activeTicket.id}</span>{' '}
+    <div className="border-b pb-5">
+      <h3 className="text-base font-semibold leading-6 text-foreground">
+        <span className="text-muted-foreground">#{activeTicket.id}</span>{' '}
         {activeTicket.contact.name}
       </h3>
     </div>

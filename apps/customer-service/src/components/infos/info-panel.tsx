@@ -43,13 +43,13 @@ export const InfoPanel: FC = () => {
             />
           </div>
           <div className="min-w-0 flex-1">
-            <p className="text-sm font-semibold text-gray-900">
+            <p className="text-sm font-semibold text-foreground">
               {/* eslint-disable-next-line jsx-a11y/anchor-is-valid*/}
               <a href="#" className="hover:underline">
                 {user.name}
               </a>
             </p>
-            <p className="flex items-center gap-x-2 text-xs leading-5 text-gray-500">
+            <p className="flex items-center gap-x-2 text-xs leading-5 text-muted-foreground">
               <span>
                 <FormattedDisplayName
                   value={user.language.substring(0, 2)}
@@ -84,7 +84,7 @@ export const InfoPanel: FC = () => {
                   </span>
                   <Mail className="h-6 w-5 text-gray-400" aria-hidden="true" />
                 </dt>
-                <dd className="text-sm leading-6 text-gray-500">
+                <dd className="text-sm leading-6 text-muted-foreground">
                   {user.email}
                 </dd>
               </div>
@@ -95,7 +95,7 @@ export const InfoPanel: FC = () => {
                   </span>
                   <Phone className="h-6 w-5 text-gray-400" aria-hidden="true" />
                 </dt>
-                <dd className="text-sm leading-6 text-gray-500">
+                <dd className="text-sm leading-6 text-muted-foreground">
                   <time dateTime="2023-01-31">{user.phone}</time>
                 </dd>
               </div>
@@ -109,7 +109,7 @@ export const InfoPanel: FC = () => {
                     aria-hidden="true"
                   />
                 </dt>
-                <dd className="text-sm leading-6 text-gray-500">
+                <dd className="text-sm leading-6 text-muted-foreground">
                   {user.app.version}
                 </dd>
               </div>

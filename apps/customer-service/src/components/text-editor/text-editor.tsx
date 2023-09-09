@@ -23,11 +23,11 @@ type TextEditorProps = {
 export const TextEditor: FC<TextEditorProps> = ({ value, onChange }) => {
   return (
     <LexicalComposer initialConfig={editorConfig}>
-      <div className="relative bg-transparent text-left font-normal leading-5 text-black">
+      <div className="relative bg-transparent text-left font-normal leading-5 text-foreground">
         <PlainTextPlugin
           contentEditable={
             <ContentEditable
-              className="relative min-h-[128px] resize-none px-2 py-4 text-[15px] caret-gray-800 outline-none"
+              className="relative min-h-[128px] resize-none px-2 py-4 text-[15px] caret-muted-foreground outline-none"
               style={{ tabSize: '1' }}
             />
           }

@@ -21,7 +21,7 @@ export default async function HomePage() {
           src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
           alt="Customer Service"
         />
-        <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
+        <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-foreground">
           Sign in to your account
         </h2>
       </div>

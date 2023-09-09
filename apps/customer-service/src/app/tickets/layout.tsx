@@ -13,7 +13,7 @@ export default async function TicketsLayout({
 
   return (
     <LayoutWithSidebar user={user}>
-      <aside className="fixed inset-y-0 right-0 hidden w-96 overflow-y-auto border-l border-gray-200 px-4 py-6 sm:px-6 xl:block">
+      <aside className="fixed inset-y-0 right-0 hidden w-96 overflow-y-auto border-l px-4 py-6 sm:px-6 xl:block">
         <InfoPanel />
       </aside>
 
@@ -25,7 +25,7 @@ export default async function TicketsLayout({
         </div>
       </main>
 
-      <aside className="fixed inset-y-0 left-60 hidden w-96 overflow-y-auto border-r border-gray-200 px-4 py-6 sm:px-6 xl:block">
+      <aside className="fixed inset-y-0 left-60 hidden w-96 overflow-y-auto border-r px-4 py-6 sm:px-6 xl:block">
         <TicketList />
       </aside>
     </LayoutWithSidebar>

@@ -12,6 +12,7 @@ import {
 } from '@cs/database/schema/message';
 
 import { TextEditor } from '~/components/text-editor/text-editor';
+import { Button } from '~/components/ui/button';
 import { useTicket } from '~/hooks/useTicket/TicketProvider';
 
 type MessageFormSchema = {
@@ -46,7 +47,7 @@ export const MessageForm: FC = () => {
   return (
     <FormProvider {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="relative">
-        <div className="overflow-hidden rounded-lg shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-indigo-600">
+        <div className="overflow-hidden rounded-lg shadow-sm ring-1 ring-inset ring-border focus-within:ring-2 focus-within:ring-foreground">
           <Controller
             name="content"
             control={form.control}
@@ -86,12 +87,9 @@ export const MessageForm: FC = () => {
             </div>
           </div>
           <div className="shrink-0">
-            <button
-              type="submit"
-              className="inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-            >
+            <Button type="submit" className="h-auto px-3">
               <FormattedMessage id="text_editor.send" />
-            </button>
+            </Button>
           </div>
         </div>
       </form>

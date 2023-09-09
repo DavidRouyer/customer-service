@@ -53,7 +53,7 @@ export const Message: FC<MessageProps> = ({
               'inline-block space-y-2 rounded-lg px-4 py-2',
               message.direction === MessageDirection.Outbound
                 ? 'bg-blue-600 text-white'
-                : 'bg-gray-300 text-gray-600',
+                : 'bg-gray-300 text-gray-600 dark:bg-gray-800 dark:text-gray-200',
               (position === 'single' ||
                 position === 'first' ||
                 position === 'last') &&

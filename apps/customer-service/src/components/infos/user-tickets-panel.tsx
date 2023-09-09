@@ -36,9 +36,9 @@ export const UserTicketsPanel: FC = () => {
     <ul className="flex flex-col gap-y-1">
       {userTickets.map((ticket) => (
         <li key={ticket.id}>
-          <div className="flex-auto rounded-md p-3 ring-1 ring-inset ring-gray-200">
+          <div className="flex-auto rounded-md p-3 ring-1 ring-inset ring-border">
             <div className="flex items-start gap-x-3">
-              <p className="text-sm font-semibold leading-6 text-gray-900">
+              <p className="text-sm font-semibold leading-6 text-foreground">
                 #{ticket.id}
               </p>
               <p
@@ -54,7 +54,7 @@ export const UserTicketsPanel: FC = () => {
                 )}
               </p>
             </div>
-            <div className="mt-1 flex items-center gap-x-2 text-xs leading-5 text-gray-500">
+            <div className="mt-1 flex items-center gap-x-2 text-xs leading-5 text-muted-foreground">
               <p className="whitespace-nowrap">
                 {!ticket.resolvedDate ? (
                   <>

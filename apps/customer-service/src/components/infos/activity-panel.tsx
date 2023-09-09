@@ -51,7 +51,7 @@ export const ActivityPanel: FC = () => {
               'absolute left-0 top-0 flex w-6 justify-center'
             )}
           >
-            <div className="w-px bg-gray-200" />
+            <div className="w-px bg-border" />
           </div>
           {activityItem.type === 'commented' ? (
             <>
@@ -60,47 +60,47 @@ export const ActivityPanel: FC = () => {
                 alt=""
                 className="relative mt-3 h-6 w-6 flex-none rounded-full bg-gray-50"
               />
-              <div className="flex-auto rounded-md p-3 ring-1 ring-inset ring-gray-200">
+              <div className="flex-auto rounded-md p-3 ring-1 ring-inset ring-border">
                 <div className="flex justify-between gap-x-4">
-                  <div className="py-0.5 text-xs leading-5 text-gray-500">
-                    <span className="font-medium text-gray-900">
+                  <div className="py-0.5 text-xs leading-5 text-muted-foreground">
+                    <span className="font-medium text-foreground">
                       {activityItem.person.name}
                     </span>{' '}
                     commented
                   </div>
                   <time
                     dateTime={activityItem.dateTime}
-                    className="flex-none py-0.5 text-xs leading-5 text-gray-500"
+                    className="flex-none py-0.5 text-xs leading-5 text-muted-foreground"
                   >
                     <RelativeTime dateTime={new Date(activityItem.dateTime)} />
                   </time>
                 </div>
-                <p className="text-sm leading-6 text-gray-500">
+                <p className="text-sm leading-6 text-muted-foreground">
                   {activityItem.comment}
                 </p>
               </div>
             </>
           ) : (
             <>
-              <div className="relative flex h-6 w-6 flex-none items-center justify-center bg-white">
+              <div className="relative flex h-6 w-6 flex-none items-center justify-center bg-background">
                 {activityItem.type === 'resolved' ? (
                   <CheckCircle2
-                    className="h-6 w-6 text-green-600"
+                    className="text-valid h-6 w-6"
                     aria-hidden="true"
                   />
                 ) : (
                   <div className="h-1.5 w-1.5 rounded-full bg-gray-100 ring-1 ring-gray-300" />
                 )}
               </div>
-              <p className="flex-auto py-0.5 text-xs leading-5 text-gray-500">
-                <span className="font-medium text-gray-900">
+              <p className="flex-auto py-0.5 text-xs leading-5 text-muted-foreground">
+                <span className="font-medium text-foreground">
                   {activityItem.person.name}
                 </span>{' '}
                 {activityItem.type} the ticket.
               </p>
               <time
                 dateTime={activityItem.dateTime}
-                className="flex-none py-0.5 text-xs leading-5 text-gray-500"
+                className="flex-none py-0.5 text-xs leading-5 text-muted-foreground"
               >
                 <RelativeTime dateTime={new Date(activityItem.dateTime)} />
               </time>
