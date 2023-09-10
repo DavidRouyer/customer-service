@@ -1,11 +1,11 @@
 'use client';
 
 import { FC } from 'react';
-import { Mail, Phone } from 'lucide-react';
-import { FormattedDisplayName, FormattedMessage } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 
-import { Android } from '~/components/icons/android';
 import { ActivityPanel } from '~/components/infos/activity-panel';
+import { InfoSummary } from '~/components/infos/info-summary';
+import { UserInfoPanel } from '~/components/infos/user-info-panel';
 import { UserTicketsPanel } from '~/components/infos/user-tickets-panel';
 import {
   Accordion,
@@ -13,59 +13,18 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '~/components/ui/accordion';
-import { CurrentTime } from '~/components/ui/current-time';
-
-const user = {
-  id: 1,
-  name: 'Leslie Alexander',
-  avatarUrl:
-    'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-  email: 'leslie.alexander@gmail.com',
-  phone: '+33 6 06 06 06 06',
-  language: 'fr_FR',
-  timezone: 'Europe/Paris',
-  app: {
-    platform: 'android',
-    version: '1.0.0',
-  },
-};
+import { useTicket } from '~/hooks/useTicket/TicketProvider';
 
 export const InfoPanel: FC = () => {
+  const { activeTicket } = useTicket();
+
+  if (!activeTicket) {
+    return null;
+  }
+
   return (
     <div className="flex flex-1 flex-col">
-      <div>
-        <div className="flex space-x-3 border-b border-gray-900/5 pb-6">
-          <div className="shrink-0">
-            <img
-              className="h-10 w-10 rounded-full"
-              src={user.avatarUrl}
-              alt=""
-            />
-          </div>
-          <div className="min-w-0 flex-1">
-            <p className="text-sm font-semibold text-foreground">
-              {/* eslint-disable-next-line jsx-a11y/anchor-is-valid*/}
-              <a href="#" className="hover:underline">
-                {user.name}
-              </a>
-            </p>
-            <p className="flex items-center gap-x-2 text-xs leading-5 text-muted-foreground">
-              <span>
-                <FormattedDisplayName
-                  value={user.language.substring(0, 2)}
-                  type="language"
-                />
-              </span>
-              <svg viewBox="0 0 2 2" className="h-0.5 w-0.5 fill-current">
-                <circle cx={1} cy={1} r={1} />
-              </svg>
-              <span>
-                <CurrentTime timezone={user.timezone} />
-              </span>
-            </p>
-          </div>
-        </div>
-      </div>
+      <InfoSummary />
       <Accordion
         type="multiple"
         className="w-full"
@@ -76,44 +35,7 @@ export const InfoPanel: FC = () => {
             <FormattedMessage id="info_panel.contact_information" />
           </AccordionTrigger>
           <AccordionContent>
-            <dl>
-              <div className="flex w-full flex-none gap-x-4">
-                <dt className="flex-none">
-                  <span className="sr-only">
-                    <FormattedMessage id="user.email" />
-                  </span>
-                  <Mail className="h-6 w-5 text-gray-400" aria-hidden="true" />
-                </dt>
-                <dd className="text-sm leading-6 text-muted-foreground">
-                  {user.email}
-                </dd>
-              </div>
-              <div className="mt-4 flex w-full flex-none gap-x-4">
-                <dt className="flex-none">
-                  <span className="sr-only">
-                    <FormattedMessage id="user.phone" />
-                  </span>
-                  <Phone className="h-6 w-5 text-gray-400" aria-hidden="true" />
-                </dt>
-                <dd className="text-sm leading-6 text-muted-foreground">
-                  <time dateTime="2023-01-31">{user.phone}</time>
-                </dd>
-              </div>
-              <div className="mt-4 flex w-full flex-none gap-x-4">
-                <dt className="flex-none">
-                  <span className="sr-only">
-                    <FormattedMessage id="user.platform" />
-                  </span>
-                  <Android
-                    className="h-6 w-5 text-gray-400"
-                    aria-hidden="true"
-                  />
-                </dt>
-                <dd className="text-sm leading-6 text-muted-foreground">
-                  {user.app.version}
-                </dd>
-              </div>
-            </dl>
+            <UserInfoPanel />
           </AccordionContent>
         </AccordionItem>
         <AccordionItem value="item-1">

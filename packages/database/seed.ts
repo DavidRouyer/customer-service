@@ -18,8 +18,11 @@ async function main() {
     .values({
       name: 'Tom Cook',
       email: 'tom.cook@example.com',
+      phone: '+12025550191',
       avatarUrl:
         'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
+      language: 'en_US',
+      timezone: 'America/Los_Angeles',
     })
     .returning({ id: schema.contacts.id })
     .then((res) => res[0]);
@@ -204,8 +207,11 @@ async function main() {
     .values({
       name: 'Lindsay Walton',
       email: 'lindsay.walton@example.com',
+      phone: '+441632960050',
       avatarUrl:
         'https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
+      language: 'en_GB',
+      timezone: 'Europe/London',
     })
     .returning({ id: schema.contacts.id })
     .then((res) => res[0]);
