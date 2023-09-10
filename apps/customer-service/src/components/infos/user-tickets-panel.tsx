@@ -3,7 +3,7 @@
 import { FC } from 'react';
 import { FormattedDate, FormattedMessage } from 'react-intl';
 
-import { cn } from '~/utils/utils';
+import { Badge } from '~/components/ui/badge';
 
 type UserTicket = {
   id: number;
@@ -26,11 +26,6 @@ const userTickets: UserTicket[] = [
   },
 ];
 
-const statuses = {
-  resolved: 'text-green-700 bg-green-50 ring-green-600/20',
-  open: 'text-gray-600 bg-gray-50 ring-gray-500/10',
-};
-
 export const UserTicketsPanel: FC = () => {
   return (
     <ul className="flex flex-col gap-y-1">
@@ -41,18 +36,26 @@ export const UserTicketsPanel: FC = () => {
               <p className="text-sm font-semibold leading-6 text-foreground">
                 #{ticket.id}
               </p>
-              <p
-                className={cn(
-                  statuses[ticket.status],
-                  'mt-0.5 whitespace-nowrap rounded-md px-1.5 py-0.5 text-xs font-medium ring-1 ring-inset'
-                )}
+              <Badge
+                variant={
+                  (
+                    {
+                      resolved: 'success',
+                      open: 'neutral',
+                    } as const
+                  )[ticket.status]
+                }
+                className="mt-0.5 whitespace-nowrap"
               >
-                {ticket.status === 'open' ? (
-                  <FormattedMessage id="ticket.statuses.open" />
-                ) : (
-                  <FormattedMessage id="ticket.statuses.resolved" />
-                )}
-              </p>
+                {
+                  {
+                    resolved: (
+                      <FormattedMessage id="ticket.statuses.resolved" />
+                    ),
+                    open: <FormattedMessage id="ticket.statuses.open" />,
+                  }[ticket.status]
+                }
+              </Badge>
             </div>
             <div className="mt-1 flex items-center gap-x-2 text-xs leading-5 text-muted-foreground">
               <p className="whitespace-nowrap">
