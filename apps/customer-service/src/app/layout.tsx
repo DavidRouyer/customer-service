@@ -8,6 +8,7 @@ import '~/styles/globals.css';
 import getIntl from '~/app/i18n/server';
 import ServerIntlProvider from '~/app/i18n/ServerIntlProvider';
 import { ThemeProvider } from '~/components/theme-provider';
+import { getCurrentUser } from '~/utils/session';
 
 export const metadata: Metadata = {
   title: 'Customer Service',
@@ -27,6 +28,8 @@ export default async function RootLayout({
 }) {
   const intl = await getIntl();
 
+  const user = await getCurrentUser();
+
   return (
     <html lang={intl.locale} className="h-full" suppressHydrationWarning>
       <body className={['font-sans', 'h-full'].join(' ')}>
@@ -34,7 +37,7 @@ export default async function RootLayout({
           <ServerIntlProvider
             intl={{ messages: intl.messages, locale: intl.locale }}
           >
-            <TRPCReactProvider headers={headers()}>
+            <TRPCReactProvider headers={headers()} user={user}>
               {children}
             </TRPCReactProvider>
           </ServerIntlProvider>

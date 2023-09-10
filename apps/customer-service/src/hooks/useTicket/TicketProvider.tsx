@@ -8,6 +8,7 @@ import {
   useState,
 } from 'react';
 
+import { Session } from '@cs/auth';
 import { MessageStatus } from '@cs/database/schema/message';
 
 import { FailedMessageStatus, Message } from '~/hooks/useTicket/Message';
@@ -48,10 +49,14 @@ export const useTicket = () => {
 
 export type TicketProviderProps = {
   children: React.ReactNode;
+  user?: Session['user'];
 };
 
-export const TicketProvider: React.FC<TicketProviderProps> = ({ children }) => {
-  const [storage] = useState<TicketStorage>(new TicketStorage());
+export const TicketProvider: React.FC<TicketProviderProps> = ({
+  children,
+  user,
+}) => {
+  const [storage] = useState<TicketStorage>(new TicketStorage(user));
   const [state, setState] = useState<TicketState>(storage.getState());
   const { mutateAsync: sendRemoteMessage } = api.message.create.useMutation();
 

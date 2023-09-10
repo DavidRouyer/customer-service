@@ -1,3 +1,5 @@
+import { Session } from '@cs/auth';
+
 import { Message } from '~/hooks/useTicket/Message';
 import { Ticket, TicketId } from '~/hooks/useTicket/Ticket';
 import { TicketState } from '~/hooks/useTicket/TicketState';
@@ -8,6 +10,16 @@ export class TicketStorage {
   private tickets: Ticket[] = [];
   private activeTicketId?: TicketId;
   private messagesByTicketId = new Map<number, Message[]>();
+
+  constructor(user?: Session['user']) {
+    if (user)
+      this.currentUser = new User(
+        user.id,
+        user.name ?? '',
+        user.email ?? '',
+        user.image ?? undefined
+      );
+  }
 
   /**
    * Sets current user

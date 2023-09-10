@@ -1,17 +1,14 @@
 import { LayoutWithSidebar } from '~/app/tickets/layout-with-sidebar';
 import { InfoPanel } from '~/components/infos/info-panel';
 import { TicketList } from '~/components/tickets/ticket-list';
-import { getCurrentUser } from '~/utils/session';
 
-export default async function TicketsLayout({
+export default function TicketsLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const user = await getCurrentUser();
-
   return (
-    <LayoutWithSidebar user={user}>
+    <LayoutWithSidebar>
       <aside className="fixed inset-y-0 right-0 hidden w-96 overflow-y-auto border-l px-4 py-6 sm:px-6 xl:block">
         <InfoPanel />
       </aside>

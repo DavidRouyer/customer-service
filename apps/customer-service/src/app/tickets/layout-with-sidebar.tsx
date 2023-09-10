@@ -1,6 +1,6 @@
 'use client';
 
-import { FC, useEffect, useState } from 'react';
+import { FC, useState } from 'react';
 import Link from 'next/link';
 import { AlignJustify } from 'lucide-react';
 import { FormattedMessage } from 'react-intl';
@@ -15,8 +15,6 @@ import {
 } from '~/components/ui/accordion';
 import { Sheet, SheetContent } from '~/components/ui/sheet';
 import { UserNav } from '~/components/user-nav';
-import { useTicket } from '~/hooks/useTicket/TicketProvider';
-import { User } from '~/hooks/useTicket/User';
 
 const useNavigationLinks = () => {
   return [
@@ -98,32 +96,9 @@ const useNavigationLinks = () => {
 
 export const LayoutWithSidebar: FC<{
   children: React.ReactNode;
-  user: {
-    id: string;
-    name: string;
-    email: string;
-    image: string;
-  };
-}> = ({
-  children,
-  user,
-}: {
-  children: React.ReactNode;
-  user: {
-    id: string;
-    name: string;
-    email: string;
-    image: string;
-  };
-}) => {
+}> = ({ children }: { children: React.ReactNode }) => {
   const navigation = useNavigationLinks();
   const [sidebarOpen, setSidebarOpen] = useState(false);
-
-  const { setCurrentUser } = useTicket();
-  useEffect(() => {
-    if (user)
-      setCurrentUser(new User(user.id, user.name, user.email, user.image));
-  }, [setCurrentUser, user]);
 
   return (
     <div>
