@@ -9,7 +9,6 @@ export default async function TicketsLayout({
   children: React.ReactNode;
 }) {
   const user = await getCurrentUser();
-  console.log(user);
 
   return (
     <LayoutWithSidebar user={user}>
