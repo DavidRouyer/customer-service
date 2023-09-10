@@ -3,6 +3,8 @@
 import { signIn } from 'next-auth/react';
 import { FormattedMessage } from 'react-intl';
 
+import { Button } from '~/components/ui/button';
+
 export function SignIn() {
   return (
     <>
@@ -18,12 +20,12 @@ export function SignIn() {
       </div>
 
       <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-        <button
+        <Button
           onClick={() => signIn('github', { callbackUrl: '/tickets' })}
-          className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+          className="w-full"
         >
           <FormattedMessage id="sign_in_with_github" />
-        </button>
+        </Button>
       </div>
     </>
   );
