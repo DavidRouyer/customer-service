@@ -12,6 +12,8 @@
   "layout.tickets.unassigned_tickets": "Tickets non assignés",
   "layout.your_profile": "Votre profil",
   "logout": "Se déconnecter",
+  "sign_in_to_your_account": "Connectez-vous à votre compte",
+  "sign_in_with_github": "Se connecter avec GitHub",
   "text_editor.add_emoticons": "Ajouter des émoticônes",
   "text_editor.attach_files": "Joindre des fichiers",
   "text_editor.placeholder": "Écrivez votre réponse ici ...",
