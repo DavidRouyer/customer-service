@@ -21,9 +21,10 @@ async function main() {
       avatarUrl:
         'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
     })
-    .returning({ id: schema.contacts.id });
+    .returning({ id: schema.contacts.id })
+    .then((res) => res[0]);
 
-  if (!tom[0]?.id) throw new Error('Could not create contact');
+  if (!tom?.id) throw new Error('Could not create contact');
 
   await db.insert(schema.contacts).values({
     name: 'Lawrence Brooks',
@@ -40,9 +41,10 @@ async function main() {
       avatarUrl:
         'https://images.unsplash.com/photo-1517070208541-6ddc4d3efbcb?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
     })
-    .returning({ id: schema.contacts.id });
+    .returning({ id: schema.contacts.id })
+    .then((res) => res[0]);
 
-  if (!jeffrey[0]?.id) throw new Error('Could not create contact');
+  if (!jeffrey?.id) throw new Error('Could not create contact');
 
   const leslie = await db
     .insert(schema.contacts)
@@ -55,20 +57,22 @@ async function main() {
       language: 'fr_FR',
       timezone: 'Europe/Paris',
     })
-    .returning({ id: schema.contacts.id });
+    .returning({ id: schema.contacts.id })
+    .then((res) => res[0]);
 
-  if (!leslie[0]?.id) throw new Error('Could not create contact');
+  if (!leslie?.id) throw new Error('Could not create contact');
 
   const leslieTicket = await db
     .insert(schema.tickets)
     .values({
       content: "My order hasn't arrived yet.",
       createdAt: new Date('2023-05-04T20:54:41.389Z'),
-      contactId: leslie[0].id,
+      contactId: leslie.id,
     })
-    .returning({ id: schema.tickets.id });
+    .returning({ id: schema.tickets.id })
+    .then((res) => res[0]);
 
-  if (!leslieTicket[0]?.id) throw new Error('Could not create ticket');
+  if (!leslieTicket?.id) throw new Error('Could not create ticket');
 
   await db
     .insert(schema.messages)
@@ -79,8 +83,8 @@ async function main() {
         createdAt: new Date('2023-05-04T20:54:41.389Z'),
         direction: MessageDirection.Inbound,
         status: MessageStatus.Seen,
-        senderId: leslie[0].id,
-        ticketId: leslieTicket[0].id,
+        senderId: leslie.id,
+        ticketId: leslieTicket.id,
       },
       {
         contentType: MessageContentType.TextPlain,
@@ -89,8 +93,8 @@ async function main() {
         createdAt: new Date('2023-05-11T10:33:56.231Z'),
         direction: MessageDirection.Outbound,
         status: MessageStatus.Seen,
-        senderId: tom[0].id,
-        ticketId: leslieTicket[0].id,
+        senderId: tom.id,
+        ticketId: leslieTicket.id,
       },
     ])
     .returning({ id: schema.tickets.id });
@@ -103,20 +107,22 @@ async function main() {
       avatarUrl:
         'https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
     })
-    .returning({ id: schema.tickets.id });
+    .returning({ id: schema.tickets.id })
+    .then((res) => res[0]);
 
-  if (!michael[0]?.id) throw new Error('Could not create contact');
+  if (!michael?.id) throw new Error('Could not create contact');
 
   const michaelTicket = await db
     .insert(schema.tickets)
     .values({
       content: 'I received a damaged product.',
       createdAt: new Date('2023-03-03T14:02Z'),
-      contactId: michael[0].id,
+      contactId: michael.id,
     })
-    .returning({ id: schema.tickets.id });
+    .returning({ id: schema.tickets.id })
+    .then((res) => res[0]);
 
-  if (!michaelTicket[0]?.id) throw new Error('Could not create ticket');
+  if (!michaelTicket?.id) throw new Error('Could not create ticket');
 
   await db
     .insert(schema.messages)
@@ -127,8 +133,8 @@ async function main() {
         createdAt: new Date('2023-03-03T14:02Z'),
         direction: MessageDirection.Inbound,
         status: MessageStatus.Seen,
-        senderId: michael[0].id,
-        ticketId: michaelTicket[0].id,
+        senderId: michael.id,
+        ticketId: michaelTicket.id,
       },
       {
         contentType: MessageContentType.TextPlain,
@@ -137,8 +143,8 @@ async function main() {
         createdAt: new Date('2023-03-12T17:20Z'),
         direction: MessageDirection.Outbound,
         status: MessageStatus.Seen,
-        senderId: jeffrey[0].id,
-        ticketId: michaelTicket[0].id,
+        senderId: jeffrey.id,
+        ticketId: michaelTicket.id,
       },
     ])
     .returning({ id: schema.tickets.id });
@@ -151,20 +157,22 @@ async function main() {
       avatarUrl:
         'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
     })
-    .returning({ id: schema.contacts.id });
+    .returning({ id: schema.contacts.id })
+    .then((res) => res[0]);
 
-  if (!dries[0]?.id) throw new Error('Could not create contact');
+  if (!dries?.id) throw new Error('Could not create contact');
 
   const driesTicket = await db
     .insert(schema.tickets)
     .values({
       content: 'I need to return an item.',
       createdAt: new Date('2023-03-03T13:23Z'),
-      contactId: dries[0].id,
+      contactId: dries.id,
     })
-    .returning({ id: schema.tickets.id });
+    .returning({ id: schema.tickets.id })
+    .then((res) => res[0]);
 
-  if (!driesTicket[0]?.id) throw new Error('Could not create ticket');
+  if (!driesTicket?.id) throw new Error('Could not create ticket');
 
   await db
     .insert(schema.messages)
@@ -175,8 +183,8 @@ async function main() {
         createdAt: new Date('2023-03-03T13:23Z'),
         direction: MessageDirection.Inbound,
         status: MessageStatus.Seen,
-        senderId: dries[0].id,
-        ticketId: driesTicket[0].id,
+        senderId: dries.id,
+        ticketId: driesTicket.id,
       },
       {
         contentType: MessageContentType.TextPlain,
@@ -185,8 +193,8 @@ async function main() {
         createdAt: new Date('2023-04-01T06:06Z'),
         direction: MessageDirection.Outbound,
         status: MessageStatus.DeliveredToDevice,
-        senderId: jeffrey[0].id,
-        ticketId: driesTicket[0].id,
+        senderId: jeffrey.id,
+        ticketId: driesTicket.id,
       },
     ])
     .returning({ id: schema.tickets.id });
@@ -199,9 +207,10 @@ async function main() {
       avatarUrl:
         'https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
     })
-    .returning({ id: schema.contacts.id });
+    .returning({ id: schema.contacts.id })
+    .then((res) => res[0]);
 
-  if (!lindsay[0]?.id) throw new Error('Could not create contact');
+  if (!lindsay?.id) throw new Error('Could not create contact');
 
   const lindsayTicket = await db
     .insert(schema.tickets)
@@ -209,11 +218,12 @@ async function main() {
       content:
         'Unde dolore exercitationem nobis reprehenderit rerum corporis accusamus. Nemo suscipit temporibus quidem dolorum. Nobis optio quae atque blanditiis aspernatur doloribus sit accusamus. Sunt reiciendis ut corrupti ab debitis dolorem dolorem nam sit. Ducimus nisi qui earum aliquam. Est nam doloribus culpa illum.',
       createdAt: new Date('2023-03-02T21:13Z'),
-      contactId: lindsay[0].id,
+      contactId: lindsay.id,
     })
-    .returning({ id: schema.tickets.id });
+    .returning({ id: schema.tickets.id })
+    .then((res) => res[0]);
 
-  if (!lindsayTicket[0]?.id) throw new Error('Could not create ticket');
+  if (!lindsayTicket?.id) throw new Error('Could not create ticket');
 
   await db
     .insert(schema.messages)
@@ -224,8 +234,8 @@ async function main() {
         createdAt: new Date('2023-03-02T21:13Z'),
         direction: MessageDirection.Inbound,
         status: MessageStatus.Seen,
-        senderId: lindsay[0].id,
-        ticketId: lindsayTicket[0].id,
+        senderId: lindsay.id,
+        ticketId: lindsayTicket.id,
       },
       {
         contentType: MessageContentType.TextPlain,
@@ -234,8 +244,8 @@ async function main() {
         createdAt: new Date('2023-03-03T22:40Z'),
         direction: MessageDirection.Outbound,
         status: MessageStatus.DeliveredToDevice,
-        senderId: tom[0].id,
-        ticketId: lindsayTicket[0].id,
+        senderId: tom.id,
+        ticketId: lindsayTicket.id,
       },
     ])
     .returning({ id: schema.tickets.id });
