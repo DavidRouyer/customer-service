@@ -16,6 +16,7 @@ declare module 'next-auth' {
   interface Session {
     user: {
       id: string;
+      contactId?: number;
     } & DefaultSession['user'];
   }
 }

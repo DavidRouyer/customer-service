@@ -19,7 +19,7 @@ import { User } from '~/hooks/useTicket/User';
 import { api } from '~/utils/api';
 
 export type SendMessageParams = {
-  message: Omit<Message, 'id'>;
+  message: Omit<Message, 'id'> & { senderId: number };
   ticketId: TicketId;
 };
 

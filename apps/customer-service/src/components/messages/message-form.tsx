@@ -32,10 +32,13 @@ export const MessageForm: FC = () => {
         status: MessageStatus.Pending,
         content: data.content,
         createdAt: new Date(),
+        senderId: currentUser?.contactId ?? 0,
         sender: {
-          id: currentUser?.id ?? '',
-          name: currentUser?.fullName,
-          avatarUrl: currentUser?.image,
+          id: currentUser?.contactId ?? 0,
+          name: currentUser?.name ?? '',
+          email: currentUser?.email ?? '',
+          avatarUrl: currentUser?.image ?? '',
+          createdAt: new Date(),
         },
       },
     });

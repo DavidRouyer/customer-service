@@ -17,7 +17,8 @@ export class TicketStorage {
         user.id,
         user.name ?? '',
         user.email ?? '',
-        user.image ?? undefined
+        user.image ?? undefined,
+        user.contactId
       );
   }
 
