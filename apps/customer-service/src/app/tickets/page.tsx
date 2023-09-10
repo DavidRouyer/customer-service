@@ -7,7 +7,7 @@ import { Ticket } from '~/components/tickets/ticket';
 export default async function TicketsPage() {
   const session = await auth();
 
-  if (session) {
+  if (!session) {
     redirect('/');
   }
   return <Ticket />;
