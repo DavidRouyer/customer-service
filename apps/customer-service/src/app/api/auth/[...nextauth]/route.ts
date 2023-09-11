@@ -1,3 +1,3 @@
 export { GET, POST } from '@cs/auth';
 
-export const runtime = 'nodejs';
+export const runtime = 'edge';
