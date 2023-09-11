@@ -16,7 +16,7 @@ import { getInitials } from '~/utils/string';
 
 export function UserNav({ showLabel = false }) {
   const session = useSession();
-  console.log(session);
+
   if (!session.data?.user) return null;
 
   return (
