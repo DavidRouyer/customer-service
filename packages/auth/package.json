@@ -27,7 +27,7 @@
     "@cs/tsconfig": "*",
     "@types/bcrypt": "^5.0.0",
     "@types/validator": "^13.11.1",
-    "eslint": "^8.47.0",
+    "eslint": "^8.49.0",
     "prettier": "^3.0.2",
     "validator": "^13.11.0",
     "typescript": "^5.1.6"
