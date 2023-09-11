@@ -2,6 +2,7 @@
 
 import { FC } from 'react';
 import { PaperclipIcon, SmilePlusIcon } from 'lucide-react';
+import { useSession } from 'next-auth/react';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
 import { FormattedMessage } from 'react-intl';
 
@@ -13,34 +14,73 @@ import {
 
 import { TextEditor } from '~/components/text-editor/text-editor';
 import { Button } from '~/components/ui/button';
-import { useTicket } from '~/hooks/useTicket/TicketProvider';
+import { Message } from '~/types/Message';
+import { api } from '~/utils/api';
 
 type MessageFormSchema = {
   content: string;
 };
 
-export const MessageForm: FC = () => {
-  const { activeTicket, sendMessage, currentUser } = useTicket();
+export const MessageForm: FC<{ id: number }> = ({ id }) => {
+  const session = useSession();
+  const utils = api.useContext();
+  const { mutateAsync: sendMessage } = api.message.create.useMutation({
+    onMutate: async (newMessage) => {
+      // Cancel any outgoing refetches
+      // (so they don't overwrite our optimistic update)
+      await utils.message.all.cancel({ ticketId: id });
+
+      // Snapshot the previous value
+      const previousMessages = utils.message.all.getData({ ticketId: id });
+
+      // Optimistically update to the new value
+      utils.message.all.setData(
+        { ticketId: id },
+        (oldQueryData: Message[] | undefined) =>
+          [
+            ...(oldQueryData ?? []),
+            {
+              id: self.crypto.randomUUID(),
+              direction: newMessage.direction,
+              contentType: newMessage.contentType,
+              status: newMessage.status,
+              content: newMessage.content,
+              createdAt: newMessage.createdAt,
+              senderId: session.data?.user?.contactId ?? 0,
+              sender: {
+                name: session.data?.user?.name ?? '',
+                avatarUrl: session.data?.user?.image ?? '',
+                id: session.data?.user?.contactId ?? 0,
+              },
+            },
+          ] as Message[]
+      );
+
+      // Return a context object with the snapshotted value
+      return { previousMessages };
+    },
+    onError: (err, _newMessage, context) => {
+      // TODO: handle failed queries
+      utils.message.all.setData(
+        { ticketId: id },
+        context?.previousMessages ?? []
+      );
+    },
+    onSettled: () => {
+      void utils.message.all.invalidate({ ticketId: id });
+    },
+  });
   const form = useForm<MessageFormSchema>();
 
   const onSubmit = (data: MessageFormSchema) => {
     sendMessage({
-      ticketId: activeTicket?.id ?? 0,
-      message: {
-        direction: MessageDirection.Outbound,
-        contentType: MessageContentType.TextPlain,
-        status: MessageStatus.Pending,
-        content: data.content,
-        createdAt: new Date(),
-        senderId: currentUser?.contactId ?? 0,
-        sender: {
-          id: currentUser?.contactId ?? 0,
-          name: currentUser?.name ?? '',
-          email: currentUser?.email ?? '',
-          avatarUrl: currentUser?.image ?? '',
-          createdAt: new Date(),
-        },
-      },
+      ticketId: id,
+      direction: MessageDirection.Outbound,
+      contentType: MessageContentType.TextPlain,
+      status: MessageStatus.Pending,
+      content: data.content,
+      createdAt: new Date(),
+      senderId: session.data?.user?.contactId ?? 0,
     });
     form.reset({
       content: '',

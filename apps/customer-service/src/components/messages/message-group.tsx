@@ -1,8 +1,11 @@
 import { FC } from 'react';
 
-import { MessageAvatar } from '~/components/messages/message-avatar';
+import { MessageDirection } from '@cs/database/schema/message';
+
 import { Message } from '~/components/messages/message';
-import { Message as MessageType } from '~/hooks/useTicket/Message';
+import { MessageAvatar } from '~/components/messages/message-avatar';
+import { Contact } from '~/types/Contact';
+import { Message as MessageType } from '~/types/Message';
 import { cn } from '~/utils/utils';
 
 export type MessageGroupProps = {

@@ -1,9 +1,10 @@
 import { FC } from 'react';
+import { useParams } from 'next/navigation';
 import { Mail, Phone } from 'lucide-react';
 import { FormattedMessage } from 'react-intl';
 
 import { Android } from '~/components/icons/android';
-import { useTicket } from '~/hooks/useTicket/TicketProvider';
+import { api } from '~/utils/api';
 
 const user = {
   app: {
@@ -13,9 +14,12 @@ const user = {
 };
 
 export const UserInfoPanel: FC = () => {
-  const { activeTicket } = useTicket();
+  const params = useParams();
+  const { data: ticketData } = api.ticket.byId.useQuery({
+    id: parseInt(params.id),
+  });
 
-  if (!activeTicket) {
+  if (!ticketData) {
     return null;
   }
 
@@ -29,7 +33,7 @@ export const UserInfoPanel: FC = () => {
           <Mail className="h-6 w-5 text-gray-400" aria-hidden="true" />
         </dt>
         <dd className="text-sm leading-6 text-muted-foreground">
-          {activeTicket.contact.email}
+          {ticketData.contact.email}
         </dd>
       </div>
       <div className="mt-4 flex w-full flex-none gap-x-4">
@@ -40,7 +44,7 @@ export const UserInfoPanel: FC = () => {
           <Phone className="h-6 w-5 text-gray-400" aria-hidden="true" />
         </dt>
         <dd className="text-sm leading-6 text-muted-foreground">
-          {activeTicket.contact.phone}
+          {ticketData.contact.phone}
         </dd>
       </div>
       <div className="mt-4 flex w-full flex-none gap-x-4">

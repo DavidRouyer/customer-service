@@ -3,10 +3,7 @@ import { Badge, BadgeAlert, BadgeCheck, CheckCircle2 } from 'lucide-react';
 
 import { MessageStatus as MessageStatusType } from '@cs/database/schema/message';
 
-import {
-  ExtendedMessageStatus,
-  FailedMessageStatus,
-} from '~/hooks/useTicket/Message';
+import { ExtendedMessageStatus, FailedMessageStatus } from '~/types/Message';
 
 export type MessageStatusProps = {
   status: ExtendedMessageStatus;

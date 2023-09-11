@@ -1,9 +1,10 @@
 import GitHub from '@auth/core/providers/github';
 import type { DefaultSession } from '@auth/core/types';
-import { DrizzleAdapter } from '@auth/drizzle-adapter';
 import NextAuth from 'next-auth';
 
-import { db, eq, schema, tableCreator } from '@cs/database';
+import { db, eq, schema } from '@cs/database';
+
+import { pgDrizzleAdapter } from './adapter';
 
 export type { Session } from 'next-auth';
 
@@ -19,6 +20,10 @@ declare module 'next-auth' {
       contactId?: number;
     } & DefaultSession['user'];
   }
+  // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
+  interface User {
+    contactId?: number;
+  }
 }
 
 export const {
@@ -26,7 +31,7 @@ export const {
   auth,
   CSRF_experimental,
 } = NextAuth({
-  adapter: DrizzleAdapter(db, tableCreator),
+  adapter: pgDrizzleAdapter(db),
   providers: [
     GitHub({
       clientId: process.env.AUTH_GITHUB_ID,
@@ -55,13 +60,16 @@ export const {
     },
   },
   callbacks: {
-    session: ({ session, user }) => ({
-      ...session,
-      user: {
-        ...session.user,
-        id: user.id,
-      },
-    }),
+    session: async ({ session, user }) => {
+      return {
+        ...session,
+        user: {
+          ...session.user,
+          id: user.id,
+          contactId: user.contactId,
+        },
+      };
+    },
 
     authorized({ auth }) {
       return !!auth?.user;

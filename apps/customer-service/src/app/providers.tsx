@@ -5,11 +5,9 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { ReactQueryStreamedHydration } from '@tanstack/react-query-next-experimental';
 import { loggerLink, unstable_httpBatchStreamLink } from '@trpc/client';
+import { SessionProvider } from 'next-auth/react';
 import superjson from 'superjson';
 
-import { Session } from '@cs/auth';
-
-import { TicketProvider } from '~/hooks/useTicket/TicketProvider';
 import { api } from '~/utils/api';
 
 const getBaseUrl = () => {
@@ -22,7 +20,6 @@ const getBaseUrl = () => {
 export function TRPCReactProvider(props: {
   children: React.ReactNode;
   headers?: Headers;
-  user?: Session['user'];
 }) {
   const [queryClient] = useState(
     () =>
@@ -60,7 +57,7 @@ export function TRPCReactProvider(props: {
     <api.Provider client={trpcClient} queryClient={queryClient}>
       <QueryClientProvider client={queryClient}>
         <ReactQueryStreamedHydration transformer={superjson}>
-          <TicketProvider user={props.user}>{props.children}</TicketProvider>
+          <SessionProvider>{props.children}</SessionProvider>
         </ReactQueryStreamedHydration>
         <ReactQueryDevtools initialIsOpen={false} />
       </QueryClientProvider>

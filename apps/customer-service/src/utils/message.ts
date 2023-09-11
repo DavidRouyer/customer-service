@@ -1,4 +1,4 @@
-import { Message } from '~/hooks/useTicket/Message';
+import { Message } from '~/types/Message';
 
 export const groupMessagesByDateAndUser = (messages: Message[]) => {
   const groupedMessages = messages.reduce<Record<string, Message[]>>(

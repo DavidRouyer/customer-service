@@ -1,17 +1,15 @@
 import { FC } from 'react';
 
-import { useTicket } from '~/hooks/useTicket/TicketProvider';
+import { api } from '~/utils/api';
 
-export const TicketHeader: FC = () => {
-  const { activeTicket } = useTicket();
-
-  if (!activeTicket) return null;
+export const TicketHeader: FC<{ id: number }> = ({ id }) => {
+  const { data: ticketData } = api.ticket.byId.useQuery({ id: id });
 
   return (
     <div className="border-b pb-5">
       <h3 className="text-base font-semibold leading-6 text-foreground">
-        <span className="text-muted-foreground">#{activeTicket.id}</span>{' '}
-        {activeTicket.contact.name}
+        <span className="text-muted-foreground">#{ticketData?.id}</span>{' '}
+        {ticketData?.contact.name}
       </h3>
     </div>
   );

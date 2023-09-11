@@ -4,7 +4,7 @@ import { useSearchParams } from 'next/navigation';
 
 import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/avatar';
 import { RelativeTime } from '~/components/ui/relative-time';
-import { Ticket } from '~/hooks/useTicket/Ticket';
+import { Ticket } from '~/types/Ticket';
 import { getInitials } from '~/utils/string';
 
 export type TicketListItemProps = {

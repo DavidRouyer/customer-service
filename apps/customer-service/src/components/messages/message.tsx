@@ -10,7 +10,7 @@ import {
 
 import { MessageStatus } from '~/components/messages/message-status';
 import { MessageTextContent } from '~/components/messages/message-text-content';
-import { Message as MessageType } from '~/hooks/useTicket/Message';
+import { Message as MessageType } from '~/types/Message';
 import { cn } from '~/utils/utils';
 
 export type MessageProps = {

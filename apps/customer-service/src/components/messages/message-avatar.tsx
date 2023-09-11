@@ -3,7 +3,7 @@ import { FC } from 'react';
 import { MessageDirection } from '@cs/database/schema/message';
 
 import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/avatar';
-import { Contact } from '~/hooks/useTicket/Contact';
+import { Contact } from '~/types/Contact';
 import { getInitials } from '~/utils/string';
 import { cn } from '~/utils/utils';
 

@@ -4,7 +4,7 @@ import {
   MessageStatus,
 } from '@cs/database/schema/message';
 
-import { Message } from '~/hooks/useTicket/Message';
+import { Message } from '~/types/Message';
 import { groupMessagesByDateAndUser } from '~/utils/message';
 
 describe('groupMessagesByDateAndUser', () => {

@@ -20,6 +20,8 @@
   "text_editor.send": "Send",
   "ticket.opened_on": "Opened on",
   "ticket.resolved_on": "Resolved on",
+  "ticket.sort_by.newest": "Plus récent",
+  "ticket.sort_by.oldest": "Plus ancien",
   "ticket.statuses.open": "Open",
   "ticket.statuses.resolved": "Resolved",
   "user.email": "Email address",

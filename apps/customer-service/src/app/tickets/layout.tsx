@@ -1,17 +1,17 @@
 import { LayoutWithSidebar } from '~/app/tickets/layout-with-sidebar';
 import { InfoPanel } from '~/components/infos/info-panel';
 import { TicketList } from '~/components/tickets/ticket-list';
+import { TicketListHeader } from '~/components/tickets/ticket-list-header';
 
 export default function TicketsLayout({
   children,
 }: {
   children: React.ReactNode;
+  params: { id: string };
 }) {
   return (
     <LayoutWithSidebar>
-      <aside className="fixed inset-y-0 right-0 hidden w-96 overflow-y-auto border-l px-4 py-6 sm:px-6 xl:block">
-        <InfoPanel />
-      </aside>
+      <InfoPanel />
 
       <main className="lg:pl-60">
         <div className="xl:mr-96 xl:h-[100dvh] xl:overflow-y-auto xl:pl-96">
@@ -22,6 +22,7 @@ export default function TicketsLayout({
       </main>
 
       <aside className="fixed inset-y-0 left-60 hidden w-96 overflow-y-auto border-r px-4 py-6 sm:px-6 xl:block">
+        <TicketListHeader />
         <TicketList />
       </aside>
     </LayoutWithSidebar>

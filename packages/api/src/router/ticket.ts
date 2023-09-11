@@ -1,22 +1,33 @@
 import { z } from 'zod';
 
-import { desc, eq, schema } from '@cs/database';
+import { asc, desc, eq, schema } from '@cs/database';
 
 import { createTRPCRouter, protectedProcedure } from '../trpc';
 
 export const ticketRouter = createTRPCRouter({
-  all: protectedProcedure.query(({ ctx }) => {
-    return ctx.db.query.tickets.findMany({
-      orderBy: desc(schema.tickets.id),
-      with: { contact: true },
-    });
-  }),
+  all: protectedProcedure
+    .input(
+      z.object({
+        filter: z.enum(['all', 'me', 'unassigned']),
+        orderBy: z.enum(['newest', 'oldest']),
+      })
+    )
+    .query(({ ctx, input }) => {
+      return ctx.db.query.tickets.findMany({
+        orderBy: {
+          newest: desc(schema.tickets.createdAt),
+          oldest: asc(schema.tickets.createdAt),
+        }[input.orderBy],
+        with: { contact: true },
+      });
+    }),
 
   byId: protectedProcedure
     .input(z.object({ id: z.number() }))
     .query(({ ctx, input }) => {
       return ctx.db.query.tickets.findFirst({
         where: eq(schema.tickets.id, input.id),
+        with: { contact: true },
       });
     }),
 
