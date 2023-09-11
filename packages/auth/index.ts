@@ -60,16 +60,14 @@ export const {
     },
   },
   callbacks: {
-    session: async ({ session, user }) => {
-      return {
-        ...session,
-        user: {
-          ...session.user,
-          id: user.id,
-          contactId: user.contactId,
-        },
-      };
-    },
+    session: async ({ session, user }) => ({
+      ...session,
+      user: {
+        ...session.user,
+        id: user.id,
+        contactId: user.contactId,
+      },
+    }),
 
     authorized({ auth }) {
       return !!auth?.user;
