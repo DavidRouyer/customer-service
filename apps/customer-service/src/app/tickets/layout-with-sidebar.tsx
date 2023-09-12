@@ -5,8 +5,8 @@ import Link from 'next/link';
 import { AlignJustify } from 'lucide-react';
 import { FormattedMessage } from 'react-intl';
 
-import { AgentList } from '~/components/agents/agent-list';
 import { Logo } from '~/components/logo';
+import { AgentList } from '~/components/team-members/team-members-list';
 import {
   Accordion,
   AccordionContent,

@@ -27,7 +27,7 @@ export const ticketRouter = createTRPCRouter({
     .query(({ ctx, input }) => {
       return ctx.db.query.tickets.findFirst({
         where: eq(schema.tickets.id, input.id),
-        with: { author: true },
+        with: { author: true, assignedTo: true },
       });
     }),
 
