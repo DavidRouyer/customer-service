@@ -1,4 +1,5 @@
 import { FC } from 'react';
+import { BookOpenCheck, HardDriveUpload, Vote } from 'lucide-react';
 import { FormattedMessage } from 'react-intl';
 
 import { RouterOutputs } from '@cs/api';
@@ -84,7 +85,9 @@ export const TicketChangeStatus: FC<TicketChangeStatusProps> = ({
       onClick={() => {
         reopenTicket({ id: ticketId });
       }}
+      className="flex items-center gap-x-1"
     >
+      <HardDriveUpload className="h-4 w-4" />
       <FormattedMessage id="ticket.actions.reopen" />
     </Button>
   ) : (
@@ -92,7 +95,9 @@ export const TicketChangeStatus: FC<TicketChangeStatusProps> = ({
       onClick={() => {
         resolveTicket({ id: ticketId });
       }}
+      className="flex items-center gap-x-1"
     >
+      <BookOpenCheck className="h-4 w-4" />
       <FormattedMessage id="ticket.actions.resolve" />
     </Button>
   );

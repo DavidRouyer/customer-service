@@ -1,6 +1,6 @@
 import { FC } from 'react';
 
-import { TicketAssignment } from '~/components/tickets/ticket-assignment';
+import { TicketChangeAssignment } from '~/components/tickets/ticket-change-assignment';
 import { TicketChangeStatus } from '~/components/tickets/ticket-change-status';
 import { api } from '~/utils/api';
 
@@ -14,7 +14,7 @@ export const TicketHeader: FC<{ ticketId: number }> = ({ ticketId }) => {
         {ticketData?.author.name}
       </h3>
       <div className="flex items-center gap-x-2">
-        <TicketAssignment
+        <TicketChangeAssignment
           assignedTo={ticketData?.assignedTo}
           ticketId={ticketId}
         />

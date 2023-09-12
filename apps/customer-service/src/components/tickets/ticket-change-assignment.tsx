@@ -16,12 +16,12 @@ import {
 import { api } from '~/utils/api';
 import { getInitials } from '~/utils/string';
 
-type TicketAssignmentProps = {
+type TicketChangeAssignmentProps = {
   assignedTo?: NonNullable<RouterOutputs['ticket']['byId']>['assignedTo'];
   ticketId: number;
 };
 
-export const TicketAssignment: FC<TicketAssignmentProps> = ({
+export const TicketChangeAssignment: FC<TicketChangeAssignmentProps> = ({
   assignedTo,
   ticketId,
 }) => {

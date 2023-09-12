@@ -1,4 +1,4 @@
-import { TRPCError } from '@trpc/server/dist/error/TRPCError';
+import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
 
 import { and, asc, desc, eq, isNull, not, schema } from '@cs/database';
