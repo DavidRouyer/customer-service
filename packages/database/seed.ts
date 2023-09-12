@@ -72,7 +72,7 @@ async function main() {
       status: TicketStatus.Open,
       content: "My order hasn't arrived yet.",
       createdAt: new Date('2023-05-04T20:54:41.389Z'),
-      contactId: leslie.id,
+      authorId: leslie.id,
     })
     .returning({ id: schema.tickets.id })
     .then((res) => res[0]);
@@ -110,7 +110,7 @@ async function main() {
       status: TicketStatus.Open,
       content: 'Could not purchase.',
       createdAt: new Date('2023-05-06T11:23:45.389Z'),
-      contactId: leslie.id,
+      authorId: leslie.id,
     })
     .returning({ id: schema.tickets.id })
     .then((res) => res[0]);
@@ -124,7 +124,7 @@ async function main() {
       content: "Impossible d'acheter",
       createdAt: new Date('2023-05-06T11:23:45.389Z'),
       resolvedAt: new Date('2023-06-12T06:10:45.389Z'),
-      contactId: leslie.id,
+      authorId: leslie.id,
     })
     .returning({ id: schema.tickets.id })
     .then((res) => res[0]);
@@ -150,7 +150,7 @@ async function main() {
       status: TicketStatus.Open,
       content: 'I received a damaged product.',
       createdAt: new Date('2023-03-03T14:02Z'),
-      contactId: michael.id,
+      authorId: michael.id,
     })
     .returning({ id: schema.tickets.id })
     .then((res) => res[0]);
@@ -201,7 +201,7 @@ async function main() {
       status: TicketStatus.Open,
       content: 'I need to return an item.',
       createdAt: new Date('2023-03-03T13:23Z'),
-      contactId: dries.id,
+      authorId: dries.id,
     })
     .returning({ id: schema.tickets.id })
     .then((res) => res[0]);
@@ -256,7 +256,7 @@ async function main() {
       content:
         'Unde dolore exercitationem nobis reprehenderit rerum corporis accusamus. Nemo suscipit temporibus quidem dolorum. Nobis optio quae atque blanditiis aspernatur doloribus sit accusamus. Sunt reiciendis ut corrupti ab debitis dolorem dolorem nam sit. Ducimus nisi qui earum aliquam. Est nam doloribus culpa illum.',
       createdAt: new Date('2023-03-02T21:13Z'),
-      contactId: lindsay.id,
+      authorId: lindsay.id,
     })
     .returning({ id: schema.tickets.id })
     .then((res) => res[0]);

@@ -18,7 +18,7 @@ export const ticketRouter = createTRPCRouter({
           newest: desc(schema.tickets.createdAt),
           oldest: asc(schema.tickets.createdAt),
         }[input.orderBy],
-        with: { contact: true },
+        with: { author: true },
       });
     }),
 
@@ -27,7 +27,7 @@ export const ticketRouter = createTRPCRouter({
     .query(({ ctx, input }) => {
       return ctx.db.query.tickets.findFirst({
         where: eq(schema.tickets.id, input.id),
-        with: { contact: true },
+        with: { author: true },
       });
     }),
 
@@ -37,7 +37,7 @@ export const ticketRouter = createTRPCRouter({
       return ctx.db.query.tickets.findMany({
         orderBy: desc(schema.tickets.createdAt),
         where: and(
-          eq(schema.tickets.contactId, input.contactId),
+          eq(schema.tickets.authorId, input.contactId),
           not(eq(schema.tickets.id, input.excludeId))
         ),
       });

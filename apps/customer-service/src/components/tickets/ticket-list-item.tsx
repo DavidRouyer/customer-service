@@ -21,17 +21,17 @@ export const TicketListItem: FC<TicketListItemProps> = ({ ticket }) => {
       >
         <Avatar className="h-12 w-12">
           <AvatarImage
-            src={ticket.contact.avatarUrl ?? undefined}
-            alt={ticket.contact.name ?? ''}
+            src={ticket.author.avatarUrl ?? undefined}
+            alt={ticket.author.name ?? ''}
           />
           <AvatarFallback>
-            {getInitials(ticket.contact.name ?? '')}
+            {getInitials(ticket.author.name ?? '')}
           </AvatarFallback>
         </Avatar>
         <div className="flex-auto">
           <div className="flex items-baseline justify-between gap-x-4">
             <p className="text-sm font-semibold leading-6 text-foreground">
-              {ticket.contact.name}
+              {ticket.author.name}
             </p>
             <p className="flex-none text-xs text-muted-foreground">
               <time dateTime={ticket.createdAt.toUTCString()}>

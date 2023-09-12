@@ -56,7 +56,7 @@ export const InfoPanel: FC = () => {
             <AccordionContent>
               <LinkedTicketsPanel
                 ticketId={ticketId}
-                contactId={ticketData?.contactId}
+                contactId={ticketData?.authorId}
               />
             </AccordionContent>
           </AccordionItem>

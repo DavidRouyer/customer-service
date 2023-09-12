@@ -31,7 +31,7 @@ export const UserInfoPanel: FC<{ ticketId: number }> = ({ ticketId }) => {
           <Mail className="h-6 w-5 text-gray-400" aria-hidden="true" />
         </dt>
         <dd className="text-sm leading-6 text-muted-foreground">
-          {ticketData.contact.email}
+          {ticketData.author.email}
         </dd>
       </div>
       <div className="mt-4 flex w-full flex-none gap-x-4">
@@ -42,7 +42,7 @@ export const UserInfoPanel: FC<{ ticketId: number }> = ({ ticketId }) => {
           <Phone className="h-6 w-5 text-gray-400" aria-hidden="true" />
         </dt>
         <dd className="text-sm leading-6 text-muted-foreground">
-          {ticketData.contact.phone}
+          {ticketData.author.phone}
         </dd>
       </div>
       <div className="mt-4 flex w-full flex-none gap-x-4">

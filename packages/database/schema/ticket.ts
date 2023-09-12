@@ -23,7 +23,11 @@ export const tickets = pgTable('Ticket', {
   resolvedAt: timestamp('resolvedAt', { precision: 3, mode: 'date' }),
   content: text('content'),
   status: ticketStatus('status').notNull(),
-  contactId: integer('contactId')
+  assignedToId: integer('assignedToId').references(() => contacts.id, {
+    onDelete: 'restrict',
+    onUpdate: 'cascade',
+  }),
+  authorId: integer('authorId')
     .notNull()
     .references(() => contacts.id, {
       onDelete: 'restrict',
@@ -32,8 +36,12 @@ export const tickets = pgTable('Ticket', {
 });
 
 export const ticketsRelations = relations(tickets, ({ one, many }) => ({
-  contact: one(contacts, {
-    fields: [tickets.contactId],
+  assignedTo: one(contacts, {
+    fields: [tickets.assignedToId],
+    references: [contacts.id],
+  }),
+  author: one(contacts, {
+    fields: [tickets.authorId],
     references: [contacts.id],
   }),
   messages: many(messages),

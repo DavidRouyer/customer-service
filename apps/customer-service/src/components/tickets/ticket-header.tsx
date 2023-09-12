@@ -9,7 +9,7 @@ export const TicketHeader: FC<{ ticketId: number }> = ({ ticketId }) => {
     <div className="border-b pb-5">
       <h3 className="text-base font-semibold leading-6 text-foreground">
         <span className="text-muted-foreground">#{ticketData?.id}</span>{' '}
-        {ticketData?.contact.name}
+        {ticketData?.author.name}
       </h3>
     </div>
   );
