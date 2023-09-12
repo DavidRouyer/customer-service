@@ -1,11 +1,15 @@
 import { Ticket } from '~/components/tickets/ticket';
 
-export default function TicketsPage({
+export default function TicketPage({
   params: { id },
 }: {
   params: { id: string };
 }) {
-  return <Ticket id={id} />;
+  const ticketId = parseInt(id);
+
+  if (!ticketId) return null;
+
+  return <Ticket ticketId={ticketId} />;
 }
 
-TicketsPage.displayName = 'TicketsPage';
+TicketPage.displayName = 'TicketPage';
