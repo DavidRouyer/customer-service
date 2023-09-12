@@ -1,6 +1,7 @@
 import { FC } from 'react';
 
 import { TicketAssignment } from '~/components/tickets/ticket-assignment';
+import { TicketChangeStatus } from '~/components/tickets/ticket-change-status';
 import { api } from '~/utils/api';
 
 export const TicketHeader: FC<{ ticketId: number }> = ({ ticketId }) => {
@@ -12,10 +13,13 @@ export const TicketHeader: FC<{ ticketId: number }> = ({ ticketId }) => {
         <span className="text-muted-foreground">#{ticketData?.id}</span>{' '}
         {ticketData?.author.name}
       </h3>
-      <TicketAssignment
-        assignedTo={ticketData?.assignedTo}
-        ticketId={ticketId}
-      />
+      <div className="flex items-center gap-x-2">
+        <TicketAssignment
+          assignedTo={ticketData?.assignedTo}
+          ticketId={ticketId}
+        />
+        <TicketChangeStatus status={ticketData?.status} ticketId={ticketId} />
+      </div>
     </div>
   );
 };

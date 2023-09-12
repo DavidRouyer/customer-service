@@ -20,6 +20,7 @@
   "text_editor.send": "Send",
   "ticket.actions.assign_to": "Assign to",
   "ticket.actions.remove_assignment": "Remove",
+  "ticket.actions.resolve": "Close",
   "ticket.opened_on": "Opened on",
   "ticket.resolved_on": "Resolved on",
   "ticket.sort_by.newest": "Plus récent",
