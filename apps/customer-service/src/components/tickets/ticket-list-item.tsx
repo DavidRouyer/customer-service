@@ -2,13 +2,14 @@ import { FC } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 
+import { RouterOutputs } from '@cs/api';
+
 import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/avatar';
 import { RelativeTime } from '~/components/ui/relative-time';
-import { Ticket } from '~/types/Ticket';
 import { getInitials } from '~/utils/string';
 
 export type TicketListItemProps = {
-  ticket: Ticket;
+  ticket: NonNullable<RouterOutputs['ticket']['all'][0]>;
 };
 
 export const TicketListItem: FC<TicketListItemProps> = ({ ticket }) => {

@@ -45,7 +45,7 @@ export const TicketListHeader: FC = () => {
   };
 
   return (
-    <header className="flex items-center justify-between border-b pb-6">
+    <header className="flex items-center justify-between border-b px-4 py-6 sm:px-6">
       <h1 className="text-base font-semibold leading-7 text-white">Inbox</h1>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>

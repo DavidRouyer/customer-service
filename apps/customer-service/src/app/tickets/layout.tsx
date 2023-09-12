@@ -21,7 +21,7 @@ export default function TicketsLayout({
         </div>
       </main>
 
-      <aside className="fixed inset-y-0 left-60 hidden w-96 overflow-y-auto border-r px-4 py-6 sm:px-6 xl:block">
+      <aside className="fixed inset-y-0 left-60 hidden w-96 flex-col border-r xl:flex">
         <TicketListHeader />
         <TicketList />
       </aside>

@@ -36,7 +36,7 @@ export const TicketList: FC = () => {
   }, [ticketsData]);
 
   return (
-    <div className="divide-y">
+    <div className="flex-auto divide-y overflow-y-auto px-4 sm:px-6">
       {ticketsData?.map((ticket) => (
         <TicketListItem key={ticket.id} ticket={ticket} />
       ))}

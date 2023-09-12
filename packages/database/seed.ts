@@ -14,6 +14,18 @@ async function main() {
       'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
   });
 
+  const tomUser = await db
+    .insert(schema.users)
+    .values({
+      id: crypto.randomUUID(),
+      name: 'Tom Cook',
+      email: 'tom.cook@example.com',
+    })
+    .returning({ id: schema.users.id })
+    .then((res) => res[0]);
+
+  if (!tomUser?.id) throw new Error('Could not create user');
+
   const tom = await db
     .insert(schema.contacts)
     .values({
@@ -24,6 +36,7 @@ async function main() {
         'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
       language: 'en_US',
       timezone: 'America/Los_Angeles',
+      userId: tomUser.id,
     })
     .returning({ id: schema.contacts.id })
     .then((res) => res[0]);
@@ -73,6 +86,7 @@ async function main() {
       content: "My order hasn't arrived yet.",
       createdAt: new Date('2023-05-04T20:54:41.389Z'),
       authorId: leslie.id,
+      assignedToId: tom.id,
     })
     .returning({ id: schema.tickets.id })
     .then((res) => res[0]);

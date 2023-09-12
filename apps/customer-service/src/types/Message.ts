@@ -6,7 +6,6 @@ export enum FailedMessageStatus {
 
 export type MessageContentType =
   RouterOutputs['message']['all'][0]['contentType'];
-export type MessageDirection = RouterOutputs['message']['all'][0]['direction'];
 export type MessageStatus = RouterOutputs['message']['all'][0]['status'];
 
 export type ExtendedMessageStatus = MessageStatus | FailedMessageStatus;
