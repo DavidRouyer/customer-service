@@ -1,6 +1,7 @@
 import { z } from 'zod';
 
 import { asc, eq, schema } from '@cs/database';
+import { MessageStatus } from '@cs/database/schema/message';
 
 import { createTRPCRouter, protectedProcedure } from '../trpc';
 
@@ -32,6 +33,7 @@ export const messageRouter = createTRPCRouter({
         .insert(schema.messages)
         .values({
           ...input,
+          status: MessageStatus.DeliveredToCloud,
           createdAt: input.createdAt,
         })
         .returning({ id: schema.messages.id });
