@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { and, asc, desc, eq, not, schema } from '@cs/database';
+import { and, asc, desc, eq, isNull, not, schema } from '@cs/database';
 
 import { createTRPCRouter, protectedProcedure } from '../trpc';
 
@@ -18,6 +18,11 @@ export const ticketRouter = createTRPCRouter({
           newest: desc(schema.tickets.createdAt),
           oldest: asc(schema.tickets.createdAt),
         }[input.orderBy],
+        where: {
+          all: undefined,
+          me: eq(schema.tickets.assignedToId, ctx.session.user.contactId ?? 0),
+          unassigned: isNull(schema.tickets.assignedToId),
+        }[input.filter],
         with: { author: true },
       });
     }),
