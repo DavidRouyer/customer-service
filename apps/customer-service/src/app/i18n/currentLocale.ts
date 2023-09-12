@@ -1,3 +1,5 @@
+import 'server-only';
+
 import { cookies } from 'next/headers';
 
 import i18nConfig from '~/app/i18n/config.mjs';
