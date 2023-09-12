@@ -50,6 +50,7 @@ export const TicketListHeader: FC = () => {
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button
+            type="button"
             variant="secondary"
             className="flex items-center justify-between gap-x-1 text-sm leading-6"
           >

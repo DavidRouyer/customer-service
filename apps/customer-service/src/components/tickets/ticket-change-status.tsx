@@ -82,6 +82,7 @@ export const TicketChangeStatus: FC<TicketChangeStatusProps> = ({
 
   return status === TicketStatus.Resolved ? (
     <Button
+      type="button"
       onClick={() => {
         reopenTicket({ id: ticketId });
       }}
@@ -92,6 +93,7 @@ export const TicketChangeStatus: FC<TicketChangeStatusProps> = ({
     </Button>
   ) : (
     <Button
+      type="button"
       onClick={() => {
         resolveTicket({ id: ticketId });
       }}

@@ -39,7 +39,11 @@ export function UserNav({ showLabel = false }) {
             <span aria-hidden="true">{session.data?.user.name}</span>
           </button>
         ) : (
-          <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+          <Button
+            type="button"
+            variant="ghost"
+            className="relative h-8 w-8 rounded-full"
+          >
             <Avatar className="h-9 w-9">
               <AvatarImage
                 src={session.data.user.image ?? undefined}
