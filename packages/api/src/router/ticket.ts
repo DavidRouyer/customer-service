@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { asc, desc, eq, schema } from '@cs/database';
+import { and, asc, desc, eq, not, schema } from '@cs/database';
 
 import { createTRPCRouter, protectedProcedure } from '../trpc';
 
@@ -28,6 +28,18 @@ export const ticketRouter = createTRPCRouter({
       return ctx.db.query.tickets.findFirst({
         where: eq(schema.tickets.id, input.id),
         with: { contact: true },
+      });
+    }),
+
+  byContactId: protectedProcedure
+    .input(z.object({ contactId: z.number(), excludeId: z.number() }))
+    .query(({ ctx, input }) => {
+      return ctx.db.query.tickets.findMany({
+        orderBy: desc(schema.tickets.createdAt),
+        where: and(
+          eq(schema.tickets.contactId, input.contactId),
+          not(eq(schema.tickets.id, input.excludeId))
+        ),
       });
     }),
 

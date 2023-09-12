@@ -20,10 +20,10 @@ export const Ticket: FC = () => {
 
   return (
     <>
-      <TicketHeader id={ticketId} />
+      <TicketHeader ticketId={ticketId} />
 
-      <MessageList id={ticketId} />
-      <MessageForm id={ticketId} />
+      <MessageList ticketId={ticketId} />
+      <MessageForm ticketId={ticketId} />
     </>
   );
 };

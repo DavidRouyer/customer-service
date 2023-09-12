@@ -21,21 +21,21 @@ type MessageFormSchema = {
   content: string;
 };
 
-export const MessageForm: FC<{ id: number }> = ({ id }) => {
+export const MessageForm: FC<{ ticketId: number }> = ({ ticketId }) => {
   const session = useSession();
   const utils = api.useContext();
   const { mutateAsync: sendMessage } = api.message.create.useMutation({
     onMutate: async (newMessage) => {
       // Cancel any outgoing refetches
       // (so they don't overwrite our optimistic update)
-      await utils.message.all.cancel({ ticketId: id });
+      await utils.message.all.cancel({ ticketId: ticketId });
 
       // Snapshot the previous value
       const previousMessages = utils.message.all.getData({ ticketId: id });
 
       // Optimistically update to the new value
       utils.message.all.setData(
-        { ticketId: id },
+        { ticketId: ticketId },
         (oldQueryData: Message[] | undefined) =>
           [
             ...(oldQueryData ?? []),
@@ -62,7 +62,7 @@ export const MessageForm: FC<{ id: number }> = ({ id }) => {
     onError: (err, _newMessage, context) => {
       // TODO: handle failed queries
       utils.message.all.setData(
-        { ticketId: id },
+        { ticketId: ticketId },
         context?.previousMessages ?? []
       );
     },
@@ -74,7 +74,7 @@ export const MessageForm: FC<{ id: number }> = ({ id }) => {
 
   const onSubmit = (data: MessageFormSchema) => {
     sendMessage({
-      ticketId: id,
+      ticketId: ticketId,
       direction: MessageDirection.Outbound,
       contentType: MessageContentType.TextPlain,
       status: MessageStatus.Pending,

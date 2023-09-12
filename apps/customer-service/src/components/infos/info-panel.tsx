@@ -6,8 +6,8 @@ import { FormattedMessage } from 'react-intl';
 
 import { ActivityPanel } from '~/components/infos/activity-panel';
 import { InfoSummary } from '~/components/infos/info-summary';
+import { LinkedTicketsPanel } from '~/components/infos/linked-tickets-panel';
 import { UserInfoPanel } from '~/components/infos/user-info-panel';
-import { UserTicketsPanel } from '~/components/infos/user-tickets-panel';
 import {
   Accordion,
   AccordionContent,
@@ -18,12 +18,13 @@ import { api } from '~/utils/api';
 
 export const InfoPanel: FC = () => {
   const params = useParams();
+  const ticketId = parseInt(params.id ?? '');
   const { data: ticketData } = api.ticket.byId.useQuery(
     {
-      id: parseInt(params.id),
+      id: ticketId,
     },
     {
-      enabled: !!params.id,
+      enabled: !!ticketId,
     }
   );
 
@@ -34,7 +35,7 @@ export const InfoPanel: FC = () => {
   return (
     <aside className="fixed inset-y-0 right-0 hidden w-96 overflow-y-auto border-l px-4 py-6 sm:px-6 xl:block">
       <div className="flex flex-1 flex-col">
-        <InfoSummary />
+        <InfoSummary ticketId={ticketId} />
         <Accordion
           type="multiple"
           className="w-full"
@@ -45,7 +46,7 @@ export const InfoPanel: FC = () => {
               <FormattedMessage id="info_panel.contact_information" />
             </AccordionTrigger>
             <AccordionContent>
-              <UserInfoPanel />
+              <UserInfoPanel ticketId={ticketId} />
             </AccordionContent>
           </AccordionItem>
           <AccordionItem value="item-1">
@@ -53,7 +54,10 @@ export const InfoPanel: FC = () => {
               <FormattedMessage id="info_panel.conversations" />
             </AccordionTrigger>
             <AccordionContent>
-              <UserTicketsPanel />
+              <LinkedTicketsPanel
+                ticketId={ticketId}
+                contactId={ticketData?.contactId}
+              />
             </AccordionContent>
           </AccordionItem>
           <AccordionItem value="item-2">

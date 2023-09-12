@@ -4,32 +4,30 @@ import { FC } from 'react';
 import { FormattedDate, FormattedMessage } from 'react-intl';
 
 import { Badge } from '~/components/ui/badge';
+import { api } from '~/utils/api';
 
-type UserTicket = {
-  id: number;
-  status: 'open' | 'resolved';
-  openedDate: string;
-  resolvedDate?: string;
+type LinkedTicketsPanelProps = {
+  ticketId: number;
+  contactId?: number;
 };
 
-const userTickets: UserTicket[] = [
-  {
-    id: 8,
-    status: 'open',
-    openedDate: '2023-03-18T12:56',
-  },
-  {
-    id: 5,
-    status: 'resolved',
-    openedDate: '2023-01-12T19:56',
-    resolvedDate: '2023-01-23T15:56',
-  },
-];
+export const LinkedTicketsPanel: FC<LinkedTicketsPanelProps> = ({
+  ticketId,
+  contactId,
+}) => {
+  const { data: ticketsData } = api.ticket.byContactId.useQuery(
+    {
+      contactId: contactId ?? 0,
+      excludeId: ticketId,
+    },
+    {
+      enabled: !!contactId,
+    }
+  );
 
-export const UserTicketsPanel: FC = () => {
   return (
     <ul className="flex flex-col gap-y-1">
-      {userTickets.map((ticket) => (
+      {ticketsData?.map((ticket) => (
         <li key={ticket.id}>
           <div className="flex-auto rounded-md p-3 ring-1 ring-inset ring-border">
             <div className="flex items-start gap-x-3">
@@ -40,8 +38,8 @@ export const UserTicketsPanel: FC = () => {
                 variant={
                   (
                     {
-                      resolved: 'success',
-                      open: 'neutral',
+                      Resolved: 'success',
+                      Open: 'neutral',
                     } as const
                   )[ticket.status]
                 }
@@ -49,22 +47,22 @@ export const UserTicketsPanel: FC = () => {
               >
                 {
                   {
-                    resolved: (
+                    Resolved: (
                       <FormattedMessage id="ticket.statuses.resolved" />
                     ),
-                    open: <FormattedMessage id="ticket.statuses.open" />,
+                    Open: <FormattedMessage id="ticket.statuses.open" />,
                   }[ticket.status]
                 }
               </Badge>
             </div>
             <div className="mt-1 flex items-center gap-x-2 text-xs leading-5 text-muted-foreground">
               <p className="whitespace-nowrap">
-                {!ticket.resolvedDate ? (
+                {!ticket.resolvedAt ? (
                   <>
                     <FormattedMessage id="ticket.opened_on" />{' '}
-                    <time dateTime={ticket.openedDate}>
+                    <time dateTime={ticket.createdAt.toISOString()}>
                       <FormattedDate
-                        value={new Date(ticket.openedDate)}
+                        value={new Date(ticket.createdAt)}
                         year="numeric"
                         month="long"
                         day="numeric"
@@ -74,9 +72,9 @@ export const UserTicketsPanel: FC = () => {
                 ) : (
                   <>
                     <FormattedMessage id="ticket.resolved_on" />{' '}
-                    <time dateTime={ticket.resolvedDate}>
+                    <time dateTime={ticket.resolvedAt.toISOString()}>
                       <FormattedDate
-                        value={new Date(new Date(ticket.resolvedDate))}
+                        value={new Date(ticket.resolvedAt)}
                         year="numeric"
                         month="long"
                         day="numeric"
@@ -93,4 +91,4 @@ export const UserTicketsPanel: FC = () => {
   );
 };
 
-UserTicketsPanel.displayName = 'UserTicketsPanel';
+LinkedTicketsPanel.displayName = 'UserTicketsPanel';

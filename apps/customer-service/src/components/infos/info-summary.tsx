@@ -1,5 +1,4 @@
 import { FC } from 'react';
-import { useParams } from 'next/navigation';
 import { FormattedDisplayName } from 'react-intl';
 
 import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/avatar';
@@ -7,10 +6,9 @@ import { CurrentTime } from '~/components/ui/current-time';
 import { api } from '~/utils/api';
 import { getInitials } from '~/utils/string';
 
-export const InfoSummary: FC = () => {
-  const params = useParams();
+export const InfoSummary: FC<{ ticketId: number }> = ({ ticketId }) => {
   const { data: ticketData } = api.ticket.byId.useQuery({
-    id: parseInt(params.id),
+    id: ticketId,
   });
 
   if (!ticketData) {

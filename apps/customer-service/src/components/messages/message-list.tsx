@@ -13,9 +13,9 @@ import '~/components/messages/message-list.css';
 
 import { api } from '~/utils/api';
 
-export const MessageList: FC<{ id: number }> = ({ id }) => {
+export const MessageList: FC<{ ticketId: number }> = ({ ticketId }) => {
   const { data: messagesData } = api.message.all.useQuery({
-    ticketId: id,
+    ticketId: ticketId,
   });
 
   const groupedMessagesByDate =

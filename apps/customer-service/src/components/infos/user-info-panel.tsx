@@ -1,5 +1,4 @@
 import { FC } from 'react';
-import { useParams } from 'next/navigation';
 import { Mail, Phone } from 'lucide-react';
 import { FormattedMessage } from 'react-intl';
 
@@ -13,10 +12,9 @@ const user = {
   },
 };
 
-export const UserInfoPanel: FC = () => {
-  const params = useParams();
+export const UserInfoPanel: FC<{ ticketId: number }> = ({ ticketId }) => {
   const { data: ticketData } = api.ticket.byId.useQuery({
-    id: parseInt(params.id),
+    id: ticketId,
   });
 
   if (!ticketData) {

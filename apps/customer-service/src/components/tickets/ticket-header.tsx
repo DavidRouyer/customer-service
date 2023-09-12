@@ -2,8 +2,8 @@ import { FC } from 'react';
 
 import { api } from '~/utils/api';
 
-export const TicketHeader: FC<{ id: number }> = ({ id }) => {
-  const { data: ticketData } = api.ticket.byId.useQuery({ id: id });
+export const TicketHeader: FC<{ ticketId: number }> = ({ ticketId }) => {
+  const { data: ticketData } = api.ticket.byId.useQuery({ id: ticketId });
 
   return (
     <div className="border-b pb-5">
