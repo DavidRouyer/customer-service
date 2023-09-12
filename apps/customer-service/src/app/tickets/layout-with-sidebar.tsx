@@ -6,7 +6,7 @@ import { AlignJustify } from 'lucide-react';
 import { FormattedMessage } from 'react-intl';
 
 import { Logo } from '~/components/logo';
-import { AgentList } from '~/components/team-members/team-members-list';
+import { TeamMemberList } from '~/components/team-members/team-members-list';
 import {
   Accordion,
   AccordionContent,
@@ -63,7 +63,7 @@ const useNavigationLinks = () => {
               <FormattedMessage id="layout.team" />
             </AccordionTrigger>
             <AccordionContent>
-              <AgentList />
+              <TeamMemberList />
             </AccordionContent>
           </AccordionItem>
         </Accordion>

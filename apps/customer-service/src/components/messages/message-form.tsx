@@ -31,7 +31,9 @@ export const MessageForm: FC<{ ticketId: number }> = ({ ticketId }) => {
       await utils.message.all.cancel({ ticketId: ticketId });
 
       // Snapshot the previous value
-      const previousMessages = utils.message.all.getData({ ticketId: id });
+      const previousMessages = utils.message.all.getData({
+        ticketId: ticketId,
+      });
 
       // Optimistically update to the new value
       utils.message.all.setData(
@@ -67,7 +69,7 @@ export const MessageForm: FC<{ ticketId: number }> = ({ ticketId }) => {
       );
     },
     onSettled: () => {
-      void utils.message.all.invalidate({ ticketId: id });
+      void utils.message.all.invalidate({ ticketId: ticketId });
     },
   });
   const form = useForm<MessageFormSchema>();

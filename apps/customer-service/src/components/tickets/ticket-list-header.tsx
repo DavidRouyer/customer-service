@@ -50,8 +50,8 @@ export const TicketListHeader: FC = () => {
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button
-            variant="ghost"
-            className="flex items-center justify-between gap-x-1 px-0 text-sm leading-6"
+            variant="secondary"
+            className="flex items-center justify-between gap-x-1 text-sm leading-6"
           >
             <FormattedMessage id="ticket.sort_by.newest" />
             <ChevronDown className="h-5 w-5" />

@@ -87,3 +87,7 @@
       'calt' 1;
   }
 }
+
+.no-scrollbar::-webkit-scrollbar {
+  @apply w-0;
+}

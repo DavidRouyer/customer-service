@@ -18,6 +18,8 @@
   "text_editor.attach_files": "Joindre des fichiers",
   "text_editor.placeholder": "Écrivez votre réponse ici ...",
   "text_editor.send": "Envoyer",
+  "ticket.actions.assign_to": "Assigner",
+  "ticket.actions.remove_assignment": "Retirer",
   "ticket.opened_on": "Ouvert le",
   "ticket.resolved_on": "Résolu le",
   "ticket.sort_by.newest": "Plus récent",

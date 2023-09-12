@@ -48,6 +48,28 @@ export const ticketRouter = createTRPCRouter({
       });
     }),
 
+  assign: protectedProcedure
+    .input(z.object({ id: z.number(), contactId: z.number() }))
+    .mutation(({ ctx, input }) => {
+      return ctx.db
+        .update(schema.tickets)
+        .set({
+          assignedToId: input.contactId,
+        })
+        .where(eq(schema.tickets.id, input.id));
+    }),
+
+  removeAssignment: protectedProcedure
+    .input(z.object({ id: z.number() }))
+    .mutation(({ ctx, input }) => {
+      return ctx.db
+        .update(schema.tickets)
+        .set({
+          assignedToId: null,
+        })
+        .where(eq(schema.tickets.id, input.id));
+    }),
+
   /*create: protectedProcedure
     .input(
       z.object({
