@@ -12,6 +12,7 @@ import { FormattedMessage } from 'react-intl';
 import editorConfig from '~/components/text-editor/editorConfig';
 import EmoticonPlugin from '~/components/text-editor/plugins/emoticon-plugin';
 import MyCustomAutoFocusPlugin from '~/components/text-editor/plugins/my-custom-auto-focus-plugin';
+import MyCustomCommandHandlerPlugin from '~/components/text-editor/plugins/my-custom-command-handler-plugin';
 import MyCustomOnChangePlugin from '~/components/text-editor/plugins/my-custom-on-change-plugin';
 import MyCustomValuePlugin from '~/components/text-editor/plugins/my-custom-value-plugin';
 
@@ -40,6 +41,7 @@ export const TextEditor: FC<TextEditorProps> = ({ value, onChange }) => {
         <EmoticonPlugin />
         <ClearEditorPlugin />
         <MyCustomAutoFocusPlugin />
+        <MyCustomCommandHandlerPlugin />
       </div>
     </LexicalComposer>
   );
