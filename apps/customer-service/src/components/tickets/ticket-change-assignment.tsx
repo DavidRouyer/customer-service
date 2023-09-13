@@ -123,7 +123,7 @@ export const TicketChangeAssignment: FC<TicketChangeAssignmentProps> = ({
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         <DropdownMenuGroup>
-          {assignedTo && (
+          {assignedTo ? (
             <DropdownMenuItem
               onClick={() =>
                 removeAssignmentTicket({
@@ -135,7 +135,7 @@ export const TicketChangeAssignment: FC<TicketChangeAssignmentProps> = ({
               <XCircle className="h-5 w-5" />
               <FormattedMessage id="ticket.actions.remove_assignment" />
             </DropdownMenuItem>
-          )}
+          ) : null}
           {contactsData
             ?.filter((contact) => contact.id !== assignedTo?.id)
             ?.map((contact) => (

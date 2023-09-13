@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import Link from 'next/link';
-import { useSearchParams } from 'next/navigation';
+import { usePathname, useSearchParams } from 'next/navigation';
 
 import { RouterOutputs } from '@cs/api';
 
@@ -13,12 +13,17 @@ export type TicketListItemProps = {
 };
 
 export const TicketListItem: FC<TicketListItemProps> = ({ ticket }) => {
+  const pathname = usePathname();
   const searchParams = useSearchParams();
+
   return (
-    <section key={ticket.id}>
+    <section
+      key={ticket.id}
+      className={pathname === `/tickets/${ticket.id}` ? 'bg-muted' : ''}
+    >
       <Link
         href={`/tickets/${ticket.id}${searchParams.toString()}`}
-        className="flex gap-x-4 py-5"
+        className="mx-4 flex gap-x-4 border-b py-5 last:border-0 sm:mx-6"
       >
         <Avatar className="h-12 w-12">
           <AvatarImage

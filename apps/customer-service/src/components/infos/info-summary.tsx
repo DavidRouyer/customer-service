@@ -34,24 +34,24 @@ export const InfoSummary: FC<{ ticketId: number }> = ({ ticketId }) => {
             </a>
           </p>
           <p className="flex items-center gap-x-2 text-xs leading-5 text-muted-foreground">
-            {ticketData.author.language && (
+            {ticketData.author.language ? (
               <span>
                 <FormattedDisplayName
                   value={ticketData.author.language.substring(0, 2)}
                   type="language"
                 />
               </span>
-            )}
-            {ticketData.author.language && ticketData.author.timezone && (
+            ) : null}
+            {ticketData.author.language && ticketData.author.timezone ? (
               <svg viewBox="0 0 2 2" className="h-0.5 w-0.5 fill-current">
                 <circle cx={1} cy={1} r={1} />
               </svg>
-            )}
-            {ticketData.author.timezone && (
+            ) : null}
+            {ticketData.author.timezone ? (
               <span>
                 <CurrentTime timezone={ticketData.author.timezone} />
               </span>
-            )}
+            ) : null}
           </p>
         </div>
       </div>

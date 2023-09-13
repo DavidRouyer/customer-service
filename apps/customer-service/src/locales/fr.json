@@ -28,6 +28,8 @@
   "ticket.sort_by.oldest": "Plus ancien",
   "ticket.statuses.open": "Ouvert",
   "ticket.statuses.resolved": "Résolu",
+  "tickets.all_tickets_processed": "Tous les tickets ont été traités !",
+  "tickets.no_tickets": "Aucun ticket",
   "user.email": "Adresse e-mail",
   "user.phone": "Téléphone",
   "user.platform": "Plateforme"
