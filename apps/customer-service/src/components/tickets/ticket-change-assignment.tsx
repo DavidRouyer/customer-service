@@ -29,7 +29,7 @@ export const TicketChangeAssignment: FC<TicketChangeAssignmentProps> = ({
 
   const { data: contactsData } = api.contact.allWithUserId.useQuery();
 
-  const { mutateAsync: assignTicket } = api.ticket.assign.useMutation({
+  const { mutateAsync: addAssignment } = api.ticket.addAssignment.useMutation({
     onMutate: async (newAssignment) => {
       // Cancel any outgoing refetches
       // (so they don't overwrite our optimistic update)
@@ -63,7 +63,42 @@ export const TicketChangeAssignment: FC<TicketChangeAssignmentProps> = ({
     },
   });
 
-  const { mutateAsync: removeAssignmentTicket } =
+  const { mutateAsync: changeAssignment } =
+    api.ticket.changeAssignment.useMutation({
+      onMutate: async (newAssignment) => {
+        // Cancel any outgoing refetches
+        // (so they don't overwrite our optimistic update)
+        await utils.ticket.byId.cancel({ id: ticketId });
+
+        // Snapshot the previous value
+        const previousTicket = utils.ticket.byId.getData({ id: ticketId });
+
+        // Optimistically update to the new value
+        utils.ticket.byId.setData(
+          { id: ticketId },
+          (oldQueryData) =>
+            ({
+              ...oldQueryData,
+              assignedToId: newAssignment.contactId,
+              assignedTo: contactsData?.find(
+                (contact) => contact.id === newAssignment.contactId
+              ),
+            }) as NonNullable<RouterOutputs['ticket']['byId']>
+        );
+
+        // Return a context object with the snapshotted value
+        return { previousTicket: previousTicket };
+      },
+      onError: (err, _newTicket, context) => {
+        // TODO: handle failed queries
+        utils.ticket.byId.setData({ id: ticketId }, context?.previousTicket);
+      },
+      onSettled: () => {
+        void utils.ticket.byId.invalidate({ id: ticketId });
+      },
+    });
+
+  const { mutateAsync: removeAssignment } =
     api.ticket.removeAssignment.useMutation({
       onMutate: async () => {
         // Cancel any outgoing refetches
@@ -126,7 +161,7 @@ export const TicketChangeAssignment: FC<TicketChangeAssignmentProps> = ({
           {assignedTo ? (
             <DropdownMenuItem
               onClick={() =>
-                removeAssignmentTicket({
+                removeAssignment({
                   id: ticketId,
                 })
               }
@@ -141,12 +176,19 @@ export const TicketChangeAssignment: FC<TicketChangeAssignmentProps> = ({
             ?.map((contact) => (
               <DropdownMenuItem
                 key={contact.id}
-                onClick={() =>
-                  assignTicket({
-                    id: ticketId,
-                    contactId: contact.id,
-                  })
-                }
+                onClick={() => {
+                  if (assignedTo) {
+                    changeAssignment({
+                      id: ticketId,
+                      contactId: contact.id,
+                    });
+                  } else {
+                    addAssignment({
+                      id: ticketId,
+                      contactId: contact.id,
+                    });
+                  }
+                }}
               >
                 <div className="flex items-center gap-x-2">
                   <Avatar className="h-5 w-5">

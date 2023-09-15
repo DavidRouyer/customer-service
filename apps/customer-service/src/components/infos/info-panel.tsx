@@ -65,7 +65,7 @@ export const InfoPanel: FC = () => {
               <FormattedMessage id="info_panel.activity" />
             </AccordionTrigger>
             <AccordionContent>
-              <ActivityPanel />
+              <ActivityPanel ticketId={ticketId} />
             </AccordionContent>
           </AccordionItem>
         </Accordion>

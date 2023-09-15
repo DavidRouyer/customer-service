@@ -3,6 +3,12 @@ import { z } from 'zod';
 
 import { and, asc, desc, eq, isNull, not, schema } from '@cs/database';
 import { TicketStatus } from '@cs/database/schema/ticket';
+import {
+  TicketActivityType,
+  TicketAssignmentAdded,
+  TicketAssignmentChanged,
+  TicketAssignmentRemoved,
+} from '@cs/database/schema/ticketActivity';
 
 import { createTRPCRouter, protectedProcedure } from '../trpc';
 
@@ -58,7 +64,7 @@ export const ticketRouter = createTRPCRouter({
       });
     }),
 
-  assign: protectedProcedure
+  addAssignment: protectedProcedure
     .input(z.object({ id: z.number(), contactId: z.number() }))
     .mutation(async ({ ctx, input }) => {
       const ticket = await ctx.db.query.tickets.findFirst({
@@ -71,18 +77,98 @@ export const ticketRouter = createTRPCRouter({
           message: 'Ticket not found',
         });
 
+      if (ticket.assignedToId)
+        throw new TRPCError({
+          code: 'BAD_REQUEST',
+          message: 'Ticket is already assigned',
+        });
+
+      return await ctx.db.transaction(async (tx) => {
+        const updatedTicket = await tx
+          .update(schema.tickets)
+          .set({
+            assignedToId: input.contactId,
+            updatedAt: new Date(),
+          })
+          .where(eq(schema.tickets.id, input.id))
+          .returning({
+            id: schema.tickets.id,
+            updatedAt: schema.tickets.updatedAt,
+          })
+          .then((res) => res[0]);
+
+        if (!updatedTicket) {
+          await tx.rollback();
+          return;
+        }
+
+        await tx.insert(schema.ticketActivities).values({
+          ticketId: input.id,
+          authorId: ctx.session.user.contactId ?? 0,
+          type: TicketActivityType.AssignmentAdded,
+          extraInfo: {
+            newAssignedToId: input.contactId,
+          } satisfies TicketAssignmentAdded,
+          createdAt: updatedTicket.updatedAt ?? new Date(),
+        });
+      });
+    }),
+
+  changeAssignment: protectedProcedure
+    .input(z.object({ id: z.number(), contactId: z.number() }))
+    .mutation(async ({ ctx, input }) => {
+      const ticket = await ctx.db.query.tickets.findFirst({
+        where: eq(schema.tickets.id, input.id),
+      });
+
+      if (!ticket)
+        throw new TRPCError({
+          code: 'BAD_REQUEST',
+          message: 'Ticket not found',
+        });
+
+      if (!ticket.assignedToId)
+        throw new TRPCError({
+          code: 'BAD_REQUEST',
+          message: 'Ticket is not assigned to anybody',
+        });
+
       if (ticket.assignedToId === input.contactId)
         throw new TRPCError({
           code: 'BAD_REQUEST',
           message: 'Ticket is already assigned to the contact',
         });
 
-      return ctx.db
-        .update(schema.tickets)
-        .set({
-          assignedToId: input.contactId,
-        })
-        .where(eq(schema.tickets.id, input.id));
+      return await ctx.db.transaction(async (tx) => {
+        const updatedTicket = await tx
+          .update(schema.tickets)
+          .set({
+            assignedToId: input.contactId,
+            updatedAt: new Date(),
+          })
+          .where(eq(schema.tickets.id, input.id))
+          .returning({
+            id: schema.tickets.id,
+            updatedAt: schema.tickets.updatedAt,
+          })
+          .then((res) => res[0]);
+
+        if (!updatedTicket) {
+          await tx.rollback();
+          return;
+        }
+
+        await tx.insert(schema.ticketActivities).values({
+          ticketId: input.id,
+          authorId: ctx.session.user.contactId ?? 0,
+          type: TicketActivityType.AssignmentChanged,
+          extraInfo: {
+            oldAssignedToId: ticket.assignedToId ?? 0,
+            newAssignedToId: input.contactId,
+          } satisfies TicketAssignmentChanged,
+          createdAt: updatedTicket.updatedAt ?? new Date(),
+        });
+      });
     }),
 
   removeAssignment: protectedProcedure
@@ -104,12 +190,35 @@ export const ticketRouter = createTRPCRouter({
           message: 'Ticket is already assigned to nobody',
         });
 
-      return ctx.db
-        .update(schema.tickets)
-        .set({
-          assignedToId: null,
-        })
-        .where(eq(schema.tickets.id, input.id));
+      return await ctx.db.transaction(async (tx) => {
+        const updatedTicket = await tx
+          .update(schema.tickets)
+          .set({
+            assignedToId: null,
+            updatedAt: new Date(),
+          })
+          .where(eq(schema.tickets.id, input.id))
+          .returning({
+            id: schema.tickets.id,
+            updatedAt: schema.tickets.updatedAt,
+          })
+          .then((res) => res[0]);
+
+        if (!updatedTicket) {
+          await tx.rollback();
+          return;
+        }
+
+        await tx.insert(schema.ticketActivities).values({
+          ticketId: input.id,
+          authorId: ctx.session.user.contactId ?? 0,
+          type: TicketActivityType.AssignmentRemoved,
+          extraInfo: {
+            oldAssignedToId: ticket.assignedToId ?? 0,
+          } satisfies TicketAssignmentRemoved,
+          createdAt: updatedTicket.updatedAt ?? new Date(),
+        });
+      });
     }),
 
   resolve: protectedProcedure
@@ -131,12 +240,33 @@ export const ticketRouter = createTRPCRouter({
           message: 'Ticket is already resolved',
         });
 
-      return ctx.db
-        .update(schema.tickets)
-        .set({
-          status: TicketStatus.Resolved,
-        })
-        .where(eq(schema.tickets.id, input.id));
+      return await ctx.db.transaction(async (tx) => {
+        const updatedTicket = await tx
+          .update(schema.tickets)
+          .set({
+            status: TicketStatus.Resolved,
+            resolvedAt: new Date(),
+            updatedAt: new Date(),
+          })
+          .where(eq(schema.tickets.id, input.id))
+          .returning({
+            id: schema.tickets.id,
+            updatedAt: schema.tickets.updatedAt,
+          })
+          .then((res) => res[0]);
+
+        if (!updatedTicket) {
+          await tx.rollback();
+          return;
+        }
+
+        await tx.insert(schema.ticketActivities).values({
+          ticketId: input.id,
+          authorId: ctx.session.user.contactId ?? 0,
+          type: TicketActivityType.Resolved,
+          createdAt: updatedTicket.updatedAt ?? new Date(),
+        });
+      });
     }),
 
   reopen: protectedProcedure
@@ -158,26 +288,73 @@ export const ticketRouter = createTRPCRouter({
           message: 'Ticket is already reopened',
         });
 
-      return ctx.db
-        .update(schema.tickets)
-        .set({
-          status: TicketStatus.Open,
-        })
-        .where(eq(schema.tickets.id, input.id));
+      return await ctx.db.transaction(async (tx) => {
+        const updatedTicket = await tx
+          .update(schema.tickets)
+          .set({
+            status: TicketStatus.Open,
+            resolvedAt: null,
+            updatedAt: new Date(),
+          })
+          .where(eq(schema.tickets.id, input.id))
+          .returning({
+            id: schema.tickets.id,
+            updatedAt: schema.tickets.updatedAt,
+          })
+          .then((res) => res[0]);
+
+        if (!updatedTicket) {
+          await tx.rollback();
+          return;
+        }
+
+        await tx.insert(schema.ticketActivities).values({
+          ticketId: input.id,
+          authorId: ctx.session.user.contactId ?? 0,
+          type: TicketActivityType.Reopened,
+          createdAt: updatedTicket.updatedAt ?? new Date(),
+        });
+      });
     }),
 
-  /*create: protectedProcedure
+  create: protectedProcedure
     .input(
       z.object({
         title: z.string().min(1),
         content: z.string().min(1),
+        authorId: z.number(),
       })
     )
-    .mutation(({ ctx, input }) => {
-      return ctx.db.insert(schema.ticket).values(input);
-    }),
+    .mutation(async ({ ctx, input }) => {
+      return await ctx.db.transaction(async (tx) => {
+        const newTicket = await tx
+          .insert(schema.tickets)
+          .values({
+            ...input,
+            status: TicketStatus.Open,
+            createdAt: new Date(),
+          })
+          .returning({
+            id: schema.tickets.id,
+            createdAt: schema.tickets.createdAt,
+          })
+          .then((res) => res[0]);
 
-  delete: publicProcedure.input(z.number()).mutation(({ ctx, input }) => {
-    return ctx.db.delete(schema.ticket).where(eq(schema.ticket.id, input));
-  }),*/
+        if (!newTicket) {
+          await tx.rollback();
+          return;
+        }
+
+        await tx.insert(schema.ticketActivities).values({
+          ticketId: newTicket.id,
+          authorId: input.authorId,
+          type: TicketActivityType.Created,
+          createdAt: newTicket.createdAt,
+        });
+
+        return {
+          id: newTicket.id,
+        };
+      });
+    }),
 });

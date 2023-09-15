@@ -1,15 +1,25 @@
-import { neon } from '@neondatabase/serverless';
-import { drizzle } from 'drizzle-orm/neon-http';
+import { Pool } from '@neondatabase/serverless';
+import { drizzle } from 'drizzle-orm/neon-serverless';
 
 import * as auth from './schema/auth';
 import * as contact from './schema/contact';
 import * as message from './schema/message';
 import * as ticket from './schema/ticket';
+import * as ticketActivities from './schema/ticketActivity';
 
-export const schema = { ...auth, ...contact, ...message, ...ticket };
+export const schema = {
+  ...auth,
+  ...contact,
+  ...message,
+  ...ticket,
+  ...ticketActivities,
+};
 
 export { pgTable as tableCreator } from './schema/_table';
 
 export * from 'drizzle-orm';
 
-export const db = drizzle(neon(process.env.DATABASE_URL!), { schema });
+export const db = drizzle(
+  new Pool({ connectionString: process.env.DATABASE_URL }),
+  { schema }
+);

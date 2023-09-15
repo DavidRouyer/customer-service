@@ -20,6 +20,7 @@ export const tickets = pgTable('Ticket', {
   createdAt: timestamp('createdAt', { precision: 3, mode: 'date' })
     .defaultNow()
     .notNull(),
+  updatedAt: timestamp('updatedAt', { precision: 3, mode: 'date' }),
   resolvedAt: timestamp('resolvedAt', { precision: 3, mode: 'date' }),
   content: text('content'),
   status: ticketStatus('status').notNull(),

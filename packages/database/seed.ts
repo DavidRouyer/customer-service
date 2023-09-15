@@ -1,3 +1,6 @@
+import { neonConfig } from '@neondatabase/serverless';
+import ws from 'ws';
+
 import { db, schema } from '.';
 import {
   MessageContentType,
@@ -5,6 +8,12 @@ import {
   MessageStatus,
 } from './schema/message';
 import { TicketStatus } from './schema/ticket';
+import {
+  TicketActivityType,
+  TicketAssignmentAdded,
+} from './schema/ticketActivity';
+
+neonConfig.webSocketConstructor = ws;
 
 async function main() {
   await db.insert(schema.contacts).values({
@@ -88,10 +97,25 @@ async function main() {
       authorId: leslie.id,
       assignedToId: tom.id,
     })
-    .returning({ id: schema.tickets.id })
+    .returning({ id: schema.tickets.id, createdAt: schema.tickets.createdAt })
     .then((res) => res[0]);
 
   if (!leslieTicket?.id) throw new Error('Could not create ticket');
+
+  await db.insert(schema.ticketActivities).values({
+    ticketId: leslieTicket.id,
+    authorId: leslie.id,
+    type: TicketActivityType.Created,
+    createdAt: leslieTicket.createdAt,
+  });
+
+  await db.insert(schema.ticketActivities).values({
+    ticketId: leslieTicket.id,
+    authorId: tom.id,
+    type: TicketActivityType.AssignmentAdded,
+    extraInfo: { newAssignedToId: tom.id } satisfies TicketAssignmentAdded,
+    createdAt: new Date('2023-05-20T20:54:41.389Z'),
+  });
 
   await db
     .insert(schema.messages)
@@ -126,10 +150,17 @@ async function main() {
       createdAt: new Date('2023-05-06T11:23:45.389Z'),
       authorId: leslie.id,
     })
-    .returning({ id: schema.tickets.id })
+    .returning({ id: schema.tickets.id, createdAt: schema.tickets.createdAt })
     .then((res) => res[0]);
 
   if (!leslieTicket2?.id) throw new Error('Could not create ticket');
+
+  await db.insert(schema.ticketActivities).values({
+    ticketId: leslieTicket2.id,
+    authorId: leslie.id,
+    type: TicketActivityType.Created,
+    createdAt: leslieTicket2.createdAt,
+  });
 
   const leslieTicket3 = await db
     .insert(schema.tickets)
@@ -140,10 +171,28 @@ async function main() {
       resolvedAt: new Date('2023-06-12T06:10:45.389Z'),
       authorId: leslie.id,
     })
-    .returning({ id: schema.tickets.id })
+    .returning({
+      id: schema.tickets.id,
+      createdAt: schema.tickets.createdAt,
+      resolvedAt: schema.tickets.resolvedAt,
+    })
     .then((res) => res[0]);
 
   if (!leslieTicket3?.id) throw new Error('Could not create ticket');
+
+  await db.insert(schema.ticketActivities).values({
+    ticketId: leslieTicket3.id,
+    authorId: leslie.id,
+    type: TicketActivityType.Created,
+    createdAt: leslieTicket3.createdAt,
+  });
+
+  await db.insert(schema.ticketActivities).values({
+    ticketId: leslieTicket3.id,
+    authorId: leslie.id,
+    type: TicketActivityType.Resolved,
+    createdAt: leslieTicket3.resolvedAt ?? new Date(),
+  });
 
   const michael = await db
     .insert(schema.contacts)
@@ -166,10 +215,17 @@ async function main() {
       createdAt: new Date('2023-03-03T14:02Z'),
       authorId: michael.id,
     })
-    .returning({ id: schema.tickets.id })
+    .returning({ id: schema.tickets.id, createdAt: schema.tickets.createdAt })
     .then((res) => res[0]);
 
   if (!michaelTicket?.id) throw new Error('Could not create ticket');
+
+  await db.insert(schema.ticketActivities).values({
+    ticketId: michaelTicket.id,
+    authorId: michael.id,
+    type: TicketActivityType.Created,
+    createdAt: michaelTicket.createdAt,
+  });
 
   await db
     .insert(schema.messages)
@@ -217,10 +273,17 @@ async function main() {
       createdAt: new Date('2023-03-03T13:23Z'),
       authorId: dries.id,
     })
-    .returning({ id: schema.tickets.id })
+    .returning({ id: schema.tickets.id, createdAt: schema.tickets.createdAt })
     .then((res) => res[0]);
 
   if (!driesTicket?.id) throw new Error('Could not create ticket');
+
+  await db.insert(schema.ticketActivities).values({
+    ticketId: driesTicket.id,
+    authorId: dries.id,
+    type: TicketActivityType.Created,
+    createdAt: driesTicket.createdAt,
+  });
 
   await db
     .insert(schema.messages)
@@ -272,7 +335,7 @@ async function main() {
       createdAt: new Date('2023-03-02T21:13Z'),
       authorId: lindsay.id,
     })
-    .returning({ id: schema.tickets.id })
+    .returning({ id: schema.tickets.id, createdAt: schema.tickets.createdAt })
     .then((res) => res[0]);
 
   if (!lindsayTicket?.id) throw new Error('Could not create ticket');
@@ -301,5 +364,13 @@ async function main() {
       },
     ])
     .returning({ id: schema.tickets.id });
+
+  await db.insert(schema.ticketActivities).values({
+    ticketId: lindsayTicket.id,
+    authorId: lindsay.id,
+    type: TicketActivityType.Created,
+    createdAt: lindsayTicket.createdAt,
+  });
 }
+
 main();

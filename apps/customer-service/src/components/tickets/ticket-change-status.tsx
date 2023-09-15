@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { BookOpenCheck, HardDriveUpload, Vote } from 'lucide-react';
+import { BookOpenCheck, HardDriveUpload } from 'lucide-react';
 import { FormattedMessage } from 'react-intl';
 
 import { RouterOutputs } from '@cs/api';
