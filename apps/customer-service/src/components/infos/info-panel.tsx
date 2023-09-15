@@ -1,7 +1,6 @@
 'use client';
 
 import { FC } from 'react';
-import { useParams } from 'next/navigation';
 import { FormattedMessage } from 'react-intl';
 
 import { ActivityPanel } from '~/components/infos/activity-panel';
@@ -16,17 +15,12 @@ import {
 } from '~/components/ui/accordion';
 import { api } from '~/utils/api';
 
-export const InfoPanel: FC = () => {
-  const params = useParams();
-  const ticketId = parseInt(params.id ?? '');
-  const { data: ticketData } = api.ticket.byId.useQuery(
-    {
-      id: ticketId,
-    },
-    {
-      enabled: !!ticketId,
-    }
-  );
+export const InfoPanel: FC<{
+  ticketId: number;
+}> = ({ ticketId }) => {
+  const [ticketData] = api.ticket.byId.useSuspenseQuery({
+    id: ticketId,
+  });
 
   if (!ticketData) {
     return null;
@@ -51,7 +45,7 @@ export const InfoPanel: FC = () => {
           </AccordionItem>
           <AccordionItem value="item-1">
             <AccordionTrigger>
-              <FormattedMessage id="info_panel.conversations" />
+              <FormattedMessage id="info_panel.recent_conversations" />
             </AccordionTrigger>
             <AccordionContent>
               <LinkedTicketsPanel

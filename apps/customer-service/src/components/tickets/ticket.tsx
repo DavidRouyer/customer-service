@@ -10,7 +10,7 @@ import { api } from '~/utils/api';
 export const Ticket: FC<{
   ticketId: number;
 }> = ({ ticketId }) => {
-  const { data: ticketData } = api.ticket.byId.useQuery({ id: ticketId });
+  const [ticketData] = api.ticket.byId.useSuspenseQuery({ id: ticketId });
 
   if (!ticketData) return null;
 
