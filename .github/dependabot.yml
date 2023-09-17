@@ -17,6 +17,10 @@ updates:
       trpc:
         patterns:
           - '@trpc*'
+      turbo:
+        patterns:
+          - 'turbo'
+          - 'eslint-config-turbo'
       typescript-eslint:
         patterns:
           - '@typescript-eslint*'
