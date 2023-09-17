@@ -33,7 +33,7 @@
     "vitest": "^0.34.4"
   },
   "resolutions": {
-    "@auth/core": "0.14.0"
+    "@auth/core": "0.15.0"
   },
   "prettier": "@acme/prettier-config"
 }
