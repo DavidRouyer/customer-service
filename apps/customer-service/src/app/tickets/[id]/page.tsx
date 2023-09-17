@@ -29,11 +29,9 @@ export default async function TicketPage({
 
       <main className="lg:pl-60">
         <div className="xl:mr-96 xl:h-[100dvh] xl:overflow-y-auto xl:pl-96">
-          <div className="flex h-[100dvh] flex-col px-4 py-6 sm:px-6">
-            <Suspense fallback={null}>
-              <Ticket ticketId={ticketId} />
-            </Suspense>
-          </div>
+          <Suspense fallback={null}>
+            <Ticket ticketId={ticketId} />
+          </Suspense>
         </div>
       </main>
     </>

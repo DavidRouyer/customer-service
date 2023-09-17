@@ -1,6 +1,8 @@
 'use client';
 
-import { createContext, FC, RefObject, useRef } from 'react';
+import { createContext, FC, RefObject, useRef, useState } from 'react';
+import { type PutBlobResult } from '@vercel/blob';
+import { upload } from '@vercel/blob/client';
 import { PaperclipIcon, SmilePlusIcon } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
@@ -16,6 +18,7 @@ import { TextEditor } from '~/components/text-editor/text-editor';
 import { Button } from '~/components/ui/button';
 import { Message } from '~/types/Message';
 import { api } from '~/utils/api';
+import { useAttachment } from '~/utils/useAttachment';
 
 type MessageFormSchema = {
   content: string;
@@ -26,6 +29,8 @@ export const FormElementContext =
 
 export const MessageForm: FC<{ ticketId: number }> = ({ ticketId }) => {
   const formRef = useRef<HTMLFormElement>(null);
+  const inputFileRef = useRef<HTMLInputElement>(null);
+  const { draftAttachments, processAttachments } = useAttachment();
   const session = useSession();
   const utils = api.useContext();
   const { mutateAsync: sendMessage } = api.message.create.useMutation({
@@ -102,6 +107,20 @@ export const MessageForm: FC<{ ticketId: number }> = ({ ticketId }) => {
           className="relative"
         >
           <div className="overflow-hidden rounded-lg shadow-sm ring-1 ring-inset ring-border focus-within:ring-2 focus-within:ring-foreground">
+            {draftAttachments && (
+              <ul>
+                {draftAttachments.map((draftAttachment, index) => (
+                  <li key={index}>
+                    <a href={draftAttachment.uploadedFile?.url}>
+                      <img
+                        src={draftAttachment.uploadedFile?.url}
+                        className="h-20 w-20"
+                      />
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            )}
             <Controller
               name="content"
               control={form.control}
@@ -126,6 +145,21 @@ export const MessageForm: FC<{ ticketId: number }> = ({ ticketId }) => {
                   <span className="sr-only">
                     <FormattedMessage id="text_editor.attach_files" />
                   </span>
+                  <input
+                    name="file"
+                    ref={inputFileRef}
+                    type="file"
+                    onChange={async () => {
+                      if (inputFileRef.current?.files?.length) {
+                        const files = Array.from(inputFileRef.current.files);
+                        const errors = await processAttachments(
+                          ticketId,
+                          files
+                        );
+                        console.log('errors', errors);
+                      }
+                    }}
+                  />
                 </button>
               </div>
               <div className="flex items-center">
