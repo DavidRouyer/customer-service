@@ -5,13 +5,20 @@ import {
   useMemo,
   useState,
 } from 'react';
-import { type PutBlobResult } from '@vercel/blob';
 import { upload } from '@vercel/blob/client';
 
-import { AttachmentError, preProcessAttachment } from '~/utils/attachment';
+import {
+  AttachmentDraftType,
+  AttachmentError,
+  getPendingAttachment,
+  InMemoryAttachmentDraftType,
+  preProcessAttachment,
+  processAttachment,
+} from '~/utils/attachment';
 
 export type AttachmentContextType = {
-  draftAttachments: { file: File; uploadedFile?: PutBlobResult }[];
+  attachments: InMemoryAttachmentDraftType[];
+  draftAttachments: AttachmentDraftType[];
   processAttachments: (
     ticketId: number,
     files: readonly File[]
@@ -45,12 +52,14 @@ export const AttachmentProvider: React.FC<AttachmentProviderProps> = ({
   children,
 }) => {
   const [draftAttachments, setDraftAttachments] = useState<
-    { file: File; uploadedFile?: PutBlobResult }[]
+    AttachmentDraftType[]
   >([]);
+  const [attachments, setAttachments] = useState<InMemoryAttachmentDraftType[]>(
+    []
+  );
 
   const processAttachments = useCallback(
     async (ticketId: number, files: readonly File[]) => {
-      console.log('processAttachments', ticketId, files);
       if (!files.length) {
         return;
       }
@@ -62,8 +71,14 @@ export const AttachmentProvider: React.FC<AttachmentProviderProps> = ({
         if (preProcessResult) {
           return preProcessResult;
         } else {
-          filesToProcess.push(file);
-          setDraftAttachments([...draftAttachments, { file }]);
+          const pendingAttachment = getPendingAttachment(file);
+          if (pendingAttachment) {
+            filesToProcess.push(file);
+            setDraftAttachments((oldDraftAttachments) => [
+              ...oldDraftAttachments,
+              pendingAttachment,
+            ]);
+          }
         }
       }
 
@@ -71,14 +86,27 @@ export const AttachmentProvider: React.FC<AttachmentProviderProps> = ({
 
       await Promise.all(
         filesToProcess.map(async (file) => {
+          const attachment = await processAttachment(file, {
+            generateScreenshot: true,
+          });
+
+          setAttachments((oldAttachments) => [...oldAttachments, attachment]);
+
           const newBlob = await upload(file.name, file, {
             access: 'public',
             handleUploadUrl: '/api/message/upload',
           });
 
-          setDraftAttachments([
-            ...draftAttachments.filter((f) => f.file !== file),
-            { file, uploadedFile: newBlob },
+          const attachmentWithUrl = {
+            ...attachment,
+            url: newBlob.url,
+          };
+          console.log('attachmentWithUrl', attachmentWithUrl);
+          setAttachments((oldAttachments) => [
+            ...oldAttachments.filter(
+              (attach) => attach.fileName !== attachment.fileName
+            ),
+            attachmentWithUrl,
           ]);
         })
       );
@@ -88,10 +116,11 @@ export const AttachmentProvider: React.FC<AttachmentProviderProps> = ({
 
   const contextValue = useMemo<AttachmentContextType>(() => {
     return {
+      attachments,
       draftAttachments,
       processAttachments,
     };
-  }, [draftAttachments, processAttachments]);
+  }, [attachments, draftAttachments, processAttachments]);
 
   return (
     <AttachmentContext.Provider value={contextValue}>

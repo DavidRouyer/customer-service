@@ -2,7 +2,7 @@
 
 import { FC, useCallback } from 'react';
 
-import { useAttachment } from '~/utils/useAttachment';
+import { useAttachment } from '~/utils/use-attachment';
 
 export const TicketContainer: FC<{
   ticketId: number;

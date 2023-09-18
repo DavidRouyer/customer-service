@@ -7,7 +7,7 @@ import { MessageList } from '~/components/messages/message-list';
 import { TicketContainer } from '~/components/tickets/ticket-container';
 import { TicketHeader } from '~/components/tickets/ticket-header';
 import { api } from '~/utils/api';
-import { AttachmentProvider } from '~/utils/useAttachment';
+import { AttachmentProvider } from '~/utils/use-attachment';
 
 export const Ticket: FC<{
   ticketId: number;

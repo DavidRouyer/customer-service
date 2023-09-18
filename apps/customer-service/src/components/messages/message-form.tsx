@@ -1,8 +1,6 @@
 'use client';
 
-import { createContext, FC, RefObject, useRef, useState } from 'react';
-import { type PutBlobResult } from '@vercel/blob';
-import { upload } from '@vercel/blob/client';
+import { createContext, FC, RefObject, useRef } from 'react';
 import { PaperclipIcon, SmilePlusIcon } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
@@ -14,11 +12,12 @@ import {
   MessageStatus,
 } from '@cs/database/schema/message';
 
+import { AttachmentList } from '~/components/messages/attachment-list';
 import { TextEditor } from '~/components/text-editor/text-editor';
 import { Button } from '~/components/ui/button';
 import { Message } from '~/types/Message';
 import { api } from '~/utils/api';
-import { useAttachment } from '~/utils/useAttachment';
+import { useAttachment } from '~/utils/use-attachment';
 
 type MessageFormSchema = {
   content: string;
@@ -30,7 +29,7 @@ export const FormElementContext =
 export const MessageForm: FC<{ ticketId: number }> = ({ ticketId }) => {
   const formRef = useRef<HTMLFormElement>(null);
   const inputFileRef = useRef<HTMLInputElement>(null);
-  const { draftAttachments, processAttachments } = useAttachment();
+  const { processAttachments } = useAttachment();
   const session = useSession();
   const utils = api.useContext();
   const { mutateAsync: sendMessage } = api.message.create.useMutation({
@@ -101,26 +100,13 @@ export const MessageForm: FC<{ ticketId: number }> = ({ ticketId }) => {
   return (
     <FormElementContext.Provider value={formRef}>
       <FormProvider {...form}>
+        <AttachmentList />
         <form
           ref={formRef}
           onSubmit={form.handleSubmit(onSubmit)}
           className="relative"
         >
           <div className="overflow-hidden rounded-lg shadow-sm ring-1 ring-inset ring-border focus-within:ring-2 focus-within:ring-foreground">
-            {draftAttachments && (
-              <ul>
-                {draftAttachments.map((draftAttachment, index) => (
-                  <li key={index}>
-                    <a href={draftAttachment.uploadedFile?.url}>
-                      <img
-                        src={draftAttachment.uploadedFile?.url}
-                        className="h-20 w-20"
-                      />
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            )}
             <Controller
               name="content"
               control={form.control}
