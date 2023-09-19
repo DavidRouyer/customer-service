@@ -63,7 +63,6 @@ const MiB = 1024 * 1024;
 const DEFAULT_LEVEL_DATA = {
   maxDimensions: 1600,
   quality: 0.4,
-  size: MiB,
   thresholdSize: 0.2 * MiB,
 };
 const SCALABLE_DIMENSIONS = [3072, 2048, 1600, 1024, 768];
@@ -242,16 +241,7 @@ export async function scaleImageToLevel(
     throw error;
   }
 
-  const { maxDimensions, quality, size, thresholdSize } = DEFAULT_LEVEL_DATA;
-
-  if (fileOrBlobOrURL.size <= thresholdSize) {
-    // Always encode through canvas as a temporary fix for a library bug
-    const blob: Blob = await canvasToBlob(data.image, contentType);
-    return {
-      blob,
-      contentType,
-    };
-  }
+  const { maxDimensions, quality, thresholdSize } = DEFAULT_LEVEL_DATA;
 
   for (const element of SCALABLE_DIMENSIONS) {
     const scalableDimensions = element;
@@ -266,7 +256,8 @@ export async function scaleImageToLevel(
       scalableDimensions,
       quality
     );
-    if (blob.size <= size) {
+
+    if (blob.size <= thresholdSize) {
       return {
         blob,
         contentType: IMAGE_JPEG,

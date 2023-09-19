@@ -8,16 +8,15 @@ import {
 import { upload } from '@vercel/blob/client';
 
 import {
-  AttachmentDraftType,
   AttachmentError,
+  AttachmentType,
   getPendingAttachment,
-  InMemoryAttachmentDraftType,
   preProcessAttachment,
   processAttachment,
 } from '~/utils/attachment';
 
 export type AttachmentContextType = {
-  draftAttachments: (InMemoryAttachmentDraftType | AttachmentDraftType)[];
+  draftAttachments: AttachmentType[];
   processAttachments: (
     ticketId: number,
     files: readonly File[]
@@ -50,9 +49,9 @@ export type AttachmentProviderProps = {
 export const AttachmentProvider: React.FC<AttachmentProviderProps> = ({
   children,
 }) => {
-  const [draftAttachments, setDraftAttachments] = useState<
-    AttachmentDraftType[]
-  >([]);
+  const [draftAttachments, setDraftAttachments] = useState<AttachmentType[]>(
+    []
+  );
 
   const processAttachments = useCallback(
     async (ticketId: number, files: readonly File[]) => {
@@ -82,27 +81,33 @@ export const AttachmentProvider: React.FC<AttachmentProviderProps> = ({
         filesToProcess.map(async (file) => {
           const attachment = await processAttachment(file.id, file.file);
 
-          setDraftAttachments((oldAttachments) => [
-            ...oldAttachments.filter(
-              (oldAttachment) => oldAttachment.id !== attachment.id
-            ),
-            attachment,
-          ]);
+          setDraftAttachments((oldAttachments) => {
+            const updatedAttachments = [...oldAttachments];
+            const index = updatedAttachments.findIndex(
+              (a) => a.id === attachment.id
+            );
+            updatedAttachments[index] = attachment;
+            return updatedAttachments;
+          });
 
           const newBlob = await upload(file.file.name, file.file, {
             access: 'public',
             handleUploadUrl: '/api/message/upload',
           });
 
-          setDraftAttachments((oldAttachments) => [
-            ...oldAttachments.filter(
-              (oldAttachment) => oldAttachment.id !== attachment.id
-            ),
-            {
-              ...attachment,
-              url: newBlob.url,
-            },
-          ]);
+          setDraftAttachments((oldAttachments) => {
+            const updatedAttachments = [...oldAttachments];
+            const index = updatedAttachments.findIndex(
+              (a) => a.id === attachment.id
+            );
+            const updatedAttachment = updatedAttachments[index];
+            if (updatedAttachment)
+              updatedAttachments[index] = {
+                ...updatedAttachment,
+                url: newBlob.url,
+              };
+            return updatedAttachments;
+          });
         })
       );
     },

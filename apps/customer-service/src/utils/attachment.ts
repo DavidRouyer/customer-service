@@ -2,7 +2,7 @@ import { handleImageAttachment, isImageTypeSupported } from '~/utils/image';
 import { MIMEType, stringToMIMEType } from '~/utils/MIME';
 
 const MAX_FILE_SIZE = 5000;
-const MAX_ATTACHMENTS = 12;
+const MAX_ATTACHMENTS = 8;
 
 export type AttachmentType = {
   id: string;
@@ -19,47 +19,6 @@ export type AttachmentType = {
   height?: number;
   data?: Uint8Array;
 };
-
-export type BaseAttachmentDraftType = {
-  blurHash?: string;
-  contentType: MIMEType;
-  screenshotContentType?: string;
-  size: number;
-};
-
-export type InMemoryAttachmentDraftType =
-  | ({
-      data: Uint8Array;
-      pending: false;
-      fileName?: string;
-      preview?: string;
-      id: string;
-    } & BaseAttachmentDraftType)
-  | {
-      contentType: MIMEType;
-      fileName?: string;
-      id: string;
-      pending: true;
-      size: number;
-    };
-
-// What's stored in conversation.draftAttachments
-export type AttachmentDraftType =
-  | ({
-      url?: string;
-      pending: false;
-      fileName?: string;
-      id: string;
-      width?: number;
-      height?: number;
-    } & BaseAttachmentDraftType)
-  | {
-      contentType: MIMEType;
-      fileName?: string;
-      id: string;
-      pending: true;
-      size: number;
-    };
 
 export enum AttachmentError {
   FILE_TOO_LARGE,
@@ -94,10 +53,10 @@ export function fileToBytes(file: Blob): Promise<Uint8Array> {
 export const processAttachment = async (
   id: string,
   file: File
-): Promise<InMemoryAttachmentDraftType> => {
+): Promise<AttachmentType> => {
   const fileType = stringToMIMEType(file.type);
 
-  let attachment: InMemoryAttachmentDraftType;
+  let attachment: AttachmentType;
   try {
     if (isImageTypeSupported(fileType)) {
       attachment = await handleImageAttachment(id, file);
@@ -129,24 +88,11 @@ export const processAttachment = async (
   }
 
   return attachment;
-
-  /*try {
-    if (isAttachmentSizeOkay(attachment)) {
-      return attachment;
-    }
-  } catch (error) {
-    log.error(
-      'Error ensuring that image is properly sized:',
-      Errors.toLogFormat(error)
-    );
-
-    throw error;
-  }*/
 };
 
 export const preProcessAttachment = (
   file: File,
-  draftAttachments: AttachmentDraftType[]
+  draftAttachments: AttachmentType[]
 ) => {
   if (file.size / 1024 > MAX_FILE_SIZE)
     return {
@@ -168,7 +114,7 @@ export const preProcessAttachment = (
 
 export const getPendingAttachment = (
   file: File
-): AttachmentDraftType | undefined => {
+): AttachmentType | undefined => {
   if (!file) {
     return;
   }
