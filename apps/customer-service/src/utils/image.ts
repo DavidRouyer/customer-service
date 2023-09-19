@@ -62,7 +62,7 @@ async function getCanvasBlobAsJPEG(
 const MiB = 1024 * 1024;
 const DEFAULT_LEVEL_DATA = {
   maxDimensions: 1600,
-  quality: 0.7,
+  quality: 0.4,
   size: MiB,
   thresholdSize: 0.2 * MiB,
 };
@@ -149,6 +149,7 @@ const loadImageData = async (input: Input): Promise<ImageData> => {
 };
 
 export async function handleImageAttachment(
+  id: string,
   file: File
 ): Promise<InMemoryAttachmentDraftType> {
   const processedFile: File | Blob = file;
@@ -170,8 +171,11 @@ export async function handleImageAttachment(
     blurHash,
     contentType,
     data: new Uint8Array(data),
+    preview: `data:image/jpeg;base64,${btoa(
+      String.fromCharCode(...new Uint8Array(data))
+    )}`,
     fileName: fileName || file.name,
-    path: file.name,
+    id: id,
     pending: false,
     size: data.byteLength,
   };
@@ -196,8 +200,7 @@ export async function autoScale({
 
   const { blob, contentType: newContentType } = await scaleImageToLevel(
     file,
-    contentType,
-    true
+    contentType
   );
 
   if (newContentType !== IMAGE_JPEG) {
@@ -217,8 +220,7 @@ export async function autoScale({
 
 export async function scaleImageToLevel(
   fileOrBlobOrURL: File | Blob,
-  contentType: MIMEType,
-  sendAsHighQuality?: boolean
+  contentType: MIMEType
 ): Promise<{
   blob: Blob;
   contentType: MIMEType;

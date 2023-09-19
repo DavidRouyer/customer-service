@@ -1,39 +1,34 @@
 import { FC, Fragment } from 'react';
 
-import { Image } from '~/components/messages/image';
+import { AttachmentImage } from '~/components/messages/attachment-image';
 import { useAttachment } from '~/utils/use-attachment';
 
 const IMAGE_WIDTH = 120;
 const IMAGE_HEIGHT = 120;
 
 export const AttachmentList: FC = () => {
-  const { attachments, draftAttachments } = useAttachment();
+  const { draftAttachments } = useAttachment();
 
-  if (!attachments.length) {
+  if (!draftAttachments.length) {
     return null;
   }
 
-  console.log('draftAttachments', draftAttachments);
-  console.log('attachments', attachments);
-
   return (
-    attachments && (
-      <div className="flex">
-        {attachments.map((attachment, index) => {
-          const key = attachment.path || attachment.fileName || index;
+    draftAttachments && (
+      <div className="flex gap-2">
+        {draftAttachments.map((attachment) => {
           const imgElement = (
-            <Image
-              key={key}
+            <AttachmentImage
+              key={attachment.id}
               alt={''}
               className="module-staged-attachment"
               attachment={attachment}
               height={IMAGE_HEIGHT}
               width={IMAGE_WIDTH}
-              url={attachment.url}
               closeButton
             />
           );
-          return <Fragment key={key}>{imgElement}</Fragment>;
+          return <Fragment key={attachment.id}>{imgElement}</Fragment>;
         })}
       </div>
     )

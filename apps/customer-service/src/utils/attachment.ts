@@ -5,22 +5,18 @@ const MAX_FILE_SIZE = 5000;
 const MAX_ATTACHMENTS = 12;
 
 export type AttachmentType = {
+  id: string;
   error?: boolean;
   blurHash?: string;
   contentType: MIMEType;
   digest?: string;
   fileName?: string;
-  uploadTimestamp?: number;
-  /** For messages not already on disk, this will be a data url */
   url?: string;
   size: number;
   fileSize?: string;
   pending?: boolean;
   width?: number;
   height?: number;
-  path?: string;
-  flags?: number;
-  isCorrupted?: boolean;
   data?: Uint8Array;
 };
 
@@ -29,21 +25,20 @@ export type BaseAttachmentDraftType = {
   contentType: MIMEType;
   screenshotContentType?: string;
   size: number;
-  flags?: number;
 };
 
 export type InMemoryAttachmentDraftType =
   | ({
       data: Uint8Array;
       pending: false;
-      screenshotData?: Uint8Array;
       fileName?: string;
-      path?: string;
+      preview?: string;
+      id: string;
     } & BaseAttachmentDraftType)
   | {
       contentType: MIMEType;
       fileName?: string;
-      path?: string;
+      id: string;
       pending: true;
       size: number;
     };
@@ -52,17 +47,16 @@ export type InMemoryAttachmentDraftType =
 export type AttachmentDraftType =
   | ({
       url?: string;
-      screenshotPath?: string;
       pending: false;
       fileName?: string;
-      path: string;
+      id: string;
       width?: number;
       height?: number;
     } & BaseAttachmentDraftType)
   | {
       contentType: MIMEType;
       fileName?: string;
-      path?: string;
+      id: string;
       pending: true;
       size: number;
     };
@@ -98,22 +92,22 @@ export function fileToBytes(file: Blob): Promise<Uint8Array> {
 }
 
 export const processAttachment = async (
-  file: File,
-  options?: { generateScreenshot: boolean }
+  id: string,
+  file: File
 ): Promise<InMemoryAttachmentDraftType> => {
   const fileType = stringToMIMEType(file.type);
 
   let attachment: InMemoryAttachmentDraftType;
   try {
     if (isImageTypeSupported(fileType)) {
-      attachment = await handleImageAttachment(file);
+      attachment = await handleImageAttachment(id, file);
     } else {
       const data = await fileToBytes(file);
       attachment = {
         contentType: fileType,
         data,
         fileName: file.name,
-        path: file.name,
+        id: id,
         pending: false,
         size: data.byteLength,
       };
@@ -128,7 +122,7 @@ export const processAttachment = async (
       contentType: fileType,
       data,
       fileName: file.name,
-      path: file.name,
+      id: id,
       pending: false,
       size: data.byteLength,
     };
@@ -182,10 +176,10 @@ export const getPendingAttachment = (
   const fileType = stringToMIMEType(file.type);
 
   return {
+    id: self.crypto.randomUUID(),
     contentType: fileType,
     fileName: file.name,
     size: file.size,
-    path: file.name,
     pending: true,
   };
 };
