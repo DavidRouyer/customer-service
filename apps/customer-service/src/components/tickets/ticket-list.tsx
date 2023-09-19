@@ -41,7 +41,13 @@ export const TicketList: FC<{
   const { isFetching, fetchNextPage, hasNextPage } = allTicketsQuery;
 
   useEffect(() => {
-    if (!data.pages || data.pages.length === 0 || params.id) return;
+    if (
+      !data.pages ||
+      data.pages.length === 0 ||
+      data?.pages?.flatMap((page) => page.data).length === 0 ||
+      params.id
+    )
+      return;
 
     const firstTicketIdFromList = data.pages[0]?.data?.[0]?.id;
     if (!firstTicketIdFromList) return;
@@ -60,7 +66,7 @@ export const TicketList: FC<{
 
   return (
     <div className="no-scrollbar flex-auto overflow-y-auto">
-      {data?.pages?.length > 0 ? (
+      {data?.pages?.flatMap((page) => page.data).length > 0 ? (
         <>
           <div>
             {data?.pages.map((page) => (
