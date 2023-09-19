@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { useSession } from 'next-auth/react';
 
 import { api } from '~/utils/api';
+import { FILTER_QUERY_PARAM } from '~/utils/search-params';
 
 export const TeamMemberList: FC = () => {
   const session = useSession();
@@ -14,7 +15,9 @@ export const TeamMemberList: FC = () => {
         ?.filter((contact) => contact.id !== session.data?.user?.contactId)
         ?.map((contact) => (
           <li key={contact.id}>
-            <Link href={`/tickets?filter=${contact.id}`}>{contact.name}</Link>
+            <Link href={`/tickets?${FILTER_QUERY_PARAM}=${contact.id}`}>
+              {contact.name}
+            </Link>
           </li>
         ))}
     </ul>

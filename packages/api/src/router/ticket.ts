@@ -17,6 +17,7 @@ export const ticketRouter = createTRPCRouter({
     .input(
       z.object({
         filter: z.enum(['all', 'me', 'unassigned']),
+        status: z.enum([TicketStatus.Open, TicketStatus.Resolved]),
         orderBy: z.enum(['newest', 'oldest']),
       })
     )
@@ -26,11 +27,17 @@ export const ticketRouter = createTRPCRouter({
           newest: desc(schema.tickets.createdAt),
           oldest: asc(schema.tickets.createdAt),
         }[input.orderBy],
-        where: {
-          all: undefined,
-          me: eq(schema.tickets.assignedToId, ctx.session.user.contactId ?? 0),
-          unassigned: isNull(schema.tickets.assignedToId),
-        }[input.filter],
+        where: and(
+          eq(schema.tickets.status, input.status),
+          {
+            all: undefined,
+            me: eq(
+              schema.tickets.assignedToId,
+              ctx.session.user.contactId ?? 0
+            ),
+            unassigned: isNull(schema.tickets.assignedToId),
+          }[input.filter]
+        ),
         with: { author: true },
       });
     }),

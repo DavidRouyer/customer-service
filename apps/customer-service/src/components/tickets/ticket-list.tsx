@@ -5,23 +5,23 @@ import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { PartyPopper } from 'lucide-react';
 import { FormattedMessage } from 'react-intl';
 
+import { TicketStatus } from '@cs/database/schema/ticket';
+
 import { TicketListItem } from '~/components/tickets/ticket-list-item';
 import { api } from '~/utils/api';
 
-export const TicketList: FC = () => {
+export const TicketList: FC<{
+  filter: 'all' | 'me' | 'unassigned';
+  status: TicketStatus;
+  orderBy: 'newest' | 'oldest';
+}> = ({ filter, status, orderBy }) => {
   const params = useParams();
   const router = useRouter();
   const searchParams = useSearchParams();
-  const filter =
-    searchParams.get('filter') === 'me'
-      ? 'me'
-      : searchParams.get('filter') === 'unassigned'
-      ? 'unassigned'
-      : 'all';
-  const orderBy =
-    searchParams.get('orderBy') === 'oldest' ? 'oldest' : 'newest';
+
   const [ticketsData] = api.ticket.all.useSuspenseQuery({
     filter: filter,
+    status: status,
     orderBy: orderBy,
   });
 

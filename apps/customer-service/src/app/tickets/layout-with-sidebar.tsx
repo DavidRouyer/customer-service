@@ -15,6 +15,7 @@ import {
 } from '~/components/ui/accordion';
 import { Sheet, SheetContent } from '~/components/ui/sheet';
 import { UserNav } from '~/components/user-nav';
+import { FILTER_QUERY_PARAM } from '~/utils/search-params';
 
 const useNavigationLinks = () => {
   return [
@@ -34,17 +35,17 @@ const useNavigationLinks = () => {
             <AccordionContent>
               <ul className="flex flex-col gap-y-1">
                 <li>
-                  <Link href="/tickets?filter=me">
+                  <Link href={`/tickets?${FILTER_QUERY_PARAM}=me`}>
                     <FormattedMessage id="layout.tickets.my_tickets" />
                   </Link>
                 </li>
                 <li>
-                  <Link href="/tickets?filter=all">
+                  <Link href={`/tickets?${FILTER_QUERY_PARAM}=all`}>
                     <FormattedMessage id="layout.tickets.all_tickets" />
                   </Link>
                 </li>
                 <li>
-                  <Link href="/tickets?filter=unassigned">
+                  <Link href={`/tickets?${FILTER_QUERY_PARAM}=unassigned`}>
                     <FormattedMessage id="layout.tickets.unassigned_tickets" />
                   </Link>
                 </li>
