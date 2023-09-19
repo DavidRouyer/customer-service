@@ -1,7 +1,7 @@
 import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
 
-import { and, asc, desc, eq, isNull, not, schema } from '@cs/database';
+import { and, asc, desc, eq, gt, isNull, lt, not, schema } from '@cs/database';
 import { TicketStatus } from '@cs/database/schema/ticket';
 import {
   TicketActivityType,
@@ -19,16 +19,26 @@ export const ticketRouter = createTRPCRouter({
         filter: z.enum(['all', 'me', 'unassigned']),
         status: z.enum([TicketStatus.Open, TicketStatus.Resolved]),
         orderBy: z.enum(['newest', 'oldest']),
+        cursor: z.string().nullish(),
       })
     )
-    .query(({ ctx, input }) => {
-      return ctx.db.query.tickets.findMany({
+    .query(async ({ ctx, input }) => {
+      const PAGE_SIZE = 10;
+      const tickets = await ctx.db.query.tickets.findMany({
         orderBy: {
           newest: desc(schema.tickets.createdAt),
           oldest: asc(schema.tickets.createdAt),
         }[input.orderBy],
         where: and(
           eq(schema.tickets.status, input.status),
+          {
+            newest: input.cursor
+              ? lt(schema.tickets.createdAt, new Date(input.cursor))
+              : undefined,
+            oldest: input.cursor
+              ? gt(schema.tickets.createdAt, new Date(input.cursor))
+              : undefined,
+          }[input.orderBy],
           {
             all: undefined,
             me: eq(
@@ -39,7 +49,13 @@ export const ticketRouter = createTRPCRouter({
           }[input.filter]
         ),
         with: { author: true },
+        limit: PAGE_SIZE,
       });
+
+      const nextCursor =
+        tickets[tickets.length - 1]?.createdAt.toISOString() ?? null;
+
+      return { data: tickets, nextCursor };
     }),
 
   byId: protectedProcedure

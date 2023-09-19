@@ -1,13 +1,15 @@
 'use client';
 
-import { FC, useEffect } from 'react';
+import { FC, Fragment, useEffect } from 'react';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { PartyPopper } from 'lucide-react';
+import { useInView } from 'react-intersection-observer';
 import { FormattedMessage } from 'react-intl';
 
 import { TicketStatus } from '@cs/database/schema/ticket';
 
 import { TicketListItem } from '~/components/tickets/ticket-list-item';
+import { TicketListItemSkeleton } from '~/components/tickets/ticket-list-item-skeleton';
 import { api } from '~/utils/api';
 
 export const TicketList: FC<{
@@ -18,31 +20,66 @@ export const TicketList: FC<{
   const params = useParams();
   const router = useRouter();
   const searchParams = useSearchParams();
-
-  const [ticketsData] = api.ticket.all.useSuspenseQuery({
-    filter: filter,
-    status: status,
-    orderBy: orderBy,
+  const { ref, inView } = useInView({
+    triggerOnce: true,
+    threshold: 1,
   });
 
-  useEffect(() => {
-    if (!ticketsData || ticketsData.length === 0 || params.id) return;
+  const [data, allTicketsQuery] = api.ticket.all.useSuspenseInfiniteQuery(
+    {
+      filter: filter,
+      status: status,
+      orderBy: orderBy,
+    },
+    {
+      getNextPageParam(lastPage) {
+        return lastPage.nextCursor;
+      },
+    }
+  );
 
-    const firstTicketIdFromList = ticketsData?.[0]?.id;
+  const { isFetching, fetchNextPage, hasNextPage } = allTicketsQuery;
+
+  useEffect(() => {
+    if (!data.pages || data.pages.length === 0 || params.id) return;
+
+    const firstTicketIdFromList = data.pages[0]?.data?.[0]?.id;
     if (!firstTicketIdFromList) return;
 
     router.replace(
       `/tickets/${firstTicketIdFromList}?${searchParams.toString()}`
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [ticketsData]);
+  }, [data]);
+
+  useEffect(() => {
+    if (inView && hasNextPage && !isFetching) {
+      fetchNextPage();
+    }
+  }, [inView, hasNextPage, isFetching, fetchNextPage]);
 
   return (
     <div className="no-scrollbar flex-auto overflow-y-auto">
-      {ticketsData?.length > 0 ? (
-        ticketsData.map((ticket) => (
-          <TicketListItem key={ticket.id} ticket={ticket} />
-        ))
+      {data?.pages?.length > 0 ? (
+        <>
+          <div>
+            {data?.pages.map((page) => (
+              <Fragment key={page.nextCursor}>
+                {page.data.map((ticket) => (
+                  <TicketListItem key={ticket.id} ticket={ticket} />
+                ))}
+              </Fragment>
+            ))}
+          </div>
+          {isFetching && (
+            <div className="flex w-full flex-col gap-4">
+              <TicketListItemSkeleton />
+              <TicketListItemSkeleton />
+              <TicketListItemSkeleton />
+            </div>
+          )}
+          <div ref={ref} className="h-px w-full" />
+        </>
       ) : (
         <div className="py-10">
           <div className="text-center">
