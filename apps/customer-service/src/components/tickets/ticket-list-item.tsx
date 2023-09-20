@@ -9,7 +9,7 @@ import { RelativeTime } from '~/components/ui/relative-time';
 import { getInitials } from '~/utils/string';
 
 export type TicketListItemProps = {
-  ticket: NonNullable<RouterOutputs['ticket']['all'][0]>;
+  ticket: NonNullable<RouterOutputs['ticket']['all']['data'][0]>;
 };
 
 export const TicketListItem: FC<TicketListItemProps> = ({ ticket }) => {
