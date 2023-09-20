@@ -20,10 +20,7 @@ export const TicketList: FC<{
   const params = useParams();
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { ref, inView } = useInView({
-    triggerOnce: true,
-    threshold: 1,
-  });
+  const { ref, inView } = useInView();
 
   const [data, allTicketsQuery] = api.ticket.all.useSuspenseInfiniteQuery(
     {
