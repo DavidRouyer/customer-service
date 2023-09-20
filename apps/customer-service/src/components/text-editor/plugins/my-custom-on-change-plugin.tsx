@@ -16,7 +16,7 @@ const MyCustomOnChangePlugin: React.FC<MyCustomOnChangePluginProps> = ({
           const root = $getRoot();
           const selection = $getSelection();
 
-          console.log(root, selection);
+          console.debug(root, selection);
 
           onChange(root.getTextContent());
         });
