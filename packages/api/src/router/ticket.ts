@@ -1,7 +1,18 @@
 import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
 
-import { and, asc, desc, eq, gt, isNull, lt, not, schema } from '@cs/database';
+import {
+  and,
+  asc,
+  desc,
+  eq,
+  gt,
+  isNull,
+  lt,
+  not,
+  schema,
+  sql,
+} from '@cs/database';
 import { TicketStatus } from '@cs/database/schema/ticket';
 import {
   TicketActivityType,
@@ -57,6 +68,36 @@ export const ticketRouter = createTRPCRouter({
 
       return { data: tickets, nextCursor };
     }),
+
+  stats: protectedProcedure.query(async ({ ctx }) => {
+    const results = await ctx.db.execute<{
+      total: number;
+      open: number;
+      resolved: number;
+      unassigned: number;
+      assignedToMe: number;
+    }>(
+      sql`SELECT
+      count(*)::int AS "total",
+      sum(case when ${schema.tickets.status} = ${
+        TicketStatus.Open
+      } then 1 else 0 end)::int AS "open",
+      sum(case when ${schema.tickets.status} = ${
+        TicketStatus.Resolved
+      } then 1 else 0 end)::int AS "resolved",
+      sum(case when (${schema.tickets.status} = ${TicketStatus.Open} AND ${
+        schema.tickets.assignedToId
+      } IS NULL) then 1 else 0 end)::int AS "unassigned",
+      sum(case when (${schema.tickets.status} = ${TicketStatus.Open} AND ${
+        schema.tickets.assignedToId
+      } = ${
+        ctx.session.user.contactId ?? 0
+      }) then 1 else 0 end)::int AS "assignedToMe"
+      FROM ${schema.tickets}`
+    );
+
+    return results.rows[0];
+  }),
 
   byId: protectedProcedure
     .input(z.object({ id: z.number() }))

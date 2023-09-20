@@ -1,6 +1,5 @@
 import { FC } from 'react';
 import { CheckCircle2 } from 'lucide-react';
-import { useSession } from 'next-auth/react';
 import { FormattedMessage } from 'react-intl';
 
 import {
