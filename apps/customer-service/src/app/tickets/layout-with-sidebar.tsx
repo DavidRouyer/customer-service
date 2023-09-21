@@ -1,87 +1,28 @@
 'use client';
 
 import { FC, Suspense, useState } from 'react';
-import Link from 'next/link';
-import { AlignJustify, BarChart3, BookmarkX, Users } from 'lucide-react';
-import { useSession } from 'next-auth/react';
+import { AlignJustify } from 'lucide-react';
 import { FormattedMessage } from 'react-intl';
 
 import { Logo } from '~/components/logo';
-import { TeamMemberList } from '~/components/team-members/team-members-list';
-import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/avatar';
+import { InboxList } from '~/components/navbar/inbox-list';
+import { TeamMemberList } from '~/components/navbar/team-member-list';
 import { Sheet, SheetContent } from '~/components/ui/sheet';
 import { UserNav } from '~/components/user-nav';
-import { api } from '~/utils/api';
-import { FILTER_QUERY_PARAM } from '~/utils/search-params';
-import { getInitials } from '~/utils/string';
 
 export const LayoutWithSidebar: FC<{
   children: React.ReactNode;
 }> = ({ children }: { children: React.ReactNode }) => {
-  const session = useSession();
-
   const [sidebarOpen, setSidebarOpen] = useState(false);
-
-  const { data: statsData } = api.ticket.stats.useQuery();
 
   const navigationLinks = [
     {
-      name: 'Tickets',
+      name: 'Default',
       content: (
         <ul className="-mx-2 flex flex-col gap-y-1">
-          <li>
-            <Link
-              href={`/tickets?${FILTER_QUERY_PARAM}=me`}
-              className="flex items-center justify-between gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-muted-foreground hover:bg-muted hover:text-foreground"
-            >
-              <div className="flex items-center gap-x-3">
-                <Avatar className="h-4 w-4 shrink-0">
-                  <AvatarImage src={session.data?.user.image ?? undefined} />
-                  <AvatarFallback>
-                    {getInitials(session.data?.user.name ?? '')}
-                  </AvatarFallback>
-                </Avatar>
-                <FormattedMessage id="layout.tickets.my_tickets" />
-              </div>
-
-              {statsData?.assignedToMe}
-            </Link>
-          </li>
-          <li>
-            <Link
-              href={`/tickets?${FILTER_QUERY_PARAM}=all`}
-              className="flex items-center justify-between gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-muted-foreground hover:bg-muted hover:text-foreground"
-            >
-              <div className="flex items-center gap-x-3">
-                <Users className="h-4 w-4 shrink-0" aria-hidden="true" />
-                <FormattedMessage id="layout.tickets.all_tickets" />
-              </div>
-
-              {statsData?.total}
-            </Link>
-          </li>
-          <li>
-            <Link
-              href={`/tickets?${FILTER_QUERY_PARAM}=unassigned`}
-              className="flex items-center justify-between gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-muted-foreground hover:bg-muted hover:text-foreground"
-            >
-              <div className="flex items-center gap-x-3">
-                <BookmarkX className="h-4 w-4 shrink-0" aria-hidden="true" />
-                <FormattedMessage id="layout.tickets.unassigned_tickets" />
-              </div>
-
-              {statsData?.unassigned}
-            </Link>
-          </li>
-          <li>
-            <Link
-              href="/reports"
-              className="flex items-center gap-x-3 rounded-md p-2 text-sm font-semibold text-muted-foreground hover:bg-muted hover:text-foreground"
-            >
-              <BarChart3 className="h-4 w-4 shrink-0" aria-hidden="true" />
-              <FormattedMessage id="layout.reports" />
-            </Link>
-          </li>
+          <Suspense fallback={null}>
+            <InboxList />
+          </Suspense>
         </ul>
       ),
     },

@@ -7,10 +7,13 @@ import {
   desc,
   eq,
   gt,
+  isNotNull,
   isNull,
   lt,
+  ne,
   not,
   schema,
+  SQL,
   sql,
 } from '@cs/database';
 import { TicketStatus } from '@cs/database/schema/ticket';
@@ -70,31 +73,53 @@ export const ticketRouter = createTRPCRouter({
     }),
 
   stats: protectedProcedure.query(async ({ ctx }) => {
-    const results = await ctx.db.execute<{
-      total: number;
-      open: number;
-      resolved: number;
-      unassigned: number;
-      assignedToMe: number;
-    }>(
-      sql`SELECT
-      count(*)::int AS "total",
-      sum(case when ${schema.tickets.status} = ${
-        TicketStatus.Open
-      } then 1 else 0 end)::int AS "open",
-      sum(case when ${schema.tickets.status} = ${
-        TicketStatus.Resolved
-      } then 1 else 0 end)::int AS "resolved",
-      sum(case when (${schema.tickets.status} = ${TicketStatus.Open} AND ${
-        schema.tickets.assignedToId
-      } IS NULL) then 1 else 0 end)::int AS "unassigned",
-      sum(case when (${schema.tickets.status} = ${TicketStatus.Open} AND ${
-        schema.tickets.assignedToId
-      } = ${
-        ctx.session.user.contactId ?? 0
-      }) then 1 else 0 end)::int AS "assignedToMe"
-      FROM ${schema.tickets}`
-    );
+    const contacts = await ctx.db.query.contacts.findMany({
+      where: and(
+        isNotNull(schema.contacts.userId),
+        ne(schema.contacts.id, ctx.session.user.contactId ?? 0)
+      ),
+    });
+
+    const sqlChunks: SQL[] = [];
+
+    sqlChunks.push(sql`SELECT
+    count(*)::int AS "total",
+    sum(case when ${schema.tickets.status} = ${
+      TicketStatus.Open
+    } then 1 else 0 end)::int AS "open",
+    sum(case when ${schema.tickets.status} = ${
+      TicketStatus.Resolved
+    } then 1 else 0 end)::int AS "resolved",
+    sum(case when (${schema.tickets.status} = ${TicketStatus.Open} AND ${
+      schema.tickets.assignedToId
+    } IS NULL) then 1 else 0 end)::int AS "unassigned",
+    sum(case when (${schema.tickets.status} = ${TicketStatus.Open} AND ${
+      schema.tickets.assignedToId
+    } = ${
+      ctx.session.user.contactId ?? 0
+    }) then 1 else 0 end)::int AS "assignedToMe"`);
+
+    for (const contact of contacts) {
+      sqlChunks.push(sql`,`);
+      sqlChunks.push(
+        sql`sum(case when (${schema.tickets.status} = ${
+          TicketStatus.Open
+        } AND ${schema.tickets.assignedToId} = ${
+          contact?.id ?? 0
+        }) then 1 else 0 end)::int AS "${sql.raw(`assignedTo${contact.id}`)}"`
+      );
+    }
+    sqlChunks.push(sql`FROM ${schema.tickets}`);
+
+    const results = await ctx.db.execute<
+      {
+        total: number;
+        open: number;
+        resolved: number;
+        unassigned: number;
+        assignedToMe: number;
+      } & Record<string, number>
+    >(sql.join(sqlChunks, sql.raw(' ')));
 
     return results.rows[0];
   }),
