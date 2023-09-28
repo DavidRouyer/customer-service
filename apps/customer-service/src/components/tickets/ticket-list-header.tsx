@@ -9,11 +9,11 @@ export const TicketListHeader = () => {
       <h1 className="text-base font-semibold leading-10 text-white">
         {searchParams.get('filter') === 'me' ? (
           <FormattedMessage id="layout.tickets.my_tickets" />
-        ) : searchParams.get('filter') === 'all' ? (
-          <FormattedMessage id="layout.tickets.all_tickets" />
         ) : searchParams.get('filter') === 'unassigned' ? (
           <FormattedMessage id="layout.tickets.unassigned_tickets" />
-        ) : null}
+        ) : (
+          <FormattedMessage id="layout.tickets.all_tickets" />
+        )}
       </h1>
     </header>
   );
