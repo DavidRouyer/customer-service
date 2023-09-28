@@ -8,6 +8,7 @@ import { TicketStatus } from '@cs/database/schema/ticket';
 import { TicketList } from '~/components/tickets/ticket-list';
 import { TicketListHeader } from '~/components/tickets/ticket-list-header';
 import { TicketListItemSkeleton } from '~/components/tickets/ticket-list-item-skeleton';
+import { TicketListNavigation } from '~/components/tickets/ticket-list-navigation';
 import {
   FILTER_QUERY_PARAM,
   ORDER_BY_QUERY_PARAM,
@@ -30,7 +31,8 @@ export const TicketListContainer = () => {
     searchParams.get(ORDER_BY_QUERY_PARAM) === 'oldest' ? 'oldest' : 'newest';
   return (
     <aside className="fixed inset-y-0 left-60 hidden w-96 flex-col border-r xl:flex">
-      <TicketListHeader status={status} orderBy={orderBy} />
+      <TicketListHeader />
+      <TicketListNavigation status={status} orderBy={orderBy} />
       <Suspense
         fallback={
           <div className="flex w-full flex-col gap-4">
