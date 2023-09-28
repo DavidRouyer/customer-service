@@ -135,7 +135,7 @@ export const ticketRouter = createTRPCRouter({
       if (!ticket)
         throw new TRPCError({
           code: 'BAD_REQUEST',
-          message: 'Ticket not found',
+          message: 'ticket_not_found',
         });
 
       return ticket;
@@ -163,13 +163,13 @@ export const ticketRouter = createTRPCRouter({
       if (!ticket)
         throw new TRPCError({
           code: 'BAD_REQUEST',
-          message: 'Ticket not found',
+          message: 'ticket_not_found',
         });
 
       if (ticket.assignedToId)
         throw new TRPCError({
           code: 'BAD_REQUEST',
-          message: 'Ticket is already assigned',
+          message: 'ticket_already_assigned',
         });
 
       return await ctx.db.transaction(async (tx) => {
@@ -213,19 +213,19 @@ export const ticketRouter = createTRPCRouter({
       if (!ticket)
         throw new TRPCError({
           code: 'BAD_REQUEST',
-          message: 'Ticket not found',
+          message: 'ticket_not_found',
         });
 
       if (!ticket.assignedToId)
         throw new TRPCError({
           code: 'BAD_REQUEST',
-          message: 'Ticket is not assigned to anybody',
+          message: 'ticket_not_assigned',
         });
 
       if (ticket.assignedToId === input.contactId)
         throw new TRPCError({
           code: 'BAD_REQUEST',
-          message: 'Ticket is already assigned to the contact',
+          message: 'ticket_already_assigned_to_contact',
         });
 
       return await ctx.db.transaction(async (tx) => {
@@ -270,13 +270,13 @@ export const ticketRouter = createTRPCRouter({
       if (!ticket)
         throw new TRPCError({
           code: 'BAD_REQUEST',
-          message: 'Ticket not found',
+          message: 'ticket_not_found',
         });
 
-      if (ticket.assignedToId === null)
+      if (!ticket.assignedToId)
         throw new TRPCError({
           code: 'BAD_REQUEST',
-          message: 'Ticket is already assigned to nobody',
+          message: 'ticket_not_assigned',
         });
 
       return await ctx.db.transaction(async (tx) => {
@@ -320,13 +320,13 @@ export const ticketRouter = createTRPCRouter({
       if (!ticket)
         throw new TRPCError({
           code: 'BAD_REQUEST',
-          message: 'Ticket not found',
+          message: 'ticket_not_found',
         });
 
       if (ticket.status === TicketStatus.Resolved)
         throw new TRPCError({
           code: 'BAD_REQUEST',
-          message: 'Ticket is already resolved',
+          message: 'ticket_already_resolved',
         });
 
       return await ctx.db.transaction(async (tx) => {
@@ -368,13 +368,13 @@ export const ticketRouter = createTRPCRouter({
       if (!ticket)
         throw new TRPCError({
           code: 'BAD_REQUEST',
-          message: 'Ticket not found',
+          message: 'ticket_not_found',
         });
 
       if (ticket.status === TicketStatus.Open)
         throw new TRPCError({
           code: 'BAD_REQUEST',
-          message: 'Ticket is already reopened',
+          message: 'ticket_already_opened',
         });
 
       return await ctx.db.transaction(async (tx) => {

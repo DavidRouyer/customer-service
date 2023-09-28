@@ -1,4 +1,7 @@
 {
+  "error.an_error_occured": "Une erreur s'est produite",
+  "errors.ticket_not_found": "Le ticket n'existe pas",
+  "errors.unhandled_error": "Une erreur inattendue s'est produite. Veuillez réessayer plus tard",
   "info_panel.activity": "Activité",
   "info_panel.contact_information": "Informations de contact",
   "info_panel.recent_conversations": "Conversations récentes",
@@ -39,6 +42,7 @@
   "ticket.statuses.resolved": "Résolu",
   "tickets.all_tickets_processed": "Tous les tickets ont été traités !",
   "tickets.no_tickets": "Aucun ticket",
+  "try_again": "Réessayer",
   "user.email": "Adresse e-mail",
   "user.phone": "Téléphone",
   "user.platform": "Plateforme"
