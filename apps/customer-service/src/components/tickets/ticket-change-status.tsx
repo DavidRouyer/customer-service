@@ -47,6 +47,7 @@ export const TicketChangeStatus: FC<TicketChangeStatusProps> = ({
     },
     onSettled: () => {
       void utils.ticket.byId.invalidate({ id: ticketId });
+      void utils.ticketActivity.byTicketId.invalidate({ ticketId: ticketId });
     },
   });
   const { mutateAsync: reopenTicket } = api.ticket.reopen.useMutation({
@@ -77,6 +78,7 @@ export const TicketChangeStatus: FC<TicketChangeStatusProps> = ({
     },
     onSettled: () => {
       void utils.ticket.byId.invalidate({ id: ticketId });
+      void utils.ticketActivity.byTicketId.invalidate({ ticketId: ticketId });
     },
   });
 
