@@ -60,6 +60,7 @@ export const TicketChangeAssignment: FC<TicketChangeAssignmentProps> = ({
     },
     onSettled: () => {
       void utils.ticket.byId.invalidate({ id: ticketId });
+      void utils.ticketActivity.byTicketId.invalidate({ ticketId: ticketId });
     },
   });
 
@@ -95,6 +96,7 @@ export const TicketChangeAssignment: FC<TicketChangeAssignmentProps> = ({
       },
       onSettled: () => {
         void utils.ticket.byId.invalidate({ id: ticketId });
+        void utils.ticketActivity.byTicketId.invalidate({ ticketId: ticketId });
       },
     });
 
@@ -128,6 +130,7 @@ export const TicketChangeAssignment: FC<TicketChangeAssignmentProps> = ({
       },
       onSettled: () => {
         void utils.ticket.byId.invalidate({ id: ticketId });
+        void utils.ticketActivity.byTicketId.invalidate({ ticketId: ticketId });
       },
     });
 
