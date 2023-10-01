@@ -1,8 +1,6 @@
 import { ComponentPropsWithoutRef, FC } from 'react';
 
-export type AndroidProps = ComponentPropsWithoutRef<'svg'>;
-
-export const Android: FC<AndroidProps> = ({ ...props }) => {
+export const Android: FC<ComponentPropsWithoutRef<'svg'>> = ({ ...props }) => {
   return (
     <svg
       role="img"
