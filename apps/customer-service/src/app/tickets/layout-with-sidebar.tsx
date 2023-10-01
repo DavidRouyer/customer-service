@@ -51,13 +51,9 @@ export const LayoutWithSidebar: FC<{
             </div>
             <nav className="flex flex-1 flex-col">
               <ul className="flex flex-1 flex-col gap-y-7">
-                <li>
-                  <ul className="-mx-2 gap-y-1">
-                    {navigationLinks.map((item) => (
-                      <li key={item.name}>{item.content}</li>
-                    ))}
-                  </ul>
-                </li>
+                {navigationLinks.map((item) => (
+                  <li key={item.name}>{item.content}</li>
+                ))}
               </ul>
             </nav>
           </div>
