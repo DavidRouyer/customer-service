@@ -1,4 +1,6 @@
 {
+  "clipboard.copy": "Copy",
+  "clipboard.copied": "Copied",
   "error.an_error_occured": "An error occurred",
   "errors.ticket_not_found": "Ticket not found",
   "errors.unhandled_error": "An unhandled error occurred. Please try again later",

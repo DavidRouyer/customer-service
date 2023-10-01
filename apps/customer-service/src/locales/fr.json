@@ -1,4 +1,6 @@
 {
+  "clipboard.copy": "Copier",
+  "clipboard.copied": "Copié",
   "error.an_error_occured": "Une erreur s'est produite",
   "errors.ticket_not_found": "Le ticket n'existe pas",
   "errors.unhandled_error": "Une erreur inattendue s'est produite. Veuillez réessayer plus tard",
