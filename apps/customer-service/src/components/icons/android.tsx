@@ -10,6 +10,9 @@ export const Android: FC<AndroidProps> = ({ ...props }) => {
       xmlns="http://www.w3.org/2000/svg"
       stroke="currentColor"
       strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      fill="none"
       {...props}
     >
       <title>Android</title>
