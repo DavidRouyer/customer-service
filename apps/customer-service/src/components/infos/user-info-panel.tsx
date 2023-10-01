@@ -33,7 +33,7 @@ export const UserInfoPanel: FC<{ ticketId: number }> = ({ ticketId }) => {
             </span>
             <Mail className="h-4 w-4 text-gray-400" aria-hidden="true" />
           </dt>
-          <dd className="truncate text-sm leading-6 text-muted-foreground">
+          <dd className="truncate text-sm leading-5 text-muted-foreground">
             <Copy content={ticketData.author.email}>
               {ticketData.author.email}
             </Copy>
@@ -48,7 +48,7 @@ export const UserInfoPanel: FC<{ ticketId: number }> = ({ ticketId }) => {
             </span>
             <Phone className="h-4 w-4 text-gray-400" aria-hidden="true" />
           </dt>
-          <dd className="truncate text-sm leading-6 text-muted-foreground">
+          <dd className="truncate text-sm leading-5 text-muted-foreground">
             <Copy content={ticketData.author.phone}>
               <PhoneNumber value={ticketData.author.phone} />
             </Copy>
@@ -62,7 +62,7 @@ export const UserInfoPanel: FC<{ ticketId: number }> = ({ ticketId }) => {
           </span>
           <Android className="h-4 w-4 text-gray-400" aria-hidden="true" />
         </dt>
-        <dd className="truncate text-sm leading-6 text-muted-foreground">
+        <dd className="truncate text-sm leading-5 text-muted-foreground">
           <Copy content={user.app.version}>{user.app.version}</Copy>
         </dd>
       </div>
