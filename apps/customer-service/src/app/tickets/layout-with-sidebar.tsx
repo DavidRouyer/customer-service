@@ -31,7 +31,7 @@ export const LayoutWithSidebar: FC<{
       content: (
         <div className="text-xs font-semibold leading-6 text-gray-400">
           <FormattedMessage id="layout.team" />
-          <ul className="-mx-2 flex flex-col gap-y-0.5">
+          <ul className="-mx-2 flex flex-col gap-y-1">
             <Suspense fallback={null}>
               <TeamMemberList />
             </Suspense>
@@ -52,7 +52,7 @@ export const LayoutWithSidebar: FC<{
             <nav className="flex flex-1 flex-col">
               <ul className="flex flex-1 flex-col gap-y-7">
                 <li>
-                  <ul className="-mx-2 gap-y-0.5">
+                  <ul className="-mx-2 gap-y-1">
                     {navigationLinks.map((item) => (
                       <li key={item.name}>{item.content}</li>
                     ))}
