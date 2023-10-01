@@ -12,17 +12,14 @@ import { TicketListNavigation } from '~/components/tickets/ticket-list-navigatio
 import {
   FILTER_QUERY_PARAM,
   ORDER_BY_QUERY_PARAM,
+  parseFilters,
   STATUS_QUERY_PARAM,
 } from '~/utils/search-params';
 
 export const TicketListContainer = () => {
   const searchParams = useSearchParams();
-  const filter =
-    searchParams.get(FILTER_QUERY_PARAM) === 'me'
-      ? 'me'
-      : searchParams.get(FILTER_QUERY_PARAM) === 'unassigned'
-      ? 'unassigned'
-      : 'all';
+  searchParams.get(FILTER_QUERY_PARAM);
+  const filter = parseFilters(searchParams.get(FILTER_QUERY_PARAM));
   const status =
     searchParams.get(STATUS_QUERY_PARAM) === 'resolved'
       ? TicketStatus.Resolved

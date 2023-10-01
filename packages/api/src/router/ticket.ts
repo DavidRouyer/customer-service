@@ -30,7 +30,7 @@ export const ticketRouter = createTRPCRouter({
   all: protectedProcedure
     .input(
       z.object({
-        filter: z.enum(['all', 'me', 'unassigned']),
+        filter: z.enum(['all', 'me', 'unassigned']).or(z.number()),
         status: z.enum([TicketStatus.Open, TicketStatus.Resolved]),
         orderBy: z.enum(['newest', 'oldest']),
         cursor: z.string().nullish(),
@@ -53,14 +53,16 @@ export const ticketRouter = createTRPCRouter({
               ? gt(schema.tickets.createdAt, new Date(input.cursor))
               : undefined,
           }[input.orderBy],
-          {
-            all: undefined,
-            me: eq(
-              schema.tickets.assignedToId,
-              ctx.session.user.contactId ?? 0
-            ),
-            unassigned: isNull(schema.tickets.assignedToId),
-          }[input.filter]
+          typeof input.filter === 'number'
+            ? eq(schema.tickets.assignedToId, input.filter)
+            : {
+                all: undefined,
+                me: eq(
+                  schema.tickets.assignedToId,
+                  ctx.session.user.contactId ?? 0
+                ),
+                unassigned: isNull(schema.tickets.assignedToId),
+              }[input.filter]
         ),
         with: { author: true },
         limit: PAGE_SIZE,

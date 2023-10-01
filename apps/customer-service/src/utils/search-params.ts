@@ -19,3 +19,21 @@ export const getUpdatedSearchParams = (
 
   return updatedSeachParams;
 };
+
+export const parseFilters = (filterParams: string | null) => {
+  if (filterParams === null || filterParams === 'all') {
+    return 'all';
+  }
+  if (filterParams === 'me') {
+    return 'me';
+  }
+  if (filterParams === 'unassigned') {
+    return 'unassigned';
+  }
+  const filter = parseInt(filterParams);
+  if (!isNaN(filter)) {
+    return filter;
+  }
+
+  return 'all';
+};

@@ -1,12 +1,17 @@
 import { FC } from 'react';
 import Link from 'next/link';
+import { usePathname, useSearchParams } from 'next/navigation';
 
 import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/avatar';
 import { api } from '~/utils/api';
+import { matchParams, matchPath } from '~/utils/path';
 import { FILTER_QUERY_PARAM } from '~/utils/search-params';
 import { getInitials } from '~/utils/string';
+import { cn } from '~/utils/utils';
 
 export const TeamMemberList: FC = () => {
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
   const [contactsData] = api.contact.allWithUserId.useSuspenseQuery();
   const [statsData] = api.ticket.stats.useSuspenseQuery();
 
@@ -14,7 +19,14 @@ export const TeamMemberList: FC = () => {
     <li key={contact.id}>
       <Link
         href={`/tickets?${FILTER_QUERY_PARAM}=${contact.id}`}
-        className="flex items-center justify-between gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-muted-foreground hover:bg-muted hover:text-foreground"
+        className={cn(
+          'flex items-center justify-between gap-x-3 rounded-md px-2 py-1.5 text-sm font-semibold leading-5 text-muted-foreground hover:bg-muted hover:text-foreground',
+          matchPath(pathname, '/tickets') &&
+            matchParams(searchParams, {
+              [`${FILTER_QUERY_PARAM}`]: [contact.id.toString()],
+            }) &&
+            'bg-muted text-foreground'
+        )}
       >
         <div className="flex items-center gap-x-3 truncate">
           <Avatar className="h-4 w-4 shrink-0">
