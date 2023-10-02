@@ -31,7 +31,7 @@ export const LayoutWithSidebar: FC<{
       content: (
         <div className="text-xs font-semibold leading-6 text-gray-400">
           <FormattedMessage id="layout.team" />
-          <ul className="-mx-2 flex flex-col gap-y-1">
+          <ul className="-mx-2 mt-2 flex flex-col gap-y-1">
             <Suspense fallback={null}>
               <TeamMemberList />
             </Suspense>
