@@ -139,12 +139,12 @@ export const TicketChangeAssignment: FC<TicketChangeAssignmentProps> = ({
       <DropdownMenuTrigger asChild>
         <Button
           type="button"
-          variant="secondary"
-          className="flex items-center justify-between gap-x-1 text-sm leading-6"
+          variant="ghost"
+          className="flex h-auto items-center justify-between gap-x-1 px-2 text-sm leading-6"
         >
           {assignedTo ? (
             <div className="flex items-center gap-x-2">
-              <Avatar className="h-5 w-5">
+              <Avatar className="h-4 w-4">
                 <AvatarImage src={assignedTo?.avatarUrl ?? undefined} />
                 <AvatarFallback>
                   {getInitials(assignedTo?.name ?? '')}

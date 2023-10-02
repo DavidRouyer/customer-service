@@ -6,6 +6,7 @@ import { FormattedMessage } from 'react-intl';
 import { ActivityPanel } from '~/components/infos/activity-panel';
 import { InfoSummary } from '~/components/infos/info-summary';
 import { LinkedTicketsPanel } from '~/components/infos/linked-tickets-panel';
+import { TicketInfoPanel } from '~/components/infos/ticket-info-panel';
 import { UserInfoPanel } from '~/components/infos/user-info-panel';
 import {
   Accordion,
@@ -28,8 +29,13 @@ export const InfoPanel: FC<{
 
   return (
     <aside className="fixed inset-y-0 right-0 hidden w-96 overflow-y-auto border-l px-4 py-6 sm:px-6 xl:block">
+      <header className="flex items-center justify-between border-b pb-6">
+        <h1 className="text-base font-semibold leading-10 text-foreground">
+          Détails
+        </h1>
+      </header>
       <div className="flex flex-1 flex-col">
-        <InfoSummary ticketId={ticketId} />
+        <TicketInfoPanel ticketId={ticketId} />
         <Accordion
           type="multiple"
           className="w-full"

@@ -1,8 +1,6 @@
 import { FC } from 'react';
-import { Mail, Phone } from 'lucide-react';
 import { FormattedMessage } from 'react-intl';
 
-import { Android } from '~/components/icons/android';
 import { PhoneNumber } from '~/components/infos/phone-number';
 import { Copy } from '~/components/ui/copy';
 import { api } from '~/utils/api';
@@ -24,48 +22,56 @@ export const UserInfoPanel: FC<{ ticketId: number }> = ({ ticketId }) => {
   }
 
   return (
-    <dl>
-      {ticketData.author.email ? (
-        <div className="flex w-full flex-none gap-x-3">
-          <dt className="flex flex-none items-center">
-            <span className="sr-only">
-              <FormattedMessage id="user.email" />
-            </span>
-            <Mail className="h-4 w-4 text-gray-400" aria-hidden="true" />
-          </dt>
-          <dd className="truncate text-sm leading-5 text-muted-foreground">
-            <Copy content={ticketData.author.email}>
-              {ticketData.author.email}
-            </Copy>
-          </dd>
-        </div>
-      ) : null}
-      {ticketData.author.phone ? (
-        <div className="mt-4 flex w-full flex-none gap-x-3">
-          <dt className="flex flex-none items-center">
-            <span className="sr-only">
-              <FormattedMessage id="user.phone" />
-            </span>
-            <Phone className="h-4 w-4 text-gray-400" aria-hidden="true" />
-          </dt>
-          <dd className="truncate text-sm leading-5 text-muted-foreground">
-            <Copy content={ticketData.author.phone}>
-              <PhoneNumber value={ticketData.author.phone} />
-            </Copy>
-          </dd>
-        </div>
-      ) : null}
-      <div className="mt-4 flex w-full flex-none gap-x-3">
-        <dt className="flex flex-none items-center">
-          <span className="sr-only">
-            <FormattedMessage id="user.platform" />
+    <dl className="grid grid-cols-[5rem,_1fr] items-center gap-x-3 gap-y-4">
+      <dt className="flex flex-none items-center">
+        <FormattedMessage id="info_panel.user_panel.name" />
+      </dt>
+      <dd className="truncate text-sm leading-5 text-muted-foreground">
+        {ticketData.author.name ? (
+          <Copy content={ticketData.author.name}>{ticketData.author.name}</Copy>
+        ) : (
+          <span>
+            <FormattedMessage id="not_documented" />
           </span>
-          <Android className="h-4 w-4 text-gray-400" aria-hidden="true" />
-        </dt>
-        <dd className="truncate text-sm leading-5 text-muted-foreground">
-          <Copy content={user.app.version}>{user.app.version}</Copy>
-        </dd>
-      </div>
+        )}
+      </dd>
+
+      <dt className="flex flex-none items-center">
+        <FormattedMessage id="info_panel.user_panel.email" />
+      </dt>
+      <dd className="truncate text-sm leading-5 text-muted-foreground">
+        {ticketData.author.email ? (
+          <Copy content={ticketData.author.email}>
+            {ticketData.author.email}
+          </Copy>
+        ) : (
+          <span>
+            <FormattedMessage id="not_documented" />
+          </span>
+        )}
+      </dd>
+
+      <dt className="flex flex-none items-center">
+        <FormattedMessage id="info_panel.user_panel.phone_number" />
+      </dt>
+      <dd className="truncate text-sm leading-5 text-muted-foreground">
+        {ticketData.author.phone ? (
+          <Copy content={ticketData.author.phone}>
+            <PhoneNumber value={ticketData.author.phone} />
+          </Copy>
+        ) : (
+          <span>
+            <FormattedMessage id="not_documented" />
+          </span>
+        )}
+      </dd>
+
+      <dt className="flex flex-none items-center">
+        <FormattedMessage id="user.platform" />
+      </dt>
+      <dd className="truncate text-sm leading-5 text-muted-foreground">
+        <Copy content={user.app.version}>{user.app.version}</Copy>
+      </dd>
     </dl>
   );
 };
