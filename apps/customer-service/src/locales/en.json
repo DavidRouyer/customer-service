@@ -6,6 +6,7 @@
   "errors.unhandled_error": "An unhandled error occurred. Please try again later",
   "info_panel.activity": "Activity",
   "info_panel.contact_information": "Contact information",
+  "info_panel.details": "Details",
   "info_panel.recent_conversations": "Recent conversations",
   "info_panel.ticket_information": "Ticket information",
   "info_panel.ticket_panel.assignee": "Assignee",

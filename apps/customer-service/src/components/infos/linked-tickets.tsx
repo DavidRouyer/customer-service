@@ -8,12 +8,12 @@ import { FormattedDate, FormattedMessage } from 'react-intl';
 import { Badge } from '~/components/ui/badge';
 import { api } from '~/utils/api';
 
-type LinkedTicketsPanelProps = {
+type LinkedTicketsProps = {
   ticketId: number;
   contactId?: number;
 };
 
-export const LinkedTicketsPanel: FC<LinkedTicketsPanelProps> = ({
+export const LinkedTickets: FC<LinkedTicketsProps> = ({
   ticketId,
   contactId,
 }) => {
@@ -98,4 +98,4 @@ export const LinkedTicketsPanel: FC<LinkedTicketsPanelProps> = ({
   );
 };
 
-LinkedTicketsPanel.displayName = 'UserTicketsPanel';
+LinkedTickets.displayName = 'UserTicketsPanel';

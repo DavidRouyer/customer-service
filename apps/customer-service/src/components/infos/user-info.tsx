@@ -12,7 +12,7 @@ const user = {
   },
 };
 
-export const UserInfoPanel: FC<{ ticketId: number }> = ({ ticketId }) => {
+export const UserInfo: FC<{ ticketId: number }> = ({ ticketId }) => {
   const { data: ticketData } = api.ticket.byId.useQuery({
     id: ticketId,
   });

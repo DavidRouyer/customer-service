@@ -6,7 +6,7 @@ import { TicketStatus } from '@cs/database/schema/ticket';
 import { TicketChangeAssignment } from '~/components/tickets/ticket-change-assignment';
 import { api } from '~/utils/api';
 
-export const TicketInfoPanel: FC<{ ticketId: number }> = ({ ticketId }) => {
+export const TicketInfo: FC<{ ticketId: number }> = ({ ticketId }) => {
   const { data: ticketData } = api.ticket.byId.useQuery({
     id: ticketId,
   });
