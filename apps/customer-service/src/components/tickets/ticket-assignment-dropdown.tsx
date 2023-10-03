@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { XCircle } from 'lucide-react';
+import { Plus, XCircle } from 'lucide-react';
 import { FormattedMessage } from 'react-intl';
 
 import { RouterOutputs } from '@cs/api';
@@ -16,12 +16,12 @@ import {
 import { api } from '~/utils/api';
 import { getInitials } from '~/utils/string';
 
-type TicketChangeAssignmentProps = {
+type TicketAssignmentDropdownProps = {
   assignedTo?: NonNullable<RouterOutputs['ticket']['byId']>['assignedTo'];
   ticketId: number;
 };
 
-export const TicketChangeAssignment: FC<TicketChangeAssignmentProps> = ({
+export const TicketAssignmentDropdown: FC<TicketAssignmentDropdownProps> = ({
   assignedTo,
   ticketId,
 }) => {
@@ -33,14 +33,16 @@ export const TicketChangeAssignment: FC<TicketChangeAssignmentProps> = ({
     onMutate: async (newAssignment) => {
       // Cancel any outgoing refetches
       // (so they don't overwrite our optimistic update)
-      await utils.ticket.byId.cancel({ id: ticketId });
+      await utils.ticket.byId.cancel({ id: newAssignment.id });
 
       // Snapshot the previous value
-      const previousTicket = utils.ticket.byId.getData({ id: ticketId });
+      const previousTicket = utils.ticket.byId.getData({
+        id: newAssignment.id,
+      });
 
       // Optimistically update to the new value
       utils.ticket.byId.setData(
-        { id: ticketId },
+        { id: newAssignment.id },
         (oldQueryData) =>
           ({
             ...oldQueryData,
@@ -54,13 +56,13 @@ export const TicketChangeAssignment: FC<TicketChangeAssignmentProps> = ({
       // Return a context object with the snapshotted value
       return { previousTicket: previousTicket };
     },
-    onError: (err, _newTicket, context) => {
+    onError: (err, { id }, context) => {
       // TODO: handle failed queries
-      utils.ticket.byId.setData({ id: ticketId }, context?.previousTicket);
+      utils.ticket.byId.setData({ id }, context?.previousTicket);
     },
-    onSettled: () => {
-      void utils.ticket.byId.invalidate({ id: ticketId });
-      void utils.ticketActivity.byTicketId.invalidate({ ticketId: ticketId });
+    onSettled: (_, __, { id }) => {
+      void utils.ticket.byId.invalidate({ id });
+      void utils.ticketActivity.byTicketId.invalidate({ ticketId: id });
     },
   });
 
@@ -69,14 +71,16 @@ export const TicketChangeAssignment: FC<TicketChangeAssignmentProps> = ({
       onMutate: async (newAssignment) => {
         // Cancel any outgoing refetches
         // (so they don't overwrite our optimistic update)
-        await utils.ticket.byId.cancel({ id: ticketId });
+        await utils.ticket.byId.cancel({ id: newAssignment.id });
 
         // Snapshot the previous value
-        const previousTicket = utils.ticket.byId.getData({ id: ticketId });
+        const previousTicket = utils.ticket.byId.getData({
+          id: newAssignment.id,
+        });
 
         // Optimistically update to the new value
         utils.ticket.byId.setData(
-          { id: ticketId },
+          { id: newAssignment.id },
           (oldQueryData) =>
             ({
               ...oldQueryData,
@@ -90,29 +94,29 @@ export const TicketChangeAssignment: FC<TicketChangeAssignmentProps> = ({
         // Return a context object with the snapshotted value
         return { previousTicket: previousTicket };
       },
-      onError: (err, _newTicket, context) => {
+      onError: (err, { id }, context) => {
         // TODO: handle failed queries
-        utils.ticket.byId.setData({ id: ticketId }, context?.previousTicket);
+        utils.ticket.byId.setData({ id }, context?.previousTicket);
       },
-      onSettled: () => {
-        void utils.ticket.byId.invalidate({ id: ticketId });
-        void utils.ticketActivity.byTicketId.invalidate({ ticketId: ticketId });
+      onSettled: (_, __, { id }) => {
+        void utils.ticket.byId.invalidate({ id });
+        void utils.ticketActivity.byTicketId.invalidate({ ticketId: id });
       },
     });
 
   const { mutateAsync: removeAssignment } =
     api.ticket.removeAssignment.useMutation({
-      onMutate: async () => {
+      onMutate: async ({ id }) => {
         // Cancel any outgoing refetches
         // (so they don't overwrite our optimistic update)
-        await utils.ticket.byId.cancel({ id: ticketId });
+        await utils.ticket.byId.cancel({ id });
 
         // Snapshot the previous value
-        const previousTicket = utils.ticket.byId.getData({ id: ticketId });
+        const previousTicket = utils.ticket.byId.getData({ id });
 
         // Optimistically update to the new value
         utils.ticket.byId.setData(
-          { id: ticketId },
+          { id },
           (oldQueryData) =>
             ({
               ...oldQueryData,
@@ -124,13 +128,13 @@ export const TicketChangeAssignment: FC<TicketChangeAssignmentProps> = ({
         // Return a context object with the snapshotted value
         return { previousTicket: previousTicket };
       },
-      onError: (err, _newTicket, context) => {
+      onError: (err, { id }, context) => {
         // TODO: handle failed queries
-        utils.ticket.byId.setData({ id: ticketId }, context?.previousTicket);
+        utils.ticket.byId.setData({ id }, context?.previousTicket);
       },
-      onSettled: () => {
-        void utils.ticket.byId.invalidate({ id: ticketId });
-        void utils.ticketActivity.byTicketId.invalidate({ ticketId: ticketId });
+      onSettled: (_, __, { id }) => {
+        void utils.ticket.byId.invalidate({ id });
+        void utils.ticketActivity.byTicketId.invalidate({ ticketId: id });
       },
     });
 
@@ -139,12 +143,12 @@ export const TicketChangeAssignment: FC<TicketChangeAssignmentProps> = ({
       <DropdownMenuTrigger asChild>
         <Button
           type="button"
-          variant="secondary"
-          className="flex items-center justify-between gap-x-1 text-sm leading-6"
+          variant="ghost"
+          className="flex h-auto items-center justify-between gap-x-1 px-2 text-sm leading-6"
         >
           {assignedTo ? (
             <div className="flex items-center gap-x-2">
-              <Avatar className="h-5 w-5">
+              <Avatar className="h-4 w-4">
                 <AvatarImage src={assignedTo?.avatarUrl ?? undefined} />
                 <AvatarFallback>
                   {getInitials(assignedTo?.name ?? '')}
@@ -155,7 +159,12 @@ export const TicketChangeAssignment: FC<TicketChangeAssignmentProps> = ({
               </p>
             </div>
           ) : (
-            <FormattedMessage id="ticket.actions.assign_to" />
+            <div className="flex items-center gap-x-2 text-xs">
+              <Plus className="h-4 w-4" />
+              <span>
+                <FormattedMessage id="ticket.actions.assign_to" />
+              </span>
+            </div>
           )}
         </Button>
       </DropdownMenuTrigger>
