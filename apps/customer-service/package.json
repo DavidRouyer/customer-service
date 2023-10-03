@@ -27,7 +27,7 @@
     "copy-to-clipboard": "^3.3.3",
     "google-libphonenumber": "^3.2.33",
     "lexical": "^0.12.2",
-    "lucide-react": "^0.282.0",
+    "lucide-react": "^0.284.0",
     "negotiator": "^0.6.3",
     "next": "^13.5.4-canary.9",
     "next-themes": "^0.2.1",
