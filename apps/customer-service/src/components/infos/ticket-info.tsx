@@ -1,9 +1,8 @@
 import { FC } from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { TicketStatus } from '@cs/database/schema/ticket';
-
-import { TicketChangeAssignment } from '~/components/tickets/ticket-change-assignment';
+import { TicketAssignmentDropdown } from '~/components/tickets/ticket-assignment-dropdown';
+import { TicketStatusDropdowm } from '~/components/tickets/ticket-status-dropdown';
 import { api } from '~/utils/api';
 
 export const TicketInfo: FC<{ ticketId: number }> = ({ ticketId }) => {
@@ -21,22 +20,14 @@ export const TicketInfo: FC<{ ticketId: number }> = ({ ticketId }) => {
         <FormattedMessage id="info_panel.ticket_panel.status" />
       </dt>
       <dd className="truncate text-sm leading-5 text-muted-foreground">
-        {ticketData.status === TicketStatus.Open ? (
-          <span>
-            <FormattedMessage id="ticket.statuses.open" />
-          </span>
-        ) : (
-          <span>
-            <FormattedMessage id="ticket.statuses.resolved" />
-          </span>
-        )}
+        <TicketStatusDropdowm status={ticketData?.status} ticketId={ticketId} />
       </dd>
 
       <dt className="text-sm leading-5">
         <FormattedMessage id="info_panel.ticket_panel.assignee" />
       </dt>
       <dd className="truncate text-sm leading-5 text-muted-foreground">
-        <TicketChangeAssignment
+        <TicketAssignmentDropdown
           assignedTo={ticketData?.assignedTo}
           ticketId={ticketId}
         />
