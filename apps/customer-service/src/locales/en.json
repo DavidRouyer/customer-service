@@ -55,5 +55,6 @@
   "try_again": "Try again",
   "user.email": "Email address",
   "user.phone": "Phone",
-  "user.platform": "Platform"
+  "user.platform": "Platform",
+  "you": "You:"
 }

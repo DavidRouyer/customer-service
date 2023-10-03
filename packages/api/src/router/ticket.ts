@@ -64,7 +64,13 @@ export const ticketRouter = createTRPCRouter({
                 unassigned: isNull(schema.tickets.assignedToId),
               }[input.filter]
         ),
-        with: { author: true },
+        with: {
+          author: true,
+          messages: {
+            orderBy: desc(schema.messages.createdAt),
+            limit: 1,
+          },
+        },
         limit: PAGE_SIZE,
       });
 

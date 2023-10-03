@@ -92,7 +92,6 @@ async function main() {
     .insert(schema.tickets)
     .values({
       status: TicketStatus.Open,
-      content: "My order hasn't arrived yet.",
       createdAt: new Date('2023-05-04T20:54:41.389Z'),
       authorId: leslie.id,
       assignedToId: tom.id,
@@ -146,7 +145,6 @@ async function main() {
     .insert(schema.tickets)
     .values({
       status: TicketStatus.Open,
-      content: 'Could not purchase.',
       createdAt: new Date('2023-05-06T11:23:45.389Z'),
       authorId: leslie.id,
     })
@@ -166,7 +164,6 @@ async function main() {
     .insert(schema.tickets)
     .values({
       status: TicketStatus.Resolved,
-      content: "Impossible d'acheter",
       createdAt: new Date('2023-05-06T11:23:45.389Z'),
       resolvedAt: new Date('2023-06-12T06:10:45.389Z'),
       authorId: leslie.id,
@@ -211,7 +208,6 @@ async function main() {
     .insert(schema.tickets)
     .values({
       status: TicketStatus.Open,
-      content: 'I received a damaged product.',
       createdAt: new Date('2023-03-03T14:02Z'),
       authorId: michael.id,
     })
@@ -269,7 +265,6 @@ async function main() {
     .insert(schema.tickets)
     .values({
       status: TicketStatus.Open,
-      content: 'I need to return an item.',
       createdAt: new Date('2023-03-03T13:23Z'),
       authorId: dries.id,
     })
@@ -330,8 +325,6 @@ async function main() {
     .insert(schema.tickets)
     .values({
       status: TicketStatus.Open,
-      content:
-        'Unde dolore exercitationem nobis reprehenderit rerum corporis accusamus. Nemo suscipit temporibus quidem dolorum. Nobis optio quae atque blanditiis aspernatur doloribus sit accusamus. Sunt reiciendis ut corrupti ab debitis dolorem dolorem nam sit. Ducimus nisi qui earum aliquam. Est nam doloribus culpa illum.',
       createdAt: new Date('2023-03-02T21:13Z'),
       authorId: lindsay.id,
     })
