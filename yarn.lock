@@ -25,7 +25,7 @@
     "@jridgewell/gen-mapping" "^0.3.0"
     "@jridgewell/trace-mapping" "^0.3.9"
 
-"@auth/core@0.12.0", "@auth/core@0.15.0", "@auth/core@^0.16.0", "@auth/core@experimental":
+"@auth/core@0.15.0", "@auth/core@0.16.1", "@auth/core@^0.16.0", "@auth/core@experimental":
   version "0.15.0"
   resolved "https://registry.yarnpkg.com/@auth/core/-/core-0.15.0.tgz#b7856317bf95e4bfe55cbbae6cd592222bb7dee4"
   integrity sha512-pWchDMUT0TXUn5kencusX4IL9IfIuVKzRF/cy6RSKr6PgdwMvSPyqyxxhHU+nh3+C/3vYqV0k8SKzfgNo0A1jQ==
@@ -37,12 +37,12 @@
     preact "10.11.3"
     preact-render-to-string "5.2.3"
 
-"@auth/drizzle-adapter@^0.3.2":
-  version "0.3.2"
-  resolved "https://registry.yarnpkg.com/@auth/drizzle-adapter/-/drizzle-adapter-0.3.2.tgz#63a913809c94d8c8bad751c8e63215dde3f984fc"
-  integrity sha512-fHfzwaTomm/RKgFKBO5AJ8JTfR44rX1KX2ASaKRk+4jvVhDh9FCir5BV1Fv68b5ay7XBo9DtcNSQuZp4hbpLYw==
+"@auth/drizzle-adapter@^0.3.3":
+  version "0.3.3"
+  resolved "https://registry.yarnpkg.com/@auth/drizzle-adapter/-/drizzle-adapter-0.3.3.tgz#f436b1f731b524ce967e57a3169180cef4f36c02"
+  integrity sha512-HD936/q+uQIYHu50rwkC0yoMUNt+3pkf1UPUIx6wARVmqoBzHqhMykN5X3I0twtPR/oy3OBTNSyWCDBTv4uUBA==
   dependencies:
-    "@auth/core" "0.12.0"
+    "@auth/core" "0.16.1"
 
 "@babel/code-frame@^7.10.4", "@babel/code-frame@^7.22.10", "@babel/code-frame@^7.22.13", "@babel/code-frame@^7.22.5":
   version "7.22.13"
