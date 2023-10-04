@@ -1,7 +1,21 @@
 import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
 
-import { and, asc, desc, eq, isNull, not, schema } from '@cs/database';
+import {
+  and,
+  asc,
+  desc,
+  eq,
+  gt,
+  isNotNull,
+  isNull,
+  lt,
+  ne,
+  not,
+  schema,
+  SQL,
+  sql,
+} from '@cs/database';
 import { TicketStatus } from '@cs/database/schema/ticket';
 import {
   TicketActivityType,
@@ -16,24 +30,107 @@ export const ticketRouter = createTRPCRouter({
   all: protectedProcedure
     .input(
       z.object({
-        filter: z.enum(['all', 'me', 'unassigned']),
+        filter: z.enum(['all', 'me', 'unassigned']).or(z.number()),
+        status: z.enum([TicketStatus.Open, TicketStatus.Resolved]),
         orderBy: z.enum(['newest', 'oldest']),
+        cursor: z.string().nullish(),
       })
     )
-    .query(({ ctx, input }) => {
-      return ctx.db.query.tickets.findMany({
+    .query(async ({ ctx, input }) => {
+      const PAGE_SIZE = 10;
+      const tickets = await ctx.db.query.tickets.findMany({
         orderBy: {
           newest: desc(schema.tickets.createdAt),
           oldest: asc(schema.tickets.createdAt),
         }[input.orderBy],
-        where: {
-          all: undefined,
-          me: eq(schema.tickets.assignedToId, ctx.session.user.contactId ?? 0),
-          unassigned: isNull(schema.tickets.assignedToId),
-        }[input.filter],
-        with: { author: true },
+        where: and(
+          eq(schema.tickets.status, input.status),
+          {
+            newest: input.cursor
+              ? lt(schema.tickets.createdAt, new Date(input.cursor))
+              : undefined,
+            oldest: input.cursor
+              ? gt(schema.tickets.createdAt, new Date(input.cursor))
+              : undefined,
+          }[input.orderBy],
+          typeof input.filter === 'number'
+            ? eq(schema.tickets.assignedToId, input.filter)
+            : {
+                all: undefined,
+                me: eq(
+                  schema.tickets.assignedToId,
+                  ctx.session.user.contactId ?? 0
+                ),
+                unassigned: isNull(schema.tickets.assignedToId),
+              }[input.filter]
+        ),
+        with: {
+          author: true,
+          messages: {
+            orderBy: desc(schema.messages.createdAt),
+            limit: 1,
+          },
+        },
+        limit: PAGE_SIZE,
       });
+
+      const nextCursor =
+        tickets[tickets.length - 1]?.createdAt.toISOString() ?? null;
+
+      return { data: tickets, nextCursor };
     }),
+
+  stats: protectedProcedure.query(async ({ ctx }) => {
+    const contacts = await ctx.db.query.contacts.findMany({
+      where: and(
+        isNotNull(schema.contacts.userId),
+        ne(schema.contacts.id, ctx.session.user.contactId ?? 0)
+      ),
+    });
+
+    const sqlChunks: SQL[] = [];
+
+    sqlChunks.push(sql`SELECT
+    count(*)::int AS "total",
+    sum(case when ${schema.tickets.status} = ${
+      TicketStatus.Open
+    } then 1 else 0 end)::int AS "open",
+    sum(case when ${schema.tickets.status} = ${
+      TicketStatus.Resolved
+    } then 1 else 0 end)::int AS "resolved",
+    sum(case when (${schema.tickets.status} = ${TicketStatus.Open} AND ${
+      schema.tickets.assignedToId
+    } IS NULL) then 1 else 0 end)::int AS "unassigned",
+    sum(case when (${schema.tickets.status} = ${TicketStatus.Open} AND ${
+      schema.tickets.assignedToId
+    } = ${
+      ctx.session.user.contactId ?? 0
+    }) then 1 else 0 end)::int AS "assignedToMe"`);
+
+    for (const contact of contacts) {
+      sqlChunks.push(sql`,`);
+      sqlChunks.push(
+        sql`sum(case when (${schema.tickets.status} = ${
+          TicketStatus.Open
+        } AND ${schema.tickets.assignedToId} = ${
+          contact?.id ?? 0
+        }) then 1 else 0 end)::int AS "${sql.raw(`assignedTo${contact.id}`)}"`
+      );
+    }
+    sqlChunks.push(sql`FROM ${schema.tickets}`);
+
+    const results = await ctx.db.execute<
+      {
+        total: number;
+        open: number;
+        resolved: number;
+        unassigned: number;
+        assignedToMe: number;
+      } & Record<string, number>
+    >(sql.join(sqlChunks, sql.raw(' ')));
+
+    return results.rows[0];
+  }),
 
   byId: protectedProcedure
     .input(z.object({ id: z.number() }))
@@ -46,7 +143,7 @@ export const ticketRouter = createTRPCRouter({
       if (!ticket)
         throw new TRPCError({
           code: 'BAD_REQUEST',
-          message: 'Ticket not found',
+          message: 'ticket_not_found',
         });
 
       return ticket;
@@ -74,13 +171,13 @@ export const ticketRouter = createTRPCRouter({
       if (!ticket)
         throw new TRPCError({
           code: 'BAD_REQUEST',
-          message: 'Ticket not found',
+          message: 'ticket_not_found',
         });
 
       if (ticket.assignedToId)
         throw new TRPCError({
           code: 'BAD_REQUEST',
-          message: 'Ticket is already assigned',
+          message: 'ticket_already_assigned',
         });
 
       return await ctx.db.transaction(async (tx) => {
@@ -124,19 +221,19 @@ export const ticketRouter = createTRPCRouter({
       if (!ticket)
         throw new TRPCError({
           code: 'BAD_REQUEST',
-          message: 'Ticket not found',
+          message: 'ticket_not_found',
         });
 
       if (!ticket.assignedToId)
         throw new TRPCError({
           code: 'BAD_REQUEST',
-          message: 'Ticket is not assigned to anybody',
+          message: 'ticket_not_assigned',
         });
 
       if (ticket.assignedToId === input.contactId)
         throw new TRPCError({
           code: 'BAD_REQUEST',
-          message: 'Ticket is already assigned to the contact',
+          message: 'ticket_already_assigned_to_contact',
         });
 
       return await ctx.db.transaction(async (tx) => {
@@ -181,13 +278,13 @@ export const ticketRouter = createTRPCRouter({
       if (!ticket)
         throw new TRPCError({
           code: 'BAD_REQUEST',
-          message: 'Ticket not found',
+          message: 'ticket_not_found',
         });
 
-      if (ticket.assignedToId === null)
+      if (!ticket.assignedToId)
         throw new TRPCError({
           code: 'BAD_REQUEST',
-          message: 'Ticket is already assigned to nobody',
+          message: 'ticket_not_assigned',
         });
 
       return await ctx.db.transaction(async (tx) => {
@@ -231,13 +328,13 @@ export const ticketRouter = createTRPCRouter({
       if (!ticket)
         throw new TRPCError({
           code: 'BAD_REQUEST',
-          message: 'Ticket not found',
+          message: 'ticket_not_found',
         });
 
       if (ticket.status === TicketStatus.Resolved)
         throw new TRPCError({
           code: 'BAD_REQUEST',
-          message: 'Ticket is already resolved',
+          message: 'ticket_already_resolved',
         });
 
       return await ctx.db.transaction(async (tx) => {
@@ -279,13 +376,13 @@ export const ticketRouter = createTRPCRouter({
       if (!ticket)
         throw new TRPCError({
           code: 'BAD_REQUEST',
-          message: 'Ticket not found',
+          message: 'ticket_not_found',
         });
 
       if (ticket.status === TicketStatus.Open)
         throw new TRPCError({
           code: 'BAD_REQUEST',
-          message: 'Ticket is already reopened',
+          message: 'ticket_already_opened',
         });
 
       return await ctx.db.transaction(async (tx) => {

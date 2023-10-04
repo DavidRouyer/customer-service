@@ -22,7 +22,6 @@ export const tickets = pgTable('Ticket', {
     .notNull(),
   updatedAt: timestamp('updatedAt', { precision: 3, mode: 'date' }),
   resolvedAt: timestamp('resolvedAt', { precision: 3, mode: 'date' }),
-  content: text('content'),
   status: ticketStatus('status').notNull(),
   assignedToId: integer('assignedToId').references(() => contacts.id, {
     onDelete: 'restrict',

@@ -1,20 +1,24 @@
 'use client';
 
 import { FC } from 'react';
+import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 import { FormattedDate, FormattedMessage } from 'react-intl';
 
 import { Badge } from '~/components/ui/badge';
 import { api } from '~/utils/api';
 
-type LinkedTicketsPanelProps = {
+type LinkedTicketsProps = {
   ticketId: number;
   contactId?: number;
 };
 
-export const LinkedTicketsPanel: FC<LinkedTicketsPanelProps> = ({
+export const LinkedTickets: FC<LinkedTicketsProps> = ({
   ticketId,
   contactId,
 }) => {
+  const searchParams = useSearchParams();
+
   const { data: ticketsData } = api.ticket.byContactId.useQuery(
     {
       contactId: contactId ?? 0,
@@ -29,7 +33,10 @@ export const LinkedTicketsPanel: FC<LinkedTicketsPanelProps> = ({
     <ul className="flex flex-col gap-y-1">
       {ticketsData?.map((ticket) => (
         <li key={ticket.id}>
-          <div className="flex-auto rounded-md p-3 ring-1 ring-inset ring-border">
+          <Link
+            href={`/tickets/${ticket.id}?${searchParams.toString()}`}
+            className="block flex-auto rounded-md p-3 ring-1 ring-inset ring-border"
+          >
             <div className="flex items-start gap-x-3">
               <p className="text-sm font-semibold leading-6 text-foreground">
                 #{ticket.id}
@@ -84,11 +91,11 @@ export const LinkedTicketsPanel: FC<LinkedTicketsPanelProps> = ({
                 )}
               </p>
             </div>
-          </div>
+          </Link>
         </li>
       ))}
     </ul>
   );
 };
 
-LinkedTicketsPanel.displayName = 'UserTicketsPanel';
+LinkedTickets.displayName = 'UserTicketsPanel';

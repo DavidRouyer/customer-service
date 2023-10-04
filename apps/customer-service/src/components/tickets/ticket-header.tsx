@@ -1,11 +1,19 @@
 import { FC } from 'react';
+import { BookOpenCheck, HardDriveUpload } from 'lucide-react';
+import { FormattedMessage } from 'react-intl';
 
-import { TicketChangeAssignment } from '~/components/tickets/ticket-change-assignment';
-import { TicketChangeStatus } from '~/components/tickets/ticket-change-status';
+import { TicketStatus } from '@cs/database/schema/ticket';
+
+import { Button } from '~/components/ui/button';
+import { useReopenTicket } from '~/hooks/useReopenTicket';
+import { useResolveTicket } from '~/hooks/useResolveTicket';
 import { api } from '~/utils/api';
 
 export const TicketHeader: FC<{ ticketId: number }> = ({ ticketId }) => {
   const { data: ticketData } = api.ticket.byId.useQuery({ id: ticketId });
+
+  const { resolveTicket } = useResolveTicket();
+  const { reopenTicket } = useReopenTicket();
 
   return (
     <div className="flex items-center justify-between border-b pb-6">
@@ -14,11 +22,29 @@ export const TicketHeader: FC<{ ticketId: number }> = ({ ticketId }) => {
         {ticketData?.author.name}
       </h3>
       <div className="flex items-center gap-x-2">
-        <TicketChangeAssignment
-          assignedTo={ticketData?.assignedTo}
-          ticketId={ticketId}
-        />
-        <TicketChangeStatus status={ticketData?.status} ticketId={ticketId} />
+        {ticketData?.status === TicketStatus.Resolved ? (
+          <Button
+            type="button"
+            onClick={() => {
+              reopenTicket({ id: ticketId });
+            }}
+            className="flex items-center gap-x-1"
+          >
+            <HardDriveUpload className="h-4 w-4" />
+            <FormattedMessage id="ticket.actions.reopen" />
+          </Button>
+        ) : (
+          <Button
+            type="button"
+            onClick={() => {
+              resolveTicket({ id: ticketId });
+            }}
+            className="flex items-center gap-x-1"
+          >
+            <BookOpenCheck className="h-4 w-4" />
+            <FormattedMessage id="ticket.actions.resolve" />
+          </Button>
+        )}
       </div>
     </div>
   );

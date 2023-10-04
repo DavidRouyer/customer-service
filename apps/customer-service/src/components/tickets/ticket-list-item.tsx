@@ -1,6 +1,8 @@
 import { FC } from 'react';
 import Link from 'next/link';
 import { usePathname, useSearchParams } from 'next/navigation';
+import { useSession } from 'next-auth/react';
+import { FormattedMessage } from 'react-intl';
 
 import { RouterOutputs } from '@cs/api';
 
@@ -9,12 +11,13 @@ import { RelativeTime } from '~/components/ui/relative-time';
 import { getInitials } from '~/utils/string';
 
 export type TicketListItemProps = {
-  ticket: NonNullable<RouterOutputs['ticket']['all'][0]>;
+  ticket: NonNullable<RouterOutputs['ticket']['all']['data'][0]>;
 };
 
 export const TicketListItem: FC<TicketListItemProps> = ({ ticket }) => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const session = useSession();
 
   return (
     <section
@@ -46,7 +49,13 @@ export const TicketListItem: FC<TicketListItemProps> = ({ ticket }) => {
             </p>
           </div>
           <p className="mt-1 line-clamp-2 text-sm leading-6 text-muted-foreground">
-            {ticket.content}
+            {session.data?.user?.contactId ===
+            ticket.messages?.[0]?.senderId ? (
+              <>
+                <FormattedMessage id="you" />{' '}
+              </>
+            ) : null}
+            {ticket.messages?.[0]?.content}
           </p>
         </div>
       </Link>

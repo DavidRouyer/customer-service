@@ -1,104 +1,45 @@
 'use client';
 
-import { FC, useState } from 'react';
-import Link from 'next/link';
+import { FC, Suspense, useState } from 'react';
 import { AlignJustify } from 'lucide-react';
 import { FormattedMessage } from 'react-intl';
 
 import { Logo } from '~/components/logo';
-import { TeamMemberList } from '~/components/team-members/team-members-list';
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from '~/components/ui/accordion';
+import { InboxList } from '~/components/navbar/inbox-list';
+import { TeamMemberList } from '~/components/navbar/team-member-list';
 import { Sheet, SheetContent } from '~/components/ui/sheet';
 import { UserNav } from '~/components/user-nav';
 
-const useNavigationLinks = () => {
-  return [
+export const LayoutWithSidebar: FC<{
+  children: React.ReactNode;
+}> = ({ children }: { children: React.ReactNode }) => {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  const navigationLinks = [
     {
-      name: 'Tickets',
+      name: 'Default',
       content: (
-        <Accordion
-          type="single"
-          collapsible
-          className="w-full"
-          defaultValue="item-1"
-        >
-          <AccordionItem value="item-1">
-            <AccordionTrigger>
-              <FormattedMessage id="layout.tickets.tickets" />
-            </AccordionTrigger>
-            <AccordionContent>
-              <ul className="flex flex-col gap-y-1">
-                <li>
-                  <Link href="/tickets?filter=me">
-                    <FormattedMessage id="layout.tickets.my_tickets" />
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/tickets?filter=all">
-                    <FormattedMessage id="layout.tickets.all_tickets" />
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/tickets?filter=unassigned">
-                    <FormattedMessage id="layout.tickets.unassigned_tickets" />
-                  </Link>
-                </li>
-              </ul>
-            </AccordionContent>
-          </AccordionItem>
-        </Accordion>
+        <ul className="-mx-2 flex flex-col gap-y-1">
+          <Suspense fallback={null}>
+            <InboxList />
+          </Suspense>
+        </ul>
       ),
     },
     {
       name: 'Team',
       content: (
-        <Accordion type="single" collapsible className="w-full">
-          <AccordionItem value="item-1">
-            <AccordionTrigger>
-              <FormattedMessage id="layout.team" />
-            </AccordionTrigger>
-            <AccordionContent>
+        <div className="text-xs font-semibold leading-6 text-gray-400">
+          <FormattedMessage id="layout.team" />
+          <ul className="-mx-2 mt-2 flex flex-col gap-y-1">
+            <Suspense fallback={null}>
               <TeamMemberList />
-            </AccordionContent>
-          </AccordionItem>
-        </Accordion>
-      ),
-    },
-    {
-      name: 'Reports',
-      content: (
-        <Link
-          href="/reports"
-          className="flex flex-1 items-center justify-between py-4 font-medium transition-all hover:underline"
-        >
-          <FormattedMessage id="layout.reports" />
-        </Link>
-      ),
-    },
-    {
-      name: 'Settings',
-      content: (
-        <Link
-          href="/settings"
-          className="flex flex-1 items-center justify-between py-4 font-medium transition-all hover:underline"
-        >
-          <FormattedMessage id="layout.settings" />
-        </Link>
+            </Suspense>
+          </ul>
+        </div>
       ),
     },
   ];
-};
-
-export const LayoutWithSidebar: FC<{
-  children: React.ReactNode;
-}> = ({ children }: { children: React.ReactNode }) => {
-  const navigation = useNavigationLinks();
-  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
     <div>
@@ -110,13 +51,9 @@ export const LayoutWithSidebar: FC<{
             </div>
             <nav className="flex flex-1 flex-col">
               <ul className="flex flex-1 flex-col gap-y-7">
-                <li>
-                  <ul className="-mx-2 space-y-1">
-                    {navigation.map((item) => (
-                      <li key={item.name}>{item.content}</li>
-                    ))}
-                  </ul>
-                </li>
+                {navigationLinks.map((item) => (
+                  <li key={item.name}>{item.content}</li>
+                ))}
               </ul>
             </nav>
           </div>
@@ -130,7 +67,7 @@ export const LayoutWithSidebar: FC<{
           </div>
           <nav className="flex flex-1 flex-col">
             <ul className="flex flex-1 flex-col gap-y-7">
-              {navigation.map((item) => (
+              {navigationLinks.map((item) => (
                 <li key={item.name}>{item.content}</li>
               ))}
               <li className="-mx-6 mt-auto">
