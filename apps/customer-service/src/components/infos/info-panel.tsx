@@ -13,7 +13,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '~/components/ui/accordion';
-import { api } from '~/utils/api';
+import { api } from '~/lib/api';
 
 export const InfoPanel: FC<{
   ticketId: number;

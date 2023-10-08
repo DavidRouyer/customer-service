@@ -3,7 +3,7 @@ import { FormattedMessage } from 'react-intl';
 
 import { PhoneNumber } from '~/components/infos/phone-number';
 import { Copy } from '~/components/ui/copy';
-import { api } from '~/utils/api';
+import { api } from '~/lib/api';
 
 const user = {
   app: {

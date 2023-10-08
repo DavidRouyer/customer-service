@@ -1,9 +1,9 @@
 import { FC } from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { TicketAssignmentDropdown } from '~/components/tickets/ticket-assignment-dropdown';
+import { TicketAssignmentCombobox } from '~/components/tickets/ticket-assignment-combobox';
 import { TicketStatusDropdowm } from '~/components/tickets/ticket-status-dropdown';
-import { api } from '~/utils/api';
+import { api } from '~/lib/api';
 
 export const TicketInfo: FC<{ ticketId: number }> = ({ ticketId }) => {
   const { data: ticketData } = api.ticket.byId.useQuery({
@@ -27,7 +27,7 @@ export const TicketInfo: FC<{ ticketId: number }> = ({ ticketId }) => {
         <FormattedMessage id="info_panel.ticket_panel.assignee" />
       </dt>
       <dd className="truncate text-sm leading-5 text-muted-foreground">
-        <TicketAssignmentDropdown
+        <TicketAssignmentCombobox
           assignedTo={ticketData?.assignedTo}
           ticketId={ticketId}
         />

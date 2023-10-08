@@ -1,4 +1,4 @@
-import { getInitials } from '~/utils/string';
+import { getInitials } from '~/lib/string';
 
 describe('getInitials', () => {
   it('should get correct initials with first name', () => {

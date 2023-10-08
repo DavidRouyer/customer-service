@@ -10,7 +10,7 @@ import { TicketStatus } from '@cs/database/schema/ticket';
 
 import { TicketListItem } from '~/components/tickets/ticket-list-item';
 import { TicketListItemSkeleton } from '~/components/tickets/ticket-list-item-skeleton';
-import { api } from '~/utils/api';
+import { api } from '~/lib/api';
 
 export const TicketList: FC<{
   filter: 'all' | 'me' | 'unassigned' | number;

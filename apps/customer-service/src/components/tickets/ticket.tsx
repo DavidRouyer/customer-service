@@ -5,7 +5,7 @@ import { FC } from 'react';
 import { MessageForm } from '~/components/messages/message-form';
 import { MessageList } from '~/components/messages/message-list';
 import { TicketHeader } from '~/components/tickets/ticket-header';
-import { api } from '~/utils/api';
+import { api } from '~/lib/api';
 
 export const Ticket: FC<{
   ticketId: number;

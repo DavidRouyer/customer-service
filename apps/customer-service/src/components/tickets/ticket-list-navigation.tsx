@@ -19,7 +19,7 @@ import {
   getUpdatedSearchParams,
   ORDER_BY_QUERY_PARAM,
   STATUS_QUERY_PARAM,
-} from '~/utils/search-params';
+} from '~/lib/search-params';
 
 export const TicketListNavigation: FC<{
   status: TicketStatus;

@@ -6,12 +6,12 @@ import { MessageGroup } from '~/components/messages/message-group';
 import { MessageSeparator } from '~/components/messages/message-separator';
 import { ScrollableMessageList } from '~/components/scroll/scrollable-message-list';
 import { RelativeDate } from '~/components/ui/relative-date';
+import { groupMessagesByDateAndUser } from '~/lib/message';
 import { Message as MessageType } from '~/types/Message';
-import { groupMessagesByDateAndUser } from '~/utils/message';
 
 import '~/components/messages/message-list.css';
 
-import { api } from '~/utils/api';
+import { api } from '~/lib/api';
 
 export const MessageList: FC<{ ticketId: number }> = ({ ticketId }) => {
   const { data: messagesData } = api.message.all.useQuery({

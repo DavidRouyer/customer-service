@@ -10,8 +10,8 @@ import {
 
 import { MessageStatus } from '~/components/messages/message-status';
 import { MessageTextContent } from '~/components/messages/message-text-content';
+import { cn } from '~/lib/utils';
 import { Message as MessageType } from '~/types/Message';
-import { cn } from '~/utils/utils';
 
 export type MessageProps = {
   message: MessageType;

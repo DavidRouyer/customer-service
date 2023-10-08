@@ -6,11 +6,11 @@ import { useSession } from 'next-auth/react';
 import { FormattedMessage } from 'react-intl';
 
 import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/avatar';
-import { api } from '~/utils/api';
-import { matchParams, matchPath } from '~/utils/path';
-import { FILTER_QUERY_PARAM } from '~/utils/search-params';
-import { getInitials } from '~/utils/string';
-import { cn } from '~/utils/utils';
+import { api } from '~/lib/api';
+import { matchParams, matchPath } from '~/lib/path';
+import { FILTER_QUERY_PARAM } from '~/lib/search-params';
+import { getInitials } from '~/lib/string';
+import { cn } from '~/lib/utils';
 
 export const InboxList: FC = () => {
   const session = useSession();

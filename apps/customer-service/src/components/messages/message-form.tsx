@@ -16,9 +16,9 @@ import {
 import { messageModeAtom } from '~/components/messages/message-mode-atom';
 import { TextEditor } from '~/components/text-editor/text-editor';
 import { Button } from '~/components/ui/button';
+import { api } from '~/lib/api';
 import { Comment } from '~/types/Comment';
 import { Message } from '~/types/Message';
-import { api } from '~/utils/api';
 
 type MessageFormSchema = {
   content: string;

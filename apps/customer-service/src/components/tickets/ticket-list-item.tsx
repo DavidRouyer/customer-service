@@ -8,7 +8,7 @@ import { RouterOutputs } from '@cs/api';
 
 import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/avatar';
 import { RelativeTime } from '~/components/ui/relative-time';
-import { getInitials } from '~/utils/string';
+import { getInitials } from '~/lib/string';
 
 export type TicketListItemProps = {
   ticket: NonNullable<RouterOutputs['ticket']['all']['data'][0]>;

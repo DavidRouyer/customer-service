@@ -1,6 +1,6 @@
 import { TicketStatus } from '@cs/database/schema/ticket';
 
-import { api, RouterOutputs } from '~/utils/api';
+import { api, RouterOutputs } from '~/lib/api';
 
 export const useReopenTicket = () => {
   const utils = api.useContext();

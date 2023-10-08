@@ -7,7 +7,7 @@ import { TicketStatus } from '@cs/database/schema/ticket';
 import { Button } from '~/components/ui/button';
 import { useReopenTicket } from '~/hooks/useReopenTicket';
 import { useResolveTicket } from '~/hooks/useResolveTicket';
-import { api } from '~/utils/api';
+import { api } from '~/lib/api';
 
 export const TicketHeader: FC<{ ticketId: number }> = ({ ticketId }) => {
   const { data: ticketData } = api.ticket.byId.useQuery({ id: ticketId });

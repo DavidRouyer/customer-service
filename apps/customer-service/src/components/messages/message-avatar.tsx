@@ -3,9 +3,9 @@ import { FC } from 'react';
 import { MessageDirection } from '@cs/database/schema/message';
 
 import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/avatar';
+import { getInitials } from '~/lib/string';
+import { cn } from '~/lib/utils';
 import { Contact } from '~/types/Contact';
-import { getInitials } from '~/utils/string';
-import { cn } from '~/utils/utils';
 
 type MessageAvatarProps = {
   direction: MessageDirection;

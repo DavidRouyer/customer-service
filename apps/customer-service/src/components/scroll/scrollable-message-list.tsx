@@ -1,7 +1,7 @@
 import React, { forwardRef, useImperativeHandle, useRef } from 'react';
 
 import Scrollbar from '~/components/scroll/scrollbar';
-import { cn } from '~/utils/utils';
+import { cn } from '~/lib/utils';
 
 import '~/components/scroll/perfect-scrollbar.css';
 

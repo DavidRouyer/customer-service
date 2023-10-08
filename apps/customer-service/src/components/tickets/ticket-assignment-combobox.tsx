@@ -1,33 +1,80 @@
-import { FC } from 'react';
-import { Plus, XCircle } from 'lucide-react';
-import { FormattedMessage } from 'react-intl';
+import { FC, useCallback, useState } from 'react';
+import { Check, Plus } from 'lucide-react';
+import { useSession } from 'next-auth/react';
+import { FormattedMessage, useIntl } from 'react-intl';
 
 import { RouterOutputs } from '@cs/api';
 
 import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/avatar';
 import { Button } from '~/components/ui/button';
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '~/components/ui/dropdown-menu';
-import { api } from '~/utils/api';
-import { getInitials } from '~/utils/string';
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+} from '~/components/ui/command';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '~/components/ui/popover';
+import { api } from '~/lib/api';
+import { getInitials } from '~/lib/string';
+import { cn } from '~/lib/utils';
 
-type TicketAssignmentDropdownProps = {
+type TicketAssignmentComboboxProps = {
   assignedTo?: NonNullable<RouterOutputs['ticket']['byId']>['assignedTo'];
   ticketId: number;
 };
 
-export const TicketAssignmentDropdown: FC<TicketAssignmentDropdownProps> = ({
+export const TicketAssignmentCombobox: FC<TicketAssignmentComboboxProps> = ({
   assignedTo,
   ticketId,
 }) => {
+  const { formatMessage } = useIntl();
+  const { data: sessionData } = useSession();
+
+  const [open, setOpen] = useState(false);
+
   const utils = api.useContext();
 
-  const { data: contactsData } = api.contact.allWithUserId.useQuery();
+  const { data: contactsData } = api.contact.allWithUserId.useQuery(undefined, {
+    select: useCallback(
+      (data: RouterOutputs['contact']['allWithUserId']) => {
+        let newContacts = data.map((contact) => contact);
+        if (sessionData?.user.contactId) {
+          const sessionContact = newContacts.find(
+            (contact) => contact.id === sessionData.user.contactId
+          );
+          if (sessionContact) {
+            newContacts = [
+              sessionContact,
+              ...newContacts.filter(
+                (contact) => contact.id !== sessionContact.id
+              ),
+            ];
+          }
+        }
+        if (assignedTo) {
+          const assignedToContact = newContacts.find(
+            (contact) => contact.id === assignedTo.id
+          );
+          if (assignedToContact) {
+            newContacts = [
+              assignedToContact,
+              ...newContacts.filter(
+                (contact) => contact.id !== assignedToContact.id
+              ),
+            ];
+          }
+        }
+
+        return newContacts;
+      },
+      [assignedTo, sessionData?.user]
+    ),
+  });
 
   const { mutateAsync: addAssignment } = api.ticket.addAssignment.useMutation({
     onMutate: async (newAssignment) => {
@@ -139,11 +186,13 @@ export const TicketAssignmentDropdown: FC<TicketAssignmentDropdownProps> = ({
     });
 
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
+    <Popover open={open} onOpenChange={setOpen}>
+      <PopoverTrigger asChild>
         <Button
           type="button"
           variant="ghost"
+          role="combobox"
+          aria-expanded={open}
           className="flex h-auto items-center justify-between gap-x-1 px-2 text-sm leading-6"
         >
           {assignedTo ? (
@@ -167,56 +216,64 @@ export const TicketAssignmentDropdown: FC<TicketAssignmentDropdownProps> = ({
             </div>
           )}
         </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
-        <DropdownMenuGroup>
-          {assignedTo ? (
-            <DropdownMenuItem
-              onClick={() =>
-                removeAssignment({
-                  id: ticketId,
-                })
-              }
-              className="flex items-center gap-x-2 text-destructive"
-            >
-              <XCircle className="h-5 w-5" />
-              <FormattedMessage id="ticket.actions.remove_assignment" />
-            </DropdownMenuItem>
-          ) : null}
-          {contactsData
-            ?.filter((contact) => contact.id !== assignedTo?.id)
-            ?.map((contact) => (
-              <DropdownMenuItem
+      </PopoverTrigger>
+      <PopoverContent className="w-[200px] p-0">
+        <Command>
+          <CommandInput
+            placeholder={formatMessage({
+              id: 'ticket.assignment.search.placeholder',
+            })}
+          />
+          <CommandEmpty>
+            <FormattedMessage id="ticket.assignment.no_results" />
+          </CommandEmpty>
+          <CommandGroup>
+            {contactsData?.map((contact) => (
+              <CommandItem
                 key={contact.id}
-                onClick={() => {
+                value={contact.id.toString()}
+                onSelect={(value) => {
+                  const parsedValue = parseInt(value, 10);
                   if (assignedTo) {
-                    changeAssignment({
-                      id: ticketId,
-                      contactId: contact.id,
-                    });
+                    if (parsedValue === assignedTo.id) {
+                      removeAssignment({ id: ticketId });
+                    } else {
+                      changeAssignment({
+                        id: ticketId,
+                        contactId: parsedValue,
+                      });
+                    }
                   } else {
                     addAssignment({
                       id: ticketId,
-                      contactId: contact.id,
+                      contactId: parsedValue,
                     });
                   }
+                  setOpen(false);
                 }}
               >
-                <div className="flex items-center gap-x-2">
+                <Check
+                  className={cn(
+                    'mr-2 h-4 w-4 shrink-0',
+                    assignedTo?.id === contact.id ? 'opacity-100' : 'opacity-0'
+                  )}
+                />
+                <div className="flex items-center gap-x-2 truncate">
                   <Avatar className="h-5 w-5">
                     <AvatarImage src={contact?.avatarUrl ?? undefined} />
                     <AvatarFallback>
                       {getInitials(contact?.name ?? '')}
                     </AvatarFallback>
                   </Avatar>
-                  <p className="text-xs text-muted-foreground">
+                  <p className="truncate text-xs text-muted-foreground">
                     {contact?.name}
                   </p>
                 </div>
-              </DropdownMenuItem>
+              </CommandItem>
             ))}
-        </DropdownMenuGroup>
-      </DropdownMenuContent>
-    </DropdownMenu>
+          </CommandGroup>
+        </Command>
+      </PopoverContent>
+    </Popover>
   );
 };

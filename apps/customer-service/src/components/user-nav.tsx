@@ -12,7 +12,7 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from '~/components/ui/dropdown-menu';
-import { getInitials } from '~/utils/string';
+import { getInitials } from '~/lib/string';
 
 export function UserNav({ showLabel = false }) {
   const session = useSession();

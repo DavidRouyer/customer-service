@@ -9,7 +9,7 @@ import { Provider } from 'jotai';
 import { SessionProvider } from 'next-auth/react';
 import superjson from 'superjson';
 
-import { api } from '~/utils/api';
+import { api } from '~/lib/api';
 
 const getBaseUrl = () => {
   if (typeof window !== 'undefined') return ''; // browser should use relative url

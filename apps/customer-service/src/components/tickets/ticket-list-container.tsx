@@ -14,7 +14,7 @@ import {
   ORDER_BY_QUERY_PARAM,
   parseFilters,
   STATUS_QUERY_PARAM,
-} from '~/utils/search-params';
+} from '~/lib/search-params';
 
 export const TicketListContainer = () => {
   const searchParams = useSearchParams();

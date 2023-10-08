@@ -4,9 +4,9 @@ import { MessageDirection } from '@cs/database/schema/message';
 
 import { Message } from '~/components/messages/message';
 import { MessageAvatar } from '~/components/messages/message-avatar';
+import { cn } from '~/lib/utils';
 import { Contact } from '~/types/Contact';
 import { Message as MessageType } from '~/types/Message';
-import { cn } from '~/utils/utils';
 
 export type MessageGroupProps = {
   direction: MessageDirection;

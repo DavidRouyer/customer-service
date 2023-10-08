@@ -14,9 +14,9 @@ import {
 
 import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/avatar';
 import { RelativeTime } from '~/components/ui/relative-time';
-import { api } from '~/utils/api';
-import { getInitials } from '~/utils/string';
-import { cn } from '~/utils/utils';
+import { api } from '~/lib/api';
+import { getInitials } from '~/lib/string';
+import { cn } from '~/lib/utils';
 
 export const Activity: FC<{
   ticketId: number;

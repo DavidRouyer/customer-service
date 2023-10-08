@@ -6,7 +6,7 @@ import { useSearchParams } from 'next/navigation';
 import { FormattedDate, FormattedMessage } from 'react-intl';
 
 import { Badge } from '~/components/ui/badge';
-import { api } from '~/utils/api';
+import { api } from '~/lib/api';
 
 type LinkedTicketsProps = {
   ticketId: number;

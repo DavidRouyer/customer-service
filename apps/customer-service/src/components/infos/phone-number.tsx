@@ -5,7 +5,7 @@ import { FC } from 'react';
 import {
   parseAndFormatPhoneNumber,
   PhoneNumberFormat,
-} from '~/utils/libphonenumber';
+} from '~/lib/libphonenumber';
 
 export const PhoneNumber: FC<{
   value: string;

@@ -4,8 +4,8 @@ import {
   MessageStatus,
 } from '@cs/database/schema/message';
 
+import { groupMessagesByDateAndUser } from '~/lib/message';
 import { Message } from '~/types/Message';
-import { groupMessagesByDateAndUser } from '~/utils/message';
 
 describe('groupMessagesByDateAndUser', () => {
   it('should correctly group messages', () => {
