@@ -48,7 +48,7 @@ export const messages = pgTable('Message', {
   contentType: messageContentType('contentType').notNull(),
   content: jsonb('content').$type<string>().notNull(),
   direction: messageDirection('direction').notNull(),
-  senderId: integer('senderId')
+  authorId: integer('authorId')
     .notNull()
     .references(() => contacts.id, {
       onDelete: 'restrict',
@@ -63,8 +63,8 @@ export const messages = pgTable('Message', {
 });
 
 export const messagesRelations = relations(messages, ({ one }) => ({
-  sender: one(contacts, {
-    fields: [messages.senderId],
+  author: one(contacts, {
+    fields: [messages.authorId],
     references: [contacts.id],
   }),
   ticket: one(tickets, {

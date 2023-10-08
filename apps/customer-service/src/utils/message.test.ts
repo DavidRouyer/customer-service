@@ -14,7 +14,7 @@ describe('groupMessagesByDateAndUser', () => {
         id: 1,
         createdAt: new Date('2021-01-01T00:00:00.000Z'),
         content: 'Hello',
-        sender: {
+        author: {
           id: 1,
           name: 'John Doe',
           email: null,
@@ -25,7 +25,7 @@ describe('groupMessagesByDateAndUser', () => {
           timezone: null,
           createdAt: new Date('2021-01-01T00:00:00.000Z'),
         },
-        senderId: 1,
+        authorId: 1,
         ticketId: 1,
         contentType: MessageContentType.TextPlain,
         direction: MessageDirection.Outbound,
@@ -35,7 +35,7 @@ describe('groupMessagesByDateAndUser', () => {
         id: 2,
         createdAt: new Date('2021-01-01T00:00:59.000Z'),
         content: 'Hello',
-        sender: {
+        author: {
           id: 1,
           name: 'John Doe',
           email: null,
@@ -46,7 +46,7 @@ describe('groupMessagesByDateAndUser', () => {
           timezone: null,
           createdAt: new Date('2021-01-01T00:00:00.000Z'),
         },
-        senderId: 1,
+        authorId: 1,
         ticketId: 1,
         contentType: MessageContentType.TextPlain,
         direction: MessageDirection.Outbound,
@@ -61,7 +61,7 @@ describe('groupMessagesByDateAndUser', () => {
         id: 1,
         createdAt: new Date('2021-01-01T00:00:00.000Z'),
         content: 'Hello',
-        sender: {
+        author: {
           id: 1,
           name: 'John Doe',
           email: null,
@@ -72,7 +72,7 @@ describe('groupMessagesByDateAndUser', () => {
           timezone: null,
           createdAt: new Date('2021-01-01T00:00:00.000Z'),
         },
-        senderId: 1,
+        authorId: 1,
         ticketId: 1,
         contentType: MessageContentType.TextPlain,
         direction: MessageDirection.Outbound,
@@ -82,7 +82,7 @@ describe('groupMessagesByDateAndUser', () => {
         id: 2,
         createdAt: new Date('2021-01-01T00:01:59.000Z'),
         content: 'Hello',
-        sender: {
+        author: {
           id: 1,
           name: 'John Doe',
           email: null,
@@ -93,7 +93,7 @@ describe('groupMessagesByDateAndUser', () => {
           timezone: null,
           createdAt: new Date('2021-01-01T00:01:59.000Z'),
         },
-        senderId: 1,
+        authorId: 1,
         ticketId: 1,
         contentType: MessageContentType.TextPlain,
         direction: MessageDirection.Outbound,
@@ -110,7 +110,7 @@ describe('groupMessagesByDateAndUser', () => {
         id: 1,
         createdAt: new Date('2021-01-01T00:00:00.000Z'),
         content: 'Hello',
-        sender: {
+        author: {
           id: 1,
           name: 'John Doe',
           email: null,
@@ -121,7 +121,7 @@ describe('groupMessagesByDateAndUser', () => {
           timezone: null,
           createdAt: new Date('2021-01-01T00:00:00.000Z'),
         },
-        senderId: 1,
+        authorId: 1,
         ticketId: 1,
         contentType: MessageContentType.TextPlain,
         direction: MessageDirection.Outbound,
@@ -131,7 +131,7 @@ describe('groupMessagesByDateAndUser', () => {
         id: 2,
         createdAt: new Date('2021-01-01T00:00:59.000Z'),
         content: 'Hello',
-        sender: {
+        author: {
           id: 2,
           name: 'Jane Doe',
           email: null,
@@ -142,7 +142,7 @@ describe('groupMessagesByDateAndUser', () => {
           timezone: null,
           createdAt: new Date('2021-01-01T00:00:59.000Z'),
         },
-        senderId: 1,
+        authorId: 1,
         ticketId: 1,
         contentType: MessageContentType.TextPlain,
         direction: MessageDirection.Outbound,

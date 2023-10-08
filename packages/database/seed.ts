@@ -125,7 +125,7 @@ async function main() {
         createdAt: new Date('2023-05-04T20:54:41.389Z'),
         direction: MessageDirection.Inbound,
         status: MessageStatus.Seen,
-        senderId: leslie.id,
+        authorId: leslie.id,
         ticketId: leslieTicket.id,
       },
       {
@@ -135,7 +135,7 @@ async function main() {
         createdAt: new Date('2023-05-11T10:33:56.231Z'),
         direction: MessageDirection.Outbound,
         status: MessageStatus.Seen,
-        senderId: tom.id,
+        authorId: tom.id,
         ticketId: leslieTicket.id,
       },
     ])
@@ -159,6 +159,39 @@ async function main() {
     type: TicketActivityType.Created,
     createdAt: leslieTicket2.createdAt,
   });
+
+  await db
+    .insert(schema.messages)
+    .values([
+      {
+        contentType: MessageContentType.TextPlain,
+        content: 'can ya help me change a product of purchase?',
+        createdAt: new Date('2023-06-23T14:56Z'),
+        direction: MessageDirection.Inbound,
+        status: MessageStatus.Seen,
+        authorId: leslie.id,
+        ticketId: leslieTicket2.id,
+      },
+      {
+        contentType: MessageContentType.TextPlain,
+        content: 'Can you tell me which product you would like to change?',
+        createdAt: new Date('2023-03-03T22:40Z'),
+        direction: MessageDirection.Outbound,
+        status: MessageStatus.Seen,
+        authorId: tom.id,
+        ticketId: leslieTicket2.id,
+      },
+      {
+        contentType: MessageContentType.TextPlain,
+        content: 'The socks, please',
+        createdAt: new Date('2023-03-03T22:40Z'),
+        direction: MessageDirection.Inbound,
+        status: MessageStatus.Seen,
+        authorId: leslie.id,
+        ticketId: leslieTicket2.id,
+      },
+    ])
+    .returning({ id: schema.tickets.id });
 
   const leslieTicket3 = await db
     .insert(schema.tickets)
@@ -190,6 +223,21 @@ async function main() {
     type: TicketActivityType.Resolved,
     createdAt: leslieTicket3.resolvedAt ?? new Date(),
   });
+
+  await db
+    .insert(schema.messages)
+    .values([
+      {
+        contentType: MessageContentType.TextPlain,
+        content: 'problems with canceling purchase',
+        createdAt: new Date('2023-07-07T16:59Z'),
+        direction: MessageDirection.Inbound,
+        status: MessageStatus.DeliveredToDevice,
+        authorId: leslie.id,
+        ticketId: leslieTicket3.id,
+      },
+    ])
+    .returning({ id: schema.tickets.id });
 
   const michael = await db
     .insert(schema.contacts)
@@ -232,7 +280,7 @@ async function main() {
         createdAt: new Date('2023-03-03T14:02Z'),
         direction: MessageDirection.Inbound,
         status: MessageStatus.Seen,
-        senderId: michael.id,
+        authorId: michael.id,
         ticketId: michaelTicket.id,
       },
       {
@@ -242,7 +290,7 @@ async function main() {
         createdAt: new Date('2023-03-12T17:20Z'),
         direction: MessageDirection.Outbound,
         status: MessageStatus.Seen,
-        senderId: jeffrey.id,
+        authorId: jeffrey.id,
         ticketId: michaelTicket.id,
       },
     ])
@@ -289,7 +337,7 @@ async function main() {
         createdAt: new Date('2023-03-03T13:23Z'),
         direction: MessageDirection.Inbound,
         status: MessageStatus.Seen,
-        senderId: dries.id,
+        authorId: dries.id,
         ticketId: driesTicket.id,
       },
       {
@@ -299,7 +347,7 @@ async function main() {
         createdAt: new Date('2023-04-01T06:06Z'),
         direction: MessageDirection.Outbound,
         status: MessageStatus.DeliveredToDevice,
-        senderId: jeffrey.id,
+        authorId: jeffrey.id,
         ticketId: driesTicket.id,
       },
     ])
@@ -342,7 +390,7 @@ async function main() {
         createdAt: new Date('2023-03-02T21:13Z'),
         direction: MessageDirection.Inbound,
         status: MessageStatus.Seen,
-        senderId: lindsay.id,
+        authorId: lindsay.id,
         ticketId: lindsayTicket.id,
       },
       {
@@ -352,7 +400,7 @@ async function main() {
         createdAt: new Date('2023-03-03T22:40Z'),
         direction: MessageDirection.Outbound,
         status: MessageStatus.DeliveredToDevice,
-        senderId: tom.id,
+        authorId: tom.id,
         ticketId: lindsayTicket.id,
       },
     ])

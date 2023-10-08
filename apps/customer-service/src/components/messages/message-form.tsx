@@ -50,14 +50,16 @@ export const MessageForm: FC<{ ticketId: number }> = ({ ticketId }) => {
           [
             ...(oldQueryData ?? []),
             {
-              id: self.crypto.randomUUID(),
+              id: self.crypto.randomUUID() as unknown as number,
+              ticketId: newMessage.ticketId,
               direction: newMessage.direction,
               contentType: newMessage.contentType,
               status: newMessage.status,
               content: newMessage.content,
               createdAt: newMessage.createdAt,
-              senderId: session.data?.user?.contactId ?? 0,
-              sender: {
+              authorId: session.data?.user?.contactId ?? 0,
+              // TODO: remove hack by fetching contact from user
+              author: {
                 name: session.data?.user?.name ?? '',
                 avatarUrl: session.data?.user?.image ?? '',
                 id: session.data?.user?.contactId ?? 0,
@@ -104,6 +106,7 @@ export const MessageForm: FC<{ ticketId: number }> = ({ ticketId }) => {
               content: newTicket.content,
               createdAt: newTicket.createdAt,
               authorId: session.data?.user?.contactId ?? 0,
+              // TODO: remove hack by fetching contact from user
               author: {
                 name: session.data?.user?.name ?? '',
                 avatarUrl: session.data?.user?.image ?? '',
@@ -139,7 +142,7 @@ export const MessageForm: FC<{ ticketId: number }> = ({ ticketId }) => {
         status: MessageStatus.Pending,
         content: data.content,
         createdAt: new Date(),
-        senderId: session.data?.user?.contactId ?? 0,
+        authorId: session.data?.user?.contactId ?? 0,
       });
     } else {
       sendComment({

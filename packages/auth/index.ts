@@ -33,6 +33,7 @@ export const {
 } = NextAuth({
   adapter: {
     ...DrizzleAdapter(db, tableCreator),
+    // TODO: remove hack when https://github.com/nextauthjs/next-auth/pull/8561 is released
     async getSessionAndUser(data) {
       return (await db
         .select({

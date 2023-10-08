@@ -6,7 +6,7 @@ export const groupMessagesByDateAndUser = (messages: Message[]) => {
       const date = new Date(message.createdAt);
       date.setUTCMilliseconds(0);
       date.setUTCSeconds(0);
-      const idx = `${date.toISOString()}.${message.sender.id}`;
+      const idx = `${date.toISOString()}.${message.author.id}`;
       const messages = acc[idx] ?? [];
 
       return {

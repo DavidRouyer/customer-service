@@ -1,3 +1,3 @@
 import { RouterOutputs } from '@cs/api';
 
-export type Contact = RouterOutputs['message']['all'][0]['sender'];
+export type Contact = RouterOutputs['message']['all'][0]['author'];
