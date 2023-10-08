@@ -6,6 +6,7 @@ import * as contact from './schema/contact';
 import * as message from './schema/message';
 import * as ticket from './schema/ticket';
 import * as ticketActivities from './schema/ticketActivity';
+import * as ticketComments from './schema/ticketComment';
 
 export const schema = {
   ...auth,
@@ -13,6 +14,7 @@ export const schema = {
   ...message,
   ...ticket,
   ...ticketActivities,
+  ...ticketComments,
 };
 
 export { pgTable as tableCreator } from './schema/_table';

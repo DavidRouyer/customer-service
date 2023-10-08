@@ -1,3 +1,4 @@
+import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
 
 import { asc, eq, schema } from '@cs/database';
@@ -12,7 +13,7 @@ export const messageRouter = createTRPCRouter({
       return ctx.db.query.messages.findMany({
         where: eq(schema.messages.ticketId, input.ticketId),
         orderBy: asc(schema.messages.createdAt),
-        with: { sender: true },
+        with: { author: true },
       });
     }),
 
@@ -23,12 +24,22 @@ export const messageRouter = createTRPCRouter({
         contentType: z.enum(schema.messages.contentType.enumValues),
         createdAt: z.date(),
         direction: z.enum(schema.messages.direction.enumValues),
-        senderId: z.number(),
+        authorId: z.number(),
         ticketId: z.number(),
         status: z.enum(schema.messages.status.enumValues),
       })
     )
-    .mutation(({ ctx, input }) => {
+    .mutation(async ({ ctx, input }) => {
+      const ticket = await ctx.db.query.tickets.findFirst({
+        where: eq(schema.tickets.id, input.ticketId),
+      });
+
+      if (!ticket)
+        throw new TRPCError({
+          code: 'BAD_REQUEST',
+          message: 'ticket_not_found',
+        });
+
       return ctx.db
         .insert(schema.messages)
         .values({

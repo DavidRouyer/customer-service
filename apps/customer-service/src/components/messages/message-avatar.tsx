@@ -9,12 +9,12 @@ import { cn } from '~/utils/utils';
 
 type MessageAvatarProps = {
   direction: MessageDirection;
-  sender: Contact;
+  author: Contact;
 };
 
 export const MessageAvatar: FC<MessageAvatarProps> = ({
   direction,
-  sender,
+  author,
 }) => {
   return (
     <Avatar
@@ -24,11 +24,11 @@ export const MessageAvatar: FC<MessageAvatarProps> = ({
       )}
     >
       <AvatarImage
-        src={sender.avatarUrl ?? undefined}
-        alt={sender.name ?? ''}
+        src={author.avatarUrl ?? undefined}
+        alt={author.name ?? ''}
       />
       <AvatarFallback className="text-xs">
-        {getInitials(sender.name ?? '')}
+        {getInitials(author.name ?? '')}
       </AvatarFallback>
     </Avatar>
   );

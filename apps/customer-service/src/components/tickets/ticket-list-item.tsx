@@ -50,7 +50,7 @@ export const TicketListItem: FC<TicketListItemProps> = ({ ticket }) => {
           </div>
           <p className="mt-1 line-clamp-2 text-sm leading-6 text-muted-foreground">
             {session.data?.user?.contactId ===
-            ticket.messages?.[0]?.senderId ? (
+            ticket.messages?.[0]?.authorId ? (
               <>
                 <FormattedMessage id="you" />{' '}
               </>

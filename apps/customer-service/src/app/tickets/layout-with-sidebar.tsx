@@ -4,6 +4,7 @@ import { FC, Suspense, useState } from 'react';
 import { AlignJustify } from 'lucide-react';
 import { FormattedMessage } from 'react-intl';
 
+import { CommandMenu } from '~/components/command-menu/command-menu';
 import { Logo } from '~/components/logo';
 import { InboxList } from '~/components/navbar/inbox-list';
 import { TeamMemberList } from '~/components/navbar/team-member-list';
@@ -43,6 +44,7 @@ export const LayoutWithSidebar: FC<{
 
   return (
     <div>
+      <CommandMenu />
       <Sheet open={sidebarOpen} onOpenChange={(open) => setSidebarOpen(open)}>
         <SheetContent position="left" size="content">
           <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-background px-6 pb-2">

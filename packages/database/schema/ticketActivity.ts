@@ -9,17 +9,18 @@ export enum TicketActivityType {
   AssignmentAdded = 'AssignmentAdded',
   AssignmentChanged = 'AssignmentChanged',
   AssignmentRemoved = 'AssignmentRemoved',
-  CommentAdded = 'CommentAdded',
+  Commented = 'Commented',
   Created = 'Created',
   Reopened = 'Reopened',
   Resolved = 'Resolved',
 }
 
 export const ticketStatus = pgEnum('TicketActivityType', [
-  TicketActivityType.Created,
   TicketActivityType.AssignmentAdded,
   TicketActivityType.AssignmentChanged,
   TicketActivityType.AssignmentRemoved,
+  TicketActivityType.Commented,
+  TicketActivityType.Created,
   TicketActivityType.Resolved,
   TicketActivityType.Reopened,
 ]);
@@ -37,6 +38,10 @@ export type TicketAssignmentRemoved = {
   oldAssignedToId: number;
 };
 
+export type TicketCommented = {
+  comment: string;
+};
+
 export const ticketActivities = pgTable('TicketActivity', {
   id: serial('id').primaryKey().notNull(),
   createdAt: timestamp('createdAt', { precision: 3, mode: 'date' })
@@ -44,7 +49,10 @@ export const ticketActivities = pgTable('TicketActivity', {
     .notNull(),
   type: ticketStatus('type').notNull(),
   extraInfo: json('extraInfo').$type<
-    TicketAssignmentAdded | TicketAssignmentChanged | TicketAssignmentRemoved
+    | TicketAssignmentAdded
+    | TicketAssignmentChanged
+    | TicketAssignmentRemoved
+    | TicketCommented
   >(),
   ticketId: integer('ticketId')
     .notNull()

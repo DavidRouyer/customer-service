@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { ReactQueryStreamedHydration } from '@tanstack/react-query-next-experimental';
 import { loggerLink, unstable_httpBatchStreamLink } from '@trpc/client';
+import { Provider } from 'jotai';
 import { SessionProvider } from 'next-auth/react';
 import superjson from 'superjson';
 
@@ -57,7 +58,9 @@ export function TRPCReactProvider(props: {
     <api.Provider client={trpcClient} queryClient={queryClient}>
       <QueryClientProvider client={queryClient}>
         <ReactQueryStreamedHydration transformer={superjson}>
-          <SessionProvider>{props.children}</SessionProvider>
+          <SessionProvider>
+            <Provider>{props.children}</Provider>
+          </SessionProvider>
         </ReactQueryStreamedHydration>
         <ReactQueryDevtools initialIsOpen={false} />
       </QueryClientProvider>

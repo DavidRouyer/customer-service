@@ -10,13 +10,13 @@ import { cn } from '~/utils/utils';
 
 export type MessageGroupProps = {
   direction: MessageDirection;
-  sender: Contact;
+  author: Contact;
   messages: MessageType[];
 };
 
 export const MessageGroup: FC<MessageGroupProps> = ({
   direction,
-  sender,
+  author,
   messages,
 }) => {
   return (
@@ -43,7 +43,7 @@ export const MessageGroup: FC<MessageGroupProps> = ({
             />
           ))}
         </div>
-        <MessageAvatar direction={direction} sender={sender} />
+        <MessageAvatar direction={direction} author={author} />
       </div>
     </section>
   );

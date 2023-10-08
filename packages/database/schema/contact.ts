@@ -21,7 +21,7 @@ export const contacts = pgTable('Contact', {
 
 export const contactsRelations = relations(contacts, ({ one, many }) => ({
   tickets: many(tickets),
-  sender: one(users, {
+  user: one(users, {
     fields: [contacts.userId],
     references: [users.id],
   }),

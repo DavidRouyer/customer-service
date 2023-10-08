@@ -41,14 +41,14 @@ export const MessageList: FC<{ ticketId: number }> = ({ ticketId }) => {
               <Message key={messages[0]!.id} message={messages[0]!}>
                 <MessageAvatar
                   direction={messages[0]!.direction}
-                  sender={messages[0]!.sender}
+                  author={messages[0]!.author}
                 />
               </Message>
             ) : (
               <MessageGroup
                 key={messages[0]?.id}
                 direction={messages[0]!.direction}
-                sender={messages[0]!.sender}
+                author={messages[0]!.author}
                 messages={messages}
               />
             )

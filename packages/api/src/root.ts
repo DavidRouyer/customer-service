@@ -3,6 +3,7 @@ import { contactRouter } from './router/contact';
 import { messageRouter } from './router/message';
 import { ticketRouter } from './router/ticket';
 import { ticketActivityRouter } from './router/ticketActivity';
+import { ticketCommentRouter } from './router/ticketComment';
 import { createTRPCRouter } from './trpc';
 
 export const appRouter = createTRPCRouter({
@@ -11,6 +12,7 @@ export const appRouter = createTRPCRouter({
   message: messageRouter,
   ticket: ticketRouter,
   ticketActivity: ticketActivityRouter,
+  ticketComment: ticketCommentRouter,
 });
 
 // export type definition of API
