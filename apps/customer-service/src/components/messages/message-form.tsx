@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, FC, RefObject, useRef } from 'react';
+import { createContext, FC, RefObject, useRef, useState } from 'react';
 import { PaperclipIcon, SmilePlusIcon } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
@@ -14,6 +14,7 @@ import {
 
 import { TextEditor } from '~/components/text-editor/text-editor';
 import { Button } from '~/components/ui/button';
+import { Comment } from '~/types/Comment';
 import { Message } from '~/types/Message';
 import { api } from '~/utils/api';
 
@@ -28,6 +29,9 @@ export const MessageForm: FC<{ ticketId: number }> = ({ ticketId }) => {
   const formRef = useRef<HTMLFormElement>(null);
   const session = useSession();
   const utils = api.useContext();
+
+  const [messageMode] = useState<'message' | 'comment'>('message');
+
   const { mutateAsync: sendMessage } = api.message.create.useMutation({
     onMutate: async (newMessage) => {
       // Cancel any outgoing refetches
@@ -76,18 +80,76 @@ export const MessageForm: FC<{ ticketId: number }> = ({ ticketId }) => {
       void utils.message.all.invalidate({ ticketId: ticketId });
     },
   });
+  const { mutateAsync: sendComment } = api.ticketComment.create.useMutation({
+    onMutate: async (newTicket) => {
+      // Cancel any outgoing refetches
+      // (so they don't overwrite our optimistic update)
+      await utils.ticketComment.byTicketId.cancel({
+        ticketId: newTicket.ticketId,
+      });
+
+      // Snapshot the previous value
+      const previousComments = utils.ticketComment.byTicketId.getData({
+        ticketId: newTicket.ticketId,
+      });
+
+      // Optimistically update to the new value
+      utils.ticketComment.byTicketId.setData(
+        { ticketId: newTicket.ticketId },
+        (oldQueryData: Comment[] | undefined) =>
+          [
+            ...(oldQueryData ?? []),
+            {
+              id: self.crypto.randomUUID(),
+              content: newTicket.content,
+              createdAt: newTicket.createdAt,
+              authorId: session.data?.user?.contactId ?? 0,
+              author: {
+                name: session.data?.user?.name ?? '',
+                avatarUrl: session.data?.user?.image ?? '',
+                id: session.data?.user?.contactId ?? 0,
+              },
+            },
+          ] as Comment[]
+      );
+
+      // Return a context object with the snapshotted value
+      return { previousComments };
+    },
+    onError: (err, _newTicket, context) => {
+      // TODO: handle failed queries
+      utils.ticketComment.byTicketId.setData(
+        { ticketId: _newTicket.ticketId },
+        context?.previousComments ?? []
+      );
+    },
+    onSettled: (_, __, { ticketId }) => {
+      void utils.ticketComment.byTicketId.invalidate({ ticketId: ticketId });
+      void utils.ticketActivity.byTicketId.invalidate({ ticketId: ticketId });
+    },
+  });
   const form = useForm<MessageFormSchema>();
 
   const onSubmit = (data: MessageFormSchema) => {
-    sendMessage({
-      ticketId: ticketId,
-      direction: MessageDirection.Outbound,
-      contentType: MessageContentType.TextPlain,
-      status: MessageStatus.Pending,
-      content: data.content,
-      createdAt: new Date(),
-      senderId: session.data?.user?.contactId ?? 0,
-    });
+    if (messageMode === 'message') {
+      sendMessage({
+        ticketId: ticketId,
+        direction: MessageDirection.Outbound,
+        contentType: MessageContentType.TextPlain,
+        status: MessageStatus.Pending,
+        content: data.content,
+        createdAt: new Date(),
+        senderId: session.data?.user?.contactId ?? 0,
+      });
+    } else {
+      sendComment({
+        ticketId: ticketId,
+        content: data.content,
+        createdAt: new Date(),
+        authorId: session.data?.user?.contactId ?? 0,
+      });
+    }
+
     form.reset({
       content: '',
     });

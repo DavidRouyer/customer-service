@@ -1,3 +1,4 @@
+import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
 
 import { asc, eq, schema } from '@cs/database';
@@ -28,7 +29,17 @@ export const messageRouter = createTRPCRouter({
         status: z.enum(schema.messages.status.enumValues),
       })
     )
-    .mutation(({ ctx, input }) => {
+    .mutation(async ({ ctx, input }) => {
+      const ticket = await ctx.db.query.tickets.findFirst({
+        where: eq(schema.tickets.id, input.ticketId),
+      });
+
+      if (!ticket)
+        throw new TRPCError({
+          code: 'BAD_REQUEST',
+          message: 'ticket_not_found',
+        });
+
       return ctx.db
         .insert(schema.messages)
         .values({

@@ -6,6 +6,7 @@ import {
   TicketAssignmentAdded,
   TicketAssignmentChanged,
   TicketAssignmentRemoved,
+  TicketCommented,
 } from '@cs/database/schema/ticketActivity';
 
 import { createTRPCRouter, protectedProcedure } from '../trpc';
@@ -40,6 +41,7 @@ export const ticketActivityRouter = createTRPCRouter({
           | TicketAssignmentAddedWithData
           | TicketAssignmentChangedWithData
           | TicketAssignmentRemovedWithData
+          | TicketCommented
           | null;
       })[] = [];
 
@@ -122,6 +124,12 @@ export const ticketActivityRouter = createTRPCRouter({
                       .oldAssignedToId
                 ),
               },
+            });
+            break;
+          case TicketActivityType.Commented:
+            augmentedTicketActivities.push({
+              ...ticketActivity,
+              extraInfo: ticketActivity.extraInfo as TicketCommented,
             });
             break;
           default:
