@@ -166,7 +166,7 @@ async function main() {
       {
         contentType: MessageContentType.TextPlain,
         content: 'can ya help me change a product of purchase?',
-        createdAt: new Date('2023-06-23T14:56Z'),
+        createdAt: new Date('2023-05-06T11:23:45.389Z'),
         direction: MessageDirection.Inbound,
         status: MessageStatus.Seen,
         authorId: leslie.id,
@@ -175,7 +175,7 @@ async function main() {
       {
         contentType: MessageContentType.TextPlain,
         content: 'Can you tell me which product you would like to change?',
-        createdAt: new Date('2023-03-03T22:40Z'),
+        createdAt: new Date('2023-05-07T22:40Z'),
         direction: MessageDirection.Outbound,
         status: MessageStatus.Seen,
         authorId: tom.id,
@@ -184,7 +184,7 @@ async function main() {
       {
         contentType: MessageContentType.TextPlain,
         content: 'The socks, please',
-        createdAt: new Date('2023-03-03T22:40Z'),
+        createdAt: new Date('2023-05-08T22:40Z'),
         direction: MessageDirection.Inbound,
         status: MessageStatus.Seen,
         authorId: leslie.id,
@@ -230,7 +230,7 @@ async function main() {
       {
         contentType: MessageContentType.TextPlain,
         content: 'problems with canceling purchase',
-        createdAt: new Date('2023-07-07T16:59Z'),
+        createdAt: new Date('2023-05-06T11:23:45.389Z'),
         direction: MessageDirection.Inbound,
         status: MessageStatus.DeliveredToDevice,
         authorId: leslie.id,
