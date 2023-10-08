@@ -7,8 +7,10 @@ import { ContentEditable } from '@lexical/react/LexicalContentEditable';
 import LexicalErrorBoundary from '@lexical/react/LexicalErrorBoundary';
 import { HistoryPlugin } from '@lexical/react/LexicalHistoryPlugin';
 import { PlainTextPlugin } from '@lexical/react/LexicalPlainTextPlugin';
+import { useAtomValue } from 'jotai';
 import { FormattedMessage } from 'react-intl';
 
+import { messageModeAtom } from '~/components/messages/message-mode-atom';
 import editorConfig from '~/components/text-editor/editorConfig';
 import EmoticonPlugin from '~/components/text-editor/plugins/emoticon-plugin';
 import MyCustomAutoFocusPlugin from '~/components/text-editor/plugins/my-custom-auto-focus-plugin';
@@ -50,9 +52,15 @@ export const TextEditor: FC<TextEditorProps> = ({ value, onChange }) => {
 TextEditor.displayName = 'TextEditor';
 
 const Placeholder: FC = () => {
+  const messageMode = useAtomValue(messageModeAtom);
+
   return (
     <div className="pointer-events-none absolute left-2 top-4 inline-block select-none overflow-hidden text-ellipsis text-[15px] text-gray-400">
-      <FormattedMessage id="text_editor.placeholder" />
+      {messageMode === 'message' ? (
+        <FormattedMessage id="text_editor.message_placeholder" />
+      ) : (
+        <FormattedMessage id="text_editor.note_placeholder" />
+      )}
     </div>
   );
 };

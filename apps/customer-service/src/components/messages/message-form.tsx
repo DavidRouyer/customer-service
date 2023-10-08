@@ -1,6 +1,7 @@
 'use client';
 
-import { createContext, FC, RefObject, useRef, useState } from 'react';
+import { createContext, FC, RefObject, useRef } from 'react';
+import { useAtomValue } from 'jotai';
 import { PaperclipIcon, SmilePlusIcon } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
@@ -12,6 +13,7 @@ import {
   MessageStatus,
 } from '@cs/database/schema/message';
 
+import { messageModeAtom } from '~/components/messages/message-mode-atom';
 import { TextEditor } from '~/components/text-editor/text-editor';
 import { Button } from '~/components/ui/button';
 import { Comment } from '~/types/Comment';
@@ -30,7 +32,7 @@ export const MessageForm: FC<{ ticketId: number }> = ({ ticketId }) => {
   const session = useSession();
   const utils = api.useContext();
 
-  const [messageMode] = useState<'message' | 'comment'>('message');
+  const messageMode = useAtomValue(messageModeAtom);
 
   const { mutateAsync: sendMessage } = api.message.create.useMutation({
     onMutate: async (newMessage) => {
