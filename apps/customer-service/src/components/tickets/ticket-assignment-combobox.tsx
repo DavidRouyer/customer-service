@@ -231,22 +231,20 @@ export const TicketAssignmentCombobox: FC<TicketAssignmentComboboxProps> = ({
             {contactsData?.map((contact) => (
               <CommandItem
                 key={contact.id}
-                value={contact.id.toString()}
-                onSelect={(value) => {
-                  const parsedValue = parseInt(value, 10);
+                onSelect={() => {
                   if (assignedTo) {
-                    if (parsedValue === assignedTo.id) {
+                    if (contact.id === assignedTo.id) {
                       removeAssignment({ id: ticketId });
                     } else {
                       changeAssignment({
                         id: ticketId,
-                        contactId: parsedValue,
+                        contactId: contact.id,
                       });
                     }
                   } else {
                     addAssignment({
                       id: ticketId,
-                      contactId: parsedValue,
+                      contactId: contact.id,
                     });
                   }
                   setOpen(false);
