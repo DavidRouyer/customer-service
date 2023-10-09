@@ -1,4 +1,5 @@
 import { FC } from 'react';
+import { CheckCircle2, CircleDot } from 'lucide-react';
 import { FormattedMessage } from 'react-intl';
 
 import { RouterOutputs } from '@cs/api';
@@ -38,14 +39,14 @@ export const TicketStatusDropdowm: FC<TicketChangeAssignmentProps> = ({
           <div className="flex items-center gap-x-2">
             {status === TicketStatus.Open ? (
               <>
-                <div className="h-4 w-4 rounded-full bg-destructive"></div>
+                <CircleDot className="text-warning h-4 w-4" />
                 <p className="text-xs text-muted-foreground">
                   <FormattedMessage id="ticket.statuses.open" />
                 </p>
               </>
             ) : (
               <>
-                <div className="h-4 w-4 rounded-full bg-valid"></div>
+                <CheckCircle2 className="h-4 w-4 text-valid" />
                 <p className="text-xs text-muted-foreground">
                   <FormattedMessage id="ticket.statuses.resolved" />
                 </p>
@@ -54,7 +55,7 @@ export const TicketStatusDropdowm: FC<TicketChangeAssignmentProps> = ({
           </div>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
+      <DropdownMenuContent>
         <DropdownMenuGroup>
           <DropdownMenuItem
             key="open"
@@ -62,7 +63,7 @@ export const TicketStatusDropdowm: FC<TicketChangeAssignmentProps> = ({
             disabled={status === TicketStatus.Open}
           >
             <div className="flex items-center gap-x-2">
-              <div className="h-5 w-5 rounded-full bg-destructive"></div>
+              <CircleDot className="text-warning h-5 w-5" />
               <p className="text-xs text-muted-foreground">
                 <FormattedMessage id="ticket.statuses.open" />
               </p>
@@ -74,7 +75,7 @@ export const TicketStatusDropdowm: FC<TicketChangeAssignmentProps> = ({
             disabled={status === TicketStatus.Resolved}
           >
             <div className="flex items-center gap-x-2">
-              <div className="h-5 w-5 rounded-full bg-valid"></div>
+              <CheckCircle2 className="h-5 w-5 text-valid" />
               <p className="text-xs text-muted-foreground">
                 <FormattedMessage id="ticket.statuses.resolved" />
               </p>
