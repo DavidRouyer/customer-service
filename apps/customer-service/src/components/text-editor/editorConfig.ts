@@ -1,5 +1,6 @@
 import { InitialConfigType } from '@lexical/react/LexicalComposer';
 
+import { MentionNode } from '~/components/text-editor/nodes/mention-node';
 import { EmojiNode } from './nodes/emoji-node';
 import ExampleTheme from './themes/example-theme';
 
@@ -9,7 +10,7 @@ const editorConfig: InitialConfigType = {
   onError(error: Error) {
     throw error;
   },
-  nodes: [EmojiNode],
+  nodes: [EmojiNode, MentionNode],
 };
 
 export default editorConfig;

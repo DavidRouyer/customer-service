@@ -1,7 +1,7 @@
 import { useContext, useEffect } from 'react';
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
 import { mergeRegister } from '@lexical/utils';
-import { COMMAND_PRIORITY_LOW, KEY_ENTER_COMMAND } from 'lexical';
+import { COMMAND_PRIORITY_EDITOR, KEY_ENTER_COMMAND } from 'lexical';
 
 import { FormElementContext } from '~/components/messages/message-form';
 
@@ -26,7 +26,7 @@ export default function MyCustomCommandHandlerPlugin() {
           }
           return false;
         },
-        COMMAND_PRIORITY_LOW
+        COMMAND_PRIORITY_EDITOR
       )
     );
   }, [editor]);

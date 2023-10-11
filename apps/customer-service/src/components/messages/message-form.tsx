@@ -1,6 +1,7 @@
 'use client';
 
 import { createContext, FC, RefObject, useRef } from 'react';
+import dynamic from 'next/dynamic';
 import { useAtomValue } from 'jotai';
 import { PaperclipIcon, SmilePlusIcon } from 'lucide-react';
 import { useSession } from 'next-auth/react';
@@ -14,11 +15,17 @@ import {
 } from '@cs/database/schema/message';
 
 import { messageModeAtom } from '~/components/messages/message-mode-atom';
-import { TextEditor } from '~/components/text-editor/text-editor';
 import { Button } from '~/components/ui/button';
 import { api } from '~/lib/api';
 import { Comment } from '~/types/Comment';
 import { Message } from '~/types/Message';
+
+const TextEditor = dynamic(
+  () => import('~/components/text-editor/text-editor'),
+  {
+    ssr: false,
+  }
+);
 
 type MessageFormSchema = {
   content: string;

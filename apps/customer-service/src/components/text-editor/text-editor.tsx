@@ -13,6 +13,7 @@ import { FormattedMessage } from 'react-intl';
 import { messageModeAtom } from '~/components/messages/message-mode-atom';
 import editorConfig from '~/components/text-editor/editorConfig';
 import EmoticonPlugin from '~/components/text-editor/plugins/emoticon-plugin';
+import NewMentionsPlugin from '~/components/text-editor/plugins/mentions-plugin';
 import MyCustomAutoFocusPlugin from '~/components/text-editor/plugins/my-custom-auto-focus-plugin';
 import MyCustomCommandHandlerPlugin from '~/components/text-editor/plugins/my-custom-command-handler-plugin';
 import MyCustomOnChangePlugin from '~/components/text-editor/plugins/my-custom-on-change-plugin';
@@ -23,7 +24,7 @@ type TextEditorProps = {
   onChange: (value: string) => void;
 };
 
-export const TextEditor: FC<TextEditorProps> = ({ value, onChange }) => {
+const TextEditor: FC<TextEditorProps> = ({ value, onChange }) => {
   return (
     <LexicalComposer initialConfig={editorConfig}>
       <div className="relative bg-transparent text-left font-normal leading-5 text-foreground">
@@ -43,6 +44,7 @@ export const TextEditor: FC<TextEditorProps> = ({ value, onChange }) => {
         <EmoticonPlugin />
         <ClearEditorPlugin />
         <MyCustomAutoFocusPlugin />
+        <NewMentionsPlugin />
         <MyCustomCommandHandlerPlugin />
       </div>
     </LexicalComposer>
@@ -66,3 +68,5 @@ const Placeholder: FC = () => {
 };
 
 Placeholder.displayName = 'Placeholder';
+
+export default TextEditor;
