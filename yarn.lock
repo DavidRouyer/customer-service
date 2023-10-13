@@ -4005,10 +4005,10 @@ lru-queue@^0.1.0:
   dependencies:
     es5-ext "~0.10.2"
 
-lucide-react@^0.286.0:
-  version "0.286.0"
-  resolved "https://registry.yarnpkg.com/lucide-react/-/lucide-react-0.286.0.tgz#478e441727dc8e0fe6b16a436c95dccc0574ac62"
-  integrity sha512-0+AOFa/uiXlXJJTqcKto1gqbU9XflYgYZbS9DN2ytSIhSBQaF5xfRKAq/k0okBInpgu5P6i7dhCcgbHV4OMkHQ==
+lucide-react@^0.287.0:
+  version "0.287.0"
+  resolved "https://registry.yarnpkg.com/lucide-react/-/lucide-react-0.287.0.tgz#efa49872a91fa97b7ef650c4b40396b6880d0088"
+  integrity sha512-auxP2bTGiMoELzX+6ItTeNzLmhGd/O+PHBsrXV2YwPXYCxarIFJhiMOSzFT9a1GWeYPSZtnWdLr79IVXr/5JqQ==
 
 lz-string@^1.5.0:
   version "1.5.0"
