@@ -18,7 +18,7 @@ const MyCustomOnChangePlugin: React.FC<MyCustomOnChangePluginProps> = ({
 
           console.debug(root, selection);
 
-          onChange(root.getTextContent());
+          onChange(JSON.stringify(editorState.toJSON()));
         });
       }}
     />

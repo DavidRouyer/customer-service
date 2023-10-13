@@ -182,7 +182,7 @@ export const MessageForm: FC<{ ticketId: number }> = ({ ticketId }) => {
               render={({ field: { value, onChange } }) => (
                 <TextEditor value={value} onChange={onChange} />
               )}
-            ></Controller>
+            />
             {/* Spacer element to match the height of the toolbar */}
             <div className="py-2" aria-hidden="true">
               {/* Matches height of button in toolbar (1px border + 36px content height) */}

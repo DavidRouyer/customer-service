@@ -1,5 +1,6 @@
 import { relations } from 'drizzle-orm';
-import { integer, serial, text, timestamp } from 'drizzle-orm/pg-core';
+import { integer, jsonb, serial, timestamp } from 'drizzle-orm/pg-core';
+import { SerializedEditorState } from 'lexical';
 
 import { pgTable } from './_table';
 import { contacts } from './contact';
@@ -10,7 +11,7 @@ export const ticketComments = pgTable('TicketComment', {
   createdAt: timestamp('createdAt', { precision: 3, mode: 'date' })
     .defaultNow()
     .notNull(),
-  content: text('content').notNull(),
+  content: jsonb('content').$type<SerializedEditorState>().notNull(),
   ticketId: integer('ticketId')
     .notNull()
     .references(() => tickets.id, {

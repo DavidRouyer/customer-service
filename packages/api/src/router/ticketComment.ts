@@ -1,4 +1,5 @@
 import { TRPCError } from '@trpc/server';
+import { SerializedEditorState } from 'lexical';
 import { z } from 'zod';
 
 import { asc, eq, schema } from '@cs/database';
@@ -22,12 +23,27 @@ export const ticketCommentRouter = createTRPCRouter({
 
   create: protectedProcedure
     .input(
-      z.object({
-        content: z.string().min(1),
-        createdAt: z.date(),
-        authorId: z.number(),
-        ticketId: z.number(),
-      })
+      z
+        .object({
+          content: z.string().min(1),
+          createdAt: z.date(),
+          authorId: z.number(),
+          ticketId: z.number(),
+        })
+        .refine(
+          (v) => {
+            try {
+              JSON.parse(v.content);
+              return true;
+            } catch (e) {
+              return false;
+            }
+          },
+          {
+            path: ['content'],
+            message: 'content must be a valid JSON string',
+          }
+        )
     )
     .mutation(async ({ ctx, input }) => {
       const ticket = await ctx.db.query.tickets.findFirst({
@@ -45,6 +61,7 @@ export const ticketCommentRouter = createTRPCRouter({
           .insert(schema.ticketComments)
           .values({
             ...input,
+            content: JSON.parse(input.content) as SerializedEditorState,
             createdAt: input.createdAt,
           })
           .returning({
