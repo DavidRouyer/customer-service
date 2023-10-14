@@ -7,6 +7,7 @@ import {
   TicketActivityType,
   TicketCommented,
 } from '@cs/database/schema/ticketActivity';
+import { extractMentions } from '@cs/lib';
 
 import { createTRPCRouter, protectedProcedure } from '../trpc';
 
@@ -56,12 +57,15 @@ export const ticketCommentRouter = createTRPCRouter({
           message: 'ticket_not_found',
         });
 
+      const content = JSON.parse(input.content) as SerializedEditorState;
+      const mentionIds = extractMentions(content);
+
       return await ctx.db.transaction(async (tx) => {
         const newComment = await tx
           .insert(schema.ticketComments)
           .values({
             ...input,
-            content: JSON.parse(input.content) as SerializedEditorState,
+            content: content,
             createdAt: input.createdAt,
           })
           .returning({
@@ -73,6 +77,15 @@ export const ticketCommentRouter = createTRPCRouter({
         if (!newComment) {
           await tx.rollback();
           return;
+        }
+
+        if (mentionIds.length > 0) {
+          await tx.insert(schema.contactsToTicketComments).values(
+            mentionIds.map((mentionId) => ({
+              ticketCommentId: newComment.id,
+              contactId: mentionId,
+            }))
+          );
         }
 
         await tx.insert(schema.ticketActivities).values({

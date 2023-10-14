@@ -1,14 +1,5 @@
-/**
- * Copyright (c) Meta Platforms, Inc. and affiliates.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- *
- */
-
 'use client';
 
-import type { Spread } from 'lexical';
 import {
   $applyNodeReplacement,
   TextNode,
@@ -18,23 +9,20 @@ import {
   type EditorConfig,
   type LexicalNode,
   type NodeKey,
-  type SerializedTextNode,
 } from 'lexical';
 
-export type SerializedMentionNode = Spread<
-  {
-    mentionName: string;
-  },
-  SerializedTextNode
->;
+import { SerializedMentionNode } from '@cs/lib';
 
 function convertMentionElement(
   domNode: HTMLElement
 ): DOMConversionOutput | null {
   const textContent = domNode.textContent;
+  const mentionId = parseInt(
+    domNode.getAttribute('data-lexical-mention-id') ?? ''
+  );
 
-  if (textContent !== null) {
-    const node = $createMentionNode(textContent);
+  if (textContent !== null && mentionId !== null) {
+    const node = $createMentionNode(mentionId, textContent);
     return {
       node,
     };
@@ -46,16 +34,25 @@ function convertMentionElement(
 const mentionStyle = 'background-color: rgba(24, 119, 232, 0.2)';
 export class MentionNode extends TextNode {
   __mention: string;
+  __mentionId: number;
 
   static getType(): string {
     return 'mention';
   }
 
   static clone(node: MentionNode): MentionNode {
-    return new MentionNode(node.__mention, node.__text, node.__key);
+    return new MentionNode(
+      node.__mentionId,
+      node.__mention,
+      node.__text,
+      node.__key
+    );
   }
   static importJSON(serializedNode: SerializedMentionNode): MentionNode {
-    const node = $createMentionNode(serializedNode.mentionName);
+    const node = $createMentionNode(
+      serializedNode.mentionEntityId,
+      serializedNode.mentionName
+    );
     node.setTextContent(serializedNode.text);
     node.setFormat(serializedNode.format);
     node.setDetail(serializedNode.detail);
@@ -64,15 +61,22 @@ export class MentionNode extends TextNode {
     return node;
   }
 
-  constructor(mentionName: string, text?: string, key?: NodeKey) {
+  constructor(
+    mentionEntityId: number,
+    mentionName: string,
+    text?: string,
+    key?: NodeKey
+  ) {
     super(text ?? mentionName, key);
     this.__mention = mentionName;
+    this.__mentionId = mentionEntityId;
   }
 
   exportJSON(): SerializedMentionNode {
     return {
       ...super.exportJSON(),
       mentionName: this.__mention,
+      mentionEntityId: this.__mentionId,
       type: 'mention',
       version: 1,
     };
@@ -82,12 +86,17 @@ export class MentionNode extends TextNode {
     const dom = super.createDOM(config);
     dom.style.cssText = mentionStyle;
     dom.className = 'mention';
+    dom.setAttribute('data-lexical-mention-id', this.__mentionId.toString());
     return dom;
   }
 
   exportDOM(): DOMExportOutput {
     const element = document.createElement('span');
     element.setAttribute('data-lexical-mention', 'true');
+    element.setAttribute(
+      'data-lexical-mention-id',
+      this.__mentionId.toString()
+    );
     element.textContent = this.__text;
     return { element };
   }
@@ -119,8 +128,11 @@ export class MentionNode extends TextNode {
   }
 }
 
-export function $createMentionNode(mentionName: string): MentionNode {
-  const mentionNode = new MentionNode(mentionName);
+export function $createMentionNode(
+  mentionEntityId: number,
+  mentionName: string
+): MentionNode {
+  const mentionNode = new MentionNode(mentionEntityId, mentionName);
   mentionNode.setMode('segmented').toggleDirectionless();
   return $applyNodeReplacement(mentionNode);
 }

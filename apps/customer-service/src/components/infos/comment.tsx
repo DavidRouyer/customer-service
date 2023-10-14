@@ -10,6 +10,7 @@ import {
 
 import { SerializedEmojiNode } from '~/components/text-editor/nodes/emoji-node';
 
+// TODO: add key prop to children
 const deserializeChildren = (children: SerializedLexicalNode[]) => {
   const content: ReactNode[] = [];
   for (const child of children) {

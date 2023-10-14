@@ -140,11 +140,13 @@ function getPossibleQueryMatch(text: string): MenuTextMatch | null {
 }
 
 class MentionTypeaheadOption extends MenuOption {
+  id: number;
   name: string;
   picture: JSX.Element;
 
-  constructor(name: string, picture: JSX.Element) {
+  constructor(id: number, name: string, picture: JSX.Element) {
     super(name);
+    this.id = id;
     this.name = name;
     this.picture = picture;
   }
@@ -202,6 +204,7 @@ export default function NewMentionsPlugin(): JSX.Element | null {
         .map(
           (result) =>
             new MentionTypeaheadOption(
+              result.id,
               result.name ?? '',
               (
                 <Avatar className="relative mr-2 h-5 w-5 flex-none text-xs">
@@ -224,7 +227,10 @@ export default function NewMentionsPlugin(): JSX.Element | null {
       closeMenu: () => void
     ) => {
       editor.update(() => {
-        const mentionNode = $createMentionNode(selectedOption.name);
+        const mentionNode = $createMentionNode(
+          selectedOption.id.toString(),
+          selectedOption.name
+        );
         if (nodeToReplace) {
           nodeToReplace.replace(mentionNode);
         }
