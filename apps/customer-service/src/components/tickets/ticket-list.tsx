@@ -13,7 +13,7 @@ import { TicketListItemSkeleton } from '~/components/tickets/ticket-list-item-sk
 import { api } from '~/lib/api';
 
 export const TicketList: FC<{
-  filter: 'all' | 'me' | 'unassigned' | number;
+  filter: 'all' | 'me' | 'unassigned' | 'mentions' | number;
   status: TicketStatus;
   orderBy: 'newest' | 'oldest';
 }> = ({ filter, status, orderBy }) => {

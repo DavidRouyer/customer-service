@@ -84,6 +84,7 @@ export const ticketCommentRouter = createTRPCRouter({
             mentionIds.map((mentionId) => ({
               ticketCommentId: newComment.id,
               contactId: mentionId,
+              ticketId: ticket.id,
             }))
           );
         }

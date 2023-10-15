@@ -30,6 +30,9 @@ export const parseFilters = (filterParams: string | null) => {
   if (filterParams === 'unassigned') {
     return 'unassigned';
   }
+  if (filterParams === 'mentions') {
+    return 'mentions';
+  }
   const filter = parseInt(filterParams);
   if (!isNaN(filter)) {
     return filter;

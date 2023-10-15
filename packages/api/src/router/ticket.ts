@@ -6,6 +6,7 @@ import {
   asc,
   desc,
   eq,
+  exists,
   gt,
   isNotNull,
   isNull,
@@ -30,7 +31,7 @@ export const ticketRouter = createTRPCRouter({
   all: protectedProcedure
     .input(
       z.object({
-        filter: z.enum(['all', 'me', 'unassigned']).or(z.number()),
+        filter: z.enum(['all', 'me', 'unassigned', 'mentions']).or(z.number()),
         status: z.enum([TicketStatus.Open, TicketStatus.Resolved]),
         orderBy: z.enum(['newest', 'oldest']),
         cursor: z.string().nullish(),
@@ -43,27 +44,48 @@ export const ticketRouter = createTRPCRouter({
           newest: desc(schema.tickets.createdAt),
           oldest: asc(schema.tickets.createdAt),
         }[input.orderBy],
-        where: and(
-          eq(schema.tickets.status, input.status),
-          {
-            newest: input.cursor
-              ? lt(schema.tickets.createdAt, new Date(input.cursor))
-              : undefined,
-            oldest: input.cursor
-              ? gt(schema.tickets.createdAt, new Date(input.cursor))
-              : undefined,
-          }[input.orderBy],
-          typeof input.filter === 'number'
-            ? eq(schema.tickets.assignedToId, input.filter)
-            : {
-                all: undefined,
-                me: eq(
-                  schema.tickets.assignedToId,
-                  ctx.session.user.contactId ?? 0
-                ),
-                unassigned: isNull(schema.tickets.assignedToId),
-              }[input.filter]
-        ),
+        where: (tickets) =>
+          and(
+            eq(schema.tickets.status, input.status),
+            {
+              newest: input.cursor
+                ? lt(schema.tickets.createdAt, new Date(input.cursor))
+                : undefined,
+              oldest: input.cursor
+                ? gt(schema.tickets.createdAt, new Date(input.cursor))
+                : undefined,
+            }[input.orderBy],
+            typeof input.filter === 'number'
+              ? eq(schema.tickets.assignedToId, input.filter)
+              : {
+                  all: undefined,
+                  me: eq(
+                    schema.tickets.assignedToId,
+                    ctx.session.user.contactId ?? 0
+                  ),
+                  unassigned: isNull(schema.tickets.assignedToId),
+                  mentions: exists(
+                    ctx.db
+                      .selectDistinct({
+                        id: schema.contactsToTicketComments.ticketId,
+                      })
+                      .from(schema.contactsToTicketComments)
+                      .where(
+                        and(
+                          eq(
+                            schema.contactsToTicketComments.contactId,
+                            ctx.session.user.contactId ?? 0
+                          ),
+                          eq(
+                            schema.contactsToTicketComments.ticketId,
+                            tickets.id
+                          )
+                        )
+                      )
+                      .limit(1)
+                  ),
+                }[input.filter]
+          ),
         with: {
           author: true,
           messages: {
@@ -105,7 +127,16 @@ export const ticketRouter = createTRPCRouter({
       schema.tickets.assignedToId
     } = ${
       ctx.session.user.contactId ?? 0
-    }) then 1 else 0 end)::int AS "assignedToMe"`);
+    }) then 1 else 0 end)::int AS "assignedToMe",
+    (SELECT
+      count(DISTINCT ${schema.tickets.id})::int AS "total"
+      FROM ${schema.tickets}
+      LEFT JOIN ${schema.contactsToTicketComments} ON ${
+        schema.contactsToTicketComments.ticketId
+      } = ${schema.tickets.id}
+      WHERE ${schema.contactsToTicketComments.contactId} = ${
+        ctx.session.user.contactId ?? 0
+      }) as "mentions"`);
 
     for (const contact of contacts) {
       sqlChunks.push(sql`,`);
@@ -126,6 +157,7 @@ export const ticketRouter = createTRPCRouter({
         resolved: number;
         unassigned: number;
         assignedToMe: number;
+        mentions: number;
       } & Record<string, number>
     >(sql.join(sqlChunks, sql.raw(' ')));
 
