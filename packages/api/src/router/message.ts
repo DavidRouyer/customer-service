@@ -2,7 +2,7 @@ import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
 
 import { asc, eq, schema } from '@cs/database';
-import { MessageStatus } from '@cs/database/schema/message';
+import { MessageStatus } from '@cs/lib/messages';
 
 import { createTRPCRouter, protectedProcedure } from '../trpc';
 

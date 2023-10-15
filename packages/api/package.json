@@ -14,6 +14,7 @@
   "dependencies": {
     "@cs/auth": "*",
     "@cs/database": "*",
+    "@cs/lib": "*",
     "@trpc/client": "^10.40.0",
     "@trpc/server": "^10.40.0",
     "superjson": "^1.13.3",
@@ -24,6 +25,7 @@
     "@cs/prettier-config": "*",
     "@cs/tsconfig": "*",
     "eslint": "^8.51.0",
+    "lexical": "^0.12.2",
     "prettier": "^3.0.2",
     "typescript": "^5.1.6"
   },

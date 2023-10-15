@@ -26,6 +26,7 @@
   "layout.settings": "Settings",
   "layout.team": "Team",
   "layout.tickets.all_tickets": "All",
+  "layout.tickets.mentions": "Mentions",
   "layout.tickets.my_tickets": "Your inbox",
   "layout.tickets.tickets": "Tickets",
   "layout.tickets.unassigned_tickets": "Unassigned",

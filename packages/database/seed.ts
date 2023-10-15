@@ -1,17 +1,18 @@
 import { neonConfig } from '@neondatabase/serverless';
 import ws from 'ws';
 
-import { db, schema } from '.';
 import {
   MessageContentType,
   MessageDirection,
   MessageStatus,
-} from './schema/message';
-import { TicketStatus } from './schema/ticket';
+} from '@cs/lib/messages';
 import {
   TicketActivityType,
   TicketAssignmentAdded,
-} from './schema/ticketActivity';
+} from '@cs/lib/ticketActivities';
+import { TicketStatus } from '@cs/lib/tickets';
+
+import { db, schema } from '.';
 
 neonConfig.webSocketConstructor = ws;
 
@@ -51,6 +52,35 @@ async function main() {
     .then((res) => res[0]);
 
   if (!tom?.id) throw new Error('Could not create contact');
+
+  const jeffUser = await db
+    .insert(schema.users)
+    .values({
+      id: crypto.randomUUID(),
+      name: 'Jeff Lacey',
+      email: 'jeff.lacey@example.com',
+    })
+    .returning({ id: schema.users.id })
+    .then((res) => res[0]);
+
+  if (!jeffUser?.id) throw new Error('Could not create user');
+
+  const jeff = await db
+    .insert(schema.contacts)
+    .values({
+      name: 'Jeff Lacey',
+      email: 'jeff.lacey@example.com',
+      phone: '+12025550149',
+      avatarUrl:
+        'https://images.unsplash.com/photo-1542909168-82c3e7fdca5c?ixid=MnwxMjA3fDB8MHxzZWFyY2h8OXx8ZmFjZXxlbnwwfHwwfHw%3D&ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
+      language: 'en_US',
+      timezone: 'America/Los_Angeles',
+      userId: tomUser.id,
+    })
+    .returning({ id: schema.contacts.id })
+    .then((res) => res[0]);
+
+  if (!jeff?.id) throw new Error('Could not create contact');
 
   await db.insert(schema.contacts).values({
     name: 'Lawrence Brooks',
@@ -147,6 +177,7 @@ async function main() {
       status: TicketStatus.Open,
       createdAt: new Date('2023-05-06T11:23:45.389Z'),
       authorId: leslie.id,
+      assignedToId: jeff.id,
     })
     .returning({ id: schema.tickets.id, createdAt: schema.tickets.createdAt })
     .then((res) => res[0]);
@@ -178,7 +209,7 @@ async function main() {
         createdAt: new Date('2023-05-07T22:40Z'),
         direction: MessageDirection.Outbound,
         status: MessageStatus.Seen,
-        authorId: tom.id,
+        authorId: jeff.id,
         ticketId: leslieTicket2.id,
       },
       {

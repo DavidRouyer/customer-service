@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import Link from 'next/link';
 import { usePathname, useSearchParams } from 'next/navigation';
-import { BarChart3, BookmarkX, Users } from 'lucide-react';
+import { AtSign, BarChart3, BookmarkX, Users } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { FormattedMessage } from 'react-intl';
 
@@ -90,6 +90,28 @@ export const InboxList: FC = () => {
           </div>
 
           {statsData?.unassigned}
+        </Link>
+      </li>
+      <li>
+        <Link
+          href={`/tickets?${FILTER_QUERY_PARAM}=mentions`}
+          className={cn(
+            'flex items-center justify-between gap-x-3 rounded-md px-2 py-1.5 text-sm font-semibold leading-5 text-muted-foreground hover:bg-muted',
+            matchPath(pathname, '/tickets') &&
+              matchParams(searchParams, {
+                [`${FILTER_QUERY_PARAM}`]: ['mentions'],
+              }) &&
+              'bg-muted text-foreground'
+          )}
+        >
+          <div className="flex items-center gap-x-3 truncate">
+            <AtSign className="h-4 w-4 shrink-0" aria-hidden="true" />
+            <span className="truncate">
+              <FormattedMessage id="layout.tickets.mentions" />
+            </span>
+          </div>
+
+          {statsData?.mentions}
         </Link>
       </li>
       <li>

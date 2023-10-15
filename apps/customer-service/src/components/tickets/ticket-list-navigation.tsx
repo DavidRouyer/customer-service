@@ -5,7 +5,7 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { ChevronDown } from 'lucide-react';
 import { FormattedMessage } from 'react-intl';
 
-import { TicketStatus } from '@cs/database/schema/ticket';
+import { TicketStatus } from '@cs/lib/tickets';
 
 import { Button } from '~/components/ui/button';
 import {

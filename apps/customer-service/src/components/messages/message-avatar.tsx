@@ -1,6 +1,6 @@
 import { FC } from 'react';
 
-import { MessageDirection } from '@cs/database/schema/message';
+import { MessageDirection } from '@cs/lib/messages';
 
 import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/avatar';
 import { getInitials } from '~/lib/string';

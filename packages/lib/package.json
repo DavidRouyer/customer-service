@@ -1,34 +1,23 @@
 {
-  "name": "@cs/database",
+  "name": "@cs/lib",
   "version": "0.0.0",
   "private": true,
   "main": "./index.ts",
   "license": "MIT",
   "scripts": {
     "build": "tsc",
-    "db:push": "drizzle-kit push:pg",
-    "db:seed": "dotenv -e ../../.env tsx seed.ts",
     "clean": "rm -rf .turbo node_modules",
     "lint": "eslint .",
     "format": "prettier --check \"**/*.{mjs,ts,md,json}\"",
     "typecheck": "tsc --noEmit"
   },
-  "dependencies": {
-    "@cs/lib": "*",
-    "@neondatabase/serverless": "^0.6.0",
-    "drizzle-orm": "^0.28.6"
-  },
   "devDependencies": {
     "@cs/eslint-config": "*",
     "@cs/prettier-config": "*",
     "@cs/tsconfig": "*",
-    "@types/ws": "^8.5.7",
-    "dotenv-cli": "^7.3.0",
-    "drizzle-kit": "^0.19.13",
     "eslint": "^8.51.0",
     "lexical": "^0.12.2",
     "prettier": "^3.0.3",
-    "tsx": "^3.13.0",
     "typescript": "^5.2.2"
   },
   "eslintConfig": {

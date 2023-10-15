@@ -3,10 +3,7 @@
 import { FC } from 'react';
 import { FormattedDate } from 'react-intl';
 
-import {
-  MessageContentType,
-  MessageDirection,
-} from '@cs/database/schema/message';
+import { MessageContentType, MessageDirection } from '@cs/lib/messages';
 
 import { MessageStatus } from '~/components/messages/message-status';
 import { MessageTextContent } from '~/components/messages/message-text-content';

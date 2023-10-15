@@ -2,7 +2,7 @@ import { FC } from 'react';
 import { BookOpenCheck, HardDriveUpload } from 'lucide-react';
 import { FormattedMessage } from 'react-intl';
 
-import { TicketStatus } from '@cs/database/schema/ticket';
+import { TicketStatus } from '@cs/lib/tickets';
 
 import { Button } from '~/components/ui/button';
 import { useReopenTicket } from '~/hooks/useReopenTicket';

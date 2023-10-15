@@ -1,11 +1,10 @@
 import { TRPCError } from '@trpc/server';
+import { SerializedEditorState } from 'lexical';
 import { z } from 'zod';
 
 import { asc, eq, schema } from '@cs/database';
-import {
-  TicketActivityType,
-  TicketCommented,
-} from '@cs/database/schema/ticketActivity';
+import { extractMentions } from '@cs/lib/editor';
+import { TicketActivityType, TicketCommented } from '@cs/lib/ticketActivities';
 
 import { createTRPCRouter, protectedProcedure } from '../trpc';
 
@@ -22,12 +21,27 @@ export const ticketCommentRouter = createTRPCRouter({
 
   create: protectedProcedure
     .input(
-      z.object({
-        content: z.string().min(1),
-        createdAt: z.date(),
-        authorId: z.number(),
-        ticketId: z.number(),
-      })
+      z
+        .object({
+          content: z.string().min(1),
+          createdAt: z.date(),
+          authorId: z.number(),
+          ticketId: z.number(),
+        })
+        .refine(
+          (v) => {
+            try {
+              JSON.parse(v.content);
+              return true;
+            } catch (e) {
+              return false;
+            }
+          },
+          {
+            path: ['content'],
+            message: 'content must be a valid JSON string',
+          }
+        )
     )
     .mutation(async ({ ctx, input }) => {
       const ticket = await ctx.db.query.tickets.findFirst({
@@ -40,11 +54,15 @@ export const ticketCommentRouter = createTRPCRouter({
           message: 'ticket_not_found',
         });
 
+      const content = JSON.parse(input.content) as SerializedEditorState;
+      const mentionIds = extractMentions(content);
+
       return await ctx.db.transaction(async (tx) => {
         const newComment = await tx
           .insert(schema.ticketComments)
           .values({
             ...input,
+            content: content,
             createdAt: input.createdAt,
           })
           .returning({
@@ -56,6 +74,16 @@ export const ticketCommentRouter = createTRPCRouter({
         if (!newComment) {
           await tx.rollback();
           return;
+        }
+
+        if (mentionIds.length > 0) {
+          await tx.insert(schema.contactsToTicketComments).values(
+            mentionIds.map((mentionId) => ({
+              ticketCommentId: newComment.id,
+              contactId: mentionId,
+              ticketId: ticket.id,
+            }))
+          );
         }
 
         await tx.insert(schema.ticketActivities).values({

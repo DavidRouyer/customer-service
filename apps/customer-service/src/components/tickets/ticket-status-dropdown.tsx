@@ -3,7 +3,7 @@ import { CheckCircle2, CircleDot } from 'lucide-react';
 import { FormattedMessage } from 'react-intl';
 
 import { RouterOutputs } from '@cs/api';
-import { TicketStatus } from '@cs/database/schema/ticket';
+import { TicketStatus } from '@cs/lib/tickets';
 
 import { Button } from '~/components/ui/button';
 import {
@@ -39,7 +39,7 @@ export const TicketStatusDropdowm: FC<TicketChangeAssignmentProps> = ({
           <div className="flex items-center gap-x-2">
             {status === TicketStatus.Open ? (
               <>
-                <CircleDot className="text-warning h-4 w-4" />
+                <CircleDot className="h-4 w-4 text-warning" />
                 <p className="text-xs text-muted-foreground">
                   <FormattedMessage id="ticket.statuses.open" />
                 </p>
@@ -63,7 +63,7 @@ export const TicketStatusDropdowm: FC<TicketChangeAssignmentProps> = ({
             disabled={status === TicketStatus.Open}
           >
             <div className="flex items-center gap-x-2">
-              <CircleDot className="text-warning h-5 w-5" />
+              <CircleDot className="h-5 w-5 text-warning" />
               <p className="text-xs text-muted-foreground">
                 <FormattedMessage id="ticket.statuses.open" />
               </p>

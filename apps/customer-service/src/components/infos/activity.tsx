@@ -7,11 +7,9 @@ import {
   TicketAssignmentChangedWithData,
   TicketAssignmentRemovedWithData,
 } from '@cs/api/src/router/ticketActivity';
-import {
-  TicketActivityType,
-  TicketCommented,
-} from '@cs/database/schema/ticketActivity';
+import { TicketActivityType, TicketCommented } from '@cs/lib/ticketActivities';
 
+import { Comment } from '~/components/infos/comment';
 import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/avatar';
 import { RelativeTime } from '~/components/ui/relative-time';
 import { api } from '~/lib/api';
@@ -71,7 +69,11 @@ export const Activity: FC<{
                       </time>
                     </div>
                     <p className="text-sm leading-6 text-gray-500">
-                      {(ticketActivity.extraInfo as TicketCommented)?.comment}
+                      <Comment
+                        content={
+                          (ticketActivity.extraInfo as TicketCommented)?.comment
+                        }
+                      />
                     </p>
                   </div>
                 </>

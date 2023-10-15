@@ -1,14 +1,12 @@
 import { relations } from 'drizzle-orm';
-import { integer, pgEnum, serial, text, timestamp } from 'drizzle-orm/pg-core';
+import { integer, pgEnum, serial, timestamp } from 'drizzle-orm/pg-core';
+
+import { TicketStatus } from '@cs/lib/tickets';
 
 import { pgTable } from './_table';
 import { contacts } from './contact';
+import { contactsToTicketComments } from './contactsToTicketComments';
 import { messages } from './message';
-
-export enum TicketStatus {
-  Open = 'Open',
-  Resolved = 'Resolved',
-}
 
 export const ticketStatus = pgEnum('TicketStatus', [
   TicketStatus.Open,
@@ -45,4 +43,5 @@ export const ticketsRelations = relations(tickets, ({ one, many }) => ({
     references: [contacts.id],
   }),
   messages: many(messages),
+  contactsToTicketComments: many(contactsToTicketComments),
 }));
