@@ -17,13 +17,13 @@ import {
   SQL,
   sql,
 } from '@cs/database';
-import { TicketStatus } from '@cs/database/schema/ticket';
 import {
   TicketActivityType,
   TicketAssignmentAdded,
   TicketAssignmentChanged,
   TicketAssignmentRemoved,
 } from '@cs/database/schema/ticketActivity';
+import { TicketFilter, TicketStatus } from '@cs/lib';
 
 import { createTRPCRouter, protectedProcedure } from '../trpc';
 
@@ -31,7 +31,14 @@ export const ticketRouter = createTRPCRouter({
   all: protectedProcedure
     .input(
       z.object({
-        filter: z.enum(['all', 'me', 'unassigned', 'mentions']).or(z.number()),
+        filter: z
+          .enum([
+            TicketFilter.All,
+            TicketFilter.Me,
+            TicketFilter.Unassigned,
+            TicketFilter.Mentions,
+          ])
+          .or(z.number()),
         status: z.enum([TicketStatus.Open, TicketStatus.Resolved]),
         orderBy: z.enum(['newest', 'oldest']),
         cursor: z.string().nullish(),
