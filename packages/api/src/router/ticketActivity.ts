@@ -7,7 +7,7 @@ import {
   TicketAssignmentChanged,
   TicketAssignmentRemoved,
   TicketCommented,
-} from '@cs/database/schema/ticketActivity';
+} from '@cs/lib/ticketActivities';
 
 import { createTRPCRouter, protectedProcedure } from '../trpc';
 

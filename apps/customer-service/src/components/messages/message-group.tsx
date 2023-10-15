@@ -1,6 +1,6 @@
 import { FC } from 'react';
 
-import { MessageDirection } from '@cs/database/schema/message';
+import { MessageDirection } from '@cs/lib/messages';
 
 import { Message } from '~/components/messages/message';
 import { MessageAvatar } from '~/components/messages/message-avatar';

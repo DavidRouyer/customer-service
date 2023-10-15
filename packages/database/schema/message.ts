@@ -1,27 +1,15 @@
 import { relations } from 'drizzle-orm';
 import { integer, jsonb, pgEnum, serial, timestamp } from 'drizzle-orm/pg-core';
 
+import {
+  MessageContentType,
+  MessageDirection,
+  MessageStatus,
+} from '@cs/lib/messages';
+
 import { pgTable } from './_table';
 import { contacts } from './contact';
 import { tickets } from './ticket';
-
-export enum MessageDirection {
-  Outbound = 'Outbound',
-  Inbound = 'Inbound',
-}
-
-export enum MessageContentType {
-  TextHtml = 'TextHtml',
-  TextPlain = 'TextPlain',
-}
-
-export enum MessageStatus {
-  Seen = 'Seen',
-  DeliveredToDevice = 'DeliveredToDevice',
-  DeliveredToCloud = 'DeliveredToCloud',
-  Sent = 'Sent',
-  Pending = 'Pending',
-}
 
 export const messageDirection = pgEnum('MessageDirection', [
   MessageDirection.Outbound,

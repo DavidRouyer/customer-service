@@ -11,7 +11,7 @@ import {
   type NodeKey,
 } from 'lexical';
 
-import { SerializedMentionNode } from '@cs/lib';
+import { SerializedMentionNode } from '@cs/lib/editor';
 
 function convertMentionElement(
   domNode: HTMLElement

@@ -1,4 +1,4 @@
-import { TicketStatus } from '@cs/database/schema/ticket';
+import { TicketStatus } from '@cs/lib/tickets';
 
 import { api, RouterOutputs } from '~/lib/api';
 

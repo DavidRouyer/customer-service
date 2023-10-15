@@ -7,10 +7,7 @@ import {
   TicketAssignmentChangedWithData,
   TicketAssignmentRemovedWithData,
 } from '@cs/api/src/router/ticketActivity';
-import {
-  TicketActivityType,
-  TicketCommented,
-} from '@cs/database/schema/ticketActivity';
+import { TicketActivityType, TicketCommented } from '@cs/lib/ticketActivities';
 
 import { Comment } from '~/components/infos/comment';
 import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/avatar';

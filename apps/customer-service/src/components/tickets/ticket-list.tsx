@@ -6,7 +6,7 @@ import { PartyPopper } from 'lucide-react';
 import { useInView } from 'react-intersection-observer';
 import { FormattedMessage } from 'react-intl';
 
-import { TicketFilter, TicketStatus } from '@cs/lib';
+import { TicketFilter, TicketStatus } from '@cs/lib/tickets';
 
 import { TicketListItem } from '~/components/tickets/ticket-list-item';
 import { TicketListItemSkeleton } from '~/components/tickets/ticket-list-item-skeleton';

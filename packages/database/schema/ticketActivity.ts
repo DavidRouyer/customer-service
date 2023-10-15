@@ -1,19 +1,17 @@
 import { relations } from 'drizzle-orm';
 import { integer, json, pgEnum, serial, timestamp } from 'drizzle-orm/pg-core';
 
+import {
+  TicketActivityType,
+  TicketAssignmentAdded,
+  TicketAssignmentChanged,
+  TicketAssignmentRemoved,
+  TicketCommented,
+} from '@cs/lib/ticketActivities';
+
 import { pgTable } from './_table';
 import { contacts } from './contact';
 import { tickets } from './ticket';
-
-export enum TicketActivityType {
-  AssignmentAdded = 'AssignmentAdded',
-  AssignmentChanged = 'AssignmentChanged',
-  AssignmentRemoved = 'AssignmentRemoved',
-  Commented = 'Commented',
-  Created = 'Created',
-  Reopened = 'Reopened',
-  Resolved = 'Resolved',
-}
 
 export const ticketStatus = pgEnum('TicketActivityType', [
   TicketActivityType.AssignmentAdded,
@@ -24,23 +22,6 @@ export const ticketStatus = pgEnum('TicketActivityType', [
   TicketActivityType.Resolved,
   TicketActivityType.Reopened,
 ]);
-
-export type TicketAssignmentAdded = {
-  newAssignedToId: number;
-};
-
-export type TicketAssignmentChanged = {
-  oldAssignedToId: number;
-  newAssignedToId: number;
-};
-
-export type TicketAssignmentRemoved = {
-  oldAssignedToId: number;
-};
-
-export type TicketCommented = {
-  comment: string;
-};
 
 export const ticketActivities = pgTable('TicketActivity', {
   id: serial('id').primaryKey().notNull(),

@@ -1,6 +1,6 @@
 import { ReadonlyURLSearchParams } from 'next/navigation';
 
-import { TicketFilter } from '@cs/lib';
+import { TicketFilter } from '@cs/lib/tickets';
 
 export const FILTER_QUERY_PARAM = 'filter';
 export const STATUS_QUERY_PARAM = 'status';
@@ -24,21 +24,21 @@ export const getUpdatedSearchParams = (
 
 export const parseFilters = (filterParams: string | null) => {
   if (filterParams === null || filterParams === TicketFilter.All.toString()) {
-    return 'all';
+    return TicketFilter.All;
   }
   if (filterParams === TicketFilter.Me.toString()) {
-    return 'me';
+    return TicketFilter.Me;
   }
   if (filterParams === TicketFilter.Unassigned.toString()) {
-    return 'unassigned';
+    return TicketFilter.Unassigned;
   }
   if (filterParams === TicketFilter.Mentions.toString()) {
-    return 'mentions';
+    return TicketFilter.Mentions;
   }
   const filter = parseInt(filterParams);
   if (!isNaN(filter)) {
     return filter;
   }
 
-  return 'all';
+  return TicketFilter.All;
 };

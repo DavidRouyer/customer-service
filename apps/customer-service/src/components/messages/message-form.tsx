@@ -12,7 +12,7 @@ import {
   MessageContentType,
   MessageDirection,
   MessageStatus,
-} from '@cs/database/schema/message';
+} from '@cs/lib/messages';
 
 import { messageModeAtom } from '~/components/messages/message-mode-atom';
 import { Button } from '~/components/ui/button';

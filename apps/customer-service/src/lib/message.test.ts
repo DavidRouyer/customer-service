@@ -2,7 +2,7 @@ import {
   MessageContentType,
   MessageDirection,
   MessageStatus,
-} from '@cs/database/schema/message';
+} from '@cs/lib/messages';
 
 import { groupMessagesByDateAndUser } from '~/lib/message';
 import { Message } from '~/types/Message';

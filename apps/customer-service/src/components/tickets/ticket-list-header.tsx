@@ -1,7 +1,7 @@
 import { useSearchParams } from 'next/navigation';
 import { FormattedMessage } from 'react-intl';
 
-import { TicketFilter } from '@cs/lib';
+import { TicketFilter } from '@cs/lib/tickets';
 
 export const TicketListHeader = () => {
   const searchParams = useSearchParams();

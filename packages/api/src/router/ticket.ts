@@ -22,8 +22,8 @@ import {
   TicketAssignmentAdded,
   TicketAssignmentChanged,
   TicketAssignmentRemoved,
-} from '@cs/database/schema/ticketActivity';
-import { TicketFilter, TicketStatus } from '@cs/lib';
+} from '@cs/lib/ticketActivities';
+import { TicketFilter, TicketStatus } from '@cs/lib/tickets';
 
 import { createTRPCRouter, protectedProcedure } from '../trpc';
 

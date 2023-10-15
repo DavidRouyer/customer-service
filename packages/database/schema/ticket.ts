@@ -1,7 +1,7 @@
 import { relations } from 'drizzle-orm';
 import { integer, pgEnum, serial, timestamp } from 'drizzle-orm/pg-core';
 
-import { TicketStatus } from '@cs/lib';
+import { TicketStatus } from '@cs/lib/tickets';
 
 import { pgTable } from './_table';
 import { contacts } from './contact';

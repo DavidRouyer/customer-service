@@ -3,11 +3,8 @@ import { SerializedEditorState } from 'lexical';
 import { z } from 'zod';
 
 import { asc, eq, schema } from '@cs/database';
-import {
-  TicketActivityType,
-  TicketCommented,
-} from '@cs/database/schema/ticketActivity';
-import { extractMentions } from '@cs/lib';
+import { extractMentions } from '@cs/lib/editor';
+import { TicketActivityType, TicketCommented } from '@cs/lib/ticketActivities';
 
 import { createTRPCRouter, protectedProcedure } from '../trpc';
 

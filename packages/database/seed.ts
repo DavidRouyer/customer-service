@@ -1,17 +1,18 @@
 import { neonConfig } from '@neondatabase/serverless';
 import ws from 'ws';
 
-import { db, schema } from '.';
 import {
   MessageContentType,
   MessageDirection,
   MessageStatus,
-} from './schema/message';
-import { TicketStatus } from './schema/ticket';
+} from '@cs/lib/messages';
 import {
   TicketActivityType,
   TicketAssignmentAdded,
-} from './schema/ticketActivity';
+} from '@cs/lib/ticketActivities';
+import { TicketStatus } from '@cs/lib/tickets';
+
+import { db, schema } from '.';
 
 neonConfig.webSocketConstructor = ws;
 
