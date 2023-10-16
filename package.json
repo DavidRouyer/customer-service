@@ -35,5 +35,5 @@
   "resolutions": {
     "@auth/core": "0.16.1"
   },
-  "prettier": "@acme/prettier-config"
+  "prettier": "@cs/prettier-config"
 }
