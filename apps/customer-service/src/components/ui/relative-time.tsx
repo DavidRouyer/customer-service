@@ -21,7 +21,7 @@ const useRelativeTime = (time: number, locale: string, dateNow = Date.now) => {
 
   useEffect(() => {
     if (now - time < minute) {
-      const interval = setInterval(() => setNow(dateNow()), 10_000);
+      const interval = setInterval(() => setNow(dateNow()), 1_000);
       return () => clearInterval(interval);
     }
   }, [dateNow, now, time]);
