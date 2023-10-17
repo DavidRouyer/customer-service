@@ -25,7 +25,7 @@
     "@jridgewell/gen-mapping" "^0.3.0"
     "@jridgewell/trace-mapping" "^0.3.9"
 
-"@auth/core@0.16.1", "@auth/core@0.17.0", "@auth/core@^0.16.1", "@auth/core@experimental":
+"@auth/core@0.16.1", "@auth/core@0.17.0", "@auth/core@^0.17.0", "@auth/core@experimental":
   version "0.16.1"
   resolved "https://registry.yarnpkg.com/@auth/core/-/core-0.16.1.tgz#208005d8b7eeb87847988109f15ff4e0250c9828"
   integrity sha512-V+YifnjpyOadiiTbxfYDV2xYWo8xpKNtwYVskAEKUSwMvE0FlSlP+10QGBpf0axS/AJFOO61IR6GncFF/IOrHQ==
