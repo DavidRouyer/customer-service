@@ -1,6 +1,6 @@
 'use client';
 
-import { FC, ReactNode } from 'react';
+import { FC, Fragment, ReactNode } from 'react';
 import {
   SerializedEditorState,
   SerializedLexicalNode,
@@ -10,18 +10,19 @@ import {
 
 import { SerializedEmojiNode } from '~/components/text-editor/nodes/emoji-node';
 
-// TODO: add key prop to children
 const deserializeChildren = (children: SerializedLexicalNode[]) => {
   const content: ReactNode[] = [];
-  for (const child of children) {
+  children.forEach((child, index) => {
     if (child.type === 'paragraph') {
       content.push(
-        <>{deserializeChildren((child as SerializedParagraphNode).children)}</>
+        <Fragment key={index}>
+          {deserializeChildren((child as SerializedParagraphNode).children)}
+        </Fragment>
       );
     } else {
-      content.push(dezerializeNode(child));
+      content.push(<Fragment key={index}>{dezerializeNode(child)}</Fragment>);
     }
-  }
+  });
 
   return content;
 };
