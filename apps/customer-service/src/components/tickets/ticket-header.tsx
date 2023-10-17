@@ -5,8 +5,8 @@ import { FormattedMessage } from 'react-intl';
 import { TicketStatus } from '@cs/lib/tickets';
 
 import { Button } from '~/components/ui/button';
-import { useReopenTicket } from '~/hooks/useReopenTicket';
-import { useResolveTicket } from '~/hooks/useResolveTicket';
+import { useReopenTicket } from '~/hooks/use-reopen-ticket';
+import { useResolveTicket } from '~/hooks/use-resolve-ticket';
 import { api } from '~/lib/api';
 
 export const TicketHeader: FC<{ ticketId: number }> = ({ ticketId }) => {

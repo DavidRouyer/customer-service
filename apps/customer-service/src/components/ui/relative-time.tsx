@@ -1,62 +1,65 @@
 'use client';
 
-import { FC, useEffect, useState } from 'react';
+import { FC, useEffect, useMemo, useState } from 'react';
 import { useIntl } from 'react-intl';
+
+import { useMounted } from '~/hooks/use-mounted';
 
 type RelativeTimeProps = {
   dateTime: Date;
 };
 
-const formatRelativeTime = (prevDate: Date, locale: string) => {
-  const diff = Number(new Date()) - prevDate.getTime();
-  const minute = 60 * 1000;
-  const hour = minute * 60;
-  const day = hour * 24;
-  const month = day * 30;
-  const year = day * 365;
+const second = 1000;
+const minute = second * 60;
+const hour = minute * 60;
+const day = hour * 24;
+const month = day * 30;
+const year = day * 365;
 
-  const formatter = new Intl.RelativeTimeFormat(locale, {
-    numeric: 'auto',
-  });
+const useRelativeTime = (time: number, locale: string, dateNow = Date.now) => {
+  const [now, setNow] = useState(dateNow);
 
-  switch (true) {
-    case diff < minute:
-      return formatter.format(-Math.round(diff / 1000), 'seconds');
-    case diff < hour:
-      return formatter.format(-Math.round(diff / minute), 'minutes');
-    case diff < day:
-      return formatter.format(-Math.round(diff / hour), 'hours');
-    case diff < month:
-      return formatter.format(-Math.round(diff / day), 'days');
-    case diff < year:
-      return formatter.format(-Math.round(diff / month), 'months');
-    case diff > year:
-      return formatter.format(-Math.round(diff / year), 'years');
-    default:
-      return '';
-  }
+  useEffect(() => {
+    if (now - time < minute) {
+      const interval = setInterval(() => setNow(dateNow()), 10_000);
+      return () => clearInterval(interval);
+    }
+  }, [dateNow, now, time]);
+
+  const formatter = useMemo(() => {
+    return new Intl.RelativeTimeFormat(locale, {
+      numeric: 'auto',
+    });
+  }, [locale]);
+
+  return useMemo(() => {
+    const relativeTime = now - time;
+    const elapsed = Math.abs(relativeTime);
+
+    const sign = Math.sign(-relativeTime);
+    if (elapsed < minute) {
+      return formatter.format(sign * Math.round(elapsed / second), 'second');
+    } else if (elapsed < hour) {
+      return formatter.format(sign * Math.round(elapsed / minute), 'minute');
+    } else if (elapsed < day) {
+      return formatter.format(sign * Math.round(elapsed / hour), 'hour');
+    } else if (elapsed < month) {
+      return formatter.format(sign * Math.round(elapsed / day), 'day');
+    } else if (elapsed < year) {
+      return formatter.format(sign * Math.round(elapsed / month), 'month');
+    } else {
+      return formatter.format(sign * Math.round(elapsed / year), 'year');
+    }
+  }, [now, time, formatter]);
 };
 
 export const RelativeTime: FC<RelativeTimeProps> = ({ dateTime }) => {
   const { locale } = useIntl();
+  const mounted = useMounted();
 
-  const [relativeTime, setRelativeTime] = useState(
-    formatRelativeTime(dateTime, locale)
-  );
+  const relativeTime = useRelativeTime(dateTime.getTime(), locale);
 
-  useEffect(() => {
-    setRelativeTime(formatRelativeTime(dateTime, locale));
-
-    const interval = setInterval(() => {
-      setRelativeTime(formatRelativeTime(dateTime, locale));
-    }, 1000);
-
-    return () => {
-      clearInterval(interval);
-    };
-  }, [dateTime, locale, setRelativeTime]);
-
-  return <>{relativeTime}</>;
+  return mounted ? <>{relativeTime}</> : null;
 };
 
 RelativeTime.displayName = 'RelativeTime';

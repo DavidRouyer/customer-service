@@ -13,8 +13,8 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '~/components/ui/dropdown-menu';
-import { useReopenTicket } from '~/hooks/useReopenTicket';
-import { useResolveTicket } from '~/hooks/useResolveTicket';
+import { useReopenTicket } from '~/hooks/use-reopen-ticket';
+import { useResolveTicket } from '~/hooks/use-resolve-ticket';
 
 type TicketChangeAssignmentProps = {
   status?: NonNullable<RouterOutputs['ticket']['byId']>['status'];

@@ -1,71 +1,83 @@
 'use client';
 
-import { FC, useEffect, useState } from 'react';
+import { FC, useEffect, useMemo, useState } from 'react';
 import { useIntl } from 'react-intl';
+
+import { useMounted } from '~/hooks/use-mounted';
 
 type RelativeDateProps = {
   dateTime: Date;
 };
 
-const formatRelativeDate = (prevDate: Date, locale: string) => {
-  const diff = Number(new Date()) - prevDate.getTime();
-  const minute = 60 * 1000;
-  const hour = minute * 60;
-  const day = hour * 24;
-  const year = day * 365;
+const second = 1000;
+const minute = second * 60;
+const hour = minute * 60;
+const day = hour * 24;
+const year = day * 365;
 
-  const relativeFormatter = new Intl.RelativeTimeFormat(locale, {
-    numeric: 'auto',
-  });
+const useRelativeDate = (time: number, locale: string, dateNow = Date.now) => {
+  const [now, setNow] = useState(dateNow);
 
-  if (diff < day) {
-    return relativeFormatter.format(0, 'day');
-  }
+  useEffect(() => {
+    if (now - time < minute) {
+      const interval = setInterval(() => setNow(dateNow()), 10_000);
+      return () => clearInterval(interval);
+    }
+  }, [dateNow, now, time]);
 
-  if (diff < day * 2) {
-    return relativeFormatter.format(-1, 'day');
-  }
+  const relativeFormatter = useMemo(() => {
+    return new Intl.RelativeTimeFormat(locale, {
+      numeric: 'auto',
+    });
+  }, [locale]);
 
-  const absoluteFormatterWithoutYear = new Intl.DateTimeFormat(locale, {
-    weekday: 'short',
-    month: 'short',
-    day: 'numeric',
-  });
+  const absoluteWithoutYearFormatter = useMemo(() => {
+    return new Intl.DateTimeFormat(locale, {
+      weekday: 'short',
+      month: 'short',
+      day: 'numeric',
+    });
+  }, [locale]);
 
-  if (diff < year) {
-    return absoluteFormatterWithoutYear.format(prevDate);
-  }
+  const absoluteWithYearFormatter = useMemo(() => {
+    return new Intl.DateTimeFormat(locale, {
+      weekday: 'short',
+      month: 'short',
+      year: 'numeric',
+      day: 'numeric',
+    });
+  }, [locale]);
 
-  const absoluteFormatterWithYear = new Intl.DateTimeFormat(locale, {
-    weekday: 'short',
-    month: 'short',
-    year: 'numeric',
-    day: 'numeric',
-  });
+  return useMemo(() => {
+    const relativeTime = now - time;
+    const elapsed = Math.abs(relativeTime);
 
-  return absoluteFormatterWithYear.format(prevDate);
+    if (elapsed < day) {
+      return relativeFormatter.format(0, 'day');
+    } else if (elapsed < day * 2) {
+      return relativeFormatter.format(-1, 'day');
+    } else if (elapsed < year) {
+      return absoluteWithoutYearFormatter.format(time);
+    } else {
+      return absoluteWithYearFormatter.format(time);
+    }
+  }, [
+    now,
+    time,
+    relativeFormatter,
+    absoluteWithoutYearFormatter,
+    absoluteWithYearFormatter,
+  ]);
 };
 
 export const RelativeDate: FC<RelativeDateProps> = ({ dateTime }) => {
   const { locale } = useIntl();
 
-  const [relativeDate, setRelativeDate] = useState(
-    formatRelativeDate(dateTime, locale)
-  );
+  const mounted = useMounted();
 
-  useEffect(() => {
-    setRelativeDate(formatRelativeDate(dateTime, locale));
+  const relativeDate = useRelativeDate(dateTime.getTime(), locale);
 
-    const interval = setInterval(() => {
-      setRelativeDate(formatRelativeDate(dateTime, locale));
-    }, 1000);
-
-    return () => {
-      clearInterval(interval);
-    };
-  }, [dateTime, locale, setRelativeDate]);
-
-  return <>{relativeDate}</>;
+  return mounted ? <>{relativeDate}</> : null;
 };
 
 RelativeDate.displayName = 'RelativeDate';
