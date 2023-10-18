@@ -4,9 +4,9 @@
   "private": true,
   "license": "MIT",
   "files": [
-    "./base.js",
-    "./react.js",
-    "./tailwind.js"
+    "base.js",
+    "react.js",
+    "tailwind.js"
   ],
   "scripts": {
     "clean": "rm -rf .turbo node_modules",
