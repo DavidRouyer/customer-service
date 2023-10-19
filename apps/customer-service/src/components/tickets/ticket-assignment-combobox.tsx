@@ -37,7 +37,7 @@ export const TicketAssignmentCombobox: FC<TicketAssignmentComboboxProps> = ({
 
   const [open, setOpen] = useState(false);
 
-  const utils = api.useContext();
+  const utils = api.useUtils();
 
   const { data: contactsData } = api.contact.allWithUserId.useQuery(undefined, {
     select: useCallback(

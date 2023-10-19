@@ -37,7 +37,7 @@ export const FormElementContext =
 export const MessageForm: FC<{ ticketId: number }> = ({ ticketId }) => {
   const formRef = useRef<HTMLFormElement>(null);
   const session = useSession();
-  const utils = api.useContext();
+  const utils = api.useUtils();
 
   const messageMode = useAtomValue(messageModeAtom);
 

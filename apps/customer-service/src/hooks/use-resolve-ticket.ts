@@ -3,7 +3,7 @@ import { TicketStatus } from '@cs/lib/tickets';
 import { api, RouterOutputs } from '~/lib/api';
 
 export const useResolveTicket = () => {
-  const utils = api.useContext();
+  const utils = api.useUtils();
 
   const { mutateAsync } = api.ticket.resolve.useMutation({
     onMutate: async ({ id }) => {
