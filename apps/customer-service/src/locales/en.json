@@ -38,6 +38,7 @@
   "text_editor.add_emoticons": "Add emoticons",
   "text_editor.attach_files": "Attach files",
   "text_editor.mesage_placeholder": "Type your message here...",
+  "text_editor.note": "Note",
   "text_editor.note_placeholder": "Type your note here...",
   "text_editor.send": "Send",
   "ticket.actions.assign_to": "Assign to",

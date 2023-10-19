@@ -2,7 +2,7 @@
 
 import { createContext, FC, RefObject, useRef } from 'react';
 import dynamic from 'next/dynamic';
-import { useAtomValue } from 'jotai';
+import { useAtom, useAtomValue } from 'jotai';
 import { PaperclipIcon, SmilePlusIcon } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
@@ -16,7 +16,10 @@ import {
 
 import { messageModeAtom } from '~/components/messages/message-mode-atom';
 import { Button } from '~/components/ui/button';
+import { Label } from '~/components/ui/label';
+import { Switch } from '~/components/ui/switch';
 import { api } from '~/lib/api';
+import { cn } from '~/lib/utils';
 import { Comment } from '~/types/Comment';
 import { Message } from '~/types/Message';
 
@@ -39,7 +42,7 @@ export const MessageForm: FC<{ ticketId: number }> = ({ ticketId }) => {
   const session = useSession();
   const utils = api.useUtils();
 
-  const messageMode = useAtomValue(messageModeAtom);
+  const [messageMode, setMessageMode] = useAtom(messageModeAtom);
 
   const { mutateAsync: sendMessage } = api.message.create.useMutation({
     onMutate: async (newMessage) => {
@@ -175,7 +178,16 @@ export const MessageForm: FC<{ ticketId: number }> = ({ ticketId }) => {
           onSubmit={form.handleSubmit(onSubmit)}
           className="relative"
         >
-          <div className="overflow-hidden rounded-lg shadow-sm ring-1 ring-inset ring-border focus-within:ring-2 focus-within:ring-foreground">
+          <div
+            className={cn(
+              'overflow-hidden rounded-lg shadow-sm ring-1 ring-inset ring-border focus-within:ring-2',
+              {
+                'bg-warning/30 ring-warning/70 focus-within:ring-warning':
+                  messageMode === 'comment',
+                'focus-within:ring-foreground': messageMode === 'message',
+              }
+            )}
+          >
             <Controller
               name="content"
               control={form.control}
@@ -214,6 +226,20 @@ export const MessageForm: FC<{ ticketId: number }> = ({ ticketId }) => {
                     <FormattedMessage id="text_editor.add_emoticons" />
                   </span>
                 </button>
+              </div>
+              <div className="flex items-center">
+                <div className="flex items-center space-x-2">
+                  <Switch
+                    id="message-mode"
+                    checked={messageMode === 'comment'}
+                    onCheckedChange={(checked) =>
+                      setMessageMode(checked ? 'comment' : 'message')
+                    }
+                  />
+                  <Label htmlFor="message-mode">
+                    <FormattedMessage id="text_editor.note" />
+                  </Label>
+                </div>
               </div>
             </div>
             <div className="shrink-0">
