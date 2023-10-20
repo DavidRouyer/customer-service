@@ -80,7 +80,7 @@ export const Activity: FC<{
               ) : (
                 <>
                   <div className="relative flex h-6 w-6 flex-none items-center justify-center bg-background">
-                    {TicketActivityType.Resolved ? (
+                    {ticketActivity.type === TicketActivityType.Resolved ? (
                       <CheckCircle2
                         className="h-6 w-6 text-valid"
                         aria-hidden="true"
