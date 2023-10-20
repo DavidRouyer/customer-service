@@ -122,6 +122,7 @@ async function main() {
     .insert(schema.tickets)
     .values({
       status: TicketStatus.Open,
+      priority: true,
       createdAt: new Date('2023-05-04T20:54:41.389Z'),
       authorId: leslie.id,
       assignedToId: tom.id,
@@ -175,6 +176,7 @@ async function main() {
     .insert(schema.tickets)
     .values({
       status: TicketStatus.Open,
+      priority: false,
       createdAt: new Date('2023-05-06T11:23:45.389Z'),
       authorId: leslie.id,
       assignedToId: jeff.id,
@@ -228,6 +230,7 @@ async function main() {
     .insert(schema.tickets)
     .values({
       status: TicketStatus.Resolved,
+      priority: false,
       createdAt: new Date('2023-05-06T11:23:45.389Z'),
       resolvedAt: new Date('2023-06-12T06:10:45.389Z'),
       authorId: leslie.id,
@@ -287,6 +290,7 @@ async function main() {
     .insert(schema.tickets)
     .values({
       status: TicketStatus.Open,
+      priority: false,
       createdAt: new Date('2023-03-03T14:02Z'),
       authorId: michael.id,
     })
@@ -344,6 +348,7 @@ async function main() {
     .insert(schema.tickets)
     .values({
       status: TicketStatus.Open,
+      priority: false,
       createdAt: new Date('2023-03-03T13:23Z'),
       authorId: dries.id,
     })
@@ -404,6 +409,7 @@ async function main() {
     .insert(schema.tickets)
     .values({
       status: TicketStatus.Open,
+      priority: false,
       createdAt: new Date('2023-03-02T21:13Z'),
       authorId: lindsay.id,
     })

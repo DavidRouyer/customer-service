@@ -458,6 +458,8 @@ export const ticketRouter = createTRPCRouter({
       z.object({
         title: z.string().min(1),
         content: z.string().min(1),
+        status: z.enum([TicketStatus.Open, TicketStatus.Resolved]),
+        priority: z.boolean(),
         authorId: z.number(),
       })
     )
@@ -467,7 +469,6 @@ export const ticketRouter = createTRPCRouter({
           .insert(schema.tickets)
           .values({
             ...input,
-            status: TicketStatus.Open,
             createdAt: new Date(),
           })
           .returning({
