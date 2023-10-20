@@ -5,12 +5,17 @@ import { FormattedMessage } from 'react-intl';
 import { TicketAssignmentCombobox } from '~/components/tickets/ticket-assignment-combobox';
 import { TicketStatusDropdowm } from '~/components/tickets/ticket-status-dropdown';
 import { Button } from '~/components/ui/button';
+import { useAddPriorityTicket } from '~/hooks/use-add-priority-ticket';
+import { useRemovePriorityTicket } from '~/hooks/use-remove-priority-ticket';
 import { api } from '~/lib/api';
 
 export const TicketInfo: FC<{ ticketId: number }> = ({ ticketId }) => {
   const { data: ticketData } = api.ticket.byId.useQuery({
     id: ticketId,
   });
+
+  const { addPriorityTicket } = useAddPriorityTicket();
+  const { removePriorityTicket } = useRemovePriorityTicket();
 
   if (!ticketData) {
     return null;
@@ -40,7 +45,12 @@ export const TicketInfo: FC<{ ticketId: number }> = ({ ticketId }) => {
       </dt>
       <dd className="truncate text-sm leading-5 text-muted-foreground">
         {ticketData.priority ? (
-          <Button type="button" variant={'ghost'} className="gap-x-2 px-2">
+          <Button
+            type="button"
+            variant={'ghost'}
+            className="gap-x-2 px-2"
+            onClick={() => removePriorityTicket({ id: ticketId })}
+          >
             <Star className="h-4 w-4 text-warning" />
             <p className="text-xs text-muted-foreground">
               <FormattedMessage id="ticket.priorities.priority" />
@@ -51,6 +61,7 @@ export const TicketInfo: FC<{ ticketId: number }> = ({ ticketId }) => {
             type="button"
             variant={'ghost'}
             className="h-auto gap-x-2 p-2 text-xs"
+            onClick={() => addPriorityTicket({ id: ticketId })}
           >
             <StarOff className="h-4 w-4 text-warning" />
             <p className="text-xs text-muted-foreground">

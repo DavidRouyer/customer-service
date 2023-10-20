@@ -53,6 +53,8 @@
   "ticket.activity.type.ticket_assignment.unassigned": "a désassigné",
   "ticket.activity.type.ticket_commented": "a commenté",
   "ticket.activity.type.ticket_created": "a créé le ticket",
+  "ticket.activity.type.ticket_priority.added": "a priorisé le ticket",
+  "ticket.activity.type.ticket_priority.removed": "a dépriorisé le ticket",
   "ticket.activity.type.ticket_reopened": "a rouvert le ticket",
   "ticket.activity.type.ticket_resolved": "a clôturé le ticket",
   "ticket.assignment.search.placeholder": "Rechercher collègue ...",

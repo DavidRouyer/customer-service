@@ -52,6 +52,8 @@
   "ticket.activity.type.ticket_assignment.unassigned": "unassigned",
   "ticket.activity.type.ticket_commented": "commented",
   "ticket.activity.type.ticket_created": "created the ticket",
+  "ticket.activity.type.ticket_priority.added": "prioritized the ticket",
+  "ticket.activity.type.ticket_priority.removed": "deprioritized the ticket",
   "ticket.activity.type.ticket_reopened": "reopened the ticket",
   "ticket.activity.type.ticket_resolved": "resolved the ticket",
   "ticket.assignment.search.placeholder": "Search teammate...",

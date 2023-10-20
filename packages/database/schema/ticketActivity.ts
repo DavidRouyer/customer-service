@@ -19,6 +19,8 @@ export const ticketStatus = pgEnum('TicketActivityType', [
   TicketActivityType.AssignmentRemoved,
   TicketActivityType.Commented,
   TicketActivityType.Created,
+  TicketActivityType.PriorityAdded,
+  TicketActivityType.PriorityRemoved,
   TicketActivityType.Resolved,
   TicketActivityType.Reopened,
 ]);
