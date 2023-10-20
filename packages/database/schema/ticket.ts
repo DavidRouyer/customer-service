@@ -1,5 +1,11 @@
 import { relations } from 'drizzle-orm';
-import { integer, pgEnum, serial, timestamp } from 'drizzle-orm/pg-core';
+import {
+  boolean,
+  integer,
+  pgEnum,
+  serial,
+  timestamp,
+} from 'drizzle-orm/pg-core';
 
 import { TicketStatus } from '@cs/lib/tickets';
 
@@ -21,6 +27,7 @@ export const tickets = pgTable('Ticket', {
   updatedAt: timestamp('updatedAt', { precision: 3, mode: 'date' }),
   resolvedAt: timestamp('resolvedAt', { precision: 3, mode: 'date' }),
   status: ticketStatus('status').notNull(),
+  priority: boolean('priority').notNull(),
   assignedToId: integer('assignedToId').references(() => contacts.id, {
     onDelete: 'restrict',
     onUpdate: 'cascade',

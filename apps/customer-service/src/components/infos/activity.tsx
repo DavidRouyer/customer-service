@@ -159,6 +159,12 @@ export const Activity: FC<{
                         Created: (
                           <FormattedMessage id="ticket.activity.type.ticket_created" />
                         ),
+                        PriorityAdded: (
+                          <FormattedMessage id="ticket.activity.type.ticket_priority.added" />
+                        ),
+                        PriorityRemoved: (
+                          <FormattedMessage id="ticket.activity.type.ticket_priority.removed" />
+                        ),
                         Reopened: (
                           <FormattedMessage id="ticket.activity.type.ticket_reopened" />
                         ),

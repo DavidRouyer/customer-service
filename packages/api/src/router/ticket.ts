@@ -357,6 +357,100 @@ export const ticketRouter = createTRPCRouter({
       });
     }),
 
+  addPriority: protectedProcedure
+    .input(z.object({ id: z.number() }))
+    .mutation(async ({ ctx, input }) => {
+      const ticket = await ctx.db.query.tickets.findFirst({
+        where: eq(schema.tickets.id, input.id),
+      });
+
+      if (!ticket)
+        throw new TRPCError({
+          code: 'BAD_REQUEST',
+          message: 'ticket_not_found',
+        });
+
+      if (ticket.priority)
+        throw new TRPCError({
+          code: 'BAD_REQUEST',
+          message: 'ticket_already_prioritized',
+        });
+
+      return await ctx.db.transaction(async (tx) => {
+        const updatedTicket = await tx
+          .update(schema.tickets)
+          .set({
+            priority: true,
+            updatedAt: new Date(),
+          })
+          .where(eq(schema.tickets.id, input.id))
+          .returning({
+            id: schema.tickets.id,
+            updatedAt: schema.tickets.updatedAt,
+          })
+          .then((res) => res[0]);
+
+        if (!updatedTicket) {
+          await tx.rollback();
+          return;
+        }
+
+        await tx.insert(schema.ticketActivities).values({
+          ticketId: input.id,
+          authorId: ctx.session.user.contactId ?? 0,
+          type: TicketActivityType.PriorityAdded,
+          createdAt: updatedTicket.updatedAt ?? new Date(),
+        });
+      });
+    }),
+
+  removePriority: protectedProcedure
+    .input(z.object({ id: z.number() }))
+    .mutation(async ({ ctx, input }) => {
+      const ticket = await ctx.db.query.tickets.findFirst({
+        where: eq(schema.tickets.id, input.id),
+      });
+
+      if (!ticket)
+        throw new TRPCError({
+          code: 'BAD_REQUEST',
+          message: 'ticket_not_found',
+        });
+
+      if (!ticket.priority)
+        throw new TRPCError({
+          code: 'BAD_REQUEST',
+          message: 'ticket_already_unprioritized',
+        });
+
+      return await ctx.db.transaction(async (tx) => {
+        const updatedTicket = await tx
+          .update(schema.tickets)
+          .set({
+            priority: false,
+            updatedAt: new Date(),
+          })
+          .where(eq(schema.tickets.id, input.id))
+          .returning({
+            id: schema.tickets.id,
+            updatedAt: schema.tickets.updatedAt,
+          })
+          .then((res) => res[0]);
+
+        if (!updatedTicket) {
+          await tx.rollback();
+          return;
+        }
+
+        await tx.insert(schema.ticketActivities).values({
+          ticketId: input.id,
+          authorId: ctx.session.user.contactId ?? 0,
+          type: TicketActivityType.PriorityRemoved,
+          createdAt: updatedTicket.updatedAt ?? new Date(),
+        });
+      });
+    }),
+
   resolve: protectedProcedure
     .input(z.object({ id: z.number() }))
     .mutation(async ({ ctx, input }) => {
@@ -458,6 +552,8 @@ export const ticketRouter = createTRPCRouter({
       z.object({
         title: z.string().min(1),
         content: z.string().min(1),
+        status: z.enum([TicketStatus.Open, TicketStatus.Resolved]),
+        priority: z.boolean(),
         authorId: z.number(),
       })
     )
@@ -467,7 +563,6 @@ export const ticketRouter = createTRPCRouter({
           .insert(schema.tickets)
           .values({
             ...input,
-            status: TicketStatus.Open,
             createdAt: new Date(),
           })
           .returning({
