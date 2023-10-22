@@ -5,7 +5,7 @@ import { FormattedDate } from 'react-intl';
 
 import { MessageContentType, MessageDirection } from '@cs/lib/messages';
 
-import { Comment } from '~/components/infos/comment';
+import { NodeContent } from '~/components/infos/node-content';
 import { MessageStatus } from '~/components/messages/message-status';
 import { cn } from '~/lib/utils';
 import { Message as MessageType } from '~/types/Message';
@@ -27,7 +27,7 @@ export const Message: FC<MessageProps> = ({
     if (message.contentType === MessageContentType.TextPlain)
       return <div>{message.content}</div>;
     if (message.contentType === MessageContentType.TextJson)
-      return <Comment content={message.content} />;
+      return <NodeContent content={message.content} />;
     return null;
   })();
 

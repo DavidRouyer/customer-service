@@ -49,6 +49,6 @@ const deserializeContent = (content: string) => {
   return deserializeChildren(state.root.children);
 };
 
-export const Comment: FC<{ content: string }> = ({ content }) => {
+export const NodeContent: FC<{ content: string }> = ({ content }) => {
   return <>{deserializeContent(content)}</>;
 };

@@ -9,7 +9,7 @@ import {
 } from '@cs/api/src/router/ticketActivity';
 import { TicketActivityType, TicketCommented } from '@cs/lib/ticketActivities';
 
-import { Comment } from '~/components/infos/comment';
+import { NodeContent } from '~/components/infos/node-content';
 import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/avatar';
 import { RelativeTime } from '~/components/ui/relative-time';
 import { api } from '~/lib/api';
@@ -69,7 +69,7 @@ export const Activity: FC<{
                       </time>
                     </div>
                     <p className="text-sm leading-6 text-gray-500">
-                      <Comment
+                      <NodeContent
                         content={
                           (ticketActivity.extraInfo as TicketCommented)?.comment
                         }
