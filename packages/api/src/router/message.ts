@@ -1,4 +1,5 @@
 import { TRPCError } from '@trpc/server';
+import { SerializedEditorState } from 'lexical';
 import { z } from 'zod';
 
 import { asc, eq, schema } from '@cs/database';
@@ -49,8 +50,4 @@ export const messageRouter = createTRPCRouter({
         })
         .returning({ id: schema.messages.id });
     }),
-
-  /*delete: publicProcedure.input(z.number()).mutation(({ ctx, input }) => {
-    return ctx.db.delete(schema.message).where(eq(schema.message.id, input));
-  }),*/
 });

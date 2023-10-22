@@ -2,7 +2,7 @@
 
 import { createContext, FC, RefObject, useRef } from 'react';
 import dynamic from 'next/dynamic';
-import { useAtom, useAtomValue } from 'jotai';
+import { useAtom } from 'jotai';
 import { PaperclipIcon, SmilePlusIcon } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
@@ -150,7 +150,7 @@ export const MessageForm: FC<{ ticketId: number }> = ({ ticketId }) => {
       sendMessage({
         ticketId: ticketId,
         direction: MessageDirection.Outbound,
-        contentType: MessageContentType.TextPlain,
+        contentType: MessageContentType.TextJson,
         status: MessageStatus.Pending,
         content: data.content,
         createdAt: new Date(),

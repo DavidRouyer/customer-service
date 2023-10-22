@@ -1,5 +1,5 @@
 import { relations } from 'drizzle-orm';
-import { integer, jsonb, pgEnum, serial, timestamp } from 'drizzle-orm/pg-core';
+import { integer, pgEnum, serial, text, timestamp } from 'drizzle-orm/pg-core';
 
 import {
   MessageContentType,
@@ -17,6 +17,7 @@ export const messageDirection = pgEnum('MessageDirection', [
 ]);
 export const messageContentType = pgEnum('MessageContentType', [
   MessageContentType.TextHtml,
+  MessageContentType.TextJson,
   MessageContentType.TextPlain,
 ]);
 export const messageStatus = pgEnum('MessageStatus', [
@@ -34,7 +35,7 @@ export const messages = pgTable('Message', {
     .notNull(),
   status: messageStatus('status').notNull(),
   contentType: messageContentType('contentType').notNull(),
-  content: jsonb('content').$type<string>().notNull(),
+  content: text('content').notNull(),
   direction: messageDirection('direction').notNull(),
   authorId: integer('authorId')
     .notNull()

@@ -5,26 +5,36 @@ import { MessageDirection } from '@cs/lib/messages';
 import { Message } from '~/components/messages/message';
 import { MessageAvatar } from '~/components/messages/message-avatar';
 import { cn } from '~/lib/utils';
-import { Contact } from '~/types/Contact';
 import { Message as MessageType } from '~/types/Message';
 
 export type MessageGroupProps = {
-  direction: MessageDirection;
-  author: Contact;
   messages: MessageType[];
 };
 
-export const MessageGroup: FC<MessageGroupProps> = ({
-  direction,
-  author,
-  messages,
-}) => {
+export const MessageGroup: FC<MessageGroupProps> = ({ messages }) => {
+  if (messages.length === 0 || !messages[0]) {
+    return null;
+  }
+
+  const firstMessage = messages[0];
+
+  if (messages.length === 1) {
+    return (
+      <Message message={firstMessage}>
+        <MessageAvatar
+          direction={firstMessage.direction}
+          author={firstMessage.author}
+        />
+      </Message>
+    );
+  }
+
   return (
     <section {...{ ['data-message-group']: '' }}>
       <div
         className={cn(
           'flex items-end',
-          direction === MessageDirection.Outbound && 'justify-end'
+          firstMessage.direction === MessageDirection.Outbound && 'justify-end'
         )}
       >
         <div className="space-y-1">
@@ -43,7 +53,10 @@ export const MessageGroup: FC<MessageGroupProps> = ({
             />
           ))}
         </div>
-        <MessageAvatar direction={direction} author={author} />
+        <MessageAvatar
+          direction={firstMessage.direction}
+          author={firstMessage.author}
+        />
       </div>
     </section>
   );

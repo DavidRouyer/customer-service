@@ -1,7 +1,5 @@
 import { FC, Fragment } from 'react';
 
-import { Message } from '~/components/messages/message';
-import { MessageAvatar } from '~/components/messages/message-avatar';
 import { MessageGroup } from '~/components/messages/message-group';
 import { MessageSeparator } from '~/components/messages/message-separator';
 import { ScrollableMessageList } from '~/components/scroll/scrollable-message-list';
@@ -36,23 +34,9 @@ export const MessageList: FC<{ ticketId: number }> = ({ ticketId }) => {
           <MessageSeparator>
             <RelativeDate dateTime={new Date(date)} />
           </MessageSeparator>
-          {groupMessagesByDateAndUser(messages).map((messages) =>
-            messages.length === 1 ? (
-              <Message key={messages[0]!.id} message={messages[0]!}>
-                <MessageAvatar
-                  direction={messages[0]!.direction}
-                  author={messages[0]!.author}
-                />
-              </Message>
-            ) : (
-              <MessageGroup
-                key={messages[0]?.id}
-                direction={messages[0]!.direction}
-                author={messages[0]!.author}
-                messages={messages}
-              />
-            )
-          )}
+          {groupMessagesByDateAndUser(messages).map((messages) => (
+            <MessageGroup key={messages[0]?.id} messages={messages} />
+          ))}
         </Fragment>
       ))}
     </ScrollableMessageList>
