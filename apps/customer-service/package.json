@@ -31,7 +31,7 @@
     "cmdk": "^0.2.0",
     "copy-to-clipboard": "^3.3.3",
     "google-libphonenumber": "^3.2.33",
-    "jotai": "^2.4.3",
+    "jotai": "^2.5.0",
     "lexical": "^0.12.2",
     "lucide-react": "^0.288.0",
     "negotiator": "^0.6.3",
