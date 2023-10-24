@@ -15,8 +15,8 @@
     "@cs/auth": "*",
     "@cs/database": "*",
     "@cs/lib": "*",
-    "@trpc/client": "^10.41.0",
-    "@trpc/server": "^10.41.0",
+    "@trpc/client": "^10.42.0",
+    "@trpc/server": "^10.42.0",
     "superjson": "^1.13.3",
     "zod": "^3.22.4"
   },
