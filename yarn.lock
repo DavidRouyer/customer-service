@@ -25,10 +25,10 @@
     "@jridgewell/gen-mapping" "^0.3.0"
     "@jridgewell/trace-mapping" "^0.3.9"
 
-"@auth/core@0.17.0", "@auth/core@^0.17.0", "@auth/core@experimental":
-  version "0.17.0"
-  resolved "https://registry.yarnpkg.com/@auth/core/-/core-0.17.0.tgz#1250174f4a11b3252a93c4664b06ae46ccd62bc0"
-  integrity sha512-YkbWuXny6sv0gF/sYm7KD3GxnnGxJomoQJzibzhJuwVOYjPUjjYBv/JMTkYcfpBuPHoHZwTVR3y1J+/W18oRxA==
+"@auth/core@0.18.0", "@auth/core@^0.18.0", "@auth/core@experimental":
+  version "0.18.0"
+  resolved "https://registry.yarnpkg.com/@auth/core/-/core-0.18.0.tgz#9dfd8f6e8634d3c089af6afbbb4ecd146c882e1e"
+  integrity sha512-Xb41H3FIv4PlTZmwoFvntaNlVTwIqFxIg7i0/ieHOOxf/7H8EJpGTWoNrqKhwMyZEPU6fHp+VcUiqdX3vFrWSg==
   dependencies:
     "@panva/hkdf" "^1.0.4"
     cookie "0.5.0"
@@ -37,12 +37,12 @@
     preact "10.11.3"
     preact-render-to-string "5.2.3"
 
-"@auth/drizzle-adapter@^0.3.4":
-  version "0.3.4"
-  resolved "https://registry.yarnpkg.com/@auth/drizzle-adapter/-/drizzle-adapter-0.3.4.tgz#ea4efba384fb5baf40b36b76d4f6fb91a9a897d9"
-  integrity sha512-3N734pgz7UJa+p1GBBl4OaORD7Ka6AIgfgM8W9b3UZjvIMnyT1dUZB6JleNg52Qskzh9ULtBuT1Lzb9/gKxsgQ==
+"@auth/drizzle-adapter@^0.3.5":
+  version "0.3.5"
+  resolved "https://registry.yarnpkg.com/@auth/drizzle-adapter/-/drizzle-adapter-0.3.5.tgz#890ac51b6535a1a9d63aa18e3a10dd0ae08dc977"
+  integrity sha512-pZCnZ8vrqUD+C4uc4MiRj+Ox7NLXze6yzWHdtAgK1QMj9PgvUtBsJu02mAYJCyCchWVzdvPG25e9+B6L2mLRBg==
   dependencies:
-    "@auth/core" "0.17.0"
+    "@auth/core" "0.18.0"
 
 "@babel/code-frame@^7.10.4", "@babel/code-frame@^7.22.13":
   version "7.22.13"
@@ -4225,10 +4225,10 @@ negotiator@^0.6.3:
   resolved "https://registry.yarnpkg.com/negotiator/-/negotiator-0.6.3.tgz#58e323a72fedc0d6f9cd4d31fe49f51479590ccd"
   integrity sha512-+EUsqGPLsM+j/zdChZjsnX51g4XrHFOIXwfnCVPGlQk/k5giakcKsuxCObBRu6DSm9opw/O6slWbJdghQM4bBg==
 
-next-auth@0.0.0-manual.ffd05533:
-  version "0.0.0-manual.ffd05533"
-  resolved "https://registry.yarnpkg.com/next-auth/-/next-auth-0.0.0-manual.ffd05533.tgz#606cf84126fb0449cc4a6a685ccacfa7e1277cf5"
-  integrity sha512-oTdpOP93rzABms/Qgp3z0udQG3tCZ3JxOCnwU04xLgX/xnC8+HuDHct7IcEpz+zxhZp6jxN0tdVkMCs5kubUfw==
+next-auth@^5.0.0-beta.0:
+  version "5.0.0-beta.0"
+  resolved "https://registry.yarnpkg.com/next-auth/-/next-auth-5.0.0-beta.0.tgz#8c98221849c50be880b7fa2a656a438da2da8ee8"
+  integrity sha512-xR16llhTIWwuL5Cf/9Sp2LQSCmTWVnen/ZEGTOuml0/TVEvyM85+tmo6tpe8+t2EJSlBOR7e6NRAiayh9V+ftw==
   dependencies:
     "@auth/core" experimental
 
