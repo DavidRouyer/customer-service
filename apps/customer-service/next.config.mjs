@@ -13,7 +13,6 @@ const config = {
   eslint: { ignoreDuringBuilds: true },
   typescript: { ignoreBuildErrors: true },
   experimental: {
-    serverActions: true,
     swcPlugins: [['@swc-jotai/react-refresh', {}]],
   },
 };
