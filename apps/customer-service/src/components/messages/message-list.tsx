@@ -12,7 +12,7 @@ import '~/components/messages/message-list.css';
 import { api } from '~/lib/api';
 
 export const MessageList: FC<{ ticketId: number }> = ({ ticketId }) => {
-  const { data: messagesData } = api.message.all.useQuery({
+  const { data: messagesData } = api.message.byTicketId.useQuery({
     ticketId: ticketId,
   });
 

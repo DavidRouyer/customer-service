@@ -7,7 +7,7 @@ import { MessageStatus } from '@cs/lib/messages';
 import { createTRPCRouter, protectedProcedure } from '../trpc';
 
 export const messageRouter = createTRPCRouter({
-  all: protectedProcedure
+  byTicketId: protectedProcedure
     .input(z.object({ ticketId: z.number() }))
     .query(({ ctx, input }) => {
       return ctx.db.query.messages.findMany({
