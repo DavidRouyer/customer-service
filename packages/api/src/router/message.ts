@@ -1,5 +1,4 @@
 import { TRPCError } from '@trpc/server';
-import { SerializedEditorState } from 'lexical';
 import { z } from 'zod';
 
 import { asc, eq, schema } from '@cs/database';
