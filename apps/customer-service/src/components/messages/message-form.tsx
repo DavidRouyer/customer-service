@@ -48,15 +48,15 @@ export const MessageForm: FC<{ ticketId: number }> = ({ ticketId }) => {
     onMutate: async (newMessage) => {
       // Cancel any outgoing refetches
       // (so they don't overwrite our optimistic update)
-      await utils.message.all.cancel({ ticketId: newMessage.ticketId });
+      await utils.message.byTicketId.cancel({ ticketId: newMessage.ticketId });
 
       // Snapshot the previous value
-      const previousMessages = utils.message.all.getData({
+      const previousMessages = utils.message.byTicketId.getData({
         ticketId: newMessage.ticketId,
       });
 
       // Optimistically update to the new value
-      utils.message.all.setData(
+      utils.message.byTicketId.setData(
         { ticketId: newMessage.ticketId },
         (oldQueryData: Message[] | undefined) =>
           [
@@ -85,13 +85,13 @@ export const MessageForm: FC<{ ticketId: number }> = ({ ticketId }) => {
     },
     onError: (err, _newMessage, context) => {
       // TODO: handle failed queries
-      utils.message.all.setData(
+      utils.message.byTicketId.setData(
         { ticketId: _newMessage.ticketId },
         context?.previousMessages ?? []
       );
     },
     onSettled: (_, __, { ticketId }) => {
-      void utils.message.all.invalidate({ ticketId: ticketId });
+      void utils.message.byTicketId.invalidate({ ticketId: ticketId });
     },
   });
   const { mutateAsync: sendComment } = api.ticketComment.create.useMutation({

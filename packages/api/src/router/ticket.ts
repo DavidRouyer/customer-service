@@ -18,6 +18,11 @@ import {
   sql,
 } from '@cs/database';
 import {
+  MessageContentType,
+  MessageDirection,
+  MessageStatus,
+} from '@cs/lib/messages';
+import {
   TicketActivityType,
   TicketAssignmentAdded,
   TicketAssignmentChanged,
@@ -107,6 +112,68 @@ export const ticketRouter = createTRPCRouter({
         tickets[tickets.length - 1]?.createdAt.toISOString() ?? null;
 
       return { data: tickets, nextCursor };
+    }),
+
+  messagesAndComments: protectedProcedure
+    .input(z.object({ ticketId: z.number() }))
+    .query(async ({ ctx, input }) => {
+      const messages = await ctx.db.query.messages.findMany({
+        where: eq(schema.messages.ticketId, input.ticketId),
+        orderBy: asc(schema.messages.createdAt),
+        with: { author: true },
+      });
+      const comments = await ctx.db.query.ticketComments.findMany({
+        orderBy: asc(schema.ticketComments.createdAt),
+        where: eq(schema.ticketComments.ticketId, input.ticketId),
+        with: { author: true },
+      });
+      const messagesAndComments = [
+        ...messages.map((message) => ({
+          ...message,
+          type: 'message' as const,
+        })),
+        ...comments.map((comment) => ({
+          ...comment,
+          status: MessageStatus.Seen,
+          contentType: MessageContentType.TextJson,
+          direction: MessageDirection.Outbound,
+          content: JSON.stringify(comment.content),
+          type: 'comment' as const,
+        })),
+      ];
+      return messagesAndComments?.reduce<
+        Record<
+          string,
+          Record<
+            string,
+            ((typeof messages)[0] & { type: 'message' | 'comment' })[]
+          >
+        >
+      >((acc, message) => {
+        const date = new Date(message.createdAt);
+        const dateAsString = date.toDateString();
+        date.setUTCMilliseconds(0);
+        date.setUTCSeconds(0);
+        const idx = `${date.toISOString()}.${message.author.id}`;
+
+        if (acc[dateAsString]) {
+          acc = {
+            ...acc,
+            [dateAsString]: {
+              ...acc[dateAsString],
+              [idx]: [...(acc[dateAsString]?.[idx] ?? []), message],
+            },
+          };
+        } else {
+          acc = {
+            ...acc,
+            [dateAsString]: {
+              [idx]: [message],
+            },
+          };
+        }
+        return acc;
+      }, {});
     }),
 
   stats: protectedProcedure.query(async ({ ctx }) => {

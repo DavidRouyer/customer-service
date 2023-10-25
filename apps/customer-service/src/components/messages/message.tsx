@@ -12,6 +12,7 @@ import { Message as MessageType } from '~/types/Message';
 
 export type MessageProps = {
   message: MessageType;
+  type: 'message' | 'comment';
   showStatus?: boolean;
   position?: 'single' | 'first' | 'normal' | 'last';
   children?: React.ReactNode;
@@ -19,6 +20,7 @@ export type MessageProps = {
 
 export const Message: FC<MessageProps> = ({
   message,
+  type,
   showStatus = true,
   position = 'single',
   children,
@@ -51,7 +53,9 @@ export const Message: FC<MessageProps> = ({
             className={cn(
               'inline-block space-y-2 rounded-lg px-4 py-2',
               message.direction === MessageDirection.Outbound
-                ? 'bg-blue-600 text-white'
+                ? type === 'message'
+                  ? 'bg-blue-600 text-white'
+                  : 'bg-warning'
                 : 'bg-gray-300 text-gray-600 dark:bg-gray-800 dark:text-gray-200',
               (position === 'single' ||
                 position === 'first' ||
@@ -84,9 +88,10 @@ export const Message: FC<MessageProps> = ({
                   hour="numeric"
                   minute="numeric"
                 />
-                {message.direction === MessageDirection.Outbound && (
-                  <MessageStatus status={message.status} />
-                )}
+                {message.direction === MessageDirection.Outbound &&
+                  type === 'message' && (
+                    <MessageStatus status={message.status} />
+                  )}
               </div>
             )}
           </div>
