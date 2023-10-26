@@ -114,7 +114,7 @@ export const ticketRouter = createTRPCRouter({
       return { data: tickets, nextCursor };
     }),
 
-  messagesAndComments: protectedProcedure
+  conversation: protectedProcedure
     .input(z.object({ ticketId: z.number() }))
     .query(async ({ ctx, input }) => {
       const messages = await ctx.db.query.messages.findMany({
@@ -127,7 +127,7 @@ export const ticketRouter = createTRPCRouter({
         where: eq(schema.ticketComments.ticketId, input.ticketId),
         with: { author: true },
       });
-      const messagesAndComments = [
+      return [
         ...messages.map((message) => ({
           ...message,
           type: 'message' as const,
@@ -141,39 +141,6 @@ export const ticketRouter = createTRPCRouter({
           type: 'comment' as const,
         })),
       ];
-      return messagesAndComments?.reduce<
-        Record<
-          string,
-          Record<
-            string,
-            ((typeof messages)[0] & { type: 'message' | 'comment' })[]
-          >
-        >
-      >((acc, message) => {
-        const date = new Date(message.createdAt);
-        const dateAsString = date.toDateString();
-        date.setUTCMilliseconds(0);
-        date.setUTCSeconds(0);
-        const idx = `${date.toISOString()}.${message.author.id}`;
-
-        if (acc[dateAsString]) {
-          acc = {
-            ...acc,
-            [dateAsString]: {
-              ...acc[dateAsString],
-              [idx]: [...(acc[dateAsString]?.[idx] ?? []), message],
-            },
-          };
-        } else {
-          acc = {
-            ...acc,
-            [dateAsString]: {
-              [idx]: [message],
-            },
-          };
-        }
-        return acc;
-      }, {});
     }),
 
   stats: protectedProcedure.query(async ({ ctx }) => {

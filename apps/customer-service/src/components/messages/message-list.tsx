@@ -7,12 +7,46 @@ import { RelativeDate } from '~/components/ui/relative-date';
 
 import '~/components/messages/message-list.css';
 
-import { api } from '~/lib/api';
+import { api, RouterOutputs } from '~/lib/api';
+import { Conversation } from '~/types/Conversation';
+
+const getConversation = (messages: RouterOutputs['ticket']['conversation']) => {
+  return messages?.reduce<Conversation>((acc, message) => {
+    const date = new Date(message.createdAt);
+    const dateAsString = date.toDateString();
+    date.setUTCMilliseconds(0);
+    date.setUTCSeconds(0);
+    const idx = `${date.toISOString()}.${message.author.id}`;
+
+    if (acc[dateAsString]) {
+      acc = {
+        ...acc,
+        [dateAsString]: {
+          ...acc[dateAsString],
+          [idx]: [...(acc[dateAsString]?.[idx] ?? []), message],
+        },
+      };
+    } else {
+      acc = {
+        ...acc,
+        [dateAsString]: {
+          [idx]: [message],
+        },
+      };
+    }
+    return acc;
+  }, {});
+};
 
 export const MessageList: FC<{ ticketId: number }> = ({ ticketId }) => {
-  const { data: messagesData } = api.ticket.messagesAndComments.useQuery({
-    ticketId: ticketId,
-  });
+  const { data: messagesData } = api.ticket.conversation.useQuery(
+    {
+      ticketId: ticketId,
+    },
+    {
+      select: getConversation,
+    }
+  );
 
   return (
     <ScrollableMessageList className="relative h-full w-full overflow-hidden py-3">

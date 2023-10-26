@@ -8,7 +8,7 @@ import { MessageAvatar } from '~/components/messages/message-avatar';
 import { cn } from '~/lib/utils';
 
 export type MessageGroupProps = {
-  messages: RouterOutputs['ticket']['messagesAndComments'][0][0];
+  messages: RouterOutputs['ticket']['conversation'][0][];
 };
 
 export const MessageGroup: FC<MessageGroupProps> = ({ messages }) => {
