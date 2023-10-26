@@ -20,8 +20,7 @@ import { Label } from '~/components/ui/label';
 import { Switch } from '~/components/ui/switch';
 import { api } from '~/lib/api';
 import { cn } from '~/lib/utils';
-import { Comment } from '~/types/Comment';
-import { Message } from '~/types/Message';
+import { ConversationItem } from '~/types/Conversation';
 
 const TextEditor = dynamic(
   () => import('~/components/text-editor/text-editor'),
@@ -48,21 +47,22 @@ export const MessageForm: FC<{ ticketId: number }> = ({ ticketId }) => {
     onMutate: async (newMessage) => {
       // Cancel any outgoing refetches
       // (so they don't overwrite our optimistic update)
-      await utils.message.byTicketId.cancel({ ticketId: newMessage.ticketId });
+      await utils.ticket.conversation.cancel({ ticketId: newMessage.ticketId });
 
       // Snapshot the previous value
-      const previousMessages = utils.message.byTicketId.getData({
+      const previousMessages = utils.ticket.conversation.getData({
         ticketId: newMessage.ticketId,
       });
 
       // Optimistically update to the new value
-      utils.message.byTicketId.setData(
+      utils.ticket.conversation.setData(
         { ticketId: newMessage.ticketId },
-        (oldQueryData: Message[] | undefined) =>
+        (oldQueryData: ConversationItem[] | undefined) =>
           [
             ...(oldQueryData ?? []),
             {
-              id: self.crypto.randomUUID() as unknown as number,
+              id: self.crypto.randomUUID(),
+              type: 'message',
               ticketId: newMessage.ticketId,
               direction: newMessage.direction,
               contentType: newMessage.contentType,
@@ -77,7 +77,7 @@ export const MessageForm: FC<{ ticketId: number }> = ({ ticketId }) => {
                 id: session.data?.user?.contactId ?? 0,
               },
             },
-          ] as Message[]
+          ] as ConversationItem[]
       );
 
       // Return a context object with the snapshotted value
@@ -85,36 +85,40 @@ export const MessageForm: FC<{ ticketId: number }> = ({ ticketId }) => {
     },
     onError: (err, _newMessage, context) => {
       // TODO: handle failed queries
-      utils.message.byTicketId.setData(
+      utils.ticket.conversation.setData(
         { ticketId: _newMessage.ticketId },
         context?.previousMessages ?? []
       );
     },
     onSettled: (_, __, { ticketId }) => {
-      void utils.message.byTicketId.invalidate({ ticketId: ticketId });
+      void utils.ticket.conversation.invalidate({ ticketId: ticketId });
     },
   });
   const { mutateAsync: sendComment } = api.ticketComment.create.useMutation({
     onMutate: async (newTicket) => {
       // Cancel any outgoing refetches
       // (so they don't overwrite our optimistic update)
-      await utils.ticketComment.byTicketId.cancel({
+      await utils.ticket.conversation.cancel({
         ticketId: newTicket.ticketId,
       });
 
       // Snapshot the previous value
-      const previousComments = utils.ticketComment.byTicketId.getData({
+      const previousConversationItem = utils.ticket.conversation.getData({
         ticketId: newTicket.ticketId,
       });
 
       // Optimistically update to the new value
-      utils.ticketComment.byTicketId.setData(
+      utils.ticket.conversation.setData(
         { ticketId: newTicket.ticketId },
-        (oldQueryData: Comment[] | undefined) =>
+        (oldQueryData: ConversationItem[] | undefined) =>
           [
             ...(oldQueryData ?? []),
             {
               id: self.crypto.randomUUID(),
+              type: 'comment',
+              direction: MessageDirection.Outbound,
+              contentType: MessageContentType.TextJson,
+              status: MessageStatus.Pending,
               content: newTicket.content,
               createdAt: newTicket.createdAt,
               authorId: session.data?.user?.contactId ?? 0,
@@ -125,21 +129,21 @@ export const MessageForm: FC<{ ticketId: number }> = ({ ticketId }) => {
                 id: session.data?.user?.contactId ?? 0,
               },
             },
-          ] as Comment[]
+          ] as ConversationItem[]
       );
 
       // Return a context object with the snapshotted value
-      return { previousComments };
+      return { previousComments: previousConversationItem };
     },
     onError: (err, _newTicket, context) => {
       // TODO: handle failed queries
-      utils.ticketComment.byTicketId.setData(
+      utils.ticket.conversation.setData(
         { ticketId: _newTicket.ticketId },
         context?.previousComments ?? []
       );
     },
     onSettled: (_, __, { ticketId }) => {
-      void utils.ticketComment.byTicketId.invalidate({ ticketId: ticketId });
+      void utils.ticket.conversation.invalidate({ ticketId: ticketId });
       void utils.ticketActivity.byTicketId.invalidate({ ticketId: ticketId });
     },
   });

@@ -15,7 +15,7 @@ import { Conversation } from '~/types/Conversation';
 const getConversation = (messages: RouterOutputs['ticket']['conversation']) => {
   return messages?.reduce<Conversation>((acc, message) => {
     const date = new Date(message.createdAt);
-    const dateAsString = date.toDateString();
+    const dateAsString = date.toISOString().substring(0, 10);
     date.setUTCMilliseconds(0);
     date.setUTCSeconds(0);
     const idx = `${date.toISOString()}.${message.author.id}`;
