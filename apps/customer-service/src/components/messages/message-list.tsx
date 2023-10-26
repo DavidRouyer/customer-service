@@ -1,3 +1,5 @@
+'use client';
+
 import { FC, Fragment } from 'react';
 
 import { MessageGroup } from '~/components/messages/message-group';

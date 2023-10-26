@@ -1,9 +1,9 @@
+'use client';
+
 // https://github.com/goldenyz/react-perfect-scrollbar/
 import React, { CSSProperties } from 'react';
 
-import PerfectScrollbar, {
-  PerfectScrollbarOptions,
-} from './perfect-scrollbar';
+import PerfectScrollbar, { PerfectScrollbarOptions } from './perfect-scrollbar';
 
 type handlerEvent =
   | 'onScrollY'
