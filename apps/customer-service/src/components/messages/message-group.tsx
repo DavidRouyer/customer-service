@@ -1,14 +1,14 @@
 import { FC } from 'react';
 
+import { RouterOutputs } from '@cs/api';
 import { MessageDirection } from '@cs/lib/messages';
 
 import { Message } from '~/components/messages/message';
 import { MessageAvatar } from '~/components/messages/message-avatar';
 import { cn } from '~/lib/utils';
-import { Message as MessageType } from '~/types/Message';
 
 export type MessageGroupProps = {
-  messages: MessageType[];
+  messages: RouterOutputs['ticket']['conversation'][0][];
 };
 
 export const MessageGroup: FC<MessageGroupProps> = ({ messages }) => {
@@ -20,7 +20,7 @@ export const MessageGroup: FC<MessageGroupProps> = ({ messages }) => {
 
   if (messages.length === 1) {
     return (
-      <Message message={firstMessage}>
+      <Message message={firstMessage} type={firstMessage.type}>
         <MessageAvatar
           direction={firstMessage.direction}
           author={firstMessage.author}
@@ -42,6 +42,7 @@ export const MessageGroup: FC<MessageGroupProps> = ({ messages }) => {
             <Message
               key={message.id}
               message={message}
+              type={firstMessage.type}
               showStatus={idx === messages.length - 1}
               position={
                 idx === 0

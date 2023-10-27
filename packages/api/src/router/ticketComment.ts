@@ -12,7 +12,7 @@ export const ticketCommentRouter = createTRPCRouter({
   byTicketId: protectedProcedure
     .input(z.object({ ticketId: z.number() }))
     .query(async ({ ctx, input }) => {
-      return await ctx.db.query.ticketComments.findMany({
+      return ctx.db.query.ticketComments.findMany({
         orderBy: asc(schema.ticketComments.createdAt),
         where: eq(schema.ticketComments.ticketId, input.ticketId),
         with: { author: true },

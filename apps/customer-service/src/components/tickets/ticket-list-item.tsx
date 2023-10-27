@@ -6,6 +6,7 @@ import { FormattedMessage } from 'react-intl';
 
 import { RouterOutputs } from '@cs/api';
 
+import { MessageContent } from '~/components/messages/message-content';
 import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/avatar';
 import { RelativeTime } from '~/components/ui/relative-time';
 import { getInitials } from '~/lib/string';
@@ -55,7 +56,12 @@ export const TicketListItem: FC<TicketListItemProps> = ({ ticket }) => {
                 <FormattedMessage id="you" />{' '}
               </>
             ) : null}
-            {ticket.messages?.[0]?.content}
+            {ticket.messages?.[0] ? (
+              <MessageContent
+                type={ticket.messages[0].contentType}
+                content={ticket.messages[0].content}
+              />
+            ) : null}
           </p>
         </div>
       </Link>

@@ -1,3 +1,5 @@
+'use client';
+
 import React, { forwardRef, useImperativeHandle, useRef } from 'react';
 
 import Scrollbar from '~/components/scroll/scrollbar';
