@@ -3,9 +3,9 @@
 import { FC } from 'react';
 import { FormattedDate } from 'react-intl';
 
-import { MessageContentType, MessageDirection } from '@cs/lib/messages';
+import { MessageDirection } from '@cs/lib/messages';
 
-import { NodeContent } from '~/components/infos/node-content';
+import { MessageContent } from '~/components/messages/message-content';
 import { MessageStatus } from '~/components/messages/message-status';
 import { cn } from '~/lib/utils';
 import { Message as MessageType } from '~/types/Message';
@@ -25,14 +25,6 @@ export const Message: FC<MessageProps> = ({
   position = 'single',
   children,
 }) => {
-  const messageContent = (() => {
-    if (message.contentType === MessageContentType.TextPlain)
-      return <div>{message.content}</div>;
-    if (message.contentType === MessageContentType.TextJson)
-      return <NodeContent content={message.content} />;
-    return null;
-  })();
-
   return (
     <section key={message.id} {...{ ['data-message']: '' }}>
       <div
@@ -73,7 +65,10 @@ export const Message: FC<MessageProps> = ({
                 'rounded-l-none'
             )}
           >
-            {messageContent}
+            <MessageContent
+              type={message.contentType}
+              content={message.content}
+            />
             {showStatus && (
               <div
                 className={cn(
