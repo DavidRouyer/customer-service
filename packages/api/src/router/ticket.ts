@@ -140,7 +140,11 @@ export const ticketRouter = createTRPCRouter({
           content: JSON.stringify(comment.content),
           type: 'comment' as const,
         })),
-      ];
+      ].toSorted((a, b) => {
+        if (a.createdAt < b.createdAt) return -1;
+        if (a.createdAt > b.createdAt) return 1;
+        return 0;
+      });
     }),
 
   stats: protectedProcedure.query(async ({ ctx }) => {
