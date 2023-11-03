@@ -7,7 +7,11 @@ import {
   TicketAssignmentChangedWithData,
   TicketAssignmentRemovedWithData,
 } from '@cs/api/src/router/ticketActivity';
-import { TicketActivityType, TicketCommented } from '@cs/lib/ticketActivities';
+import {
+  TicketActivityType,
+  TicketCommented,
+  TicketPriorityChanged,
+} from '@cs/lib/ticketActivities';
 
 import { NodeContent } from '~/components/infos/node-content';
 import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/avatar';
@@ -159,11 +163,18 @@ export const Activity: FC<{
                         Created: (
                           <FormattedMessage id="ticket.activity.type.ticket_created" />
                         ),
-                        PriorityAdded: (
-                          <FormattedMessage id="ticket.activity.type.ticket_priority.added" />
-                        ),
-                        PriorityRemoved: (
-                          <FormattedMessage id="ticket.activity.type.ticket_priority.removed" />
+                        PriorityChanged: (
+                          <FormattedMessage
+                            id="ticket.activity.type.ticket_priority.changed"
+                            values={{
+                              old: (
+                                ticketActivity.extraInfo as TicketPriorityChanged
+                              )?.oldPriority,
+                              new: (
+                                ticketActivity.extraInfo as TicketPriorityChanged
+                              )?.newPriority,
+                            }}
+                          />
                         ),
                         Reopened: (
                           <FormattedMessage id="ticket.activity.type.ticket_reopened" />

@@ -1,3 +1,4 @@
+import { TicketPriority } from '../tickets';
 import { TicketActivityType } from './TicketActivityType';
 
 type TicketAssignmentAdded = {
@@ -17,10 +18,16 @@ type TicketCommented = {
   comment: string;
 };
 
+type TicketPriorityChanged = {
+  oldPriority: TicketPriority;
+  newPriority: TicketPriority;
+};
+
 export {
   type TicketAssignmentAdded,
   type TicketAssignmentChanged,
   type TicketAssignmentRemoved,
   type TicketCommented,
+  type TicketPriorityChanged,
   TicketActivityType,
 };

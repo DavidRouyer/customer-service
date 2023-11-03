@@ -7,6 +7,7 @@ import {
   TicketAssignmentChanged,
   TicketAssignmentRemoved,
   TicketCommented,
+  TicketPriorityChanged,
 } from '@cs/lib/ticketActivities';
 
 import { createTRPCRouter, protectedProcedure } from '../trpc';
@@ -42,6 +43,7 @@ export const ticketActivityRouter = createTRPCRouter({
           | TicketAssignmentChangedWithData
           | TicketAssignmentRemovedWithData
           | TicketCommented
+          | TicketPriorityChanged
           | null;
       })[] = [];
 
@@ -130,6 +132,12 @@ export const ticketActivityRouter = createTRPCRouter({
             augmentedTicketActivities.push({
               ...ticketActivity,
               extraInfo: ticketActivity.extraInfo as TicketCommented,
+            });
+            break;
+          case TicketActivityType.PriorityChanged:
+            augmentedTicketActivities.push({
+              ...ticketActivity,
+              extraInfo: ticketActivity.extraInfo as TicketPriorityChanged,
             });
             break;
           default:

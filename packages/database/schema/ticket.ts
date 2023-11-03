@@ -1,13 +1,7 @@
 import { relations } from 'drizzle-orm';
-import {
-  boolean,
-  integer,
-  pgEnum,
-  serial,
-  timestamp,
-} from 'drizzle-orm/pg-core';
+import { integer, pgEnum, serial, timestamp } from 'drizzle-orm/pg-core';
 
-import { TicketStatus } from '@cs/lib/tickets';
+import { TicketPriority, TicketStatus } from '@cs/lib/tickets';
 
 import { pgTable } from './_table';
 import { contacts } from './contact';
@@ -19,6 +13,13 @@ export const ticketStatus = pgEnum('TicketStatus', [
   TicketStatus.Resolved,
 ]);
 
+export const ticketPriority = pgEnum('TicketPriority', [
+  TicketPriority.Critical,
+  TicketPriority.High,
+  TicketPriority.Medium,
+  TicketPriority.Low,
+]);
+
 export const tickets = pgTable('Ticket', {
   id: serial('id').primaryKey().notNull(),
   createdAt: timestamp('createdAt', { precision: 3, mode: 'date' })
@@ -27,7 +28,7 @@ export const tickets = pgTable('Ticket', {
   updatedAt: timestamp('updatedAt', { precision: 3, mode: 'date' }),
   resolvedAt: timestamp('resolvedAt', { precision: 3, mode: 'date' }),
   status: ticketStatus('status').notNull(),
-  priority: boolean('priority').notNull(),
+  priority: ticketPriority('priority').notNull(),
   assignedToId: integer('assignedToId').references(() => contacts.id, {
     onDelete: 'restrict',
     onUpdate: 'cascade',
