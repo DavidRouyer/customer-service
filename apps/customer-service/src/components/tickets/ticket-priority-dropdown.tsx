@@ -1,9 +1,9 @@
 import { FC } from 'react';
-import { CheckCircle2, CircleDot, Shield, ShieldAlert } from 'lucide-react';
+import { Shield, ShieldAlert } from 'lucide-react';
 import { FormattedMessage } from 'react-intl';
 
 import { RouterOutputs } from '@cs/api';
-import { TicketPriority, TicketStatus } from '@cs/lib/tickets';
+import { TicketPriority } from '@cs/lib/tickets';
 
 import { Button } from '~/components/ui/button';
 import {
