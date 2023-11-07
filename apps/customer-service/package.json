@@ -77,6 +77,7 @@
     "extends": [
       "@cs/eslint-config/base",
       "@cs/eslint-config/react",
+      "@cs/eslint-config/nextjs",
       "@cs/eslint-config/tailwind"
     ]
   },
