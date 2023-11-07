@@ -8,10 +8,6 @@ import { sessions, users } from '@cs/database/schema/auth';
 
 export type { Session } from 'next-auth';
 
-// Update this whenever adding new providers so that the client can
-export const providers = ['github'] as const;
-export type OAuthProviders = (typeof providers)[number];
-
 declare module 'next-auth' {
   // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
   interface Session {
@@ -29,6 +25,8 @@ declare module 'next-auth' {
 export const {
   handlers: { GET, POST },
   auth,
+  signIn,
+  signOut,
 } = NextAuth({
   adapter: {
     ...DrizzleAdapter(db, tableCreator),

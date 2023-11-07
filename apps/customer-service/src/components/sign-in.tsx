@@ -1,11 +1,10 @@
-'use client';
+import { signIn } from '@cs/auth';
 
-import { signIn } from 'next-auth/react';
-import { FormattedMessage } from 'react-intl';
-
+import getIntl from '~/app/i18n/server';
 import { Button } from '~/components/ui/button';
 
-export function SignIn() {
+export async function SignIn() {
+  const { formatMessage } = await getIntl();
   return (
     <>
       <div className="sm:mx-auto sm:w-full sm:max-w-sm">
@@ -15,17 +14,21 @@ export function SignIn() {
           alt="Customer Service"
         />
         <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-foreground">
-          <FormattedMessage id="sign_in_to_your_account" />
+          {formatMessage({ id: 'sign_in_to_your_account' })}
         </h2>
       </div>
 
       <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-        <Button
-          onClick={() => signIn('github', { callbackUrl: '/tickets' })}
-          className="w-full"
+        <form
+          action={async () => {
+            'use server';
+            await signIn('github', { callbackUrl: '/tickets' });
+          }}
         >
-          <FormattedMessage id="sign_in_with_github" />
-        </Button>
+          <Button className="w-full">
+            {formatMessage({ id: 'sign_in_with_github' })}
+          </Button>
+        </form>
       </div>
     </>
   );
