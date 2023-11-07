@@ -10,7 +10,11 @@ function localeDetector(request: NextRequest, config: Config): string {
   request.headers.forEach((value, key) => (negotiatorHeaders[key] = value));
 
   const languages = new Negotiator({ headers: negotiatorHeaders }).languages();
-  console.log('languages', JSON.stringify(languages));
+
+  // Handle no language header
+  if (!languages || (languages.length === 1 && languages[0] === '*')) {
+    return config.defaultLocale;
+  }
 
   return match(languages, config.locales, config.defaultLocale);
 }
