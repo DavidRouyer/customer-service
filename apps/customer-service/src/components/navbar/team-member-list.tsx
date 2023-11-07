@@ -1,7 +1,6 @@
 import { FC } from 'react';
 import Link from 'next/link';
 import { usePathname, useSearchParams } from 'next/navigation';
-import { useSession } from 'next-auth/react';
 
 import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/avatar';
 import { api } from '~/lib/api';
@@ -11,14 +10,14 @@ import { getInitials } from '~/lib/string';
 import { cn } from '~/lib/utils';
 
 export const TeamMemberList: FC = () => {
-  const session = useSession();
+  const { data: sessionData } = api.auth.getSession.useQuery();
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const [contactsData] = api.contact.allWithUserId.useSuspenseQuery();
   const [statsData] = api.ticket.stats.useSuspenseQuery();
 
   return contactsData
-    ?.filter((contact) => contact.id !== session?.data?.user.contactId)
+    ?.filter((contact) => contact.id !== sessionData?.user.contactId)
     .map((contact) => (
       <li key={contact.id}>
         <Link

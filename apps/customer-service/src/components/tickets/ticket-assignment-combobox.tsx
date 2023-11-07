@@ -1,6 +1,5 @@
 import { FC, useCallback, useState } from 'react';
 import { Check, Plus } from 'lucide-react';
-import { useSession } from 'next-auth/react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
 import { RouterOutputs } from '@cs/api';
@@ -33,7 +32,7 @@ export const TicketAssignmentCombobox: FC<TicketAssignmentComboboxProps> = ({
   ticketId,
 }) => {
   const { formatMessage } = useIntl();
-  const { data: sessionData } = useSession();
+  const { data: sessionData } = api.auth.getSession.useQuery();
 
   const [open, setOpen] = useState(false);
 

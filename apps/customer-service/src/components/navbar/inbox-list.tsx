@@ -2,7 +2,6 @@ import { FC } from 'react';
 import Link from 'next/link';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { AtSign, BarChart3, BookmarkX, Users } from 'lucide-react';
-import { useSession } from 'next-auth/react';
 import { FormattedMessage } from 'react-intl';
 
 import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/avatar';
@@ -13,7 +12,7 @@ import { getInitials } from '~/lib/string';
 import { cn } from '~/lib/utils';
 
 export const InboxList: FC = () => {
-  const session = useSession();
+  const { data: sessionData } = api.auth.getSession.useQuery();
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
@@ -35,9 +34,9 @@ export const InboxList: FC = () => {
         >
           <div className="flex items-center gap-x-3 truncate">
             <Avatar className="h-4 w-4 shrink-0">
-              <AvatarImage src={session.data?.user.image ?? undefined} />
+              <AvatarImage src={sessionData?.user.image ?? undefined} />
               <AvatarFallback>
-                {getInitials(session.data?.user.name ?? '')}
+                {getInitials(sessionData?.user.name ?? '')}
               </AvatarFallback>
             </Avatar>
             <span className="truncate">

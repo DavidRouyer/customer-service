@@ -1,7 +1,6 @@
 import { FC } from 'react';
 import Link from 'next/link';
 import { usePathname, useSearchParams } from 'next/navigation';
-import { useSession } from 'next-auth/react';
 import { FormattedMessage } from 'react-intl';
 
 import { RouterOutputs } from '@cs/api';
@@ -9,6 +8,7 @@ import { RouterOutputs } from '@cs/api';
 import { MessageContent } from '~/components/messages/message-content';
 import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/avatar';
 import { RelativeTime } from '~/components/ui/relative-time';
+import { api } from '~/lib/api';
 import { getInitials } from '~/lib/string';
 
 export type TicketListItemProps = {
@@ -18,7 +18,7 @@ export type TicketListItemProps = {
 export const TicketListItem: FC<TicketListItemProps> = ({ ticket }) => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const session = useSession();
+  const { data: sessionData } = api.auth.getSession.useQuery();
 
   return (
     <section
@@ -50,8 +50,7 @@ export const TicketListItem: FC<TicketListItemProps> = ({ ticket }) => {
             </p>
           </div>
           <p className="mt-1 line-clamp-2 text-sm leading-6 text-muted-foreground">
-            {session.data?.user?.contactId ===
-            ticket.messages?.[0]?.authorId ? (
+            {sessionData?.user?.contactId === ticket.messages?.[0]?.authorId ? (
               <>
                 <FormattedMessage id="you" />{' '}
               </>

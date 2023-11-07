@@ -4,7 +4,6 @@ import { createContext, FC, RefObject, useRef } from 'react';
 import dynamic from 'next/dynamic';
 import { useAtom } from 'jotai';
 import { PaperclipIcon, SmilePlusIcon } from 'lucide-react';
-import { useSession } from 'next-auth/react';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
 import { FormattedMessage } from 'react-intl';
 
@@ -38,7 +37,7 @@ export const FormElementContext =
 
 export const MessageForm: FC<{ ticketId: number }> = ({ ticketId }) => {
   const formRef = useRef<HTMLFormElement>(null);
-  const session = useSession();
+  const { data: sessionData } = api.auth.getSession.useQuery();
   const utils = api.useUtils();
 
   const [messageMode, setMessageMode] = useAtom(messageModeAtom);
@@ -69,12 +68,12 @@ export const MessageForm: FC<{ ticketId: number }> = ({ ticketId }) => {
               status: newMessage.status,
               content: newMessage.content,
               createdAt: newMessage.createdAt,
-              authorId: session.data?.user?.contactId ?? 0,
+              authorId: sessionData?.user?.contactId ?? 0,
               // TODO: remove hack by fetching contact from user
               author: {
-                name: session.data?.user?.name ?? '',
-                avatarUrl: session.data?.user?.image ?? '',
-                id: session.data?.user?.contactId ?? 0,
+                name: sessionData?.user?.name ?? '',
+                avatarUrl: sessionData?.user?.image ?? '',
+                id: sessionData?.user?.contactId ?? 0,
               },
             },
           ] as ConversationItem[]
@@ -121,12 +120,12 @@ export const MessageForm: FC<{ ticketId: number }> = ({ ticketId }) => {
               status: MessageStatus.Pending,
               content: newTicket.content,
               createdAt: newTicket.createdAt,
-              authorId: session.data?.user?.contactId ?? 0,
+              authorId: sessionData?.user?.contactId ?? 0,
               // TODO: remove hack by fetching contact from user
               author: {
-                name: session.data?.user?.name ?? '',
-                avatarUrl: session.data?.user?.image ?? '',
-                id: session.data?.user?.contactId ?? 0,
+                name: sessionData?.user?.name ?? '',
+                avatarUrl: sessionData?.user?.image ?? '',
+                id: sessionData?.user?.contactId ?? 0,
               },
             },
           ] as ConversationItem[]
@@ -158,14 +157,14 @@ export const MessageForm: FC<{ ticketId: number }> = ({ ticketId }) => {
         status: MessageStatus.Pending,
         content: data.content,
         createdAt: new Date(),
-        authorId: session.data?.user?.contactId ?? 0,
+        authorId: sessionData?.user?.contactId ?? 0,
       });
     } else {
       sendComment({
         ticketId: ticketId,
         content: data.content,
         createdAt: new Date(),
-        authorId: session.data?.user?.contactId ?? 0,
+        authorId: sessionData?.user?.contactId ?? 0,
       });
     }
 

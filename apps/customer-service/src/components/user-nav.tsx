@@ -1,7 +1,6 @@
 'use client';
 
 import { useRef } from 'react';
-import { useSession } from 'next-auth/react';
 import { FormattedMessage } from 'react-intl';
 
 import { handleSignOut } from '~/app/tickets/sign-out';
@@ -16,13 +15,14 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from '~/components/ui/dropdown-menu';
+import { api } from '~/lib/api';
 import { getInitials } from '~/lib/string';
 
 export function UserNav({ showLabel = false }: { showLabel?: boolean }) {
-  const session = useSession();
+  const { data: sessionData } = api.auth.getSession.useQuery();
   const formRef = useRef<HTMLFormElement>(null);
 
-  if (!session.data?.user) return null;
+  if (!sessionData?.user) return null;
 
   return (
     <>
@@ -35,15 +35,15 @@ export function UserNav({ showLabel = false }: { showLabel?: boolean }) {
               className="flex w-full items-center gap-x-4 px-6 py-3 text-sm font-semibold leading-6 text-foreground hover:bg-gray-50 dark:hover:bg-gray-900"
             >
               <Avatar className="h-8 w-8">
-                <AvatarImage src={session.data.user.image ?? undefined} />
+                <AvatarImage src={sessionData.user.image ?? undefined} />
                 <AvatarFallback>
-                  {getInitials(session.data.user.name ?? '')}
+                  {getInitials(sessionData.user.name ?? '')}
                 </AvatarFallback>
               </Avatar>
               <span className="sr-only">
                 <FormattedMessage id="layout.your_profile" />
               </span>
-              <span aria-hidden="true">{session.data?.user.name}</span>
+              <span aria-hidden="true">{sessionData?.user.name}</span>
             </button>
           ) : (
             <Button
@@ -53,11 +53,11 @@ export function UserNav({ showLabel = false }: { showLabel?: boolean }) {
             >
               <Avatar className="h-9 w-9">
                 <AvatarImage
-                  src={session.data.user.image ?? undefined}
-                  alt={session.data.user.name ?? ''}
+                  src={sessionData.user.image ?? undefined}
+                  alt={sessionData.user.name ?? ''}
                 />
                 <AvatarFallback>
-                  {getInitials(session.data.user.name ?? '')}
+                  {getInitials(sessionData.user.name ?? '')}
                 </AvatarFallback>
               </Avatar>
             </Button>
@@ -67,10 +67,10 @@ export function UserNav({ showLabel = false }: { showLabel?: boolean }) {
           <DropdownMenuLabel className="font-normal">
             <div className="flex flex-col space-y-1">
               <p className="text-sm font-medium leading-none">
-                {session.data.user.name ?? ''}
+                {sessionData.user.name ?? ''}
               </p>
               <p className="text-xs leading-none text-muted-foreground">
-                {session.data.user.email}
+                {sessionData.user.email}
               </p>
             </div>
           </DropdownMenuLabel>
