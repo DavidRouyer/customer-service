@@ -61,7 +61,7 @@
     "@swc-jotai/react-refresh": "^0.1.0",
     "@testing-library/jest-dom": "^6.1.4",
     "@testing-library/react": "^14.0.0",
-    "@types/google-libphonenumber": "^7.4.29",
+    "@types/google-libphonenumber": "^7.4.30",
     "@types/negotiator": "^0.6.3",
     "@types/node": "^20.8.10",
     "@types/react": "^18.2.36",
