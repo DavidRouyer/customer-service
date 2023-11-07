@@ -79,7 +79,7 @@ export const TicketPriorityDropdowm: FC<TicketChangePriorityProps> = ({
                 ),
                 High: (
                   <>
-                    <Shield className="h-4 w-4 text-warning" />
+                    <Shield className="h-4 w-4 text-destructive" />
                     <p className="text-xs text-muted-foreground">
                       <FormattedMessage id="ticket.priorities.high" />
                     </p>
@@ -87,7 +87,7 @@ export const TicketPriorityDropdowm: FC<TicketChangePriorityProps> = ({
                 ),
                 Medium: (
                   <>
-                    <Shield className="h-4 w-4 text-valid" />
+                    <Shield className="h-4 w-4 text-warning" />
                     <p className="text-xs text-muted-foreground">
                       <FormattedMessage id="ticket.priorities.medium" />
                     </p>
@@ -130,7 +130,7 @@ export const TicketPriorityDropdowm: FC<TicketChangePriorityProps> = ({
             disabled={priority === TicketPriority.High}
           >
             <div className="flex items-center gap-x-2">
-              <Shield className="h-5 w-5 text-warning" />
+              <Shield className="h-5 w-5 text-destructive" />
               <p className="text-xs text-muted-foreground">
                 <FormattedMessage id="ticket.priorities.high" />
               </p>
@@ -144,7 +144,7 @@ export const TicketPriorityDropdowm: FC<TicketChangePriorityProps> = ({
             disabled={priority === TicketPriority.Medium}
           >
             <div className="flex items-center gap-x-2">
-              <Shield className="h-5 w-5 text-valid" />
+              <Shield className="h-5 w-5 text-warning" />
               <p className="text-xs text-muted-foreground">
                 <FormattedMessage id="ticket.priorities.medium" />
               </p>
