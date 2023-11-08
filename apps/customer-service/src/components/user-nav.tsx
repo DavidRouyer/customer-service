@@ -19,7 +19,7 @@ import { api } from '~/lib/api';
 import { getInitials } from '~/lib/string';
 
 export function UserNav({ showLabel = false }: { showLabel?: boolean }) {
-  const { data: sessionData } = api.auth.getSession.useQuery();
+  const [sessionData] = api.auth.getSession.useSuspenseQuery();
   const formRef = useRef<HTMLFormElement>(null);
 
   if (!sessionData?.user) return null;

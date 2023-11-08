@@ -73,7 +73,9 @@ export const LayoutWithSidebar: FC<{
                 <li key={item.name}>{item.content}</li>
               ))}
               <li className="-mx-6 mt-auto">
-                <UserNav showLabel />
+                <Suspense>
+                  <UserNav showLabel />
+                </Suspense>
               </li>
             </ul>
           </nav>
@@ -93,7 +95,9 @@ export const LayoutWithSidebar: FC<{
         <div className="flex-1 text-sm font-semibold leading-6 text-foreground">
           Help Desk
         </div>
-        <UserNav />
+        <Suspense>
+          <UserNav />
+        </Suspense>
       </div>
 
       {children}

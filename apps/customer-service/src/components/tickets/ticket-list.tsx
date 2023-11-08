@@ -34,6 +34,7 @@ export const TicketList: FC<{
       },
     }
   );
+  const [sessionData] = api.auth.getSession.useSuspenseQuery();
 
   const { isFetching, fetchNextPage, hasNextPage } = allTicketsQuery;
 
@@ -69,7 +70,11 @@ export const TicketList: FC<{
             {data?.pages.map((page) => (
               <Fragment key={page.nextCursor}>
                 {page.data.map((ticket) => (
-                  <TicketListItem key={ticket.id} ticket={ticket} />
+                  <TicketListItem
+                    key={ticket.id}
+                    ticket={ticket}
+                    currentContactId={sessionData?.user.contactId}
+                  />
                 ))}
               </Fragment>
             ))}
