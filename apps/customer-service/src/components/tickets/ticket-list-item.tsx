@@ -49,7 +49,7 @@ export const TicketListItem: FC<TicketListItemProps> = ({ ticket }) => {
               </time>
             </p>
           </div>
-          <p className="mt-1 line-clamp-2 text-sm leading-6 text-muted-foreground">
+          <div className="mt-1 line-clamp-2 text-sm leading-6 text-muted-foreground">
             {sessionData?.user?.contactId === ticket.messages?.[0]?.authorId ? (
               <>
                 <FormattedMessage id="you" />{' '}
@@ -61,7 +61,7 @@ export const TicketListItem: FC<TicketListItemProps> = ({ ticket }) => {
                 content={ticket.messages[0].content}
               />
             ) : null}
-          </p>
+          </div>
         </div>
       </Link>
     </section>
