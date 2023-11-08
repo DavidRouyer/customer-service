@@ -24,6 +24,9 @@ export { pgTable as tableCreator } from './schema/_table';
 export * from 'drizzle-orm';
 
 export const db = drizzle(
-  new Pool({ connectionString: process.env.DATABASE_URL }),
+  new Pool({
+    connectionString: process.env.DATABASE_URL,
+    maxUses: typeof EdgeRuntime !== 'undefined' ? 1 : undefined,
+  }),
   { schema }
 );
