@@ -14,6 +14,7 @@ import {
 } from '@cs/lib/ticketActivities';
 
 import { NodeContent } from '~/components/infos/node-content';
+import { TicketPriority } from '~/components/tickets/ticket-priority';
 import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/avatar';
 import { RelativeTime } from '~/components/ui/relative-time';
 import { api } from '~/lib/api';
@@ -164,17 +165,28 @@ export const Activity: FC<{
                           <FormattedMessage id="ticket.activity.type.ticket_created" />
                         ),
                         PriorityChanged: (
-                          <FormattedMessage
-                            id="ticket.activity.type.ticket_priority.changed"
-                            values={{
-                              old: (
-                                ticketActivity.extraInfo as TicketPriorityChanged
-                              )?.oldPriority,
-                              new: (
-                                ticketActivity.extraInfo as TicketPriorityChanged
-                              )?.newPriority,
-                            }}
-                          />
+                          <>
+                            <FormattedMessage id="ticket.activity.type.ticket_priority.changed" />
+                            <span className="inline-flex flex-nowrap space-x-1">
+                              <TicketPriority
+                                priority={
+                                  (
+                                    ticketActivity.extraInfo as TicketPriorityChanged
+                                  )?.oldPriority
+                                }
+                              />
+                            </span>{' '}
+                            <FormattedMessage id="ticket.activity.type.ticket_priority.to" />{' '}
+                            <span className="inline-flex flex-nowrap space-x-1">
+                              <TicketPriority
+                                priority={
+                                  (
+                                    ticketActivity.extraInfo as TicketPriorityChanged
+                                  )?.newPriority
+                                }
+                              />
+                            </span>
+                          </>
                         ),
                         Reopened: (
                           <FormattedMessage id="ticket.activity.type.ticket_reopened" />

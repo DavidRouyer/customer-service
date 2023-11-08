@@ -3,8 +3,9 @@ import { Shield, ShieldAlert } from 'lucide-react';
 import { FormattedMessage } from 'react-intl';
 
 import { RouterOutputs } from '@cs/api';
-import { TicketPriority } from '@cs/lib/tickets';
+import { TicketPriority as TicketPriorityType } from '@cs/lib/tickets';
 
+import { TicketPriority } from '~/components/tickets/ticket-priority';
 import { Button } from '~/components/ui/button';
 import {
   DropdownMenu,
@@ -67,42 +68,7 @@ export const TicketPriorityDropdowm: FC<TicketChangePriorityProps> = ({
           className="flex h-auto items-center justify-between gap-x-1 px-2 text-sm leading-6"
         >
           <div className="flex items-center gap-x-2">
-            {
-              {
-                Critical: (
-                  <>
-                    <ShieldAlert className="h-4 w-4 text-destructive" />
-                    <p className="text-xs text-muted-foreground">
-                      <FormattedMessage id="ticket.priorities.critical" />
-                    </p>
-                  </>
-                ),
-                High: (
-                  <>
-                    <Shield className="h-4 w-4 text-destructive" />
-                    <p className="text-xs text-muted-foreground">
-                      <FormattedMessage id="ticket.priorities.high" />
-                    </p>
-                  </>
-                ),
-                Medium: (
-                  <>
-                    <Shield className="h-4 w-4 text-warning" />
-                    <p className="text-xs text-muted-foreground">
-                      <FormattedMessage id="ticket.priorities.medium" />
-                    </p>
-                  </>
-                ),
-                Low: (
-                  <>
-                    <Shield className="h-4 w-4 text-muted-foreground" />
-                    <p className="text-xs text-muted-foreground">
-                      <FormattedMessage id="ticket.priorities.low" />
-                    </p>
-                  </>
-                ),
-              }[priority]
-            }
+            <TicketPriority priority={priority} />
           </div>
         </Button>
       </DropdownMenuTrigger>
@@ -111,9 +77,12 @@ export const TicketPriorityDropdowm: FC<TicketChangePriorityProps> = ({
           <DropdownMenuItem
             key="critical"
             onClick={() =>
-              mutateAsync({ id: ticketId, priority: TicketPriority.Critical })
+              mutateAsync({
+                id: ticketId,
+                priority: TicketPriorityType.Critical,
+              })
             }
-            disabled={priority === TicketPriority.Critical}
+            disabled={priority === TicketPriorityType.Critical}
           >
             <div className="flex items-center gap-x-2">
               <ShieldAlert className="h-5 w-5 text-destructive" />
@@ -125,9 +94,9 @@ export const TicketPriorityDropdowm: FC<TicketChangePriorityProps> = ({
           <DropdownMenuItem
             key="high"
             onClick={() =>
-              mutateAsync({ id: ticketId, priority: TicketPriority.High })
+              mutateAsync({ id: ticketId, priority: TicketPriorityType.High })
             }
-            disabled={priority === TicketPriority.High}
+            disabled={priority === TicketPriorityType.High}
           >
             <div className="flex items-center gap-x-2">
               <Shield className="h-5 w-5 text-destructive" />
@@ -139,9 +108,9 @@ export const TicketPriorityDropdowm: FC<TicketChangePriorityProps> = ({
           <DropdownMenuItem
             key="medium"
             onClick={() =>
-              mutateAsync({ id: ticketId, priority: TicketPriority.Medium })
+              mutateAsync({ id: ticketId, priority: TicketPriorityType.Medium })
             }
-            disabled={priority === TicketPriority.Medium}
+            disabled={priority === TicketPriorityType.Medium}
           >
             <div className="flex items-center gap-x-2">
               <Shield className="h-5 w-5 text-warning" />
@@ -153,9 +122,9 @@ export const TicketPriorityDropdowm: FC<TicketChangePriorityProps> = ({
           <DropdownMenuItem
             key="low"
             onClick={() =>
-              mutateAsync({ id: ticketId, priority: TicketPriority.Low })
+              mutateAsync({ id: ticketId, priority: TicketPriorityType.Low })
             }
-            disabled={priority === TicketPriority.Low}
+            disabled={priority === TicketPriorityType.Low}
           >
             <div className="flex items-center gap-x-2">
               <Shield className="h-5 w-5 text-muted-foreground" />
