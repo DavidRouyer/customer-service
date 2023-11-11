@@ -36,7 +36,7 @@ jobs:
       - name: Neon Database Create Branch Action
         uses: neondatabase/create-branch-action@v4
         id: create_branch
-        if: github.actor == 'dependabot[bot]'
+        if: github.actor != 'dependabot[bot]'
         with:
           project_id: ${{ secrets.NEON_PROJECT_ID }}
           parent: dev
