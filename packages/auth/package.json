@@ -12,7 +12,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@auth/core": "^0.18.0",
+    "@auth/core": "^0.18.1",
     "@auth/drizzle-adapter": "^0.3.6",
     "@cs/database": "*",
     "bcrypt": "^5.1.1",
