@@ -13,11 +13,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Use Node.js 20.x
+      - name: Use Node.js 21.x
         uses: actions/setup-node@v4
         with:
-          node-version: 20.x
-          cache: "yarn"
+          node-version: 21.x
+          cache: 'yarn'
 
       - name: Install dependencies
         run: yarn
@@ -29,7 +29,7 @@ jobs:
         run: |
           yarn db:push
         env:
-          DATABASE_URL: "${{ secrets.DATABASE_URL }}"
+          DATABASE_URL: '${{ secrets.DATABASE_URL }}'
 
       - name: Install Vercel CLI
         run: npm install --global vercel@latest
@@ -40,10 +40,10 @@ jobs:
       - name: Build Project Artifacts
         run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
         env:
-          AUTH_GITHUB_ID: "${{ secrets.AUTH_GITHUB_ID }}"
-          AUTH_GITHUB_SECRET: "${{ secrets.AUTH_GITHUB_SECRET }}"
-          AUTH_SECRET: "${{ secrets.AUTH_SECRET }}"
-          DATABASE_URL: "${{ secrets.DATABASE_URL }}"
+          AUTH_GITHUB_ID: '${{ secrets.AUTH_GITHUB_ID }}'
+          AUTH_GITHUB_SECRET: '${{ secrets.AUTH_GITHUB_SECRET }}'
+          AUTH_SECRET: '${{ secrets.AUTH_SECRET }}'
+          DATABASE_URL: '${{ secrets.DATABASE_URL }}'
 
       - name: Deploy Project Artifacts to Vercel
         run: vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
