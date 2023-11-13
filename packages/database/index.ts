@@ -4,6 +4,7 @@ import { drizzle } from 'drizzle-orm/neon-serverless';
 import * as auth from './schema/auth';
 import * as contact from './schema/contact';
 import * as contactsToTicketComments from './schema/contactsToTicketComments';
+import * as labels from './schema/label';
 import * as labelTypes from './schema/labelType';
 import * as message from './schema/message';
 import * as ticket from './schema/ticket';
@@ -14,6 +15,7 @@ export const schema = {
   ...auth,
   ...contact,
   ...contactsToTicketComments,
+  ...labels,
   ...labelTypes,
   ...message,
   ...ticket,
