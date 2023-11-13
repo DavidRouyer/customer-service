@@ -17,6 +17,33 @@ import { db, schema } from '.';
 neonConfig.webSocketConstructor = ws;
 
 async function main() {
+  const botUser = await db
+    .insert(schema.contacts)
+    .values({
+      name: 'Bot',
+      email: 'bot@example.com',
+    })
+    .returning({ id: schema.contacts.id })
+    .then((res) => res[0]);
+
+  await db.insert(schema.labelTypes).values({
+    name: 'Bug report',
+    icon: 'bug',
+    authorId: botUser!.id,
+  });
+
+  await db.insert(schema.labelTypes).values({
+    name: 'Feature request',
+    icon: 'lightbulb',
+    authorId: botUser!.id,
+  });
+
+  await db.insert(schema.labelTypes).values({
+    name: 'General question',
+    icon: 'help-circle',
+    authorId: botUser!.id,
+  });
+
   await db.insert(schema.contacts).values({
     name: 'Courtney Henry',
     email: 'courtney.henry@example.com',
