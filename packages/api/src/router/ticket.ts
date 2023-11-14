@@ -105,6 +105,7 @@ export const ticketRouter = createTRPCRouter({
             orderBy: desc(schema.messages.createdAt),
             limit: 1,
           },
+          labels: true,
         },
         limit: PAGE_SIZE,
       });
@@ -215,7 +216,7 @@ export const ticketRouter = createTRPCRouter({
     .query(async ({ ctx, input }) => {
       const ticket = await ctx.db.query.tickets.findFirst({
         where: eq(schema.tickets.id, input.id),
-        with: { author: true, assignedTo: true },
+        with: { author: true, assignedTo: true, labels: true },
       });
 
       if (!ticket)

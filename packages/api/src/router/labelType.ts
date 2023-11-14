@@ -14,7 +14,6 @@ export const labelTypeRouter = createTRPCRouter({
         where: input.isArchived
           ? isNotNull(schema.labelTypes.archivedAt)
           : isNull(schema.labelTypes.archivedAt),
-        with: { author: true },
       });
     }),
 

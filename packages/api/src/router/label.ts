@@ -48,7 +48,7 @@ export const labelRouter = createTRPCRouter({
             labelTypeId: labelType.id,
           }))
         )
-        .returning({ id: schema.labelTypes.id });
+        .returning({ labelTypeId: schema.labels.labelTypeId });
     }),
 
   removeLabels: protectedProcedure
@@ -93,6 +93,6 @@ export const labelRouter = createTRPCRouter({
             inArray(schema.labels.labelTypeId, input.labelTypeIds)
           )
         )
-        .returning({ id: schema.labelTypes.id });
+        .returning({ labelTypeId: schema.labels.labelTypeId });
     }),
 });
