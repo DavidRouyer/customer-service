@@ -26,23 +26,23 @@ async function main() {
     .returning({ id: schema.contacts.id })
     .then((res) => res[0]);
 
-  await db.insert(schema.labelTypes).values({
-    name: 'Bug report',
-    icon: 'bug',
-    authorId: botUser!.id,
-  });
-
-  await db.insert(schema.labelTypes).values({
-    name: 'Feature request',
-    icon: 'lightbulb',
-    authorId: botUser!.id,
-  });
-
-  await db.insert(schema.labelTypes).values({
-    name: 'General question',
-    icon: 'help-circle',
-    authorId: botUser!.id,
-  });
+  await db.insert(schema.labelTypes).values([
+    {
+      name: 'Bug report',
+      icon: 'bug',
+      authorId: botUser!.id,
+    },
+    {
+      name: 'Feature request',
+      icon: 'lightbulb',
+      authorId: botUser!.id,
+    },
+    {
+      name: 'General question',
+      icon: 'help-circle',
+      authorId: botUser!.id,
+    },
+  ]);
 
   await db.insert(schema.contacts).values({
     name: 'Courtney Henry',
