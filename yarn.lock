@@ -2868,10 +2868,10 @@ dreamopt@~0.8.0:
   dependencies:
     wordwrap ">=0.0.2"
 
-drizzle-kit@^0.20.2:
-  version "0.20.2"
-  resolved "https://registry.yarnpkg.com/drizzle-kit/-/drizzle-kit-0.20.2.tgz#812f7426621e6cc2dbc7eda54a5302b27af15d17"
-  integrity sha512-4iwjsIj2sY3B3MleKeyNzg/6myjXbTE/CBOXwfePoRVXayM3VwHGZboMkxUkmIQk6o7UAKRb2ODDpO24YNoL2g==
+drizzle-kit@^0.20.4:
+  version "0.20.4"
+  resolved "https://registry.yarnpkg.com/drizzle-kit/-/drizzle-kit-0.20.4.tgz#84cb515c8b65cb8a313c5954c49a15d95116ceae"
+  integrity sha512-pfaryOMS4jtQ6PNIanggsXqZnl34nMeoFd6Mmc9mZA+amSym0izLTuOO3xnivPT2BDsDVOoPhrC47QzKij7fRA==
   dependencies:
     "@drizzle-team/studio" "^0.0.27"
     "@esbuild-kit/esm-loader" "^2.5.5"
