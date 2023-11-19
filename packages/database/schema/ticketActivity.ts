@@ -7,6 +7,8 @@ import {
   TicketAssignmentChanged,
   TicketAssignmentRemoved,
   TicketCommented,
+  TicketLabelAdded,
+  TicketLabelRemoved,
   TicketPriorityChanged,
 } from '@cs/lib/ticketActivities';
 
@@ -20,6 +22,8 @@ export const ticketStatus = pgEnum('TicketActivityType', [
   TicketActivityType.AssignmentRemoved,
   TicketActivityType.Commented,
   TicketActivityType.Created,
+  TicketActivityType.LabelAdded,
+  TicketActivityType.LabelRemoved,
   TicketActivityType.PriorityChanged,
   TicketActivityType.Resolved,
   TicketActivityType.Reopened,
@@ -36,6 +40,8 @@ export const ticketActivities = pgTable('TicketActivity', {
     | TicketAssignmentChanged
     | TicketAssignmentRemoved
     | TicketCommented
+    | TicketLabelAdded
+    | TicketLabelRemoved
     | TicketPriorityChanged
   >(),
   ticketId: integer('ticketId')

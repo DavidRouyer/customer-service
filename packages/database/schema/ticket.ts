@@ -6,6 +6,7 @@ import { TicketPriority, TicketStatus } from '@cs/lib/tickets';
 import { pgTable } from './_table';
 import { contacts } from './contact';
 import { contactsToTicketComments } from './contactsToTicketComments';
+import { labels } from './label';
 import { messages } from './message';
 
 export const ticketStatus = pgEnum('TicketStatus', [
@@ -52,4 +53,5 @@ export const ticketsRelations = relations(tickets, ({ one, many }) => ({
   }),
   messages: many(messages),
   contactsToTicketComments: many(contactsToTicketComments),
+  labels: many(labels),
 }));
