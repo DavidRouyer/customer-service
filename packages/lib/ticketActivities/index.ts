@@ -18,6 +18,14 @@ type TicketCommented = {
   comment: string;
 };
 
+type TicketLabelAdded = {
+  labelTypeIds: number[];
+};
+
+type TicketLabelRemoved = {
+  labelTypeIds: number[];
+};
+
 type TicketPriorityChanged = {
   oldPriority: TicketPriority;
   newPriority: TicketPriority;
@@ -28,6 +36,8 @@ export {
   type TicketAssignmentChanged,
   type TicketAssignmentRemoved,
   type TicketCommented,
+  type TicketLabelAdded,
+  type TicketLabelRemoved,
   type TicketPriorityChanged,
   TicketActivityType,
 };

@@ -2,6 +2,11 @@ import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
 
 import { and, eq, inArray, schema } from '@cs/database';
+import {
+  TicketActivityType,
+  TicketLabelAdded,
+  TicketLabelRemoved,
+} from '@cs/lib/ticketActivities';
 
 import { createTRPCRouter, protectedProcedure } from '../trpc';
 
@@ -40,15 +45,44 @@ export const labelRouter = createTRPCRouter({
           message: 'label_type_missing_ids',
         });
 
-      return ctx.db
-        .insert(schema.labels)
-        .values(
-          labelTypes.map((labelType) => ({
-            ticketId: ticket.id,
-            labelTypeId: labelType.id,
-          }))
-        )
-        .returning({ labelTypeId: schema.labels.labelTypeId });
+      return await ctx.db.transaction(async (tx) => {
+        await tx
+          .insert(schema.labels)
+          .values(
+            labelTypes.map((labelType) => ({
+              ticketId: ticket.id,
+              labelTypeId: labelType.id,
+            }))
+          )
+          .returning({ labelTypeId: schema.labels.labelTypeId });
+
+        const updatedTicket = await tx
+          .update(schema.tickets)
+          .set({
+            updatedAt: new Date(),
+          })
+          .where(eq(schema.tickets.id, ticket.id))
+          .returning({
+            id: schema.tickets.id,
+            updatedAt: schema.tickets.updatedAt,
+          })
+          .then((res) => res[0]);
+
+        if (!updatedTicket) {
+          await tx.rollback();
+          return;
+        }
+
+        await tx.insert(schema.ticketActivities).values({
+          ticketId: ticket.id,
+          authorId: ctx.session.user.contactId ?? 0,
+          type: TicketActivityType.LabelAdded,
+          extraInfo: {
+            labelTypeIds: input.labelTypeIds,
+          } satisfies TicketLabelAdded,
+          createdAt: updatedTicket.updatedAt ?? new Date(),
+        });
+      });
     }),
 
   removeLabels: protectedProcedure
@@ -85,14 +119,43 @@ export const labelRouter = createTRPCRouter({
           message: 'label_type_missing_ids',
         });
 
-      return ctx.db
-        .delete(schema.labels)
-        .where(
-          and(
-            eq(schema.labels.ticketId, ticket.id),
-            inArray(schema.labels.labelTypeId, input.labelTypeIds)
+      return await ctx.db.transaction(async (tx) => {
+        await tx
+          .delete(schema.labels)
+          .where(
+            and(
+              eq(schema.labels.ticketId, ticket.id),
+              inArray(schema.labels.labelTypeId, input.labelTypeIds)
+            )
           )
-        )
-        .returning({ labelTypeId: schema.labels.labelTypeId });
+          .returning({ labelTypeId: schema.labels.labelTypeId });
+
+        const updatedTicket = await tx
+          .update(schema.tickets)
+          .set({
+            updatedAt: new Date(),
+          })
+          .where(eq(schema.tickets.id, ticket.id))
+          .returning({
+            id: schema.tickets.id,
+            updatedAt: schema.tickets.updatedAt,
+          })
+          .then((res) => res[0]);
+
+        if (!updatedTicket) {
+          await tx.rollback();
+          return;
+        }
+
+        await tx.insert(schema.ticketActivities).values({
+          ticketId: ticket.id,
+          authorId: ctx.session.user.contactId ?? 0,
+          type: TicketActivityType.LabelRemoved,
+          extraInfo: {
+            labelTypeIds: input.labelTypeIds,
+          } satisfies TicketLabelRemoved,
+          createdAt: updatedTicket.updatedAt ?? new Date(),
+        });
+      });
     }),
 });
