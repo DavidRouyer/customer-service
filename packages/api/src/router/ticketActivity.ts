@@ -28,11 +28,11 @@ export type TicketAssignmentRemovedWithData = {
 } & TicketAssignmentRemoved;
 
 export type TicketLabelAddedWithData = {
-  labelTypes: InferSelectModel<typeof schema.labelTypes>[];
+  labelTypes?: InferSelectModel<typeof schema.labelTypes>[];
 } & TicketLabelAdded;
 
 export type TicketLabelRemovedWithData = {
-  labelTypes: InferSelectModel<typeof schema.labelTypes>[];
+  labelTypes?: InferSelectModel<typeof schema.labelTypes>[];
 } & TicketLabelRemoved;
 
 export const ticketActivityRouter = createTRPCRouter({
