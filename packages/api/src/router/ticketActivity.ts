@@ -7,6 +7,8 @@ import {
   TicketAssignmentChanged,
   TicketAssignmentRemoved,
   TicketCommented,
+  TicketLabelAdded,
+  TicketLabelRemoved,
   TicketPriorityChanged,
 } from '@cs/lib/ticketActivities';
 
@@ -25,6 +27,14 @@ export type TicketAssignmentRemovedWithData = {
   oldAssignedTo?: InferSelectModel<typeof schema.contacts>;
 } & TicketAssignmentRemoved;
 
+export type TicketLabelAddedWithData = {
+  labelTypes: InferSelectModel<typeof schema.labelTypes>[];
+} & TicketLabelAdded;
+
+export type TicketLabelRemovedWithData = {
+  labelTypes: InferSelectModel<typeof schema.labelTypes>[];
+} & TicketLabelRemoved;
+
 export const ticketActivityRouter = createTRPCRouter({
   byTicketId: protectedProcedure
     .input(z.object({ ticketId: z.number() }))
@@ -42,12 +52,15 @@ export const ticketActivityRouter = createTRPCRouter({
           | TicketAssignmentAddedWithData
           | TicketAssignmentChangedWithData
           | TicketAssignmentRemovedWithData
+          | TicketLabelAddedWithData
+          | TicketLabelRemovedWithData
           | TicketCommented
           | TicketPriorityChanged
           | null;
       })[] = [];
 
       const contactsToFetch = new Set<number>();
+      const labelTypesToFetch = new Set<number>();
       ticketActivities.forEach((ticketActivity) => {
         if (ticketActivity.type === TicketActivityType.AssignmentAdded) {
           contactsToFetch.add(
@@ -70,11 +83,33 @@ export const ticketActivityRouter = createTRPCRouter({
               .oldAssignedToId
           );
         }
+        if (ticketActivity.type === TicketActivityType.LabelAdded) {
+          (ticketActivity.extraInfo as TicketLabelAdded).labelTypeIds.forEach(
+            (labelTypeId) => {
+              labelTypesToFetch.add(labelTypeId);
+            }
+          );
+        }
+        if (ticketActivity.type === TicketActivityType.LabelRemoved) {
+          (ticketActivity.extraInfo as TicketLabelRemoved).labelTypeIds.forEach(
+            (labelTypeId) => {
+              labelTypesToFetch.add(labelTypeId);
+            }
+          );
+        }
       });
+
       const contacts =
         contactsToFetch.size > 0
           ? await ctx.db.query.contacts.findMany({
               where: inArray(schema.contacts.id, [...contactsToFetch]),
+            })
+          : [];
+
+      const labelTypes =
+        labelTypesToFetch.size > 0
+          ? await ctx.db.query.labelTypes.findMany({
+              where: inArray(schema.labelTypes.id, [...labelTypesToFetch]),
             })
           : [];
 
@@ -132,6 +167,32 @@ export const ticketActivityRouter = createTRPCRouter({
             augmentedTicketActivities.push({
               ...ticketActivity,
               extraInfo: ticketActivity.extraInfo as TicketCommented,
+            });
+            break;
+          case TicketActivityType.LabelAdded:
+            augmentedTicketActivities.push({
+              ...ticketActivity,
+              extraInfo: {
+                ...(ticketActivity.extraInfo as TicketLabelAdded),
+                labelTypes: labelTypes.filter((labelType) =>
+                  (
+                    ticketActivity.extraInfo as TicketLabelAdded
+                  ).labelTypeIds.includes(labelType.id)
+                ),
+              },
+            });
+            break;
+          case TicketActivityType.LabelRemoved:
+            augmentedTicketActivities.push({
+              ...ticketActivity,
+              extraInfo: {
+                ...(ticketActivity.extraInfo as TicketLabelRemoved),
+                labelTypes: labelTypes.filter((labelType) =>
+                  (
+                    ticketActivity.extraInfo as TicketLabelRemoved
+                  ).labelTypeIds.includes(labelType.id)
+                ),
+              },
             });
             break;
           case TicketActivityType.PriorityChanged:

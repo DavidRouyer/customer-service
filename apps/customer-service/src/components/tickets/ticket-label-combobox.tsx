@@ -141,7 +141,7 @@ export const TicketLabelCombobox: FC<TicketLabelComboboxProps> = ({
             <div className="flex items-center gap-x-2 text-xs">
               <Plus className="h-4 w-4" />
               <span>
-                <FormattedMessage id="ticket.actions.assign_to" />
+                <FormattedMessage id="ticket.actions.add_label" />
               </span>
             </div>
           )}
@@ -151,11 +151,11 @@ export const TicketLabelCombobox: FC<TicketLabelComboboxProps> = ({
         <Command>
           <CommandInput
             placeholder={formatMessage({
-              id: 'ticket.assignment.search.placeholder',
+              id: 'ticket.labeling.search.placeholder',
             })}
           />
           <CommandEmpty>
-            <FormattedMessage id="ticket.assignment.no_results" />
+            <FormattedMessage id="ticket.labeling.no_results" />
           </CommandEmpty>
           <CommandGroup>
             {labelTypesData?.map((labelType) => (

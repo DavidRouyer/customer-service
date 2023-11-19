@@ -6,6 +6,8 @@ import {
   TicketAssignmentAddedWithData,
   TicketAssignmentChangedWithData,
   TicketAssignmentRemovedWithData,
+  TicketLabelAddedWithData,
+  TicketLabelRemovedWithData,
 } from '@cs/api/src/router/ticketActivity';
 import {
   TicketActivityType,
@@ -16,6 +18,7 @@ import {
 import { NodeContent } from '~/components/infos/node-content';
 import { TicketPriority } from '~/components/tickets/ticket-priority';
 import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/avatar';
+import { Badge } from '~/components/ui/badge';
 import { RelativeTime } from '~/components/ui/relative-time';
 import { api } from '~/lib/api';
 import { getInitials } from '~/lib/string';
@@ -163,6 +166,32 @@ export const Activity: FC<{
                         ),
                         Created: (
                           <FormattedMessage id="ticket.activity.type.ticket_created" />
+                        ),
+                        LabelAdded: (
+                          <>
+                            <FormattedMessage id="ticket.activity.type.ticket_label.added" />{' '}
+                            {(
+                              ticketActivity.extraInfo as TicketLabelAddedWithData
+                            )?.labelTypes?.map((labelType) => (
+                              <Badge key={labelType?.id}>
+                                {' '}
+                                {labelType?.name}
+                              </Badge>
+                            ))}
+                          </>
+                        ),
+                        LabelRemoved: (
+                          <>
+                            <FormattedMessage id="ticket.activity.type.ticket_label.removed" />{' '}
+                            {(
+                              ticketActivity.extraInfo as TicketLabelRemovedWithData
+                            )?.labelTypes?.map((labelType) => (
+                              <Badge key={labelType?.id}>
+                                {' '}
+                                {labelType?.name}
+                              </Badge>
+                            ))}
+                          </>
                         ),
                         PriorityChanged: (
                           <>

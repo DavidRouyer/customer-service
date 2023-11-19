@@ -36,7 +36,7 @@ export const TicketInfo: FC<{ ticketId: number }> = ({ ticketId }) => {
       </dd>
 
       <dt className="text-sm leading-8">
-        <FormattedMessage id="info_panel.ticket_panel.assignee" />
+        <FormattedMessage id="info_panel.ticket_panel.label" />
       </dt>
       <dd className="truncate text-sm leading-5 text-muted-foreground">
         <TicketLabelCombobox labels={ticketData?.labels} ticketId={ticketId} />
