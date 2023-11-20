@@ -25,7 +25,7 @@
     "@types/ws": "^8.5.9",
     "dotenv-cli": "^7.3.0",
     "drizzle-kit": "^0.20.4",
-    "eslint": "^8.53.0",
+    "eslint": "^8.54.0",
     "lexical": "^0.12.2",
     "prettier": "^3.1.0",
     "tsx": "^4.1.3",

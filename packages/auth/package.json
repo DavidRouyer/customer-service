@@ -27,7 +27,7 @@
     "@cs/prettier-config": "*",
     "@cs/tsconfig": "*",
     "@types/bcrypt": "^5.0.2",
-    "eslint": "^8.53.0",
+    "eslint": "^8.54.0",
     "prettier": "^3.1.0",
     "typescript": "^5.1.6"
   },
