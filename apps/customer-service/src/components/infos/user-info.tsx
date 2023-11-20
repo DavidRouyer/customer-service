@@ -27,8 +27,10 @@ export const UserInfo: FC<{ ticketId: number }> = ({ ticketId }) => {
         <FormattedMessage id="info_panel.user_panel.name" />
       </dt>
       <dd className="truncate text-sm leading-5 text-muted-foreground">
-        {ticketData.author.name ? (
-          <Copy content={ticketData.author.name}>{ticketData.author.name}</Copy>
+        {ticketData.createdBy.name ? (
+          <Copy content={ticketData.createdBy.name}>
+            {ticketData.createdBy.name}
+          </Copy>
         ) : (
           <span>
             <FormattedMessage id="not_documented" />
@@ -40,9 +42,9 @@ export const UserInfo: FC<{ ticketId: number }> = ({ ticketId }) => {
         <FormattedMessage id="info_panel.user_panel.email" />
       </dt>
       <dd className="truncate text-sm leading-5 text-muted-foreground">
-        {ticketData.author.email ? (
-          <Copy content={ticketData.author.email}>
-            {ticketData.author.email}
+        {ticketData.createdBy.email ? (
+          <Copy content={ticketData.createdBy.email}>
+            {ticketData.createdBy.email}
           </Copy>
         ) : (
           <span>
@@ -55,9 +57,9 @@ export const UserInfo: FC<{ ticketId: number }> = ({ ticketId }) => {
         <FormattedMessage id="info_panel.user_panel.phone_number" />
       </dt>
       <dd className="truncate text-sm leading-5 text-muted-foreground">
-        {ticketData.author.phone ? (
-          <Copy content={ticketData.author.phone}>
-            <PhoneNumber value={ticketData.author.phone} />
+        {ticketData.createdBy.phone ? (
+          <Copy content={ticketData.createdBy.phone}>
+            <PhoneNumber value={ticketData.createdBy.phone} />
           </Copy>
         ) : (
           <span>

@@ -9,12 +9,12 @@ import { Contact } from '~/types/Contact';
 
 type MessageAvatarProps = {
   direction: MessageDirection;
-  author: Contact;
+  createdBy: Contact;
 };
 
 export const MessageAvatar: FC<MessageAvatarProps> = ({
   direction,
-  author,
+  createdBy,
 }) => {
   return (
     <Avatar
@@ -24,11 +24,11 @@ export const MessageAvatar: FC<MessageAvatarProps> = ({
       )}
     >
       <AvatarImage
-        src={author.avatarUrl ?? undefined}
-        alt={author.name ?? ''}
+        src={createdBy.avatarUrl ?? undefined}
+        alt={createdBy.name ?? ''}
       />
       <AvatarFallback className="text-xs">
-        {getInitials(author.name ?? '')}
+        {getInitials(createdBy.name ?? '')}
       </AvatarFallback>
     </Avatar>
   );

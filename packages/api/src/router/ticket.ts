@@ -100,7 +100,7 @@ export const ticketRouter = createTRPCRouter({
                 }[input.filter]
           ),
         with: {
-          author: true,
+          createdBy: true,
           messages: {
             orderBy: desc(schema.messages.createdAt),
             limit: 1,
@@ -122,12 +122,12 @@ export const ticketRouter = createTRPCRouter({
       const messages = await ctx.db.query.messages.findMany({
         where: eq(schema.messages.ticketId, input.ticketId),
         orderBy: asc(schema.messages.createdAt),
-        with: { author: true },
+        with: { createdBy: true },
       });
       const comments = await ctx.db.query.ticketComments.findMany({
         orderBy: asc(schema.ticketComments.createdAt),
         where: eq(schema.ticketComments.ticketId, input.ticketId),
-        with: { author: true },
+        with: { createdBy: true },
       });
       return [
         ...messages.map((message) => ({
@@ -216,7 +216,7 @@ export const ticketRouter = createTRPCRouter({
     .query(async ({ ctx, input }) => {
       const ticket = await ctx.db.query.tickets.findFirst({
         where: eq(schema.tickets.id, input.id),
-        with: { author: true, assignedTo: true, labels: true },
+        with: { createdBy: true, assignedTo: true, labels: true },
       });
 
       if (!ticket)
@@ -234,7 +234,7 @@ export const ticketRouter = createTRPCRouter({
       return ctx.db.query.tickets.findMany({
         orderBy: desc(schema.tickets.createdAt),
         where: and(
-          eq(schema.tickets.authorId, input.contactId),
+          eq(schema.tickets.createdById, input.contactId),
           not(eq(schema.tickets.id, input.excludeId))
         ),
       });
@@ -280,7 +280,7 @@ export const ticketRouter = createTRPCRouter({
 
         await tx.insert(schema.ticketActivities).values({
           ticketId: input.id,
-          authorId: ctx.session.user.contactId ?? 0,
+          createdById: ctx.session.user.contactId ?? 0,
           type: TicketActivityType.AssignmentAdded,
           extraInfo: {
             newAssignedToId: input.contactId,
@@ -336,7 +336,7 @@ export const ticketRouter = createTRPCRouter({
 
         await tx.insert(schema.ticketActivities).values({
           ticketId: input.id,
-          authorId: ctx.session.user.contactId ?? 0,
+          createdById: ctx.session.user.contactId ?? 0,
           type: TicketActivityType.AssignmentChanged,
           extraInfo: {
             oldAssignedToId: ticket.assignedToId ?? 0,
@@ -387,7 +387,7 @@ export const ticketRouter = createTRPCRouter({
 
         await tx.insert(schema.ticketActivities).values({
           ticketId: input.id,
-          authorId: ctx.session.user.contactId ?? 0,
+          createdById: ctx.session.user.contactId ?? 0,
           type: TicketActivityType.AssignmentRemoved,
           extraInfo: {
             oldAssignedToId: ticket.assignedToId ?? 0,
@@ -441,7 +441,7 @@ export const ticketRouter = createTRPCRouter({
 
         await tx.insert(schema.ticketActivities).values({
           ticketId: input.id,
-          authorId: ctx.session.user.contactId ?? 0,
+          createdById: ctx.session.user.contactId ?? 0,
           type: TicketActivityType.PriorityChanged,
           extraInfo: {
             oldPriority: ticket.priority,
@@ -493,7 +493,7 @@ export const ticketRouter = createTRPCRouter({
 
         await tx.insert(schema.ticketActivities).values({
           ticketId: input.id,
-          authorId: ctx.session.user.contactId ?? 0,
+          createdById: ctx.session.user.contactId ?? 0,
           type: TicketActivityType.Resolved,
           createdAt: updatedTicket.updatedAt ?? new Date(),
         });
@@ -541,7 +541,7 @@ export const ticketRouter = createTRPCRouter({
 
         await tx.insert(schema.ticketActivities).values({
           ticketId: input.id,
-          authorId: ctx.session.user.contactId ?? 0,
+          createdById: ctx.session.user.contactId ?? 0,
           type: TicketActivityType.Reopened,
           createdAt: updatedTicket.updatedAt ?? new Date(),
         });
@@ -560,7 +560,7 @@ export const ticketRouter = createTRPCRouter({
           TicketPriority.High,
           TicketPriority.Critical,
         ]),
-        authorId: z.number(),
+        createdById: z.number(),
       })
     )
     .mutation(async ({ ctx, input }) => {
@@ -584,7 +584,7 @@ export const ticketRouter = createTRPCRouter({
 
         await tx.insert(schema.ticketActivities).values({
           ticketId: newTicket.id,
-          authorId: input.authorId,
+          createdById: input.createdById,
           type: TicketActivityType.Created,
           createdAt: newTicket.createdAt,
         });

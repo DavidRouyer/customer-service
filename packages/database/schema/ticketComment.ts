@@ -18,7 +18,7 @@ export const ticketComments = pgTable('TicketComment', {
       onDelete: 'restrict',
       onUpdate: 'cascade',
     }),
-  authorId: integer('authorId')
+  createdById: integer('createdById')
     .notNull()
     .references(() => contacts.id, {
       onDelete: 'restrict',
@@ -27,8 +27,8 @@ export const ticketComments = pgTable('TicketComment', {
 });
 
 export const ticketCommentsRelations = relations(ticketComments, ({ one }) => ({
-  author: one(contacts, {
-    fields: [ticketComments.authorId],
+  createdBy: one(contacts, {
+    fields: [ticketComments.createdById],
     references: [contacts.id],
   }),
   ticket: one(tickets, {

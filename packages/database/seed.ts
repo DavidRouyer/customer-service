@@ -30,17 +30,17 @@ async function main() {
     {
       name: 'Bug report',
       icon: 'bug',
-      authorId: botUser!.id,
+      createdById: botUser!.id,
     },
     {
       name: 'Feature request',
       icon: 'lightbulb',
-      authorId: botUser!.id,
+      createdById: botUser!.id,
     },
     {
       name: 'General question',
       icon: 'help-circle',
-      authorId: botUser!.id,
+      createdById: botUser!.id,
     },
   ]);
 
@@ -151,7 +151,7 @@ async function main() {
       status: TicketStatus.Open,
       priority: TicketPriority.Critical,
       createdAt: new Date('2023-05-04T20:54:41.389Z'),
-      authorId: leslie.id,
+      createdById: leslie.id,
       assignedToId: tom.id,
     })
     .returning({ id: schema.tickets.id, createdAt: schema.tickets.createdAt })
@@ -161,14 +161,14 @@ async function main() {
 
   await db.insert(schema.ticketActivities).values({
     ticketId: leslieTicket.id,
-    authorId: leslie.id,
+    createdById: leslie.id,
     type: TicketActivityType.Created,
     createdAt: leslieTicket.createdAt,
   });
 
   await db.insert(schema.ticketActivities).values({
     ticketId: leslieTicket.id,
-    authorId: tom.id,
+    createdById: tom.id,
     type: TicketActivityType.AssignmentAdded,
     extraInfo: { newAssignedToId: tom.id } satisfies TicketAssignmentAdded,
     createdAt: new Date('2023-05-20T20:54:41.389Z'),
@@ -183,7 +183,7 @@ async function main() {
         createdAt: new Date('2023-05-04T20:54:41.389Z'),
         direction: MessageDirection.Inbound,
         status: MessageStatus.Seen,
-        authorId: leslie.id,
+        createdById: leslie.id,
         ticketId: leslieTicket.id,
       },
       {
@@ -193,7 +193,7 @@ async function main() {
         createdAt: new Date('2023-05-11T10:33:56.231Z'),
         direction: MessageDirection.Outbound,
         status: MessageStatus.Seen,
-        authorId: tom.id,
+        createdById: tom.id,
         ticketId: leslieTicket.id,
       },
     ])
@@ -205,7 +205,7 @@ async function main() {
       status: TicketStatus.Open,
       priority: TicketPriority.Medium,
       createdAt: new Date('2023-05-06T11:23:45.389Z'),
-      authorId: leslie.id,
+      createdById: leslie.id,
       assignedToId: jeff.id,
     })
     .returning({ id: schema.tickets.id, createdAt: schema.tickets.createdAt })
@@ -215,7 +215,7 @@ async function main() {
 
   await db.insert(schema.ticketActivities).values({
     ticketId: leslieTicket2.id,
-    authorId: leslie.id,
+    createdById: leslie.id,
     type: TicketActivityType.Created,
     createdAt: leslieTicket2.createdAt,
   });
@@ -229,7 +229,7 @@ async function main() {
         createdAt: new Date('2023-05-06T11:23:45.389Z'),
         direction: MessageDirection.Inbound,
         status: MessageStatus.Seen,
-        authorId: leslie.id,
+        createdById: leslie.id,
         ticketId: leslieTicket2.id,
       },
       {
@@ -238,7 +238,7 @@ async function main() {
         createdAt: new Date('2023-05-07T22:40Z'),
         direction: MessageDirection.Outbound,
         status: MessageStatus.Seen,
-        authorId: jeff.id,
+        createdById: jeff.id,
         ticketId: leslieTicket2.id,
       },
       {
@@ -247,7 +247,7 @@ async function main() {
         createdAt: new Date('2023-05-08T22:40Z'),
         direction: MessageDirection.Inbound,
         status: MessageStatus.Seen,
-        authorId: leslie.id,
+        createdById: leslie.id,
         ticketId: leslieTicket2.id,
       },
     ])
@@ -260,7 +260,7 @@ async function main() {
       priority: TicketPriority.Medium,
       createdAt: new Date('2023-05-06T11:23:45.389Z'),
       resolvedAt: new Date('2023-06-12T06:10:45.389Z'),
-      authorId: leslie.id,
+      createdById: leslie.id,
     })
     .returning({
       id: schema.tickets.id,
@@ -273,14 +273,14 @@ async function main() {
 
   await db.insert(schema.ticketActivities).values({
     ticketId: leslieTicket3.id,
-    authorId: leslie.id,
+    createdById: leslie.id,
     type: TicketActivityType.Created,
     createdAt: leslieTicket3.createdAt,
   });
 
   await db.insert(schema.ticketActivities).values({
     ticketId: leslieTicket3.id,
-    authorId: leslie.id,
+    createdById: leslie.id,
     type: TicketActivityType.Resolved,
     createdAt: leslieTicket3.resolvedAt ?? new Date(),
   });
@@ -294,7 +294,7 @@ async function main() {
         createdAt: new Date('2023-05-06T11:23:45.389Z'),
         direction: MessageDirection.Inbound,
         status: MessageStatus.DeliveredToDevice,
-        authorId: leslie.id,
+        createdById: leslie.id,
         ticketId: leslieTicket3.id,
       },
     ])
@@ -319,7 +319,7 @@ async function main() {
       status: TicketStatus.Open,
       priority: TicketPriority.Medium,
       createdAt: new Date('2023-03-03T14:02Z'),
-      authorId: michael.id,
+      createdById: michael.id,
     })
     .returning({ id: schema.tickets.id, createdAt: schema.tickets.createdAt })
     .then((res) => res[0]);
@@ -328,7 +328,7 @@ async function main() {
 
   await db.insert(schema.ticketActivities).values({
     ticketId: michaelTicket.id,
-    authorId: michael.id,
+    createdById: michael.id,
     type: TicketActivityType.Created,
     createdAt: michaelTicket.createdAt,
   });
@@ -342,7 +342,7 @@ async function main() {
         createdAt: new Date('2023-03-03T14:02Z'),
         direction: MessageDirection.Inbound,
         status: MessageStatus.Seen,
-        authorId: michael.id,
+        createdById: michael.id,
         ticketId: michaelTicket.id,
       },
       {
@@ -352,7 +352,7 @@ async function main() {
         createdAt: new Date('2023-03-12T17:20Z'),
         direction: MessageDirection.Outbound,
         status: MessageStatus.Seen,
-        authorId: jeffrey.id,
+        createdById: jeffrey.id,
         ticketId: michaelTicket.id,
       },
     ])
@@ -377,7 +377,7 @@ async function main() {
       status: TicketStatus.Open,
       priority: TicketPriority.Medium,
       createdAt: new Date('2023-03-03T13:23Z'),
-      authorId: dries.id,
+      createdById: dries.id,
     })
     .returning({ id: schema.tickets.id, createdAt: schema.tickets.createdAt })
     .then((res) => res[0]);
@@ -386,7 +386,7 @@ async function main() {
 
   await db.insert(schema.ticketActivities).values({
     ticketId: driesTicket.id,
-    authorId: dries.id,
+    createdById: dries.id,
     type: TicketActivityType.Created,
     createdAt: driesTicket.createdAt,
   });
@@ -400,7 +400,7 @@ async function main() {
         createdAt: new Date('2023-03-03T13:23Z'),
         direction: MessageDirection.Inbound,
         status: MessageStatus.Seen,
-        authorId: dries.id,
+        createdById: dries.id,
         ticketId: driesTicket.id,
       },
       {
@@ -410,7 +410,7 @@ async function main() {
         createdAt: new Date('2023-04-01T06:06Z'),
         direction: MessageDirection.Outbound,
         status: MessageStatus.DeliveredToDevice,
-        authorId: jeffrey.id,
+        createdById: jeffrey.id,
         ticketId: driesTicket.id,
       },
     ])
@@ -438,7 +438,7 @@ async function main() {
       status: TicketStatus.Open,
       priority: TicketPriority.Medium,
       createdAt: new Date('2023-03-02T21:13Z'),
-      authorId: lindsay.id,
+      createdById: lindsay.id,
     })
     .returning({ id: schema.tickets.id, createdAt: schema.tickets.createdAt })
     .then((res) => res[0]);
@@ -454,7 +454,7 @@ async function main() {
         createdAt: new Date('2023-03-02T21:13Z'),
         direction: MessageDirection.Inbound,
         status: MessageStatus.Seen,
-        authorId: lindsay.id,
+        createdById: lindsay.id,
         ticketId: lindsayTicket.id,
       },
       {
@@ -464,7 +464,7 @@ async function main() {
         createdAt: new Date('2023-03-03T22:40Z'),
         direction: MessageDirection.Outbound,
         status: MessageStatus.DeliveredToDevice,
-        authorId: tom.id,
+        createdById: tom.id,
         ticketId: lindsayTicket.id,
       },
     ])
@@ -472,7 +472,7 @@ async function main() {
 
   await db.insert(schema.ticketActivities).values({
     ticketId: lindsayTicket.id,
-    authorId: lindsay.id,
+    createdById: lindsay.id,
     type: TicketActivityType.Created,
     createdAt: lindsayTicket.createdAt,
   });

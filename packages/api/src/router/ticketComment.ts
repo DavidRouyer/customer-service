@@ -15,7 +15,7 @@ export const ticketCommentRouter = createTRPCRouter({
       return ctx.db.query.ticketComments.findMany({
         orderBy: asc(schema.ticketComments.createdAt),
         where: eq(schema.ticketComments.ticketId, input.ticketId),
-        with: { author: true },
+        with: { createdBy: true },
       });
     }),
 
@@ -25,7 +25,7 @@ export const ticketCommentRouter = createTRPCRouter({
         .object({
           content: z.string().min(1),
           createdAt: z.date(),
-          authorId: z.number(),
+          createdById: z.number(),
           ticketId: z.number(),
         })
         .refine(
@@ -88,7 +88,7 @@ export const ticketCommentRouter = createTRPCRouter({
 
         await tx.insert(schema.ticketActivities).values({
           ticketId: input.ticketId,
-          authorId: input.authorId,
+          createdById: input.createdById,
           type: TicketActivityType.Commented,
           extraInfo: {
             comment: input.content,

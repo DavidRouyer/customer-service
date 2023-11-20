@@ -53,17 +53,17 @@ export const Activity: FC<{
                 <>
                   <Avatar className="relative mt-3 h-6 w-6 flex-none text-xs">
                     <AvatarImage
-                      src={ticketActivity.author.avatarUrl ?? undefined}
+                      src={ticketActivity.createdBy.avatarUrl ?? undefined}
                     />
                     <AvatarFallback>
-                      {getInitials(ticketActivity.author.name ?? '')}
+                      {getInitials(ticketActivity.createdBy.name ?? '')}
                     </AvatarFallback>
                   </Avatar>
                   <div className="flex-auto rounded-md p-3 ring-1 ring-inset ring-muted-foreground">
                     <div className="flex justify-between gap-x-4">
                       <div className="py-0.5 text-xs leading-5 text-muted-foreground">
                         <span className="font-medium text-foreground">
-                          {ticketActivity.author.name}
+                          {ticketActivity.createdBy.name}
                         </span>{' '}
                         <FormattedMessage id="ticket.activity.type.ticket_commented" />
                       </div>
@@ -100,7 +100,7 @@ export const Activity: FC<{
 
                   <p className="flex-auto py-0.5 text-xs leading-5 text-muted-foreground">
                     <span className="font-medium text-foreground">
-                      {ticketActivity.author.name}
+                      {ticketActivity.createdBy.name}
                     </span>{' '}
                     {
                       {
@@ -108,7 +108,8 @@ export const Activity: FC<{
                           <>
                             {(
                               ticketActivity.extraInfo as TicketAssignmentAddedWithData
-                            )?.newAssignedToId === ticketActivity.authorId ? (
+                            )?.newAssignedToId ===
+                            ticketActivity.createdById ? (
                               <FormattedMessage id="ticket.activity.type.ticket_assignment.self_assigned" />
                             ) : (
                               <>
@@ -148,7 +149,8 @@ export const Activity: FC<{
                           <>
                             {(
                               ticketActivity.extraInfo as TicketAssignmentRemovedWithData
-                            )?.oldAssignedToId === ticketActivity.authorId ? (
+                            )?.oldAssignedToId ===
+                            ticketActivity.createdById ? (
                               <FormattedMessage id="ticket.activity.type.ticket_assignment.self_unassigned" />
                             ) : (
                               <>

@@ -55,7 +55,7 @@ export const InfoPanel: FC<{
             <AccordionContent>
               <LinkedTickets
                 ticketId={ticketId}
-                contactId={ticketData?.authorId}
+                contactId={ticketData?.createdById}
               />
             </AccordionContent>
           </AccordionItem>

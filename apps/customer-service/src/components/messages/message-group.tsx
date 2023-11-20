@@ -23,7 +23,7 @@ export const MessageGroup: FC<MessageGroupProps> = ({ messages }) => {
       <Message message={firstMessage} type={firstMessage.type}>
         <MessageAvatar
           direction={firstMessage.direction}
-          author={firstMessage.author}
+          createdBy={firstMessage.createdBy}
         />
       </Message>
     );
@@ -48,15 +48,15 @@ export const MessageGroup: FC<MessageGroupProps> = ({ messages }) => {
                 idx === 0
                   ? 'first'
                   : idx === messages.length - 1
-                  ? 'last'
-                  : 'normal'
+                    ? 'last'
+                    : 'normal'
               }
             />
           ))}
         </div>
         <MessageAvatar
           direction={firstMessage.direction}
-          author={firstMessage.author}
+          createdBy={firstMessage.createdBy}
         />
       </div>
     </section>

@@ -42,7 +42,7 @@ export const ticketActivityRouter = createTRPCRouter({
       const ticketActivities = await ctx.db.query.ticketActivities.findMany({
         orderBy: asc(schema.ticketActivities.createdAt),
         where: eq(schema.ticketActivities.ticketId, input.ticketId),
-        with: { author: true },
+        with: { createdBy: true },
       });
       const augmentedTicketActivities: (Omit<
         (typeof ticketActivities)[0],

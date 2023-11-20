@@ -12,7 +12,7 @@ export const labelTypes = pgTable('LabelType', {
     .notNull(),
   updatedAt: timestamp('updatedAt', { precision: 3, mode: 'date' }),
   archivedAt: timestamp('archivedAt', { precision: 3, mode: 'date' }),
-  authorId: integer('authorId')
+  createdById: integer('createdById')
     .notNull()
     .references(() => contacts.id, {
       onDelete: 'restrict',

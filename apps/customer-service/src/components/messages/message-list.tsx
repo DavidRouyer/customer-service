@@ -18,7 +18,7 @@ const getConversation = (messages: RouterOutputs['ticket']['conversation']) => {
     const dateAsString = date.toISOString().substring(0, 10);
     date.setUTCMilliseconds(0);
     date.setUTCSeconds(0);
-    const idx = `${date.toISOString()}.${message.author.id}`;
+    const idx = `${date.toISOString()}.${message.createdBy.id}`;
 
     if (acc[dateAsString]) {
       acc = {

@@ -68,9 +68,9 @@ export const MessageForm: FC<{ ticketId: number }> = ({ ticketId }) => {
               status: newMessage.status,
               content: newMessage.content,
               createdAt: newMessage.createdAt,
-              authorId: sessionData?.user?.contactId ?? 0,
+              createdById: sessionData?.user?.contactId ?? 0,
               // TODO: remove hack by fetching contact from user
-              author: {
+              createdBy: {
                 name: sessionData?.user?.name ?? '',
                 avatarUrl: sessionData?.user?.image ?? '',
                 id: sessionData?.user?.contactId ?? 0,
@@ -120,9 +120,9 @@ export const MessageForm: FC<{ ticketId: number }> = ({ ticketId }) => {
               status: MessageStatus.Pending,
               content: newTicket.content,
               createdAt: newTicket.createdAt,
-              authorId: sessionData?.user?.contactId ?? 0,
+              createdById: sessionData?.user?.contactId ?? 0,
               // TODO: remove hack by fetching contact from user
-              author: {
+              createdBy: {
                 name: sessionData?.user?.name ?? '',
                 avatarUrl: sessionData?.user?.image ?? '',
                 id: sessionData?.user?.contactId ?? 0,
@@ -157,14 +157,14 @@ export const MessageForm: FC<{ ticketId: number }> = ({ ticketId }) => {
         status: MessageStatus.Pending,
         content: data.content,
         createdAt: new Date(),
-        authorId: sessionData?.user?.contactId ?? 0,
+        createdById: sessionData?.user?.contactId ?? 0,
       });
     } else {
       sendComment({
         ticketId: ticketId,
         content: data.content,
         createdAt: new Date(),
-        authorId: sessionData?.user?.contactId ?? 0,
+        createdById: sessionData?.user?.contactId ?? 0,
       });
     }
 

@@ -13,7 +13,7 @@ export const messageRouter = createTRPCRouter({
       return ctx.db.query.messages.findMany({
         where: eq(schema.messages.ticketId, input.ticketId),
         orderBy: asc(schema.messages.createdAt),
-        with: { author: true },
+        with: { createdBy: true },
       });
     }),
 
@@ -24,7 +24,7 @@ export const messageRouter = createTRPCRouter({
         contentType: z.enum(schema.messages.contentType.enumValues),
         createdAt: z.date(),
         direction: z.enum(schema.messages.direction.enumValues),
-        authorId: z.number(),
+        createdById: z.number(),
         ticketId: z.number(),
         status: z.enum(schema.messages.status.enumValues),
       })
