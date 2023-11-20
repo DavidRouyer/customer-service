@@ -15,7 +15,7 @@ import {
   MenuTextMatch,
   useBasicTypeaheadTriggerMatch,
 } from '@lexical/react/LexicalTypeaheadMenuPlugin';
-import { TextNode } from 'lexical';
+import { COMMAND_PRIORITY_NORMAL, TextNode } from 'lexical';
 import * as ReactDOM from 'react-dom';
 
 import { $createMentionNode } from '~/components/text-editor/nodes/mention-node';
@@ -258,6 +258,7 @@ export default function NewMentionsPlugin(): JSX.Element | null {
       onSelectOption={onSelectOption}
       triggerFn={checkForMentionMatch}
       options={options}
+      commandPriority={COMMAND_PRIORITY_NORMAL}
       menuRenderFn={(
         anchorElementRef,
         { selectedIndex, selectOptionAndCleanUp, setHighlightedIndex }
