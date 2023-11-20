@@ -60,6 +60,7 @@ export const labelRouter = createTRPCRouter({
           .update(schema.tickets)
           .set({
             updatedAt: new Date(),
+            updatedById: ctx.session.user.contactId ?? 0,
           })
           .where(eq(schema.tickets.id, ticket.id))
           .returning({
@@ -134,6 +135,7 @@ export const labelRouter = createTRPCRouter({
           .update(schema.tickets)
           .set({
             updatedAt: new Date(),
+            updatedById: ctx.session.user.contactId ?? 0,
           })
           .where(eq(schema.tickets.id, ticket.id))
           .returning({

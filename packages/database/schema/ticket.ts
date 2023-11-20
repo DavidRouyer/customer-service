@@ -23,7 +23,6 @@ export const ticketPriority = pgEnum('TicketPriority', [
 
 export const tickets = pgTable('Ticket', {
   id: serial('id').primaryKey().notNull(),
-  updatedAt: timestamp('updatedAt', { precision: 3, mode: 'date' }),
   resolvedAt: timestamp('resolvedAt', { precision: 3, mode: 'date' }),
   status: ticketStatus('status').notNull(),
   priority: ticketPriority('priority').notNull(),
@@ -40,6 +39,11 @@ export const tickets = pgTable('Ticket', {
       onDelete: 'restrict',
       onUpdate: 'cascade',
     }),
+  updatedAt: timestamp('updatedAt', { precision: 3, mode: 'date' }),
+  updatedById: integer('updatedById').references(() => contacts.id, {
+    onDelete: 'restrict',
+    onUpdate: 'cascade',
+  }),
 });
 
 export const ticketsRelations = relations(tickets, ({ one, many }) => ({
@@ -49,6 +53,10 @@ export const ticketsRelations = relations(tickets, ({ one, many }) => ({
   }),
   createdBy: one(contacts, {
     fields: [tickets.createdById],
+    references: [contacts.id],
+  }),
+  updatedBy: one(contacts, {
+    fields: [tickets.updatedById],
     references: [contacts.id],
   }),
   messages: many(messages),

@@ -265,6 +265,7 @@ export const ticketRouter = createTRPCRouter({
           .set({
             assignedToId: input.contactId,
             updatedAt: new Date(),
+            updatedById: ctx.session.user.contactId ?? 0,
           })
           .where(eq(schema.tickets.id, input.id))
           .returning({
@@ -321,6 +322,7 @@ export const ticketRouter = createTRPCRouter({
           .set({
             assignedToId: input.contactId,
             updatedAt: new Date(),
+            updatedById: ctx.session.user.contactId ?? 0,
           })
           .where(eq(schema.tickets.id, input.id))
           .returning({
@@ -372,6 +374,7 @@ export const ticketRouter = createTRPCRouter({
           .set({
             assignedToId: null,
             updatedAt: new Date(),
+            updatedById: ctx.session.user.contactId ?? 0,
           })
           .where(eq(schema.tickets.id, input.id))
           .returning({
@@ -426,6 +429,7 @@ export const ticketRouter = createTRPCRouter({
           .set({
             priority: input.priority,
             updatedAt: new Date(),
+            updatedById: ctx.session.user.contactId ?? 0,
           })
           .where(eq(schema.tickets.id, input.id))
           .returning({
@@ -478,6 +482,7 @@ export const ticketRouter = createTRPCRouter({
             status: TicketStatus.Resolved,
             resolvedAt: new Date(),
             updatedAt: new Date(),
+            updatedById: ctx.session.user.contactId ?? 0,
           })
           .where(eq(schema.tickets.id, input.id))
           .returning({
@@ -526,6 +531,7 @@ export const ticketRouter = createTRPCRouter({
             status: TicketStatus.Open,
             resolvedAt: null,
             updatedAt: new Date(),
+            updatedById: ctx.session.user.contactId ?? 0,
           })
           .where(eq(schema.tickets.id, input.id))
           .returning({
