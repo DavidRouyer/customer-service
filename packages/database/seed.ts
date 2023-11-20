@@ -161,17 +161,17 @@ async function main() {
 
   await db.insert(schema.ticketActivities).values({
     ticketId: leslieTicket.id,
-    createdById: leslie.id,
     type: TicketActivityType.Created,
     createdAt: leslieTicket.createdAt,
+    createdById: leslie.id,
   });
 
   await db.insert(schema.ticketActivities).values({
     ticketId: leslieTicket.id,
-    createdById: tom.id,
     type: TicketActivityType.AssignmentAdded,
     extraInfo: { newAssignedToId: tom.id } satisfies TicketAssignmentAdded,
     createdAt: new Date('2023-05-20T20:54:41.389Z'),
+    createdById: tom.id,
   });
 
   await db
@@ -215,9 +215,9 @@ async function main() {
 
   await db.insert(schema.ticketActivities).values({
     ticketId: leslieTicket2.id,
-    createdById: leslie.id,
     type: TicketActivityType.Created,
     createdAt: leslieTicket2.createdAt,
+    createdById: leslie.id,
   });
 
   await db
@@ -227,27 +227,27 @@ async function main() {
         contentType: MessageContentType.TextPlain,
         content: 'can ya help me change a product of purchase?',
         createdAt: new Date('2023-05-06T11:23:45.389Z'),
+        createdById: leslie.id,
         direction: MessageDirection.Inbound,
         status: MessageStatus.Seen,
-        createdById: leslie.id,
         ticketId: leslieTicket2.id,
       },
       {
         contentType: MessageContentType.TextPlain,
         content: 'Can you tell me which product you would like to change?',
         createdAt: new Date('2023-05-07T22:40Z'),
+        createdById: jeff.id,
         direction: MessageDirection.Outbound,
         status: MessageStatus.Seen,
-        createdById: jeff.id,
         ticketId: leslieTicket2.id,
       },
       {
         contentType: MessageContentType.TextPlain,
         content: 'The socks, please',
         createdAt: new Date('2023-05-08T22:40Z'),
+        createdById: leslie.id,
         direction: MessageDirection.Inbound,
         status: MessageStatus.Seen,
-        createdById: leslie.id,
         ticketId: leslieTicket2.id,
       },
     ])
@@ -259,8 +259,8 @@ async function main() {
       status: TicketStatus.Resolved,
       priority: TicketPriority.Medium,
       createdAt: new Date('2023-05-06T11:23:45.389Z'),
-      resolvedAt: new Date('2023-06-12T06:10:45.389Z'),
       createdById: leslie.id,
+      resolvedAt: new Date('2023-06-12T06:10:45.389Z'),
     })
     .returning({
       id: schema.tickets.id,
@@ -273,16 +273,16 @@ async function main() {
 
   await db.insert(schema.ticketActivities).values({
     ticketId: leslieTicket3.id,
-    createdById: leslie.id,
     type: TicketActivityType.Created,
     createdAt: leslieTicket3.createdAt,
+    createdById: leslie.id,
   });
 
   await db.insert(schema.ticketActivities).values({
     ticketId: leslieTicket3.id,
-    createdById: leslie.id,
     type: TicketActivityType.Resolved,
     createdAt: leslieTicket3.resolvedAt ?? new Date(),
+    createdById: leslie.id,
   });
 
   await db
@@ -292,9 +292,9 @@ async function main() {
         contentType: MessageContentType.TextPlain,
         content: 'problems with canceling purchase',
         createdAt: new Date('2023-05-06T11:23:45.389Z'),
+        createdById: leslie.id,
         direction: MessageDirection.Inbound,
         status: MessageStatus.DeliveredToDevice,
-        createdById: leslie.id,
         ticketId: leslieTicket3.id,
       },
     ])
@@ -328,9 +328,9 @@ async function main() {
 
   await db.insert(schema.ticketActivities).values({
     ticketId: michaelTicket.id,
-    createdById: michael.id,
     type: TicketActivityType.Created,
     createdAt: michaelTicket.createdAt,
+    createdById: michael.id,
   });
 
   await db
@@ -340,9 +340,9 @@ async function main() {
         contentType: MessageContentType.TextPlain,
         content: 'I received a damaged product.',
         createdAt: new Date('2023-03-03T14:02Z'),
+        createdById: michael.id,
         direction: MessageDirection.Inbound,
         status: MessageStatus.Seen,
-        createdById: michael.id,
         ticketId: michaelTicket.id,
       },
       {
@@ -350,9 +350,9 @@ async function main() {
         content:
           'We apologize for the inconvenience. Can you please provide a photo of the damaged product so we can assist you further?',
         createdAt: new Date('2023-03-12T17:20Z'),
+        createdById: jeffrey.id,
         direction: MessageDirection.Outbound,
         status: MessageStatus.Seen,
-        createdById: jeffrey.id,
         ticketId: michaelTicket.id,
       },
     ])
@@ -386,9 +386,9 @@ async function main() {
 
   await db.insert(schema.ticketActivities).values({
     ticketId: driesTicket.id,
-    createdById: dries.id,
     type: TicketActivityType.Created,
     createdAt: driesTicket.createdAt,
+    createdById: dries.id,
   });
 
   await db
@@ -398,9 +398,9 @@ async function main() {
         contentType: MessageContentType.TextPlain,
         content: 'I need to return an item.',
         createdAt: new Date('2023-03-03T13:23Z'),
+        createdById: dries.id,
         direction: MessageDirection.Inbound,
         status: MessageStatus.Seen,
-        createdById: dries.id,
         ticketId: driesTicket.id,
       },
       {
@@ -408,9 +408,9 @@ async function main() {
         content:
           'Certainly. Please provide your order number and reason for return, and we will provide you with instructions on how to proceed.',
         createdAt: new Date('2023-04-01T06:06Z'),
+        createdById: jeffrey.id,
         direction: MessageDirection.Outbound,
         status: MessageStatus.DeliveredToDevice,
-        createdById: jeffrey.id,
         ticketId: driesTicket.id,
       },
     ])
@@ -452,9 +452,9 @@ async function main() {
         contentType: MessageContentType.TextPlain,
         content: 'I want to change my shipping address.',
         createdAt: new Date('2023-03-02T21:13Z'),
+        createdById: lindsay.id,
         direction: MessageDirection.Inbound,
         status: MessageStatus.Seen,
-        createdById: lindsay.id,
         ticketId: lindsayTicket.id,
       },
       {
@@ -462,9 +462,9 @@ async function main() {
         content:
           "No problem. Can you please provide your order number and the new shipping address you'd like to use?",
         createdAt: new Date('2023-03-03T22:40Z'),
+        createdById: tom.id,
         direction: MessageDirection.Outbound,
         status: MessageStatus.DeliveredToDevice,
-        createdById: tom.id,
         ticketId: lindsayTicket.id,
       },
     ])
@@ -472,9 +472,9 @@ async function main() {
 
   await db.insert(schema.ticketActivities).values({
     ticketId: lindsayTicket.id,
-    createdById: lindsay.id,
     type: TicketActivityType.Created,
     createdAt: lindsayTicket.createdAt,
+    createdById: lindsay.id,
   });
 }
 

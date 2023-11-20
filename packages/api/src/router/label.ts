@@ -75,12 +75,12 @@ export const labelRouter = createTRPCRouter({
 
         await tx.insert(schema.ticketActivities).values({
           ticketId: ticket.id,
-          createdById: ctx.session.user.contactId ?? 0,
           type: TicketActivityType.LabelAdded,
           extraInfo: {
             labelTypeIds: input.labelTypeIds,
           } satisfies TicketLabelAdded,
           createdAt: updatedTicket.updatedAt ?? new Date(),
+          createdById: ctx.session.user.contactId ?? 0,
         });
       });
     }),
@@ -149,12 +149,12 @@ export const labelRouter = createTRPCRouter({
 
         await tx.insert(schema.ticketActivities).values({
           ticketId: ticket.id,
-          createdById: ctx.session.user.contactId ?? 0,
           type: TicketActivityType.LabelRemoved,
           extraInfo: {
             labelTypeIds: input.labelTypeIds,
           } satisfies TicketLabelRemoved,
           createdAt: updatedTicket.updatedAt ?? new Date(),
+          createdById: ctx.session.user.contactId ?? 0,
         });
       });
     }),

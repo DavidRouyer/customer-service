@@ -8,9 +8,6 @@ import { tickets } from './ticket';
 
 export const ticketComments = pgTable('TicketComment', {
   id: serial('id').primaryKey().notNull(),
-  createdAt: timestamp('createdAt', { precision: 3, mode: 'date' })
-    .defaultNow()
-    .notNull(),
   content: jsonb('content').$type<SerializedEditorState>().notNull(),
   ticketId: integer('ticketId')
     .notNull()
@@ -18,6 +15,9 @@ export const ticketComments = pgTable('TicketComment', {
       onDelete: 'restrict',
       onUpdate: 'cascade',
     }),
+  createdAt: timestamp('createdAt', { precision: 3, mode: 'date' })
+    .defaultNow()
+    .notNull(),
   createdById: integer('createdById')
     .notNull()
     .references(() => contacts.id, {

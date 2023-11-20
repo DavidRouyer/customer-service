@@ -30,13 +30,13 @@ export const messageStatus = pgEnum('MessageStatus', [
 
 export const messages = pgTable('Message', {
   id: serial('id').primaryKey().notNull(),
-  createdAt: timestamp('createdAt', { precision: 3, mode: 'date' })
-    .defaultNow()
-    .notNull(),
   status: messageStatus('status').notNull(),
   contentType: messageContentType('contentType').notNull(),
   content: text('content').notNull(),
   direction: messageDirection('direction').notNull(),
+  createdAt: timestamp('createdAt', { precision: 3, mode: 'date' })
+    .defaultNow()
+    .notNull(),
   createdById: integer('createdById')
     .notNull()
     .references(() => contacts.id, {

@@ -7,11 +7,11 @@ export const labelTypes = pgTable('LabelType', {
   id: serial('id').primaryKey().notNull(),
   name: varchar('name', { length: 256 }).notNull(),
   icon: varchar('icon', { length: 256 }).notNull(),
+  updatedAt: timestamp('updatedAt', { precision: 3, mode: 'date' }),
+  archivedAt: timestamp('archivedAt', { precision: 3, mode: 'date' }),
   createdAt: timestamp('createdAt', { precision: 3, mode: 'date' })
     .defaultNow()
     .notNull(),
-  updatedAt: timestamp('updatedAt', { precision: 3, mode: 'date' }),
-  archivedAt: timestamp('archivedAt', { precision: 3, mode: 'date' }),
   createdById: integer('createdById')
     .notNull()
     .references(() => contacts.id, {

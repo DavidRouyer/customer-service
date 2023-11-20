@@ -88,12 +88,12 @@ export const ticketCommentRouter = createTRPCRouter({
 
         await tx.insert(schema.ticketActivities).values({
           ticketId: input.ticketId,
-          createdById: input.createdById,
           type: TicketActivityType.Commented,
           extraInfo: {
             comment: input.content,
           } satisfies TicketCommented,
           createdAt: newComment.createdAt,
+          createdById: input.createdById,
         });
 
         return {

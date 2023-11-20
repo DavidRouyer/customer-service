@@ -31,9 +31,6 @@ export const ticketStatus = pgEnum('TicketActivityType', [
 
 export const ticketActivities = pgTable('TicketActivity', {
   id: serial('id').primaryKey().notNull(),
-  createdAt: timestamp('createdAt', { precision: 3, mode: 'date' })
-    .defaultNow()
-    .notNull(),
   type: ticketStatus('type').notNull(),
   extraInfo: json('extraInfo').$type<
     | TicketAssignmentAdded
@@ -50,6 +47,9 @@ export const ticketActivities = pgTable('TicketActivity', {
       onDelete: 'restrict',
       onUpdate: 'cascade',
     }),
+  createdAt: timestamp('createdAt', { precision: 3, mode: 'date' })
+    .defaultNow()
+    .notNull(),
   createdById: integer('createdById')
     .notNull()
     .references(() => contacts.id, {
