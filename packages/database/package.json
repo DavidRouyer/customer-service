@@ -22,7 +22,7 @@
     "@cs/eslint-config": "*",
     "@cs/prettier-config": "*",
     "@cs/tsconfig": "*",
-    "@types/ws": "^8.5.9",
+    "@types/ws": "^8.5.10",
     "dotenv-cli": "^7.3.0",
     "drizzle-kit": "^0.20.4",
     "eslint": "^8.54.0",
