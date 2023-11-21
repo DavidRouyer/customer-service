@@ -18,7 +18,7 @@ import { api } from '~/lib/api';
 
 type TicketChangePriorityProps = {
   priority: NonNullable<RouterOutputs['ticket']['byId']>['priority'];
-  ticketId: number;
+  ticketId: string;
 };
 
 export const TicketPriorityDropdowm: FC<TicketChangePriorityProps> = ({

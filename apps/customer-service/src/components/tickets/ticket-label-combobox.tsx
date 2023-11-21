@@ -23,7 +23,7 @@ import { cn } from '~/lib/utils';
 
 type TicketLabelComboboxProps = {
   labels?: NonNullable<RouterOutputs['ticket']['byId']>['labels'];
-  ticketId: number;
+  ticketId: string;
 };
 
 export const TicketLabelCombobox: FC<TicketLabelComboboxProps> = ({

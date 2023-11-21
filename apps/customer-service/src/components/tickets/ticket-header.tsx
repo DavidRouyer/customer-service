@@ -9,7 +9,7 @@ import { useReopenTicket } from '~/hooks/use-reopen-ticket';
 import { useResolveTicket } from '~/hooks/use-resolve-ticket';
 import { api } from '~/lib/api';
 
-export const TicketHeader: FC<{ ticketId: number }> = ({ ticketId }) => {
+export const TicketHeader: FC<{ ticketId: string }> = ({ ticketId }) => {
   const { data: ticketData } = api.ticket.byId.useQuery({ id: ticketId });
 
   const { resolveTicket } = useResolveTicket();

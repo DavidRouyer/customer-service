@@ -39,7 +39,7 @@ export const labelTypeRouter = createTRPCRouter({
         .insert(schema.labelTypes)
         .values({
           ...input,
-          createdById: ctx.session.user.contactId ?? 0,
+          createdById: ctx.session.user.contactId ?? '',
         })
         .returning({ id: schema.labelTypes.id });
     }),
@@ -47,7 +47,7 @@ export const labelTypeRouter = createTRPCRouter({
   archive: protectedProcedure
     .input(
       z.object({
-        id: z.number(),
+        id: z.string(),
       })
     )
     .mutation(async ({ ctx, input }) => {
@@ -82,7 +82,7 @@ export const labelTypeRouter = createTRPCRouter({
   unarchive: protectedProcedure
     .input(
       z.object({
-        id: z.number(),
+        id: z.string(),
       })
     )
     .mutation(async ({ ctx, input }) => {

@@ -1,6 +1,7 @@
 import { relations } from 'drizzle-orm';
-import { integer, json, pgEnum, serial, timestamp } from 'drizzle-orm/pg-core';
+import { json, pgEnum, timestamp, varchar } from 'drizzle-orm/pg-core';
 
+import { generateEntityId } from '@cs/lib/generate-entity-id';
 import {
   TicketActivityType,
   TicketAssignmentAdded,
@@ -16,7 +17,7 @@ import { pgTable } from './_table';
 import { contacts } from './contact';
 import { tickets } from './ticket';
 
-export const ticketStatus = pgEnum('TicketActivityType', [
+export const ticketStatus = pgEnum('ticketActivityType', [
   TicketActivityType.AssignmentAdded,
   TicketActivityType.AssignmentChanged,
   TicketActivityType.AssignmentRemoved,
@@ -29,8 +30,8 @@ export const ticketStatus = pgEnum('TicketActivityType', [
   TicketActivityType.Reopened,
 ]);
 
-export const ticketActivities = pgTable('TicketActivity', {
-  id: serial('id').primaryKey().notNull(),
+export const ticketActivities = pgTable('ticketActivity', {
+  id: varchar('id').primaryKey().notNull().default(generateEntityId('', 'ta')),
   type: ticketStatus('type').notNull(),
   extraInfo: json('extraInfo').$type<
     | TicketAssignmentAdded
@@ -41,7 +42,7 @@ export const ticketActivities = pgTable('TicketActivity', {
     | TicketLabelRemoved
     | TicketPriorityChanged
   >(),
-  ticketId: integer('ticketId')
+  ticketId: varchar('ticketId')
     .notNull()
     .references(() => tickets.id, {
       onDelete: 'restrict',
@@ -50,7 +51,7 @@ export const ticketActivities = pgTable('TicketActivity', {
   createdAt: timestamp('createdAt', { precision: 3, mode: 'date' })
     .defaultNow()
     .notNull(),
-  createdById: integer('createdById')
+  createdById: varchar('createdById')
     .notNull()
     .references(() => contacts.id, {
       onDelete: 'restrict',

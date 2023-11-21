@@ -4,7 +4,7 @@ import { type SerializedTextNode } from 'lexical';
 export type SerializedMentionNode = Spread<
   {
     mentionName: string;
-    mentionEntityId: number;
+    mentionEntityId: string;
   },
   SerializedTextNode
 >;

@@ -35,8 +35,8 @@ export const parseFilters = (filterParams: string | null) => {
   if (filterParams === TicketFilter.Mentions.toString()) {
     return TicketFilter.Mentions;
   }
-  const filter = parseInt(filterParams);
-  if (!isNaN(filter)) {
+  const filter = filterParams;
+  if (filter) {
     return filter;
   }
 

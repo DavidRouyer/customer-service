@@ -2,16 +2,16 @@ import { TicketPriority } from '../tickets';
 import { TicketActivityType } from './TicketActivityType';
 
 type TicketAssignmentAdded = {
-  newAssignedToId: number;
+  newAssignedToId: string;
 };
 
 type TicketAssignmentChanged = {
-  oldAssignedToId: number;
-  newAssignedToId: number;
+  oldAssignedToId: string;
+  newAssignedToId: string;
 };
 
 type TicketAssignmentRemoved = {
-  oldAssignedToId: number;
+  oldAssignedToId: string;
 };
 
 type TicketCommented = {
@@ -19,11 +19,11 @@ type TicketCommented = {
 };
 
 type TicketLabelAdded = {
-  labelTypeIds: number[];
+  labelTypeIds: string[];
 };
 
 type TicketLabelRemoved = {
-  labelTypeIds: number[];
+  labelTypeIds: string[];
 };
 
 type TicketPriorityChanged = {

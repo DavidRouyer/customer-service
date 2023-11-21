@@ -25,7 +25,7 @@ import { getInitials } from '~/lib/string';
 import { cn } from '~/lib/utils';
 
 export const Activity: FC<{
-  ticketId: number;
+  ticketId: string;
 }> = ({ ticketId }) => {
   const { data: ticketActivitiesData } = api.ticketActivity.byTicketId.useQuery(
     {

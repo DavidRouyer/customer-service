@@ -9,8 +9,8 @@ import { Badge } from '~/components/ui/badge';
 import { api } from '~/lib/api';
 
 type LinkedTicketsProps = {
-  ticketId: number;
-  contactId?: number;
+  ticketId: string;
+  contactId?: string;
 };
 
 export const LinkedTickets: FC<LinkedTicketsProps> = ({
@@ -21,7 +21,7 @@ export const LinkedTickets: FC<LinkedTicketsProps> = ({
 
   const { data: ticketsData } = api.ticket.byContactId.useQuery(
     {
-      contactId: contactId ?? 0,
+      contactId: contactId ?? '',
       excludeId: ticketId,
     },
     {

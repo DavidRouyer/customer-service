@@ -18,9 +18,7 @@ export default async function TicketPage({
     redirect('/');
   }
 
-  const ticketId = parseInt(id);
-
-  if (!ticketId) return null;
+  if (!id) return null;
 
   return (
     <>
@@ -33,7 +31,7 @@ export default async function TicketPage({
           </aside>
         }
       >
-        <InfoPanel ticketId={ticketId} />
+        <InfoPanel ticketId={id} />
       </Suspense>
 
       <main className="lg:pl-60">
@@ -46,7 +44,7 @@ export default async function TicketPage({
                 </div>
               }
             >
-              <Ticket ticketId={ticketId} />
+              <Ticket ticketId={id} />
             </Suspense>
           </div>
         </div>

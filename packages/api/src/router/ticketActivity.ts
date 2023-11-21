@@ -37,7 +37,7 @@ export type TicketLabelRemovedWithData = {
 
 export const ticketActivityRouter = createTRPCRouter({
   byTicketId: protectedProcedure
-    .input(z.object({ ticketId: z.number() }))
+    .input(z.object({ ticketId: z.string() }))
     .query(async ({ ctx, input }) => {
       const ticketActivities = await ctx.db.query.ticketActivities.findMany({
         orderBy: asc(schema.ticketActivities.createdAt),
@@ -59,8 +59,8 @@ export const ticketActivityRouter = createTRPCRouter({
           | null;
       })[] = [];
 
-      const contactsToFetch = new Set<number>();
-      const labelTypesToFetch = new Set<number>();
+      const contactsToFetch = new Set<string>();
+      const labelTypesToFetch = new Set<string>();
       ticketActivities.forEach((ticketActivity) => {
         if (ticketActivity.type === TicketActivityType.AssignmentAdded) {
           contactsToFetch.add(

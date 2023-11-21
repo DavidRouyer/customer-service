@@ -1,15 +1,17 @@
 import { relations } from 'drizzle-orm';
-import { integer, jsonb, serial, timestamp } from 'drizzle-orm/pg-core';
+import { jsonb, timestamp, varchar } from 'drizzle-orm/pg-core';
 import { SerializedEditorState } from 'lexical';
+
+import { generateEntityId } from '@cs/lib/generate-entity-id';
 
 import { pgTable } from './_table';
 import { contacts } from './contact';
 import { tickets } from './ticket';
 
-export const ticketComments = pgTable('TicketComment', {
-  id: serial('id').primaryKey().notNull(),
+export const ticketComments = pgTable('ticketComment', {
+  id: varchar('id').primaryKey().notNull().default(generateEntityId('', 'tc')),
   content: jsonb('content').$type<SerializedEditorState>().notNull(),
-  ticketId: integer('ticketId')
+  ticketId: varchar('ticketId')
     .notNull()
     .references(() => tickets.id, {
       onDelete: 'restrict',
@@ -18,7 +20,7 @@ export const ticketComments = pgTable('TicketComment', {
   createdAt: timestamp('createdAt', { precision: 3, mode: 'date' })
     .defaultNow()
     .notNull(),
-  createdById: integer('createdById')
+  createdById: varchar('createdById')
     .notNull()
     .references(() => contacts.id, {
       onDelete: 'restrict',

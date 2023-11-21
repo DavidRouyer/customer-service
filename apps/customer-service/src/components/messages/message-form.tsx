@@ -35,7 +35,7 @@ type MessageFormSchema = {
 export const FormElementContext =
   createContext<RefObject<HTMLFormElement> | null>(null);
 
-export const MessageForm: FC<{ ticketId: number }> = ({ ticketId }) => {
+export const MessageForm: FC<{ ticketId: string }> = ({ ticketId }) => {
   const formRef = useRef<HTMLFormElement>(null);
   const { data: sessionData } = api.auth.getSession.useQuery();
   const utils = api.useUtils();
@@ -157,14 +157,14 @@ export const MessageForm: FC<{ ticketId: number }> = ({ ticketId }) => {
         status: MessageStatus.Pending,
         content: data.content,
         createdAt: new Date(),
-        createdById: sessionData?.user?.contactId ?? 0,
+        createdById: sessionData?.user?.contactId ?? '',
       });
     } else {
       sendComment({
         ticketId: ticketId,
         content: data.content,
         createdAt: new Date(),
-        createdById: sessionData?.user?.contactId ?? 0,
+        createdById: sessionData?.user?.contactId ?? '',
       });
     }
 

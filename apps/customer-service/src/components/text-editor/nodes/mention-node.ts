@@ -17,10 +17,7 @@ function convertMentionElement(
   domNode: HTMLElement
 ): DOMConversionOutput | null {
   const textContent = domNode.textContent;
-  const mentionId = parseInt(
-    domNode.getAttribute('data-lexical-mention-id') ?? ''
-  );
-
+  const mentionId = domNode.getAttribute('data-lexical-mention-id') ?? '';
   if (textContent !== null && mentionId !== null) {
     const node = $createMentionNode(mentionId, textContent);
     return {
@@ -34,7 +31,7 @@ function convertMentionElement(
 const mentionStyle = 'background-color: rgba(24, 119, 232, 0.2)';
 export class MentionNode extends TextNode {
   __mention: string;
-  __mentionId: number;
+  __mentionId: string;
 
   static getType(): string {
     return 'mention';
@@ -62,7 +59,7 @@ export class MentionNode extends TextNode {
   }
 
   constructor(
-    mentionEntityId: number,
+    mentionEntityId: string,
     mentionName: string,
     text?: string,
     key?: NodeKey
@@ -129,7 +126,7 @@ export class MentionNode extends TextNode {
 }
 
 export function $createMentionNode(
-  mentionEntityId: number,
+  mentionEntityId: string,
   mentionName: string
 ): MentionNode {
   const mentionNode = new MentionNode(mentionEntityId, mentionName);

@@ -11,7 +11,7 @@ export const extractMentions = (content: SerializedEditorState) => {
 };
 
 const extractMentionsChildren = (children: SerializedLexicalNode[]) => {
-  let mentionIds: number[] = [];
+  let mentionIds: string[] = [];
   for (const child of children) {
     if (child.type === 'paragraph') {
       mentionIds = mentionIds.concat(

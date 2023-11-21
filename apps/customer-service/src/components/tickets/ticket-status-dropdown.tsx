@@ -18,7 +18,7 @@ import { useResolveTicket } from '~/hooks/use-resolve-ticket';
 
 type TicketChangeAssignmentProps = {
   status?: NonNullable<RouterOutputs['ticket']['byId']>['status'];
-  ticketId: number;
+  ticketId: string;
 };
 
 export const TicketStatusDropdowm: FC<TicketChangeAssignmentProps> = ({

@@ -1,5 +1,5 @@
 import { relations } from 'drizzle-orm';
-import { primaryKey, serial } from 'drizzle-orm/pg-core';
+import { primaryKey, varchar } from 'drizzle-orm/pg-core';
 
 import { pgTable } from './_table';
 import { labelTypes } from './labelType';
@@ -8,13 +8,13 @@ import { tickets } from './ticket';
 export const labels = pgTable(
   'labels',
   {
-    ticketId: serial('ticketId')
+    ticketId: varchar('ticketId')
       .notNull()
       .references(() => tickets.id, {
         onDelete: 'restrict',
         onUpdate: 'cascade',
       }),
-    labelTypeId: serial('labelTypeId')
+    labelTypeId: varchar('labelTypeId')
       .notNull()
       .references(() => labelTypes.id, {
         onDelete: 'restrict',

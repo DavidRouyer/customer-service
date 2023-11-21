@@ -2,7 +2,6 @@
   "name": "@cs/lib",
   "version": "0.0.0",
   "private": true,
-  "main": "./index.ts",
   "license": "MIT",
   "scripts": {
     "build": "tsc",
@@ -10,6 +9,9 @@
     "lint": "eslint .",
     "format": "prettier --check \"**/*.{mjs,ts,md,json}\"",
     "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "ulid": "^2.3.0"
   },
   "devDependencies": {
     "@cs/eslint-config": "*",

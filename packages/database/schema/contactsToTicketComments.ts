@@ -1,5 +1,5 @@
 import { relations } from 'drizzle-orm';
-import { primaryKey, serial } from 'drizzle-orm/pg-core';
+import { primaryKey, varchar } from 'drizzle-orm/pg-core';
 
 import { pgTable } from './_table';
 import { contacts } from './contact';
@@ -9,19 +9,19 @@ import { ticketComments } from './ticketComment';
 export const contactsToTicketComments = pgTable(
   'contactsToTicketComments',
   {
-    contactId: serial('contactId')
+    contactId: varchar('contactId')
       .notNull()
       .references(() => contacts.id, {
         onDelete: 'restrict',
         onUpdate: 'cascade',
       }),
-    ticketCommentId: serial('ticketCommentId')
+    ticketCommentId: varchar('ticketCommentId')
       .notNull()
       .references(() => ticketComments.id, {
         onDelete: 'restrict',
         onUpdate: 'cascade',
       }),
-    ticketId: serial('ticketId')
+    ticketId: varchar('ticketId')
       .notNull()
       .references(() => tickets.id, {
         onDelete: 'restrict',
@@ -30,7 +30,10 @@ export const contactsToTicketComments = pgTable(
   },
   (table) => {
     return {
-      pk: primaryKey(table.contactId, table.ticketCommentId),
+      pk: primaryKey({
+        name: 'contactsToTicketComments_pk',
+        columns: [table.contactId, table.ticketCommentId],
+      }),
     };
   }
 );

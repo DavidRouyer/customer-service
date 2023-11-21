@@ -8,7 +8,7 @@ import { createTRPCRouter, protectedProcedure } from '../trpc';
 
 export const messageRouter = createTRPCRouter({
   byTicketId: protectedProcedure
-    .input(z.object({ ticketId: z.number() }))
+    .input(z.object({ ticketId: z.string() }))
     .query(({ ctx, input }) => {
       return ctx.db.query.messages.findMany({
         where: eq(schema.messages.ticketId, input.ticketId),
@@ -23,9 +23,9 @@ export const messageRouter = createTRPCRouter({
         content: z.string().min(1),
         contentType: z.enum(schema.messages.contentType.enumValues),
         createdAt: z.date(),
+        createdById: z.string(),
         direction: z.enum(schema.messages.direction.enumValues),
-        createdById: z.number(),
-        ticketId: z.number(),
+        ticketId: z.string(),
         status: z.enum(schema.messages.status.enumValues),
       })
     )

@@ -16,7 +16,7 @@ import {
 import { api } from '~/lib/api';
 
 export const InfoPanel: FC<{
-  ticketId: number;
+  ticketId: string;
 }> = ({ ticketId }) => {
   const [ticketData] = api.ticket.byId.useSuspenseQuery({
     id: ticketId,

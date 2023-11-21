@@ -14,8 +14,8 @@ export const labelRouter = createTRPCRouter({
   addLabels: protectedProcedure
     .input(
       z.object({
-        ticketId: z.number(),
-        labelTypeIds: z.array(z.number()),
+        ticketId: z.string(),
+        labelTypeIds: z.array(z.string()),
       })
     )
     .mutation(async ({ ctx, input }) => {
@@ -33,7 +33,7 @@ export const labelRouter = createTRPCRouter({
         where: inArray(schema.labelTypes.id, input.labelTypeIds),
       });
 
-      const missingLabelTypes: number[] = [];
+      const missingLabelTypes: string[] = [];
       for (const labelTypeId of input.labelTypeIds) {
         if (!labelTypes.find((labelType) => labelType.id === labelTypeId)) {
           missingLabelTypes.push(labelTypeId);
@@ -60,7 +60,7 @@ export const labelRouter = createTRPCRouter({
           .update(schema.tickets)
           .set({
             updatedAt: new Date(),
-            updatedById: ctx.session.user.contactId ?? 0,
+            updatedById: ctx.session.user.contactId ?? '',
           })
           .where(eq(schema.tickets.id, ticket.id))
           .returning({
@@ -81,7 +81,7 @@ export const labelRouter = createTRPCRouter({
             labelTypeIds: input.labelTypeIds,
           } satisfies TicketLabelAdded,
           createdAt: updatedTicket.updatedAt ?? new Date(),
-          createdById: ctx.session.user.contactId ?? 0,
+          createdById: ctx.session.user.contactId ?? '',
         });
       });
     }),
@@ -89,8 +89,8 @@ export const labelRouter = createTRPCRouter({
   removeLabels: protectedProcedure
     .input(
       z.object({
-        ticketId: z.number(),
-        labelTypeIds: z.array(z.number()),
+        ticketId: z.string(),
+        labelTypeIds: z.array(z.string()),
       })
     )
     .mutation(async ({ ctx, input }) => {
@@ -108,7 +108,7 @@ export const labelRouter = createTRPCRouter({
         where: inArray(schema.labelTypes.id, input.labelTypeIds),
       });
 
-      const missingLabelTypes: number[] = [];
+      const missingLabelTypes: string[] = [];
       for (const labelTypeId of input.labelTypeIds) {
         if (!labelTypes.find((labelType) => labelType.id === labelTypeId)) {
           missingLabelTypes.push(labelTypeId);
@@ -135,7 +135,7 @@ export const labelRouter = createTRPCRouter({
           .update(schema.tickets)
           .set({
             updatedAt: new Date(),
-            updatedById: ctx.session.user.contactId ?? 0,
+            updatedById: ctx.session.user.contactId ?? '',
           })
           .where(eq(schema.tickets.id, ticket.id))
           .returning({
@@ -156,7 +156,7 @@ export const labelRouter = createTRPCRouter({
             labelTypeIds: input.labelTypeIds,
           } satisfies TicketLabelRemoved,
           createdAt: updatedTicket.updatedAt ?? new Date(),
-          createdById: ctx.session.user.contactId ?? 0,
+          createdById: ctx.session.user.contactId ?? '',
         });
       });
     }),

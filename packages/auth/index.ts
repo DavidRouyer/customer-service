@@ -13,12 +13,12 @@ declare module 'next-auth' {
   interface Session {
     user: {
       id: string;
-      contactId?: number;
+      contactId?: string;
     } & DefaultSession['user'];
   }
   // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
   interface User {
-    contactId?: number;
+    contactId?: string;
   }
 }
 

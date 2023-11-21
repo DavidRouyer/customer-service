@@ -1,6 +1,7 @@
 import { neonConfig } from '@neondatabase/serverless';
 import ws from 'ws';
 
+import { generateEntityId } from '@cs/lib/generate-entity-id';
 import {
   MessageContentType,
   MessageDirection,
@@ -20,6 +21,7 @@ async function main() {
   const botUser = await db
     .insert(schema.contacts)
     .values({
+      id: generateEntityId('', 'co'),
       name: 'Bot',
       email: 'bot@example.com',
     })
@@ -28,16 +30,19 @@ async function main() {
 
   await db.insert(schema.labelTypes).values([
     {
+      id: generateEntityId('', 'lt'),
       name: 'Bug report',
       icon: 'bug',
       createdById: botUser!.id,
     },
     {
+      id: generateEntityId('', 'lt'),
       name: 'Feature request',
       icon: 'lightbulb',
       createdById: botUser!.id,
     },
     {
+      id: generateEntityId('', 'lt'),
       name: 'General question',
       icon: 'help-circle',
       createdById: botUser!.id,
@@ -45,6 +50,7 @@ async function main() {
   ]);
 
   await db.insert(schema.contacts).values({
+    id: generateEntityId('', 'co'),
     name: 'Courtney Henry',
     email: 'courtney.henry@example.com',
     avatarUrl:
@@ -66,6 +72,7 @@ async function main() {
   const tom = await db
     .insert(schema.contacts)
     .values({
+      id: generateEntityId('', 'co'),
       name: 'Tom Cook',
       email: 'tom.cook@example.com',
       phone: '+12025550191',
@@ -95,6 +102,7 @@ async function main() {
   const jeff = await db
     .insert(schema.contacts)
     .values({
+      id: generateEntityId('', 'co'),
       name: 'Jeff Lacey',
       email: 'jeff.lacey@example.com',
       phone: '+12025550149',
@@ -110,6 +118,7 @@ async function main() {
   if (!jeff?.id) throw new Error('Could not create contact');
 
   await db.insert(schema.contacts).values({
+    id: generateEntityId('', 'co'),
     name: 'Lawrence Brooks',
     email: 'lawrence.brooks@example.com',
     avatarUrl:
@@ -119,6 +128,7 @@ async function main() {
   const jeffrey = await db
     .insert(schema.contacts)
     .values({
+      id: generateEntityId('', 'co'),
       name: 'Jeffrey Clark',
       email: 'jeffrey.clark@example.com',
       avatarUrl:
@@ -132,6 +142,7 @@ async function main() {
   const leslie = await db
     .insert(schema.contacts)
     .values({
+      id: generateEntityId('', 'co'),
       name: 'Leslie Alexandre',
       email: 'leslie.alexandre@example.com',
       avatarUrl:
@@ -148,6 +159,7 @@ async function main() {
   const leslieTicket = await db
     .insert(schema.tickets)
     .values({
+      id: generateEntityId('', 'ti'),
       status: TicketStatus.Open,
       priority: TicketPriority.Critical,
       createdAt: new Date('2023-05-04T20:54:41.389Z'),
@@ -160,6 +172,7 @@ async function main() {
   if (!leslieTicket?.id) throw new Error('Could not create ticket');
 
   await db.insert(schema.ticketActivities).values({
+    id: generateEntityId('', 'ta'),
     ticketId: leslieTicket.id,
     type: TicketActivityType.Created,
     createdAt: leslieTicket.createdAt,
@@ -167,6 +180,7 @@ async function main() {
   });
 
   await db.insert(schema.ticketActivities).values({
+    id: generateEntityId('', 'ta'),
     ticketId: leslieTicket.id,
     type: TicketActivityType.AssignmentAdded,
     extraInfo: { newAssignedToId: tom.id } satisfies TicketAssignmentAdded,
@@ -178,6 +192,7 @@ async function main() {
     .insert(schema.messages)
     .values([
       {
+        id: generateEntityId('', 'ms'),
         contentType: MessageContentType.TextPlain,
         content: "My order hasn't arrived yet.",
         createdAt: new Date('2023-05-04T20:54:41.389Z'),
@@ -187,6 +202,7 @@ async function main() {
         ticketId: leslieTicket.id,
       },
       {
+        id: generateEntityId('', 'ms'),
         contentType: MessageContentType.TextPlain,
         content:
           'We apologize for the inconvenience. Can you please provide your order number so we can investigate?',
@@ -202,6 +218,7 @@ async function main() {
   const leslieTicket2 = await db
     .insert(schema.tickets)
     .values({
+      id: generateEntityId('', 'ti'),
       status: TicketStatus.Open,
       priority: TicketPriority.Medium,
       createdAt: new Date('2023-05-06T11:23:45.389Z'),
@@ -214,6 +231,7 @@ async function main() {
   if (!leslieTicket2?.id) throw new Error('Could not create ticket');
 
   await db.insert(schema.ticketActivities).values({
+    id: generateEntityId('', 'ta'),
     ticketId: leslieTicket2.id,
     type: TicketActivityType.Created,
     createdAt: leslieTicket2.createdAt,
@@ -224,6 +242,7 @@ async function main() {
     .insert(schema.messages)
     .values([
       {
+        id: generateEntityId('', 'ms'),
         contentType: MessageContentType.TextPlain,
         content: 'can ya help me change a product of purchase?',
         createdAt: new Date('2023-05-06T11:23:45.389Z'),
@@ -233,6 +252,7 @@ async function main() {
         ticketId: leslieTicket2.id,
       },
       {
+        id: generateEntityId('', 'ms'),
         contentType: MessageContentType.TextPlain,
         content: 'Can you tell me which product you would like to change?',
         createdAt: new Date('2023-05-07T22:40Z'),
@@ -242,6 +262,7 @@ async function main() {
         ticketId: leslieTicket2.id,
       },
       {
+        id: generateEntityId('', 'ms'),
         contentType: MessageContentType.TextPlain,
         content: 'The socks, please',
         createdAt: new Date('2023-05-08T22:40Z'),
@@ -256,6 +277,7 @@ async function main() {
   const leslieTicket3 = await db
     .insert(schema.tickets)
     .values({
+      id: generateEntityId('', 'ti'),
       status: TicketStatus.Resolved,
       priority: TicketPriority.Medium,
       createdAt: new Date('2023-05-06T11:23:45.389Z'),
@@ -272,6 +294,7 @@ async function main() {
   if (!leslieTicket3?.id) throw new Error('Could not create ticket');
 
   await db.insert(schema.ticketActivities).values({
+    id: generateEntityId('', 'ta'),
     ticketId: leslieTicket3.id,
     type: TicketActivityType.Created,
     createdAt: leslieTicket3.createdAt,
@@ -279,6 +302,7 @@ async function main() {
   });
 
   await db.insert(schema.ticketActivities).values({
+    id: generateEntityId('', 'ta'),
     ticketId: leslieTicket3.id,
     type: TicketActivityType.Resolved,
     createdAt: leslieTicket3.resolvedAt ?? new Date(),
@@ -289,6 +313,7 @@ async function main() {
     .insert(schema.messages)
     .values([
       {
+        id: generateEntityId('', 'ms'),
         contentType: MessageContentType.TextPlain,
         content: 'problems with canceling purchase',
         createdAt: new Date('2023-05-06T11:23:45.389Z'),
@@ -303,6 +328,7 @@ async function main() {
   const michael = await db
     .insert(schema.contacts)
     .values({
+      id: generateEntityId('', 'co'),
       name: 'Michael Foster',
       email: 'michael.foster@example.com',
       avatarUrl:
@@ -316,6 +342,7 @@ async function main() {
   const michaelTicket = await db
     .insert(schema.tickets)
     .values({
+      id: generateEntityId('', 'ti'),
       status: TicketStatus.Open,
       priority: TicketPriority.Medium,
       createdAt: new Date('2023-03-03T14:02Z'),
@@ -327,6 +354,7 @@ async function main() {
   if (!michaelTicket?.id) throw new Error('Could not create ticket');
 
   await db.insert(schema.ticketActivities).values({
+    id: generateEntityId('', 'ta'),
     ticketId: michaelTicket.id,
     type: TicketActivityType.Created,
     createdAt: michaelTicket.createdAt,
@@ -337,6 +365,7 @@ async function main() {
     .insert(schema.messages)
     .values([
       {
+        id: generateEntityId('', 'ms'),
         contentType: MessageContentType.TextPlain,
         content: 'I received a damaged product.',
         createdAt: new Date('2023-03-03T14:02Z'),
@@ -346,6 +375,7 @@ async function main() {
         ticketId: michaelTicket.id,
       },
       {
+        id: generateEntityId('', 'ms'),
         contentType: MessageContentType.TextPlain,
         content:
           'We apologize for the inconvenience. Can you please provide a photo of the damaged product so we can assist you further?',
@@ -361,6 +391,7 @@ async function main() {
   const dries = await db
     .insert(schema.contacts)
     .values({
+      id: generateEntityId('', 'co'),
       name: 'Dries Vincent',
       email: 'dries.vincent@example.com',
       avatarUrl:
@@ -374,6 +405,7 @@ async function main() {
   const driesTicket = await db
     .insert(schema.tickets)
     .values({
+      id: generateEntityId('', 'ti'),
       status: TicketStatus.Open,
       priority: TicketPriority.Medium,
       createdAt: new Date('2023-03-03T13:23Z'),
@@ -385,6 +417,7 @@ async function main() {
   if (!driesTicket?.id) throw new Error('Could not create ticket');
 
   await db.insert(schema.ticketActivities).values({
+    id: generateEntityId('', 'ta'),
     ticketId: driesTicket.id,
     type: TicketActivityType.Created,
     createdAt: driesTicket.createdAt,
@@ -395,6 +428,7 @@ async function main() {
     .insert(schema.messages)
     .values([
       {
+        id: generateEntityId('', 'ms'),
         contentType: MessageContentType.TextPlain,
         content: 'I need to return an item.',
         createdAt: new Date('2023-03-03T13:23Z'),
@@ -404,6 +438,7 @@ async function main() {
         ticketId: driesTicket.id,
       },
       {
+        id: generateEntityId('', 'ms'),
         contentType: MessageContentType.TextPlain,
         content:
           'Certainly. Please provide your order number and reason for return, and we will provide you with instructions on how to proceed.',
@@ -419,6 +454,7 @@ async function main() {
   const lindsay = await db
     .insert(schema.contacts)
     .values({
+      id: generateEntityId('', 'co'),
       name: 'Lindsay Walton',
       email: 'lindsay.walton@example.com',
       phone: '+441632960050',
@@ -435,6 +471,7 @@ async function main() {
   const lindsayTicket = await db
     .insert(schema.tickets)
     .values({
+      id: generateEntityId('', 'ti'),
       status: TicketStatus.Open,
       priority: TicketPriority.Medium,
       createdAt: new Date('2023-03-02T21:13Z'),
@@ -449,6 +486,7 @@ async function main() {
     .insert(schema.messages)
     .values([
       {
+        id: generateEntityId('', 'ms'),
         contentType: MessageContentType.TextPlain,
         content: 'I want to change my shipping address.',
         createdAt: new Date('2023-03-02T21:13Z'),
@@ -458,6 +496,7 @@ async function main() {
         ticketId: lindsayTicket.id,
       },
       {
+        id: generateEntityId('', 'ms'),
         contentType: MessageContentType.TextPlain,
         content:
           "No problem. Can you please provide your order number and the new shipping address you'd like to use?",
@@ -471,6 +510,7 @@ async function main() {
     .returning({ id: schema.tickets.id });
 
   await db.insert(schema.ticketActivities).values({
+    id: generateEntityId('', 'ta'),
     ticketId: lindsayTicket.id,
     type: TicketActivityType.Created,
     createdAt: lindsayTicket.createdAt,

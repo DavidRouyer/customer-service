@@ -44,7 +44,7 @@ export const ticketRouter = createTRPCRouter({
             TicketFilter.Unassigned,
             TicketFilter.Mentions,
           ])
-          .or(z.number()),
+          .or(z.string()),
         status: z.enum([TicketStatus.Open, TicketStatus.Resolved]),
         orderBy: z.enum(['newest', 'oldest']),
         cursor: z.string().nullish(),
@@ -74,7 +74,7 @@ export const ticketRouter = createTRPCRouter({
                   all: undefined,
                   me: eq(
                     schema.tickets.assignedToId,
-                    ctx.session.user.contactId ?? 0
+                    ctx.session.user.contactId ?? ''
                   ),
                   unassigned: isNull(schema.tickets.assignedToId),
                   mentions: exists(
@@ -87,7 +87,7 @@ export const ticketRouter = createTRPCRouter({
                         and(
                           eq(
                             schema.contactsToTicketComments.contactId,
-                            ctx.session.user.contactId ?? 0
+                            ctx.session.user.contactId ?? ''
                           ),
                           eq(
                             schema.contactsToTicketComments.ticketId,
@@ -117,7 +117,7 @@ export const ticketRouter = createTRPCRouter({
     }),
 
   conversation: protectedProcedure
-    .input(z.object({ ticketId: z.number() }))
+    .input(z.object({ ticketId: z.string() }))
     .query(async ({ ctx, input }) => {
       const messages = await ctx.db.query.messages.findMany({
         where: eq(schema.messages.ticketId, input.ticketId),
@@ -153,7 +153,7 @@ export const ticketRouter = createTRPCRouter({
     const contacts = await ctx.db.query.contacts.findMany({
       where: and(
         isNotNull(schema.contacts.userId),
-        ne(schema.contacts.id, ctx.session.user.contactId ?? 0)
+        ne(schema.contacts.id, ctx.session.user.contactId ?? '')
       ),
     });
 
@@ -212,7 +212,7 @@ export const ticketRouter = createTRPCRouter({
   }),
 
   byId: protectedProcedure
-    .input(z.object({ id: z.number() }))
+    .input(z.object({ id: z.string() }))
     .query(async ({ ctx, input }) => {
       const ticket = await ctx.db.query.tickets.findFirst({
         where: eq(schema.tickets.id, input.id),
@@ -229,7 +229,7 @@ export const ticketRouter = createTRPCRouter({
     }),
 
   byContactId: protectedProcedure
-    .input(z.object({ contactId: z.number(), excludeId: z.number() }))
+    .input(z.object({ contactId: z.string(), excludeId: z.string() }))
     .query(({ ctx, input }) => {
       return ctx.db.query.tickets.findMany({
         orderBy: desc(schema.tickets.createdAt),
@@ -241,7 +241,7 @@ export const ticketRouter = createTRPCRouter({
     }),
 
   addAssignment: protectedProcedure
-    .input(z.object({ id: z.number(), contactId: z.number() }))
+    .input(z.object({ id: z.string(), contactId: z.string() }))
     .mutation(async ({ ctx, input }) => {
       const ticket = await ctx.db.query.tickets.findFirst({
         where: eq(schema.tickets.id, input.id),
@@ -265,7 +265,7 @@ export const ticketRouter = createTRPCRouter({
           .set({
             assignedToId: input.contactId,
             updatedAt: new Date(),
-            updatedById: ctx.session.user.contactId ?? 0,
+            updatedById: ctx.session.user.contactId ?? '',
           })
           .where(eq(schema.tickets.id, input.id))
           .returning({
@@ -286,13 +286,13 @@ export const ticketRouter = createTRPCRouter({
             newAssignedToId: input.contactId,
           } satisfies TicketAssignmentAdded,
           createdAt: updatedTicket.updatedAt ?? new Date(),
-          createdById: ctx.session.user.contactId ?? 0,
+          createdById: ctx.session.user.contactId ?? '',
         });
       });
     }),
 
   changeAssignment: protectedProcedure
-    .input(z.object({ id: z.number(), contactId: z.number() }))
+    .input(z.object({ id: z.string(), contactId: z.string() }))
     .mutation(async ({ ctx, input }) => {
       const ticket = await ctx.db.query.tickets.findFirst({
         where: eq(schema.tickets.id, input.id),
@@ -322,7 +322,7 @@ export const ticketRouter = createTRPCRouter({
           .set({
             assignedToId: input.contactId,
             updatedAt: new Date(),
-            updatedById: ctx.session.user.contactId ?? 0,
+            updatedById: ctx.session.user.contactId ?? '',
           })
           .where(eq(schema.tickets.id, input.id))
           .returning({
@@ -340,17 +340,17 @@ export const ticketRouter = createTRPCRouter({
           ticketId: input.id,
           type: TicketActivityType.AssignmentChanged,
           extraInfo: {
-            oldAssignedToId: ticket.assignedToId ?? 0,
+            oldAssignedToId: ticket.assignedToId ?? '',
             newAssignedToId: input.contactId,
           } satisfies TicketAssignmentChanged,
           createdAt: updatedTicket.updatedAt ?? new Date(),
-          createdById: ctx.session.user.contactId ?? 0,
+          createdById: ctx.session.user.contactId ?? '',
         });
       });
     }),
 
   removeAssignment: protectedProcedure
-    .input(z.object({ id: z.number() }))
+    .input(z.object({ id: z.string() }))
     .mutation(async ({ ctx, input }) => {
       const ticket = await ctx.db.query.tickets.findFirst({
         where: eq(schema.tickets.id, input.id),
@@ -374,7 +374,7 @@ export const ticketRouter = createTRPCRouter({
           .set({
             assignedToId: null,
             updatedAt: new Date(),
-            updatedById: ctx.session.user.contactId ?? 0,
+            updatedById: ctx.session.user.contactId ?? '',
           })
           .where(eq(schema.tickets.id, input.id))
           .returning({
@@ -392,10 +392,10 @@ export const ticketRouter = createTRPCRouter({
           ticketId: input.id,
           type: TicketActivityType.AssignmentRemoved,
           extraInfo: {
-            oldAssignedToId: ticket.assignedToId ?? 0,
+            oldAssignedToId: ticket.assignedToId ?? '',
           } satisfies TicketAssignmentRemoved,
           createdAt: updatedTicket.updatedAt ?? new Date(),
-          createdById: ctx.session.user.contactId ?? 0,
+          createdById: ctx.session.user.contactId ?? '',
         });
       });
     }),
@@ -403,7 +403,7 @@ export const ticketRouter = createTRPCRouter({
   changePriority: protectedProcedure
     .input(
       z.object({
-        id: z.number(),
+        id: z.string(),
         priority: z.enum([
           TicketPriority.Low,
           TicketPriority.Medium,
@@ -429,7 +429,7 @@ export const ticketRouter = createTRPCRouter({
           .set({
             priority: input.priority,
             updatedAt: new Date(),
-            updatedById: ctx.session.user.contactId ?? 0,
+            updatedById: ctx.session.user.contactId ?? '',
           })
           .where(eq(schema.tickets.id, input.id))
           .returning({
@@ -451,13 +451,13 @@ export const ticketRouter = createTRPCRouter({
             newPriority: input.priority,
           } satisfies TicketPriorityChanged,
           createdAt: updatedTicket.updatedAt ?? new Date(),
-          createdById: ctx.session.user.contactId ?? 0,
+          createdById: ctx.session.user.contactId ?? '',
         });
       });
     }),
 
   resolve: protectedProcedure
-    .input(z.object({ id: z.number() }))
+    .input(z.object({ id: z.string() }))
     .mutation(async ({ ctx, input }) => {
       const ticket = await ctx.db.query.tickets.findFirst({
         where: eq(schema.tickets.id, input.id),
@@ -482,7 +482,7 @@ export const ticketRouter = createTRPCRouter({
             status: TicketStatus.Resolved,
             resolvedAt: new Date(),
             updatedAt: new Date(),
-            updatedById: ctx.session.user.contactId ?? 0,
+            updatedById: ctx.session.user.contactId ?? '',
           })
           .where(eq(schema.tickets.id, input.id))
           .returning({
@@ -500,13 +500,13 @@ export const ticketRouter = createTRPCRouter({
           ticketId: input.id,
           type: TicketActivityType.Resolved,
           createdAt: updatedTicket.updatedAt ?? new Date(),
-          createdById: ctx.session.user.contactId ?? 0,
+          createdById: ctx.session.user.contactId ?? '',
         });
       });
     }),
 
   reopen: protectedProcedure
-    .input(z.object({ id: z.number() }))
+    .input(z.object({ id: z.string() }))
     .mutation(async ({ ctx, input }) => {
       const ticket = await ctx.db.query.tickets.findFirst({
         where: eq(schema.tickets.id, input.id),
@@ -531,7 +531,7 @@ export const ticketRouter = createTRPCRouter({
             status: TicketStatus.Open,
             resolvedAt: null,
             updatedAt: new Date(),
-            updatedById: ctx.session.user.contactId ?? 0,
+            updatedById: ctx.session.user.contactId ?? '',
           })
           .where(eq(schema.tickets.id, input.id))
           .returning({
@@ -549,7 +549,7 @@ export const ticketRouter = createTRPCRouter({
           ticketId: input.id,
           type: TicketActivityType.Reopened,
           createdAt: updatedTicket.updatedAt ?? new Date(),
-          createdById: ctx.session.user.contactId ?? 0,
+          createdById: ctx.session.user.contactId ?? '',
         });
       });
     }),
@@ -566,7 +566,7 @@ export const ticketRouter = createTRPCRouter({
           TicketPriority.High,
           TicketPriority.Critical,
         ]),
-        createdById: z.number(),
+        createdById: z.string(),
       })
     )
     .mutation(async ({ ctx, input }) => {

@@ -1,6 +1,7 @@
 import { relations } from 'drizzle-orm';
-import { integer, pgEnum, serial, timestamp } from 'drizzle-orm/pg-core';
+import { pgEnum, timestamp, varchar } from 'drizzle-orm/pg-core';
 
+import { generateEntityId } from '@cs/lib/generate-entity-id';
 import { TicketPriority, TicketStatus } from '@cs/lib/tickets';
 
 import { pgTable } from './_table';
@@ -9,38 +10,38 @@ import { contactsToTicketComments } from './contactsToTicketComments';
 import { labels } from './label';
 import { messages } from './message';
 
-export const ticketStatus = pgEnum('TicketStatus', [
+export const ticketStatus = pgEnum('ticketStatus', [
   TicketStatus.Open,
   TicketStatus.Resolved,
 ]);
 
-export const ticketPriority = pgEnum('TicketPriority', [
+export const ticketPriority = pgEnum('ticketPriority', [
   TicketPriority.Critical,
   TicketPriority.High,
   TicketPriority.Medium,
   TicketPriority.Low,
 ]);
 
-export const tickets = pgTable('Ticket', {
-  id: serial('id').primaryKey().notNull(),
+export const tickets = pgTable('ticket', {
+  id: varchar('id').primaryKey().notNull().default(generateEntityId('', 'ti')),
   resolvedAt: timestamp('resolvedAt', { precision: 3, mode: 'date' }),
   status: ticketStatus('status').notNull(),
   priority: ticketPriority('priority').notNull(),
-  assignedToId: integer('assignedToId').references(() => contacts.id, {
+  assignedToId: varchar('assignedToId').references(() => contacts.id, {
     onDelete: 'restrict',
     onUpdate: 'cascade',
   }),
   createdAt: timestamp('createdAt', { precision: 3, mode: 'date' })
     .defaultNow()
     .notNull(),
-  createdById: integer('createdById')
+  createdById: varchar('createdById')
     .notNull()
     .references(() => contacts.id, {
       onDelete: 'restrict',
       onUpdate: 'cascade',
     }),
   updatedAt: timestamp('updatedAt', { precision: 3, mode: 'date' }),
-  updatedById: integer('updatedById').references(() => contacts.id, {
+  updatedById: varchar('updatedById').references(() => contacts.id, {
     onDelete: 'restrict',
     onUpdate: 'cascade',
   }),

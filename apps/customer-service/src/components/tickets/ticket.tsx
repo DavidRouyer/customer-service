@@ -8,7 +8,7 @@ import { TicketHeader } from '~/components/tickets/ticket-header';
 import { api } from '~/lib/api';
 
 export const Ticket: FC<{
-  ticketId: number;
+  ticketId: string;
 }> = ({ ticketId }) => {
   const [ticketData] = api.ticket.byId.useSuspenseQuery({ id: ticketId });
 

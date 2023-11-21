@@ -24,7 +24,7 @@ import { cn } from '~/lib/utils';
 
 type TicketAssignmentComboboxProps = {
   assignedTo?: NonNullable<RouterOutputs['ticket']['byId']>['assignedTo'];
-  ticketId: number;
+  ticketId: string;
 };
 
 export const TicketAssignmentCombobox: FC<TicketAssignmentComboboxProps> = ({

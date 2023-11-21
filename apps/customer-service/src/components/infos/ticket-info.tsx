@@ -7,7 +7,7 @@ import { TicketPriorityDropdowm } from '~/components/tickets/ticket-priority-dro
 import { TicketStatusDropdowm } from '~/components/tickets/ticket-status-dropdown';
 import { api } from '~/lib/api';
 
-export const TicketInfo: FC<{ ticketId: number }> = ({ ticketId }) => {
+export const TicketInfo: FC<{ ticketId: string }> = ({ ticketId }) => {
   const { data: ticketData } = api.ticket.byId.useQuery({
     id: ticketId,
   });

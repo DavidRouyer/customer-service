@@ -1,12 +1,14 @@
 import { relations } from 'drizzle-orm';
-import { serial, text, timestamp } from 'drizzle-orm/pg-core';
+import { text, timestamp, varchar } from 'drizzle-orm/pg-core';
+
+import { generateEntityId } from '@cs/lib/generate-entity-id';
 
 import { pgTable } from './_table';
 import { users } from './auth';
 import { tickets } from './ticket';
 
-export const contacts = pgTable('Contact', {
-  id: serial('id').primaryKey().notNull(),
+export const contacts = pgTable('contact', {
+  id: varchar('id').primaryKey().notNull().default(generateEntityId('', 'co')),
   createdAt: timestamp('createdAt', { precision: 3, mode: 'date' })
     .defaultNow()
     .notNull(),

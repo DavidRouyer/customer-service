@@ -10,7 +10,7 @@ import { createTRPCRouter, protectedProcedure } from '../trpc';
 
 export const ticketCommentRouter = createTRPCRouter({
   byTicketId: protectedProcedure
-    .input(z.object({ ticketId: z.number() }))
+    .input(z.object({ ticketId: z.string() }))
     .query(async ({ ctx, input }) => {
       return ctx.db.query.ticketComments.findMany({
         orderBy: asc(schema.ticketComments.createdAt),
@@ -25,8 +25,8 @@ export const ticketCommentRouter = createTRPCRouter({
         .object({
           content: z.string().min(1),
           createdAt: z.date(),
-          createdById: z.number(),
-          ticketId: z.number(),
+          createdById: z.string(),
+          ticketId: z.string(),
         })
         .refine(
           (v) => {

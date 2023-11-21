@@ -40,7 +40,7 @@ const getConversation = (messages: RouterOutputs['ticket']['conversation']) => {
   }, {});
 };
 
-export const MessageList: FC<{ ticketId: number }> = ({ ticketId }) => {
+export const MessageList: FC<{ ticketId: string }> = ({ ticketId }) => {
   const { data: messagesData } = api.ticket.conversation.useQuery(
     {
       ticketId: ticketId,
