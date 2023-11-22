@@ -28,7 +28,7 @@
     "eslint": "^8.54.0",
     "lexical": "^0.12.4",
     "prettier": "^3.1.0",
-    "tsx": "^4.2.0",
+    "tsx": "^4.2.1",
     "typescript": "^5.3.2"
   },
   "eslintConfig": {
