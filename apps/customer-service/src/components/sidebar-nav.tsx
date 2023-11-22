@@ -4,16 +4,14 @@ import { FC, Suspense, useState } from 'react';
 import { AlignJustify } from 'lucide-react';
 import { FormattedMessage } from 'react-intl';
 
-import { CommandMenu } from '~/components/command-menu/command-menu';
+import { DashboardCommandMenu } from '~/components/dashboard-command-menu';
 import { Logo } from '~/components/logo';
 import { InboxList } from '~/components/navbar/inbox-list';
 import { TeamMemberList } from '~/components/navbar/team-member-list';
 import { Sheet, SheetContent } from '~/components/ui/sheet';
 import { UserNav } from '~/components/user-nav';
 
-export const LayoutWithSidebar: FC<{
-  children: React.ReactNode;
-}> = ({ children }: { children: React.ReactNode }) => {
+export const SidebarNav: FC = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const navigationLinks = [
@@ -43,8 +41,8 @@ export const LayoutWithSidebar: FC<{
   ];
 
   return (
-    <div>
-      <CommandMenu />
+    <>
+      <DashboardCommandMenu />
       <Sheet open={sidebarOpen} onOpenChange={(open) => setSidebarOpen(open)}>
         <SheetContent position="left" size="content">
           <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-background px-6 pb-2">
@@ -62,7 +60,6 @@ export const LayoutWithSidebar: FC<{
         </SheetContent>
       </Sheet>
       <div className="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-60 lg:flex-col">
-        {/* Sidebar component, swap this element with another sidebar if you like */}
         <div className="flex grow flex-col gap-y-5 overflow-y-auto border-r bg-background px-6">
           <div className="flex h-16 shrink-0 items-center">
             <Logo />
@@ -99,10 +96,8 @@ export const LayoutWithSidebar: FC<{
           <UserNav />
         </Suspense>
       </div>
-
-      {children}
-    </div>
+    </>
   );
 };
 
-LayoutWithSidebar.displayName = 'LayoutWithSidebar';
+SidebarNav.displayName = 'SidebarNav';

@@ -3,7 +3,7 @@
 import { useRef } from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { handleSignOut } from '~/app/tickets/sign-out';
+import { handleSignOut } from '~/components/sign-out';
 import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/avatar';
 import { Button } from '~/components/ui/button';
 import {
@@ -18,7 +18,11 @@ import {
 import { api } from '~/lib/api';
 import { getInitials } from '~/lib/string';
 
-export function UserNav({ showLabel = false }: { showLabel?: boolean }) {
+type UserNavProps = {
+  showLabel?: boolean;
+};
+
+export function UserNav({ showLabel = false }: UserNavProps) {
   const [sessionData] = api.auth.getSession.useSuspenseQuery();
   const formRef = useRef<HTMLFormElement>(null);
 

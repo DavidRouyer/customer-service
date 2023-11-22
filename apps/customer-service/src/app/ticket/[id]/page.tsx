@@ -1,24 +1,18 @@
 import { Suspense } from 'react';
-import { redirect } from 'next/navigation';
+import { notFound } from 'next/navigation';
 import { Loader2 } from 'lucide-react';
-
-import { auth } from '@cs/auth';
 
 import { InfoPanel } from '~/components/infos/info-panel';
 import { Ticket } from '~/components/tickets/ticket';
 
-export default async function TicketPage({
-  params: { id },
-}: {
-  params: { id: string };
-}) {
-  const session = await auth();
+type TicketPageProps = {
+  params: {
+    id: string;
+  };
+};
 
-  if (!session?.user) {
-    redirect('/');
-  }
-
-  if (!id) return null;
+export default async function TicketPage({ params: { id } }: TicketPageProps) {
+  if (!id) return notFound();
 
   return (
     <>

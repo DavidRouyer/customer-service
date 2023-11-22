@@ -4,13 +4,13 @@ import { auth } from '@cs/auth';
 
 import { SignIn } from '~/components/sign-in';
 
-export const runtime = 'edge';
+export const runtime = 'nodejs';
 
 export default async function HomePage() {
   const session = await auth();
 
   if (session) {
-    redirect('/tickets');
+    redirect('/dashboard');
   }
 
   return (

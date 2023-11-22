@@ -14,7 +14,7 @@ import {
   CommandList,
 } from '~/components/ui/command';
 
-export function CommandMenu() {
+export function TicketCommandMenu() {
   const { formatMessage } = useIntl();
 
   const [open, setOpen] = useState(false);
