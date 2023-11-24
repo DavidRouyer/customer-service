@@ -33,7 +33,7 @@
     "google-libphonenumber": "^3.2.33",
     "jotai": "^2.5.1",
     "lexical": "^0.12.4",
-    "lucide-react": "^0.292.0",
+    "lucide-react": "^0.293.0",
     "negotiator": "^0.6.3",
     "next": "^14.0.3",
     "next-themes": "^0.2.1",
