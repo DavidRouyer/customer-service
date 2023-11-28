@@ -25,24 +25,24 @@
     "@jridgewell/gen-mapping" "^0.3.0"
     "@jridgewell/trace-mapping" "^0.3.9"
 
-"@auth/core@0.18.3", "@auth/core@^0.18.3", "@auth/core@experimental":
-  version "0.18.3"
-  resolved "https://registry.yarnpkg.com/@auth/core/-/core-0.18.3.tgz#e85c2e8f3dbcee47ff7759d94a762781acedb505"
-  integrity sha512-YXQWxi3pKxngt+2vo3dq8+wDANlUH8nhQgX6EVdd3Enfe3vweBtHqzaWrtWzQnVb8wdGxdhxaoOlYroEBE+/yw==
+"@auth/core@0.18.4", "@auth/core@^0.18.4", "@auth/core@experimental":
+  version "0.18.4"
+  resolved "https://registry.yarnpkg.com/@auth/core/-/core-0.18.4.tgz#5c91f7835dc24329d5486a2939d766608a7aacb8"
+  integrity sha512-GsNhsP1xE/3FoNS3dVkPjqRljLNJ4iyL2OLv3klQGNvw3bMpROFcK4lqhx7+pPHiamnVaYt2vg1xbB+lsNaevg==
   dependencies:
     "@panva/hkdf" "^1.1.1"
-    cookie "0.5.0"
+    cookie "0.6.0"
     jose "^5.1.0"
     oauth4webapi "^2.3.0"
     preact "10.11.3"
     preact-render-to-string "5.2.3"
 
-"@auth/drizzle-adapter@^0.3.8":
-  version "0.3.8"
-  resolved "https://registry.yarnpkg.com/@auth/drizzle-adapter/-/drizzle-adapter-0.3.8.tgz#c5750184fc794c663d1fb62f1a742c05d217ce33"
-  integrity sha512-7x+XlUM9u3pphAinWUjsHTSS5EPBvH6bqhogPMFhD1JNIViFeJ/+dgHWBO2Ft0IY3Le1Fkpgo3pKlYEC4z7AZA==
+"@auth/drizzle-adapter@^0.3.9":
+  version "0.3.9"
+  resolved "https://registry.yarnpkg.com/@auth/drizzle-adapter/-/drizzle-adapter-0.3.9.tgz#bee02523446277906264602deb153b8fa656ba98"
+  integrity sha512-xDHYofXyxIvqkLqsrxnnRWpNLJVpvPw+2qlFuZxkMYs83+geYHQqMg0GBrB/pAoNx1+1hG1DjGQvCeSr52FPKg==
   dependencies:
-    "@auth/core" "0.18.3"
+    "@auth/core" "0.18.4"
 
 "@babel/code-frame@^7.10.4", "@babel/code-frame@^7.22.13":
   version "7.22.13"
@@ -2692,7 +2692,12 @@ convert-source-map@^2.0.0:
   resolved "https://registry.yarnpkg.com/convert-source-map/-/convert-source-map-2.0.0.tgz#4b560f649fc4e918dd0ab75cf4961e8bc882d82a"
   integrity sha512-Kvp459HrV2FEJ1CAsi1Ku+MY3kasH19TFykTz2xWmMeq6bk2NU3XXvfJ+Q61m0xktWwt+1HSYf3JZsTms3aRJg==
 
-cookie@0.5.0, cookie@^0.5.0:
+cookie@0.6.0:
+  version "0.6.0"
+  resolved "https://registry.yarnpkg.com/cookie/-/cookie-0.6.0.tgz#2798b04b071b0ecbff0dbb62a505a8efa4e19051"
+  integrity sha512-U71cyTamuh1CRNCfpGY6to28lxvNwPG4Guz/EVjgf3Jmzv0vlDp1atT9eS5dDjMYHucpHbWns6Lwf3BKz6svdw==
+
+cookie@^0.5.0:
   version "0.5.0"
   resolved "https://registry.yarnpkg.com/cookie/-/cookie-0.5.0.tgz#d1f5d71adec6558c58f389987c366aa47e994f8b"
   integrity sha512-YZ3GUyn/o8gfKJlnlX7g7xq4gyO6OSuhGPKaaGssGB2qgDUS0gPgtTvoyZLTt9Ab6dC4hfc9dV5arkvc/OCmrw==
