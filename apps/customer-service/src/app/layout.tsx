@@ -31,7 +31,7 @@ export default async function RootLayout({
 
   return (
     <html lang={intl.locale} className="h-full" suppressHydrationWarning>
-      <body className={['font-sans', 'h-full', 'flex'].join(' ')}>
+      <body className={['font-sans', 'h-full'].join(' ')}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <ServerIntlProvider
             intl={{ messages: intl.messages, locale: intl.locale }}
