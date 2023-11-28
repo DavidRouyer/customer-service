@@ -25,7 +25,7 @@
     "@jridgewell/gen-mapping" "^0.3.0"
     "@jridgewell/trace-mapping" "^0.3.9"
 
-"@auth/core@0.18.4", "@auth/core@^0.18.4", "@auth/core@experimental":
+"@auth/core@0.18.4", "@auth/core@^0.18.4":
   version "0.18.4"
   resolved "https://registry.yarnpkg.com/@auth/core/-/core-0.18.4.tgz#5c91f7835dc24329d5486a2939d766608a7aacb8"
   integrity sha512-GsNhsP1xE/3FoNS3dVkPjqRljLNJ4iyL2OLv3klQGNvw3bMpROFcK4lqhx7+pPHiamnVaYt2vg1xbB+lsNaevg==
@@ -4735,12 +4735,12 @@ negotiator@^0.6.3:
   resolved "https://registry.yarnpkg.com/negotiator/-/negotiator-0.6.3.tgz#58e323a72fedc0d6f9cd4d31fe49f51479590ccd"
   integrity sha512-+EUsqGPLsM+j/zdChZjsnX51g4XrHFOIXwfnCVPGlQk/k5giakcKsuxCObBRu6DSm9opw/O6slWbJdghQM4bBg==
 
-next-auth@^5.0.0-beta.3:
-  version "5.0.0-beta.3"
-  resolved "https://registry.yarnpkg.com/next-auth/-/next-auth-5.0.0-beta.3.tgz#cadf30a70434765be07a9e72a995ac6af1480143"
-  integrity sha512-WOKhATBFGeONV+29HzFmspNmL7NXxrsCWLfaDKmAd/4DD1nqXE0BzNFH8t3SJBx7PUDMnB6F7xB76LM/AaV1MQ==
+next-auth@^5.0.0-beta.4:
+  version "5.0.0-beta.4"
+  resolved "https://registry.yarnpkg.com/next-auth/-/next-auth-5.0.0-beta.4.tgz#3be1ca3a89626e993e04bfc5129a8f8e0afb161b"
+  integrity sha512-vgocjvwPA8gxd/zrIP/vr9lJ/HeNe+C56lPP1D3sdyenHt8KncQV6ro7q0xCsDp1fcOKx7WAWVZH5o8aMxDzgw==
   dependencies:
-    "@auth/core" experimental
+    "@auth/core" "0.18.4"
 
 next-themes@^0.2.1:
   version "0.2.1"
