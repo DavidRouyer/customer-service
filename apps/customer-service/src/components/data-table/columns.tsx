@@ -1,14 +1,28 @@
 'use client';
 
 import { ColumnDef } from '@tanstack/react-table';
+import { Plus } from 'lucide-react';
 
+import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/avatar';
 import { Badge } from '~/components/ui/badge';
 import { Checkbox } from '~/components/ui/checkbox';
-import { labels, priorities, statuses } from './data';
-import { DataTableColumnHeader } from './data-table-column-header';
-import { Task } from './schema';
+import { getInitials } from '~/lib/string';
+import { Contact } from '~/types/Contact';
+import { priorities, statuses } from './data';
 
-export const columns: ColumnDef<Task>[] = [
+export type TicketData = {
+  id: string;
+  title: string;
+  status: string;
+  labels: {
+    ticketId: string;
+    labelTypeId: string;
+  }[];
+  priority: string;
+  assignedTo: Contact | null;
+};
+
+export const columns: ColumnDef<TicketData>[] = [
   {
     id: 'select',
     header: ({ table }) => (
@@ -23,26 +37,25 @@ export const columns: ColumnDef<Task>[] = [
       />
     ),
     cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        //onCheckedChange={(value) => row.toggleSelected(!!value)}
-        onClick={(event) => {
-          //event.stopPropagation();
-          event.preventDefault();
-          row.toggleSelected(!row.getIsSelected());
-        }}
-        aria-label="Select row"
-        className="translate-y-[2px] select-none"
-      />
+      <div className="flex translate-y-[2px] p-2 align-middle">
+        <Checkbox
+          checked={row.getIsSelected()}
+          //onCheckedChange={(value) => row.toggleSelected(!!value)}
+          onClick={(event) => {
+            //event.stopPropagation();
+            event.preventDefault();
+            row.toggleSelected(!row.getIsSelected());
+          }}
+          aria-label="Select row"
+          className="translate-y-[2px] select-none"
+        />
+      </div>
     ),
     enableSorting: false,
     enableHiding: false,
   },
   {
     accessorKey: 'priority',
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Priority" />
-    ),
     cell: ({ row }) => {
       const priority = priorities.find(
         (priority) => priority.value === row.getValue('priority')
@@ -53,10 +66,12 @@ export const columns: ColumnDef<Task>[] = [
       }
 
       return (
-        <div className="flex items-center">
-          {priority.icon && (
-            <priority.icon className="h-4 w-4 text-muted-foreground" />
-          )}
+        <div className="flex p-2 align-middle">
+          <div className="flex items-center">
+            {priority.icon && (
+              <priority.icon className="h-4 w-4 text-muted-foreground" />
+            )}
+          </div>
         </div>
       );
     },
@@ -66,18 +81,16 @@ export const columns: ColumnDef<Task>[] = [
   },
   {
     accessorKey: 'id',
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Task" />
+    cell: ({ row }) => (
+      <div className="flex p-2 align-middle">
+        <div className="w-[120px]">{row.getValue('id')}</div>
+      </div>
     ),
-    cell: ({ row }) => <div className="w-[120px]">{row.getValue('id')}</div>,
     enableSorting: false,
     enableHiding: false,
   },
   {
     accessorKey: 'status',
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Status" />
-    ),
     cell: ({ row }) => {
       const status = statuses.find(
         (status) => status.value === row.getValue('status')
@@ -88,10 +101,12 @@ export const columns: ColumnDef<Task>[] = [
       }
 
       return (
-        <div className="flex items-center">
-          {status.icon && (
-            <status.icon className="h-4 w-4 text-muted-foreground" />
-          )}
+        <div className="flex p-2 align-middle">
+          <div className="flex items-center">
+            {status.icon && (
+              <status.icon className="h-4 w-4 text-muted-foreground" />
+            )}
+          </div>
         </div>
       );
     },
@@ -101,20 +116,58 @@ export const columns: ColumnDef<Task>[] = [
   },
   {
     accessorKey: 'title',
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Title" />
-    ),
     cell: ({ row }) => {
-      const label = labels.find((label) => label.value === row.original.label);
-
       return (
-        <div className="flex space-x-2">
-          {label && <Badge variant="outline">{label.label}</Badge>}
-          <span className="max-w-[500px] truncate font-medium">
-            {row.getValue('title')}
-          </span>
+        <div className="flex min-w-0 p-2 align-middle">
+          <div className="flex min-w-0 shrink">
+            <span className="truncate font-medium">
+              {row.getValue('title')}
+            </span>
+          </div>
         </div>
       );
     },
+  },
+  {
+    id: 'separator',
+    cell: () => <div className="flex min-w-0 flex-initial grow flex-col"></div>,
+  },
+  {
+    accessorKey: 'labels',
+    cell: ({ row }) => {
+      console.log(row.original.labels);
+      return (
+        <div className="flex flex-col">
+          {row.original.labels.map((label) => (
+            <Badge key={label.labelTypeId} variant="outline">
+              {label.labelTypeId}
+            </Badge>
+          ))}
+        </div>
+      );
+    },
+  },
+  {
+    accessorKey: 'assignee',
+    cell: ({ row }) => (
+      <div className="flex p-2 align-middle">
+        {row.original.assignedTo ? (
+          <div className="flex items-center gap-x-2">
+            <Avatar className="h-4 w-4">
+              <AvatarImage
+                src={row.original.assignedTo?.avatarUrl ?? undefined}
+              />
+              <AvatarFallback>
+                {getInitials(row.original.assignedTo?.name ?? '')}
+              </AvatarFallback>
+            </Avatar>
+          </div>
+        ) : (
+          <div className="flex items-center gap-x-2 text-xs">
+            <Plus className="h-4 w-4" />
+          </div>
+        )}
+      </div>
+    ),
   },
 ];

@@ -1,6 +1,7 @@
 'use client';
 
 import * as React from 'react';
+import { Fragment } from 'react';
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -20,7 +21,6 @@ import {
   Table,
   TableBody,
   TableCell,
-  TableHead,
   TableHeader,
   TableRow,
 } from '~/components/ui/table';
@@ -85,12 +85,12 @@ export function DataTable<TData, TValue>({
                   data-state={row.getIsSelected() && 'selected'}
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
+                    <Fragment key={cell.id}>
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext()
                       )}
-                    </TableCell>
+                    </Fragment>
                   ))}
                 </TableRow>
               ))

@@ -22,7 +22,8 @@ export default function DashboardPage() {
           title: ticket.title,
           status: ticket.status as string,
           priority: ticket.priority as string,
-          label: '',
+          labels: ticket.labels,
+          assignedTo: ticket.assignedTo,
         }));
       },
     }

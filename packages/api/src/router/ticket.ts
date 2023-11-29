@@ -106,6 +106,7 @@ export const ticketRouter = createTRPCRouter({
             limit: 1,
           },
           labels: true,
+          assignedTo: true,
         },
         limit: PAGE_SIZE,
       });

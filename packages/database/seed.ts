@@ -28,24 +28,45 @@ async function main() {
     .returning({ id: schema.contacts.id })
     .then((res) => res[0]);
 
-  await db.insert(schema.labelTypes).values({
-    id: generateEntityId('', 'lt'),
-    name: 'Bug report',
-    icon: 'bug',
-    createdById: botUser!.id,
-  });
-  await db.insert(schema.labelTypes).values({
-    id: generateEntityId('', 'lt'),
-    name: 'Feature request',
-    icon: 'lightbulb',
-    createdById: botUser!.id,
-  });
-  await db.insert(schema.labelTypes).values({
-    id: generateEntityId('', 'lt'),
-    name: 'General question',
-    icon: 'help-circle',
-    createdById: botUser!.id,
-  });
+  const bugReportLabelType = await db
+    .insert(schema.labelTypes)
+    .values({
+      id: generateEntityId('', 'lt'),
+      name: 'Bug report',
+      icon: 'bug',
+      createdById: botUser!.id,
+    })
+    .returning({ id: schema.labelTypes.id })
+    .then((res) => res[0]);
+
+  if (!bugReportLabelType?.id) throw new Error('Could not create label type');
+
+  const featureRequestLabelType = await db
+    .insert(schema.labelTypes)
+    .values({
+      id: generateEntityId('', 'lt'),
+      name: 'Feature request',
+      icon: 'lightbulb',
+      createdById: botUser!.id,
+    })
+    .returning({ id: schema.labelTypes.id })
+    .then((res) => res[0]);
+
+  if (!featureRequestLabelType?.id)
+    throw new Error('Could not create label type');
+
+  const questionLabelType = await db
+    .insert(schema.labelTypes)
+    .values({
+      id: generateEntityId('', 'lt'),
+      name: 'General question',
+      icon: 'help-circle',
+      createdById: botUser!.id,
+    })
+    .returning({ id: schema.labelTypes.id })
+    .then((res) => res[0]);
+
+  if (!questionLabelType?.id) throw new Error('Could not create label type');
 
   await db.insert(schema.contacts).values({
     id: generateEntityId('', 'co'),
@@ -170,6 +191,11 @@ async function main() {
 
   if (!leslieTicket?.id) throw new Error('Could not create ticket');
 
+  await db.insert(schema.labels).values({
+    ticketId: leslieTicket.id,
+    labelTypeId: bugReportLabelType.id,
+  });
+
   await db.insert(schema.ticketActivities).values({
     id: generateEntityId('', 'ta'),
     ticketId: leslieTicket.id,
@@ -224,6 +250,11 @@ async function main() {
     .then((res) => res[0]);
 
   if (!leslieTicket2?.id) throw new Error('Could not create ticket');
+
+  await db.insert(schema.labels).values({
+    ticketId: leslieTicket2.id,
+    labelTypeId: featureRequestLabelType.id,
+  });
 
   await db.insert(schema.ticketActivities).values({
     id: generateEntityId('', 'ta'),
@@ -284,6 +315,11 @@ async function main() {
 
   if (!leslieTicket3?.id) throw new Error('Could not create ticket');
 
+  await db.insert(schema.labels).values({
+    ticketId: leslieTicket3.id,
+    labelTypeId: bugReportLabelType.id,
+  });
+
   await db.insert(schema.ticketActivities).values({
     id: generateEntityId('', 'ta'),
     ticketId: leslieTicket3.id,
@@ -339,6 +375,11 @@ async function main() {
     .then((res) => res[0]);
 
   if (!michaelTicket?.id) throw new Error('Could not create ticket');
+
+  await db.insert(schema.labels).values({
+    ticketId: michaelTicket.id,
+    labelTypeId: bugReportLabelType.id,
+  });
 
   await db.insert(schema.ticketActivities).values({
     id: generateEntityId('', 'ta'),
@@ -460,6 +501,11 @@ async function main() {
     .then((res) => res[0]);
 
   if (!lindsayTicket?.id) throw new Error('Could not create ticket');
+
+  await db.insert(schema.labels).values({
+    ticketId: lindsayTicket.id,
+    labelTypeId: questionLabelType.id,
+  });
 
   await db.insert(schema.messages).values({
     id: generateEntityId('', 'ms'),
