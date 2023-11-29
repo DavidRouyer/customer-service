@@ -16,7 +16,7 @@
   "dependencies": {
     "@cs/lib": "*",
     "@neondatabase/serverless": "^0.6.0",
-    "drizzle-orm": "^0.29.0"
+    "drizzle-orm": "^0.29.1"
   },
   "devDependencies": {
     "@cs/eslint-config": "*",
