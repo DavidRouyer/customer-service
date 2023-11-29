@@ -73,7 +73,7 @@ export function DataTable<TData, TValue>({
         <Table>
           <TableHeader>
             <div className="w-full border-b transition-colors hover:bg-muted/50">
-              <div className="w-full p-2 align-middle">Todo</div>
+              <div className="w-full p-2 align-middle font-medium">Todo</div>
             </div>
           </TableHeader>
           <TableBody>
