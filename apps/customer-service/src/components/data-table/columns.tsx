@@ -33,11 +33,10 @@ export const columns: ColumnDef<TicketData>[] = [
         }
         onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
         aria-label="Select all"
-        className="translate-y-[2px]"
       />
     ),
     cell: ({ row }) => (
-      <div className="flex translate-y-[2px] p-2 align-middle">
+      <div className="flex p-2 align-middle">
         <Checkbox
           checked={row.getIsSelected()}
           //onCheckedChange={(value) => row.toggleSelected(!!value)}
@@ -47,7 +46,7 @@ export const columns: ColumnDef<TicketData>[] = [
             row.toggleSelected(!row.getIsSelected());
           }}
           aria-label="Select row"
-          className="translate-y-[2px] select-none"
+          className="select-none"
         />
       </div>
     ),
