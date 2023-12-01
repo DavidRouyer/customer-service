@@ -138,7 +138,7 @@ export const columns: ColumnDef<TicketData>[] = [
     accessorKey: 'labels',
     cell: ({ row }) => {
       return (
-        <div className="flex flex-col">
+        <div className="flex gap-2">
           {row.original.labels.map((label) => (
             <Badge key={label.labelType.id} variant="outline">
               {label.labelType.name}
