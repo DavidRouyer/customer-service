@@ -65,6 +65,7 @@ export const TicketLabelCombobox: FC<TicketLabelComboboxProps> = ({
             ...oldQueryData,
             labels: previousTicket?.labels?.concat(
               newLabels.labelTypeIds.map((labelTypeId) => ({
+                id: `${newLabels.ticketId}-${labelTypeId}`,
                 labelTypeId,
                 ticketId: newLabels.ticketId,
               }))
