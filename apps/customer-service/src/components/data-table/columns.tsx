@@ -15,8 +15,10 @@ export type TicketData = {
   title: string;
   status: string;
   labels: {
-    ticketId: string;
-    labelTypeId: string;
+    labelType: {
+      id: string;
+      name: string;
+    };
   }[];
   priority: string;
   assignedTo: Contact | null;
@@ -134,12 +136,11 @@ export const columns: ColumnDef<TicketData>[] = [
   {
     accessorKey: 'labels',
     cell: ({ row }) => {
-      console.log(row.original.labels);
       return (
         <div className="flex flex-col">
           {row.original.labels.map((label) => (
-            <Badge key={label.labelTypeId} variant="outline">
-              {label.labelTypeId}
+            <Badge key={label.labelType.id} variant="outline">
+              {label.labelType.name}
             </Badge>
           ))}
         </div>

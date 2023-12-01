@@ -4,7 +4,7 @@ import { FormattedMessage } from 'react-intl';
 
 import { TicketFilter, TicketStatus } from '@cs/lib/tickets';
 
-import { columns } from '~/components/data-table/columns';
+import { columns, TicketData } from '~/components/data-table/columns';
 import { DataTable } from '~/components/data-table/data-table';
 import { api } from '~/lib/api';
 
@@ -17,14 +17,22 @@ export default function DashboardPage() {
     },
     {
       select(data) {
-        return data.data.map((ticket) => ({
-          id: ticket.id,
-          title: ticket.title,
-          status: ticket.status as string,
-          priority: ticket.priority as string,
-          labels: ticket.labels,
-          assignedTo: ticket.assignedTo,
-        }));
+        return data.data.map(
+          (ticket) =>
+            ({
+              id: ticket.id,
+              title: ticket.title ?? '',
+              status: ticket.status as string,
+              priority: ticket.priority as string,
+              labels: ticket.labels.map((label) => ({
+                labelType: {
+                  id: label.labelType.id,
+                  name: label.labelType.name,
+                },
+              })),
+              assignedTo: ticket.assignedTo,
+            }) satisfies TicketData
+        );
       },
     }
   );

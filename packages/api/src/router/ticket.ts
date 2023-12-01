@@ -105,7 +105,11 @@ export const ticketRouter = createTRPCRouter({
             orderBy: desc(schema.messages.createdAt),
             limit: 1,
           },
-          labels: true,
+          labels: {
+            with: {
+              labelType: true,
+            }
+          },
           assignedTo: true,
         },
         limit: PAGE_SIZE,
