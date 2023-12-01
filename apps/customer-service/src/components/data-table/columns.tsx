@@ -15,6 +15,7 @@ export type TicketData = {
   title: string;
   status: string;
   labels: {
+    id: string;
     labelType: {
       id: string;
       name: string;

@@ -192,6 +192,7 @@ async function main() {
   if (!leslieTicket?.id) throw new Error('Could not create ticket');
 
   await db.insert(schema.labels).values({
+    id: generateEntityId('', 'lb'),
     ticketId: leslieTicket.id,
     labelTypeId: bugReportLabelType.id,
   });
@@ -252,6 +253,7 @@ async function main() {
   if (!leslieTicket2?.id) throw new Error('Could not create ticket');
 
   await db.insert(schema.labels).values({
+    id: generateEntityId('', 'lb'),
     ticketId: leslieTicket2.id,
     labelTypeId: featureRequestLabelType.id,
   });
@@ -316,6 +318,7 @@ async function main() {
   if (!leslieTicket3?.id) throw new Error('Could not create ticket');
 
   await db.insert(schema.labels).values({
+    id: generateEntityId('', 'lb'),
     ticketId: leslieTicket3.id,
     labelTypeId: bugReportLabelType.id,
   });
@@ -377,6 +380,7 @@ async function main() {
   if (!michaelTicket?.id) throw new Error('Could not create ticket');
 
   await db.insert(schema.labels).values({
+    id: generateEntityId('', 'lb'),
     ticketId: michaelTicket.id,
     labelTypeId: bugReportLabelType.id,
   });
@@ -503,6 +507,7 @@ async function main() {
   if (!lindsayTicket?.id) throw new Error('Could not create ticket');
 
   await db.insert(schema.labels).values({
+    id: generateEntityId('', 'lb'),
     ticketId: lindsayTicket.id,
     labelTypeId: questionLabelType.id,
   });

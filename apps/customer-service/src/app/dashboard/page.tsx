@@ -25,6 +25,7 @@ export default function DashboardPage() {
               status: ticket.status as string,
               priority: ticket.priority as string,
               labels: ticket.labels.map((label) => ({
+                id: label.id,
                 labelType: {
                   id: label.labelType.id,
                   name: label.labelType.name,

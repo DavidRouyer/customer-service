@@ -106,9 +106,12 @@ export const ticketRouter = createTRPCRouter({
             limit: 1,
           },
           labels: {
+            columns: {
+              id: true,
+            },
             with: {
               labelType: true,
-            }
+            },
           },
           assignedTo: true,
         },

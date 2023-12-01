@@ -1,13 +1,19 @@
 import { relations } from 'drizzle-orm';
-import { primaryKey, varchar } from 'drizzle-orm/pg-core';
+import { unique, varchar } from 'drizzle-orm/pg-core';
+
+import { generateEntityId } from '@cs/lib/generate-entity-id';
 
 import { pgTable } from './_table';
 import { labelTypes } from './labelType';
 import { tickets } from './ticket';
 
 export const labels = pgTable(
-  'labels',
+  'label',
   {
+    id: varchar('id')
+      .primaryKey()
+      .notNull()
+      .default(generateEntityId('', 'lb')),
     ticketId: varchar('ticketId')
       .notNull()
       .references(() => tickets.id, {
@@ -21,14 +27,9 @@ export const labels = pgTable(
         onUpdate: 'cascade',
       }),
   },
-  (table) => {
-    return {
-      pk: primaryKey({
-        name: 'label_pk',
-        columns: [table.ticketId, table.labelTypeId],
-      }),
-    };
-  }
+  (table) => ({
+    unique: unique().on(table.ticketId, table.labelTypeId),
+  })
 );
 
 export const labelsRelations = relations(labels, ({ one }) => ({
