@@ -27,7 +27,7 @@ export const TicketListContainer = () => {
   const orderBy =
     searchParams.get(ORDER_BY_QUERY_PARAM) === 'oldest' ? 'oldest' : 'newest';
   return (
-    <aside className="fixed inset-y-0 left-60 hidden w-96 flex-col border-r xl:flex">
+    <aside className="fixed inset-y-0 left-14 hidden w-96 flex-col border-r xl:flex">
       <TicketListHeader />
       <TicketListNavigation status={status} orderBy={orderBy} />
       <Suspense
