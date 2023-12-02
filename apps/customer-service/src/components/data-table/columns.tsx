@@ -51,6 +51,9 @@ export const columns: ColumnDef<TicketData>[] = [
         />
       </div>
     ),
+    meta: {
+      hideHeader: false,
+    },
   },
   {
     accessorKey: 'priority',
@@ -73,8 +76,8 @@ export const columns: ColumnDef<TicketData>[] = [
         </div>
       );
     },
-    filterFn: (row, id, value) => {
-      return value.includes(row.getValue(id));
+    meta: {
+      hideHeader: true,
     },
   },
   {
@@ -84,6 +87,9 @@ export const columns: ColumnDef<TicketData>[] = [
         <div className="w-[120px]">{row.getValue('id')}</div>
       </div>
     ),
+    meta: {
+      hideHeader: true,
+    },
   },
   {
     accessorKey: 'status',
@@ -106,8 +112,8 @@ export const columns: ColumnDef<TicketData>[] = [
         </div>
       );
     },
-    filterFn: (row, id, value) => {
-      return value.includes(row.getValue(id));
+    meta: {
+      hideHeader: true,
     },
   },
   {
@@ -123,10 +129,16 @@ export const columns: ColumnDef<TicketData>[] = [
         </div>
       );
     },
+    meta: {
+      hideHeader: true,
+    },
   },
   {
     id: 'separator',
     cell: () => <div className="flex min-w-0 flex-initial grow flex-col"></div>,
+    meta: {
+      hideHeader: true,
+    },
   },
   {
     accessorKey: 'labels',
@@ -140,6 +152,9 @@ export const columns: ColumnDef<TicketData>[] = [
           ))}
         </div>
       );
+    },
+    meta: {
+      hideHeader: true,
     },
   },
   {
@@ -164,5 +179,8 @@ export const columns: ColumnDef<TicketData>[] = [
         )}
       </div>
     ),
+    meta: {
+      hideHeader: true,
+    },
   },
 ];

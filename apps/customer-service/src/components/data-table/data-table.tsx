@@ -49,9 +49,29 @@ export function DataTable<TData, TValue>({
       <div className="rounded-md border">
         <Table>
           <TableHeader>
-            <div className="w-full border-b transition-colors hover:bg-muted/50">
-              <div className="w-full p-2 align-middle font-medium">Todo</div>
-            </div>
+            {table.getHeaderGroups().map((headerGroup) => (
+              <div
+                key={headerGroup.id}
+                className="flex w-full items-center border-b transition-colors hover:bg-muted/50"
+              >
+                {headerGroup.headers.map((header) =>
+                  header.column.columnDef.meta?.hideHeader ? null : (
+                    <div
+                      key={header.id}
+                      className="flex p-2 align-middle font-medium"
+                    >
+                      {header.isPlaceholder
+                        ? null
+                        : flexRender(
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )}
+                    </div>
+                  )
+                )}
+                <div>Todo</div>
+              </div>
+            ))}
           </TableHeader>
           <TableBody>
             {table.getRowModel().rows?.length ? (
