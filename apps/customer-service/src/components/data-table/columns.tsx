@@ -42,19 +42,15 @@ export const columns: ColumnDef<TicketData>[] = [
       <div className="flex p-2 align-middle">
         <Checkbox
           checked={row.getIsSelected()}
-          //onCheckedChange={(value) => row.toggleSelected(!!value)}
           onClick={(event) => {
-            //event.stopPropagation();
             event.preventDefault();
-            row.toggleSelected(!row.getIsSelected());
+            row.toggleSelected();
           }}
           aria-label="Select row"
           className="select-none"
         />
       </div>
     ),
-    enableSorting: false,
-    enableHiding: false,
   },
   {
     accessorKey: 'priority',
@@ -88,8 +84,6 @@ export const columns: ColumnDef<TicketData>[] = [
         <div className="w-[120px]">{row.getValue('id')}</div>
       </div>
     ),
-    enableSorting: false,
-    enableHiding: false,
   },
   {
     accessorKey: 'status',

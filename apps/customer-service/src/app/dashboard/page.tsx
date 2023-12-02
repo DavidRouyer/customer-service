@@ -8,12 +8,16 @@ import { columns, TicketData } from '~/components/data-table/columns';
 import { DataTable } from '~/components/data-table/data-table';
 import { api } from '~/lib/api';
 
-export default function DashboardPage() {
+export default function DashboardPage({
+  searchParams,
+}: {
+  searchParams: Record<string, string | string[] | undefined>;
+}) {
   const { data: tickets } = api.ticket.all.useQuery(
     {
       filter: TicketFilter.All,
       orderBy: 'newest',
-      status: TicketStatus.Open,
+      status: (searchParams.status as TicketStatus) ?? TicketStatus.Open,
     },
     {
       select(data) {
@@ -39,7 +43,7 @@ export default function DashboardPage() {
   );
   return (
     <main className="py-10 lg:pl-60">
-      <div className="px-4 sm:px-6 lg:px-8">
+      <div className="space-y-4 px-4 sm:px-6 lg:px-8">
         <h2 className="text-2xl font-bold tracking-tight">
           <FormattedMessage id="page.all_tickets" />
         </h2>
