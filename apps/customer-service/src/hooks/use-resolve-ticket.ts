@@ -20,7 +20,7 @@ export const useResolveTicket = () => {
         (oldQueryData) =>
           ({
             ...oldQueryData,
-            status: TicketStatus.Resolved,
+            status: TicketStatus.Done,
           }) as NonNullable<RouterOutputs['ticket']['byId']>
       );
 

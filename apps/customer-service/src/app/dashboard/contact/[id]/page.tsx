@@ -6,7 +6,7 @@ type DashboardContactPageProps = {
   };
 };
 
-export default async function DashboardContactPage({
+export default function DashboardContactPage({
   params: { id },
 }: DashboardContactPageProps) {
   if (!id) return notFound();

@@ -302,16 +302,16 @@ async function main() {
     .values({
       id: generateEntityId('', 'ti'),
       title: 'Problem with canceling purchase',
-      status: TicketStatus.Resolved,
+      status: TicketStatus.Done,
       priority: TicketPriority.Medium,
       createdAt: new Date('2023-05-06T11:23:45.389Z'),
       createdById: leslie.id,
-      resolvedAt: new Date('2023-06-12T06:10:45.389Z'),
+      statusChangedAt: new Date('2023-06-12T06:10:45.389Z'),
     })
     .returning({
       id: schema.tickets.id,
       createdAt: schema.tickets.createdAt,
-      resolvedAt: schema.tickets.resolvedAt,
+      statusChangedAt: schema.tickets.statusChangedAt,
     })
     .then((res) => res[0]);
 
@@ -335,7 +335,7 @@ async function main() {
     id: generateEntityId('', 'ta'),
     ticketId: leslieTicket3.id,
     type: TicketActivityType.Resolved,
-    createdAt: leslieTicket3.resolvedAt ?? new Date(),
+    createdAt: leslieTicket3.statusChangedAt ?? new Date(),
     createdById: leslie.id,
   });
 

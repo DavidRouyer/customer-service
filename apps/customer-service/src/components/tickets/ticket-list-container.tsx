@@ -21,8 +21,8 @@ export const TicketListContainer = () => {
   searchParams.get(FILTER_QUERY_PARAM);
   const filter = parseFilters(searchParams.get(FILTER_QUERY_PARAM));
   const status =
-    searchParams.get(STATUS_QUERY_PARAM) === 'resolved'
-      ? TicketStatus.Resolved
+    searchParams.get(STATUS_QUERY_PARAM) === 'done'
+      ? TicketStatus.Done
       : TicketStatus.Open;
   const orderBy =
     searchParams.get(ORDER_BY_QUERY_PARAM) === 'oldest' ? 'oldest' : 'newest';

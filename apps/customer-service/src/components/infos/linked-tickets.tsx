@@ -5,6 +5,8 @@ import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { FormattedDate, FormattedMessage } from 'react-intl';
 
+import { TicketStatus } from '@cs/lib/tickets';
+
 import { Badge } from '~/components/ui/badge';
 import { api } from '~/lib/api';
 
@@ -45,7 +47,7 @@ export const LinkedTickets: FC<LinkedTicketsProps> = ({
                 variant={
                   (
                     {
-                      Resolved: 'success',
+                      Done: 'success',
                       Open: 'neutral',
                     } as const
                   )[ticket.status]
@@ -54,9 +56,7 @@ export const LinkedTickets: FC<LinkedTicketsProps> = ({
               >
                 {
                   {
-                    Resolved: (
-                      <FormattedMessage id="ticket.statuses.resolved" />
-                    ),
+                    Done: <FormattedMessage id="ticket.statuses.done" />,
                     Open: <FormattedMessage id="ticket.statuses.open" />,
                   }[ticket.status]
                 }
@@ -64,7 +64,7 @@ export const LinkedTickets: FC<LinkedTicketsProps> = ({
             </div>
             <div className="mt-1 flex items-center gap-x-2 text-xs leading-5 text-muted-foreground">
               <p className="whitespace-nowrap">
-                {!ticket.resolvedAt ? (
+                {ticket.status === TicketStatus.Open ? (
                   <>
                     <FormattedMessage id="ticket.opened_on" />{' '}
                     <time dateTime={ticket.createdAt.toISOString()}>
@@ -79,14 +79,16 @@ export const LinkedTickets: FC<LinkedTicketsProps> = ({
                 ) : (
                   <>
                     <FormattedMessage id="ticket.resolved_on" />{' '}
-                    <time dateTime={ticket.resolvedAt.toISOString()}>
-                      <FormattedDate
-                        value={new Date(ticket.resolvedAt)}
-                        year="numeric"
-                        month="long"
-                        day="numeric"
-                      />
-                    </time>
+                    {ticket.statusChangedAt ? (
+                      <time dateTime={ticket.statusChangedAt.toISOString()}>
+                        <FormattedDate
+                          value={new Date(ticket.statusChangedAt)}
+                          year="numeric"
+                          month="long"
+                          day="numeric"
+                        />
+                      </time>
+                    ) : null}
                   </>
                 )}
               </p>

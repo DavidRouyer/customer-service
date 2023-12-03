@@ -40,7 +40,7 @@ export const TicketListNavigation: FC<{
           >
             {
               {
-                Resolved: <FormattedMessage id="ticket.statuses.resolved" />,
+                Done: <FormattedMessage id="ticket.statuses.done" />,
                 Open: <FormattedMessage id="ticket.statuses.open" />,
               }[status]
             }
@@ -68,12 +68,12 @@ export const TicketListNavigation: FC<{
                   `${pathname}?${getUpdatedSearchParams(
                     searchParams,
                     STATUS_QUERY_PARAM,
-                    'resolved'
+                    'done'
                   ).toString()}`
                 )
               }
             >
-              <FormattedMessage id="ticket.statuses.resolved" />
+              <FormattedMessage id="ticket.statuses.done" />
             </DropdownMenuItem>
           </DropdownMenuGroup>
         </DropdownMenuContent>

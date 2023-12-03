@@ -77,7 +77,7 @@
   "ticket.sort_by.newest": "Plus récent",
   "ticket.sort_by.oldest": "Plus ancien",
   "ticket.statuses.open": "Open",
-  "ticket.statuses.resolved": "Resolved",
+  "ticket.statuses.done": "Done",
   "tickets.all_tickets_processed": "All tickets processed!",
   "tickets.no_tickets": "No tickets",
   "try_again": "Try again",

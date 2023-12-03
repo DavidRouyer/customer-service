@@ -2,7 +2,11 @@ import { relations } from 'drizzle-orm';
 import { pgEnum, timestamp, varchar } from 'drizzle-orm/pg-core';
 
 import { generateEntityId } from '@cs/lib/generate-entity-id';
-import { TicketPriority, TicketStatus } from '@cs/lib/tickets';
+import {
+  TicketPriority,
+  TicketStatus,
+  TicketStatusDetail,
+} from '@cs/lib/tickets';
 
 import { pgTable } from './_table';
 import { contacts } from './contact';
@@ -12,7 +16,13 @@ import { messages } from './message';
 
 export const ticketStatus = pgEnum('ticketStatus', [
   TicketStatus.Open,
-  TicketStatus.Resolved,
+  TicketStatus.Done,
+]);
+
+export const ticketStatusDetail = pgEnum('ticketStatusDetail', [
+  TicketStatusDetail.Created,
+  TicketStatusDetail.NewReply,
+  TicketStatusDetail.Replied,
 ]);
 
 export const ticketPriority = pgEnum('ticketPriority', [
@@ -25,8 +35,16 @@ export const ticketPriority = pgEnum('ticketPriority', [
 export const tickets = pgTable('ticket', {
   id: varchar('id').primaryKey().notNull().default(generateEntityId('', 'ti')),
   title: varchar('title'),
-  resolvedAt: timestamp('resolvedAt', { precision: 3, mode: 'date' }),
   status: ticketStatus('status').notNull(),
+  statusDetail: ticketStatusDetail('statusDetail'),
+  statusChangedAt: timestamp('statusChangedAt', { precision: 3, mode: 'date' }),
+  statusChangedById: varchar('statusChangedById').references(
+    () => contacts.id,
+    {
+      onDelete: 'restrict',
+      onUpdate: 'cascade',
+    }
+  ),
   priority: ticketPriority('priority').notNull(),
   assignedToId: varchar('assignedToId').references(() => contacts.id, {
     onDelete: 'restrict',
@@ -51,6 +69,10 @@ export const tickets = pgTable('ticket', {
 export const ticketsRelations = relations(tickets, ({ one, many }) => ({
   assignedTo: one(contacts, {
     fields: [tickets.assignedToId],
+    references: [contacts.id],
+  }),
+  statusChangedBy: one(contacts, {
+    fields: [tickets.statusChangedById],
     references: [contacts.id],
   }),
   createdBy: one(contacts, {

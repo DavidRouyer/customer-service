@@ -22,7 +22,7 @@ export const TicketHeader: FC<{ ticketId: string }> = ({ ticketId }) => {
         {ticketData?.createdBy.name}
       </h3>
       <div className="flex items-center gap-x-2">
-        {ticketData?.status === TicketStatus.Resolved ? (
+        {ticketData?.status === TicketStatus.Done ? (
           <Button
             type="button"
             onClick={() => {

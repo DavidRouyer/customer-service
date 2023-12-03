@@ -24,8 +24,6 @@ export const ticketCommentRouter = createTRPCRouter({
       z
         .object({
           content: z.string().min(1),
-          createdAt: z.date(),
-          createdById: z.string(),
           ticketId: z.string(),
         })
         .refine(
@@ -58,12 +56,15 @@ export const ticketCommentRouter = createTRPCRouter({
       const mentionIds = extractMentions(content);
 
       return await ctx.db.transaction(async (tx) => {
+        const creationDate = new Date();
+
         const newComment = await tx
           .insert(schema.ticketComments)
           .values({
             ...input,
             content: content,
-            createdAt: input.createdAt,
+            createdAt: creationDate,
+            createdById: ctx.session.user.contactId ?? '',
           })
           .returning({
             id: schema.ticketComments.id,
@@ -72,7 +73,7 @@ export const ticketCommentRouter = createTRPCRouter({
           .then((res) => res[0]);
 
         if (!newComment) {
-          await tx.rollback();
+          tx.rollback();
           return;
         }
 
@@ -93,7 +94,7 @@ export const ticketCommentRouter = createTRPCRouter({
             comment: input.content,
           } satisfies TicketCommented,
           createdAt: newComment.createdAt,
-          createdById: input.createdById,
+          createdById: ctx.session.user.contactId ?? '',
         });
 
         return {

@@ -67,7 +67,7 @@ export const MessageForm: FC<{ ticketId: string }> = ({ ticketId }) => {
               contentType: newMessage.contentType,
               status: newMessage.status,
               content: newMessage.content,
-              createdAt: newMessage.createdAt,
+              createdAt: new Date(),
               createdById: sessionData?.user?.contactId ?? 0,
               // TODO: remove hack by fetching contact from user
               createdBy: {
@@ -156,8 +156,6 @@ export const MessageForm: FC<{ ticketId: string }> = ({ ticketId }) => {
         contentType: MessageContentType.TextJson,
         status: MessageStatus.Pending,
         content: data.content,
-        createdAt: new Date(),
-        createdById: sessionData?.user?.contactId ?? '',
       });
     } else {
       sendComment({

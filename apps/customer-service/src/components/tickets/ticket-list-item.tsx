@@ -14,7 +14,7 @@ import { getInitials } from '~/lib/string';
 
 export type TicketListItemProps = {
   ticket: NonNullable<RouterOutputs['ticket']['all']['data'][0]>;
-  currentContactId?: number;
+  currentContactId?: string;
 };
 
 export const TicketListItem: FC<TicketListItemProps> = ({

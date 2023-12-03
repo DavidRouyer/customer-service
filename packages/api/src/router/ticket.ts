@@ -29,7 +29,12 @@ import {
   TicketAssignmentRemoved,
   TicketPriorityChanged,
 } from '@cs/lib/ticketActivities';
-import { TicketFilter, TicketPriority, TicketStatus } from '@cs/lib/tickets';
+import {
+  TicketFilter,
+  TicketPriority,
+  TicketStatus,
+  TicketStatusDetail,
+} from '@cs/lib/tickets';
 
 import { createTRPCRouter, protectedProcedure } from '../trpc';
 
@@ -45,7 +50,7 @@ export const ticketRouter = createTRPCRouter({
             TicketFilter.Mentions,
           ])
           .or(z.string()),
-        status: z.enum([TicketStatus.Open, TicketStatus.Resolved]),
+        status: z.enum([TicketStatus.Open, TicketStatus.Done]),
         orderBy: z.enum(['newest', 'oldest']),
         cursor: z.string().nullish(),
       })
@@ -173,7 +178,7 @@ export const ticketRouter = createTRPCRouter({
       TicketStatus.Open
     } then 1 else 0 end)::int AS "open",
     sum(case when ${schema.tickets.status} = ${
-      TicketStatus.Resolved
+      TicketStatus.Done
     } then 1 else 0 end)::int AS "resolved",
     sum(case when (${schema.tickets.status} = ${TicketStatus.Open} AND ${
       schema.tickets.assignedToId
@@ -283,7 +288,7 @@ export const ticketRouter = createTRPCRouter({
           .then((res) => res[0]);
 
         if (!updatedTicket) {
-          await tx.rollback();
+          tx.rollback();
           return;
         }
 
@@ -340,7 +345,7 @@ export const ticketRouter = createTRPCRouter({
           .then((res) => res[0]);
 
         if (!updatedTicket) {
-          await tx.rollback();
+          tx.rollback();
           return;
         }
 
@@ -392,7 +397,7 @@ export const ticketRouter = createTRPCRouter({
           .then((res) => res[0]);
 
         if (!updatedTicket) {
-          await tx.rollback();
+          tx.rollback();
           return;
         }
 
@@ -447,7 +452,7 @@ export const ticketRouter = createTRPCRouter({
           .then((res) => res[0]);
 
         if (!updatedTicket) {
-          await tx.rollback();
+          tx.rollback();
           return;
         }
 
@@ -477,7 +482,7 @@ export const ticketRouter = createTRPCRouter({
           message: 'ticket_not_found',
         });
 
-      if (ticket.status === TicketStatus.Resolved)
+      if (ticket.status === TicketStatus.Done)
         throw new TRPCError({
           code: 'BAD_REQUEST',
           message: 'ticket_already_resolved',
@@ -487,8 +492,10 @@ export const ticketRouter = createTRPCRouter({
         const updatedTicket = await tx
           .update(schema.tickets)
           .set({
-            status: TicketStatus.Resolved,
-            resolvedAt: new Date(),
+            status: TicketStatus.Done,
+            statusDetail: null,
+            statusChangedAt: new Date(),
+            statusChangedById: ctx.session.user.contactId ?? '',
             updatedAt: new Date(),
             updatedById: ctx.session.user.contactId ?? '',
           })
@@ -500,7 +507,7 @@ export const ticketRouter = createTRPCRouter({
           .then((res) => res[0]);
 
         if (!updatedTicket) {
-          await tx.rollback();
+          tx.rollback();
           return;
         }
 
@@ -537,7 +544,9 @@ export const ticketRouter = createTRPCRouter({
           .update(schema.tickets)
           .set({
             status: TicketStatus.Open,
-            resolvedAt: null,
+            statusDetail: null,
+            statusChangedAt: new Date(),
+            statusChangedById: ctx.session.user.contactId ?? '',
             updatedAt: new Date(),
             updatedById: ctx.session.user.contactId ?? '',
           })
@@ -549,7 +558,7 @@ export const ticketRouter = createTRPCRouter({
           .then((res) => res[0]);
 
         if (!updatedTicket) {
-          await tx.rollback();
+          tx.rollback();
           return;
         }
 
@@ -567,23 +576,28 @@ export const ticketRouter = createTRPCRouter({
       z.object({
         title: z.string().min(1),
         content: z.string().min(1),
-        status: z.enum([TicketStatus.Open, TicketStatus.Resolved]),
         priority: z.enum([
           TicketPriority.Low,
           TicketPriority.Medium,
           TicketPriority.High,
           TicketPriority.Critical,
         ]),
-        createdById: z.string(),
       })
     )
     .mutation(async ({ ctx, input }) => {
       return await ctx.db.transaction(async (tx) => {
+        const creationDate = new Date();
+
         const newTicket = await tx
           .insert(schema.tickets)
           .values({
             ...input,
-            createdAt: new Date(),
+            status: TicketStatus.Open,
+            statusDetail: TicketStatusDetail.Created,
+            statusChangedAt: creationDate,
+            statusChangedById: ctx.session.user.contactId ?? '',
+            createdAt: creationDate,
+            createdById: ctx.session.user.contactId ?? '',
           })
           .returning({
             id: schema.tickets.id,
@@ -592,7 +606,7 @@ export const ticketRouter = createTRPCRouter({
           .then((res) => res[0]);
 
         if (!newTicket) {
-          await tx.rollback();
+          tx.rollback();
           return;
         }
 
@@ -600,7 +614,7 @@ export const ticketRouter = createTRPCRouter({
           ticketId: newTicket.id,
           type: TicketActivityType.Created,
           createdAt: newTicket.createdAt,
-          createdById: input.createdById,
+          createdById: ctx.session.user.contactId ?? '',
         });
 
         return {

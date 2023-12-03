@@ -48,7 +48,7 @@ export const TicketStatusDropdowm: FC<TicketChangeAssignmentProps> = ({
               <>
                 <CheckCircle2 className="h-4 w-4 text-valid" />
                 <p className="text-xs text-muted-foreground">
-                  <FormattedMessage id="ticket.statuses.resolved" />
+                  <FormattedMessage id="ticket.statuses.done" />
                 </p>
               </>
             )}
@@ -70,14 +70,14 @@ export const TicketStatusDropdowm: FC<TicketChangeAssignmentProps> = ({
             </div>
           </DropdownMenuItem>
           <DropdownMenuItem
-            key="resolved"
+            key="done"
             onClick={() => resolveTicket({ id: ticketId })}
-            disabled={status === TicketStatus.Resolved}
+            disabled={status === TicketStatus.Done}
           >
             <div className="flex items-center gap-x-2">
               <CheckCircle2 className="h-5 w-5 text-valid" />
               <p className="text-xs text-muted-foreground">
-                <FormattedMessage id="ticket.statuses.resolved" />
+                <FormattedMessage id="ticket.statuses.done" />
               </p>
             </div>
           </DropdownMenuItem>

@@ -70,7 +70,7 @@ export const labelRouter = createTRPCRouter({
           .then((res) => res[0]);
 
         if (!updatedTicket) {
-          await tx.rollback();
+          tx.rollback();
           return;
         }
 
@@ -145,7 +145,7 @@ export const labelRouter = createTRPCRouter({
           .then((res) => res[0]);
 
         if (!updatedTicket) {
-          await tx.rollback();
+          tx.rollback();
           return;
         }
 

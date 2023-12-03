@@ -31,8 +31,8 @@ export const statuses = [
     icon: Circle,
   },
   {
-    value: TicketStatus.Resolved,
-    label: 'Resolved',
+    value: TicketStatus.Done,
+    label: 'Done',
     icon: CheckCircle2,
   },
 ];
