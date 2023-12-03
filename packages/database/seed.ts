@@ -9,7 +9,7 @@ import {
 } from '@cs/lib/messages';
 import {
   TicketActivityType,
-  TicketAssignmentAdded,
+  TicketAssignmentChanged,
 } from '@cs/lib/ticketActivities';
 import { TicketPriority, TicketStatus } from '@cs/lib/tickets';
 
@@ -208,8 +208,11 @@ async function main() {
   await db.insert(schema.ticketActivities).values({
     id: generateEntityId('', 'ta'),
     ticketId: leslieTicket.id,
-    type: TicketActivityType.AssignmentAdded,
-    extraInfo: { newAssignedToId: tom.id } satisfies TicketAssignmentAdded,
+    type: TicketActivityType.AssignmentChanged,
+    extraInfo: {
+      oldAssignedToId: null,
+      newAssignedToId: tom.id,
+    } satisfies TicketAssignmentChanged,
     createdAt: new Date('2023-05-20T20:54:41.389Z'),
     createdById: tom.id,
   });

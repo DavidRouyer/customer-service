@@ -1,11 +1,8 @@
 export enum TicketActivityType {
-  AssignmentAdded = 'AssignmentAdded',
   AssignmentChanged = 'AssignmentChanged',
-  AssignmentRemoved = 'AssignmentRemoved',
   Commented = 'Commented',
   Created = 'Created',
-  LabelAdded = 'LabelAdded',
-  LabelRemoved = 'LabelRemoved',
+  LabelsChanged = 'LabelsChanged',
   PriorityChanged = 'PriorityChanged',
   Reopened = 'Reopened',
   Resolved = 'Resolved',

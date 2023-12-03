@@ -39,13 +39,6 @@ export const TicketLabelCombobox: FC<TicketLabelComboboxProps> = ({
     isArchived: false,
   });
 
-  const ticketLabelsTypes = labels
-    ?.map(
-      (label) =>
-        labelTypesData?.find((labelType) => labelType.id === label.labelTypeId)
-    )
-    .filter((labelType) => labelType !== undefined);
-
   const { mutateAsync: addLabels } = api.label.addLabels.useMutation({
     onMutate: async (newLabels) => {
       // Cancel any outgoing refetches
@@ -67,6 +60,9 @@ export const TicketLabelCombobox: FC<TicketLabelComboboxProps> = ({
               newLabels.labelTypeIds.map((labelTypeId) => ({
                 id: `${newLabels.ticketId}-${labelTypeId}`,
                 labelTypeId,
+                labelType: labelTypesData?.find(
+                  (labelType) => labelType.id === labelTypeId
+                )!,
                 ticketId: newLabels.ticketId,
               }))
             ),
@@ -104,7 +100,7 @@ export const TicketLabelCombobox: FC<TicketLabelComboboxProps> = ({
           ({
             ...oldQueryData,
             labels: previousTicket?.labels?.filter(
-              (label) => !removeLabels.labelTypeIds.includes(label.labelTypeId)
+              (label) => !removeLabels.labelIds.includes(label.id)
             ),
           }) as NonNullable<RouterOutputs['ticket']['byId']>
       );
@@ -132,10 +128,10 @@ export const TicketLabelCombobox: FC<TicketLabelComboboxProps> = ({
           aria-expanded={open}
           className="flex h-auto items-center justify-between gap-x-1 px-2 text-sm leading-6"
         >
-          {(ticketLabelsTypes?.length ?? 0) > 0 ? (
+          {(labels?.length ?? 0) > 0 ? (
             <div className="flex flex-wrap items-center gap-2">
-              {ticketLabelsTypes?.map((labelType) => (
-                <Badge key={labelType?.id}> {labelType?.name}</Badge>
+              {labels?.map((label) => (
+                <Badge key={label?.id}> {label.labelType.name}</Badge>
               ))}
             </div>
           ) : (
@@ -163,12 +159,14 @@ export const TicketLabelCombobox: FC<TicketLabelComboboxProps> = ({
               <CommandItem
                 key={labelType.id}
                 onSelect={() => {
-                  if (
-                    labels
-                      ?.map((label) => label.labelTypeId)
-                      .includes(labelType.id)
-                  ) {
-                    removeLabels({ ticketId, labelTypeIds: [labelType.id] });
+                  const labelWithLabelType = labels?.find(
+                    (label) => label.labelTypeId === labelType.id
+                  );
+                  if (labelWithLabelType) {
+                    removeLabels({
+                      ticketId,
+                      labelIds: [labelWithLabelType.id],
+                    });
                   } else {
                     addLabels({ ticketId, labelTypeIds: [labelType.id] });
                   }

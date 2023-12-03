@@ -1,29 +1,18 @@
 import { TicketPriority } from '../tickets';
 import { TicketActivityType } from './TicketActivityType';
 
-type TicketAssignmentAdded = {
-  newAssignedToId: string;
-};
-
 type TicketAssignmentChanged = {
-  oldAssignedToId: string;
-  newAssignedToId: string;
-};
-
-type TicketAssignmentRemoved = {
-  oldAssignedToId: string;
+  oldAssignedToId: string | null;
+  newAssignedToId: string | null;
 };
 
 type TicketCommented = {
   comment: string;
 };
 
-type TicketLabelAdded = {
-  labelTypeIds: string[];
-};
-
-type TicketLabelRemoved = {
-  labelTypeIds: string[];
+type TicketLabelsChanged = {
+  oldLabelIds: string[];
+  newLabelIds: string[];
 };
 
 type TicketPriorityChanged = {
@@ -32,12 +21,9 @@ type TicketPriorityChanged = {
 };
 
 export {
-  type TicketAssignmentAdded,
   type TicketAssignmentChanged,
-  type TicketAssignmentRemoved,
   type TicketCommented,
-  type TicketLabelAdded,
-  type TicketLabelRemoved,
+  type TicketLabelsChanged,
   type TicketPriorityChanged,
   TicketActivityType,
 };

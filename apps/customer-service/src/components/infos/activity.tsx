@@ -3,11 +3,8 @@ import { CheckCircle2 } from 'lucide-react';
 import { FormattedMessage } from 'react-intl';
 
 import {
-  TicketAssignmentAddedWithData,
   TicketAssignmentChangedWithData,
-  TicketAssignmentRemovedWithData,
-  TicketLabelAddedWithData,
-  TicketLabelRemovedWithData,
+  TicketLabelsChangedWithData,
 } from '@cs/api/src/router/ticketActivity';
 import {
   TicketActivityType,
@@ -104,95 +101,118 @@ export const Activity: FC<{
                     </span>{' '}
                     {
                       {
-                        AssignmentAdded: (
+                        AssignmentChanged: (
                           <>
                             {(
-                              ticketActivity.extraInfo as TicketAssignmentAddedWithData
-                            )?.newAssignedToId ===
-                            ticketActivity.createdById ? (
-                              <FormattedMessage id="ticket.activity.type.ticket_assignment.self_assigned" />
-                            ) : (
+                              ticketActivity.extraInfo as TicketAssignmentChangedWithData
+                            )?.oldAssignedToId === null &&
+                            (
+                              ticketActivity.extraInfo as TicketAssignmentChangedWithData
+                            )?.newAssignedToId !== null ? (
+                              (
+                                ticketActivity.extraInfo as TicketAssignmentChangedWithData
+                              )?.newAssignedToId ===
+                              ticketActivity.createdById ? (
+                                <FormattedMessage id="ticket.activity.type.ticket_assignment.self_assigned" />
+                              ) : (
+                                <>
+                                  <FormattedMessage id="ticket.activity.type.ticket_assignment.assigned" />{' '}
+                                  <span className="font-medium text-foreground">
+                                    {
+                                      (
+                                        ticketActivity.extraInfo as TicketAssignmentChangedWithData
+                                      )?.newAssignedTo?.name
+                                    }
+                                  </span>
+                                </>
+                              )
+                            ) : null}
+                            {(
+                              ticketActivity.extraInfo as TicketAssignmentChangedWithData
+                            )?.oldAssignedToId !== null &&
+                            (
+                              ticketActivity.extraInfo as TicketAssignmentChangedWithData
+                            )?.newAssignedToId !== null ? (
                               <>
                                 <FormattedMessage id="ticket.activity.type.ticket_assignment.assigned" />{' '}
                                 <span className="font-medium text-foreground">
                                   {
                                     (
-                                      ticketActivity.extraInfo as TicketAssignmentAddedWithData
+                                      ticketActivity.extraInfo as TicketAssignmentChangedWithData
                                     )?.newAssignedTo?.name
                                   }
-                                </span>
-                              </>
-                            )}
-                          </>
-                        ),
-                        AssignmentChanged: (
-                          <>
-                            <FormattedMessage id="ticket.activity.type.ticket_assignment.assigned" />{' '}
-                            <span className="font-medium text-foreground">
-                              {
-                                (
-                                  ticketActivity.extraInfo as TicketAssignmentChangedWithData
-                                )?.newAssignedTo?.name
-                              }
-                            </span>{' '}
-                            <FormattedMessage id="ticket.activity.type.ticket_assignment.and_unassigned" />{' '}
-                            <span className="font-medium text-foreground">
-                              {
-                                (
-                                  ticketActivity.extraInfo as TicketAssignmentChangedWithData
-                                )?.oldAssignedTo?.name
-                              }
-                            </span>
-                          </>
-                        ),
-                        AssignmentRemoved: (
-                          <>
-                            {(
-                              ticketActivity.extraInfo as TicketAssignmentRemovedWithData
-                            )?.oldAssignedToId ===
-                            ticketActivity.createdById ? (
-                              <FormattedMessage id="ticket.activity.type.ticket_assignment.self_unassigned" />
-                            ) : (
-                              <>
-                                <FormattedMessage id="ticket.activity.type.ticket_assignment.unassigned" />{' '}
+                                </span>{' '}
+                                <FormattedMessage id="ticket.activity.type.ticket_assignment.and_unassigned" />{' '}
                                 <span className="font-medium text-foreground">
                                   {
                                     (
-                                      ticketActivity.extraInfo as TicketAssignmentRemovedWithData
+                                      ticketActivity.extraInfo as TicketAssignmentChangedWithData
                                     )?.oldAssignedTo?.name
                                   }
                                 </span>
                               </>
-                            )}
+                            ) : null}
+                            {(
+                              ticketActivity.extraInfo as TicketAssignmentChangedWithData
+                            )?.oldAssignedToId !== null &&
+                            (
+                              ticketActivity.extraInfo as TicketAssignmentChangedWithData
+                            )?.newAssignedToId === null ? (
+                              <>
+                                {(
+                                  ticketActivity.extraInfo as TicketAssignmentChangedWithData
+                                )?.oldAssignedToId ===
+                                ticketActivity.createdById ? (
+                                  <FormattedMessage id="ticket.activity.type.ticket_assignment.self_unassigned" />
+                                ) : (
+                                  <>
+                                    <FormattedMessage id="ticket.activity.type.ticket_assignment.unassigned" />{' '}
+                                    <span className="font-medium text-foreground">
+                                      {
+                                        (
+                                          ticketActivity.extraInfo as TicketAssignmentChangedWithData
+                                        )?.oldAssignedTo?.name
+                                      }
+                                    </span>
+                                  </>
+                                )}
+                              </>
+                            ) : null}
                           </>
                         ),
                         Created: (
                           <FormattedMessage id="ticket.activity.type.ticket_created" />
                         ),
-                        LabelAdded: (
+                        LabelsChanged: (
                           <>
-                            <FormattedMessage id="ticket.activity.type.ticket_label.added" />{' '}
                             {(
-                              ticketActivity.extraInfo as TicketLabelAddedWithData
-                            )?.labelTypes?.map((labelType) => (
-                              <Badge key={labelType?.id}>
-                                {' '}
-                                {labelType?.name}
-                              </Badge>
-                            ))}
-                          </>
-                        ),
-                        LabelRemoved: (
-                          <>
-                            <FormattedMessage id="ticket.activity.type.ticket_label.removed" />{' '}
+                              ticketActivity.extraInfo as TicketLabelsChangedWithData
+                            )?.oldLabelIds.length === 0 ? (
+                              <>
+                                <FormattedMessage id="ticket.activity.type.ticket_label.added" />{' '}
+                                {(
+                                  ticketActivity.extraInfo as TicketLabelsChangedWithData
+                                )?.newLabels?.map((label) => (
+                                  <Badge key={label.id}>
+                                    {label.labelType.name}
+                                  </Badge>
+                                ))}
+                              </>
+                            ) : null}
                             {(
-                              ticketActivity.extraInfo as TicketLabelRemovedWithData
-                            )?.labelTypes?.map((labelType) => (
-                              <Badge key={labelType?.id}>
-                                {' '}
-                                {labelType?.name}
-                              </Badge>
-                            ))}
+                              ticketActivity.extraInfo as TicketLabelsChangedWithData
+                            )?.newLabelIds.length === 0 ? (
+                              <>
+                                <FormattedMessage id="ticket.activity.type.ticket_label.removed" />{' '}
+                                {(
+                                  ticketActivity.extraInfo as TicketLabelsChangedWithData
+                                )?.oldLabels?.map((label) => (
+                                  <Badge key={label.id}>
+                                    {label.labelType.name}
+                                  </Badge>
+                                ))}
+                              </>
+                            ) : null}
                           </>
                         ),
                         PriorityChanged: (

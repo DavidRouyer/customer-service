@@ -24,9 +24,7 @@ import {
 } from '@cs/lib/messages';
 import {
   TicketActivityType,
-  TicketAssignmentAdded,
   TicketAssignmentChanged,
-  TicketAssignmentRemoved,
   TicketPriorityChanged,
 } from '@cs/lib/ticketActivities';
 import {
@@ -229,7 +227,13 @@ export const ticketRouter = createTRPCRouter({
     .query(async ({ ctx, input }) => {
       const ticket = await ctx.db.query.tickets.findFirst({
         where: eq(schema.tickets.id, input.id),
-        with: { createdBy: true, assignedTo: true, labels: true },
+        with: {
+          createdBy: true,
+          assignedTo: true,
+          labels: {
+            with: { labelType: true },
+          },
+        },
       });
 
       if (!ticket)
@@ -294,10 +298,11 @@ export const ticketRouter = createTRPCRouter({
 
         await tx.insert(schema.ticketActivities).values({
           ticketId: input.id,
-          type: TicketActivityType.AssignmentAdded,
+          type: TicketActivityType.AssignmentChanged,
           extraInfo: {
+            oldAssignedToId: null,
             newAssignedToId: input.contactId,
-          } satisfies TicketAssignmentAdded,
+          } satisfies TicketAssignmentChanged,
           createdAt: updatedTicket.updatedAt ?? new Date(),
           createdById: ctx.session.user.contactId ?? '',
         });
@@ -403,10 +408,11 @@ export const ticketRouter = createTRPCRouter({
 
         await tx.insert(schema.ticketActivities).values({
           ticketId: input.id,
-          type: TicketActivityType.AssignmentRemoved,
+          type: TicketActivityType.AssignmentChanged,
           extraInfo: {
             oldAssignedToId: ticket.assignedToId ?? '',
-          } satisfies TicketAssignmentRemoved,
+            newAssignedToId: null,
+          } satisfies TicketAssignmentChanged,
           createdAt: updatedTicket.updatedAt ?? new Date(),
           createdById: ctx.session.user.contactId ?? '',
         });
