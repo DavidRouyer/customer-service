@@ -28,26 +28,45 @@ async function main() {
     .returning({ id: schema.contacts.id })
     .then((res) => res[0]);
 
-  await db.insert(schema.labelTypes).values([
-    {
+  const bugReportLabelType = await db
+    .insert(schema.labelTypes)
+    .values({
       id: generateEntityId('', 'lt'),
       name: 'Bug report',
       icon: 'bug',
       createdById: botUser!.id,
-    },
-    {
+    })
+    .returning({ id: schema.labelTypes.id })
+    .then((res) => res[0]);
+
+  if (!bugReportLabelType?.id) throw new Error('Could not create label type');
+
+  const featureRequestLabelType = await db
+    .insert(schema.labelTypes)
+    .values({
       id: generateEntityId('', 'lt'),
       name: 'Feature request',
       icon: 'lightbulb',
       createdById: botUser!.id,
-    },
-    {
+    })
+    .returning({ id: schema.labelTypes.id })
+    .then((res) => res[0]);
+
+  if (!featureRequestLabelType?.id)
+    throw new Error('Could not create label type');
+
+  const questionLabelType = await db
+    .insert(schema.labelTypes)
+    .values({
       id: generateEntityId('', 'lt'),
       name: 'General question',
       icon: 'help-circle',
       createdById: botUser!.id,
-    },
-  ]);
+    })
+    .returning({ id: schema.labelTypes.id })
+    .then((res) => res[0]);
+
+  if (!questionLabelType?.id) throw new Error('Could not create label type');
 
   await db.insert(schema.contacts).values({
     id: generateEntityId('', 'co'),
@@ -160,6 +179,7 @@ async function main() {
     .insert(schema.tickets)
     .values({
       id: generateEntityId('', 'ti'),
+      title: "Order hasn't arrived",
       status: TicketStatus.Open,
       priority: TicketPriority.Critical,
       createdAt: new Date('2023-05-04T20:54:41.389Z'),
@@ -170,6 +190,12 @@ async function main() {
     .then((res) => res[0]);
 
   if (!leslieTicket?.id) throw new Error('Could not create ticket');
+
+  await db.insert(schema.labels).values({
+    id: generateEntityId('', 'lb'),
+    ticketId: leslieTicket.id,
+    labelTypeId: bugReportLabelType.id,
+  });
 
   await db.insert(schema.ticketActivities).values({
     id: generateEntityId('', 'ta'),
@@ -188,37 +214,33 @@ async function main() {
     createdById: tom.id,
   });
 
-  await db
-    .insert(schema.messages)
-    .values([
-      {
-        id: generateEntityId('', 'ms'),
-        contentType: MessageContentType.TextPlain,
-        content: "My order hasn't arrived yet.",
-        createdAt: new Date('2023-05-04T20:54:41.389Z'),
-        direction: MessageDirection.Inbound,
-        status: MessageStatus.Seen,
-        createdById: leslie.id,
-        ticketId: leslieTicket.id,
-      },
-      {
-        id: generateEntityId('', 'ms'),
-        contentType: MessageContentType.TextPlain,
-        content:
-          'We apologize for the inconvenience. Can you please provide your order number so we can investigate?',
-        createdAt: new Date('2023-05-11T10:33:56.231Z'),
-        direction: MessageDirection.Outbound,
-        status: MessageStatus.Seen,
-        createdById: tom.id,
-        ticketId: leslieTicket.id,
-      },
-    ])
-    .returning({ id: schema.tickets.id });
+  await db.insert(schema.messages).values({
+    id: generateEntityId('', 'ms'),
+    contentType: MessageContentType.TextPlain,
+    content: "My order hasn't arrived yet.",
+    createdAt: new Date('2023-05-04T20:54:41.389Z'),
+    direction: MessageDirection.Inbound,
+    status: MessageStatus.Seen,
+    createdById: leslie.id,
+    ticketId: leslieTicket.id,
+  });
+  await db.insert(schema.messages).values({
+    id: generateEntityId('', 'ms'),
+    contentType: MessageContentType.TextPlain,
+    content:
+      'We apologize for the inconvenience. Can you please provide your order number so we can investigate?',
+    createdAt: new Date('2023-05-11T10:33:56.231Z'),
+    direction: MessageDirection.Outbound,
+    status: MessageStatus.Seen,
+    createdById: tom.id,
+    ticketId: leslieTicket.id,
+  });
 
   const leslieTicket2 = await db
     .insert(schema.tickets)
     .values({
       id: generateEntityId('', 'ti'),
+      title: 'Change product of purchase',
       status: TicketStatus.Open,
       priority: TicketPriority.Medium,
       createdAt: new Date('2023-05-06T11:23:45.389Z'),
@@ -230,6 +252,12 @@ async function main() {
 
   if (!leslieTicket2?.id) throw new Error('Could not create ticket');
 
+  await db.insert(schema.labels).values({
+    id: generateEntityId('', 'lb'),
+    ticketId: leslieTicket2.id,
+    labelTypeId: featureRequestLabelType.id,
+  });
+
   await db.insert(schema.ticketActivities).values({
     id: generateEntityId('', 'ta'),
     ticketId: leslieTicket2.id,
@@ -238,46 +266,42 @@ async function main() {
     createdById: leslie.id,
   });
 
-  await db
-    .insert(schema.messages)
-    .values([
-      {
-        id: generateEntityId('', 'ms'),
-        contentType: MessageContentType.TextPlain,
-        content: 'can ya help me change a product of purchase?',
-        createdAt: new Date('2023-05-06T11:23:45.389Z'),
-        createdById: leslie.id,
-        direction: MessageDirection.Inbound,
-        status: MessageStatus.Seen,
-        ticketId: leslieTicket2.id,
-      },
-      {
-        id: generateEntityId('', 'ms'),
-        contentType: MessageContentType.TextPlain,
-        content: 'Can you tell me which product you would like to change?',
-        createdAt: new Date('2023-05-07T22:40Z'),
-        createdById: jeff.id,
-        direction: MessageDirection.Outbound,
-        status: MessageStatus.Seen,
-        ticketId: leslieTicket2.id,
-      },
-      {
-        id: generateEntityId('', 'ms'),
-        contentType: MessageContentType.TextPlain,
-        content: 'The socks, please',
-        createdAt: new Date('2023-05-08T22:40Z'),
-        createdById: leslie.id,
-        direction: MessageDirection.Inbound,
-        status: MessageStatus.Seen,
-        ticketId: leslieTicket2.id,
-      },
-    ])
-    .returning({ id: schema.tickets.id });
+  await db.insert(schema.messages).values({
+    id: generateEntityId('', 'ms'),
+    contentType: MessageContentType.TextPlain,
+    content: 'can ya help me change a product of purchase?',
+    createdAt: new Date('2023-05-06T11:23:45.389Z'),
+    createdById: leslie.id,
+    direction: MessageDirection.Inbound,
+    status: MessageStatus.Seen,
+    ticketId: leslieTicket2.id,
+  });
+  await db.insert(schema.messages).values({
+    id: generateEntityId('', 'ms'),
+    contentType: MessageContentType.TextPlain,
+    content: 'Can you tell me which product you would like to change?',
+    createdAt: new Date('2023-05-07T22:40Z'),
+    createdById: jeff.id,
+    direction: MessageDirection.Outbound,
+    status: MessageStatus.Seen,
+    ticketId: leslieTicket2.id,
+  });
+  await db.insert(schema.messages).values({
+    id: generateEntityId('', 'ms'),
+    contentType: MessageContentType.TextPlain,
+    content: 'The socks, please',
+    createdAt: new Date('2023-05-08T22:40Z'),
+    createdById: leslie.id,
+    direction: MessageDirection.Inbound,
+    status: MessageStatus.Seen,
+    ticketId: leslieTicket2.id,
+  });
 
   const leslieTicket3 = await db
     .insert(schema.tickets)
     .values({
       id: generateEntityId('', 'ti'),
+      title: 'Problem with canceling purchase',
       status: TicketStatus.Resolved,
       priority: TicketPriority.Medium,
       createdAt: new Date('2023-05-06T11:23:45.389Z'),
@@ -292,6 +316,12 @@ async function main() {
     .then((res) => res[0]);
 
   if (!leslieTicket3?.id) throw new Error('Could not create ticket');
+
+  await db.insert(schema.labels).values({
+    id: generateEntityId('', 'lb'),
+    ticketId: leslieTicket3.id,
+    labelTypeId: bugReportLabelType.id,
+  });
 
   await db.insert(schema.ticketActivities).values({
     id: generateEntityId('', 'ta'),
@@ -309,21 +339,16 @@ async function main() {
     createdById: leslie.id,
   });
 
-  await db
-    .insert(schema.messages)
-    .values([
-      {
-        id: generateEntityId('', 'ms'),
-        contentType: MessageContentType.TextPlain,
-        content: 'problems with canceling purchase',
-        createdAt: new Date('2023-05-06T11:23:45.389Z'),
-        createdById: leslie.id,
-        direction: MessageDirection.Inbound,
-        status: MessageStatus.DeliveredToDevice,
-        ticketId: leslieTicket3.id,
-      },
-    ])
-    .returning({ id: schema.tickets.id });
+  await db.insert(schema.messages).values({
+    id: generateEntityId('', 'ms'),
+    contentType: MessageContentType.TextPlain,
+    content: 'problems with canceling purchase',
+    createdAt: new Date('2023-05-06T11:23:45.389Z'),
+    createdById: leslie.id,
+    direction: MessageDirection.Inbound,
+    status: MessageStatus.DeliveredToDevice,
+    ticketId: leslieTicket3.id,
+  });
 
   const michael = await db
     .insert(schema.contacts)
@@ -343,6 +368,7 @@ async function main() {
     .insert(schema.tickets)
     .values({
       id: generateEntityId('', 'ti'),
+      title: 'Damaged product received',
       status: TicketStatus.Open,
       priority: TicketPriority.Medium,
       createdAt: new Date('2023-03-03T14:02Z'),
@@ -353,6 +379,12 @@ async function main() {
 
   if (!michaelTicket?.id) throw new Error('Could not create ticket');
 
+  await db.insert(schema.labels).values({
+    id: generateEntityId('', 'lb'),
+    ticketId: michaelTicket.id,
+    labelTypeId: bugReportLabelType.id,
+  });
+
   await db.insert(schema.ticketActivities).values({
     id: generateEntityId('', 'ta'),
     ticketId: michaelTicket.id,
@@ -361,32 +393,27 @@ async function main() {
     createdById: michael.id,
   });
 
-  await db
-    .insert(schema.messages)
-    .values([
-      {
-        id: generateEntityId('', 'ms'),
-        contentType: MessageContentType.TextPlain,
-        content: 'I received a damaged product.',
-        createdAt: new Date('2023-03-03T14:02Z'),
-        createdById: michael.id,
-        direction: MessageDirection.Inbound,
-        status: MessageStatus.Seen,
-        ticketId: michaelTicket.id,
-      },
-      {
-        id: generateEntityId('', 'ms'),
-        contentType: MessageContentType.TextPlain,
-        content:
-          'We apologize for the inconvenience. Can you please provide a photo of the damaged product so we can assist you further?',
-        createdAt: new Date('2023-03-12T17:20Z'),
-        createdById: jeffrey.id,
-        direction: MessageDirection.Outbound,
-        status: MessageStatus.Seen,
-        ticketId: michaelTicket.id,
-      },
-    ])
-    .returning({ id: schema.tickets.id });
+  await db.insert(schema.messages).values({
+    id: generateEntityId('', 'ms'),
+    contentType: MessageContentType.TextPlain,
+    content: 'I received a damaged product.',
+    createdAt: new Date('2023-03-03T14:02Z'),
+    createdById: michael.id,
+    direction: MessageDirection.Inbound,
+    status: MessageStatus.Seen,
+    ticketId: michaelTicket.id,
+  });
+  await db.insert(schema.messages).values({
+    id: generateEntityId('', 'ms'),
+    contentType: MessageContentType.TextPlain,
+    content:
+      'We apologize for the inconvenience. Can you please provide a photo of the damaged product so we can assist you further?',
+    createdAt: new Date('2023-03-12T17:20Z'),
+    createdById: jeffrey.id,
+    direction: MessageDirection.Outbound,
+    status: MessageStatus.Seen,
+    ticketId: michaelTicket.id,
+  });
 
   const dries = await db
     .insert(schema.contacts)
@@ -406,6 +433,7 @@ async function main() {
     .insert(schema.tickets)
     .values({
       id: generateEntityId('', 'ti'),
+      title: 'Need to return an item',
       status: TicketStatus.Open,
       priority: TicketPriority.Medium,
       createdAt: new Date('2023-03-03T13:23Z'),
@@ -424,32 +452,27 @@ async function main() {
     createdById: dries.id,
   });
 
-  await db
-    .insert(schema.messages)
-    .values([
-      {
-        id: generateEntityId('', 'ms'),
-        contentType: MessageContentType.TextPlain,
-        content: 'I need to return an item.',
-        createdAt: new Date('2023-03-03T13:23Z'),
-        createdById: dries.id,
-        direction: MessageDirection.Inbound,
-        status: MessageStatus.Seen,
-        ticketId: driesTicket.id,
-      },
-      {
-        id: generateEntityId('', 'ms'),
-        contentType: MessageContentType.TextPlain,
-        content:
-          'Certainly. Please provide your order number and reason for return, and we will provide you with instructions on how to proceed.',
-        createdAt: new Date('2023-04-01T06:06Z'),
-        createdById: jeffrey.id,
-        direction: MessageDirection.Outbound,
-        status: MessageStatus.DeliveredToDevice,
-        ticketId: driesTicket.id,
-      },
-    ])
-    .returning({ id: schema.tickets.id });
+  await db.insert(schema.messages).values({
+    id: generateEntityId('', 'ms'),
+    contentType: MessageContentType.TextPlain,
+    content: 'I need to return an item.',
+    createdAt: new Date('2023-03-03T13:23Z'),
+    createdById: dries.id,
+    direction: MessageDirection.Inbound,
+    status: MessageStatus.Seen,
+    ticketId: driesTicket.id,
+  });
+  await db.insert(schema.messages).values({
+    id: generateEntityId('', 'ms'),
+    contentType: MessageContentType.TextPlain,
+    content:
+      'Certainly. Please provide your order number and reason for return, and we will provide you with instructions on how to proceed.',
+    createdAt: new Date('2023-04-01T06:06Z'),
+    createdById: jeffrey.id,
+    direction: MessageDirection.Outbound,
+    status: MessageStatus.DeliveredToDevice,
+    ticketId: driesTicket.id,
+  });
 
   const lindsay = await db
     .insert(schema.contacts)
@@ -472,6 +495,7 @@ async function main() {
     .insert(schema.tickets)
     .values({
       id: generateEntityId('', 'ti'),
+      title: 'Change shipping address',
       status: TicketStatus.Open,
       priority: TicketPriority.Medium,
       createdAt: new Date('2023-03-02T21:13Z'),
@@ -482,32 +506,33 @@ async function main() {
 
   if (!lindsayTicket?.id) throw new Error('Could not create ticket');
 
-  await db
-    .insert(schema.messages)
-    .values([
-      {
-        id: generateEntityId('', 'ms'),
-        contentType: MessageContentType.TextPlain,
-        content: 'I want to change my shipping address.',
-        createdAt: new Date('2023-03-02T21:13Z'),
-        createdById: lindsay.id,
-        direction: MessageDirection.Inbound,
-        status: MessageStatus.Seen,
-        ticketId: lindsayTicket.id,
-      },
-      {
-        id: generateEntityId('', 'ms'),
-        contentType: MessageContentType.TextPlain,
-        content:
-          "No problem. Can you please provide your order number and the new shipping address you'd like to use?",
-        createdAt: new Date('2023-03-03T22:40Z'),
-        createdById: tom.id,
-        direction: MessageDirection.Outbound,
-        status: MessageStatus.DeliveredToDevice,
-        ticketId: lindsayTicket.id,
-      },
-    ])
-    .returning({ id: schema.tickets.id });
+  await db.insert(schema.labels).values({
+    id: generateEntityId('', 'lb'),
+    ticketId: lindsayTicket.id,
+    labelTypeId: questionLabelType.id,
+  });
+
+  await db.insert(schema.messages).values({
+    id: generateEntityId('', 'ms'),
+    contentType: MessageContentType.TextPlain,
+    content: 'I want to change my shipping address.',
+    createdAt: new Date('2023-03-02T21:13Z'),
+    createdById: lindsay.id,
+    direction: MessageDirection.Inbound,
+    status: MessageStatus.Seen,
+    ticketId: lindsayTicket.id,
+  });
+  await db.insert(schema.messages).values({
+    id: generateEntityId('', 'ms'),
+    contentType: MessageContentType.TextPlain,
+    content:
+      "No problem. Can you please provide your order number and the new shipping address you'd like to use?",
+    createdAt: new Date('2023-03-03T22:40Z'),
+    createdById: tom.id,
+    direction: MessageDirection.Outbound,
+    status: MessageStatus.DeliveredToDevice,
+    ticketId: lindsayTicket.id,
+  });
 
   await db.insert(schema.ticketActivities).values({
     id: generateEntityId('', 'ta'),

@@ -24,6 +24,7 @@ export const ticketPriority = pgEnum('ticketPriority', [
 
 export const tickets = pgTable('ticket', {
   id: varchar('id').primaryKey().notNull().default(generateEntityId('', 'ti')),
+  title: varchar('title'),
   resolvedAt: timestamp('resolvedAt', { precision: 3, mode: 'date' }),
   status: ticketStatus('status').notNull(),
   priority: ticketPriority('priority').notNull(),

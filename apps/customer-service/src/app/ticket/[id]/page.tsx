@@ -11,7 +11,7 @@ type TicketPageProps = {
   };
 };
 
-export default async function TicketPage({ params: { id } }: TicketPageProps) {
+export default function TicketPage({ params: { id } }: TicketPageProps) {
   if (!id) return notFound();
 
   return (
@@ -28,7 +28,7 @@ export default async function TicketPage({ params: { id } }: TicketPageProps) {
         <InfoPanel ticketId={id} />
       </Suspense>
 
-      <main className="lg:pl-60">
+      <main className="lg:pl-14">
         <div className="xl:mr-96 xl:h-[100dvh] xl:overflow-y-auto xl:pl-96">
           <div className="flex h-[100dvh] flex-col px-4 py-6 sm:px-6">
             <Suspense
