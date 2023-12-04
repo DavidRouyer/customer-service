@@ -68,7 +68,7 @@
     "@testing-library/react": "^14.1.2",
     "@types/google-libphonenumber": "^7.4.30",
     "@types/negotiator": "^0.6.3",
-    "@types/node": "^20.10.2",
+    "@types/node": "^20.10.3",
     "@types/react": "^18.2.41",
     "@types/react-dom": "^18.2.17",
     "autoprefixer": "^10.4.16",
