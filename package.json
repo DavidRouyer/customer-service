@@ -24,7 +24,7 @@
     "@cs/prettier-config": "*",
     "@typescript-eslint/eslint-plugin": "^6.13.1",
     "@typescript-eslint/parser": "^6.13.1",
-    "@vitejs/plugin-react": "^4.2.0",
+    "@vitejs/plugin-react": "^4.2.1",
     "@vitest/coverage-v8": "^1.0.0",
     "@vitest/ui": "^1.0.0",
     "prettier": "^3.1.0",
