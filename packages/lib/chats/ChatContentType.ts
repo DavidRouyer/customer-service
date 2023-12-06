@@ -1,4 +1,4 @@
-export enum MessageContentType {
+export enum ChatContentType {
   TextHtml = 'TextHtml',
   TextJson = 'TextJson',
   TextPlain = 'TextPlain',

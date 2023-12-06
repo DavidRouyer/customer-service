@@ -1,4 +1,4 @@
-export enum MessageDirection {
+export enum ChatDirection {
   Outbound = 'Outbound',
   Inbound = 'Inbound',
 }

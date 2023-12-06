@@ -2,10 +2,10 @@ import { authRouter } from './router/auth';
 import { contactRouter } from './router/contact';
 import { labelRouter } from './router/label';
 import { labelTypeRouter } from './router/labelType';
-import { messageRouter } from './router/message';
 import { ticketRouter } from './router/ticket';
 import { ticketActivityRouter } from './router/ticketActivity';
-import { ticketCommentRouter } from './router/ticketComment';
+import { ticketChatRouter } from './router/ticketChat';
+import { ticketNoteRouter } from './router/ticketNote';
 import { createTRPCRouter } from './trpc';
 
 export const appRouter = createTRPCRouter({
@@ -13,10 +13,10 @@ export const appRouter = createTRPCRouter({
   contact: contactRouter,
   label: labelRouter,
   labelType: labelTypeRouter,
-  message: messageRouter,
   ticket: ticketRouter,
   ticketActivity: ticketActivityRouter,
-  ticketComment: ticketCommentRouter,
+  ticketChat: ticketChatRouter,
+  ticketNote: ticketNoteRouter,
 });
 
 // export type definition of API

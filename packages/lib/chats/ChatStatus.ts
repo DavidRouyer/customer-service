@@ -1,4 +1,4 @@
-export enum MessageStatus {
+export enum ChatStatus {
   Seen = 'Seen',
   DeliveredToDevice = 'DeliveredToDevice',
   DeliveredToCloud = 'DeliveredToCloud',

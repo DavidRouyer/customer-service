@@ -58,7 +58,7 @@ const Placeholder: FC = () => {
 
   return (
     <div className="pointer-events-none absolute left-2 top-4 inline-block select-none overflow-hidden text-ellipsis text-[15px] text-gray-400">
-      {messageMode === 'message' ? (
+      {messageMode === 'reply' ? (
         <FormattedMessage id="text_editor.message_placeholder" />
       ) : (
         <FormattedMessage id="text_editor.note_placeholder" />

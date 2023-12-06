@@ -17,16 +17,10 @@ import {
   SQL,
   sql,
 } from '@cs/database';
-import {
-  MessageContentType,
-  MessageDirection,
-  MessageStatus,
-} from '@cs/lib/messages';
+import { ChatContentType, ChatDirection, ChatStatus } from '@cs/lib/chats';
 import {
   TicketActivityType,
-  TicketAssignmentAdded,
   TicketAssignmentChanged,
-  TicketAssignmentRemoved,
   TicketPriorityChanged,
 } from '@cs/lib/ticketActivities';
 import {
@@ -85,19 +79,16 @@ export const ticketRouter = createTRPCRouter({
                   mentions: exists(
                     ctx.db
                       .selectDistinct({
-                        id: schema.contactsToTicketComments.ticketId,
+                        id: schema.ticketMentions.ticketId,
                       })
-                      .from(schema.contactsToTicketComments)
+                      .from(schema.ticketMentions)
                       .where(
                         and(
                           eq(
-                            schema.contactsToTicketComments.contactId,
+                            schema.ticketMentions.contactId,
                             ctx.session.user.contactId ?? ''
                           ),
-                          eq(
-                            schema.contactsToTicketComments.ticketId,
-                            tickets.id
-                          )
+                          eq(schema.ticketMentions.ticketId, tickets.id)
                         )
                       )
                       .limit(1)
@@ -107,7 +98,7 @@ export const ticketRouter = createTRPCRouter({
         with: {
           createdBy: true,
           messages: {
-            orderBy: desc(schema.messages.createdAt),
+            orderBy: desc(schema.ticketChats.createdAt),
             limit: 1,
           },
           labels: {
@@ -132,28 +123,28 @@ export const ticketRouter = createTRPCRouter({
   conversation: protectedProcedure
     .input(z.object({ ticketId: z.string() }))
     .query(async ({ ctx, input }) => {
-      const messages = await ctx.db.query.messages.findMany({
-        where: eq(schema.messages.ticketId, input.ticketId),
-        orderBy: asc(schema.messages.createdAt),
+      const messages = await ctx.db.query.ticketChats.findMany({
+        where: eq(schema.ticketChats.ticketId, input.ticketId),
+        orderBy: asc(schema.ticketChats.createdAt),
         with: { createdBy: true },
       });
-      const comments = await ctx.db.query.ticketComments.findMany({
-        orderBy: asc(schema.ticketComments.createdAt),
-        where: eq(schema.ticketComments.ticketId, input.ticketId),
+      const notes = await ctx.db.query.ticketNotes.findMany({
+        orderBy: asc(schema.ticketNotes.createdAt),
+        where: eq(schema.ticketNotes.ticketId, input.ticketId),
         with: { createdBy: true },
       });
       return [
         ...messages.map((message) => ({
           ...message,
-          type: 'message' as const,
+          type: 'chat' as const,
         })),
-        ...comments.map((comment) => ({
-          ...comment,
-          status: MessageStatus.Seen,
-          contentType: MessageContentType.TextJson,
-          direction: MessageDirection.Outbound,
-          content: JSON.stringify(comment.content),
-          type: 'comment' as const,
+        ...notes.map((note) => ({
+          ...note,
+          status: ChatStatus.Seen,
+          contentType: ChatContentType.TextJson,
+          direction: ChatDirection.Outbound,
+          content: JSON.stringify(note.content),
+          type: 'note' as const,
         })),
       ].toSorted((a, b) => {
         if (a.createdAt < b.createdAt) return -1;
@@ -191,10 +182,10 @@ export const ticketRouter = createTRPCRouter({
     (SELECT
       count(DISTINCT ${schema.tickets.id})::int AS "total"
       FROM ${schema.tickets}
-      LEFT JOIN ${schema.contactsToTicketComments} ON ${
-        schema.contactsToTicketComments.ticketId
+      LEFT JOIN ${schema.ticketMentions} ON ${
+        schema.ticketMentions.ticketId
       } = ${schema.tickets.id}
-      WHERE ${schema.contactsToTicketComments.contactId} = ${
+      WHERE ${schema.ticketMentions.contactId} = ${
         ctx.session.user.contactId ?? 0
       }) as "mentions"`);
 
@@ -229,7 +220,13 @@ export const ticketRouter = createTRPCRouter({
     .query(async ({ ctx, input }) => {
       const ticket = await ctx.db.query.tickets.findFirst({
         where: eq(schema.tickets.id, input.id),
-        with: { createdBy: true, assignedTo: true, labels: true },
+        with: {
+          createdBy: true,
+          assignedTo: true,
+          labels: {
+            with: { labelType: true },
+          },
+        },
       });
 
       if (!ticket)
@@ -294,10 +291,11 @@ export const ticketRouter = createTRPCRouter({
 
         await tx.insert(schema.ticketActivities).values({
           ticketId: input.id,
-          type: TicketActivityType.AssignmentAdded,
+          type: TicketActivityType.AssignmentChanged,
           extraInfo: {
+            oldAssignedToId: null,
             newAssignedToId: input.contactId,
-          } satisfies TicketAssignmentAdded,
+          } satisfies TicketAssignmentChanged,
           createdAt: updatedTicket.updatedAt ?? new Date(),
           createdById: ctx.session.user.contactId ?? '',
         });
@@ -403,10 +401,11 @@ export const ticketRouter = createTRPCRouter({
 
         await tx.insert(schema.ticketActivities).values({
           ticketId: input.id,
-          type: TicketActivityType.AssignmentRemoved,
+          type: TicketActivityType.AssignmentChanged,
           extraInfo: {
             oldAssignedToId: ticket.assignedToId ?? '',
-          } satisfies TicketAssignmentRemoved,
+            newAssignedToId: null,
+          } satisfies TicketAssignmentChanged,
           createdAt: updatedTicket.updatedAt ?? new Date(),
           createdById: ctx.session.user.contactId ?? '',
         });

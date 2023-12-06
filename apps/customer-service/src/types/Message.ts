@@ -4,12 +4,10 @@ export enum FailedMessageStatus {
   Failed = 'Failed',
 }
 
-export type MessageContentType =
-  RouterOutputs['message']['byTicketId'][0]['contentType'];
-export type MessageStatus = RouterOutputs['message']['byTicketId'][0]['status'];
+export type ExtendedMessageStatus =
+  | RouterOutputs['ticketChat']['byTicketId'][0]['status']
+  | FailedMessageStatus;
 
-export type ExtendedMessageStatus = MessageStatus | FailedMessageStatus;
-
-export type Message = RouterOutputs['message']['byTicketId'][0] & {
+export type Message = RouterOutputs['ticketChat']['byTicketId'][0] & {
   status: ExtendedMessageStatus;
 };

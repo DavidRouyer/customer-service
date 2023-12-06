@@ -1,7 +1,7 @@
 import { FC } from 'react';
 
 import { RouterOutputs } from '@cs/api';
-import { MessageDirection } from '@cs/lib/messages';
+import { ChatDirection } from '@cs/lib/chats';
 
 import { Message } from '~/components/messages/message';
 import { MessageAvatar } from '~/components/messages/message-avatar';
@@ -34,7 +34,7 @@ export const MessageGroup: FC<MessageGroupProps> = ({ messages }) => {
       <div
         className={cn(
           'flex items-end',
-          firstMessage.direction === MessageDirection.Outbound && 'justify-end'
+          firstMessage.direction === ChatDirection.Outbound && 'justify-end'
         )}
       >
         <div className="space-y-1">

@@ -7,11 +7,7 @@ import { PaperclipIcon, SmilePlusIcon } from 'lucide-react';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
 import { FormattedMessage } from 'react-intl';
 
-import {
-  MessageContentType,
-  MessageDirection,
-  MessageStatus,
-} from '@cs/lib/messages';
+import { ChatContentType, ChatDirection, ChatStatus } from '@cs/lib/chats';
 
 import { messageModeAtom } from '~/components/messages/message-mode-atom';
 import { Button } from '~/components/ui/button';
@@ -42,7 +38,7 @@ export const MessageForm: FC<{ ticketId: string }> = ({ ticketId }) => {
 
   const [messageMode, setMessageMode] = useAtom(messageModeAtom);
 
-  const { mutateAsync: sendMessage } = api.message.create.useMutation({
+  const { mutateAsync: sendMessage } = api.ticketChat.create.useMutation({
     onMutate: async (newMessage) => {
       // Cancel any outgoing refetches
       // (so they don't overwrite our optimistic update)
@@ -61,7 +57,7 @@ export const MessageForm: FC<{ ticketId: string }> = ({ ticketId }) => {
             ...(oldQueryData ?? []),
             {
               id: self.crypto.randomUUID(),
-              type: 'message',
+              type: 'chat',
               ticketId: newMessage.ticketId,
               direction: newMessage.direction,
               contentType: newMessage.contentType,
@@ -93,7 +89,7 @@ export const MessageForm: FC<{ ticketId: string }> = ({ ticketId }) => {
       void utils.ticket.conversation.invalidate({ ticketId: ticketId });
     },
   });
-  const { mutateAsync: sendComment } = api.ticketComment.create.useMutation({
+  const { mutateAsync: sendNote } = api.ticketNote.create.useMutation({
     onMutate: async (newTicket) => {
       // Cancel any outgoing refetches
       // (so they don't overwrite our optimistic update)
@@ -114,12 +110,12 @@ export const MessageForm: FC<{ ticketId: string }> = ({ ticketId }) => {
             ...(oldQueryData ?? []),
             {
               id: self.crypto.randomUUID(),
-              type: 'comment',
-              direction: MessageDirection.Outbound,
-              contentType: MessageContentType.TextJson,
-              status: MessageStatus.Pending,
+              type: 'note',
+              direction: ChatDirection.Outbound,
+              contentType: ChatContentType.TextJson,
+              status: ChatStatus.Pending,
               content: newTicket.content,
-              createdAt: newTicket.createdAt,
+              createdAt: new Date(),
               createdById: sessionData?.user?.contactId ?? 0,
               // TODO: remove hack by fetching contact from user
               createdBy: {
@@ -132,13 +128,13 @@ export const MessageForm: FC<{ ticketId: string }> = ({ ticketId }) => {
       );
 
       // Return a context object with the snapshotted value
-      return { previousComments: previousConversationItem };
+      return { previousNotes: previousConversationItem };
     },
     onError: (err, _newTicket, context) => {
       // TODO: handle failed queries
       utils.ticket.conversation.setData(
         { ticketId: _newTicket.ticketId },
-        context?.previousComments ?? []
+        context?.previousNotes ?? []
       );
     },
     onSettled: (_, __, { ticketId }) => {
@@ -149,20 +145,18 @@ export const MessageForm: FC<{ ticketId: string }> = ({ ticketId }) => {
   const form = useForm<MessageFormSchema>();
 
   const onSubmit = (data: MessageFormSchema) => {
-    if (messageMode === 'message') {
+    if (messageMode === 'reply') {
       sendMessage({
         ticketId: ticketId,
-        direction: MessageDirection.Outbound,
-        contentType: MessageContentType.TextJson,
-        status: MessageStatus.Pending,
+        direction: ChatDirection.Outbound,
+        contentType: ChatContentType.TextJson,
+        status: ChatStatus.Pending,
         content: data.content,
       });
     } else {
-      sendComment({
+      sendNote({
         ticketId: ticketId,
         content: data.content,
-        createdAt: new Date(),
-        createdById: sessionData?.user?.contactId ?? '',
       });
     }
 
@@ -184,8 +178,8 @@ export const MessageForm: FC<{ ticketId: string }> = ({ ticketId }) => {
               'overflow-hidden rounded-lg shadow-sm ring-1 ring-inset ring-border focus-within:ring-2',
               {
                 'bg-warning/30 ring-warning/70 focus-within:ring-warning':
-                  messageMode === 'comment',
-                'focus-within:ring-foreground': messageMode === 'message',
+                  messageMode === 'note',
+                'focus-within:ring-foreground': messageMode === 'reply',
               }
             )}
           >
@@ -232,9 +226,9 @@ export const MessageForm: FC<{ ticketId: string }> = ({ ticketId }) => {
                 <div className="flex items-center space-x-2">
                   <Switch
                     id="message-mode"
-                    checked={messageMode === 'comment'}
+                    checked={messageMode === 'note'}
                     onCheckedChange={(checked) =>
-                      setMessageMode(checked ? 'comment' : 'message')
+                      setMessageMode(checked ? 'note' : 'reply')
                     }
                   />
                   <Label htmlFor="message-mode">

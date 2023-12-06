@@ -1,11 +1,10 @@
 import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
 
-import { and, eq, inArray, schema } from '@cs/database';
+import { and, eq, inArray, ne, schema } from '@cs/database';
 import {
   TicketActivityType,
-  TicketLabelAdded,
-  TicketLabelRemoved,
+  TicketLabelsChanged,
 } from '@cs/lib/ticketActivities';
 
 import { createTRPCRouter, protectedProcedure } from '../trpc';
@@ -46,7 +45,7 @@ export const labelRouter = createTRPCRouter({
         });
 
       return await ctx.db.transaction(async (tx) => {
-        await tx
+        const newLabels = await tx
           .insert(schema.labels)
           .values(
             labelTypes.map((labelType) => ({
@@ -54,7 +53,7 @@ export const labelRouter = createTRPCRouter({
               labelTypeId: labelType.id,
             }))
           )
-          .returning({ labelTypeId: schema.labels.labelTypeId });
+          .returning({ labelId: schema.labels.id });
 
         const updatedTicket = await tx
           .update(schema.tickets)
@@ -76,10 +75,11 @@ export const labelRouter = createTRPCRouter({
 
         await tx.insert(schema.ticketActivities).values({
           ticketId: ticket.id,
-          type: TicketActivityType.LabelAdded,
+          type: TicketActivityType.LabelsChanged,
           extraInfo: {
-            labelTypeIds: input.labelTypeIds,
-          } satisfies TicketLabelAdded,
+            oldLabelIds: [],
+            newLabelIds: newLabels.map((label) => label.labelId),
+          } satisfies TicketLabelsChanged,
           createdAt: updatedTicket.updatedAt ?? new Date(),
           createdById: ctx.session.user.contactId ?? '',
         });
@@ -90,7 +90,7 @@ export const labelRouter = createTRPCRouter({
     .input(
       z.object({
         ticketId: z.string(),
-        labelTypeIds: z.array(z.string()),
+        labelIds: z.array(z.string()),
       })
     )
     .mutation(async ({ ctx, input }) => {
@@ -104,32 +104,32 @@ export const labelRouter = createTRPCRouter({
           message: 'ticket_not_exists',
         });
 
-      const labelTypes = await ctx.db.query.labelTypes.findMany({
-        where: inArray(schema.labelTypes.id, input.labelTypeIds),
+      const labels = await ctx.db.query.labels.findMany({
+        where: inArray(schema.labelTypes.id, input.labelIds),
       });
 
-      const missingLabelTypes: string[] = [];
-      for (const labelTypeId of input.labelTypeIds) {
-        if (!labelTypes.find((labelType) => labelType.id === labelTypeId)) {
-          missingLabelTypes.push(labelTypeId);
+      const missingLabels: string[] = [];
+      for (const labelId of input.labelIds) {
+        if (!labels.find((label) => label.id === labelId)) {
+          missingLabels.push(labelId);
         }
       }
-      if (missingLabelTypes.length > 0)
+      if (missingLabels.length > 0)
         throw new TRPCError({
           code: 'BAD_REQUEST',
-          message: 'label_type_missing_ids',
+          message: 'label_missing_ids',
         });
 
       return await ctx.db.transaction(async (tx) => {
-        await tx
+        const deletedLabels = await tx
           .delete(schema.labels)
           .where(
             and(
               eq(schema.labels.ticketId, ticket.id),
-              inArray(schema.labels.labelTypeId, input.labelTypeIds)
+              inArray(schema.labels.id, input.labelIds)
             )
           )
-          .returning({ labelTypeId: schema.labels.labelTypeId });
+          .returning({ labelId: schema.labels.id });
 
         const updatedTicket = await tx
           .update(schema.tickets)
@@ -151,10 +151,11 @@ export const labelRouter = createTRPCRouter({
 
         await tx.insert(schema.ticketActivities).values({
           ticketId: ticket.id,
-          type: TicketActivityType.LabelRemoved,
+          type: TicketActivityType.LabelsChanged,
           extraInfo: {
-            labelTypeIds: input.labelTypeIds,
-          } satisfies TicketLabelRemoved,
+            oldLabelIds: deletedLabels.map((label) => label.labelId),
+            newLabelIds: [],
+          } satisfies TicketLabelsChanged,
           createdAt: updatedTicket.updatedAt ?? new Date(),
           createdById: ctx.session.user.contactId ?? '',
         });

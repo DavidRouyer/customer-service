@@ -3,37 +3,27 @@ import { z } from 'zod';
 import { asc, eq, inArray, InferSelectModel, schema } from '@cs/database';
 import {
   TicketActivityType,
-  TicketAssignmentAdded,
   TicketAssignmentChanged,
-  TicketAssignmentRemoved,
   TicketCommented,
-  TicketLabelAdded,
-  TicketLabelRemoved,
+  TicketLabelsChanged,
   TicketPriorityChanged,
 } from '@cs/lib/ticketActivities';
 
 import { createTRPCRouter, protectedProcedure } from '../trpc';
 
-export type TicketAssignmentAddedWithData = {
-  newAssignedTo?: InferSelectModel<typeof schema.contacts>;
-} & TicketAssignmentAdded;
-
 export type TicketAssignmentChangedWithData = {
-  oldAssignedTo?: InferSelectModel<typeof schema.contacts>;
-  newAssignedTo?: InferSelectModel<typeof schema.contacts>;
+  oldAssignedTo?: InferSelectModel<typeof schema.contacts> | null;
+  newAssignedTo?: InferSelectModel<typeof schema.contacts> | null;
 } & TicketAssignmentChanged;
 
-export type TicketAssignmentRemovedWithData = {
-  oldAssignedTo?: InferSelectModel<typeof schema.contacts>;
-} & TicketAssignmentRemoved;
-
-export type TicketLabelAddedWithData = {
-  labelTypes?: InferSelectModel<typeof schema.labelTypes>[];
-} & TicketLabelAdded;
-
-export type TicketLabelRemovedWithData = {
-  labelTypes?: InferSelectModel<typeof schema.labelTypes>[];
-} & TicketLabelRemoved;
+export type TicketLabelsChangedWithData = {
+  oldLabels?: (InferSelectModel<typeof schema.labels> & {
+    labelType: InferSelectModel<typeof schema.labelTypes>;
+  })[];
+  newLabels?: (InferSelectModel<typeof schema.labels> & {
+    labelType: InferSelectModel<typeof schema.labelTypes>;
+  })[];
+} & TicketLabelsChanged;
 
 export const ticketActivityRouter = createTRPCRouter({
   byTicketId: protectedProcedure
@@ -49,53 +39,31 @@ export const ticketActivityRouter = createTRPCRouter({
         'extraInfo'
       > & {
         extraInfo:
-          | TicketAssignmentAddedWithData
           | TicketAssignmentChangedWithData
-          | TicketAssignmentRemovedWithData
-          | TicketLabelAddedWithData
-          | TicketLabelRemovedWithData
+          | TicketLabelsChangedWithData
           | TicketCommented
           | TicketPriorityChanged
           | null;
       })[] = [];
 
       const contactsToFetch = new Set<string>();
-      const labelTypesToFetch = new Set<string>();
+      const labelsToFetch = new Set<string>();
       ticketActivities.forEach((ticketActivity) => {
-        if (ticketActivity.type === TicketActivityType.AssignmentAdded) {
-          contactsToFetch.add(
-            (ticketActivity.extraInfo as TicketAssignmentAdded).newAssignedToId
-          );
-        }
         if (ticketActivity.type === TicketActivityType.AssignmentChanged) {
-          contactsToFetch.add(
-            (ticketActivity.extraInfo as TicketAssignmentChanged)
-              .oldAssignedToId
-          );
-          contactsToFetch.add(
-            (ticketActivity.extraInfo as TicketAssignmentChanged)
-              .newAssignedToId
-          );
+          const extraInfo = ticketActivity.extraInfo as TicketAssignmentChanged;
+          if (extraInfo.oldAssignedToId !== null)
+            contactsToFetch.add(extraInfo.oldAssignedToId);
+          if (extraInfo.newAssignedToId !== null)
+            contactsToFetch.add(extraInfo.newAssignedToId);
         }
-        if (ticketActivity.type === TicketActivityType.AssignmentRemoved) {
-          contactsToFetch.add(
-            (ticketActivity.extraInfo as TicketAssignmentRemoved)
-              .oldAssignedToId
-          );
-        }
-        if (ticketActivity.type === TicketActivityType.LabelAdded) {
-          (ticketActivity.extraInfo as TicketLabelAdded).labelTypeIds.forEach(
-            (labelTypeId) => {
-              labelTypesToFetch.add(labelTypeId);
-            }
-          );
-        }
-        if (ticketActivity.type === TicketActivityType.LabelRemoved) {
-          (ticketActivity.extraInfo as TicketLabelRemoved).labelTypeIds.forEach(
-            (labelTypeId) => {
-              labelTypesToFetch.add(labelTypeId);
-            }
-          );
+        if (ticketActivity.type === TicketActivityType.LabelsChanged) {
+          const extraInfo = ticketActivity.extraInfo as TicketLabelsChanged;
+          extraInfo.oldLabelIds.forEach((labelId) => {
+            labelsToFetch.add(labelId);
+          });
+          extraInfo.newLabelIds.forEach((labelId) => {
+            labelsToFetch.add(labelId);
+          });
         }
       });
 
@@ -106,60 +74,35 @@ export const ticketActivityRouter = createTRPCRouter({
             })
           : [];
 
-      const labelTypes =
-        labelTypesToFetch.size > 0
-          ? await ctx.db.query.labelTypes.findMany({
-              where: inArray(schema.labelTypes.id, [...labelTypesToFetch]),
+      const labels =
+        labelsToFetch.size > 0
+          ? await ctx.db.query.labels.findMany({
+              where: inArray(schema.labelTypes.id, [...labelsToFetch]),
+              with: { labelType: true },
             })
           : [];
 
       ticketActivities.forEach((ticketActivity) => {
         switch (ticketActivity.type) {
-          case TicketActivityType.AssignmentAdded:
-            augmentedTicketActivities.push({
-              ...ticketActivity,
-              extraInfo: {
-                ...(ticketActivity.extraInfo as TicketAssignmentAdded),
-                newAssignedTo: contacts.find(
-                  (contact) =>
-                    contact.id ===
-                    (ticketActivity.extraInfo as TicketAssignmentAdded)
-                      .newAssignedToId
-                ),
-              },
-            });
-            break;
           case TicketActivityType.AssignmentChanged:
             augmentedTicketActivities.push({
               ...ticketActivity,
               extraInfo: {
                 ...(ticketActivity.extraInfo as TicketAssignmentChanged),
-                oldAssignedTo: contacts.find(
-                  (contact) =>
-                    contact.id ===
-                    (ticketActivity.extraInfo as TicketAssignmentChanged)
-                      .oldAssignedToId
-                ),
-                newAssignedTo: contacts.find(
-                  (contact) =>
-                    contact.id ===
-                    (ticketActivity.extraInfo as TicketAssignmentChanged)
-                      .newAssignedToId
-                ),
-              },
-            });
-            break;
-          case TicketActivityType.AssignmentRemoved:
-            augmentedTicketActivities.push({
-              ...ticketActivity,
-              extraInfo: {
-                ...(ticketActivity.extraInfo as TicketAssignmentRemoved),
-                oldAssignedTo: contacts.find(
-                  (contact) =>
-                    contact.id ===
-                    (ticketActivity.extraInfo as TicketAssignmentRemoved)
-                      .oldAssignedToId
-                ),
+                oldAssignedTo:
+                  contacts.find(
+                    (contact) =>
+                      contact.id ===
+                      (ticketActivity.extraInfo as TicketAssignmentChanged)
+                        .oldAssignedToId
+                  ) ?? null,
+                newAssignedTo:
+                  contacts.find(
+                    (contact) =>
+                      contact.id ===
+                      (ticketActivity.extraInfo as TicketAssignmentChanged)
+                        .newAssignedToId
+                  ) ?? null,
               },
             });
             break;
@@ -169,28 +112,20 @@ export const ticketActivityRouter = createTRPCRouter({
               extraInfo: ticketActivity.extraInfo as TicketCommented,
             });
             break;
-          case TicketActivityType.LabelAdded:
+          case TicketActivityType.LabelsChanged:
             augmentedTicketActivities.push({
               ...ticketActivity,
               extraInfo: {
-                ...(ticketActivity.extraInfo as TicketLabelAdded),
-                labelTypes: labelTypes.filter((labelType) =>
+                ...(ticketActivity.extraInfo as TicketLabelsChanged),
+                oldLabels: labels.filter((label) =>
                   (
-                    ticketActivity.extraInfo as TicketLabelAdded
-                  ).labelTypeIds.includes(labelType.id)
+                    ticketActivity.extraInfo as TicketLabelsChanged
+                  ).oldLabelIds.includes(label.id)
                 ),
-              },
-            });
-            break;
-          case TicketActivityType.LabelRemoved:
-            augmentedTicketActivities.push({
-              ...ticketActivity,
-              extraInfo: {
-                ...(ticketActivity.extraInfo as TicketLabelRemoved),
-                labelTypes: labelTypes.filter((labelType) =>
+                newLabels: labels.filter((label) =>
                   (
-                    ticketActivity.extraInfo as TicketLabelRemoved
-                  ).labelTypeIds.includes(labelType.id)
+                    ticketActivity.extraInfo as TicketLabelsChanged
+                  ).newLabelIds.includes(label.id)
                 ),
               },
             });

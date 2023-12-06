@@ -4,12 +4,9 @@ import { json, pgEnum, timestamp, varchar } from 'drizzle-orm/pg-core';
 import { generateEntityId } from '@cs/lib/generate-entity-id';
 import {
   TicketActivityType,
-  TicketAssignmentAdded,
   TicketAssignmentChanged,
-  TicketAssignmentRemoved,
   TicketCommented,
-  TicketLabelAdded,
-  TicketLabelRemoved,
+  TicketLabelsChanged,
   TicketPriorityChanged,
 } from '@cs/lib/ticketActivities';
 
@@ -18,13 +15,10 @@ import { contacts } from './contact';
 import { tickets } from './ticket';
 
 export const ticketStatus = pgEnum('ticketActivityType', [
-  TicketActivityType.AssignmentAdded,
   TicketActivityType.AssignmentChanged,
-  TicketActivityType.AssignmentRemoved,
   TicketActivityType.Commented,
   TicketActivityType.Created,
-  TicketActivityType.LabelAdded,
-  TicketActivityType.LabelRemoved,
+  TicketActivityType.LabelsChanged,
   TicketActivityType.PriorityChanged,
   TicketActivityType.Resolved,
   TicketActivityType.Reopened,
@@ -34,12 +28,9 @@ export const ticketActivities = pgTable('ticketActivity', {
   id: varchar('id').primaryKey().notNull().default(generateEntityId('', 'ta')),
   type: ticketStatus('type').notNull(),
   extraInfo: json('extraInfo').$type<
-    | TicketAssignmentAdded
     | TicketAssignmentChanged
-    | TicketAssignmentRemoved
     | TicketCommented
-    | TicketLabelAdded
-    | TicketLabelRemoved
+    | TicketLabelsChanged
     | TicketPriorityChanged
   >(),
   ticketId: varchar('ticketId')
