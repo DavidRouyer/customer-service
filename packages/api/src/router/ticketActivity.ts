@@ -12,8 +12,8 @@ import {
 import { createTRPCRouter, protectedProcedure } from '../trpc';
 
 export type TicketAssignmentChangedWithData = {
-  oldAssignedTo: InferSelectModel<typeof schema.contacts> | null;
-  newAssignedTo: InferSelectModel<typeof schema.contacts> | null;
+  oldAssignedTo?: InferSelectModel<typeof schema.contacts> | null;
+  newAssignedTo?: InferSelectModel<typeof schema.contacts> | null;
 } & TicketAssignmentChanged;
 
 export type TicketLabelsChangedWithData = {
