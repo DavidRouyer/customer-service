@@ -83,19 +83,16 @@ export const ticketRouter = createTRPCRouter({
                   mentions: exists(
                     ctx.db
                       .selectDistinct({
-                        id: schema.contactsToTicketComments.ticketId,
+                        id: schema.ticketMentions.ticketId,
                       })
-                      .from(schema.contactsToTicketComments)
+                      .from(schema.ticketMentions)
                       .where(
                         and(
                           eq(
-                            schema.contactsToTicketComments.contactId,
+                            schema.ticketMentions.contactId,
                             ctx.session.user.contactId ?? ''
                           ),
-                          eq(
-                            schema.contactsToTicketComments.ticketId,
-                            tickets.id
-                          )
+                          eq(schema.ticketMentions.ticketId, tickets.id)
                         )
                       )
                       .limit(1)
@@ -135,9 +132,9 @@ export const ticketRouter = createTRPCRouter({
         orderBy: asc(schema.messages.createdAt),
         with: { createdBy: true },
       });
-      const comments = await ctx.db.query.ticketComments.findMany({
-        orderBy: asc(schema.ticketComments.createdAt),
-        where: eq(schema.ticketComments.ticketId, input.ticketId),
+      const notes = await ctx.db.query.ticketNotes.findMany({
+        orderBy: asc(schema.ticketNotes.createdAt),
+        where: eq(schema.ticketNotes.ticketId, input.ticketId),
         with: { createdBy: true },
       });
       return [
@@ -145,13 +142,13 @@ export const ticketRouter = createTRPCRouter({
           ...message,
           type: 'message' as const,
         })),
-        ...comments.map((comment) => ({
-          ...comment,
+        ...notes.map((note) => ({
+          ...note,
           status: MessageStatus.Seen,
           contentType: MessageContentType.TextJson,
           direction: MessageDirection.Outbound,
-          content: JSON.stringify(comment.content),
-          type: 'comment' as const,
+          content: JSON.stringify(note.content),
+          type: 'note' as const,
         })),
       ].toSorted((a, b) => {
         if (a.createdAt < b.createdAt) return -1;
@@ -189,10 +186,10 @@ export const ticketRouter = createTRPCRouter({
     (SELECT
       count(DISTINCT ${schema.tickets.id})::int AS "total"
       FROM ${schema.tickets}
-      LEFT JOIN ${schema.contactsToTicketComments} ON ${
-        schema.contactsToTicketComments.ticketId
+      LEFT JOIN ${schema.ticketMentions} ON ${
+        schema.ticketMentions.ticketId
       } = ${schema.tickets.id}
-      WHERE ${schema.contactsToTicketComments.contactId} = ${
+      WHERE ${schema.ticketMentions.contactId} = ${
         ctx.session.user.contactId ?? 0
       }) as "mentions"`);
 

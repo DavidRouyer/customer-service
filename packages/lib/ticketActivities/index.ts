@@ -7,7 +7,7 @@ type TicketAssignmentChanged = {
 };
 
 type TicketCommented = {
-  comment: string;
+  text: string;
 };
 
 type TicketLabelsChanged = {

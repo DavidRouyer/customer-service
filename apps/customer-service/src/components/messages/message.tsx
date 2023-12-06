@@ -12,7 +12,7 @@ import { Message as MessageType } from '~/types/Message';
 
 export type MessageProps = {
   message: MessageType;
-  type: 'message' | 'comment';
+  type: 'message' | 'note';
   showStatus?: boolean;
   position?: 'single' | 'first' | 'normal' | 'last';
   children?: React.ReactNode;

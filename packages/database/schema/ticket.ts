@@ -10,9 +10,9 @@ import {
 
 import { pgTable } from './_table';
 import { contacts } from './contact';
-import { contactsToTicketComments } from './contactsToTicketComments';
 import { labels } from './label';
 import { messages } from './message';
+import { ticketMentions } from './ticketMentions';
 
 export const ticketStatus = pgEnum('ticketStatus', [
   TicketStatus.Open,
@@ -84,6 +84,6 @@ export const ticketsRelations = relations(tickets, ({ one, many }) => ({
     references: [contacts.id],
   }),
   messages: many(messages),
-  contactsToTicketComments: many(contactsToTicketComments),
+  ticketMentions: many(ticketMentions),
   labels: many(labels),
 }));

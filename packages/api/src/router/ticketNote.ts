@@ -8,13 +8,13 @@ import { TicketActivityType, TicketCommented } from '@cs/lib/ticketActivities';
 
 import { createTRPCRouter, protectedProcedure } from '../trpc';
 
-export const ticketCommentRouter = createTRPCRouter({
+export const ticketNoteRouter = createTRPCRouter({
   byTicketId: protectedProcedure
     .input(z.object({ ticketId: z.string() }))
     .query(async ({ ctx, input }) => {
-      return ctx.db.query.ticketComments.findMany({
-        orderBy: asc(schema.ticketComments.createdAt),
-        where: eq(schema.ticketComments.ticketId, input.ticketId),
+      return ctx.db.query.ticketNotes.findMany({
+        orderBy: asc(schema.ticketNotes.createdAt),
+        where: eq(schema.ticketNotes.ticketId, input.ticketId),
         with: { createdBy: true },
       });
     }),
@@ -58,8 +58,8 @@ export const ticketCommentRouter = createTRPCRouter({
       return await ctx.db.transaction(async (tx) => {
         const creationDate = new Date();
 
-        const newComment = await tx
-          .insert(schema.ticketComments)
+        const newNote = await tx
+          .insert(schema.ticketNotes)
           .values({
             ...input,
             content: content,
@@ -67,20 +67,20 @@ export const ticketCommentRouter = createTRPCRouter({
             createdById: ctx.session.user.contactId ?? '',
           })
           .returning({
-            id: schema.ticketComments.id,
-            createdAt: schema.ticketComments.createdAt,
+            id: schema.ticketNotes.id,
+            createdAt: schema.ticketNotes.createdAt,
           })
           .then((res) => res[0]);
 
-        if (!newComment) {
+        if (!newNote) {
           tx.rollback();
           return;
         }
 
         if (mentionIds.length > 0) {
-          await tx.insert(schema.contactsToTicketComments).values(
+          await tx.insert(schema.ticketMentions).values(
             mentionIds.map((mentionId) => ({
-              ticketCommentId: newComment.id,
+              ticketNoteId: newNote.id,
               contactId: mentionId,
               ticketId: ticket.id,
             }))
@@ -91,14 +91,14 @@ export const ticketCommentRouter = createTRPCRouter({
           ticketId: input.ticketId,
           type: TicketActivityType.Commented,
           extraInfo: {
-            comment: input.content,
+            text: input.content,
           } satisfies TicketCommented,
-          createdAt: newComment.createdAt,
+          createdAt: newNote.createdAt,
           createdById: ctx.session.user.contactId ?? '',
         });
 
         return {
-          id: newComment.id,
+          id: newNote.id,
         };
       });
     }),

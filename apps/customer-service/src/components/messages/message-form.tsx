@@ -93,7 +93,7 @@ export const MessageForm: FC<{ ticketId: string }> = ({ ticketId }) => {
       void utils.ticket.conversation.invalidate({ ticketId: ticketId });
     },
   });
-  const { mutateAsync: sendComment } = api.ticketComment.create.useMutation({
+  const { mutateAsync: sendNote } = api.ticketNote.create.useMutation({
     onMutate: async (newTicket) => {
       // Cancel any outgoing refetches
       // (so they don't overwrite our optimistic update)
@@ -114,12 +114,12 @@ export const MessageForm: FC<{ ticketId: string }> = ({ ticketId }) => {
             ...(oldQueryData ?? []),
             {
               id: self.crypto.randomUUID(),
-              type: 'comment',
+              type: 'note',
               direction: MessageDirection.Outbound,
               contentType: MessageContentType.TextJson,
               status: MessageStatus.Pending,
               content: newTicket.content,
-              createdAt: newTicket.createdAt,
+              createdAt: new Date(),
               createdById: sessionData?.user?.contactId ?? 0,
               // TODO: remove hack by fetching contact from user
               createdBy: {
@@ -132,13 +132,13 @@ export const MessageForm: FC<{ ticketId: string }> = ({ ticketId }) => {
       );
 
       // Return a context object with the snapshotted value
-      return { previousComments: previousConversationItem };
+      return { previousNotes: previousConversationItem };
     },
     onError: (err, _newTicket, context) => {
       // TODO: handle failed queries
       utils.ticket.conversation.setData(
         { ticketId: _newTicket.ticketId },
-        context?.previousComments ?? []
+        context?.previousNotes ?? []
       );
     },
     onSettled: (_, __, { ticketId }) => {
@@ -158,11 +158,9 @@ export const MessageForm: FC<{ ticketId: string }> = ({ ticketId }) => {
         content: data.content,
       });
     } else {
-      sendComment({
+      sendNote({
         ticketId: ticketId,
         content: data.content,
-        createdAt: new Date(),
-        createdById: sessionData?.user?.contactId ?? '',
       });
     }
 
@@ -184,7 +182,7 @@ export const MessageForm: FC<{ ticketId: string }> = ({ ticketId }) => {
               'overflow-hidden rounded-lg shadow-sm ring-1 ring-inset ring-border focus-within:ring-2',
               {
                 'bg-warning/30 ring-warning/70 focus-within:ring-warning':
-                  messageMode === 'comment',
+                  messageMode === 'note',
                 'focus-within:ring-foreground': messageMode === 'message',
               }
             )}
@@ -232,9 +230,9 @@ export const MessageForm: FC<{ ticketId: string }> = ({ ticketId }) => {
                 <div className="flex items-center space-x-2">
                   <Switch
                     id="message-mode"
-                    checked={messageMode === 'comment'}
+                    checked={messageMode === 'note'}
                     onCheckedChange={(checked) =>
-                      setMessageMode(checked ? 'comment' : 'message')
+                      setMessageMode(checked ? 'note' : 'message')
                     }
                   />
                   <Label htmlFor="message-mode">

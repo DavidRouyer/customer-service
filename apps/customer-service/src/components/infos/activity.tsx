@@ -76,7 +76,7 @@ export const Activity: FC<{
                     <p className="text-sm leading-6 text-gray-500">
                       <NodeContent
                         content={
-                          (ticketActivity.extraInfo as TicketCommented)?.comment
+                          (ticketActivity.extraInfo as TicketCommented)?.text
                         }
                       />
                     </p>

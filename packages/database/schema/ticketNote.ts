@@ -8,7 +8,7 @@ import { pgTable } from './_table';
 import { contacts } from './contact';
 import { tickets } from './ticket';
 
-export const ticketComments = pgTable('ticketComment', {
+export const ticketNotes = pgTable('ticketNote', {
   id: varchar('id').primaryKey().notNull().default(generateEntityId('', 'tc')),
   content: jsonb('content').$type<SerializedEditorState>().notNull(),
   ticketId: varchar('ticketId')
@@ -28,13 +28,13 @@ export const ticketComments = pgTable('ticketComment', {
     }),
 });
 
-export const ticketCommentsRelations = relations(ticketComments, ({ one }) => ({
+export const ticketNotesRelations = relations(ticketNotes, ({ one }) => ({
   createdBy: one(contacts, {
-    fields: [ticketComments.createdById],
+    fields: [ticketNotes.createdById],
     references: [contacts.id],
   }),
   ticket: one(tickets, {
-    fields: [ticketComments.ticketId],
+    fields: [ticketNotes.ticketId],
     references: [tickets.id],
   }),
 }));
