@@ -19,7 +19,6 @@ export function generateEntityId(idProperty: string, prefix?: string): string {
   }
 
   const id = ulid();
-  console.log('generateEntityId', idProperty, id, prefix);
   prefix = prefix ? `${prefix}_` : '';
   return `${prefix}${id}`;
 }
