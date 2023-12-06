@@ -2,18 +2,18 @@ import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
 
 import { asc, eq, schema } from '@cs/database';
-import { MessageDirection, MessageStatus } from '@cs/lib/messages';
+import { ChatDirection, ChatStatus } from '@cs/lib/chats';
 import { TicketStatusDetail } from '@cs/lib/tickets';
 
 import { createTRPCRouter, protectedProcedure } from '../trpc';
 
-export const messageRouter = createTRPCRouter({
+export const ticketChatRouter = createTRPCRouter({
   byTicketId: protectedProcedure
     .input(z.object({ ticketId: z.string() }))
     .query(({ ctx, input }) => {
-      return ctx.db.query.messages.findMany({
-        where: eq(schema.messages.ticketId, input.ticketId),
-        orderBy: asc(schema.messages.createdAt),
+      return ctx.db.query.ticketChats.findMany({
+        where: eq(schema.ticketChats.ticketId, input.ticketId),
+        orderBy: asc(schema.ticketChats.createdAt),
         with: { createdBy: true },
       });
     }),
@@ -22,10 +22,10 @@ export const messageRouter = createTRPCRouter({
     .input(
       z.object({
         content: z.string().min(1),
-        contentType: z.enum(schema.messages.contentType.enumValues),
-        direction: z.enum(schema.messages.direction.enumValues),
+        contentType: z.enum(schema.ticketChats.contentType.enumValues),
+        direction: z.enum(schema.ticketChats.direction.enumValues),
         ticketId: z.string(),
-        status: z.enum(schema.messages.status.enumValues),
+        status: z.enum(schema.ticketChats.status.enumValues),
       })
     )
     .mutation(async ({ ctx, input }) => {
@@ -42,21 +42,21 @@ export const messageRouter = createTRPCRouter({
       return await ctx.db.transaction(async (tx) => {
         const creationDate = new Date();
 
-        const newMessage = await tx
-          .insert(schema.messages)
+        const newChat = await tx
+          .insert(schema.ticketChats)
           .values({
             ...input,
-            status: MessageStatus.DeliveredToCloud,
+            status: ChatStatus.DeliveredToCloud,
             createdAt: creationDate,
             createdById: ctx.session.user.contactId ?? '',
           })
           .returning({
-            id: schema.messages.id,
-            createdAt: schema.messages.createdAt,
+            id: schema.ticketChats.id,
+            createdAt: schema.ticketChats.createdAt,
           })
           .then((res) => res[0]);
 
-        if (!newMessage) {
+        if (!newChat) {
           tx.rollback();
           return;
         }
@@ -65,18 +65,18 @@ export const messageRouter = createTRPCRouter({
           .update(schema.tickets)
           .set({
             statusDetail:
-              input.direction === MessageDirection.Inbound
+              input.direction === ChatDirection.Inbound
                 ? TicketStatusDetail.NewReply
                 : TicketStatusDetail.Replied,
-            statusChangedAt: newMessage.createdAt,
+            statusChangedAt: newChat.createdAt,
             statusChangedById: ctx.session.user.contactId ?? '',
-            updatedAt: newMessage.createdAt,
+            updatedAt: newChat.createdAt,
             updatedById: ctx.session.user.contactId ?? '',
           })
           .where(eq(schema.tickets.id, input.ticketId));
 
         return {
-          id: newMessage.id,
+          id: newChat.id,
         };
       });
     }),

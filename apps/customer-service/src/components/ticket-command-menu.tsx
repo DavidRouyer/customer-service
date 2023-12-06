@@ -53,7 +53,7 @@ export function TicketCommandMenu() {
           </CommandItem>
           <CommandItem
             onSelect={() => {
-              setMessageMode('message');
+              setMessageMode('reply');
               setOpen(false);
             }}
           >

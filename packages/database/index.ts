@@ -5,9 +5,9 @@ import * as auth from './schema/auth';
 import * as contact from './schema/contact';
 import * as labels from './schema/label';
 import * as labelTypes from './schema/labelType';
-import * as message from './schema/message';
 import * as ticket from './schema/ticket';
 import * as ticketActivities from './schema/ticketActivity';
+import * as ticketChat from './schema/ticketChat';
 import * as ticketMentions from './schema/ticketMentions';
 import * as ticketNotes from './schema/ticketNote';
 
@@ -16,9 +16,9 @@ export const schema = {
   ...contact,
   ...labels,
   ...labelTypes,
-  ...message,
   ...ticket,
   ...ticketActivities,
+  ...ticketChat,
   ...ticketMentions,
   ...ticketNotes,
 };

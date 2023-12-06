@@ -11,7 +11,7 @@ import {
 import { pgTable } from './_table';
 import { contacts } from './contact';
 import { labels } from './label';
-import { messages } from './message';
+import { ticketChats } from './ticketChat';
 import { ticketMentions } from './ticketMentions';
 
 export const ticketStatus = pgEnum('ticketStatus', [
@@ -83,7 +83,7 @@ export const ticketsRelations = relations(tickets, ({ one, many }) => ({
     fields: [tickets.updatedById],
     references: [contacts.id],
   }),
-  messages: many(messages),
+  messages: many(ticketChats),
   ticketMentions: many(ticketMentions),
   labels: many(labels),
 }));

@@ -1,12 +1,8 @@
 import { neonConfig } from '@neondatabase/serverless';
 import ws from 'ws';
 
+import { ChatContentType, ChatDirection, ChatStatus } from '@cs/lib/chats';
 import { generateEntityId } from '@cs/lib/generate-entity-id';
-import {
-  MessageContentType,
-  MessageDirection,
-  MessageStatus,
-} from '@cs/lib/messages';
 import {
   TicketActivityType,
   TicketAssignmentChanged,
@@ -217,24 +213,24 @@ async function main() {
     createdById: tom.id,
   });
 
-  await db.insert(schema.messages).values({
+  await db.insert(schema.ticketChats).values({
     id: generateEntityId('', 'ms'),
-    contentType: MessageContentType.TextPlain,
+    contentType: ChatContentType.TextPlain,
     content: "My order hasn't arrived yet.",
     createdAt: new Date('2023-05-04T20:54:41.389Z'),
-    direction: MessageDirection.Inbound,
-    status: MessageStatus.Seen,
+    direction: ChatDirection.Inbound,
+    status: ChatStatus.Seen,
     createdById: leslie.id,
     ticketId: leslieTicket.id,
   });
-  await db.insert(schema.messages).values({
+  await db.insert(schema.ticketChats).values({
     id: generateEntityId('', 'ms'),
-    contentType: MessageContentType.TextPlain,
+    contentType: ChatContentType.TextPlain,
     content:
       'We apologize for the inconvenience. Can you please provide your order number so we can investigate?',
     createdAt: new Date('2023-05-11T10:33:56.231Z'),
-    direction: MessageDirection.Outbound,
-    status: MessageStatus.Seen,
+    direction: ChatDirection.Outbound,
+    status: ChatStatus.Seen,
     createdById: tom.id,
     ticketId: leslieTicket.id,
   });
@@ -269,34 +265,34 @@ async function main() {
     createdById: leslie.id,
   });
 
-  await db.insert(schema.messages).values({
+  await db.insert(schema.ticketChats).values({
     id: generateEntityId('', 'ms'),
-    contentType: MessageContentType.TextPlain,
+    contentType: ChatContentType.TextPlain,
     content: 'can ya help me change a product of purchase?',
     createdAt: new Date('2023-05-06T11:23:45.389Z'),
     createdById: leslie.id,
-    direction: MessageDirection.Inbound,
-    status: MessageStatus.Seen,
+    direction: ChatDirection.Inbound,
+    status: ChatStatus.Seen,
     ticketId: leslieTicket2.id,
   });
-  await db.insert(schema.messages).values({
+  await db.insert(schema.ticketChats).values({
     id: generateEntityId('', 'ms'),
-    contentType: MessageContentType.TextPlain,
+    contentType: ChatContentType.TextPlain,
     content: 'Can you tell me which product you would like to change?',
     createdAt: new Date('2023-05-07T22:40Z'),
     createdById: jeff.id,
-    direction: MessageDirection.Outbound,
-    status: MessageStatus.Seen,
+    direction: ChatDirection.Outbound,
+    status: ChatStatus.Seen,
     ticketId: leslieTicket2.id,
   });
-  await db.insert(schema.messages).values({
+  await db.insert(schema.ticketChats).values({
     id: generateEntityId('', 'ms'),
-    contentType: MessageContentType.TextPlain,
+    contentType: ChatContentType.TextPlain,
     content: 'The socks, please',
     createdAt: new Date('2023-05-08T22:40Z'),
     createdById: leslie.id,
-    direction: MessageDirection.Inbound,
-    status: MessageStatus.Seen,
+    direction: ChatDirection.Inbound,
+    status: ChatStatus.Seen,
     ticketId: leslieTicket2.id,
   });
 
@@ -342,14 +338,14 @@ async function main() {
     createdById: leslie.id,
   });
 
-  await db.insert(schema.messages).values({
+  await db.insert(schema.ticketChats).values({
     id: generateEntityId('', 'ms'),
-    contentType: MessageContentType.TextPlain,
+    contentType: ChatContentType.TextPlain,
     content: 'problems with canceling purchase',
     createdAt: new Date('2023-05-06T11:23:45.389Z'),
     createdById: leslie.id,
-    direction: MessageDirection.Inbound,
-    status: MessageStatus.DeliveredToDevice,
+    direction: ChatDirection.Inbound,
+    status: ChatStatus.DeliveredToDevice,
     ticketId: leslieTicket3.id,
   });
 
@@ -396,25 +392,25 @@ async function main() {
     createdById: michael.id,
   });
 
-  await db.insert(schema.messages).values({
+  await db.insert(schema.ticketChats).values({
     id: generateEntityId('', 'ms'),
-    contentType: MessageContentType.TextPlain,
+    contentType: ChatContentType.TextPlain,
     content: 'I received a damaged product.',
     createdAt: new Date('2023-03-03T14:02Z'),
     createdById: michael.id,
-    direction: MessageDirection.Inbound,
-    status: MessageStatus.Seen,
+    direction: ChatDirection.Inbound,
+    status: ChatStatus.Seen,
     ticketId: michaelTicket.id,
   });
-  await db.insert(schema.messages).values({
+  await db.insert(schema.ticketChats).values({
     id: generateEntityId('', 'ms'),
-    contentType: MessageContentType.TextPlain,
+    contentType: ChatContentType.TextPlain,
     content:
       'We apologize for the inconvenience. Can you please provide a photo of the damaged product so we can assist you further?',
     createdAt: new Date('2023-03-12T17:20Z'),
     createdById: jeffrey.id,
-    direction: MessageDirection.Outbound,
-    status: MessageStatus.Seen,
+    direction: ChatDirection.Outbound,
+    status: ChatStatus.Seen,
     ticketId: michaelTicket.id,
   });
 
@@ -455,25 +451,25 @@ async function main() {
     createdById: dries.id,
   });
 
-  await db.insert(schema.messages).values({
+  await db.insert(schema.ticketChats).values({
     id: generateEntityId('', 'ms'),
-    contentType: MessageContentType.TextPlain,
+    contentType: ChatContentType.TextPlain,
     content: 'I need to return an item.',
     createdAt: new Date('2023-03-03T13:23Z'),
     createdById: dries.id,
-    direction: MessageDirection.Inbound,
-    status: MessageStatus.Seen,
+    direction: ChatDirection.Inbound,
+    status: ChatStatus.Seen,
     ticketId: driesTicket.id,
   });
-  await db.insert(schema.messages).values({
+  await db.insert(schema.ticketChats).values({
     id: generateEntityId('', 'ms'),
-    contentType: MessageContentType.TextPlain,
+    contentType: ChatContentType.TextPlain,
     content:
       'Certainly. Please provide your order number and reason for return, and we will provide you with instructions on how to proceed.',
     createdAt: new Date('2023-04-01T06:06Z'),
     createdById: jeffrey.id,
-    direction: MessageDirection.Outbound,
-    status: MessageStatus.DeliveredToDevice,
+    direction: ChatDirection.Outbound,
+    status: ChatStatus.DeliveredToDevice,
     ticketId: driesTicket.id,
   });
 
@@ -515,25 +511,25 @@ async function main() {
     labelTypeId: questionLabelType.id,
   });
 
-  await db.insert(schema.messages).values({
+  await db.insert(schema.ticketChats).values({
     id: generateEntityId('', 'ms'),
-    contentType: MessageContentType.TextPlain,
+    contentType: ChatContentType.TextPlain,
     content: 'I want to change my shipping address.',
     createdAt: new Date('2023-03-02T21:13Z'),
     createdById: lindsay.id,
-    direction: MessageDirection.Inbound,
-    status: MessageStatus.Seen,
+    direction: ChatDirection.Inbound,
+    status: ChatStatus.Seen,
     ticketId: lindsayTicket.id,
   });
-  await db.insert(schema.messages).values({
+  await db.insert(schema.ticketChats).values({
     id: generateEntityId('', 'ms'),
-    contentType: MessageContentType.TextPlain,
+    contentType: ChatContentType.TextPlain,
     content:
       "No problem. Can you please provide your order number and the new shipping address you'd like to use?",
     createdAt: new Date('2023-03-03T22:40Z'),
     createdById: tom.id,
-    direction: MessageDirection.Outbound,
-    status: MessageStatus.DeliveredToDevice,
+    direction: ChatDirection.Outbound,
+    status: ChatStatus.DeliveredToDevice,
     ticketId: lindsayTicket.id,
   });
 

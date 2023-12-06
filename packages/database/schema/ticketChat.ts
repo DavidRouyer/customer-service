@@ -1,40 +1,36 @@
 import { relations } from 'drizzle-orm';
 import { pgEnum, text, timestamp, varchar } from 'drizzle-orm/pg-core';
 
+import { ChatContentType, ChatDirection, ChatStatus } from '@cs/lib/chats';
 import { generateEntityId } from '@cs/lib/generate-entity-id';
-import {
-  MessageContentType,
-  MessageDirection,
-  MessageStatus,
-} from '@cs/lib/messages';
 
 import { pgTable } from './_table';
 import { contacts } from './contact';
 import { tickets } from './ticket';
 
-export const messageDirection = pgEnum('messageDirection', [
-  MessageDirection.Outbound,
-  MessageDirection.Inbound,
+export const chatDirection = pgEnum('chatDirection', [
+  ChatDirection.Outbound,
+  ChatDirection.Inbound,
 ]);
-export const messageContentType = pgEnum('messageContentType', [
-  MessageContentType.TextHtml,
-  MessageContentType.TextJson,
-  MessageContentType.TextPlain,
+export const chatContentType = pgEnum('chatContentType', [
+  ChatContentType.TextHtml,
+  ChatContentType.TextJson,
+  ChatContentType.TextPlain,
 ]);
-export const messageStatus = pgEnum('messageStatus', [
-  MessageStatus.Seen,
-  MessageStatus.DeliveredToDevice,
-  MessageStatus.DeliveredToCloud,
-  MessageStatus.Sent,
-  MessageStatus.Pending,
+export const chatStatus = pgEnum('chatStatus', [
+  ChatStatus.Seen,
+  ChatStatus.DeliveredToDevice,
+  ChatStatus.DeliveredToCloud,
+  ChatStatus.Sent,
+  ChatStatus.Pending,
 ]);
 
-export const messages = pgTable('message', {
+export const ticketChats = pgTable('ticketChat', {
   id: varchar('id').primaryKey().notNull().default(generateEntityId('', 'ms')),
-  status: messageStatus('status').notNull(),
-  contentType: messageContentType('contentType').notNull(),
+  status: chatStatus('status').notNull(),
+  contentType: chatContentType('contentType').notNull(),
   content: text('content').notNull(),
-  direction: messageDirection('direction').notNull(),
+  direction: chatDirection('direction').notNull(),
   createdAt: timestamp('createdAt', { precision: 3, mode: 'date' })
     .defaultNow()
     .notNull(),
@@ -52,13 +48,13 @@ export const messages = pgTable('message', {
     }),
 });
 
-export const messagesRelations = relations(messages, ({ one }) => ({
+export const chatsRelations = relations(ticketChats, ({ one }) => ({
   createdBy: one(contacts, {
-    fields: [messages.createdById],
+    fields: [ticketChats.createdById],
     references: [contacts.id],
   }),
   ticket: one(tickets, {
-    fields: [messages.ticketId],
+    fields: [ticketChats.ticketId],
     references: [tickets.id],
   }),
 }));

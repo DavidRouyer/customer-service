@@ -7,11 +7,7 @@ import { PaperclipIcon, SmilePlusIcon } from 'lucide-react';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
 import { FormattedMessage } from 'react-intl';
 
-import {
-  MessageContentType,
-  MessageDirection,
-  MessageStatus,
-} from '@cs/lib/messages';
+import { ChatContentType, ChatDirection, ChatStatus } from '@cs/lib/chats';
 
 import { messageModeAtom } from '~/components/messages/message-mode-atom';
 import { Button } from '~/components/ui/button';
@@ -42,7 +38,7 @@ export const MessageForm: FC<{ ticketId: string }> = ({ ticketId }) => {
 
   const [messageMode, setMessageMode] = useAtom(messageModeAtom);
 
-  const { mutateAsync: sendMessage } = api.message.create.useMutation({
+  const { mutateAsync: sendMessage } = api.ticketChat.create.useMutation({
     onMutate: async (newMessage) => {
       // Cancel any outgoing refetches
       // (so they don't overwrite our optimistic update)
@@ -61,7 +57,7 @@ export const MessageForm: FC<{ ticketId: string }> = ({ ticketId }) => {
             ...(oldQueryData ?? []),
             {
               id: self.crypto.randomUUID(),
-              type: 'message',
+              type: 'chat',
               ticketId: newMessage.ticketId,
               direction: newMessage.direction,
               contentType: newMessage.contentType,
@@ -115,9 +111,9 @@ export const MessageForm: FC<{ ticketId: string }> = ({ ticketId }) => {
             {
               id: self.crypto.randomUUID(),
               type: 'note',
-              direction: MessageDirection.Outbound,
-              contentType: MessageContentType.TextJson,
-              status: MessageStatus.Pending,
+              direction: ChatDirection.Outbound,
+              contentType: ChatContentType.TextJson,
+              status: ChatStatus.Pending,
               content: newTicket.content,
               createdAt: new Date(),
               createdById: sessionData?.user?.contactId ?? 0,
@@ -149,12 +145,12 @@ export const MessageForm: FC<{ ticketId: string }> = ({ ticketId }) => {
   const form = useForm<MessageFormSchema>();
 
   const onSubmit = (data: MessageFormSchema) => {
-    if (messageMode === 'message') {
+    if (messageMode === 'reply') {
       sendMessage({
         ticketId: ticketId,
-        direction: MessageDirection.Outbound,
-        contentType: MessageContentType.TextJson,
-        status: MessageStatus.Pending,
+        direction: ChatDirection.Outbound,
+        contentType: ChatContentType.TextJson,
+        status: ChatStatus.Pending,
         content: data.content,
       });
     } else {
@@ -183,7 +179,7 @@ export const MessageForm: FC<{ ticketId: string }> = ({ ticketId }) => {
               {
                 'bg-warning/30 ring-warning/70 focus-within:ring-warning':
                   messageMode === 'note',
-                'focus-within:ring-foreground': messageMode === 'message',
+                'focus-within:ring-foreground': messageMode === 'reply',
               }
             )}
           >
@@ -232,7 +228,7 @@ export const MessageForm: FC<{ ticketId: string }> = ({ ticketId }) => {
                     id="message-mode"
                     checked={messageMode === 'note'}
                     onCheckedChange={(checked) =>
-                      setMessageMode(checked ? 'note' : 'message')
+                      setMessageMode(checked ? 'note' : 'reply')
                     }
                   />
                   <Label htmlFor="message-mode">

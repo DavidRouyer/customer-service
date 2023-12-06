@@ -17,11 +17,7 @@ import {
   SQL,
   sql,
 } from '@cs/database';
-import {
-  MessageContentType,
-  MessageDirection,
-  MessageStatus,
-} from '@cs/lib/messages';
+import { ChatContentType, ChatDirection, ChatStatus } from '@cs/lib/chats';
 import {
   TicketActivityType,
   TicketAssignmentChanged,
@@ -102,7 +98,7 @@ export const ticketRouter = createTRPCRouter({
         with: {
           createdBy: true,
           messages: {
-            orderBy: desc(schema.messages.createdAt),
+            orderBy: desc(schema.ticketChats.createdAt),
             limit: 1,
           },
           labels: {
@@ -127,9 +123,9 @@ export const ticketRouter = createTRPCRouter({
   conversation: protectedProcedure
     .input(z.object({ ticketId: z.string() }))
     .query(async ({ ctx, input }) => {
-      const messages = await ctx.db.query.messages.findMany({
-        where: eq(schema.messages.ticketId, input.ticketId),
-        orderBy: asc(schema.messages.createdAt),
+      const messages = await ctx.db.query.ticketChats.findMany({
+        where: eq(schema.ticketChats.ticketId, input.ticketId),
+        orderBy: asc(schema.ticketChats.createdAt),
         with: { createdBy: true },
       });
       const notes = await ctx.db.query.ticketNotes.findMany({
@@ -140,13 +136,13 @@ export const ticketRouter = createTRPCRouter({
       return [
         ...messages.map((message) => ({
           ...message,
-          type: 'message' as const,
+          type: 'chat' as const,
         })),
         ...notes.map((note) => ({
           ...note,
-          status: MessageStatus.Seen,
-          contentType: MessageContentType.TextJson,
-          direction: MessageDirection.Outbound,
+          status: ChatStatus.Seen,
+          contentType: ChatContentType.TextJson,
+          direction: ChatDirection.Outbound,
           content: JSON.stringify(note.content),
           type: 'note' as const,
         })),
