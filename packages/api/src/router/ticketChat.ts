@@ -48,7 +48,7 @@ export const ticketChatRouter = createTRPCRouter({
             ...input,
             status: ChatStatus.DeliveredToCloud,
             createdAt: creationDate,
-            createdById: ctx.session.user.contactId ?? '',
+            createdById: ctx.session.user.id,
           })
           .returning({
             id: schema.ticketChats.id,
@@ -69,9 +69,9 @@ export const ticketChatRouter = createTRPCRouter({
                 ? TicketStatusDetail.NewReply
                 : TicketStatusDetail.Replied,
             statusChangedAt: newChat.createdAt,
-            statusChangedById: ctx.session.user.contactId ?? '',
+            statusChangedById: ctx.session.user.id,
             updatedAt: newChat.createdAt,
-            updatedById: ctx.session.user.contactId ?? '',
+            updatedById: ctx.session.user.id,
           })
           .where(eq(schema.tickets.id, input.ticketId));
 

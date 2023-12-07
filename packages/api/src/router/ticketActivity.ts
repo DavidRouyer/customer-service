@@ -12,8 +12,8 @@ import {
 import { createTRPCRouter, protectedProcedure } from '../trpc';
 
 export type TicketAssignmentChangedWithData = {
-  oldAssignedTo?: InferSelectModel<typeof schema.contacts> | null;
-  newAssignedTo?: InferSelectModel<typeof schema.contacts> | null;
+  oldAssignedTo?: InferSelectModel<typeof schema.customers> | null;
+  newAssignedTo?: InferSelectModel<typeof schema.customers> | null;
 } & TicketAssignmentChanged;
 
 export type TicketLabelsChangedWithData = {
@@ -46,15 +46,15 @@ export const ticketActivityRouter = createTRPCRouter({
           | null;
       })[] = [];
 
-      const contactsToFetch = new Set<string>();
+      const customersToFetch = new Set<string>();
       const labelsToFetch = new Set<string>();
       ticketActivities.forEach((ticketActivity) => {
         if (ticketActivity.type === TicketActivityType.AssignmentChanged) {
           const extraInfo = ticketActivity.extraInfo as TicketAssignmentChanged;
           if (extraInfo.oldAssignedToId !== null)
-            contactsToFetch.add(extraInfo.oldAssignedToId);
+            customersToFetch.add(extraInfo.oldAssignedToId);
           if (extraInfo.newAssignedToId !== null)
-            contactsToFetch.add(extraInfo.newAssignedToId);
+            customersToFetch.add(extraInfo.newAssignedToId);
         }
         if (ticketActivity.type === TicketActivityType.LabelsChanged) {
           const extraInfo = ticketActivity.extraInfo as TicketLabelsChanged;
@@ -67,10 +67,10 @@ export const ticketActivityRouter = createTRPCRouter({
         }
       });
 
-      const contacts =
-        contactsToFetch.size > 0
-          ? await ctx.db.query.contacts.findMany({
-              where: inArray(schema.contacts.id, [...contactsToFetch]),
+      const customers =
+        customersToFetch.size > 0
+          ? await ctx.db.query.customers.findMany({
+              where: inArray(schema.customers.id, [...customersToFetch]),
             })
           : [];
 
@@ -90,16 +90,16 @@ export const ticketActivityRouter = createTRPCRouter({
               extraInfo: {
                 ...(ticketActivity.extraInfo as TicketAssignmentChanged),
                 oldAssignedTo:
-                  contacts.find(
-                    (contact) =>
-                      contact.id ===
+                  customers.find(
+                    (customer) =>
+                      customer.id ===
                       (ticketActivity.extraInfo as TicketAssignmentChanged)
                         .oldAssignedToId
                   ) ?? null,
                 newAssignedTo:
-                  contacts.find(
-                    (contact) =>
-                      contact.id ===
+                  customers.find(
+                    (customer) =>
+                      customer.id ===
                       (ticketActivity.extraInfo as TicketAssignmentChanged)
                         .newAssignedToId
                   ) ?? null,

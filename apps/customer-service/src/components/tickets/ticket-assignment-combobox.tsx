@@ -38,38 +38,34 @@ export const TicketAssignmentCombobox: FC<TicketAssignmentComboboxProps> = ({
 
   const utils = api.useUtils();
 
-  const { data: contactsData } = api.contact.allWithUserId.useQuery(undefined, {
+  const { data: usersData } = api.user.all.useQuery(undefined, {
     select: useCallback(
-      (data: RouterOutputs['contact']['allWithUserId']) => {
-        let newContacts = data.map((contact) => contact);
-        if (sessionData?.user.contactId) {
-          const sessionContact = newContacts.find(
-            (contact) => contact.id === sessionData.user.contactId
+      (data: RouterOutputs['user']['all']) => {
+        let newUsers = data.map((user) => user);
+        if (sessionData?.user.id) {
+          const loggedUser = newUsers.find(
+            (user) => user.id === sessionData.user.id
           );
-          if (sessionContact) {
-            newContacts = [
-              sessionContact,
-              ...newContacts.filter(
-                (contact) => contact.id !== sessionContact.id
-              ),
+          if (loggedUser) {
+            newUsers = [
+              loggedUser,
+              ...newUsers.filter((user) => user.id !== loggedUser.id),
             ];
           }
         }
         if (assignedTo) {
-          const assignedToContact = newContacts.find(
-            (contact) => contact.id === assignedTo.id
+          const assignedToUser = newUsers.find(
+            (user) => user.id === assignedTo.id
           );
-          if (assignedToContact) {
-            newContacts = [
-              assignedToContact,
-              ...newContacts.filter(
-                (contact) => contact.id !== assignedToContact.id
-              ),
+          if (assignedToUser) {
+            newUsers = [
+              assignedToUser,
+              ...newUsers.filter((user) => user.id !== assignedToUser.id),
             ];
           }
         }
 
-        return newContacts;
+        return newUsers;
       },
       [assignedTo, sessionData?.user]
     ),
@@ -92,9 +88,9 @@ export const TicketAssignmentCombobox: FC<TicketAssignmentComboboxProps> = ({
         (oldQueryData) =>
           ({
             ...oldQueryData,
-            assignedToId: newAssignment.contactId,
-            assignedTo: contactsData?.find(
-              (contact) => contact.id === newAssignment.contactId
+            assignedToId: newAssignment.userId,
+            assignedTo: usersData?.find(
+              (user) => user.id === newAssignment.userId
             ),
           }) as NonNullable<RouterOutputs['ticket']['byId']>
       );
@@ -130,9 +126,9 @@ export const TicketAssignmentCombobox: FC<TicketAssignmentComboboxProps> = ({
           (oldQueryData) =>
             ({
               ...oldQueryData,
-              assignedToId: newAssignment.contactId,
-              assignedTo: contactsData?.find(
-                (contact) => contact.id === newAssignment.contactId
+              assignedToId: newAssignment.userId,
+              assignedTo: usersData?.find(
+                (user) => user.id === newAssignment.userId
               ),
             }) as NonNullable<RouterOutputs['ticket']['byId']>
         );
@@ -197,7 +193,7 @@ export const TicketAssignmentCombobox: FC<TicketAssignmentComboboxProps> = ({
           {assignedTo ? (
             <div className="flex items-center gap-x-2">
               <Avatar className="h-4 w-4">
-                <AvatarImage src={assignedTo?.avatarUrl ?? undefined} />
+                <AvatarImage src={assignedTo?.image ?? undefined} />
                 <AvatarFallback>
                   {getInitials(assignedTo?.name ?? '')}
                 </AvatarFallback>
@@ -227,23 +223,23 @@ export const TicketAssignmentCombobox: FC<TicketAssignmentComboboxProps> = ({
             <FormattedMessage id="ticket.assignment.no_results" />
           </CommandEmpty>
           <CommandGroup>
-            {contactsData?.map((contact) => (
+            {usersData?.map((user) => (
               <CommandItem
-                key={contact.id}
+                key={user.id}
                 onSelect={() => {
                   if (assignedTo) {
-                    if (contact.id === assignedTo.id) {
+                    if (user.id === assignedTo.id) {
                       removeAssignment({ id: ticketId });
                     } else {
                       changeAssignment({
                         id: ticketId,
-                        contactId: contact.id,
+                        userId: user.id,
                       });
                     }
                   } else {
                     addAssignment({
                       id: ticketId,
-                      contactId: contact.id,
+                      userId: user.id,
                     });
                   }
                   setOpen(false);
@@ -252,18 +248,18 @@ export const TicketAssignmentCombobox: FC<TicketAssignmentComboboxProps> = ({
                 <Check
                   className={cn(
                     'mr-2 h-4 w-4 shrink-0',
-                    assignedTo?.id === contact.id ? 'opacity-100' : 'opacity-0'
+                    assignedTo?.id === user.id ? 'opacity-100' : 'opacity-0'
                   )}
                 />
                 <div className="flex items-center gap-x-2 truncate">
                   <Avatar className="h-5 w-5">
-                    <AvatarImage src={contact?.avatarUrl ?? undefined} />
+                    <AvatarImage src={user?.image ?? undefined} />
                     <AvatarFallback>
-                      {getInitials(contact?.name ?? '')}
+                      {getInitials(user?.name ?? '')}
                     </AvatarFallback>
                   </Avatar>
                   <p className="truncate text-xs text-muted-foreground">
-                    {contact?.name}
+                    {user?.name}
                   </p>
                 </div>
               </CommandItem>

@@ -64,13 +64,8 @@ export const MessageForm: FC<{ ticketId: string }> = ({ ticketId }) => {
               status: newMessage.status,
               content: newMessage.content,
               createdAt: new Date(),
-              createdById: sessionData?.user?.contactId ?? 0,
-              // TODO: remove hack by fetching contact from user
-              createdBy: {
-                name: sessionData?.user?.name ?? '',
-                avatarUrl: sessionData?.user?.image ?? '',
-                id: sessionData?.user?.contactId ?? 0,
-              },
+              createdById: sessionData?.user?.id ?? 0,
+              createdBy: sessionData?.user,
             },
           ] as ConversationItem[]
       );
@@ -116,13 +111,8 @@ export const MessageForm: FC<{ ticketId: string }> = ({ ticketId }) => {
               status: ChatStatus.Pending,
               content: newTicket.content,
               createdAt: new Date(),
-              createdById: sessionData?.user?.contactId ?? 0,
-              // TODO: remove hack by fetching contact from user
-              createdBy: {
-                name: sessionData?.user?.name ?? '',
-                avatarUrl: sessionData?.user?.image ?? '',
-                id: sessionData?.user?.contactId ?? 0,
-              },
+              createdById: sessionData?.user?.id ?? 0,
+              createdBy: sessionData?.user,
             },
           ] as ConversationItem[]
       );

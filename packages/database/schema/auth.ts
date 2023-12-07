@@ -1,15 +1,7 @@
 import type { AdapterAccount } from '@auth/core/adapters';
-import { relations } from 'drizzle-orm';
-import {
-  integer,
-  primaryKey,
-  text,
-  timestamp,
-  varchar,
-} from 'drizzle-orm/pg-core';
+import { integer, primaryKey, text, timestamp } from 'drizzle-orm/pg-core';
 
 import { pgTable } from './_table';
-import { contacts } from './contact';
 
 export const users = pgTable('user', {
   id: text('id').notNull().primaryKey(),
@@ -18,16 +10,7 @@ export const users = pgTable('user', {
   emailVerified: timestamp('emailVerified', { mode: 'date' }),
   password: text('password'),
   image: text('image'),
-  contactId: varchar('contactId'),
 });
-
-export const usersRelations = relations(users, ({ one, many }) => ({
-  accounts: many(accounts),
-  contact: one(contacts, {
-    fields: [users.contactId],
-    references: [contacts.id],
-  }),
-}));
 
 export const accounts = pgTable(
   'account',

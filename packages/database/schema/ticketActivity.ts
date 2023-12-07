@@ -11,7 +11,7 @@ import {
 } from '@cs/lib/ticketActivities';
 
 import { pgTable } from './_table';
-import { contacts } from './contact';
+import { users } from './auth';
 import { tickets } from './ticket';
 
 export const ticketStatus = pgEnum('ticketActivityType', [
@@ -44,7 +44,7 @@ export const ticketActivities = pgTable('ticketActivity', {
     .notNull(),
   createdById: varchar('createdById')
     .notNull()
-    .references(() => contacts.id, {
+    .references(() => users.id, {
       onDelete: 'restrict',
       onUpdate: 'cascade',
     }),
@@ -53,13 +53,13 @@ export const ticketActivities = pgTable('ticketActivity', {
 export const ticketActivitiesRelations = relations(
   ticketActivities,
   ({ one }) => ({
+    createdBy: one(users, {
+      fields: [ticketActivities.createdById],
+      references: [users.id],
+    }),
     ticket: one(tickets, {
       fields: [ticketActivities.ticketId],
       references: [tickets.id],
-    }),
-    createdBy: one(contacts, {
-      fields: [ticketActivities.createdById],
-      references: [contacts.id],
     }),
   })
 );

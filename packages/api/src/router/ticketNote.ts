@@ -64,7 +64,7 @@ export const ticketNoteRouter = createTRPCRouter({
             ...input,
             content: content,
             createdAt: creationDate,
-            createdById: ctx.session.user.contactId ?? '',
+            createdById: ctx.session.user.id,
           })
           .returning({
             id: schema.ticketNotes.id,
@@ -94,7 +94,7 @@ export const ticketNoteRouter = createTRPCRouter({
             text: input.content,
           } satisfies TicketCommented,
           createdAt: newNote.createdAt,
-          createdById: ctx.session.user.contactId ?? '',
+          createdById: ctx.session.user.id,
         });
 
         return {

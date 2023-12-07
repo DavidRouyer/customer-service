@@ -12,22 +12,22 @@ import { api } from '~/lib/api';
 
 type LinkedTicketsProps = {
   ticketId: string;
-  contactId?: string;
+  customerId?: string;
 };
 
 export const LinkedTickets: FC<LinkedTicketsProps> = ({
   ticketId,
-  contactId,
+  customerId,
 }) => {
   const searchParams = useSearchParams();
 
-  const { data: ticketsData } = api.ticket.byContactId.useQuery(
+  const { data: ticketsData } = api.ticket.byCustomerId.useQuery(
     {
-      contactId: contactId ?? '',
+      customerId: customerId ?? '',
       excludeId: ticketId,
     },
     {
-      enabled: !!contactId,
+      enabled: !!customerId,
     }
   );
 
@@ -100,4 +100,4 @@ export const LinkedTickets: FC<LinkedTicketsProps> = ({
   );
 };
 
-LinkedTickets.displayName = 'UserTicketsPanel';
+LinkedTickets.displayName = 'LinkedTickets';

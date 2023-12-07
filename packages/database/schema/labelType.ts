@@ -3,7 +3,7 @@ import { timestamp, varchar } from 'drizzle-orm/pg-core';
 import { generateEntityId } from '@cs/lib/generate-entity-id';
 
 import { pgTable } from './_table';
-import { contacts } from './contact';
+import { users } from './auth';
 
 export const labelTypes = pgTable('labelType', {
   id: varchar('id').primaryKey().notNull().default(generateEntityId('', 'lt')),
@@ -16,7 +16,7 @@ export const labelTypes = pgTable('labelType', {
     .notNull(),
   createdById: varchar('createdById')
     .notNull()
-    .references(() => contacts.id, {
+    .references(() => users.id, {
       onDelete: 'restrict',
       onUpdate: 'cascade',
     }),

@@ -19,7 +19,7 @@ export const TicketHeader: FC<{ ticketId: string }> = ({ ticketId }) => {
     <div className="flex items-center justify-between border-b pb-6">
       <h3 className="text-base font-semibold leading-6 text-foreground">
         <span className="text-muted-foreground">#{ticketData?.id}</span>{' '}
-        {ticketData?.createdBy.name}
+        {ticketData?.customer.name}
       </h3>
       <div className="flex items-center gap-x-2">
         {ticketData?.status === TicketStatus.Done ? (

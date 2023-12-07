@@ -9,20 +9,28 @@ import {
 } from '@cs/lib/ticketActivities';
 import { TicketPriority, TicketStatus } from '@cs/lib/tickets';
 
-import { db, schema } from '.';
+import { db, eq, schema } from '.';
 
 neonConfig.webSocketConstructor = ws;
 
 async function main() {
-  const botUser = await db
-    .insert(schema.contacts)
+  let botUser = await db
+    .insert(schema.users)
     .values({
-      id: generateEntityId('', 'co'),
+      id: '40cebacc-c7ae-4b5b-8072-3122d572c6d4',
       name: 'Bot',
       email: 'bot@example.com',
     })
-    .returning({ id: schema.contacts.id })
+    .onConflictDoNothing()
+    .returning({ id: schema.customers.id })
     .then((res) => res[0]);
+
+  if (!botUser?.id)
+    botUser = await db.query.users.findFirst({
+      where: eq(schema.users.id, '40cebacc-c7ae-4b5b-8072-3122d572c6d4'),
+    });
+
+  if (!botUser?.id) throw new Error('Could not create user');
 
   const bugReportLabelType = await db
     .insert(schema.labelTypes)
@@ -30,7 +38,7 @@ async function main() {
       id: generateEntityId('', 'lt'),
       name: 'Bug report',
       icon: 'bug',
-      createdById: botUser!.id,
+      createdById: botUser.id,
     })
     .returning({ id: schema.labelTypes.id })
     .then((res) => res[0]);
@@ -43,7 +51,7 @@ async function main() {
       id: generateEntityId('', 'lt'),
       name: 'Feature request',
       icon: 'lightbulb',
-      createdById: botUser!.id,
+      createdById: botUser.id,
     })
     .returning({ id: schema.labelTypes.id })
     .then((res) => res[0]);
@@ -57,14 +65,14 @@ async function main() {
       id: generateEntityId('', 'lt'),
       name: 'General question',
       icon: 'help-circle',
-      createdById: botUser!.id,
+      createdById: botUser.id,
     })
     .returning({ id: schema.labelTypes.id })
     .then((res) => res[0]);
 
   if (!questionLabelType?.id) throw new Error('Could not create label type');
 
-  await db.insert(schema.contacts).values({
+  await db.insert(schema.customers).values({
     id: generateEntityId('', 'co'),
     name: 'Courtney Henry',
     email: 'courtney.henry@example.com',
@@ -85,7 +93,7 @@ async function main() {
   if (!tomUser?.id) throw new Error('Could not create user');
 
   const tom = await db
-    .insert(schema.contacts)
+    .insert(schema.customers)
     .values({
       id: generateEntityId('', 'co'),
       name: 'Tom Cook',
@@ -97,10 +105,10 @@ async function main() {
       timezone: 'America/Los_Angeles',
       userId: tomUser.id,
     })
-    .returning({ id: schema.contacts.id })
+    .returning({ id: schema.customers.id })
     .then((res) => res[0]);
 
-  if (!tom?.id) throw new Error('Could not create contact');
+  if (!tom?.id) throw new Error('Could not create customer');
 
   const jeffUser = await db
     .insert(schema.users)
@@ -115,7 +123,7 @@ async function main() {
   if (!jeffUser?.id) throw new Error('Could not create user');
 
   const jeff = await db
-    .insert(schema.contacts)
+    .insert(schema.customers)
     .values({
       id: generateEntityId('', 'co'),
       name: 'Jeff Lacey',
@@ -127,12 +135,12 @@ async function main() {
       timezone: 'America/Los_Angeles',
       userId: tomUser.id,
     })
-    .returning({ id: schema.contacts.id })
+    .returning({ id: schema.customers.id })
     .then((res) => res[0]);
 
-  if (!jeff?.id) throw new Error('Could not create contact');
+  if (!jeff?.id) throw new Error('Could not create customer');
 
-  await db.insert(schema.contacts).values({
+  await db.insert(schema.customers).values({
     id: generateEntityId('', 'co'),
     name: 'Lawrence Brooks',
     email: 'lawrence.brooks@example.com',
@@ -141,7 +149,7 @@ async function main() {
   });
 
   const jeffrey = await db
-    .insert(schema.contacts)
+    .insert(schema.customers)
     .values({
       id: generateEntityId('', 'co'),
       name: 'Jeffrey Clark',
@@ -149,13 +157,13 @@ async function main() {
       avatarUrl:
         'https://images.unsplash.com/photo-1517070208541-6ddc4d3efbcb?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
     })
-    .returning({ id: schema.contacts.id })
+    .returning({ id: schema.customers.id })
     .then((res) => res[0]);
 
-  if (!jeffrey?.id) throw new Error('Could not create contact');
+  if (!jeffrey?.id) throw new Error('Could not create customer');
 
   const leslie = await db
-    .insert(schema.contacts)
+    .insert(schema.customers)
     .values({
       id: generateEntityId('', 'co'),
       name: 'Leslie Alexandre',
@@ -166,10 +174,10 @@ async function main() {
       language: 'fr_FR',
       timezone: 'Europe/Paris',
     })
-    .returning({ id: schema.contacts.id })
+    .returning({ id: schema.customers.id })
     .then((res) => res[0]);
 
-  if (!leslie?.id) throw new Error('Could not create contact');
+  if (!leslie?.id) throw new Error('Could not create customer');
 
   const leslieTicket = await db
     .insert(schema.tickets)
@@ -178,9 +186,10 @@ async function main() {
       title: "Order hasn't arrived",
       status: TicketStatus.Open,
       priority: TicketPriority.Critical,
+      customerId: leslie.id,
       createdAt: new Date('2023-05-04T20:54:41.389Z'),
-      createdById: leslie.id,
-      assignedToId: tom.id,
+      createdById: botUser.id,
+      assignedToId: tomUser.id,
     })
     .returning({ id: schema.tickets.id, createdAt: schema.tickets.createdAt })
     .then((res) => res[0]);
@@ -198,7 +207,7 @@ async function main() {
     ticketId: leslieTicket.id,
     type: TicketActivityType.Created,
     createdAt: leslieTicket.createdAt,
-    createdById: leslie.id,
+    createdById: botUser.id,
   });
 
   await db.insert(schema.ticketActivities).values({
@@ -210,7 +219,7 @@ async function main() {
       newAssignedToId: tom.id,
     } satisfies TicketAssignmentChanged,
     createdAt: new Date('2023-05-20T20:54:41.389Z'),
-    createdById: tom.id,
+    createdById: botUser.id,
   });
 
   await db.insert(schema.ticketChats).values({
@@ -220,7 +229,7 @@ async function main() {
     createdAt: new Date('2023-05-04T20:54:41.389Z'),
     direction: ChatDirection.Inbound,
     status: ChatStatus.Seen,
-    createdById: leslie.id,
+    createdById: botUser.id,
     ticketId: leslieTicket.id,
   });
   await db.insert(schema.ticketChats).values({
@@ -231,7 +240,7 @@ async function main() {
     createdAt: new Date('2023-05-11T10:33:56.231Z'),
     direction: ChatDirection.Outbound,
     status: ChatStatus.Seen,
-    createdById: tom.id,
+    createdById: botUser.id,
     ticketId: leslieTicket.id,
   });
 
@@ -242,9 +251,10 @@ async function main() {
       title: 'Change product of purchase',
       status: TicketStatus.Open,
       priority: TicketPriority.Medium,
+      customerId: leslie.id,
       createdAt: new Date('2023-05-06T11:23:45.389Z'),
-      createdById: leslie.id,
-      assignedToId: jeff.id,
+      createdById: botUser.id,
+      assignedToId: jeffUser.id,
     })
     .returning({ id: schema.tickets.id, createdAt: schema.tickets.createdAt })
     .then((res) => res[0]);
@@ -262,7 +272,7 @@ async function main() {
     ticketId: leslieTicket2.id,
     type: TicketActivityType.Created,
     createdAt: leslieTicket2.createdAt,
-    createdById: leslie.id,
+    createdById: botUser.id,
   });
 
   await db.insert(schema.ticketChats).values({
@@ -270,7 +280,7 @@ async function main() {
     contentType: ChatContentType.TextPlain,
     content: 'can ya help me change a product of purchase?',
     createdAt: new Date('2023-05-06T11:23:45.389Z'),
-    createdById: leslie.id,
+    createdById: botUser.id,
     direction: ChatDirection.Inbound,
     status: ChatStatus.Seen,
     ticketId: leslieTicket2.id,
@@ -280,7 +290,7 @@ async function main() {
     contentType: ChatContentType.TextPlain,
     content: 'Can you tell me which product you would like to change?',
     createdAt: new Date('2023-05-07T22:40Z'),
-    createdById: jeff.id,
+    createdById: botUser.id,
     direction: ChatDirection.Outbound,
     status: ChatStatus.Seen,
     ticketId: leslieTicket2.id,
@@ -290,7 +300,7 @@ async function main() {
     contentType: ChatContentType.TextPlain,
     content: 'The socks, please',
     createdAt: new Date('2023-05-08T22:40Z'),
-    createdById: leslie.id,
+    createdById: botUser.id,
     direction: ChatDirection.Inbound,
     status: ChatStatus.Seen,
     ticketId: leslieTicket2.id,
@@ -303,8 +313,9 @@ async function main() {
       title: 'Problem with canceling purchase',
       status: TicketStatus.Done,
       priority: TicketPriority.Medium,
+      customerId: leslie.id,
       createdAt: new Date('2023-05-06T11:23:45.389Z'),
-      createdById: leslie.id,
+      createdById: botUser.id,
       statusChangedAt: new Date('2023-06-12T06:10:45.389Z'),
     })
     .returning({
@@ -327,7 +338,7 @@ async function main() {
     ticketId: leslieTicket3.id,
     type: TicketActivityType.Created,
     createdAt: leslieTicket3.createdAt,
-    createdById: leslie.id,
+    createdById: botUser.id,
   });
 
   await db.insert(schema.ticketActivities).values({
@@ -335,7 +346,7 @@ async function main() {
     ticketId: leslieTicket3.id,
     type: TicketActivityType.Resolved,
     createdAt: leslieTicket3.statusChangedAt ?? new Date(),
-    createdById: leslie.id,
+    createdById: botUser.id,
   });
 
   await db.insert(schema.ticketChats).values({
@@ -343,14 +354,14 @@ async function main() {
     contentType: ChatContentType.TextPlain,
     content: 'problems with canceling purchase',
     createdAt: new Date('2023-05-06T11:23:45.389Z'),
-    createdById: leslie.id,
+    createdById: botUser.id,
     direction: ChatDirection.Inbound,
     status: ChatStatus.DeliveredToDevice,
     ticketId: leslieTicket3.id,
   });
 
   const michael = await db
-    .insert(schema.contacts)
+    .insert(schema.customers)
     .values({
       id: generateEntityId('', 'co'),
       name: 'Michael Foster',
@@ -361,7 +372,7 @@ async function main() {
     .returning({ id: schema.tickets.id })
     .then((res) => res[0]);
 
-  if (!michael?.id) throw new Error('Could not create contact');
+  if (!michael?.id) throw new Error('Could not create customer');
 
   const michaelTicket = await db
     .insert(schema.tickets)
@@ -370,8 +381,9 @@ async function main() {
       title: 'Damaged product received',
       status: TicketStatus.Open,
       priority: TicketPriority.Medium,
+      customerId: michael.id,
       createdAt: new Date('2023-03-03T14:02Z'),
-      createdById: michael.id,
+      createdById: botUser.id,
     })
     .returning({ id: schema.tickets.id, createdAt: schema.tickets.createdAt })
     .then((res) => res[0]);
@@ -389,7 +401,7 @@ async function main() {
     ticketId: michaelTicket.id,
     type: TicketActivityType.Created,
     createdAt: michaelTicket.createdAt,
-    createdById: michael.id,
+    createdById: botUser.id,
   });
 
   await db.insert(schema.ticketChats).values({
@@ -397,7 +409,7 @@ async function main() {
     contentType: ChatContentType.TextPlain,
     content: 'I received a damaged product.',
     createdAt: new Date('2023-03-03T14:02Z'),
-    createdById: michael.id,
+    createdById: botUser.id,
     direction: ChatDirection.Inbound,
     status: ChatStatus.Seen,
     ticketId: michaelTicket.id,
@@ -408,14 +420,14 @@ async function main() {
     content:
       'We apologize for the inconvenience. Can you please provide a photo of the damaged product so we can assist you further?',
     createdAt: new Date('2023-03-12T17:20Z'),
-    createdById: jeffrey.id,
+    createdById: botUser.id,
     direction: ChatDirection.Outbound,
     status: ChatStatus.Seen,
     ticketId: michaelTicket.id,
   });
 
   const dries = await db
-    .insert(schema.contacts)
+    .insert(schema.customers)
     .values({
       id: generateEntityId('', 'co'),
       name: 'Dries Vincent',
@@ -423,10 +435,10 @@ async function main() {
       avatarUrl:
         'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
     })
-    .returning({ id: schema.contacts.id })
+    .returning({ id: schema.customers.id })
     .then((res) => res[0]);
 
-  if (!dries?.id) throw new Error('Could not create contact');
+  if (!dries?.id) throw new Error('Could not create customer');
 
   const driesTicket = await db
     .insert(schema.tickets)
@@ -435,8 +447,9 @@ async function main() {
       title: 'Need to return an item',
       status: TicketStatus.Open,
       priority: TicketPriority.Medium,
+      customerId: dries.id,
       createdAt: new Date('2023-03-03T13:23Z'),
-      createdById: dries.id,
+      createdById: botUser.id,
     })
     .returning({ id: schema.tickets.id, createdAt: schema.tickets.createdAt })
     .then((res) => res[0]);
@@ -448,7 +461,7 @@ async function main() {
     ticketId: driesTicket.id,
     type: TicketActivityType.Created,
     createdAt: driesTicket.createdAt,
-    createdById: dries.id,
+    createdById: botUser.id,
   });
 
   await db.insert(schema.ticketChats).values({
@@ -456,7 +469,7 @@ async function main() {
     contentType: ChatContentType.TextPlain,
     content: 'I need to return an item.',
     createdAt: new Date('2023-03-03T13:23Z'),
-    createdById: dries.id,
+    createdById: botUser.id,
     direction: ChatDirection.Inbound,
     status: ChatStatus.Seen,
     ticketId: driesTicket.id,
@@ -467,14 +480,14 @@ async function main() {
     content:
       'Certainly. Please provide your order number and reason for return, and we will provide you with instructions on how to proceed.',
     createdAt: new Date('2023-04-01T06:06Z'),
-    createdById: jeffrey.id,
+    createdById: botUser.id,
     direction: ChatDirection.Outbound,
     status: ChatStatus.DeliveredToDevice,
     ticketId: driesTicket.id,
   });
 
   const lindsay = await db
-    .insert(schema.contacts)
+    .insert(schema.customers)
     .values({
       id: generateEntityId('', 'co'),
       name: 'Lindsay Walton',
@@ -485,10 +498,10 @@ async function main() {
       language: 'en_GB',
       timezone: 'Europe/London',
     })
-    .returning({ id: schema.contacts.id })
+    .returning({ id: schema.customers.id })
     .then((res) => res[0]);
 
-  if (!lindsay?.id) throw new Error('Could not create contact');
+  if (!lindsay?.id) throw new Error('Could not create customer');
 
   const lindsayTicket = await db
     .insert(schema.tickets)
@@ -497,8 +510,9 @@ async function main() {
       title: 'Change shipping address',
       status: TicketStatus.Open,
       priority: TicketPriority.Medium,
+      customerId: lindsay.id,
       createdAt: new Date('2023-03-02T21:13Z'),
-      createdById: lindsay.id,
+      createdById: botUser.id,
     })
     .returning({ id: schema.tickets.id, createdAt: schema.tickets.createdAt })
     .then((res) => res[0]);
@@ -516,7 +530,7 @@ async function main() {
     contentType: ChatContentType.TextPlain,
     content: 'I want to change my shipping address.',
     createdAt: new Date('2023-03-02T21:13Z'),
-    createdById: lindsay.id,
+    createdById: botUser.id,
     direction: ChatDirection.Inbound,
     status: ChatStatus.Seen,
     ticketId: lindsayTicket.id,
@@ -527,7 +541,7 @@ async function main() {
     content:
       "No problem. Can you please provide your order number and the new shipping address you'd like to use?",
     createdAt: new Date('2023-03-03T22:40Z'),
-    createdById: tom.id,
+    createdById: botUser.id,
     direction: ChatDirection.Outbound,
     status: ChatStatus.DeliveredToDevice,
     ticketId: lindsayTicket.id,
@@ -538,7 +552,7 @@ async function main() {
     ticketId: lindsayTicket.id,
     type: TicketActivityType.Created,
     createdAt: lindsayTicket.createdAt,
-    createdById: lindsay.id,
+    createdById: botUser.id,
   });
 }
 

@@ -3,11 +3,12 @@
 import { ColumnDef } from '@tanstack/react-table';
 import { Plus } from 'lucide-react';
 
+import { RouterOutputs } from '@cs/api';
+
 import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/avatar';
 import { Badge } from '~/components/ui/badge';
 import { Checkbox } from '~/components/ui/checkbox';
 import { getInitials } from '~/lib/string';
-import { Contact } from '~/types/Contact';
 import { priorities, statuses } from './data';
 
 export type TicketData = {
@@ -22,7 +23,7 @@ export type TicketData = {
     };
   }[];
   priority: string;
-  assignedTo: Contact | null;
+  assignedTo: RouterOutputs['ticket']['byId']['assignedTo'] | null;
 };
 
 export const columns: ColumnDef<TicketData>[] = [
@@ -164,9 +165,7 @@ export const columns: ColumnDef<TicketData>[] = [
         {row.original.assignedTo ? (
           <div className="flex items-center gap-x-2">
             <Avatar className="h-4 w-4">
-              <AvatarImage
-                src={row.original.assignedTo?.avatarUrl ?? undefined}
-              />
+              <AvatarImage src={row.original.assignedTo?.image ?? undefined} />
               <AvatarFallback>
                 {getInitials(row.original.assignedTo?.name ?? '')}
               </AvatarFallback>

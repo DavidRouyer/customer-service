@@ -1,7 +1,7 @@
 import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
 
-import { and, eq, inArray, ne, schema } from '@cs/database';
+import { and, eq, inArray, schema } from '@cs/database';
 import {
   TicketActivityType,
   TicketLabelsChanged,
@@ -59,7 +59,7 @@ export const labelRouter = createTRPCRouter({
           .update(schema.tickets)
           .set({
             updatedAt: new Date(),
-            updatedById: ctx.session.user.contactId ?? '',
+            updatedById: ctx.session.user.id,
           })
           .where(eq(schema.tickets.id, ticket.id))
           .returning({
@@ -81,7 +81,7 @@ export const labelRouter = createTRPCRouter({
             newLabelIds: newLabels.map((label) => label.labelId),
           } satisfies TicketLabelsChanged,
           createdAt: updatedTicket.updatedAt ?? new Date(),
-          createdById: ctx.session.user.contactId ?? '',
+          createdById: ctx.session.user.id,
         });
       });
     }),
@@ -135,7 +135,7 @@ export const labelRouter = createTRPCRouter({
           .update(schema.tickets)
           .set({
             updatedAt: new Date(),
-            updatedById: ctx.session.user.contactId ?? '',
+            updatedById: ctx.session.user.id,
           })
           .where(eq(schema.tickets.id, ticket.id))
           .returning({
@@ -157,7 +157,7 @@ export const labelRouter = createTRPCRouter({
             newLabelIds: [],
           } satisfies TicketLabelsChanged,
           createdAt: updatedTicket.updatedAt ?? new Date(),
-          createdById: ctx.session.user.contactId ?? '',
+          createdById: ctx.session.user.id,
         });
       });
     }),

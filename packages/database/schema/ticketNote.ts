@@ -5,7 +5,7 @@ import { SerializedEditorState } from 'lexical';
 import { generateEntityId } from '@cs/lib/generate-entity-id';
 
 import { pgTable } from './_table';
-import { contacts } from './contact';
+import { users } from './auth';
 import { tickets } from './ticket';
 
 export const ticketNotes = pgTable('ticketNote', {
@@ -22,16 +22,16 @@ export const ticketNotes = pgTable('ticketNote', {
     .notNull(),
   createdById: varchar('createdById')
     .notNull()
-    .references(() => contacts.id, {
+    .references(() => users.id, {
       onDelete: 'restrict',
       onUpdate: 'cascade',
     }),
 });
 
 export const ticketNotesRelations = relations(ticketNotes, ({ one }) => ({
-  createdBy: one(contacts, {
+  createdBy: one(users, {
     fields: [ticketNotes.createdById],
-    references: [contacts.id],
+    references: [users.id],
   }),
   ticket: one(tickets, {
     fields: [ticketNotes.ticketId],

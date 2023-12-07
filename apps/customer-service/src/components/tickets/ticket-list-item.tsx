@@ -14,12 +14,12 @@ import { getInitials } from '~/lib/string';
 
 export type TicketListItemProps = {
   ticket: NonNullable<RouterOutputs['ticket']['all']['data'][0]>;
-  currentContactId?: string;
+  currentUserId?: string;
 };
 
 export const TicketListItem: FC<TicketListItemProps> = ({
   ticket,
-  currentContactId,
+  currentUserId,
 }) => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -35,17 +35,17 @@ export const TicketListItem: FC<TicketListItemProps> = ({
       >
         <Avatar className="h-12 w-12">
           <AvatarImage
-            src={ticket.createdBy.avatarUrl ?? undefined}
-            alt={ticket.createdBy.name ?? ''}
+            src={ticket.customer.avatarUrl ?? undefined}
+            alt={ticket.customer.name ?? ''}
           />
           <AvatarFallback>
-            {getInitials(ticket.createdBy.name ?? '')}
+            {getInitials(ticket.customer.name ?? '')}
           </AvatarFallback>
         </Avatar>
         <div className="flex-auto">
           <div className="flex items-baseline justify-between gap-x-4">
             <p className="text-sm font-semibold leading-6 text-foreground">
-              {ticket.createdBy.name}
+              {ticket.customer.name}
             </p>
             <p className="flex-none text-xs text-muted-foreground">
               <time dateTime={ticket.createdAt.toUTCString()}>
@@ -54,7 +54,7 @@ export const TicketListItem: FC<TicketListItemProps> = ({
             </p>
           </div>
           <div className="mt-1 line-clamp-2 text-sm leading-6 text-muted-foreground">
-            {currentContactId === ticket.messages?.[0]?.createdById ? (
+            {currentUserId === ticket.messages?.[0]?.createdById ? (
               <>
                 <FormattedMessage id="you" />{' '}
               </>

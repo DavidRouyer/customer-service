@@ -50,7 +50,7 @@ export const Activity: FC<{
                 <>
                   <Avatar className="relative mt-3 h-6 w-6 flex-none text-xs">
                     <AvatarImage
-                      src={ticketActivity.createdBy.avatarUrl ?? undefined}
+                      src={ticketActivity.createdBy.image ?? undefined}
                     />
                     <AvatarFallback>
                       {getInitials(ticketActivity.createdBy.name ?? '')}

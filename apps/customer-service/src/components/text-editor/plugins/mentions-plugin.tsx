@@ -20,9 +20,8 @@ import * as ReactDOM from 'react-dom';
 
 import { $createMentionNode } from '~/components/text-editor/nodes/mention-node';
 import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/avatar';
-import { api } from '~/lib/api';
+import { api, RouterOutputs } from '~/lib/api';
 import { getInitials } from '~/lib/string';
-import { Contact } from '~/types/Contact';
 
 const PUNCTUATION =
   '\\.,\\+\\*\\?\\$\\@\\|#{}\\(\\)\\^\\-\\[\\]\\\\/!%\'"~=<>_:;';
@@ -88,8 +87,10 @@ const AtSignMentionsRegexAliasRegex = new RegExp(
 const SUGGESTION_LIST_LENGTH_LIMIT = 4;
 
 function useMentionLookupService(mentionString: string | null) {
-  const [results, setResults] = useState<Contact[]>([]);
-  const { data } = api.contact.allWithUserId.useQuery();
+  const [results, setResults] = useState<
+    RouterOutputs['ticket']['byId']['createdBy'][]
+  >([]);
+  const { data } = api.user.all.useQuery();
 
   useEffect(() => {
     if (mentionString == null) {
@@ -99,8 +100,7 @@ function useMentionLookupService(mentionString: string | null) {
 
     if (data) {
       const searchResults = data?.filter(
-        (contact) =>
-          contact.name?.toLowerCase().includes(mentionString.toLowerCase())
+        (user) => user.name?.toLowerCase().includes(mentionString.toLowerCase())
       );
       setResults(searchResults);
     }
@@ -140,11 +140,11 @@ function getPossibleQueryMatch(text: string): MenuTextMatch | null {
 }
 
 class MentionTypeaheadOption extends MenuOption {
-  id: number;
+  id: string;
   name: string;
   picture: JSX.Element;
 
-  constructor(id: number, name: string, picture: JSX.Element) {
+  constructor(id: string, name: string, picture: JSX.Element) {
     super(name);
     this.id = id;
     this.name = name;
@@ -208,7 +208,7 @@ export default function NewMentionsPlugin(): JSX.Element | null {
               result.name ?? '',
               (
                 <Avatar className="relative mr-2 h-5 w-5 flex-none text-xs">
-                  <AvatarImage src={result.avatarUrl ?? undefined} />
+                  <AvatarImage src={result.image ?? undefined} />
                   <AvatarFallback>
                     {getInitials(result.name ?? '')}
                   </AvatarFallback>

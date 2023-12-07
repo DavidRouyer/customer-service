@@ -73,7 +73,7 @@ export const TicketList: FC<{
                   <TicketListItem
                     key={ticket.id}
                     ticket={ticket}
-                    currentContactId={sessionData?.user.contactId}
+                    currentUserId={sessionData?.user.id}
                   />
                 ))}
               </Fragment>

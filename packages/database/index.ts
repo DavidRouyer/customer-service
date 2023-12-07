@@ -2,7 +2,7 @@ import { Pool } from '@neondatabase/serverless';
 import { drizzle } from 'drizzle-orm/neon-serverless';
 
 import * as auth from './schema/auth';
-import * as contact from './schema/contact';
+import * as customer from './schema/customer';
 import * as labels from './schema/label';
 import * as labelTypes from './schema/labelType';
 import * as ticket from './schema/ticket';
@@ -13,7 +13,7 @@ import * as ticketNotes from './schema/ticketNote';
 
 export const schema = {
   ...auth,
-  ...contact,
+  ...customer,
   ...labels,
   ...labelTypes,
   ...ticket,

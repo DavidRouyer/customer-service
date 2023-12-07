@@ -7,7 +7,7 @@ import { pgTable } from './_table';
 import { users } from './auth';
 import { tickets } from './ticket';
 
-export const contacts = pgTable('contact', {
+export const customers = pgTable('customer', {
   id: varchar('id').primaryKey().notNull().default(generateEntityId('', 'co')),
   createdAt: timestamp('createdAt', { precision: 3, mode: 'date' })
     .defaultNow()
@@ -21,10 +21,10 @@ export const contacts = pgTable('contact', {
   userId: text('userId'),
 });
 
-export const contactsRelations = relations(contacts, ({ one, many }) => ({
+export const customersRelations = relations(customers, ({ one, many }) => ({
   tickets: many(tickets),
   user: one(users, {
-    fields: [contacts.userId],
+    fields: [customers.userId],
     references: [users.id],
   }),
 }));

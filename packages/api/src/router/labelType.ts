@@ -39,7 +39,7 @@ export const labelTypeRouter = createTRPCRouter({
         .insert(schema.labelTypes)
         .values({
           ...input,
-          createdById: ctx.session.user.contactId ?? '',
+          createdById: ctx.session.user.id,
         })
         .returning({ id: schema.labelTypes.id });
     }),

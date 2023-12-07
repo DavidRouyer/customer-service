@@ -3,7 +3,7 @@ import type { DefaultSession } from '@auth/core/types';
 import { DrizzleAdapter } from '@auth/drizzle-adapter';
 import NextAuth from 'next-auth';
 
-import { db, eq, schema, tableCreator } from '@cs/database';
+import { db, eq, tableCreator } from '@cs/database';
 import { sessions, users } from '@cs/database/schema/auth';
 
 export type { Session } from 'next-auth';
@@ -13,12 +13,7 @@ declare module 'next-auth' {
   interface Session {
     user: {
       id: string;
-      contactId?: string;
     } & DefaultSession['user'];
-  }
-  // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
-  interface User {
-    contactId?: string;
   }
 }
 
@@ -49,34 +44,12 @@ export const {
       clientSecret: process.env.AUTH_GITHUB_SECRET,
     }),
   ],
-  events: {
-    createUser: async (message) => {
-      const newContact = await db
-        .insert(schema.contacts)
-        .values({
-          name: message.user.name,
-          email: message.user.email,
-          avatarUrl: message.user.image,
-          userId: message.user.id,
-        })
-        .returning({ id: schema.contacts.id })
-        .then((res) => res?.[0] ?? null);
-
-      await db
-        .update(schema.users)
-        .set({
-          contactId: newContact?.id,
-        })
-        .where(eq(schema.users.id, message.user.id));
-    },
-  },
   callbacks: {
-    session: async ({ session, user }) => ({
+    session: ({ session, user }) => ({
       ...session,
       user: {
         ...session.user,
         id: user.id,
-        contactId: user.contactId,
       },
     }),
 

@@ -9,7 +9,8 @@ import {
 } from '@cs/lib/tickets';
 
 import { pgTable } from './_table';
-import { contacts } from './contact';
+import { users } from './auth';
+import { customers } from './customer';
 import { labels } from './label';
 import { ticketChats } from './ticketChat';
 import { ticketMentions } from './ticketMentions';
@@ -38,50 +39,57 @@ export const tickets = pgTable('ticket', {
   status: ticketStatus('status').notNull(),
   statusDetail: ticketStatusDetail('statusDetail'),
   statusChangedAt: timestamp('statusChangedAt', { precision: 3, mode: 'date' }),
-  statusChangedById: varchar('statusChangedById').references(
-    () => contacts.id,
-    {
-      onDelete: 'restrict',
-      onUpdate: 'cascade',
-    }
-  ),
-  priority: ticketPriority('priority').notNull(),
-  assignedToId: varchar('assignedToId').references(() => contacts.id, {
+  statusChangedById: varchar('statusChangedById').references(() => users.id, {
     onDelete: 'restrict',
     onUpdate: 'cascade',
   }),
+  priority: ticketPriority('priority').notNull(),
+  assignedToId: varchar('assignedToId').references(() => users.id, {
+    onDelete: 'restrict',
+    onUpdate: 'cascade',
+  }),
+  customerId: varchar('customerId')
+    .notNull()
+    .references(() => customers.id, {
+      onDelete: 'restrict',
+      onUpdate: 'cascade',
+    }),
   createdAt: timestamp('createdAt', { precision: 3, mode: 'date' })
     .defaultNow()
     .notNull(),
   createdById: varchar('createdById')
     .notNull()
-    .references(() => contacts.id, {
+    .references(() => users.id, {
       onDelete: 'restrict',
       onUpdate: 'cascade',
     }),
   updatedAt: timestamp('updatedAt', { precision: 3, mode: 'date' }),
-  updatedById: varchar('updatedById').references(() => contacts.id, {
+  updatedById: varchar('updatedById').references(() => users.id, {
     onDelete: 'restrict',
     onUpdate: 'cascade',
   }),
 });
 
 export const ticketsRelations = relations(tickets, ({ one, many }) => ({
-  assignedTo: one(contacts, {
+  assignedTo: one(users, {
     fields: [tickets.assignedToId],
-    references: [contacts.id],
+    references: [users.id],
   }),
-  statusChangedBy: one(contacts, {
-    fields: [tickets.statusChangedById],
-    references: [contacts.id],
+  customer: one(customers, {
+    fields: [tickets.customerId],
+    references: [customers.id],
   }),
-  createdBy: one(contacts, {
+  createdBy: one(users, {
     fields: [tickets.createdById],
-    references: [contacts.id],
+    references: [users.id],
   }),
-  updatedBy: one(contacts, {
+  statusChangedBy: one(users, {
+    fields: [tickets.statusChangedById],
+    references: [users.id],
+  }),
+  updatedBy: one(users, {
     fields: [tickets.updatedById],
-    references: [contacts.id],
+    references: [users.id],
   }),
   messages: many(ticketChats),
   ticketMentions: many(ticketMentions),

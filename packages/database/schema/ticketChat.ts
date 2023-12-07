@@ -5,7 +5,8 @@ import { ChatContentType, ChatDirection, ChatStatus } from '@cs/lib/chats';
 import { generateEntityId } from '@cs/lib/generate-entity-id';
 
 import { pgTable } from './_table';
-import { contacts } from './contact';
+import { users } from './auth';
+import { customers } from './customer';
 import { tickets } from './ticket';
 
 export const chatDirection = pgEnum('chatDirection', [
@@ -36,7 +37,7 @@ export const ticketChats = pgTable('ticketChat', {
     .notNull(),
   createdById: varchar('createdById')
     .notNull()
-    .references(() => contacts.id, {
+    .references(() => users.id, {
       onDelete: 'restrict',
       onUpdate: 'cascade',
     }),
@@ -49,9 +50,9 @@ export const ticketChats = pgTable('ticketChat', {
 });
 
 export const chatsRelations = relations(ticketChats, ({ one }) => ({
-  createdBy: one(contacts, {
+  createdBy: one(users, {
     fields: [ticketChats.createdById],
-    references: [contacts.id],
+    references: [users.id],
   }),
   ticket: one(tickets, {
     fields: [ticketChats.ticketId],

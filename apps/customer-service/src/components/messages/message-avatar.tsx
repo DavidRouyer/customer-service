@@ -3,13 +3,13 @@ import { FC } from 'react';
 import { ChatDirection } from '@cs/lib/chats';
 
 import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/avatar';
+import { RouterOutputs } from '~/lib/api';
 import { getInitials } from '~/lib/string';
 import { cn } from '~/lib/utils';
-import { Contact } from '~/types/Contact';
 
 type MessageAvatarProps = {
   direction: ChatDirection;
-  createdBy: Contact;
+  createdBy: RouterOutputs['ticket']['byId']['createdBy'];
 };
 
 export const MessageAvatar: FC<MessageAvatarProps> = ({
@@ -24,7 +24,7 @@ export const MessageAvatar: FC<MessageAvatarProps> = ({
       )}
     >
       <AvatarImage
-        src={createdBy.avatarUrl ?? undefined}
+        src={createdBy.image ?? undefined}
         alt={createdBy.name ?? ''}
       />
       <AvatarFallback className="text-xs">
