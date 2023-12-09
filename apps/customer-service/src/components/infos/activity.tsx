@@ -5,38 +5,34 @@ import { FormattedMessage } from 'react-intl';
 import {
   TicketAssignmentChangedWithData,
   TicketLabelsChangedWithData,
-} from '@cs/api/src/router/ticketActivity';
+} from '@cs/api/src/router/ticketTimeline';
+import { TicketStatus } from '@cs/lib/tickets';
 import {
-  TicketActivityType,
-  TicketCommented,
+  TicketNote,
   TicketPriorityChanged,
-} from '@cs/lib/ticketActivities';
+  TicketStatusChanged,
+  TicketTimelineEntryType,
+} from '@cs/lib/ticketTimelineEntries';
 
 import { NodeContent } from '~/components/infos/node-content';
 import { TicketPriority } from '~/components/tickets/ticket-priority';
 import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/avatar';
 import { Badge } from '~/components/ui/badge';
 import { RelativeTime } from '~/components/ui/relative-time';
-import { api } from '~/lib/api';
+import { RouterOutputs } from '~/lib/api';
 import { getInitials } from '~/lib/string';
 import { cn } from '~/lib/utils';
 
 export const Activity: FC<{
-  ticketId: string;
-}> = ({ ticketId }) => {
-  const { data: ticketActivitiesData } = api.ticketActivity.byTicketId.useQuery(
-    {
-      ticketId,
-    }
-  );
-
+  entries: RouterOutputs['ticketTimeline']['byTicketId'];
+}> = ({ entries }) => {
   return (
     <ul className="space-y-6">
-      {ticketActivitiesData?.map((ticketActivity, ticketActivityIdx) => (
-        <li key={ticketActivity.id} className="relative flex gap-x-4">
+      {entries?.map((ticketTimelineEntry, ticketTimelineEntryIdx) => (
+        <li key={ticketTimelineEntry.id} className="relative flex gap-x-4">
           <div
             className={cn(
-              ticketActivityIdx === ticketActivitiesData.length - 1
+              ticketTimelineEntryIdx === entries.length - 1
                 ? 'h-6'
                 : '-bottom-6',
               'absolute left-0 top-0 flex w-6 justify-center'
@@ -46,37 +42,41 @@ export const Activity: FC<{
           </div>
           {
             <>
-              {ticketActivity.type === TicketActivityType.Commented ? (
+              {ticketTimelineEntry.type === TicketTimelineEntryType.Note ? (
                 <>
                   <Avatar className="relative mt-3 h-6 w-6 flex-none text-xs">
                     <AvatarImage
-                      src={ticketActivity.createdBy.image ?? undefined}
+                      src={
+                        ticketTimelineEntry.userCreatedBy?.image ?? undefined
+                      }
                     />
                     <AvatarFallback>
-                      {getInitials(ticketActivity.createdBy.name ?? '')}
+                      {getInitials(
+                        ticketTimelineEntry.userCreatedBy?.name ?? ''
+                      )}
                     </AvatarFallback>
                   </Avatar>
                   <div className="flex-auto rounded-md p-3 ring-1 ring-inset ring-muted-foreground">
                     <div className="flex justify-between gap-x-4">
                       <div className="py-0.5 text-xs leading-5 text-muted-foreground">
                         <span className="font-medium text-foreground">
-                          {ticketActivity.createdBy.name}
+                          {ticketTimelineEntry.userCreatedBy?.name}
                         </span>{' '}
                         <FormattedMessage id="ticket.activity.type.ticket_commented" />
                       </div>
                       <time
-                        dateTime={ticketActivity.createdAt.toISOString()}
+                        dateTime={ticketTimelineEntry.createdAt.toISOString()}
                         className="flex-none py-0.5 text-xs leading-5 text-muted-foreground"
                       >
                         <RelativeTime
-                          dateTime={new Date(ticketActivity.createdAt)}
+                          dateTime={new Date(ticketTimelineEntry.createdAt)}
                         />
                       </time>
                     </div>
                     <p className="text-sm leading-6 text-gray-500">
                       <NodeContent
                         content={
-                          (ticketActivity.extraInfo as TicketCommented)?.text
+                          (ticketTimelineEntry.entry as TicketNote)?.text
                         }
                       />
                     </p>
@@ -85,7 +85,10 @@ export const Activity: FC<{
               ) : (
                 <>
                   <div className="relative flex h-6 w-6 flex-none items-center justify-center bg-background">
-                    {ticketActivity.type === TicketActivityType.Resolved ? (
+                    {ticketTimelineEntry.type ===
+                      TicketTimelineEntryType.StatusChanged &&
+                    (ticketTimelineEntry.entry as TicketStatusChanged)
+                      ?.newStatus === TicketStatus.Done ? (
                       <CheckCircle2
                         className="h-6 w-6 text-valid"
                         aria-hidden="true"
@@ -97,22 +100,22 @@ export const Activity: FC<{
 
                   <p className="flex-auto py-0.5 text-xs leading-5 text-muted-foreground">
                     <span className="font-medium text-foreground">
-                      {ticketActivity.createdBy.name}
+                      {ticketTimelineEntry.userCreatedBy?.name}
                     </span>{' '}
                     {
                       {
                         AssignmentChanged: (
                           <>
                             {(
-                              ticketActivity.extraInfo as TicketAssignmentChangedWithData
+                              ticketTimelineEntry.entry as TicketAssignmentChangedWithData
                             )?.oldAssignedToId === null &&
                             (
-                              ticketActivity.extraInfo as TicketAssignmentChangedWithData
+                              ticketTimelineEntry.entry as TicketAssignmentChangedWithData
                             )?.newAssignedToId !== null ? (
                               (
-                                ticketActivity.extraInfo as TicketAssignmentChangedWithData
+                                ticketTimelineEntry.entry as TicketAssignmentChangedWithData
                               )?.newAssignedToId ===
-                              ticketActivity.createdById ? (
+                              ticketTimelineEntry.userCreatedById ? (
                                 <FormattedMessage id="ticket.activity.type.ticket_assignment.self_assigned" />
                               ) : (
                                 <>
@@ -120,7 +123,7 @@ export const Activity: FC<{
                                   <span className="font-medium text-foreground">
                                     {
                                       (
-                                        ticketActivity.extraInfo as TicketAssignmentChangedWithData
+                                        ticketTimelineEntry.entry as TicketAssignmentChangedWithData
                                       )?.newAssignedTo?.name
                                     }
                                   </span>
@@ -128,17 +131,17 @@ export const Activity: FC<{
                               )
                             ) : null}
                             {(
-                              ticketActivity.extraInfo as TicketAssignmentChangedWithData
+                              ticketTimelineEntry.entry as TicketAssignmentChangedWithData
                             )?.oldAssignedToId !== null &&
                             (
-                              ticketActivity.extraInfo as TicketAssignmentChangedWithData
+                              ticketTimelineEntry.entry as TicketAssignmentChangedWithData
                             )?.newAssignedToId !== null ? (
                               <>
                                 <FormattedMessage id="ticket.activity.type.ticket_assignment.assigned" />{' '}
                                 <span className="font-medium text-foreground">
                                   {
                                     (
-                                      ticketActivity.extraInfo as TicketAssignmentChangedWithData
+                                      ticketTimelineEntry.entry as TicketAssignmentChangedWithData
                                     )?.newAssignedTo?.name
                                   }
                                 </span>{' '}
@@ -146,23 +149,23 @@ export const Activity: FC<{
                                 <span className="font-medium text-foreground">
                                   {
                                     (
-                                      ticketActivity.extraInfo as TicketAssignmentChangedWithData
+                                      ticketTimelineEntry.entry as TicketAssignmentChangedWithData
                                     )?.oldAssignedTo?.name
                                   }
                                 </span>
                               </>
                             ) : null}
                             {(
-                              ticketActivity.extraInfo as TicketAssignmentChangedWithData
+                              ticketTimelineEntry.entry as TicketAssignmentChangedWithData
                             )?.oldAssignedToId !== null &&
                             (
-                              ticketActivity.extraInfo as TicketAssignmentChangedWithData
+                              ticketTimelineEntry.entry as TicketAssignmentChangedWithData
                             )?.newAssignedToId === null ? (
                               <>
                                 {(
-                                  ticketActivity.extraInfo as TicketAssignmentChangedWithData
+                                  ticketTimelineEntry.entry as TicketAssignmentChangedWithData
                                 )?.oldAssignedToId ===
-                                ticketActivity.createdById ? (
+                                ticketTimelineEntry.userCreatedById ? (
                                   <FormattedMessage id="ticket.activity.type.ticket_assignment.self_unassigned" />
                                 ) : (
                                   <>
@@ -170,7 +173,7 @@ export const Activity: FC<{
                                     <span className="font-medium text-foreground">
                                       {
                                         (
-                                          ticketActivity.extraInfo as TicketAssignmentChangedWithData
+                                          ticketTimelineEntry.entry as TicketAssignmentChangedWithData
                                         )?.oldAssignedTo?.name
                                       }
                                     </span>
@@ -180,18 +183,19 @@ export const Activity: FC<{
                             ) : null}
                           </>
                         ),
+                        Chat: <>TODO</>,
                         Created: (
                           <FormattedMessage id="ticket.activity.type.ticket_created" />
                         ),
                         LabelsChanged: (
                           <>
                             {(
-                              ticketActivity.extraInfo as TicketLabelsChangedWithData
-                            )?.oldLabelIds.length === 0 ? (
+                              ticketTimelineEntry.entry as TicketLabelsChangedWithData
+                            )?.oldLabelIds?.length === 0 ? (
                               <>
                                 <FormattedMessage id="ticket.activity.type.ticket_label.added" />{' '}
                                 {(
-                                  ticketActivity.extraInfo as TicketLabelsChangedWithData
+                                  ticketTimelineEntry.entry as TicketLabelsChangedWithData
                                 )?.newLabels?.map((label) => (
                                   <Badge key={label.id}>
                                     {label.labelType.name}
@@ -200,12 +204,12 @@ export const Activity: FC<{
                               </>
                             ) : null}
                             {(
-                              ticketActivity.extraInfo as TicketLabelsChangedWithData
-                            )?.newLabelIds.length === 0 ? (
+                              ticketTimelineEntry.entry as TicketLabelsChangedWithData
+                            )?.newLabelIds?.length === 0 ? (
                               <>
                                 <FormattedMessage id="ticket.activity.type.ticket_label.removed" />{' '}
                                 {(
-                                  ticketActivity.extraInfo as TicketLabelsChangedWithData
+                                  ticketTimelineEntry.entry as TicketLabelsChangedWithData
                                 )?.oldLabels?.map((label) => (
                                   <Badge key={label.id}>
                                     {label.labelType.name}
@@ -222,7 +226,7 @@ export const Activity: FC<{
                               <TicketPriority
                                 priority={
                                   (
-                                    ticketActivity.extraInfo as TicketPriorityChanged
+                                    ticketTimelineEntry.entry as TicketPriorityChanged
                                   )?.oldPriority
                                 }
                               />
@@ -232,29 +236,35 @@ export const Activity: FC<{
                               <TicketPriority
                                 priority={
                                   (
-                                    ticketActivity.extraInfo as TicketPriorityChanged
+                                    ticketTimelineEntry.entry as TicketPriorityChanged
                                   )?.newPriority
                                 }
                               />
                             </span>
                           </>
                         ),
-                        Reopened: (
-                          <FormattedMessage id="ticket.activity.type.ticket_reopened" />
+                        StatusChanged: (
+                          <>
+                            {(ticketTimelineEntry.entry as TicketStatusChanged)
+                              ?.oldStatus === TicketStatus.Done &&
+                            (ticketTimelineEntry.entry as TicketStatusChanged)
+                              ?.oldStatus === TicketStatus.Open ? (
+                              <FormattedMessage id="ticket.activity.type.ticket_reopened" />
+                            ) : (
+                              <FormattedMessage id="ticket.activity.type.ticket_resolved" />
+                            )}
+                          </>
                         ),
-                        Resolved: (
-                          <FormattedMessage id="ticket.activity.type.ticket_resolved" />
-                        ),
-                      }[ticketActivity.type]
+                      }[ticketTimelineEntry.type]
                     }
                     .
                   </p>
                   <time
-                    dateTime={ticketActivity.createdAt.toISOString()}
+                    dateTime={ticketTimelineEntry.createdAt.toISOString()}
                     className="flex-none py-0.5 text-xs leading-5 text-muted-foreground"
                   >
                     <RelativeTime
-                      dateTime={new Date(ticketActivity.createdAt)}
+                      dateTime={new Date(ticketTimelineEntry.createdAt)}
                     />
                   </time>
                 </>

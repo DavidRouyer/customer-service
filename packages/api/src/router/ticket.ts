@@ -118,7 +118,7 @@ export const ticketRouter = createTRPCRouter({
       return { data: tickets, nextCursor };
     }),
 
-  conversation: protectedProcedure
+  timeline: protectedProcedure
     .input(z.object({ ticketId: z.string() }))
     .query(async ({ ctx, input }) => {
       return await ctx.db.query.ticketTimelineEntries.findMany({

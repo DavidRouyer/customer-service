@@ -15,7 +15,7 @@ import { Label } from '~/components/ui/label';
 import { Switch } from '~/components/ui/switch';
 import { api } from '~/lib/api';
 import { cn } from '~/lib/utils';
-import { ConversationItem } from '~/types/Conversation';
+import { TimelineItem } from '~/types/Conversation';
 
 const TextEditor = dynamic(
   () => import('~/components/text-editor/text-editor'),
@@ -52,7 +52,7 @@ export const MessageForm: FC<{ ticketId: string }> = ({ ticketId }) => {
       // Optimistically update to the new value
       utils.ticket.conversation.setData(
         { ticketId: newMessage.ticketId },
-        (oldQueryData: ConversationItem[] | undefined) =>
+        (oldQueryData: TimelineItem[] | undefined) =>
           [
             ...(oldQueryData ?? []),
             {
@@ -67,7 +67,7 @@ export const MessageForm: FC<{ ticketId: string }> = ({ ticketId }) => {
               createdById: sessionData?.user?.id ?? 0,
               createdBy: sessionData?.user,
             },
-          ] as ConversationItem[]
+          ] as TimelineItem[]
       );
 
       // Return a context object with the snapshotted value
@@ -100,7 +100,7 @@ export const MessageForm: FC<{ ticketId: string }> = ({ ticketId }) => {
       // Optimistically update to the new value
       utils.ticket.conversation.setData(
         { ticketId: newTicket.ticketId },
-        (oldQueryData: ConversationItem[] | undefined) =>
+        (oldQueryData: TimelineItem[] | undefined) =>
           [
             ...(oldQueryData ?? []),
             {
@@ -114,7 +114,7 @@ export const MessageForm: FC<{ ticketId: string }> = ({ ticketId }) => {
               createdById: sessionData?.user?.id ?? 0,
               createdBy: sessionData?.user,
             },
-          ] as ConversationItem[]
+          ] as TimelineItem[]
       );
 
       // Return a context object with the snapshotted value

@@ -59,14 +59,6 @@ export const InfoPanel: FC<{
               />
             </AccordionContent>
           </AccordionItem>
-          <AccordionItem value="item-2">
-            <AccordionTrigger>
-              <FormattedMessage id="info_panel.activity" />
-            </AccordionTrigger>
-            <AccordionContent>
-              <Activity ticketId={ticketId} />
-            </AccordionContent>
-          </AccordionItem>
         </Accordion>
       </div>
     </aside>

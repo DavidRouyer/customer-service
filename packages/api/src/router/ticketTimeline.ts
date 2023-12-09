@@ -31,14 +31,14 @@ export const ticketTimelineRouter = createTRPCRouter({
   byTicketId: protectedProcedure
     .input(z.object({ ticketId: z.string() }))
     .query(async ({ ctx, input }) => {
-      const ticketActivities =
+      const ticketTimelineEntries =
         await ctx.db.query.ticketTimelineEntries.findMany({
           orderBy: asc(schema.ticketTimelineEntries.createdAt),
           where: eq(schema.ticketTimelineEntries.ticketId, input.ticketId),
           with: { customerCreatedBy: true, userCreatedBy: true },
         });
       const augmentedTicketActivities: (Omit<
-        (typeof ticketActivities)[0],
+        (typeof ticketTimelineEntries)[0],
         'entry'
       > & {
         entry:
@@ -53,16 +53,21 @@ export const ticketTimelineRouter = createTRPCRouter({
 
       const customersToFetch = new Set<string>();
       const labelsToFetch = new Set<string>();
-      ticketActivities.forEach((ticketActivity) => {
-        if (ticketActivity.type === TicketTimelineEntryType.AssignmentChanged) {
-          const extraInfo = ticketActivity.entry as TicketAssignmentChanged;
+      ticketTimelineEntries.forEach((ticketTimelineEntry) => {
+        if (
+          ticketTimelineEntry.type === TicketTimelineEntryType.AssignmentChanged
+        ) {
+          const extraInfo =
+            ticketTimelineEntry.entry as TicketAssignmentChanged;
           if (extraInfo.oldAssignedToId !== null)
             customersToFetch.add(extraInfo.oldAssignedToId);
           if (extraInfo.newAssignedToId !== null)
             customersToFetch.add(extraInfo.newAssignedToId);
         }
-        if (ticketActivity.type === TicketTimelineEntryType.LabelsChanged) {
-          const extraInfo = ticketActivity.entry as TicketLabelsChanged;
+        if (
+          ticketTimelineEntry.type === TicketTimelineEntryType.LabelsChanged
+        ) {
+          const extraInfo = ticketTimelineEntry.entry as TicketLabelsChanged;
           extraInfo.oldLabelIds.forEach((labelId) => {
             labelsToFetch.add(labelId);
           });
@@ -87,7 +92,7 @@ export const ticketTimelineRouter = createTRPCRouter({
             })
           : [];
 
-      ticketActivities.forEach((ticketActivity) => {
+      ticketTimelineEntries.forEach((ticketActivity) => {
         switch (ticketActivity.type) {
           case TicketTimelineEntryType.AssignmentChanged:
             augmentedTicketActivities.push({
