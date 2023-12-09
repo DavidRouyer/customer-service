@@ -1,31 +1,21 @@
 import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
 
-import { asc, eq, schema } from '@cs/database';
-import { ChatDirection, ChatStatus } from '@cs/lib/chats';
+import { eq, schema } from '@cs/database';
 import { TicketStatusDetail } from '@cs/lib/tickets';
+import {
+  TicketChat,
+  TicketTimelineEntryType,
+} from '@cs/lib/ticketTimelineEntries';
 
 import { createTRPCRouter, protectedProcedure } from '../trpc';
 
 export const ticketChatRouter = createTRPCRouter({
-  byTicketId: protectedProcedure
-    .input(z.object({ ticketId: z.string() }))
-    .query(({ ctx, input }) => {
-      return ctx.db.query.ticketChats.findMany({
-        where: eq(schema.ticketChats.ticketId, input.ticketId),
-        orderBy: asc(schema.ticketChats.createdAt),
-        with: { createdBy: true },
-      });
-    }),
-
-  create: protectedProcedure
+  sendChat: protectedProcedure
     .input(
       z.object({
-        content: z.string().min(1),
-        contentType: z.enum(schema.ticketChats.contentType.enumValues),
-        direction: z.enum(schema.ticketChats.direction.enumValues),
-        ticketId: z.string(),
-        status: z.enum(schema.ticketChats.status.enumValues),
+        text: z.string().min(1),
+        ticketId: z.string().min(1),
       })
     )
     .mutation(async ({ ctx, input }) => {
@@ -43,16 +33,20 @@ export const ticketChatRouter = createTRPCRouter({
         const creationDate = new Date();
 
         const newChat = await tx
-          .insert(schema.ticketChats)
+          .insert(schema.ticketTimelineEntries)
           .values({
-            ...input,
-            status: ChatStatus.DeliveredToCloud,
+            ticketId: input.ticketId,
+            type: TicketTimelineEntryType.Chat,
+            entry: {
+              text: input.text,
+            } satisfies TicketChat,
+            customerId: ticket.customerId,
             createdAt: creationDate,
-            createdById: ctx.session.user.id,
+            userCreatedById: ctx.session.user.id,
           })
           .returning({
-            id: schema.ticketChats.id,
-            createdAt: schema.ticketChats.createdAt,
+            id: schema.ticketTimelineEntries.id,
+            createdAt: schema.ticketTimelineEntries.createdAt,
           })
           .then((res) => res[0]);
 
@@ -64,10 +58,7 @@ export const ticketChatRouter = createTRPCRouter({
         await tx
           .update(schema.tickets)
           .set({
-            statusDetail:
-              input.direction === ChatDirection.Inbound
-                ? TicketStatusDetail.NewReply
-                : TicketStatusDetail.Replied,
+            statusDetail: TicketStatusDetail.Replied,
             statusChangedAt: newChat.createdAt,
             statusChangedById: ctx.session.user.id,
             updatedAt: newChat.createdAt,

@@ -2,12 +2,14 @@ import { z } from 'zod';
 
 import { asc, eq, inArray, InferSelectModel, schema } from '@cs/database';
 import {
-  TicketActivityType,
   TicketAssignmentChanged,
-  TicketCommented,
+  TicketChat,
   TicketLabelsChanged,
+  TicketNote,
   TicketPriorityChanged,
-} from '@cs/lib/ticketActivities';
+  TicketStatusChanged,
+  TicketTimelineEntryType,
+} from '@cs/lib/ticketTimelineEntries';
 
 import { createTRPCRouter, protectedProcedure } from '../trpc';
 
@@ -25,39 +27,42 @@ export type TicketLabelsChangedWithData = {
   })[];
 } & TicketLabelsChanged;
 
-export const ticketActivityRouter = createTRPCRouter({
+export const ticketTimelineRouter = createTRPCRouter({
   byTicketId: protectedProcedure
     .input(z.object({ ticketId: z.string() }))
     .query(async ({ ctx, input }) => {
-      const ticketActivities = await ctx.db.query.ticketActivities.findMany({
-        orderBy: asc(schema.ticketActivities.createdAt),
-        where: eq(schema.ticketActivities.ticketId, input.ticketId),
-        with: { createdBy: true },
-      });
+      const ticketActivities =
+        await ctx.db.query.ticketTimelineEntries.findMany({
+          orderBy: asc(schema.ticketTimelineEntries.createdAt),
+          where: eq(schema.ticketTimelineEntries.ticketId, input.ticketId),
+          with: { customerCreatedBy: true, userCreatedBy: true },
+        });
       const augmentedTicketActivities: (Omit<
         (typeof ticketActivities)[0],
-        'extraInfo'
+        'entry'
       > & {
-        extraInfo:
+        entry:
           | TicketAssignmentChangedWithData
+          | TicketChat
           | TicketLabelsChangedWithData
-          | TicketCommented
+          | TicketNote
           | TicketPriorityChanged
+          | TicketStatusChanged
           | null;
       })[] = [];
 
       const customersToFetch = new Set<string>();
       const labelsToFetch = new Set<string>();
       ticketActivities.forEach((ticketActivity) => {
-        if (ticketActivity.type === TicketActivityType.AssignmentChanged) {
-          const extraInfo = ticketActivity.extraInfo as TicketAssignmentChanged;
+        if (ticketActivity.type === TicketTimelineEntryType.AssignmentChanged) {
+          const extraInfo = ticketActivity.entry as TicketAssignmentChanged;
           if (extraInfo.oldAssignedToId !== null)
             customersToFetch.add(extraInfo.oldAssignedToId);
           if (extraInfo.newAssignedToId !== null)
             customersToFetch.add(extraInfo.newAssignedToId);
         }
-        if (ticketActivity.type === TicketActivityType.LabelsChanged) {
-          const extraInfo = ticketActivity.extraInfo as TicketLabelsChanged;
+        if (ticketActivity.type === TicketTimelineEntryType.LabelsChanged) {
+          const extraInfo = ticketActivity.entry as TicketLabelsChanged;
           extraInfo.oldLabelIds.forEach((labelId) => {
             labelsToFetch.add(labelId);
           });
@@ -84,56 +89,62 @@ export const ticketActivityRouter = createTRPCRouter({
 
       ticketActivities.forEach((ticketActivity) => {
         switch (ticketActivity.type) {
-          case TicketActivityType.AssignmentChanged:
+          case TicketTimelineEntryType.AssignmentChanged:
             augmentedTicketActivities.push({
               ...ticketActivity,
-              extraInfo: {
-                ...(ticketActivity.extraInfo as TicketAssignmentChanged),
+              entry: {
+                ...(ticketActivity.entry as TicketAssignmentChanged),
                 oldAssignedTo:
                   customers.find(
                     (customer) =>
                       customer.id ===
-                      (ticketActivity.extraInfo as TicketAssignmentChanged)
+                      (ticketActivity.entry as TicketAssignmentChanged)
                         .oldAssignedToId
                   ) ?? null,
                 newAssignedTo:
                   customers.find(
                     (customer) =>
                       customer.id ===
-                      (ticketActivity.extraInfo as TicketAssignmentChanged)
+                      (ticketActivity.entry as TicketAssignmentChanged)
                         .newAssignedToId
                   ) ?? null,
               },
             });
             break;
-          case TicketActivityType.Commented:
+          case TicketTimelineEntryType.Note:
             augmentedTicketActivities.push({
               ...ticketActivity,
-              extraInfo: ticketActivity.extraInfo as TicketCommented,
+              entry: ticketActivity.entry as TicketNote,
             });
             break;
-          case TicketActivityType.LabelsChanged:
+          case TicketTimelineEntryType.LabelsChanged:
             augmentedTicketActivities.push({
               ...ticketActivity,
-              extraInfo: {
-                ...(ticketActivity.extraInfo as TicketLabelsChanged),
+              entry: {
+                ...(ticketActivity.entry as TicketLabelsChanged),
                 oldLabels: labels.filter((label) =>
                   (
-                    ticketActivity.extraInfo as TicketLabelsChanged
+                    ticketActivity.entry as TicketLabelsChanged
                   ).oldLabelIds.includes(label.id)
                 ),
                 newLabels: labels.filter((label) =>
                   (
-                    ticketActivity.extraInfo as TicketLabelsChanged
+                    ticketActivity.entry as TicketLabelsChanged
                   ).newLabelIds.includes(label.id)
                 ),
               },
             });
             break;
-          case TicketActivityType.PriorityChanged:
+          case TicketTimelineEntryType.PriorityChanged:
             augmentedTicketActivities.push({
               ...ticketActivity,
-              extraInfo: ticketActivity.extraInfo as TicketPriorityChanged,
+              entry: ticketActivity.entry as TicketPriorityChanged,
+            });
+            break;
+          case TicketTimelineEntryType.StatusChanged:
+            augmentedTicketActivities.push({
+              ...ticketActivity,
+              entry: ticketActivity.entry as TicketStatusChanged,
             });
             break;
           default:

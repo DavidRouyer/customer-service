@@ -6,10 +6,8 @@ import * as customer from './schema/customer';
 import * as labels from './schema/label';
 import * as labelTypes from './schema/labelType';
 import * as ticket from './schema/ticket';
-import * as ticketActivities from './schema/ticketActivity';
-import * as ticketChat from './schema/ticketChat';
 import * as ticketMentions from './schema/ticketMentions';
-import * as ticketNotes from './schema/ticketNote';
+import * as ticketTimelineEntries from './schema/ticketTimelineEntry';
 
 export const schema = {
   ...auth,
@@ -17,10 +15,8 @@ export const schema = {
   ...labels,
   ...labelTypes,
   ...ticket,
-  ...ticketActivities,
-  ...ticketChat,
   ...ticketMentions,
-  ...ticketNotes,
+  ...ticketTimelineEntries,
 };
 
 export { pgTable as tableCreator } from './schema/_table';

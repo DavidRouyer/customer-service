@@ -2,34 +2,27 @@ import { TRPCError } from '@trpc/server';
 import { SerializedEditorState } from 'lexical';
 import { z } from 'zod';
 
-import { asc, eq, schema } from '@cs/database';
+import { eq, schema } from '@cs/database';
 import { extractMentions } from '@cs/lib/editor';
-import { TicketActivityType, TicketCommented } from '@cs/lib/ticketActivities';
+import {
+  TicketNote,
+  TicketTimelineEntryType,
+} from '@cs/lib/ticketTimelineEntries';
 
 import { createTRPCRouter, protectedProcedure } from '../trpc';
 
 export const ticketNoteRouter = createTRPCRouter({
-  byTicketId: protectedProcedure
-    .input(z.object({ ticketId: z.string() }))
-    .query(async ({ ctx, input }) => {
-      return ctx.db.query.ticketNotes.findMany({
-        orderBy: asc(schema.ticketNotes.createdAt),
-        where: eq(schema.ticketNotes.ticketId, input.ticketId),
-        with: { createdBy: true },
-      });
-    }),
-
-  create: protectedProcedure
+  sendNote: protectedProcedure
     .input(
       z
         .object({
-          content: z.string().min(1),
-          ticketId: z.string(),
+          text: z.string().min(1),
+          ticketId: z.string().min(1),
         })
         .refine(
           (v) => {
             try {
-              JSON.parse(v.content);
+              JSON.parse(v.text);
               return true;
             } catch (e) {
               return false;
@@ -52,23 +45,27 @@ export const ticketNoteRouter = createTRPCRouter({
           message: 'ticket_not_found',
         });
 
-      const content = JSON.parse(input.content) as SerializedEditorState;
+      const content = JSON.parse(input.text) as SerializedEditorState;
       const mentionIds = extractMentions(content);
 
       return await ctx.db.transaction(async (tx) => {
         const creationDate = new Date();
 
         const newNote = await tx
-          .insert(schema.ticketNotes)
+          .insert(schema.ticketTimelineEntries)
           .values({
-            ...input,
-            content: content,
+            ticketId: input.ticketId,
+            type: TicketTimelineEntryType.Note,
+            entry: {
+              text: input.text,
+            } satisfies TicketNote,
+            customerId: ticket.customerId,
             createdAt: creationDate,
-            createdById: ctx.session.user.id,
+            userCreatedById: ctx.session.user.id,
           })
           .returning({
-            id: schema.ticketNotes.id,
-            createdAt: schema.ticketNotes.createdAt,
+            id: schema.ticketTimelineEntries.id,
+            createdAt: schema.ticketTimelineEntries.createdAt,
           })
           .then((res) => res[0]);
 
@@ -80,22 +77,12 @@ export const ticketNoteRouter = createTRPCRouter({
         if (mentionIds.length > 0) {
           await tx.insert(schema.ticketMentions).values(
             mentionIds.map((mentionId) => ({
-              ticketNoteId: newNote.id,
+              ticketTimelineEntryId: newNote.id,
               contactId: mentionId,
               ticketId: ticket.id,
             }))
           );
         }
-
-        await tx.insert(schema.ticketActivities).values({
-          ticketId: input.ticketId,
-          type: TicketActivityType.Commented,
-          extraInfo: {
-            text: input.content,
-          } satisfies TicketCommented,
-          createdAt: newNote.createdAt,
-          createdById: ctx.session.user.id,
-        });
 
         return {
           id: newNote.id,

@@ -1,12 +1,12 @@
-import { TicketPriority } from '../tickets';
-import { TicketActivityType } from './TicketActivityType';
+import { TicketPriority, TicketStatus } from '../tickets';
+import { TicketTimelineEntryType } from './TicketTimelineEntryType';
 
 type TicketAssignmentChanged = {
   oldAssignedToId: string | null;
   newAssignedToId: string | null;
 };
 
-type TicketCommented = {
+type TicketChat = {
   text: string;
 };
 
@@ -15,15 +15,26 @@ type TicketLabelsChanged = {
   newLabelIds: string[];
 };
 
+type TicketNote = {
+  text: string;
+};
+
 type TicketPriorityChanged = {
   oldPriority: TicketPriority;
   newPriority: TicketPriority;
 };
 
+type TicketStatusChanged = {
+  oldStatus: TicketStatus;
+  newStatus: TicketStatus;
+};
+
 export {
   type TicketAssignmentChanged,
-  type TicketCommented,
+  type TicketChat,
   type TicketLabelsChanged,
+  type TicketNote,
   type TicketPriorityChanged,
-  TicketActivityType,
+  type TicketStatusChanged,
+  TicketTimelineEntryType,
 };

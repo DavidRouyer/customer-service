@@ -17,18 +17,18 @@ import {
   SQL,
   sql,
 } from '@cs/database';
-import { ChatContentType, ChatDirection, ChatStatus } from '@cs/lib/chats';
-import {
-  TicketActivityType,
-  TicketAssignmentChanged,
-  TicketPriorityChanged,
-} from '@cs/lib/ticketActivities';
 import {
   TicketFilter,
   TicketPriority,
   TicketStatus,
   TicketStatusDetail,
 } from '@cs/lib/tickets';
+import {
+  TicketAssignmentChanged,
+  TicketPriorityChanged,
+  TicketStatusChanged,
+  TicketTimelineEntryType,
+} from '@cs/lib/ticketTimelineEntries';
 
 import { createTRPCRouter, protectedProcedure } from '../trpc';
 
@@ -95,8 +95,8 @@ export const ticketRouter = createTRPCRouter({
         with: {
           createdBy: true,
           customer: true,
-          messages: {
-            orderBy: desc(schema.ticketChats.createdAt),
+          timeline: {
+            orderBy: desc(schema.ticketTimelineEntries.createdAt),
             limit: 1,
           },
           labels: {
@@ -121,33 +121,10 @@ export const ticketRouter = createTRPCRouter({
   conversation: protectedProcedure
     .input(z.object({ ticketId: z.string() }))
     .query(async ({ ctx, input }) => {
-      const messages = await ctx.db.query.ticketChats.findMany({
-        where: eq(schema.ticketChats.ticketId, input.ticketId),
-        orderBy: asc(schema.ticketChats.createdAt),
-        with: { createdBy: true },
-      });
-      const notes = await ctx.db.query.ticketNotes.findMany({
-        orderBy: asc(schema.ticketNotes.createdAt),
-        where: eq(schema.ticketNotes.ticketId, input.ticketId),
-        with: { createdBy: true },
-      });
-      return [
-        ...messages.map((message) => ({
-          ...message,
-          type: 'chat' as const,
-        })),
-        ...notes.map((note) => ({
-          ...note,
-          status: ChatStatus.Seen,
-          contentType: ChatContentType.TextJson,
-          direction: ChatDirection.Outbound,
-          content: JSON.stringify(note.content),
-          type: 'note' as const,
-        })),
-      ].toSorted((a, b) => {
-        if (a.createdAt < b.createdAt) return -1;
-        if (a.createdAt > b.createdAt) return 1;
-        return 0;
+      return await ctx.db.query.ticketTimelineEntries.findMany({
+        where: eq(schema.ticketTimelineEntries.ticketId, input.ticketId),
+        orderBy: asc(schema.ticketTimelineEntries.createdAt),
+        with: { customerCreatedBy: true, userCreatedBy: true },
       });
     }),
 
@@ -286,15 +263,16 @@ export const ticketRouter = createTRPCRouter({
           return;
         }
 
-        await tx.insert(schema.ticketActivities).values({
+        await tx.insert(schema.ticketTimelineEntries).values({
           ticketId: input.id,
-          type: TicketActivityType.AssignmentChanged,
-          extraInfo: {
+          customerId: ticket.customerId,
+          type: TicketTimelineEntryType.AssignmentChanged,
+          entry: {
             oldAssignedToId: null,
             newAssignedToId: input.userId,
           } satisfies TicketAssignmentChanged,
           createdAt: updatedTicket.updatedAt ?? new Date(),
-          createdById: ctx.session.user.id,
+          userCreatedById: ctx.session.user.id,
         });
       });
     }),
@@ -344,15 +322,16 @@ export const ticketRouter = createTRPCRouter({
           return;
         }
 
-        await tx.insert(schema.ticketActivities).values({
+        await tx.insert(schema.ticketTimelineEntries).values({
           ticketId: input.id,
-          type: TicketActivityType.AssignmentChanged,
-          extraInfo: {
+          customerId: ticket.customerId,
+          type: TicketTimelineEntryType.AssignmentChanged,
+          entry: {
             oldAssignedToId: ticket.assignedToId ?? '',
             newAssignedToId: input.userId,
           } satisfies TicketAssignmentChanged,
           createdAt: updatedTicket.updatedAt ?? new Date(),
-          createdById: ctx.session.user.id,
+          userCreatedById: ctx.session.user.id,
         });
       });
     }),
@@ -396,15 +375,16 @@ export const ticketRouter = createTRPCRouter({
           return;
         }
 
-        await tx.insert(schema.ticketActivities).values({
+        await tx.insert(schema.ticketTimelineEntries).values({
           ticketId: input.id,
-          type: TicketActivityType.AssignmentChanged,
-          extraInfo: {
+          customerId: ticket.customerId,
+          type: TicketTimelineEntryType.AssignmentChanged,
+          entry: {
             oldAssignedToId: ticket.assignedToId ?? '',
             newAssignedToId: null,
           } satisfies TicketAssignmentChanged,
           createdAt: updatedTicket.updatedAt ?? new Date(),
-          createdById: ctx.session.user.id,
+          userCreatedById: ctx.session.user.id,
         });
       });
     }),
@@ -452,15 +432,16 @@ export const ticketRouter = createTRPCRouter({
           return;
         }
 
-        await tx.insert(schema.ticketActivities).values({
+        await tx.insert(schema.ticketTimelineEntries).values({
           ticketId: input.id,
-          type: TicketActivityType.PriorityChanged,
-          extraInfo: {
+          customerId: ticket.customerId,
+          type: TicketTimelineEntryType.PriorityChanged,
+          entry: {
             oldPriority: ticket.priority,
             newPriority: input.priority,
           } satisfies TicketPriorityChanged,
           createdAt: updatedTicket.updatedAt ?? new Date(),
-          createdById: ctx.session.user.id,
+          userCreatedById: ctx.session.user.id,
         });
       });
     }),
@@ -507,11 +488,16 @@ export const ticketRouter = createTRPCRouter({
           return;
         }
 
-        await tx.insert(schema.ticketActivities).values({
+        await tx.insert(schema.ticketTimelineEntries).values({
           ticketId: input.id,
-          type: TicketActivityType.Resolved,
+          customerId: ticket.customerId,
+          type: TicketTimelineEntryType.StatusChanged,
+          entry: {
+            oldStatus: ticket.status,
+            newStatus: TicketStatus.Done,
+          } satisfies TicketStatusChanged,
           createdAt: updatedTicket.updatedAt ?? new Date(),
-          createdById: ctx.session.user.id,
+          userCreatedById: ctx.session.user.id,
         });
       });
     }),
@@ -558,11 +544,16 @@ export const ticketRouter = createTRPCRouter({
           return;
         }
 
-        await tx.insert(schema.ticketActivities).values({
+        await tx.insert(schema.ticketTimelineEntries).values({
           ticketId: input.id,
-          type: TicketActivityType.Reopened,
+          customerId: ticket.customerId,
+          type: TicketTimelineEntryType.StatusChanged,
+          entry: {
+            oldStatus: ticket.status,
+            newStatus: TicketStatus.Open,
+          } satisfies TicketStatusChanged,
           createdAt: updatedTicket.updatedAt ?? new Date(),
-          createdById: ctx.session.user.id,
+          userCreatedById: ctx.session.user.id,
         });
       });
     }),
@@ -606,13 +597,6 @@ export const ticketRouter = createTRPCRouter({
           tx.rollback();
           return;
         }
-
-        await tx.insert(schema.ticketActivities).values({
-          ticketId: newTicket.id,
-          type: TicketActivityType.Created,
-          createdAt: newTicket.createdAt,
-          createdById: ctx.session.user.id,
-        });
 
         return {
           id: newTicket.id,

@@ -3,9 +3,9 @@ import { z } from 'zod';
 
 import { and, eq, inArray, schema } from '@cs/database';
 import {
-  TicketActivityType,
   TicketLabelsChanged,
-} from '@cs/lib/ticketActivities';
+  TicketTimelineEntryType,
+} from '@cs/lib/ticketTimelineEntries';
 
 import { createTRPCRouter, protectedProcedure } from '../trpc';
 
@@ -73,15 +73,16 @@ export const labelRouter = createTRPCRouter({
           return;
         }
 
-        await tx.insert(schema.ticketActivities).values({
+        await tx.insert(schema.ticketTimelineEntries).values({
           ticketId: ticket.id,
-          type: TicketActivityType.LabelsChanged,
-          extraInfo: {
+          type: TicketTimelineEntryType.LabelsChanged,
+          entry: {
             oldLabelIds: [],
             newLabelIds: newLabels.map((label) => label.labelId),
           } satisfies TicketLabelsChanged,
+          customerId: ticket.customerId,
           createdAt: updatedTicket.updatedAt ?? new Date(),
-          createdById: ctx.session.user.id,
+          userCreatedById: ctx.session.user.id,
         });
       });
     }),
@@ -149,15 +150,16 @@ export const labelRouter = createTRPCRouter({
           return;
         }
 
-        await tx.insert(schema.ticketActivities).values({
+        await tx.insert(schema.ticketTimelineEntries).values({
           ticketId: ticket.id,
-          type: TicketActivityType.LabelsChanged,
-          extraInfo: {
+          type: TicketTimelineEntryType.LabelsChanged,
+          entry: {
             oldLabelIds: deletedLabels.map((label) => label.labelId),
             newLabelIds: [],
           } satisfies TicketLabelsChanged,
+          customerId: ticket.customerId,
           createdAt: updatedTicket.updatedAt ?? new Date(),
-          createdById: ctx.session.user.id,
+          userCreatedById: ctx.session.user.id,
         });
       });
     }),
