@@ -73,7 +73,7 @@ export const ticketActivitiesRelations = relations(
       references: [customers.id],
     }),
     customerCreatedBy: one(customers, {
-      fields: [ticketTimelineEntries.userCreatedById],
+      fields: [ticketTimelineEntries.customerCreatedById],
       references: [customers.id],
     }),
     userCreatedBy: one(users, {
