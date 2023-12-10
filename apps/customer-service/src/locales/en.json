@@ -56,7 +56,6 @@
   "ticket.activity.type.ticket_assignment.self_unassigned": "self unassigned",
   "ticket.activity.type.ticket_assignment.unassigned": "unassigned",
   "ticket.activity.type.ticket_commented": "commented",
-  "ticket.activity.type.ticket_created": "created the ticket",
   "ticket.activity.type.ticket_label.added": "added label",
   "ticket.activity.type.ticket_label.removed": "removed label",
   "ticket.activity.type.ticket_priority.changed": "set priority from",

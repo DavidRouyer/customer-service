@@ -3,7 +3,6 @@
 import { FC, Fragment } from 'react';
 
 import { Activity } from '~/components/infos/activity';
-import { MessageSeparator } from '~/components/messages/message-separator';
 import { ScrollableMessageList } from '~/components/scroll/scrollable-message-list';
 import { RelativeDate } from '~/components/ui/relative-date';
 import { api, RouterOutputs } from '~/lib/api';
@@ -47,11 +46,19 @@ export const Timeline: FC<{ ticketId: string }> = ({ ticketId }) => {
     <ScrollableMessageList className="relative h-full w-full overflow-hidden py-3">
       {Object.entries(timelineData ?? {}).map(([date, entries]) => (
         <Fragment key={date}>
-          <MessageSeparator>
+          <span className="text-sm">
             <RelativeDate dateTime={new Date(date)} />
-          </MessageSeparator>
+          </span>
 
-          <Activity entries={entries} />
+          <ul className="space-y-6">
+            {entries?.map((ticketTimelineEntry, ticketTimelineEntryIdx) => (
+              <Activity
+                key={ticketTimelineEntry.id}
+                entry={ticketTimelineEntry}
+                isLast={ticketTimelineEntryIdx === entries.length - 1}
+              />
+            ))}
+          </ul>
         </Fragment>
       ))}
     </ScrollableMessageList>
