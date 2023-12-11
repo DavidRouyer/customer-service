@@ -78,7 +78,7 @@ export const TicketLabelCombobox: FC<TicketLabelComboboxProps> = ({
     },
     onSettled: (_, __, { ticketId }) => {
       void utils.ticket.byId.invalidate({ id: ticketId });
-      void utils.ticketActivity.byTicketId.invalidate({ ticketId });
+      void utils.ticketTimeline.byTicketId.invalidate({ ticketId });
     },
   });
 
@@ -114,7 +114,7 @@ export const TicketLabelCombobox: FC<TicketLabelComboboxProps> = ({
     },
     onSettled: (_, __, { ticketId }) => {
       void utils.ticket.byId.invalidate({ id: ticketId });
-      void utils.ticketActivity.byTicketId.invalidate({ ticketId });
+      void utils.ticketTimeline.byTicketId.invalidate({ ticketId });
     },
   });
 

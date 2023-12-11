@@ -104,7 +104,7 @@ export const TicketAssignmentCombobox: FC<TicketAssignmentComboboxProps> = ({
     },
     onSettled: (_, __, { id }) => {
       void utils.ticket.byId.invalidate({ id });
-      void utils.ticketActivity.byTicketId.invalidate({ ticketId: id });
+      void utils.ticketTimeline.byTicketId.invalidate({ ticketId: id });
     },
   });
 
@@ -142,7 +142,7 @@ export const TicketAssignmentCombobox: FC<TicketAssignmentComboboxProps> = ({
       },
       onSettled: (_, __, { id }) => {
         void utils.ticket.byId.invalidate({ id });
-        void utils.ticketActivity.byTicketId.invalidate({ ticketId: id });
+        void utils.ticketTimeline.byTicketId.invalidate({ ticketId: id });
       },
     });
 
@@ -176,7 +176,7 @@ export const TicketAssignmentCombobox: FC<TicketAssignmentComboboxProps> = ({
       },
       onSettled: (_, __, { id }) => {
         void utils.ticket.byId.invalidate({ id });
-        void utils.ticketActivity.byTicketId.invalidate({ ticketId: id });
+        void utils.ticketTimeline.byTicketId.invalidate({ ticketId: id });
       },
     });
 

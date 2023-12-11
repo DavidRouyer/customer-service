@@ -14,8 +14,8 @@ import {
 import { createTRPCRouter, protectedProcedure } from '../trpc';
 
 export type TicketAssignmentChangedWithData = {
-  oldAssignedTo?: InferSelectModel<typeof schema.customers> | null;
-  newAssignedTo?: InferSelectModel<typeof schema.customers> | null;
+  oldAssignedTo?: InferSelectModel<typeof schema.users> | null;
+  newAssignedTo?: InferSelectModel<typeof schema.users> | null;
 } & TicketAssignmentChanged;
 
 export type TicketLabelsChangedWithData = {
@@ -37,7 +37,7 @@ export const ticketTimelineRouter = createTRPCRouter({
           where: eq(schema.ticketTimelineEntries.ticketId, input.ticketId),
           with: { customerCreatedBy: true, userCreatedBy: true },
         });
-      const augmentedTicketActivities: (Omit<
+      const augmentedTicketTimelineEntries: (Omit<
         (typeof ticketTimelineEntries)[0],
         'entry'
       > & {
@@ -77,7 +77,7 @@ export const ticketTimelineRouter = createTRPCRouter({
         }
       });
 
-      const customers =
+      const users =
         usersToFetch.size > 0
           ? await ctx.db.query.users.findMany({
               where: inArray(schema.users.id, [...usersToFetch]),
@@ -92,71 +92,71 @@ export const ticketTimelineRouter = createTRPCRouter({
             })
           : [];
 
-      ticketTimelineEntries.forEach((ticketActivity) => {
-        switch (ticketActivity.type) {
+      ticketTimelineEntries.forEach((ticketTimelineEntry) => {
+        switch (ticketTimelineEntry.type) {
           case TicketTimelineEntryType.AssignmentChanged:
-            augmentedTicketActivities.push({
-              ...ticketActivity,
+            augmentedTicketTimelineEntries.push({
+              ...ticketTimelineEntry,
               entry: {
-                ...(ticketActivity.entry as TicketAssignmentChanged),
+                ...(ticketTimelineEntry.entry as TicketAssignmentChanged),
                 oldAssignedTo:
-                  customers.find(
-                    (customer) =>
-                      customer.id ===
-                      (ticketActivity.entry as TicketAssignmentChanged)
+                  users.find(
+                    (user) =>
+                      user.id ===
+                      (ticketTimelineEntry.entry as TicketAssignmentChanged)
                         .oldAssignedToId
                   ) ?? null,
                 newAssignedTo:
-                  customers.find(
-                    (customer) =>
-                      customer.id ===
-                      (ticketActivity.entry as TicketAssignmentChanged)
+                  users.find(
+                    (user) =>
+                      user.id ===
+                      (ticketTimelineEntry.entry as TicketAssignmentChanged)
                         .newAssignedToId
                   ) ?? null,
               },
             });
             break;
           case TicketTimelineEntryType.Note:
-            augmentedTicketActivities.push({
-              ...ticketActivity,
-              entry: ticketActivity.entry as TicketNote,
+            augmentedTicketTimelineEntries.push({
+              ...ticketTimelineEntry,
+              entry: ticketTimelineEntry.entry as TicketNote,
             });
             break;
           case TicketTimelineEntryType.LabelsChanged:
-            augmentedTicketActivities.push({
-              ...ticketActivity,
+            augmentedTicketTimelineEntries.push({
+              ...ticketTimelineEntry,
               entry: {
-                ...(ticketActivity.entry as TicketLabelsChanged),
+                ...(ticketTimelineEntry.entry as TicketLabelsChanged),
                 oldLabels: labels.filter((label) =>
                   (
-                    ticketActivity.entry as TicketLabelsChanged
+                    ticketTimelineEntry.entry as TicketLabelsChanged
                   ).oldLabelIds.includes(label.id)
                 ),
                 newLabels: labels.filter((label) =>
                   (
-                    ticketActivity.entry as TicketLabelsChanged
+                    ticketTimelineEntry.entry as TicketLabelsChanged
                   ).newLabelIds.includes(label.id)
                 ),
               },
             });
             break;
           case TicketTimelineEntryType.PriorityChanged:
-            augmentedTicketActivities.push({
-              ...ticketActivity,
-              entry: ticketActivity.entry as TicketPriorityChanged,
+            augmentedTicketTimelineEntries.push({
+              ...ticketTimelineEntry,
+              entry: ticketTimelineEntry.entry as TicketPriorityChanged,
             });
             break;
           case TicketTimelineEntryType.StatusChanged:
-            augmentedTicketActivities.push({
-              ...ticketActivity,
-              entry: ticketActivity.entry as TicketStatusChanged,
+            augmentedTicketTimelineEntries.push({
+              ...ticketTimelineEntry,
+              entry: ticketTimelineEntry.entry as TicketStatusChanged,
             });
             break;
           default:
-            augmentedTicketActivities.push({ ...ticketActivity });
+            augmentedTicketTimelineEntries.push({ ...ticketTimelineEntry });
         }
       });
 
-      return augmentedTicketActivities;
+      return augmentedTicketTimelineEntries;
     }),
 });
