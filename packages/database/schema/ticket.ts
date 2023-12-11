@@ -34,7 +34,10 @@ export const ticketPriority = pgEnum('ticketPriority', [
 ]);
 
 export const tickets = pgTable('ticket', {
-  id: varchar('id').primaryKey().notNull().default(generateEntityId('', 'ti')),
+  id: varchar('id')
+    .primaryKey()
+    .notNull()
+    .$defaultFn(() => generateEntityId('', 'ti')),
   title: varchar('title'),
   status: ticketStatus('status').notNull(),
   statusDetail: ticketStatusDetail('statusDetail'),

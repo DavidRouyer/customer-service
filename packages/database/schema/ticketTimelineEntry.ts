@@ -27,7 +27,10 @@ export const ticketTimelineEntryType = pgEnum('ticketTimelineEntryType', [
 ]);
 
 export const ticketTimelineEntries = pgTable('ticketTimelineEntry', {
-  id: varchar('id').primaryKey().notNull().default(generateEntityId('', 'te')),
+  id: varchar('id')
+    .primaryKey()
+    .notNull()
+    .$defaultFn(() => generateEntityId('', 'te')),
   type: ticketTimelineEntryType('type').notNull(),
   entry: json('entry').$type<
     | TicketAssignmentChanged
