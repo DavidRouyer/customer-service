@@ -38,7 +38,7 @@ export const InfoPanel: FC<{
         <Accordion
           type="multiple"
           className="w-full"
-          defaultValue={['item-0', 'item-1', 'item-2']}
+          defaultValue={['item-0', 'item-1']}
         >
           <AccordionItem value="item-0">
             <AccordionTrigger>
