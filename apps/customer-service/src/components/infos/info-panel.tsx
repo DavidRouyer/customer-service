@@ -3,7 +3,6 @@
 import { FC } from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { Activity } from '~/components/infos/activity';
 import { LinkedTickets } from '~/components/infos/linked-tickets';
 import { TicketInfo } from '~/components/infos/ticket-info';
 import { UserInfo } from '~/components/infos/user-info';

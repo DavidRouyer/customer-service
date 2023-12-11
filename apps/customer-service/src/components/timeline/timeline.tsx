@@ -2,8 +2,8 @@
 
 import { FC, Fragment } from 'react';
 
-import { Activity } from '~/components/infos/activity';
 import { ScrollableMessageList } from '~/components/scroll/scrollable-message-list';
+import { TimelineEntry } from '~/components/timeline/timeline-entry';
 import { RelativeDate } from '~/components/ui/relative-date';
 import { api, RouterOutputs } from '~/lib/api';
 
@@ -51,7 +51,7 @@ export const Timeline: FC<{ ticketId: string }> = ({ ticketId }) => {
           </div>
 
           {entries?.map((ticketTimelineEntry, ticketTimelineEntryIdx) => (
-            <Activity
+            <TimelineEntry
               key={ticketTimelineEntry.id}
               entry={ticketTimelineEntry}
               isLast={ticketTimelineEntryIdx === entries.length - 1}

@@ -24,7 +24,7 @@ import { RouterOutputs } from '~/lib/api';
 import { getInitials } from '~/lib/string';
 import { cn } from '~/lib/utils';
 
-export const Activity: FC<{
+export const TimelineEntry: FC<{
   entry: RouterOutputs['ticketTimeline']['byTicketId'][0];
   isLast: boolean;
 }> = ({ entry, isLast }) => {
@@ -296,4 +296,4 @@ export const Activity: FC<{
   );
 };
 
-Activity.displayName = 'ActivityPanel';
+TimelineEntry.displayName = 'ActivityPanel';
