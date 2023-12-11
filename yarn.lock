@@ -25,12 +25,25 @@
     "@jridgewell/gen-mapping" "^0.3.0"
     "@jridgewell/trace-mapping" "^0.3.9"
 
-"@auth/core@0.18.4", "@auth/core@0.18.5", "@auth/core@^0.18.4":
+"@auth/core@0.18.4":
   version "0.18.4"
   resolved "https://registry.yarnpkg.com/@auth/core/-/core-0.18.4.tgz#5c91f7835dc24329d5486a2939d766608a7aacb8"
   integrity sha512-GsNhsP1xE/3FoNS3dVkPjqRljLNJ4iyL2OLv3klQGNvw3bMpROFcK4lqhx7+pPHiamnVaYt2vg1xbB+lsNaevg==
   dependencies:
     "@panva/hkdf" "^1.1.1"
+    cookie "0.6.0"
+    jose "^5.1.0"
+    oauth4webapi "^2.3.0"
+    preact "10.11.3"
+    preact-render-to-string "5.2.3"
+
+"@auth/core@0.18.5", "@auth/core@^0.18.5":
+  version "0.18.5"
+  resolved "https://registry.yarnpkg.com/@auth/core/-/core-0.18.5.tgz#7025d5c533588f9b01965c34ab32abf262987525"
+  integrity sha512-Ql8YobXp57mbXqHNaaroIAgBopKaxWI+3Tlu1rGcXW5KPzXdfTqijZ4HOuZvWKqmhbMWQ9xS9r8uG4fMonZYwg==
+  dependencies:
+    "@panva/hkdf" "^1.1.1"
+    "@types/cookie" "0.6.0"
     cookie "0.6.0"
     jose "^5.1.0"
     oauth4webapi "^2.3.0"
@@ -2040,6 +2053,11 @@
   integrity sha512-6atioO8Y75fNcbmj0G7UjI9lXN2pQ/IGJ2FWT4a/btd0Lk9lQalHLKhkgKVZ3r+spnmWUKfbMi1GEe9wyHQfNQ==
   dependencies:
     "@types/node" "*"
+
+"@types/cookie@0.6.0":
+  version "0.6.0"
+  resolved "https://registry.yarnpkg.com/@types/cookie/-/cookie-0.6.0.tgz#eac397f28bf1d6ae0ae081363eca2f425bedf0d5"
+  integrity sha512-4Kh9a6B2bQciAhf7FSuMRRkUWecJgJu9nPnx3yzpsfXX/c50REIqpHY4C82bXP90qrLtXtkDxTZosYO3UpOwlA==
 
 "@types/google-libphonenumber@^7.4.30":
   version "7.4.30"
