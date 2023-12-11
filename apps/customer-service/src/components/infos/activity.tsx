@@ -236,8 +236,8 @@ export const Activity: FC<{
               ),
               PriorityChanged: (
                 <>
-                  <FormattedMessage id="ticket.activity.type.ticket_priority.changed" />
-                  <span className="inline-flex flex-nowrap space-x-1">
+                  <FormattedMessage id="ticket.activity.type.ticket_priority.changed" />{' '}
+                  <span className="space-x-1">
                     <TicketPriority
                       priority={
                         (entry.entry as TicketPriorityChanged)?.oldPriority
@@ -245,7 +245,7 @@ export const Activity: FC<{
                     />
                   </span>{' '}
                   <FormattedMessage id="ticket.activity.type.ticket_priority.to" />{' '}
-                  <span className="inline-flex flex-nowrap space-x-1">
+                  <span className="space-x-1">
                     <TicketPriority
                       priority={
                         (entry.entry as TicketPriorityChanged)?.newPriority
