@@ -51,7 +51,7 @@ export const ticketTimelineRouter = createTRPCRouter({
           | null;
       })[] = [];
 
-      const customersToFetch = new Set<string>();
+      const usersToFetch = new Set<string>();
       const labelsToFetch = new Set<string>();
       ticketTimelineEntries.forEach((ticketTimelineEntry) => {
         if (
@@ -60,9 +60,9 @@ export const ticketTimelineRouter = createTRPCRouter({
           const extraInfo =
             ticketTimelineEntry.entry as TicketAssignmentChanged;
           if (extraInfo.oldAssignedToId !== null)
-            customersToFetch.add(extraInfo.oldAssignedToId);
+            usersToFetch.add(extraInfo.oldAssignedToId);
           if (extraInfo.newAssignedToId !== null)
-            customersToFetch.add(extraInfo.newAssignedToId);
+            usersToFetch.add(extraInfo.newAssignedToId);
         }
         if (
           ticketTimelineEntry.type === TicketTimelineEntryType.LabelsChanged
@@ -78,9 +78,9 @@ export const ticketTimelineRouter = createTRPCRouter({
       });
 
       const customers =
-        customersToFetch.size > 0
-          ? await ctx.db.query.customers.findMany({
-              where: inArray(schema.customers.id, [...customersToFetch]),
+        usersToFetch.size > 0
+          ? await ctx.db.query.users.findMany({
+              where: inArray(schema.users.id, [...usersToFetch]),
             })
           : [];
 
