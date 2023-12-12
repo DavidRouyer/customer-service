@@ -1,3 +1,0 @@
-div[data-message-separator]:not(:last-child), section[data-message]:not(:last-child) {
-  @apply mt-4;
-}
