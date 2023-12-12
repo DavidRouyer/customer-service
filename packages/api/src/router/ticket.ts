@@ -228,7 +228,7 @@ export const ticketRouter = createTRPCRouter({
       });
     }),
 
-  addAssignment: protectedProcedure
+  assign: protectedProcedure
     .input(z.object({ id: z.string(), userId: z.string() }))
     .mutation(async ({ ctx, input }) => {
       const ticket = await ctx.db.query.tickets.findFirst({
@@ -239,12 +239,6 @@ export const ticketRouter = createTRPCRouter({
         throw new TRPCError({
           code: 'BAD_REQUEST',
           message: 'ticket_not_found',
-        });
-
-      if (ticket.assignedToId)
-        throw new TRPCError({
-          code: 'BAD_REQUEST',
-          message: 'ticket_already_assigned',
         });
 
       return await ctx.db.transaction(async (tx) => {
@@ -272,7 +266,7 @@ export const ticketRouter = createTRPCRouter({
           customerId: ticket.customerId,
           type: TicketTimelineEntryType.AssignmentChanged,
           entry: {
-            oldAssignedToId: null,
+            oldAssignedToId: ticket.assignedToId,
             newAssignedToId: input.userId,
           } satisfies TicketAssignmentChanged,
           createdAt: updatedTicket.updatedAt ?? new Date(),
@@ -281,66 +275,7 @@ export const ticketRouter = createTRPCRouter({
       });
     }),
 
-  changeAssignment: protectedProcedure
-    .input(z.object({ id: z.string(), userId: z.string() }))
-    .mutation(async ({ ctx, input }) => {
-      const ticket = await ctx.db.query.tickets.findFirst({
-        where: eq(schema.tickets.id, input.id),
-      });
-
-      if (!ticket)
-        throw new TRPCError({
-          code: 'BAD_REQUEST',
-          message: 'ticket_not_found',
-        });
-
-      if (!ticket.assignedToId)
-        throw new TRPCError({
-          code: 'BAD_REQUEST',
-          message: 'ticket_not_assigned',
-        });
-
-      if (ticket.assignedToId === input.userId)
-        throw new TRPCError({
-          code: 'BAD_REQUEST',
-          message: 'ticket_already_assigned_to_contact',
-        });
-
-      return await ctx.db.transaction(async (tx) => {
-        const updatedTicket = await tx
-          .update(schema.tickets)
-          .set({
-            assignedToId: input.userId,
-            updatedAt: new Date(),
-            updatedById: ctx.session.user.id,
-          })
-          .where(eq(schema.tickets.id, input.id))
-          .returning({
-            id: schema.tickets.id,
-            updatedAt: schema.tickets.updatedAt,
-          })
-          .then((res) => res[0]);
-
-        if (!updatedTicket) {
-          tx.rollback();
-          return;
-        }
-
-        await tx.insert(schema.ticketTimelineEntries).values({
-          ticketId: input.id,
-          customerId: ticket.customerId,
-          type: TicketTimelineEntryType.AssignmentChanged,
-          entry: {
-            oldAssignedToId: ticket.assignedToId ?? '',
-            newAssignedToId: input.userId,
-          } satisfies TicketAssignmentChanged,
-          createdAt: updatedTicket.updatedAt ?? new Date(),
-          userCreatedById: ctx.session.user.id,
-        });
-      });
-    }),
-
-  removeAssignment: protectedProcedure
+  unassign: protectedProcedure
     .input(z.object({ id: z.string() }))
     .mutation(async ({ ctx, input }) => {
       const ticket = await ctx.db.query.tickets.findFirst({
@@ -384,7 +319,7 @@ export const ticketRouter = createTRPCRouter({
           customerId: ticket.customerId,
           type: TicketTimelineEntryType.AssignmentChanged,
           entry: {
-            oldAssignedToId: ticket.assignedToId ?? '',
+            oldAssignedToId: ticket.assignedToId,
             newAssignedToId: null,
           } satisfies TicketAssignmentChanged,
           createdAt: updatedTicket.updatedAt ?? new Date(),

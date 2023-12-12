@@ -71,7 +71,7 @@ export const TicketAssignmentCombobox: FC<TicketAssignmentComboboxProps> = ({
     ),
   });
 
-  const { mutateAsync: addAssignment } = api.ticket.addAssignment.useMutation({
+  const { mutateAsync: assign } = api.ticket.assign.useMutation({
     onMutate: async (newAssignment) => {
       // Cancel any outgoing refetches
       // (so they don't overwrite our optimistic update)
@@ -108,77 +108,38 @@ export const TicketAssignmentCombobox: FC<TicketAssignmentComboboxProps> = ({
     },
   });
 
-  const { mutateAsync: changeAssignment } =
-    api.ticket.changeAssignment.useMutation({
-      onMutate: async (newAssignment) => {
-        // Cancel any outgoing refetches
-        // (so they don't overwrite our optimistic update)
-        await utils.ticket.byId.cancel({ id: newAssignment.id });
+  const { mutateAsync: unassign } = api.ticket.unassign.useMutation({
+    onMutate: async ({ id }) => {
+      // Cancel any outgoing refetches
+      // (so they don't overwrite our optimistic update)
+      await utils.ticket.byId.cancel({ id });
 
-        // Snapshot the previous value
-        const previousTicket = utils.ticket.byId.getData({
-          id: newAssignment.id,
-        });
+      // Snapshot the previous value
+      const previousTicket = utils.ticket.byId.getData({ id });
 
-        // Optimistically update to the new value
-        utils.ticket.byId.setData(
-          { id: newAssignment.id },
-          (oldQueryData) =>
-            ({
-              ...oldQueryData,
-              assignedToId: newAssignment.userId,
-              assignedTo: usersData?.find(
-                (user) => user.id === newAssignment.userId
-              ),
-            }) as NonNullable<RouterOutputs['ticket']['byId']>
-        );
+      // Optimistically update to the new value
+      utils.ticket.byId.setData(
+        { id },
+        (oldQueryData) =>
+          ({
+            ...oldQueryData,
+            assignedToId: null,
+            assignedTo: null,
+          }) as NonNullable<RouterOutputs['ticket']['byId']>
+      );
 
-        // Return a context object with the snapshotted value
-        return { previousTicket: previousTicket };
-      },
-      onError: (err, { id }, context) => {
-        // TODO: handle failed queries
-        utils.ticket.byId.setData({ id }, context?.previousTicket);
-      },
-      onSettled: (_, __, { id }) => {
-        void utils.ticket.byId.invalidate({ id });
-        void utils.ticketTimeline.byTicketId.invalidate({ ticketId: id });
-      },
-    });
-
-  const { mutateAsync: removeAssignment } =
-    api.ticket.removeAssignment.useMutation({
-      onMutate: async ({ id }) => {
-        // Cancel any outgoing refetches
-        // (so they don't overwrite our optimistic update)
-        await utils.ticket.byId.cancel({ id });
-
-        // Snapshot the previous value
-        const previousTicket = utils.ticket.byId.getData({ id });
-
-        // Optimistically update to the new value
-        utils.ticket.byId.setData(
-          { id },
-          (oldQueryData) =>
-            ({
-              ...oldQueryData,
-              assignedToId: null,
-              assignedTo: null,
-            }) as NonNullable<RouterOutputs['ticket']['byId']>
-        );
-
-        // Return a context object with the snapshotted value
-        return { previousTicket: previousTicket };
-      },
-      onError: (err, { id }, context) => {
-        // TODO: handle failed queries
-        utils.ticket.byId.setData({ id }, context?.previousTicket);
-      },
-      onSettled: (_, __, { id }) => {
-        void utils.ticket.byId.invalidate({ id });
-        void utils.ticketTimeline.byTicketId.invalidate({ ticketId: id });
-      },
-    });
+      // Return a context object with the snapshotted value
+      return { previousTicket: previousTicket };
+    },
+    onError: (err, { id }, context) => {
+      // TODO: handle failed queries
+      utils.ticket.byId.setData({ id }, context?.previousTicket);
+    },
+    onSettled: (_, __, { id }) => {
+      void utils.ticket.byId.invalidate({ id });
+      void utils.ticketTimeline.byTicketId.invalidate({ ticketId: id });
+    },
+  });
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -227,17 +188,10 @@ export const TicketAssignmentCombobox: FC<TicketAssignmentComboboxProps> = ({
               <CommandItem
                 key={user.id}
                 onSelect={() => {
-                  if (assignedTo) {
-                    if (user.id === assignedTo.id) {
-                      removeAssignment({ id: ticketId });
-                    } else {
-                      changeAssignment({
-                        id: ticketId,
-                        userId: user.id,
-                      });
-                    }
+                  if (assignedTo && user.id === assignedTo.id) {
+                    unassign({ id: ticketId });
                   } else {
-                    addAssignment({
+                    assign({
                       id: ticketId,
                       userId: user.id,
                     });
