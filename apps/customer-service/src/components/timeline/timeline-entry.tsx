@@ -260,9 +260,9 @@ export const TimelineEntry: FC<{
                     TicketStatus.Done &&
                   (entry.entry as TicketStatusChanged)?.newStatus ===
                     TicketStatus.Open ? (
-                    <FormattedMessage id="ticket.activity.type.ticket_reopened" />
+                    <FormattedMessage id="ticket.activity.type.ticket_marked_as_open" />
                   ) : (
-                    <FormattedMessage id="ticket.activity.type.ticket_resolved" />
+                    <FormattedMessage id="ticket.activity.type.ticket_marked_as_done" />
                   )}
                 </>
               ),

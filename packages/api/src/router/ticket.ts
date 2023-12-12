@@ -149,7 +149,7 @@ export const ticketRouter = createTRPCRouter({
     } then 1 else 0 end)::int AS "open",
     sum(case when ${schema.tickets.status} = ${
       TicketStatus.Done
-    } then 1 else 0 end)::int AS "resolved",
+    } then 1 else 0 end)::int AS "done",
     sum(case when (${schema.tickets.status} = ${TicketStatus.Open} AND ${
       schema.tickets.assignedToId
     } IS NULL) then 1 else 0 end)::int AS "unassigned",
@@ -182,7 +182,7 @@ export const ticketRouter = createTRPCRouter({
       {
         total: number;
         open: number;
-        resolved: number;
+        done: number;
         unassigned: number;
         assignedToMe: number;
         mentions: number;
@@ -385,7 +385,7 @@ export const ticketRouter = createTRPCRouter({
       });
     }),
 
-  resolve: protectedProcedure
+  markAsDone: protectedProcedure
     .input(z.object({ id: z.string() }))
     .mutation(async ({ ctx, input }) => {
       const ticket = await ctx.db.query.tickets.findFirst({
@@ -401,7 +401,7 @@ export const ticketRouter = createTRPCRouter({
       if (ticket.status === TicketStatus.Done)
         throw new TRPCError({
           code: 'BAD_REQUEST',
-          message: 'ticket_already_resolved',
+          message: 'ticket_already_marked_as_done',
         });
 
       return await ctx.db.transaction(async (tx) => {
@@ -441,7 +441,7 @@ export const ticketRouter = createTRPCRouter({
       });
     }),
 
-  reopen: protectedProcedure
+  markAsOpen: protectedProcedure
     .input(z.object({ id: z.string() }))
     .mutation(async ({ ctx, input }) => {
       const ticket = await ctx.db.query.tickets.findFirst({
@@ -457,7 +457,7 @@ export const ticketRouter = createTRPCRouter({
       if (ticket.status === TicketStatus.Open)
         throw new TRPCError({
           code: 'BAD_REQUEST',
-          message: 'ticket_already_opened',
+          message: 'ticket_already_marked_as_open',
         });
 
       return await ctx.db.transaction(async (tx) => {

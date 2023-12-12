@@ -76,7 +76,7 @@ export const LinkedTickets: FC<LinkedTicketsProps> = ({
                   </>
                 ) : (
                   <>
-                    <FormattedMessage id="ticket.resolved_on" />{' '}
+                    <FormattedMessage id="ticket.marked_as_done_on" />{' '}
                     {ticket.statusChangedAt ? (
                       <time dateTime={ticket.statusChangedAt.toISOString()}>
                         <FormattedDate
