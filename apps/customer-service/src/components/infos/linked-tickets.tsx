@@ -19,8 +19,6 @@ export const LinkedTickets: FC<LinkedTicketsProps> = ({
   ticketId,
   customerId,
 }) => {
-  const searchParams = useSearchParams();
-
   const { data: ticketsData } = api.ticket.byCustomerId.useQuery(
     {
       customerId: customerId ?? '',
@@ -36,7 +34,7 @@ export const LinkedTickets: FC<LinkedTicketsProps> = ({
       {ticketsData?.map((ticket) => (
         <li key={ticket.id}>
           <Link
-            href={`/tickets/${ticket.id}?${searchParams.toString()}`}
+            href={`/ticket/${ticket.id}`}
             className="block flex-auto rounded-md p-3 ring-1 ring-inset ring-border"
           >
             <div className="flex items-start gap-x-3">

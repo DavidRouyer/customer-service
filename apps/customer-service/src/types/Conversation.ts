@@ -1,5 +1,5 @@
 import { RouterOutputs } from '@cs/api';
 
-export type ConversationItem = RouterOutputs['ticket']['conversation'][0];
+export type TimelineItem = RouterOutputs['ticket']['timeline'][0];
 
-export type Conversation = Record<string, Record<string, ConversationItem[]>>;
+export type TimelineByDay = Record<string, TimelineItem[]>;

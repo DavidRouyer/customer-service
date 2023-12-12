@@ -55,7 +55,7 @@ export const TicketPriorityDropdowm: FC<TicketChangePriorityProps> = ({
     },
     onSettled: (_, __, { id }) => {
       void utils.ticket.byId.invalidate({ id });
-      void utils.ticketActivity.byTicketId.invalidate({ ticketId: id });
+      void utils.ticketTimeline.byTicketId.invalidate({ ticketId: id });
     },
   });
 

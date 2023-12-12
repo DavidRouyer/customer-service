@@ -8,7 +8,10 @@ import { users } from './auth';
 import { tickets } from './ticket';
 
 export const customers = pgTable('customer', {
-  id: varchar('id').primaryKey().notNull().default(generateEntityId('', 'co')),
+  id: varchar('id')
+    .primaryKey()
+    .notNull()
+    .$defaultFn(() => generateEntityId('', 'co')),
   createdAt: timestamp('createdAt', { precision: 3, mode: 'date' })
     .defaultNow()
     .notNull(),

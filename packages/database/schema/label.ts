@@ -13,7 +13,7 @@ export const labels = pgTable(
     id: varchar('id')
       .primaryKey()
       .notNull()
-      .default(generateEntityId('', 'lb')),
+      .$defaultFn(() => generateEntityId('', 'lb')),
     ticketId: varchar('ticketId')
       .notNull()
       .references(() => tickets.id, {

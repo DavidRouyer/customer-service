@@ -12,8 +12,8 @@ import { pgTable } from './_table';
 import { users } from './auth';
 import { customers } from './customer';
 import { labels } from './label';
-import { ticketChats } from './ticketChat';
 import { ticketMentions } from './ticketMentions';
+import { ticketTimelineEntries } from './ticketTimelineEntry';
 
 export const ticketStatus = pgEnum('ticketStatus', [
   TicketStatus.Open,
@@ -34,7 +34,10 @@ export const ticketPriority = pgEnum('ticketPriority', [
 ]);
 
 export const tickets = pgTable('ticket', {
-  id: varchar('id').primaryKey().notNull().default(generateEntityId('', 'ti')),
+  id: varchar('id')
+    .primaryKey()
+    .notNull()
+    .$defaultFn(() => generateEntityId('', 'ti')),
   title: varchar('title'),
   status: ticketStatus('status').notNull(),
   statusDetail: ticketStatusDetail('statusDetail'),
@@ -91,7 +94,7 @@ export const ticketsRelations = relations(tickets, ({ one, many }) => ({
     fields: [tickets.updatedById],
     references: [users.id],
   }),
-  messages: many(ticketChats),
+  timeline: many(ticketTimelineEntries),
   ticketMentions: many(ticketMentions),
   labels: many(labels),
 }));

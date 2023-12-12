@@ -8,6 +8,7 @@ import { Controller, FormProvider, useForm } from 'react-hook-form';
 import { FormattedMessage } from 'react-intl';
 
 import { ChatContentType, ChatDirection, ChatStatus } from '@cs/lib/chats';
+import { TicketChat } from '@cs/lib/ticketTimelineEntries';
 
 import { messageModeAtom } from '~/components/messages/message-mode-atom';
 import { Button } from '~/components/ui/button';
@@ -15,7 +16,7 @@ import { Label } from '~/components/ui/label';
 import { Switch } from '~/components/ui/switch';
 import { api } from '~/lib/api';
 import { cn } from '~/lib/utils';
-import { ConversationItem } from '~/types/Conversation';
+import { TimelineItem } from '~/types/Conversation';
 
 const TextEditor = dynamic(
   () => import('~/components/text-editor/text-editor'),
@@ -38,36 +39,35 @@ export const MessageForm: FC<{ ticketId: string }> = ({ ticketId }) => {
 
   const [messageMode, setMessageMode] = useAtom(messageModeAtom);
 
-  const { mutateAsync: sendMessage } = api.ticketChat.create.useMutation({
+  const { mutateAsync: sendMessage } = api.ticket.sendChat.useMutation({
     onMutate: async (newMessage) => {
       // Cancel any outgoing refetches
       // (so they don't overwrite our optimistic update)
-      await utils.ticket.conversation.cancel({ ticketId: newMessage.ticketId });
+      await utils.ticket.timeline.cancel({ ticketId: newMessage.ticketId });
 
       // Snapshot the previous value
-      const previousMessages = utils.ticket.conversation.getData({
+      const previousMessages = utils.ticket.timeline.getData({
         ticketId: newMessage.ticketId,
       });
 
       // Optimistically update to the new value
-      utils.ticket.conversation.setData(
+      utils.ticket.timeline.setData(
         { ticketId: newMessage.ticketId },
-        (oldQueryData: ConversationItem[] | undefined) =>
+        (oldQueryData: TimelineItem[] | undefined) =>
           [
             ...(oldQueryData ?? []),
             {
               id: self.crypto.randomUUID(),
               type: 'chat',
               ticketId: newMessage.ticketId,
-              direction: newMessage.direction,
-              contentType: newMessage.contentType,
-              status: newMessage.status,
-              content: newMessage.content,
+              entry: {
+                text: newMessage.text,
+              } satisfies TicketChat,
               createdAt: new Date(),
               createdById: sessionData?.user?.id ?? 0,
               createdBy: sessionData?.user,
             },
-          ] as ConversationItem[]
+          ] as TimelineItem[]
       );
 
       // Return a context object with the snapshotted value
@@ -75,32 +75,32 @@ export const MessageForm: FC<{ ticketId: string }> = ({ ticketId }) => {
     },
     onError: (err, _newMessage, context) => {
       // TODO: handle failed queries
-      utils.ticket.conversation.setData(
+      utils.ticket.timeline.setData(
         { ticketId: _newMessage.ticketId },
         context?.previousMessages ?? []
       );
     },
     onSettled: (_, __, { ticketId }) => {
-      void utils.ticket.conversation.invalidate({ ticketId: ticketId });
+      void utils.ticket.timeline.invalidate({ ticketId: ticketId });
     },
   });
-  const { mutateAsync: sendNote } = api.ticketNote.create.useMutation({
+  const { mutateAsync: sendNote } = api.ticket.sendNote.useMutation({
     onMutate: async (newTicket) => {
       // Cancel any outgoing refetches
       // (so they don't overwrite our optimistic update)
-      await utils.ticket.conversation.cancel({
+      await utils.ticket.timeline.cancel({
         ticketId: newTicket.ticketId,
       });
 
       // Snapshot the previous value
-      const previousConversationItem = utils.ticket.conversation.getData({
+      const previousConversationItem = utils.ticket.timeline.getData({
         ticketId: newTicket.ticketId,
       });
 
       // Optimistically update to the new value
-      utils.ticket.conversation.setData(
+      utils.ticket.timeline.setData(
         { ticketId: newTicket.ticketId },
-        (oldQueryData: ConversationItem[] | undefined) =>
+        (oldQueryData: TimelineItem[] | undefined) =>
           [
             ...(oldQueryData ?? []),
             {
@@ -109,12 +109,14 @@ export const MessageForm: FC<{ ticketId: string }> = ({ ticketId }) => {
               direction: ChatDirection.Outbound,
               contentType: ChatContentType.TextJson,
               status: ChatStatus.Pending,
-              content: newTicket.content,
+              entry: {
+                text: newTicket.text,
+              },
               createdAt: new Date(),
               createdById: sessionData?.user?.id ?? 0,
               createdBy: sessionData?.user,
             },
-          ] as ConversationItem[]
+          ] as TimelineItem[]
       );
 
       // Return a context object with the snapshotted value
@@ -122,14 +124,14 @@ export const MessageForm: FC<{ ticketId: string }> = ({ ticketId }) => {
     },
     onError: (err, _newTicket, context) => {
       // TODO: handle failed queries
-      utils.ticket.conversation.setData(
+      utils.ticket.timeline.setData(
         { ticketId: _newTicket.ticketId },
         context?.previousNotes ?? []
       );
     },
     onSettled: (_, __, { ticketId }) => {
-      void utils.ticket.conversation.invalidate({ ticketId: ticketId });
-      void utils.ticketActivity.byTicketId.invalidate({ ticketId: ticketId });
+      void utils.ticket.timeline.invalidate({ ticketId: ticketId });
+      void utils.ticketTimeline.byTicketId.invalidate({ ticketId: ticketId });
     },
   });
   const form = useForm<MessageFormSchema>();
@@ -138,15 +140,12 @@ export const MessageForm: FC<{ ticketId: string }> = ({ ticketId }) => {
     if (messageMode === 'reply') {
       sendMessage({
         ticketId: ticketId,
-        direction: ChatDirection.Outbound,
-        contentType: ChatContentType.TextJson,
-        status: ChatStatus.Pending,
-        content: data.content,
+        text: data.content,
       });
     } else {
       sendNote({
         ticketId: ticketId,
-        content: data.content,
+        text: data.content,
       });
     }
 

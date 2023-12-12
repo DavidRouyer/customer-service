@@ -6,7 +6,10 @@ import { pgTable } from './_table';
 import { users } from './auth';
 
 export const labelTypes = pgTable('labelType', {
-  id: varchar('id').primaryKey().notNull().default(generateEntityId('', 'lt')),
+  id: varchar('id')
+    .primaryKey()
+    .notNull()
+    .$defaultFn(() => generateEntityId('', 'lt')),
   name: varchar('name', { length: 256 }).notNull(),
   icon: varchar('icon', { length: 256 }).notNull(),
   updatedAt: timestamp('updatedAt', { precision: 3, mode: 'date' }),

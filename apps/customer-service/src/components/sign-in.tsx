@@ -22,7 +22,7 @@ export async function SignIn() {
         <form
           action={async () => {
             'use server';
-            await signIn('github', { callbackUrl: '/tickets' });
+            await signIn('github', { callbackUrl: '/dashboard' });
           }}
         >
           <Button className="w-full">

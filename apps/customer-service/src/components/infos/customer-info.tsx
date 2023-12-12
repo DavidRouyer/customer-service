@@ -12,7 +12,7 @@ const user = {
   },
 };
 
-export const UserInfo: FC<{ ticketId: string }> = ({ ticketId }) => {
+export const CustomerInfo: FC<{ ticketId: string }> = ({ ticketId }) => {
   const { data: ticketData } = api.ticket.byId.useQuery({
     id: ticketId,
   });

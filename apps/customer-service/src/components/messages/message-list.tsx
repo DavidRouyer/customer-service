@@ -10,10 +10,10 @@ import { RelativeDate } from '~/components/ui/relative-date';
 import '~/components/messages/message-list.css';
 
 import { api, RouterOutputs } from '~/lib/api';
-import { Conversation } from '~/types/Conversation';
+import { TimelineByDay } from '~/types/Conversation';
 
-const getConversation = (messages: RouterOutputs['ticket']['conversation']) => {
-  return messages?.reduce<Conversation>((acc, message) => {
+const getConversation = (messages: RouterOutputs['ticket']['timeline']) => {
+  return messages?.reduce<TimelineByDay>((acc, message) => {
     const date = new Date(message.createdAt);
     const dateAsString = date.toISOString().substring(0, 10);
     date.setUTCMilliseconds(0);
@@ -41,7 +41,7 @@ const getConversation = (messages: RouterOutputs['ticket']['conversation']) => {
 };
 
 export const MessageList: FC<{ ticketId: string }> = ({ ticketId }) => {
-  const { data: messagesData } = api.ticket.conversation.useQuery(
+  const { data: messagesData } = api.ticketTimeline.byTicketId.useQuery(
     {
       ticketId: ticketId,
     },

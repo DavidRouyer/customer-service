@@ -5,7 +5,7 @@ import { pgTable } from './_table';
 import { users } from './auth';
 import { customers } from './customer';
 import { tickets } from './ticket';
-import { ticketNotes } from './ticketNote';
+import { ticketTimelineEntries } from './ticketTimelineEntry';
 
 export const ticketMentions = pgTable(
   'ticketMentions',
@@ -16,9 +16,9 @@ export const ticketMentions = pgTable(
         onDelete: 'restrict',
         onUpdate: 'cascade',
       }),
-    ticketNoteId: varchar('ticketNoteId')
+    ticketTimelineEntryId: varchar('ticketTimelineEntryId')
       .notNull()
-      .references(() => ticketNotes.id, {
+      .references(() => ticketTimelineEntries.id, {
         onDelete: 'restrict',
         onUpdate: 'cascade',
       }),
@@ -33,7 +33,7 @@ export const ticketMentions = pgTable(
     return {
       pk: primaryKey({
         name: 'ticketMentions_pk',
-        columns: [table.contactId, table.ticketNoteId],
+        columns: [table.contactId, table.ticketTimelineEntryId],
       }),
     };
   }
@@ -44,9 +44,9 @@ export const ticketMentionsRelations = relations(ticketMentions, ({ one }) => ({
     fields: [ticketMentions.contactId],
     references: [users.id],
   }),
-  ticketNote: one(ticketNotes, {
-    fields: [ticketMentions.ticketNoteId],
-    references: [ticketNotes.id],
+  ticketTimelineEntry: one(ticketTimelineEntries, {
+    fields: [ticketMentions.ticketTimelineEntryId],
+    references: [ticketTimelineEntries.id],
   }),
   ticket: one(tickets, {
     fields: [ticketMentions.ticketId],
