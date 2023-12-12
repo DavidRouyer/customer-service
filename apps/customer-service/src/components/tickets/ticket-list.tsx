@@ -1,7 +1,6 @@
 'use client';
 
 import { FC, Fragment, useEffect } from 'react';
-import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { PartyPopper } from 'lucide-react';
 import { useInView } from 'react-intersection-observer';
 import { FormattedMessage } from 'react-intl';

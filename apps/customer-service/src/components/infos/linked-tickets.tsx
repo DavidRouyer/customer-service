@@ -2,7 +2,6 @@
 
 import { FC } from 'react';
 import Link from 'next/link';
-import { useSearchParams } from 'next/navigation';
 import { FormattedDate, FormattedMessage } from 'react-intl';
 
 import { TicketStatus } from '@cs/lib/tickets';

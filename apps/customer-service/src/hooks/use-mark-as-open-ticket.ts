@@ -2,10 +2,10 @@ import { TicketStatus } from '@cs/lib/tickets';
 
 import { api, RouterOutputs } from '~/lib/api';
 
-export const useResolveTicket = () => {
+export const useMarkAsOpenTicket = () => {
   const utils = api.useUtils();
 
-  const { mutateAsync } = api.ticket.resolve.useMutation({
+  const { mutateAsync } = api.ticket.markAsOpen.useMutation({
     onMutate: async ({ id }) => {
       // Cancel any outgoing refetches
       // (so they don't overwrite our optimistic update)
@@ -20,7 +20,7 @@ export const useResolveTicket = () => {
         (oldQueryData) =>
           ({
             ...oldQueryData,
-            status: TicketStatus.Done,
+            status: TicketStatus.Open,
           }) as NonNullable<RouterOutputs['ticket']['byId']>
       );
 
@@ -38,6 +38,6 @@ export const useResolveTicket = () => {
   });
 
   return {
-    resolveTicket: mutateAsync,
+    reopenTicket: mutateAsync,
   };
 };

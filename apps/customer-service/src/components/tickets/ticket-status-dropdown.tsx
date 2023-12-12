@@ -13,8 +13,8 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '~/components/ui/dropdown-menu';
-import { useReopenTicket } from '~/hooks/use-reopen-ticket';
-import { useResolveTicket } from '~/hooks/use-resolve-ticket';
+import { useMarkAsDoneTicket } from '~/hooks/use-mark-as-done-ticket';
+import { useMarkAsOpenTicket } from '~/hooks/use-mark-as-open-ticket';
 
 type TicketChangeAssignmentProps = {
   status?: NonNullable<RouterOutputs['ticket']['byId']>['status'];
@@ -25,8 +25,8 @@ export const TicketStatusDropdowm: FC<TicketChangeAssignmentProps> = ({
   status,
   ticketId,
 }) => {
-  const { resolveTicket } = useResolveTicket();
-  const { reopenTicket } = useReopenTicket();
+  const { resolveTicket } = useMarkAsDoneTicket();
+  const { reopenTicket } = useMarkAsOpenTicket();
 
   return (
     <DropdownMenu>

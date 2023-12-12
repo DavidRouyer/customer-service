@@ -5,15 +5,15 @@ import { FormattedMessage } from 'react-intl';
 import { TicketStatus } from '@cs/lib/tickets';
 
 import { Button } from '~/components/ui/button';
-import { useReopenTicket } from '~/hooks/use-reopen-ticket';
-import { useResolveTicket } from '~/hooks/use-resolve-ticket';
+import { useMarkAsDoneTicket } from '~/hooks/use-mark-as-done-ticket';
+import { useMarkAsOpenTicket } from '~/hooks/use-mark-as-open-ticket';
 import { api } from '~/lib/api';
 
 export const TicketHeader: FC<{ ticketId: string }> = ({ ticketId }) => {
   const { data: ticketData } = api.ticket.byId.useQuery({ id: ticketId });
 
-  const { resolveTicket } = useResolveTicket();
-  const { reopenTicket } = useReopenTicket();
+  const { resolveTicket } = useMarkAsDoneTicket();
+  const { reopenTicket } = useMarkAsOpenTicket();
 
   return (
     <div className="flex items-center justify-between border-b pb-6">
