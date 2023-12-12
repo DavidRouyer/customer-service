@@ -39,7 +39,7 @@ export const MessageForm: FC<{ ticketId: string }> = ({ ticketId }) => {
 
   const [messageMode, setMessageMode] = useAtom(messageModeAtom);
 
-  const { mutateAsync: sendMessage } = api.ticketChat.sendChat.useMutation({
+  const { mutateAsync: sendMessage } = api.ticket.sendChat.useMutation({
     onMutate: async (newMessage) => {
       // Cancel any outgoing refetches
       // (so they don't overwrite our optimistic update)
@@ -84,7 +84,7 @@ export const MessageForm: FC<{ ticketId: string }> = ({ ticketId }) => {
       void utils.ticket.timeline.invalidate({ ticketId: ticketId });
     },
   });
-  const { mutateAsync: sendNote } = api.ticketNote.sendNote.useMutation({
+  const { mutateAsync: sendNote } = api.ticket.sendNote.useMutation({
     onMutate: async (newTicket) => {
       // Cancel any outgoing refetches
       // (so they don't overwrite our optimistic update)
