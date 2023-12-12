@@ -7,8 +7,11 @@ import { PaperclipIcon, SmilePlusIcon } from 'lucide-react';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
 import { FormattedMessage } from 'react-intl';
 
-import { ChatContentType, ChatDirection, ChatStatus } from '@cs/lib/chats';
-import { TicketChat } from '@cs/lib/ticketTimelineEntries';
+import {
+  TicketChat,
+  TicketNote,
+  TicketTimelineEntryType,
+} from '@cs/lib/ticketTimelineEntries';
 
 import { messageModeAtom } from '~/components/messages/message-mode-atom';
 import { Button } from '~/components/ui/button';
@@ -55,21 +58,23 @@ export const MessageForm: FC<{ ticketId: string }> = ({ ticketId }) => {
       // Optimistically update to the new value
       utils.ticketTimeline.byTicketId.setData(
         { ticketId: newMessage.ticketId },
-        (oldQueryData: TimelineItem[] | undefined) =>
-          [
-            ...(oldQueryData ?? []),
-            {
-              id: self.crypto.randomUUID(),
-              type: 'chat',
-              ticketId: newMessage.ticketId,
-              entry: {
-                text: newMessage.text,
-              } satisfies TicketChat,
-              createdAt: new Date(),
-              createdById: sessionData?.user?.id ?? 0,
-              createdBy: sessionData?.user,
-            },
-          ] as TimelineItem[]
+        (oldQueryData: TimelineItem[] | undefined) => [
+          ...(oldQueryData ?? []),
+          {
+            id: self.crypto.randomUUID(),
+            customerId: oldQueryData?.[0]?.customerId ?? '',
+            type: TicketTimelineEntryType.Chat,
+            ticketId: newMessage.ticketId,
+            entry: {
+              text: newMessage.text,
+            } satisfies TicketChat,
+            createdAt: new Date(),
+            userCreatedById: sessionData?.user?.id ?? null,
+            userCreatedBy: sessionData?.user ?? null,
+            customerCreatedById: null,
+            customerCreatedBy: null,
+          },
+        ]
       );
 
       // Return a context object with the snapshotted value
@@ -102,23 +107,23 @@ export const MessageForm: FC<{ ticketId: string }> = ({ ticketId }) => {
       // Optimistically update to the new value
       utils.ticketTimeline.byTicketId.setData(
         { ticketId: newTicket.ticketId },
-        (oldQueryData: TimelineItem[] | undefined) =>
-          [
-            ...(oldQueryData ?? []),
-            {
-              id: self.crypto.randomUUID(),
-              type: 'note',
-              direction: ChatDirection.Outbound,
-              contentType: ChatContentType.TextJson,
-              status: ChatStatus.Pending,
-              entry: {
-                text: newTicket.text,
-              },
-              createdAt: new Date(),
-              createdById: sessionData?.user?.id ?? 0,
-              createdBy: sessionData?.user,
-            },
-          ] as TimelineItem[]
+        (oldQueryData: TimelineItem[] | undefined) => [
+          ...(oldQueryData ?? []),
+          {
+            id: self.crypto.randomUUID(),
+            customerId: oldQueryData?.[0]?.customerId ?? '',
+            type: TicketTimelineEntryType.Note,
+            ticketId: newTicket.ticketId,
+            entry: {
+              text: newTicket.text,
+            } satisfies TicketNote,
+            createdAt: new Date(),
+            userCreatedById: sessionData?.user?.id ?? null,
+            userCreatedBy: sessionData?.user ?? null,
+            customerCreatedById: null,
+            customerCreatedBy: null,
+          },
+        ]
       );
 
       // Return a context object with the snapshotted value
