@@ -122,16 +122,6 @@ export const ticketRouter = createTRPCRouter({
       return { data: tickets, nextCursor };
     }),
 
-  timeline: protectedProcedure
-    .input(z.object({ ticketId: z.string() }))
-    .query(async ({ ctx, input }) => {
-      return await ctx.db.query.ticketTimelineEntries.findMany({
-        where: eq(schema.ticketTimelineEntries.ticketId, input.ticketId),
-        orderBy: asc(schema.ticketTimelineEntries.createdAt),
-        with: { customerCreatedBy: true, userCreatedBy: true },
-      });
-    }),
-
   stats: protectedProcedure.query(async ({ ctx }) => {
     const users = await ctx.db.query.users.findMany({
       where: and(

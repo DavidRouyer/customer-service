@@ -43,15 +43,17 @@ export const MessageForm: FC<{ ticketId: string }> = ({ ticketId }) => {
     onMutate: async (newMessage) => {
       // Cancel any outgoing refetches
       // (so they don't overwrite our optimistic update)
-      await utils.ticket.timeline.cancel({ ticketId: newMessage.ticketId });
+      await utils.ticketTimeline.byTicketId.cancel({
+        ticketId: newMessage.ticketId,
+      });
 
       // Snapshot the previous value
-      const previousMessages = utils.ticket.timeline.getData({
+      const previousMessages = utils.ticketTimeline.byTicketId.getData({
         ticketId: newMessage.ticketId,
       });
 
       // Optimistically update to the new value
-      utils.ticket.timeline.setData(
+      utils.ticketTimeline.byTicketId.setData(
         { ticketId: newMessage.ticketId },
         (oldQueryData: TimelineItem[] | undefined) =>
           [
@@ -75,30 +77,30 @@ export const MessageForm: FC<{ ticketId: string }> = ({ ticketId }) => {
     },
     onError: (err, _newMessage, context) => {
       // TODO: handle failed queries
-      utils.ticket.timeline.setData(
+      utils.ticketTimeline.byTicketId.setData(
         { ticketId: _newMessage.ticketId },
         context?.previousMessages ?? []
       );
     },
     onSettled: (_, __, { ticketId }) => {
-      void utils.ticket.timeline.invalidate({ ticketId: ticketId });
+      void utils.ticketTimeline.byTicketId.invalidate({ ticketId: ticketId });
     },
   });
   const { mutateAsync: sendNote } = api.ticket.sendNote.useMutation({
     onMutate: async (newTicket) => {
       // Cancel any outgoing refetches
       // (so they don't overwrite our optimistic update)
-      await utils.ticket.timeline.cancel({
+      await utils.ticketTimeline.byTicketId.cancel({
         ticketId: newTicket.ticketId,
       });
 
       // Snapshot the previous value
-      const previousConversationItem = utils.ticket.timeline.getData({
+      const previousConversationItem = utils.ticketTimeline.byTicketId.getData({
         ticketId: newTicket.ticketId,
       });
 
       // Optimistically update to the new value
-      utils.ticket.timeline.setData(
+      utils.ticketTimeline.byTicketId.setData(
         { ticketId: newTicket.ticketId },
         (oldQueryData: TimelineItem[] | undefined) =>
           [
@@ -124,13 +126,12 @@ export const MessageForm: FC<{ ticketId: string }> = ({ ticketId }) => {
     },
     onError: (err, _newTicket, context) => {
       // TODO: handle failed queries
-      utils.ticket.timeline.setData(
+      utils.ticketTimeline.byTicketId.setData(
         { ticketId: _newTicket.ticketId },
         context?.previousNotes ?? []
       );
     },
     onSettled: (_, __, { ticketId }) => {
-      void utils.ticket.timeline.invalidate({ ticketId: ticketId });
       void utils.ticketTimeline.byTicketId.invalidate({ ticketId: ticketId });
     },
   });
