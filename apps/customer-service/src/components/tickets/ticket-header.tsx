@@ -12,8 +12,8 @@ import { api } from '~/lib/api';
 export const TicketHeader: FC<{ ticketId: string }> = ({ ticketId }) => {
   const { data: ticketData } = api.ticket.byId.useQuery({ id: ticketId });
 
-  const { resolveTicket } = useMarkAsDoneTicket();
-  const { reopenTicket } = useMarkAsOpenTicket();
+  const { markAsDoneTicket } = useMarkAsDoneTicket();
+  const { markAsOpenTicket } = useMarkAsOpenTicket();
 
   return (
     <div className="flex items-center justify-between border-b pb-6">
@@ -26,7 +26,7 @@ export const TicketHeader: FC<{ ticketId: string }> = ({ ticketId }) => {
           <Button
             type="button"
             onClick={() => {
-              reopenTicket({ id: ticketId });
+              markAsOpenTicket({ id: ticketId });
             }}
             className="flex items-center gap-x-1"
           >
@@ -37,7 +37,7 @@ export const TicketHeader: FC<{ ticketId: string }> = ({ ticketId }) => {
           <Button
             type="button"
             onClick={() => {
-              resolveTicket({ id: ticketId });
+              markAsDoneTicket({ id: ticketId });
             }}
             className="flex items-center gap-x-1"
           >

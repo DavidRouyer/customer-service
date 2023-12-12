@@ -38,6 +38,6 @@ export const useMarkAsOpenTicket = () => {
   });
 
   return {
-    reopenTicket: mutateAsync,
+    markAsOpenTicket: mutateAsync,
   };
 };

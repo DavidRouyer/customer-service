@@ -38,6 +38,6 @@ export const useMarkAsDoneTicket = () => {
   });
 
   return {
-    resolveTicket: mutateAsync,
+    markAsDoneTicket: mutateAsync,
   };
 };
