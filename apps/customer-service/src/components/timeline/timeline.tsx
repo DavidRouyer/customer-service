@@ -7,29 +7,33 @@ import { TimelineEntry } from '~/components/timeline/timeline-entry';
 import { RelativeDate } from '~/components/ui/relative-date';
 import { api, RouterOutputs } from '~/lib/api';
 
+export type TimelineByDay = Record<
+  string,
+  RouterOutputs['ticketTimeline']['byTicketId']
+>;
+
 const getTimelineByDay = (
   messages: RouterOutputs['ticketTimeline']['byTicketId']
 ) => {
-  return messages?.reduce<Record<string, RouterOutputs['ticket']['timeline']>>(
-    (acc, message) => {
-      const date = new Date(message.createdAt);
-      const dateAsString = date.toISOString().substring(0, 10);
+  return messages?.reduce<
+    Record<string, RouterOutputs['ticketTimeline']['byTicketId']>
+  >((acc, message) => {
+    const date = new Date(message.createdAt);
+    const dateAsString = date.toISOString().substring(0, 10);
 
-      if (acc[dateAsString]) {
-        acc = {
-          ...acc,
-          [dateAsString]: [...(acc[dateAsString] ?? []), message],
-        };
-      } else {
-        acc = {
-          ...acc,
-          [dateAsString]: [message],
-        };
-      }
-      return acc;
-    },
-    {}
-  );
+    if (acc[dateAsString]) {
+      acc = {
+        ...acc,
+        [dateAsString]: [...(acc[dateAsString] ?? []), message],
+      };
+    } else {
+      acc = {
+        ...acc,
+        [dateAsString]: [message],
+      };
+    }
+    return acc;
+  }, {});
 };
 
 export const Timeline: FC<{ ticketId: string }> = ({ ticketId }) => {

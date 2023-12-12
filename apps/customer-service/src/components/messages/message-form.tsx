@@ -17,9 +17,10 @@ import { messageModeAtom } from '~/components/messages/message-mode-atom';
 import { Button } from '~/components/ui/button';
 import { Label } from '~/components/ui/label';
 import { Switch } from '~/components/ui/switch';
-import { api } from '~/lib/api';
+import { api, RouterOutputs } from '~/lib/api';
 import { cn } from '~/lib/utils';
-import { TimelineItem } from '~/types/Conversation';
+
+type TimelineItem = RouterOutputs['ticketTimeline']['byTicketId'][0];
 
 const TextEditor = dynamic(
   () => import('~/components/text-editor/text-editor'),
@@ -100,7 +101,7 @@ export const MessageForm: FC<{ ticketId: string }> = ({ ticketId }) => {
       });
 
       // Snapshot the previous value
-      const previousConversationItem = utils.ticketTimeline.byTicketId.getData({
+      const previousTimelineItem = utils.ticketTimeline.byTicketId.getData({
         ticketId: newTicket.ticketId,
       });
 
@@ -127,7 +128,7 @@ export const MessageForm: FC<{ ticketId: string }> = ({ ticketId }) => {
       );
 
       // Return a context object with the snapshotted value
-      return { previousNotes: previousConversationItem };
+      return { previousNotes: previousTimelineItem };
     },
     onError: (err, _newTicket, context) => {
       // TODO: handle failed queries
