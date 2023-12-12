@@ -6,8 +6,8 @@ import { usePathname } from 'next/navigation';
 import { FormattedMessage } from 'react-intl';
 
 import { RouterOutputs } from '@cs/api';
+import { TicketChat, TicketNote } from '@cs/lib/ticketTimelineEntries';
 
-import { MessageContent } from '~/components/messages/message-content';
 import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/avatar';
 import { RelativeTime } from '~/components/ui/relative-time';
 import { getInitials } from '~/lib/string';
@@ -53,17 +53,14 @@ export const TicketListItem: FC<TicketListItemProps> = ({
             </p>
           </div>
           <div className="mt-1 line-clamp-2 text-sm leading-6 text-muted-foreground">
-            {currentUserId === ticket.messages?.[0]?.createdById ? (
+            {currentUserId === ticket.timeline?.[0]?.userCreatedById ? (
               <>
                 <FormattedMessage id="you" />{' '}
               </>
             ) : null}
-            {ticket.messages?.[0] ? (
-              <MessageContent
-                type={ticket.messages[0].contentType}
-                content={ticket.messages[0].content}
-              />
-            ) : null}
+            {ticket.timeline?.[0]
+              ? (ticket.timeline?.[0]?.entry as TicketChat | TicketNote).text
+              : null}
           </div>
         </div>
       </Link>

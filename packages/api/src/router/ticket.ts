@@ -9,6 +9,7 @@ import {
   eq,
   exists,
   gt,
+  inArray,
   isNotNull,
   isNull,
   lt,
@@ -100,6 +101,12 @@ export const ticketRouter = createTRPCRouter({
           createdBy: true,
           customer: true,
           timeline: {
+            where: and(
+              inArray(schema.ticketTimelineEntries.type, [
+                TicketTimelineEntryType.Chat,
+                TicketTimelineEntryType.Note,
+              ])
+            ),
             orderBy: desc(schema.ticketTimelineEntries.createdAt),
             limit: 1,
           },

@@ -10,12 +10,13 @@ import {
   TicketStatusChanged,
   TicketTimelineEntryType,
 } from '@cs/lib/ticketTimelineEntries';
+import { User } from '@cs/lib/users';
 
 import { createTRPCRouter, protectedProcedure } from '../trpc';
 
 export type TicketAssignmentChangedWithData = {
-  oldAssignedTo?: InferSelectModel<typeof schema.users> | null;
-  newAssignedTo?: InferSelectModel<typeof schema.users> | null;
+  oldAssignedTo?: User | null;
+  newAssignedTo?: User | null;
 } & TicketAssignmentChanged;
 
 export type TicketLabelsChangedWithData = {
@@ -35,7 +36,17 @@ export const ticketTimelineRouter = createTRPCRouter({
         await ctx.db.query.ticketTimelineEntries.findMany({
           orderBy: asc(schema.ticketTimelineEntries.createdAt),
           where: eq(schema.ticketTimelineEntries.ticketId, input.ticketId),
-          with: { customerCreatedBy: true, userCreatedBy: true },
+          with: {
+            customerCreatedBy: true,
+            userCreatedBy: {
+              columns: {
+                id: true,
+                email: true,
+                name: true,
+                image: true,
+              },
+            },
+          },
         });
       const augmentedTicketTimelineEntries: (Omit<
         (typeof ticketTimelineEntries)[0],
@@ -80,6 +91,12 @@ export const ticketTimelineRouter = createTRPCRouter({
       const users =
         usersToFetch.size > 0
           ? await ctx.db.query.users.findMany({
+              columns: {
+                id: true,
+                email: true,
+                name: true,
+                image: true,
+              },
               where: inArray(schema.users.id, [...usersToFetch]),
             })
           : [];

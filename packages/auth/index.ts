@@ -1,19 +1,17 @@
 import GitHub from '@auth/core/providers/github';
-import type { DefaultSession } from '@auth/core/types';
 import { DrizzleAdapter } from '@auth/drizzle-adapter';
 import NextAuth from 'next-auth';
 
 import { db, eq, tableCreator } from '@cs/database';
 import { sessions, users } from '@cs/database/schema/auth';
+import { User } from '@cs/lib/users';
 
 export type { Session } from 'next-auth';
 
 declare module 'next-auth' {
   // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
   interface Session {
-    user: {
-      id: string;
-    } & DefaultSession['user'];
+    user: User;
   }
 }
 
@@ -27,7 +25,7 @@ export const {
     ...DrizzleAdapter(db, tableCreator),
     // TODO: remove hack when https://github.com/nextauthjs/next-auth/pull/8561 is released
     async getSessionAndUser(data) {
-      return (await db
+      return await db
         .select({
           session: sessions,
           user: users,
@@ -35,7 +33,7 @@ export const {
         .from(sessions)
         .where(eq(sessions.sessionToken, data))
         .innerJoin(users, eq(users.id, sessions.userId))
-        .then((res) => res[0] ?? null)) as any;
+        .then((res) => res[0] ?? null);
     },
   },
   providers: [
@@ -48,8 +46,10 @@ export const {
     session: ({ session, user }) => ({
       ...session,
       user: {
-        ...session.user,
         id: user.id,
+        name: user.name ?? null,
+        email: user.email,
+        image: user.image ?? null,
       },
     }),
 
