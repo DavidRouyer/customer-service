@@ -17,9 +17,6 @@ export const TicketList: FC<{
   status: TicketStatus;
   orderBy: 'newest' | 'oldest';
 }> = ({ filter, status, orderBy }) => {
-  const params = useParams();
-  const router = useRouter();
-  const searchParams = useSearchParams();
   const { ref, inView } = useInView();
 
   const [data, allTicketsQuery] = api.ticket.all.useSuspenseInfiniteQuery(
@@ -37,24 +34,6 @@ export const TicketList: FC<{
   const [sessionData] = api.auth.getSession.useSuspenseQuery();
 
   const { isFetching, fetchNextPage, hasNextPage } = allTicketsQuery;
-
-  useEffect(() => {
-    if (
-      !data.pages ||
-      data.pages.length === 0 ||
-      data?.pages?.flatMap((page) => page.data).length === 0 ||
-      params.id
-    )
-      return;
-
-    const firstTicketIdFromList = data.pages[0]?.data?.[0]?.id;
-    if (!firstTicketIdFromList) return;
-
-    router.replace(
-      `/tickets/${firstTicketIdFromList}?${searchParams.toString()}`
-    );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data]);
 
   useEffect(() => {
     if (inView && hasNextPage && !isFetching) {
