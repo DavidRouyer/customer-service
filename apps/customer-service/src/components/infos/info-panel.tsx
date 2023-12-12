@@ -3,9 +3,9 @@
 import { FC } from 'react';
 import { FormattedMessage } from 'react-intl';
 
+import { CustomerInfo } from '~/components/infos/customer-info';
 import { LinkedTickets } from '~/components/infos/linked-tickets';
 import { TicketInfo } from '~/components/infos/ticket-info';
-import { UserInfo } from '~/components/infos/user-info';
 import {
   Accordion,
   AccordionContent,
@@ -44,7 +44,7 @@ export const InfoPanel: FC<{
               <FormattedMessage id="info_panel.contact_information" />
             </AccordionTrigger>
             <AccordionContent>
-              <UserInfo ticketId={ticketId} />
+              <CustomerInfo ticketId={ticketId} />
             </AccordionContent>
           </AccordionItem>
           <AccordionItem value="item-1">
