@@ -3,6 +3,9 @@ import { FormattedMessage } from 'react-intl';
 
 import { TicketFilter } from '@cs/lib/tickets';
 
+import { TicketDropdownSort } from '~/components/tickets/ticket-dropdown-sort';
+import { ORDER_BY_QUERY_PARAM } from '~/lib/search-params';
+
 export const TicketListHeader = () => {
   const searchParams = useSearchParams();
 
@@ -18,11 +21,16 @@ export const TicketListHeader = () => {
     inboxName = <FormattedMessage id="layout.tickets.all_tickets" />;
   }
 
+  const orderBy =
+    searchParams.get(ORDER_BY_QUERY_PARAM) === 'oldest' ? 'oldest' : 'newest';
+
   return (
     <header className="flex items-center justify-between border-b px-4 py-6 sm:px-6">
       <h1 className="text-base font-semibold leading-10 text-foreground">
         {inboxName}
       </h1>
+
+      <TicketDropdownSort orderBy={orderBy} />
     </header>
   );
 };
