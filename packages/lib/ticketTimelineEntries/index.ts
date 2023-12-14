@@ -17,6 +17,7 @@ type TicketLabelsChanged = {
 
 type TicketNote = {
   text: string;
+  rawContent: string;
 };
 
 type TicketPriorityChanged = {

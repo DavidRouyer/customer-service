@@ -18,7 +18,8 @@ import {
 import { COMMAND_PRIORITY_NORMAL, TextNode } from 'lexical';
 import * as ReactDOM from 'react-dom';
 
-import { $createMentionNode } from '~/components/text-editor/nodes/mention-node';
+import { $createMentionNode } from '@cs/lib/editor';
+
 import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/avatar';
 import { api, RouterOutputs } from '~/lib/api';
 import { getInitials } from '~/lib/string';

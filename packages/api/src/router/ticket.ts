@@ -1,5 +1,4 @@
 import { TRPCError } from '@trpc/server';
-import { SerializedEditorState } from 'lexical';
 import { z } from 'zod';
 
 import {
@@ -19,7 +18,7 @@ import {
   SQL,
   sql,
 } from '@cs/database';
-import { extractMentions } from '@cs/lib/editor';
+import { extractMentions, oldExtractMentions } from '@cs/lib/editor';
 import {
   TicketFilter,
   TicketPriority,
@@ -86,10 +85,7 @@ export const ticketRouter = createTRPCRouter({
                       .from(schema.ticketMentions)
                       .where(
                         and(
-                          eq(
-                            schema.ticketMentions.contactId,
-                            ctx.session.user.id
-                          ),
+                          eq(schema.ticketMentions.userId, ctx.session.user.id),
                           eq(schema.ticketMentions.ticketId, tickets.id)
                         )
                       )
@@ -159,7 +155,7 @@ export const ticketRouter = createTRPCRouter({
       LEFT JOIN ${schema.ticketMentions} ON ${
         schema.ticketMentions.ticketId
       } = ${schema.tickets.id}
-      WHERE ${schema.ticketMentions.contactId} = ${
+      WHERE ${schema.ticketMentions.userId} = ${
         ctx.session.user.id ?? 0
       }) as "mentions"`);
 
@@ -605,21 +601,22 @@ export const ticketRouter = createTRPCRouter({
     .input(
       z
         .object({
+          rawContent: z.string().min(1),
           text: z.string().min(1),
           ticketId: z.string().min(1),
         })
         .refine(
           (v) => {
             try {
-              JSON.parse(v.text);
+              JSON.parse(v.rawContent);
               return true;
             } catch (e) {
               return false;
             }
           },
           {
-            path: ['content'],
-            message: 'content must be a valid JSON string',
+            path: ['rawContent'],
+            message: 'rawContent must be a valid JSON string',
           }
         )
     )
@@ -634,8 +631,7 @@ export const ticketRouter = createTRPCRouter({
           message: 'ticket_not_found',
         });
 
-      const content = JSON.parse(input.text) as SerializedEditorState;
-      const mentionIds = extractMentions(content);
+      const mentionIds = await extractMentions(input.rawContent);
 
       return await ctx.db.transaction(async (tx) => {
         const creationDate = new Date();
@@ -647,6 +643,7 @@ export const ticketRouter = createTRPCRouter({
             type: TicketTimelineEntryType.Note,
             entry: {
               text: input.text,
+              rawContent: input.rawContent,
             } satisfies TicketNote,
             customerId: ticket.customerId,
             createdAt: creationDate,
@@ -667,7 +664,7 @@ export const ticketRouter = createTRPCRouter({
           await tx.insert(schema.ticketMentions).values(
             mentionIds.map((mentionId) => ({
               ticketTimelineEntryId: newNote.id,
-              contactId: mentionId,
+              userId: mentionId,
               ticketId: ticket.id,
             }))
           );

@@ -1,4 +1,22 @@
-import { extractMentions } from './extractMentions';
-import { SerializedMentionNode } from './SerializedMentionNode';
+import {
+  extractMentions,
+  oldExtractMentions,
+  parseTextFromEditorState,
+} from './editor';
+import { EmojiNode, SerializedEmojiNode } from './nodes/emoji-node';
+import {
+  $createMentionNode,
+  MentionNode,
+  SerializedMentionNode,
+} from './nodes/mention-node';
 
-export { type SerializedMentionNode, extractMentions };
+export {
+  type SerializedEmojiNode,
+  type SerializedMentionNode,
+  EmojiNode,
+  extractMentions,
+  MentionNode,
+  oldExtractMentions,
+  parseTextFromEditorState,
+  $createMentionNode,
+};

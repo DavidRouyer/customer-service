@@ -7,6 +7,7 @@ import { PaperclipIcon, SmilePlusIcon } from 'lucide-react';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
 import { FormattedMessage } from 'react-intl';
 
+import { parseTextFromEditorState } from '@cs/lib/editor';
 import {
   TicketChat,
   TicketNote,
@@ -43,7 +44,7 @@ export const MessageForm: FC<{ ticketId: string }> = ({ ticketId }) => {
 
   const [messageMode, setMessageMode] = useAtom(messageModeAtom);
 
-  const { mutateAsync: sendMessage } = api.ticket.sendChat.useMutation({
+  const { mutateAsync: sendChat } = api.ticket.sendChat.useMutation({
     onMutate: async (newMessage) => {
       // Cancel any outgoing refetches
       // (so they don't overwrite our optimistic update)
@@ -117,6 +118,7 @@ export const MessageForm: FC<{ ticketId: string }> = ({ ticketId }) => {
             ticketId: newTicket.ticketId,
             entry: {
               text: newTicket.text,
+              rawContent: newTicket.rawContent,
             } satisfies TicketNote,
             createdAt: new Date(),
             userCreatedById: sessionData?.user?.id ?? null,
@@ -143,16 +145,19 @@ export const MessageForm: FC<{ ticketId: string }> = ({ ticketId }) => {
   });
   const form = useForm<MessageFormSchema>();
 
-  const onSubmit = (data: MessageFormSchema) => {
+  const onSubmit = async (data: MessageFormSchema) => {
     if (messageMode === 'reply') {
-      sendMessage({
+      const text = await parseTextFromEditorState(data.content);
+      sendChat({
         ticketId: ticketId,
-        text: data.content,
+        text: text,
       });
     } else {
+      const text = await parseTextFromEditorState(data.content);
       sendNote({
         ticketId: ticketId,
-        text: data.content,
+        text: text,
+        rawContent: data.content,
       });
     }
 

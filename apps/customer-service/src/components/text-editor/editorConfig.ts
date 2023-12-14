@@ -1,7 +1,8 @@
 import { InitialConfigType } from '@lexical/react/LexicalComposer';
 
-import { MentionNode } from '~/components/text-editor/nodes/mention-node';
-import { EmojiNode } from './nodes/emoji-node';
+import { MentionNode } from '@cs/lib/editor';
+import { EmojiNode } from '@cs/lib/editor/nodes/emoji-node';
+
 import ExampleTheme from './themes/example-theme';
 
 const editorConfig: InitialConfigType = {

@@ -64,7 +64,7 @@ export const TimelineEntry: FC<{
               <RelativeTime dateTime={new Date(entry.createdAt)} />
             </time>
           </div>
-          <p className="text-sm leading-6 text-gray-500">
+          <p className="whitespace-pre-line text-sm leading-6 text-gray-500">
             {(entry.entry as TicketChat)?.text}
           </p>
         </div>
@@ -113,7 +113,7 @@ export const TimelineEntry: FC<{
             </time>
           </div>
           <p className="text-sm leading-6 text-gray-500">
-            <NodeContent content={(entry.entry as TicketNote)?.text} />
+            <NodeContent content={(entry.entry as TicketNote)?.rawContent} />
           </p>
         </div>
       </div>

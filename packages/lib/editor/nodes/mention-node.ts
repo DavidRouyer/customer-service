@@ -1,7 +1,7 @@
-'use client';
-
 import {
   $applyNodeReplacement,
+  SerializedTextNode,
+  Spread,
   TextNode,
   type DOMConversionMap,
   type DOMConversionOutput,
@@ -11,7 +11,13 @@ import {
   type NodeKey,
 } from 'lexical';
 
-import { SerializedMentionNode } from '@cs/lib/editor';
+export type SerializedMentionNode = Spread<
+  {
+    mentionName: string;
+    mentionEntityId: string;
+  },
+  SerializedTextNode
+>;
 
 function convertMentionElement(
   domNode: HTMLElement

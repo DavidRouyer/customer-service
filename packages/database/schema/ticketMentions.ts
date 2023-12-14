@@ -3,16 +3,15 @@ import { primaryKey, varchar } from 'drizzle-orm/pg-core';
 
 import { pgTable } from './_table';
 import { users } from './auth';
-import { customers } from './customer';
 import { tickets } from './ticket';
 import { ticketTimelineEntries } from './ticketTimelineEntry';
 
 export const ticketMentions = pgTable(
   'ticketMentions',
   {
-    contactId: varchar('contactId')
+    userId: varchar('userId')
       .notNull()
-      .references(() => customers.id, {
+      .references(() => users.id, {
         onDelete: 'restrict',
         onUpdate: 'cascade',
       }),
@@ -33,7 +32,7 @@ export const ticketMentions = pgTable(
     return {
       pk: primaryKey({
         name: 'ticketMentions_pk',
-        columns: [table.contactId, table.ticketTimelineEntryId],
+        columns: [table.userId, table.ticketTimelineEntryId],
       }),
     };
   }
@@ -41,7 +40,7 @@ export const ticketMentions = pgTable(
 
 export const ticketMentionsRelations = relations(ticketMentions, ({ one }) => ({
   user: one(users, {
-    fields: [ticketMentions.contactId],
+    fields: [ticketMentions.userId],
     references: [users.id],
   }),
   ticketTimelineEntry: one(ticketTimelineEntries, {
