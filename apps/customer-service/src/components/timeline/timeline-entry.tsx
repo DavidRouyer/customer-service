@@ -33,41 +33,46 @@ export const TimelineEntry: FC<{
   if (entry.type === TicketTimelineEntryType.Chat) {
     activity = (
       <div className="my-2 flex">
-        <div className="flex-auto rounded-md bg-accent p-3">
-          <div className="flex justify-between gap-x-4">
-            <div className="py-0.5 text-xs leading-5 text-muted-foreground">
-              <div className="flex items-center gap-x-2">
-                <Avatar className="relative h-6 w-6 flex-none text-xs">
-                  <AvatarImage
-                    src={
-                      entry.userCreatedBy?.image ??
-                      entry.customerCreatedBy?.avatarUrl ??
-                      undefined
-                    }
-                  />
-                  <AvatarFallback>
-                    {getInitials(
-                      entry.userCreatedBy?.name ??
-                        entry.customerCreatedBy?.name ??
-                        ''
-                    )}
-                  </AvatarFallback>
-                </Avatar>
-                <span className="font-medium text-foreground">
-                  {entry.userCreatedBy?.name ?? entry.customerCreatedBy?.name}
-                </span>
+        <div className="flex-auto rounded-md bg-accent p-4">
+          <div className="grid grid-cols-[24px_auto] gap-x-3">
+            <Avatar className="relative h-6 w-6 flex-none text-xs">
+              <AvatarImage
+                src={
+                  entry.userCreatedBy?.image ??
+                  entry.customerCreatedBy?.avatarUrl ??
+                  undefined
+                }
+              />
+              <AvatarFallback>
+                {getInitials(
+                  entry.userCreatedBy?.name ??
+                    entry.customerCreatedBy?.name ??
+                    ''
+                )}
+              </AvatarFallback>
+            </Avatar>
+            <div className="flex items-center">
+              <span className="text-sm text-foreground">
+                {entry.userCreatedBy?.name ?? entry.customerCreatedBy?.name}
+              </span>
+              <span className="mx-1.5 h-[3px] w-[3px] rounded-full bg-gray-500"></span>
+              <time
+                dateTime={entry.createdAt.toISOString()}
+                className="text-xs text-muted-foreground"
+              >
+                <RelativeTime dateTime={new Date(entry.createdAt)} />
+              </time>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-[24px_auto] gap-x-3">
+            <div></div>
+            <div className="mt-3 border-t border-muted-foreground pt-3">
+              <div className="whitespace-pre-line text-sm leading-6 ">
+                {(entry.entry as TicketChat)?.text}
               </div>
             </div>
-            <time
-              dateTime={entry.createdAt.toISOString()}
-              className="flex-none py-0.5 text-xs leading-5 text-muted-foreground"
-            >
-              <RelativeTime dateTime={new Date(entry.createdAt)} />
-            </time>
           </div>
-          <p className="whitespace-pre-line text-sm leading-6 text-gray-500">
-            {(entry.entry as TicketChat)?.text}
-          </p>
         </div>
       </div>
     );
@@ -76,44 +81,50 @@ export const TimelineEntry: FC<{
   if (entry.type === TicketTimelineEntryType.Note) {
     activity = (
       <div className="my-2 flex">
-        <div className="flex-auto rounded-md bg-warning/30 p-3">
-          <div className="flex justify-between gap-x-4">
-            <div className="py-0.5 text-xs leading-5 text-muted-foreground">
-              <div className="flex items-center gap-x-2">
-                <Avatar className="relative h-6 w-6 flex-none text-xs">
-                  <AvatarImage
-                    src={
-                      entry.userCreatedBy?.image ??
-                      entry.customerCreatedBy?.avatarUrl ??
-                      undefined
-                    }
-                  />
-                  <AvatarFallback>
-                    {getInitials(
-                      entry.userCreatedBy?.name ??
-                        entry.customerCreatedBy?.name ??
-                        ''
-                    )}
-                  </AvatarFallback>
-                </Avatar>
-                <span className="font-medium text-foreground">
-                  {entry.userCreatedBy?.name ?? entry.customerCreatedBy?.name}
-                </span>
+        <div className="flex-auto rounded-md bg-warning/30 p-4">
+          <div className="grid grid-cols-[24px_auto] gap-x-3">
+            <Avatar className="relative h-6 w-6 flex-none text-xs">
+              <AvatarImage
+                src={
+                  entry.userCreatedBy?.image ??
+                  entry.customerCreatedBy?.avatarUrl ??
+                  undefined
+                }
+              />
+              <AvatarFallback>
+                {getInitials(
+                  entry.userCreatedBy?.name ??
+                    entry.customerCreatedBy?.name ??
+                    ''
+                )}
+              </AvatarFallback>
+            </Avatar>
+            <div className="flex items-center">
+              <span className="text-sm text-foreground">
+                {entry.userCreatedBy?.name ?? entry.customerCreatedBy?.name}
+              </span>
+              <span className="mx-1.5 h-[3px] w-[3px] rounded-full bg-gray-500"></span>
+              <time
+                dateTime={entry.createdAt.toISOString()}
+                className="text-xs text-muted-foreground"
+              >
+                <RelativeTime dateTime={new Date(entry.createdAt)} />
+              </time>
+            </div>
+          </div>
+          <div className="grid grid-cols-[24px_auto] gap-x-3">
+            <div></div>
+            <div className="mt-3 border-t border-muted-foreground pt-3">
+              <div className="whitespace-pre-line text-sm leading-6">
+                <NodeContent
+                  content={(entry.entry as TicketNote)?.rawContent}
+                />
+              </div>
+              <div className="mt-1 flex items-center gap-x-2 text-xs text-gray-500">
+                <EyeOff className="h-3 w-3" />{' '}
+                <FormattedMessage id="ticket.not_visible" /> {customer?.name}
               </div>
             </div>
-            <time
-              dateTime={entry.createdAt.toISOString()}
-              className="flex-none py-0.5 text-xs leading-5 text-muted-foreground"
-            >
-              <RelativeTime dateTime={new Date(entry.createdAt)} />
-            </time>
-          </div>
-          <p className="whitespace-pre-line text-sm leading-6">
-            <NodeContent content={(entry.entry as TicketNote)?.rawContent} />
-          </p>
-          <div className="mt-1 flex items-center gap-x-2 text-xs text-gray-500">
-            <EyeOff className="h-3 w-3" />{' '}
-            <FormattedMessage id="ticket.not_visible" /> {customer?.name}
           </div>
         </div>
       </div>

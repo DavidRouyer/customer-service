@@ -72,7 +72,7 @@
   "ticket.priorities.low": "Faible",
   "ticket.priorities.medium": "Normal",
   "ticket.marked_as_done_on": "Résolu le",
-  "ticket.not_visible": "Non visible à ",
+  "ticket.not_visible": "Non visible pour ",
   "ticket.sort_by.newest": "Plus récent",
   "ticket.sort_by.oldest": "Plus ancien",
   "ticket.statuses.open": "Ouvert",
