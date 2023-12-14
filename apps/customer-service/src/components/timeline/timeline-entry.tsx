@@ -1,5 +1,5 @@
 import { FC, ReactNode } from 'react';
-import { CheckCircle2, CircleDot } from 'lucide-react';
+import { CheckCircle2, CircleDot, EyeOff } from 'lucide-react';
 import { FormattedMessage } from 'react-intl';
 
 import {
@@ -25,9 +25,10 @@ import { getInitials } from '~/lib/string';
 import { cn } from '~/lib/utils';
 
 export const TimelineEntry: FC<{
+  customer?: RouterOutputs['ticket']['byId']['customer'];
   entry: RouterOutputs['ticketTimeline']['byTicketId'][0];
   isLast: boolean;
-}> = ({ entry, isLast }) => {
+}> = ({ customer, entry, isLast }) => {
   let activity: ReactNode = null;
   if (entry.type === TicketTimelineEntryType.Chat) {
     activity = (
@@ -75,35 +76,30 @@ export const TimelineEntry: FC<{
   if (entry.type === TicketTimelineEntryType.Note) {
     activity = (
       <div className="my-2 flex">
-        <div
-          className={cn(
-            isLast ? 'h-6' : '-bottom-6',
-            'absolute left-0 top-0 flex w-6 justify-center'
-          )}
-        >
-          <div className="w-px bg-border" />
-        </div>
-        <Avatar className="relative mt-3 h-6 w-6 flex-none text-xs">
-          <AvatarImage
-            src={
-              entry.userCreatedBy?.image ??
-              entry.customerCreatedBy?.avatarUrl ??
-              undefined
-            }
-          />
-          <AvatarFallback>
-            {getInitials(
-              entry.userCreatedBy?.name ?? entry.customerCreatedBy?.name ?? ''
-            )}
-          </AvatarFallback>
-        </Avatar>
-        <div className="flex-auto rounded-md p-3 ring-1 ring-inset ring-muted-foreground">
+        <div className="flex-auto rounded-md bg-warning/30 p-3">
           <div className="flex justify-between gap-x-4">
             <div className="py-0.5 text-xs leading-5 text-muted-foreground">
-              <span className="font-medium text-foreground">
-                {entry.userCreatedBy?.name ?? entry.customerCreatedBy?.name}
-              </span>{' '}
-              <FormattedMessage id="ticket.activity.type.ticket_commented" />
+              <div className="flex items-center gap-x-2">
+                <Avatar className="relative h-6 w-6 flex-none text-xs">
+                  <AvatarImage
+                    src={
+                      entry.userCreatedBy?.image ??
+                      entry.customerCreatedBy?.avatarUrl ??
+                      undefined
+                    }
+                  />
+                  <AvatarFallback>
+                    {getInitials(
+                      entry.userCreatedBy?.name ??
+                        entry.customerCreatedBy?.name ??
+                        ''
+                    )}
+                  </AvatarFallback>
+                </Avatar>
+                <span className="font-medium text-foreground">
+                  {entry.userCreatedBy?.name ?? entry.customerCreatedBy?.name}
+                </span>
+              </div>
             </div>
             <time
               dateTime={entry.createdAt.toISOString()}
@@ -112,9 +108,13 @@ export const TimelineEntry: FC<{
               <RelativeTime dateTime={new Date(entry.createdAt)} />
             </time>
           </div>
-          <p className="text-sm leading-6 text-gray-500">
+          <p className="whitespace-pre-line text-sm leading-6">
             <NodeContent content={(entry.entry as TicketNote)?.rawContent} />
           </p>
+          <div className="mt-1 flex items-center gap-x-2 text-xs text-gray-500">
+            <EyeOff className="h-3 w-3" />{' '}
+            <FormattedMessage id="ticket.not_visible" /> {customer?.name}
+          </div>
         </div>
       </div>
     );

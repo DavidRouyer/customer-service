@@ -37,6 +37,9 @@ const getTimelineByDay = (
 };
 
 export const Timeline: FC<{ ticketId: string }> = ({ ticketId }) => {
+  const { data: ticketData } = api.ticket.byId.useQuery({
+    id: ticketId,
+  });
   const { data: timelineData } = api.ticketTimeline.byTicketId.useQuery(
     {
       ticketId: ticketId,
@@ -59,6 +62,7 @@ export const Timeline: FC<{ ticketId: string }> = ({ ticketId }) => {
               key={ticketTimelineEntry.id}
               entry={ticketTimelineEntry}
               isLast={ticketTimelineEntryIdx === entries.length - 1}
+              customer={ticketData?.customer}
             />
           ))}
         </Fragment>

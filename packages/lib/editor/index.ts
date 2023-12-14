@@ -1,8 +1,4 @@
-import {
-  extractMentions,
-  oldExtractMentions,
-  parseTextFromEditorState,
-} from './editor';
+import { extractMentions, parseTextFromEditorState } from './editor';
 import { EmojiNode, SerializedEmojiNode } from './nodes/emoji-node';
 import {
   $createMentionNode,
@@ -16,7 +12,6 @@ export {
   EmojiNode,
   extractMentions,
   MentionNode,
-  oldExtractMentions,
   parseTextFromEditorState,
   $createMentionNode,
 };

@@ -18,7 +18,7 @@ import {
   SQL,
   sql,
 } from '@cs/database';
-import { extractMentions, oldExtractMentions } from '@cs/lib/editor';
+import { extractMentions } from '@cs/lib/editor';
 import {
   TicketFilter,
   TicketPriority,
