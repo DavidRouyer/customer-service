@@ -1981,26 +1981,26 @@
     "@types/react-dom" "^18.0.0"
 
 "@trpc/client@next":
-  version "11.0.0-alpha-next-2023-11-24-13-58-38.113"
-  resolved "https://registry.yarnpkg.com/@trpc/client/-/client-11.0.0-alpha-next-2023-11-24-13-58-38.113.tgz#db4e202fad8bb2e9164f6717e0c7b79ac9d8d566"
-  integrity sha512-wqrA7fAjueC1xBjvKZNLNG020yc8QtfbMwwm9e5NsSztOIoioDqNSFk900o8OOnGSmaUdzL1Ya8ODjVXqyLiyw==
+  version "11.0.0-alpha-next-2023-12-15-17-18-11.117"
+  resolved "https://registry.yarnpkg.com/@trpc/client/-/client-11.0.0-alpha-next-2023-12-15-17-18-11.117.tgz#11127ada040ba456feca98e10be91a297998a6c0"
+  integrity sha512-cgsqu7W0CW5m/3JMGsu+L1ZdqfWYUN+cU8O7IckrBn1yFFgR+YaZjX1fdhFbNBsSpJxILtm7u9pWevet6GlqAQ==
 
 "@trpc/next@next":
-  version "11.0.0-alpha-next-2023-11-24-13-58-38.113"
-  resolved "https://registry.yarnpkg.com/@trpc/next/-/next-11.0.0-alpha-next-2023-11-24-13-58-38.113.tgz#346cb4f396e92e5b66408fc3150ab505a248cda9"
-  integrity sha512-jU1zKvPEiXu40nL3Os5ItvMlmUKhkq6K3UGtrd8Xj53LITw7XkwD9r9+2C8CQmezrE2sAjTya8OO75JR9dCKyg==
+  version "11.0.0-alpha-next-2023-12-15-17-18-11.117"
+  resolved "https://registry.yarnpkg.com/@trpc/next/-/next-11.0.0-alpha-next-2023-12-15-17-18-11.117.tgz#2a701bf06dc421594163f62225107b6336dba5ff"
+  integrity sha512-7VOs8fCoEE+nAwVnpBvCz6m0EUxlSQi52wDRJAYf4PyjyILJgl18dBVEnynEooDcJC0AYf6567C25g4hjPmaug==
   dependencies:
     react-ssr-prepass "^1.5.0"
 
 "@trpc/react-query@next":
-  version "11.0.0-alpha-next-2023-11-24-13-58-38.113"
-  resolved "https://registry.yarnpkg.com/@trpc/react-query/-/react-query-11.0.0-alpha-next-2023-11-24-13-58-38.113.tgz#3c7b30b556e037f353a54b4b9eef4c46dbc1223b"
-  integrity sha512-hLZzhV3F2T+RVjKEFvbR2s4TTvlU6N8IxiQ+W/avoP2fCENSqmBgyNS8jg6XgftMMKPvhUI3Zx5Y1e5NB5J24g==
+  version "11.0.0-alpha-next-2023-12-15-17-18-11.117"
+  resolved "https://registry.yarnpkg.com/@trpc/react-query/-/react-query-11.0.0-alpha-next-2023-12-15-17-18-11.117.tgz#234611e101c9c586c252f10fcadc8ea0f06c1b6d"
+  integrity sha512-uB6myAwkbfKCHGfVgdseoFqU9QRJVwr+Ju+C0TMz6cEzVhvODrToh7MIggxvkscB/oIsnHQvtoy9Bkxk0iwWEw==
 
 "@trpc/server@next":
-  version "11.0.0-alpha-next-2023-11-24-13-58-38.113"
-  resolved "https://registry.yarnpkg.com/@trpc/server/-/server-11.0.0-alpha-next-2023-11-24-13-58-38.113.tgz#42c989a77d8a85008b88f0d57f44f3cd7c004337"
-  integrity sha512-iRI9hy0T0Ih18W8P9T5SnwYAJTt+fAaETOBY/ZTINpKkk1S/B4QvvSk3zmNEptKJ3jSZGsZkbrfG9Cb524ivug==
+  version "11.0.0-alpha-next-2023-12-15-17-18-11.117"
+  resolved "https://registry.yarnpkg.com/@trpc/server/-/server-11.0.0-alpha-next-2023-12-15-17-18-11.117.tgz#2af5bcdefaf5c37fbfd966f5cf1208e4346a3135"
+  integrity sha512-BhSKbm/W2iCHSEIf+MHCeZ2VsvzgczGGAICf0vP5Sta+Q7EjBgZd5ctJ2FI3udj+Z+yJqWNO6InbJNy9/c+XYA==
 
 "@types/aria-query@^5.0.1":
   version "5.0.1"
