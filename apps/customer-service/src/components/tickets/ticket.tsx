@@ -4,7 +4,7 @@ import { FC } from 'react';
 
 import { MessageForm } from '~/components/messages/message-form';
 import { TicketHeader } from '~/components/tickets/ticket-header';
-import { Timeline } from '~/components/timeline/timeline';
+import { TicketTimeline } from '~/components/timeline/ticket-timeline';
 import { api } from '~/lib/api';
 
 export const Ticket: FC<{
@@ -18,7 +18,7 @@ export const Ticket: FC<{
     <>
       <TicketHeader ticketId={ticketId} />
 
-      <Timeline ticketId={ticketId} />
+      <TicketTimeline ticketId={ticketId} />
       <MessageForm ticketId={ticketId} />
     </>
   );
