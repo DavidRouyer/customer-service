@@ -1,7 +1,5 @@
 {
-  "name": "customer-service",
-  "description": "Prototyping a Customer Service Software",
-  "version": "0.0.0",
+  "name": "root",
   "private": true,
   "author": "David Rouyer <rouyer.david@gmail.com>",
   "workspaces": [

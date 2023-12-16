@@ -12,13 +12,13 @@ import { ThemeProvider } from '~/components/theme-provider';
 export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = {
-  title: 'Customer Service',
-  description: 'Prototyping a Customer Service Software',
+  title: 'Kyaku',
+  description: 'Customer Service Software',
   openGraph: {
-    title: 'Customer Service',
-    description: 'Prototyping a Customer Service Software',
+    title: 'Kyaku',
+    description: 'Customer Service Software',
     url: 'https://github.com/DavidRouyer/customer-service',
-    siteName: 'Customer Service',
+    siteName: 'Kyaku',
   },
 };
 
