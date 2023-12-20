@@ -3,8 +3,6 @@ import type { Config } from 'tailwindcss';
 
 import baseConfig from '@cs/tailwind-config';
 
-console.log('tailwind dir', path.dirname(require.resolve('@cs/ui')));
-
 export default {
   content: [
     path.resolve(
