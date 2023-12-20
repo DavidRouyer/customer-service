@@ -13,11 +13,6 @@
     "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json",
     "types": ["vitest/globals", "@testing-library/jest-dom/vitest"]
   },
-  "include": [
-    ".",
-    ".next/types/**/*.ts",
-    ".vitest/setup.ts",
-    "../../packages/lib/editor/nodes/emoji-node.ts"
-  ],
+  "include": [".", ".next/types/**/*.ts", ".vitest/setup.ts"],
   "exclude": ["node_modules"]
 }

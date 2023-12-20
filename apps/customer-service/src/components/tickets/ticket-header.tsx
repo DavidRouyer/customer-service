@@ -3,8 +3,8 @@ import { BookOpenCheck, HardDriveUpload } from 'lucide-react';
 import { FormattedMessage } from 'react-intl';
 
 import { TicketStatus } from '@cs/lib/tickets';
+import { Button } from '@cs/ui';
 
-import { Button } from '~/components/ui/button';
 import { useMarkAsDoneTicket } from '~/hooks/use-mark-as-done-ticket';
 import { useMarkAsOpenTicket } from '~/hooks/use-mark-as-open-ticket';
 import { api } from '~/lib/api';

@@ -4,16 +4,16 @@ import { FormattedMessage } from 'react-intl';
 
 import { RouterOutputs } from '@cs/api';
 import { TicketPriority as TicketPriorityType } from '@cs/lib/tickets';
-
-import { TicketPriority } from '~/components/tickets/ticket-priority';
-import { Button } from '~/components/ui/button';
 import {
+  Button,
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '~/components/ui/dropdown-menu';
+} from '@cs/ui';
+
+import { TicketPriority } from '~/components/tickets/ticket-priority';
 import { api } from '~/lib/api';
 
 type TicketChangePriorityProps = {

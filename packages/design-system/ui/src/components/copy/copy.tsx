@@ -3,30 +3,31 @@
 import React, { useState } from 'react';
 import { Slot } from '@radix-ui/react-slot';
 import copy from 'copy-to-clipboard';
-import { useIntl } from 'react-intl';
 
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from '~/components/ui/tooltip';
-import { cn } from '~/lib/utils';
+} from '@cs/ui';
+import { cn } from '../../utils/cn';
 
 type CopyProps = {
   content: string;
   asChild?: boolean;
+  translations: {
+    copy: string;
+    copied: string;
+  }
 };
 
 const Copy = React.forwardRef<
   HTMLButtonElement,
   React.HTMLAttributes<HTMLButtonElement> & CopyProps
->(({ children, className, content, asChild = false, ...props }, ref) => {
-  const { formatMessage } = useIntl();
-
+>(({ children, className, content, translations, asChild = false, ...props }, ref) => {
   const [done, setDone] = useState(false);
   const [open, setOpen] = useState(false);
-  const [text, setText] = useState(formatMessage({ id: 'clipboard.copy' }));
+  const [text, setText] = useState(translations.copy);
 
   const copyToClipboard = () => {
     setDone(true);
@@ -39,12 +40,12 @@ const Copy = React.forwardRef<
 
   React.useEffect(() => {
     if (done) {
-      setText(formatMessage({ id: 'clipboard.copied' }));
+      setText(translations.copied);
       return;
     }
 
     setTimeout(() => {
-      setText(formatMessage({ id: 'clipboard.copy' }));
+      setText(translations.copy);
     }, 500);
   }, [done]);
 

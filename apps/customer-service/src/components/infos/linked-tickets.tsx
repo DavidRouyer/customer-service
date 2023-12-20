@@ -5,8 +5,8 @@ import Link from 'next/link';
 import { FormattedDate, FormattedMessage } from 'react-intl';
 
 import { TicketStatus } from '@cs/lib/tickets';
+import { Badge } from '@cs/ui';
 
-import { Badge } from '~/components/ui/badge';
 import { api } from '~/lib/api';
 
 type LinkedTicketsProps = {

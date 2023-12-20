@@ -4,7 +4,7 @@ import { TRPCClientError } from '@trpc/client';
 import { XIcon } from 'lucide-react';
 import { FormattedMessage } from 'react-intl';
 
-import { Button } from '~/components/ui/button';
+import { Button } from '@cs/ui';
 
 export default function Error({
   error,

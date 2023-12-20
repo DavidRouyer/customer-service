@@ -4,11 +4,12 @@ import { FC, Suspense, useState } from 'react';
 import { AlignJustify } from 'lucide-react';
 import { FormattedMessage } from 'react-intl';
 
+import { Sheet, SheetContent } from '@cs/ui';
+
 import { DashboardCommandMenu } from '~/components/dashboard-command-menu';
 import { Logo } from '~/components/logo';
 import { InboxList } from '~/components/navbar/inbox-list';
 import { TeamMemberList } from '~/components/navbar/team-member-list';
-import { Sheet, SheetContent } from '~/components/ui/sheet';
 import { UserNav } from '~/components/user-nav';
 
 export const SidebarNav: FC = () => {
@@ -44,7 +45,7 @@ export const SidebarNav: FC = () => {
     <>
       <DashboardCommandMenu />
       <Sheet open={sidebarOpen} onOpenChange={(open) => setSidebarOpen(open)}>
-        <SheetContent position="left" size="content">
+        <SheetContent side="left" className="max-w-min">
           <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-background px-6 pb-2">
             <div className="flex h-16 shrink-0 items-center">
               <Logo />

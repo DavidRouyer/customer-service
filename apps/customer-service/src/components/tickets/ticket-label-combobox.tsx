@@ -3,23 +3,21 @@ import { Check, Plus } from 'lucide-react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
 import { RouterOutputs } from '@cs/api';
-
-import { Badge } from '~/components/ui/badge';
-import { Button } from '~/components/ui/button';
 import {
+  Badge,
+  Button,
+  cn,
   Command,
   CommandEmpty,
   CommandGroup,
   CommandInput,
   CommandItem,
-} from '~/components/ui/command';
-import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from '~/components/ui/popover';
+} from '@cs/ui';
+
 import { api } from '~/lib/api';
-import { cn } from '~/lib/utils';
 
 type TicketLabelComboboxProps = {
   labels?: NonNullable<RouterOutputs['ticket']['byId']>['labels'];

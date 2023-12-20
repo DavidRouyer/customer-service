@@ -1,11 +1,11 @@
 import * as React from 'react';
-import { cva, type VariantProps } from 'class-variance-authority';
+import { cva, type VariantProps } from 'cva';
 
-import { cn } from '~/lib/utils';
+import { cn } from '../../utils/cn';
 
 const badgeVariants = cva(
-  'inline-flex items-center rounded-md px-1.5 py-0.5 text-xs font-medium ring-1 ring-inset',
   {
+    base: 'inline-flex items-center rounded-md px-1.5 py-0.5 text-xs font-medium ring-1 ring-inset',
     variants: {
       variant: {
         default: 'border-transparent bg-primary text-primary-foreground',

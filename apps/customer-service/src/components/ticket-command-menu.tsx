@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react';
 import { useSetAtom } from 'jotai';
 import { FormattedMessage, useIntl } from 'react-intl';
 
-import { messageModeAtom } from '~/components/messages/message-mode-atom';
 import {
   CommandDialog,
   CommandEmpty,
@@ -12,7 +11,9 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from '~/components/ui/command';
+} from '@cs/ui';
+
+import { messageModeAtom } from '~/components/messages/message-mode-atom';
 
 export function TicketCommandMenu() {
   const { formatMessage } = useIntl();

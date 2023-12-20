@@ -4,11 +4,11 @@ import { usePathname } from 'next/navigation';
 import { AtSign, BarChart3, BookmarkX, Users } from 'lucide-react';
 import { FormattedMessage } from 'react-intl';
 
-import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/avatar';
+import { Avatar, AvatarFallback, AvatarImage, cn } from '@cs/ui';
+
 import { api } from '~/lib/api';
 import { matchPath } from '~/lib/path';
 import { getInitials } from '~/lib/string';
-import { cn } from '~/lib/utils';
 
 export const InboxList: FC = () => {
   const { data: sessionData } = api.auth.getSession.useQuery();

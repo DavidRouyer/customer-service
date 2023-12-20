@@ -5,14 +5,15 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { ChevronDown } from 'lucide-react';
 import { FormattedMessage } from 'react-intl';
 
-import { Button } from '~/components/ui/button';
 import {
+  Button,
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '~/components/ui/dropdown-menu';
+} from '@cs/ui';
+
 import {
   getUpdatedSearchParams,
   ORDER_BY_QUERY_PARAM,

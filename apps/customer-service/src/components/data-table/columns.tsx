@@ -4,10 +4,8 @@ import { ColumnDef } from '@tanstack/react-table';
 import { Plus } from 'lucide-react';
 
 import { RouterOutputs } from '@cs/api';
+import { Avatar, AvatarFallback, AvatarImage, Badge, Checkbox } from '@cs/ui';
 
-import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/avatar';
-import { Badge } from '~/components/ui/badge';
-import { Checkbox } from '~/components/ui/checkbox';
 import { getInitials } from '~/lib/string';
 import { priorities, statuses } from './data';
 

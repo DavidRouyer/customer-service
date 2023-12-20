@@ -4,7 +4,7 @@ import { FC, Fragment } from 'react';
 
 import { ScrollableMessageList } from '~/components/scroll/scrollable-message-list';
 import { TimelineEntry } from '~/components/timeline/timeline-entry';
-import { RelativeDate } from '~/components/ui/relative-date';
+import { RelativeDate } from '~/components/ui/relative-date/relative-date';
 import { api, RouterOutputs } from '~/lib/api';
 
 export type TimelineByDay = Record<
