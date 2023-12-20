@@ -14,15 +14,13 @@ import {
   TicketStatusChanged,
   TicketTimelineEntryType,
 } from '@cs/lib/ticketTimelineEntries';
+import { Avatar, AvatarFallback, AvatarImage, Badge, cn } from '@cs/ui';
 
 import { NodeContent } from '~/components/infos/node-content';
 import { TicketPriority } from '~/components/tickets/ticket-priority';
-import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/avatar';
-import { Badge } from '~/components/ui/badge';
-import { RelativeTime } from '~/components/ui/relative-time';
+import { RelativeTime } from '~/components/ui/relative-time/relative-time';
 import { RouterOutputs } from '~/lib/api';
 import { getInitials } from '~/lib/string';
-import { cn } from '~/lib/utils';
 
 export const TimelineEntry: FC<{
   customer?: RouterOutputs['ticket']['byId']['customer'];

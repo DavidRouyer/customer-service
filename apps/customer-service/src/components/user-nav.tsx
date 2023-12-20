@@ -3,10 +3,11 @@
 import { useRef } from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { handleSignOut } from '~/components/sign-out';
-import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/avatar';
-import { Button } from '~/components/ui/button';
 import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+  Button,
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
@@ -14,7 +15,9 @@ import {
   DropdownMenuSeparator,
   DropdownMenuShortcut,
   DropdownMenuTrigger,
-} from '~/components/ui/dropdown-menu';
+} from '@cs/ui';
+
+import { handleSignOut } from '~/components/sign-out';
 import { api } from '~/lib/api';
 import { getInitials } from '~/lib/string';
 

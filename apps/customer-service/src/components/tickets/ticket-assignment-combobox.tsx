@@ -3,24 +3,24 @@ import { Check, Plus } from 'lucide-react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
 import { RouterOutputs } from '@cs/api';
-
-import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/avatar';
-import { Button } from '~/components/ui/button';
 import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+  Button,
+  cn,
   Command,
   CommandEmpty,
   CommandGroup,
   CommandInput,
   CommandItem,
-} from '~/components/ui/command';
-import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from '~/components/ui/popover';
+} from '@cs/ui';
+
 import { api } from '~/lib/api';
 import { getInitials } from '~/lib/string';
-import { cn } from '~/lib/utils';
 
 type TicketAssignmentComboboxProps = {
   assignedTo?: NonNullable<RouterOutputs['ticket']['byId']>['assignedTo'];

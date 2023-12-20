@@ -11,7 +11,7 @@ import {
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from '~/components/ui/accordion';
+} from '@cs/ui';
 import { api } from '~/lib/api';
 
 export const InfoPanel: FC<{

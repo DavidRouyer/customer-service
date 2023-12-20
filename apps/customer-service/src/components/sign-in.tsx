@@ -1,7 +1,7 @@
 import { signIn } from '@cs/auth';
+import { Button } from '@cs/ui';
 
 import getIntl from '~/app/i18n/server';
-import { Button } from '~/components/ui/button';
 
 export async function SignIn() {
   const { formatMessage } = await getIntl();
@@ -25,7 +25,7 @@ export async function SignIn() {
             await signIn('github', { callbackUrl: '/dashboard' });
           }}
         >
-          <Button className="w-full">
+          <Button type="submit" className="w-full">
             {formatMessage({ id: 'sign_in_with_github' })}
           </Button>
         </form>

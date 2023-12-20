@@ -1,8 +1,9 @@
 import { FC } from 'react';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
+
+import { Copy } from '@cs/ui';
 
 import { PhoneNumber } from '~/components/infos/phone-number';
-import { Copy } from '~/components/ui/copy';
 import { api } from '~/lib/api';
 
 const user = {
@@ -13,6 +14,7 @@ const user = {
 };
 
 export const CustomerInfo: FC<{ ticketId: string }> = ({ ticketId }) => {
+  const { formatMessage } = useIntl();
   const { data: ticketData } = api.ticket.byId.useQuery({
     id: ticketId,
   });
@@ -28,7 +30,13 @@ export const CustomerInfo: FC<{ ticketId: string }> = ({ ticketId }) => {
       </dt>
       <dd className="truncate text-sm leading-5 text-muted-foreground">
         {ticketData.customer.name ? (
-          <Copy content={ticketData.customer.name}>
+          <Copy
+            content={ticketData.customer.name}
+            translations={{
+              copy: formatMessage({ id: 'clipboard.copy' }),
+              copied: formatMessage({ id: 'clipboard.copied' }),
+            }}
+          >
             {ticketData.customer.name}
           </Copy>
         ) : (
@@ -43,7 +51,13 @@ export const CustomerInfo: FC<{ ticketId: string }> = ({ ticketId }) => {
       </dt>
       <dd className="truncate text-sm leading-5 text-muted-foreground">
         {ticketData.customer.email ? (
-          <Copy content={ticketData.customer.email}>
+          <Copy
+            content={ticketData.customer.email}
+            translations={{
+              copy: formatMessage({ id: 'clipboard.copy' }),
+              copied: formatMessage({ id: 'clipboard.copied' }),
+            }}
+          >
             {ticketData.customer.email}
           </Copy>
         ) : (
@@ -58,7 +72,13 @@ export const CustomerInfo: FC<{ ticketId: string }> = ({ ticketId }) => {
       </dt>
       <dd className="truncate text-sm leading-5 text-muted-foreground">
         {ticketData.customer.phone ? (
-          <Copy content={ticketData.customer.phone}>
+          <Copy
+            content={ticketData.customer.phone}
+            translations={{
+              copy: formatMessage({ id: 'clipboard.copy' }),
+              copied: formatMessage({ id: 'clipboard.copied' }),
+            }}
+          >
             <PhoneNumber value={ticketData.customer.phone} />
           </Copy>
         ) : (
@@ -72,7 +92,15 @@ export const CustomerInfo: FC<{ ticketId: string }> = ({ ticketId }) => {
         <FormattedMessage id="user.platform" />
       </dt>
       <dd className="truncate text-sm leading-5 text-muted-foreground">
-        <Copy content={user.app.version}>{user.app.version}</Copy>
+        <Copy
+          content={user.app.version}
+          translations={{
+            copy: formatMessage({ id: 'clipboard.copy' }),
+            copied: formatMessage({ id: 'clipboard.copied' }),
+          }}
+        >
+          {user.app.version}
+        </Copy>
       </dd>
     </dl>
   );

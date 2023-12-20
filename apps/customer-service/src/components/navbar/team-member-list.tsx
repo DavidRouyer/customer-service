@@ -2,11 +2,12 @@ import { FC } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
-import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/avatar';
+import { Avatar, AvatarFallback, AvatarImage } from '@cs/ui';
+
 import { api } from '~/lib/api';
 import { matchPath } from '~/lib/path';
 import { getInitials } from '~/lib/string';
-import { cn } from '~/lib/utils';
+import { cn } from '../../../../../packages/design-system/ui/src/utils/cn';
 
 export const TeamMemberList: FC = () => {
   const { data: sessionData } = api.auth.getSession.useQuery();

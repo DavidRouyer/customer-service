@@ -7,9 +7,9 @@ import { FormattedMessage } from 'react-intl';
 
 import { RouterOutputs } from '@cs/api';
 import { TicketChat, TicketNote } from '@cs/lib/ticketTimelineEntries';
+import { Avatar, AvatarFallback, AvatarImage } from '@cs/ui';
 
-import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/avatar';
-import { RelativeTime } from '~/components/ui/relative-time';
+import { RelativeTime } from '~/components/ui/relative-time/relative-time';
 import { getInitials } from '~/lib/string';
 
 export type TicketListItemProps = {

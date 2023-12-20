@@ -13,13 +13,10 @@ import {
   TicketNote,
   TicketTimelineEntryType,
 } from '@cs/lib/ticketTimelineEntries';
+import { Button, cn, Label, Switch } from '@cs/ui';
 
 import { messageModeAtom } from '~/components/messages/message-mode-atom';
-import { Button } from '~/components/ui/button';
-import { Label } from '~/components/ui/label';
-import { Switch } from '~/components/ui/switch';
 import { api, RouterOutputs } from '~/lib/api';
-import { cn } from '~/lib/utils';
 
 type TimelineItem = RouterOutputs['ticketTimeline']['byTicketId'][0];
 

@@ -4,15 +4,15 @@ import { FormattedMessage } from 'react-intl';
 
 import { RouterOutputs } from '@cs/api';
 import { TicketStatus } from '@cs/lib/tickets';
-
-import { Button } from '~/components/ui/button';
 import {
+  Button,
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '~/components/ui/dropdown-menu';
+} from '@cs/ui';
+
 import { useMarkAsDoneTicket } from '~/hooks/use-mark-as-done-ticket';
 import { useMarkAsOpenTicket } from '~/hooks/use-mark-as-open-ticket';
 

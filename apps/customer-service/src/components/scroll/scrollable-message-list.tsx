@@ -2,8 +2,9 @@
 
 import React, { forwardRef, useImperativeHandle, useRef } from 'react';
 
+import { cn } from '@cs/ui';
+
 import Scrollbar from '~/components/scroll/scrollbar';
-import { cn } from '~/lib/utils';
 
 import '~/components/scroll/perfect-scrollbar.css';
 
