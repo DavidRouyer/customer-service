@@ -1123,10 +1123,10 @@
     semver "^7.3.5"
     tar "^6.1.11"
 
-"@neondatabase/serverless@^0.6.0":
-  version "0.6.0"
-  resolved "https://registry.yarnpkg.com/@neondatabase/serverless/-/serverless-0.6.0.tgz#efe001f571e85af79c8042601ec694f96ca8fb17"
-  integrity sha512-qXxBRYN0m2v8kVQBfMxbzNGn2xFAhTXFibzQlE++NfJ56Shz3m7+MyBBtXDlEH+3Wfa6lToDXf1MElocY4sJ3w==
+"@neondatabase/serverless@^0.6.1":
+  version "0.6.1"
+  resolved "https://registry.yarnpkg.com/@neondatabase/serverless/-/serverless-0.6.1.tgz#40479ae385a17a6771024c75c534ee161e0f891e"
+  integrity sha512-rZIyWf27WxH4eW0ZRDQT2PxUJH3AphNVEnO4x1AGjBW6XrguH3ChLokup0gNGrX8cxDbP0UyduI7qdy4OLos+A==
   dependencies:
     "@types/pg" "8.6.6"
 
