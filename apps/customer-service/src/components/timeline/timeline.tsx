@@ -1,4 +1,4 @@
-import React, { ReactChild, useEffect, useRef, useState } from 'react';
+import React, { ReactNode, useEffect, useRef, useState } from 'react';
 
 import { cn } from '@cs/ui';
 
@@ -11,15 +11,19 @@ import { SizeObserver } from '~/components/timeline/useSizeObserver';
 type TimelineProps = {
   haveNewest: boolean;
   haveOldest: boolean;
+  id: string;
   items: string[];
-  messageLoadingState?: boolean;
-  loadNewerMessages: (conversationId: string, messageId: string) => unknown;
-  loadOlderMessages: (conversationId: string, messageId: string) => unknown;
+  loadNewerEntries: (ticketId: string, entryId: string) => unknown;
+  loadOlderEntries: (ticketId: string, entryId: string) => unknown;
+  markEntryRead: (ticketId: string, entryId: string) => unknown;
+  entryLoadingState?: boolean;
   renderItem: (props: {
-    messageId: string;
+    entryId: string;
     containerElementRef: React.RefObject<HTMLElement>;
     containerWidthBreakpoint: string;
     ticketId: string;
+    nextEntryId?: string;
+    previousEntryId?: string;
   }) => JSX.Element;
   setIsNearBottom: (ticketId: string, isNearBottom: boolean) => unknown;
   ticketId: string;
@@ -27,20 +31,23 @@ type TimelineProps = {
 
 const AT_BOTTOM_THRESHOLD = 15;
 const AT_BOTTOM_DETECTOR_STYLE = { height: AT_BOTTOM_THRESHOLD };
+const LOAD_NEWER_THRESHOLD = 5;
 
 export const Timeline: React.FC<TimelineProps> = ({
   haveNewest,
   haveOldest,
+  id,
   items,
-  loadNewerMessages,
-  loadOlderMessages,
-  messageLoadingState,
-  ticketId,
+  loadNewerEntries,
+  loadOlderEntries,
+  markEntryRead,
+  entryLoadingState,
   renderItem,
   setIsNearBottom,
+  ticketId,
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const messagesRef = useRef<HTMLDivElement>(null);
+  const entriesRef = useRef<HTMLDivElement>(null);
   const atBottomDetectorRef = useRef<HTMLDivElement>(null);
 
   let intersectionObserver: IntersectionObserver | undefined = undefined;
@@ -48,27 +55,22 @@ export const Timeline: React.FC<TimelineProps> = ({
   const [widthBreakpoint, setWidthBreakpoint] = useState('wide');
   const [scrollLocked, setScrollLocked] = useState(false);
   const [state, setState] = useState({
-    oldestPartiallyVisibleMessageId: undefined as undefined | string,
-    newestBottomVisibleMessageId: undefined as undefined | string,
+    oldestPartiallyVisibleEntryId: undefined as undefined | string,
+    newestBottomVisibleEntryId: undefined as undefined | string,
   });
 
-  const getMessageIdFromElement = (element: undefined | Element) => {
-    return element instanceof HTMLElement
-      ? element.dataset.messageId
-      : undefined;
+  const getEntryIdFromElement = (element: undefined | Element) => {
+    return element instanceof HTMLElement ? element.dataset.entryId : undefined;
   };
 
   const updateIntersectionObserver = () => {
     const containerEl = containerRef.current;
-    const messagesEl = messagesRef.current;
+    const entriesEl = entriesRef.current;
     const atBottomDetectorEl = atBottomDetectorRef.current;
-    if (!containerEl || !messagesEl || !atBottomDetectorEl) {
+    if (!containerEl || !entriesEl || !atBottomDetectorEl) {
       return;
     }
 
-    // We re-initialize the `IntersectionObserver`. We don't want stale references to old
-    //   props, and we care about the order of `IntersectionObserverEntry`s. (We could do
-    //   this another way, but this approach works.)
     intersectionObserver?.disconnect();
 
     const intersectionRatios = new Map<Element, number>();
@@ -76,9 +78,6 @@ export const Timeline: React.FC<TimelineProps> = ({
     const intersectionObserverCallback: IntersectionObserverCallback = (
       entries
     ) => {
-      // The first time this callback is called, we'll get entries in observation order
-      //   (which should match DOM order). We don't want to delete anything from our map
-      //   because we don't want the order to change at all.
       entries.forEach((entry) => {
         intersectionRatios.set(entry.target, entry.intersectionRatio);
       });
@@ -93,14 +92,6 @@ export const Timeline: React.FC<TimelineProps> = ({
           continue;
         }
 
-        // We use this "at bottom detector" for two reasons, both for performance. It's
-        //   usually faster to use an `IntersectionObserver` instead of a scroll event,
-        //   and we want to do that here.
-        //
-        // 1. We can determine whether we're near the bottom without `onScroll`
-        // 2. We need this information when deciding whether the bottom of the last
-        //    message is visible. We want to get an intersection observer event when the
-        //    bottom of the container comes into view.
         if (element === atBottomDetectorEl) {
           newIsNearBottom = true;
         } else {
@@ -112,10 +103,6 @@ export const Timeline: React.FC<TimelineProps> = ({
         }
       }
 
-      // If a message is fully visible, then you can see its bottom. If not, there's a
-      //   very tall message around. We assume you can see the bottom of a message if
-      //   (1) another message is partly visible right below it, or (2) you're near the
-      //   bottom of the scrollable container.
       let newestBottomVisible: undefined | Element;
       if (newestFullyVisible) {
         newestBottomVisible = newestFullyVisible;
@@ -126,43 +113,43 @@ export const Timeline: React.FC<TimelineProps> = ({
         newestBottomVisible = oldestPartiallyVisible;
       }
 
-      const oldestPartiallyVisibleMessageId = getMessageIdFromElement(
+      const oldestPartiallyVisibleEntryId = getEntryIdFromElement(
         oldestPartiallyVisible
       );
-      const newestBottomVisibleMessageId =
-        getMessageIdFromElement(newestBottomVisible);
+      const newestBottomVisibleEntryId =
+        getEntryIdFromElement(newestBottomVisible);
 
       setState({
-        oldestPartiallyVisibleMessageId,
-        newestBottomVisibleMessageId,
+        oldestPartiallyVisibleEntryId: oldestPartiallyVisibleEntryId,
+        newestBottomVisibleEntryId: newestBottomVisibleEntryId,
       });
 
       setIsNearBottom(ticketId, newIsNearBottom);
 
-      if (newestBottomVisibleMessageId) {
-        this.markNewestBottomVisibleMessageRead();
+      if (newestBottomVisibleEntryId) {
+        markNewestBottomVisibleEntryRead();
 
         const rowIndex = getRowIndexFromElement(newestBottomVisible);
         const maxRowIndex = items.length - 1;
 
         if (
-          !messageLoadingState &&
+          !entryLoadingState &&
           !haveNewest &&
-          isNumber(rowIndex) &&
+          rowIndex !== undefined &&
           maxRowIndex >= 0 &&
           rowIndex >= maxRowIndex - LOAD_NEWER_THRESHOLD
         ) {
-          loadNewerMessages(ticketId, newestBottomVisibleMessageId);
+          loadNewerEntries(ticketId, newestBottomVisibleEntryId);
         }
       }
 
       if (
-        !messageLoadingState &&
+        !entryLoadingState &&
         !haveOldest &&
-        oldestPartiallyVisibleMessageId &&
-        oldestPartiallyVisibleMessageId === items[0]
+        oldestPartiallyVisibleEntryId &&
+        oldestPartiallyVisibleEntryId === items[0]
       ) {
-        loadOlderMessages(ticketId, oldestPartiallyVisibleMessageId);
+        loadOlderEntries(ticketId, oldestPartiallyVisibleEntryId);
       }
     };
 
@@ -185,8 +172,8 @@ export const Timeline: React.FC<TimelineProps> = ({
         threshold: [0, 1],
       }
     );
-    for (const child of messagesEl.children) {
-      if ((child as HTMLElement).dataset.messageId) {
+    for (const child of entriesEl.children) {
+      if ((child as HTMLElement).dataset.entryId) {
         intersectionObserver.observe(child);
       }
     }
@@ -205,36 +192,44 @@ export const Timeline: React.FC<TimelineProps> = ({
       scrollerLock.onUserInterrupt('onScroll');
     }
   };
+  const markNewestBottomVisibleEntryRead = (): void => {
+    const { newestBottomVisibleEntryId: newestBottomVisibleMessageId } = state;
+    if (newestBottomVisibleMessageId) {
+      markEntryRead(id, newestBottomVisibleMessageId);
+    }
+  };
   const scrollerLock = createScrollerLock('Timeline', onScrollLockChange);
 
-  const messageNodes: ReactChild[] = [];
+  const messageNodes: ReactNode[] = [];
   for (let itemIndex = 0; itemIndex < items.length; itemIndex += 1) {
     const previousItemIndex = itemIndex - 1;
     const nextItemIndex = itemIndex + 1;
 
-    const previousMessageId: undefined | string = items[previousItemIndex];
-    const nextMessageId: undefined | string = items[nextItemIndex];
-    const messageId = items[itemIndex];
+    const previousEntryId: undefined | string = items[previousItemIndex];
+    const nextEntryId: undefined | string = items[nextItemIndex];
+    const entryId = items[itemIndex];
 
-    console.log('messageId', messageId);
+    console.log('entryId', entryId);
 
     messageNodes.push(
       <div
-        key={messageId}
+        key={entryId}
         className={
           itemIndex === items.length - 1
             ? 'module-timeline__last-message'
             : undefined
         }
         data-item-index={itemIndex}
-        data-message-id={messageId}
+        data-entry-id={entryId}
         role="listitem"
       >
         {renderItem({
           containerElementRef: containerRef,
           containerWidthBreakpoint: widthBreakpoint,
           ticketId: ticketId,
-          messageId: messageId!,
+          entryId: entryId!,
+          previousEntryId,
+          nextEntryId,
         })}
       </div>
     );
@@ -270,7 +265,7 @@ export const Timeline: React.FC<TimelineProps> = ({
                   haveOldest && 'module-timeline__messages--have-oldest',
                   scrollLocked && 'module-timeline__messages--scroll-locked'
                 )}
-                ref={messagesRef}
+                ref={entriesRef}
                 role="list"
               >
                 {messageNodes}
@@ -288,3 +283,11 @@ export const Timeline: React.FC<TimelineProps> = ({
     </ScrollerLockContext.Provider>
   );
 };
+
+function getRowIndexFromElement(
+  element: undefined | Element
+): undefined | number {
+  return element instanceof HTMLElement && element.dataset.itemIndex
+    ? parseInt(element.dataset.itemIndex, 10)
+    : undefined;
+}

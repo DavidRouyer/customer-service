@@ -28,8 +28,9 @@ export const TimelineItem: FC<{
   ticketId: string;
   customer?: RouterOutputs['ticket']['byId']['customer'];
   item: RouterOutputs['ticketTimeline']['byTicketId'][0];
-  isLast: boolean;
-}> = ({ customer, item, isLast }) => {
+  previousEntryId?: string;
+  nextEntryId?: string;
+}> = ({ customer, item }) => {
   let activity: ReactNode = null;
   if (item.type === TicketTimelineEntryType.Chat) {
     activity = (
@@ -291,9 +292,7 @@ export const TimelineItem: FC<{
       <div className="grid grid-cols-[24px_auto] gap-6">
         <div
           className={cn(
-            !isLast
-              ? 'm-auto h-full w-0 border-l border-muted-foreground bg-gray-200'
-              : undefined
+            'm-auto h-full w-0 border-l border-muted-foreground bg-gray-200'
           )}
         ></div>
         <div className="mb-6"></div>

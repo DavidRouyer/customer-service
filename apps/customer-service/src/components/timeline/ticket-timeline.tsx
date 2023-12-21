@@ -40,34 +40,42 @@ export const TicketTimeline: FC<{ ticketId: string }> = ({ ticketId }) => {
   );
 
   const renderItem = ({
-    messageId,
     containerElementRef,
     containerWidthBreakpoint,
+    entryId,
+    nextEntryId,
+    previousEntryId,
   }: {
-    messageId: string;
     containerElementRef: React.RefObject<HTMLElement>;
     containerWidthBreakpoint: string;
+    entryId: string;
+    nextEntryId?: string;
+    previousEntryId?: string;
   }) => (
     <TimelineItem
       containerElementRef={containerElementRef}
       containerWidthBreakpoint={containerWidthBreakpoint}
       ticketId={ticketId}
-      item={timelineData?.[messageId]!}
+      item={timelineData?.[entryId]!}
     />
   );
 
   return (
     <Timeline
+      id={ticketId}
       haveNewest={false}
       haveOldest={false}
       items={Object.keys(timelineData ?? {})}
-      loadNewerMessages={() => {
-        console.log('loadNewerMessages');
+      loadNewerEntries={() => {
+        console.log('loadNewerEntries');
       }}
-      loadOlderMessages={() => {
-        console.log('loadOlderMessages');
+      loadOlderEntries={() => {
+        console.log('loadOlderEntries');
       }}
-      messageLoadingState={isLoading}
+      markEntryRead={() => {
+        console.log('markEntryRead');
+      }}
+      entryLoadingState={isLoading}
       setIsNearBottom={(ticketId, isNearBottom) => {
         console.log('setIsNearBottom', ticketId, isNearBottom);
       }}
