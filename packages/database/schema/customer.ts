@@ -1,9 +1,8 @@
 import { relations } from 'drizzle-orm';
-import { text, timestamp, varchar } from 'drizzle-orm/pg-core';
+import { pgTable, text, timestamp, varchar } from 'drizzle-orm/pg-core';
 
 import { generateEntityId } from '@cs/lib/generate-entity-id';
 
-import { pgTable } from './_table';
 import { users } from './auth';
 import { tickets } from './ticket';
 

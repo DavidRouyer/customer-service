@@ -1,5 +1,5 @@
 import { relations } from 'drizzle-orm';
-import { json, pgEnum, timestamp, varchar } from 'drizzle-orm/pg-core';
+import { json, pgEnum, pgTable, timestamp, varchar } from 'drizzle-orm/pg-core';
 
 import { generateEntityId } from '@cs/lib/generate-entity-id';
 import {
@@ -12,7 +12,6 @@ import {
   TicketTimelineEntryType,
 } from '@cs/lib/ticketTimelineEntries';
 
-import { pgTable } from './_table';
 import { users } from './auth';
 import { customers } from './customer';
 import { tickets } from './ticket';

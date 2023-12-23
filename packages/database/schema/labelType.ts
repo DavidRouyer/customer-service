@@ -1,8 +1,7 @@
-import { timestamp, varchar } from 'drizzle-orm/pg-core';
+import { pgTable, timestamp, varchar } from 'drizzle-orm/pg-core';
 
 import { generateEntityId } from '@cs/lib/generate-entity-id';
 
-import { pgTable } from './_table';
 import { users } from './auth';
 
 export const labelTypes = pgTable('labelType', {

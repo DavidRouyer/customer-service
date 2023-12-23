@@ -19,7 +19,7 @@ export const schema = {
   ...ticketTimelineEntries,
 };
 
-export { pgTable as tableCreator } from './schema/_table';
+export { pgTable as tableCreator } from 'drizzle-orm/pg-core';
 
 export * from 'drizzle-orm';
 

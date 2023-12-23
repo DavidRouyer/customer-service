@@ -1,5 +1,5 @@
 import { relations } from 'drizzle-orm';
-import { pgEnum, timestamp, varchar } from 'drizzle-orm/pg-core';
+import { pgEnum, pgTable, timestamp, varchar } from 'drizzle-orm/pg-core';
 
 import { generateEntityId } from '@cs/lib/generate-entity-id';
 import {
@@ -8,7 +8,6 @@ import {
   TicketStatusDetail,
 } from '@cs/lib/tickets';
 
-import { pgTable } from './_table';
 import { users } from './auth';
 import { customers } from './customer';
 import { labels } from './label';
