@@ -5,7 +5,6 @@ import { useSearchParams } from 'next/navigation';
 
 import { TicketStatus } from '@cs/lib/tickets';
 
-import { TicketDropdownSort } from '~/components/tickets/ticket-dropdown-sort';
 import { TicketList } from '~/components/tickets/ticket-list';
 import { TicketListHeader } from '~/components/tickets/ticket-list-header';
 import { TicketListItemSkeleton } from '~/components/tickets/ticket-list-item-skeleton';

@@ -1,126 +1,83 @@
-import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
 
 import {
   and,
-  asc,
+  db,
   desc,
   eq,
-  exists,
-  gt,
   inArray,
   isNotNull,
-  isNull,
-  lt,
   ne,
   not,
   schema,
   SQL,
   sql,
 } from '@cs/database';
-import { extractMentions } from '@cs/lib/editor';
-import {
-  TicketFilter,
-  TicketPriority,
-  TicketStatus,
-  TicketStatusDetail,
-} from '@cs/lib/tickets';
-import {
-  TicketAssignmentChanged,
-  TicketChat,
-  TicketNote,
-  TicketPriorityChanged,
-  TicketStatusChanged,
-  TicketTimelineEntryType,
-} from '@cs/lib/ticketTimelineEntries';
+import { TicketPriority, TicketStatus } from '@cs/lib/tickets';
+import { TicketTimelineEntryType } from '@cs/lib/ticketTimelineEntries';
 
+import { SortDirection } from '../entities/ticket';
+import TicketService from '../services/ticket';
 import { createTRPCRouter, protectedProcedure } from '../trpc';
+
+const ticketService = new TicketService(db);
 
 export const ticketRouter = createTRPCRouter({
   all: protectedProcedure
     .input(
       z.object({
-        filter: z
-          .enum([
-            TicketFilter.All,
-            TicketFilter.Me,
-            TicketFilter.Unassigned,
-            TicketFilter.Mentions,
-          ])
-          .or(z.string()),
+        assignedToId: z.string().array().nullish().optional(),
         status: z.enum([TicketStatus.Open, TicketStatus.Done]),
-        orderBy: z.enum(['newest', 'oldest']),
+        sortBy: z
+          .object({
+            createdAt: z.enum([SortDirection.ASC, SortDirection.DESC]),
+          })
+          .or(
+            z.object({
+              priority: z.enum([SortDirection.ASC, SortDirection.DESC]),
+            })
+          )
+          .optional(),
         cursor: z.string().nullish(),
+        limit: z.number().default(50),
       })
     )
-    .query(async ({ ctx, input }) => {
-      const PAGE_SIZE = 10;
-      const tickets = await ctx.db.query.tickets.findMany({
-        orderBy: {
-          newest: desc(schema.tickets.createdAt),
-          oldest: asc(schema.tickets.createdAt),
-        }[input.orderBy],
-        where: (tickets) =>
-          and(
-            eq(schema.tickets.status, input.status),
-            {
-              newest: input.cursor
-                ? lt(schema.tickets.createdAt, new Date(input.cursor))
-                : undefined,
-              oldest: input.cursor
-                ? gt(schema.tickets.createdAt, new Date(input.cursor))
-                : undefined,
-            }[input.orderBy],
-            typeof input.filter === 'number'
-              ? eq(schema.tickets.assignedToId, input.filter)
-              : {
-                  all: undefined,
-                  me: eq(schema.tickets.assignedToId, ctx.session.user.id),
-                  unassigned: isNull(schema.tickets.assignedToId),
-                  mentions: exists(
-                    ctx.db
-                      .selectDistinct({
-                        id: schema.ticketMentions.ticketId,
-                      })
-                      .from(schema.ticketMentions)
-                      .where(
-                        and(
-                          eq(schema.ticketMentions.userId, ctx.session.user.id),
-                          eq(schema.ticketMentions.ticketId, tickets.id)
-                        )
-                      )
-                      .limit(1)
-                  ),
-                }[input.filter]
-          ),
-        with: {
-          createdBy: true,
-          customer: true,
-          timeline: {
-            where: and(
-              inArray(schema.ticketTimelineEntries.type, [
-                TicketTimelineEntryType.Chat,
-                TicketTimelineEntryType.Note,
-              ])
-            ),
-            orderBy: desc(schema.ticketTimelineEntries.createdAt),
-            limit: 1,
-          },
-          labels: {
-            columns: {
-              id: true,
-            },
-            with: {
-              labelType: true,
-            },
-          },
-          assignedTo: true,
+    .query(async ({ input }) => {
+      const tickets = await ticketService.list(
+        {
+          status: input.status,
+          assignedToId: input.assignedToId,
         },
-        limit: PAGE_SIZE,
-      });
+        {
+          sortBy: input.sortBy,
+          relations: {
+            createdBy: true,
+            customer: true,
+            timeline: {
+              where: and(
+                inArray(schema.ticketTimelineEntries.type, [
+                  TicketTimelineEntryType.Chat,
+                  TicketTimelineEntryType.Note,
+                ])
+              ),
+              orderBy: desc(schema.ticketTimelineEntries.createdAt),
+              limit: 1,
+            },
+            labels: {
+              columns: {
+                id: true,
+              },
+              with: {
+                labelType: true,
+              },
+            },
+            assignedTo: true,
+          },
+          take: input.limit,
+        }
+      );
 
-      const nextCursor =
-        tickets[tickets.length - 1]?.createdAt.toISOString() ?? null;
+      const nextCursor = tickets[tickets.length - 1]?.id ?? null;
 
       return { data: tickets, nextCursor };
     }),
@@ -187,10 +144,9 @@ export const ticketRouter = createTRPCRouter({
 
   byId: protectedProcedure
     .input(z.object({ id: z.string() }))
-    .query(async ({ ctx, input }) => {
-      const ticket = await ctx.db.query.tickets.findFirst({
-        where: eq(schema.tickets.id, input.id),
-        with: {
+    .query(async ({ input }) => {
+      return await ticketService.retrieve(input.id, {
+        relations: {
           createdBy: true,
           customer: true,
           assignedTo: true,
@@ -199,14 +155,6 @@ export const ticketRouter = createTRPCRouter({
           },
         },
       });
-
-      if (!ticket)
-        throw new TRPCError({
-          code: 'BAD_REQUEST',
-          message: 'ticket_not_found',
-        });
-
-      return ticket;
     }),
 
   byCustomerId: protectedProcedure
@@ -224,101 +172,17 @@ export const ticketRouter = createTRPCRouter({
   assign: protectedProcedure
     .input(z.object({ id: z.string(), userId: z.string() }))
     .mutation(async ({ ctx, input }) => {
-      const ticket = await ctx.db.query.tickets.findFirst({
-        where: eq(schema.tickets.id, input.id),
-      });
-
-      if (!ticket)
-        throw new TRPCError({
-          code: 'BAD_REQUEST',
-          message: 'ticket_not_found',
-        });
-
-      return await ctx.db.transaction(async (tx) => {
-        const updatedTicket = await tx
-          .update(schema.tickets)
-          .set({
-            assignedToId: input.userId,
-            updatedAt: new Date(),
-            updatedById: ctx.session.user.id,
-          })
-          .where(eq(schema.tickets.id, input.id))
-          .returning({
-            id: schema.tickets.id,
-            updatedAt: schema.tickets.updatedAt,
-          })
-          .then((res) => res[0]);
-
-        if (!updatedTicket) {
-          tx.rollback();
-          return;
-        }
-
-        await tx.insert(schema.ticketTimelineEntries).values({
-          ticketId: input.id,
-          customerId: ticket.customerId,
-          type: TicketTimelineEntryType.AssignmentChanged,
-          entry: {
-            oldAssignedToId: ticket.assignedToId,
-            newAssignedToId: input.userId,
-          } satisfies TicketAssignmentChanged,
-          createdAt: updatedTicket.updatedAt ?? new Date(),
-          userCreatedById: ctx.session.user.id,
-        });
-      });
+      return await ticketService.assign(
+        input.id,
+        input.userId,
+        ctx.session.user.id
+      );
     }),
 
   unassign: protectedProcedure
     .input(z.object({ id: z.string() }))
     .mutation(async ({ ctx, input }) => {
-      const ticket = await ctx.db.query.tickets.findFirst({
-        where: eq(schema.tickets.id, input.id),
-      });
-
-      if (!ticket)
-        throw new TRPCError({
-          code: 'BAD_REQUEST',
-          message: 'ticket_not_found',
-        });
-
-      if (!ticket.assignedToId)
-        throw new TRPCError({
-          code: 'BAD_REQUEST',
-          message: 'ticket_not_assigned',
-        });
-
-      return await ctx.db.transaction(async (tx) => {
-        const updatedTicket = await tx
-          .update(schema.tickets)
-          .set({
-            assignedToId: null,
-            updatedAt: new Date(),
-            updatedById: ctx.session.user.id,
-          })
-          .where(eq(schema.tickets.id, input.id))
-          .returning({
-            id: schema.tickets.id,
-            updatedAt: schema.tickets.updatedAt,
-          })
-          .then((res) => res[0]);
-
-        if (!updatedTicket) {
-          tx.rollback();
-          return;
-        }
-
-        await tx.insert(schema.ticketTimelineEntries).values({
-          ticketId: input.id,
-          customerId: ticket.customerId,
-          type: TicketTimelineEntryType.AssignmentChanged,
-          entry: {
-            oldAssignedToId: ticket.assignedToId,
-            newAssignedToId: null,
-          } satisfies TicketAssignmentChanged,
-          createdAt: updatedTicket.updatedAt ?? new Date(),
-          userCreatedById: ctx.session.user.id,
-        });
-      });
+      return await ticketService.unassign(input.id, ctx.session.user.id);
     }),
 
   changePriority: protectedProcedure
@@ -334,160 +198,23 @@ export const ticketRouter = createTRPCRouter({
       })
     )
     .mutation(async ({ ctx, input }) => {
-      const ticket = await ctx.db.query.tickets.findFirst({
-        where: eq(schema.tickets.id, input.id),
-      });
-
-      if (!ticket)
-        throw new TRPCError({
-          code: 'BAD_REQUEST',
-          message: 'ticket_not_found',
-        });
-
-      return await ctx.db.transaction(async (tx) => {
-        const updatedTicket = await tx
-          .update(schema.tickets)
-          .set({
-            priority: input.priority,
-            updatedAt: new Date(),
-            updatedById: ctx.session.user.id,
-          })
-          .where(eq(schema.tickets.id, input.id))
-          .returning({
-            id: schema.tickets.id,
-            updatedAt: schema.tickets.updatedAt,
-          })
-          .then((res) => res[0]);
-
-        if (!updatedTicket) {
-          tx.rollback();
-          return;
-        }
-
-        await tx.insert(schema.ticketTimelineEntries).values({
-          ticketId: input.id,
-          customerId: ticket.customerId,
-          type: TicketTimelineEntryType.PriorityChanged,
-          entry: {
-            oldPriority: ticket.priority,
-            newPriority: input.priority,
-          } satisfies TicketPriorityChanged,
-          createdAt: updatedTicket.updatedAt ?? new Date(),
-          userCreatedById: ctx.session.user.id,
-        });
-      });
+      return await ticketService.changePriority(
+        input.id,
+        input.priority,
+        ctx.session.user.id
+      );
     }),
 
   markAsDone: protectedProcedure
     .input(z.object({ id: z.string() }))
     .mutation(async ({ ctx, input }) => {
-      const ticket = await ctx.db.query.tickets.findFirst({
-        where: eq(schema.tickets.id, input.id),
-      });
-
-      if (!ticket)
-        throw new TRPCError({
-          code: 'BAD_REQUEST',
-          message: 'ticket_not_found',
-        });
-
-      if (ticket.status === TicketStatus.Done)
-        throw new TRPCError({
-          code: 'BAD_REQUEST',
-          message: 'ticket_already_marked_as_done',
-        });
-
-      return await ctx.db.transaction(async (tx) => {
-        const updatedTicket = await tx
-          .update(schema.tickets)
-          .set({
-            status: TicketStatus.Done,
-            statusDetail: null,
-            statusChangedAt: new Date(),
-            statusChangedById: ctx.session.user.id,
-            updatedAt: new Date(),
-            updatedById: ctx.session.user.id,
-          })
-          .where(eq(schema.tickets.id, input.id))
-          .returning({
-            id: schema.tickets.id,
-            updatedAt: schema.tickets.updatedAt,
-          })
-          .then((res) => res[0]);
-
-        if (!updatedTicket) {
-          tx.rollback();
-          return;
-        }
-
-        await tx.insert(schema.ticketTimelineEntries).values({
-          ticketId: input.id,
-          customerId: ticket.customerId,
-          type: TicketTimelineEntryType.StatusChanged,
-          entry: {
-            oldStatus: ticket.status,
-            newStatus: TicketStatus.Done,
-          } satisfies TicketStatusChanged,
-          createdAt: updatedTicket.updatedAt ?? new Date(),
-          userCreatedById: ctx.session.user.id,
-        });
-      });
+      return await ticketService.markAsDone(input.id, ctx.session.user.id);
     }),
 
   markAsOpen: protectedProcedure
     .input(z.object({ id: z.string() }))
     .mutation(async ({ ctx, input }) => {
-      const ticket = await ctx.db.query.tickets.findFirst({
-        where: eq(schema.tickets.id, input.id),
-      });
-
-      if (!ticket)
-        throw new TRPCError({
-          code: 'BAD_REQUEST',
-          message: 'ticket_not_found',
-        });
-
-      if (ticket.status === TicketStatus.Open)
-        throw new TRPCError({
-          code: 'BAD_REQUEST',
-          message: 'ticket_already_marked_as_open',
-        });
-
-      return await ctx.db.transaction(async (tx) => {
-        const updatedTicket = await tx
-          .update(schema.tickets)
-          .set({
-            status: TicketStatus.Open,
-            statusDetail: null,
-            statusChangedAt: new Date(),
-            statusChangedById: ctx.session.user.id,
-            updatedAt: new Date(),
-            updatedById: ctx.session.user.id,
-          })
-          .where(eq(schema.tickets.id, input.id))
-          .returning({
-            id: schema.tickets.id,
-            updatedAt: schema.tickets.updatedAt,
-          })
-          .then((res) => res[0]);
-
-        if (!updatedTicket) {
-          tx.rollback();
-          return;
-        }
-
-        await tx.insert(schema.ticketTimelineEntries).values({
-          ticketId: input.id,
-          customerId: ticket.customerId,
-          type: TicketTimelineEntryType.StatusChanged,
-          entry: {
-            oldStatus: ticket.status,
-            newStatus: TicketStatus.Open,
-          } satisfies TicketStatusChanged,
-          createdAt: updatedTicket.updatedAt ?? new Date(),
-          userCreatedById: ctx.session.user.id,
-        });
-      });
+      return await ticketService.markAsOpen(input.id, ctx.session.user.id);
     }),
 
   create: protectedProcedure
@@ -505,34 +232,10 @@ export const ticketRouter = createTRPCRouter({
       })
     )
     .mutation(async ({ ctx, input }) => {
-      return await ctx.db.transaction(async (tx) => {
-        const creationDate = new Date();
-
-        const newTicket = await tx
-          .insert(schema.tickets)
-          .values({
-            ...input,
-            status: TicketStatus.Open,
-            statusDetail: TicketStatusDetail.Created,
-            statusChangedAt: creationDate,
-            statusChangedById: ctx.session.user.id,
-            createdAt: creationDate,
-            createdById: ctx.session.user.id,
-          })
-          .returning({
-            id: schema.tickets.id,
-            createdAt: schema.tickets.createdAt,
-          })
-          .then((res) => res[0]);
-
-        if (!newTicket) {
-          tx.rollback();
-          return;
-        }
-
-        return {
-          id: newTicket.id,
-        };
+      return ticketService.create({
+        ...input,
+        createdById: ctx.session.user.id,
+        statusChangedById: ctx.session.user.id,
       });
     }),
 
@@ -544,57 +247,11 @@ export const ticketRouter = createTRPCRouter({
       })
     )
     .mutation(async ({ ctx, input }) => {
-      const ticket = await ctx.db.query.tickets.findFirst({
-        where: eq(schema.tickets.id, input.ticketId),
-      });
-
-      if (!ticket)
-        throw new TRPCError({
-          code: 'BAD_REQUEST',
-          message: 'ticket_not_found',
-        });
-
-      return await ctx.db.transaction(async (tx) => {
-        const creationDate = new Date();
-
-        const newChat = await tx
-          .insert(schema.ticketTimelineEntries)
-          .values({
-            ticketId: input.ticketId,
-            type: TicketTimelineEntryType.Chat,
-            entry: {
-              text: input.text,
-            } satisfies TicketChat,
-            customerId: ticket.customerId,
-            createdAt: creationDate,
-            userCreatedById: ctx.session.user.id,
-          })
-          .returning({
-            id: schema.ticketTimelineEntries.id,
-            createdAt: schema.ticketTimelineEntries.createdAt,
-          })
-          .then((res) => res[0]);
-
-        if (!newChat) {
-          tx.rollback();
-          return;
-        }
-
-        await tx
-          .update(schema.tickets)
-          .set({
-            statusDetail: TicketStatusDetail.Replied,
-            statusChangedAt: newChat.createdAt,
-            statusChangedById: ctx.session.user.id,
-            updatedAt: newChat.createdAt,
-            updatedById: ctx.session.user.id,
-          })
-          .where(eq(schema.tickets.id, input.ticketId));
-
-        return {
-          id: newChat.id,
-        };
-      });
+      return await ticketService.sendChat(
+        input.ticketId,
+        input.text,
+        ctx.session.user.id
+      );
     }),
 
   sendNote: protectedProcedure
@@ -621,58 +278,11 @@ export const ticketRouter = createTRPCRouter({
         )
     )
     .mutation(async ({ ctx, input }) => {
-      const ticket = await ctx.db.query.tickets.findFirst({
-        where: eq(schema.tickets.id, input.ticketId),
-      });
-
-      if (!ticket)
-        throw new TRPCError({
-          code: 'BAD_REQUEST',
-          message: 'ticket_not_found',
-        });
-
-      const mentionIds = await extractMentions(input.rawContent);
-
-      return await ctx.db.transaction(async (tx) => {
-        const creationDate = new Date();
-
-        const newNote = await tx
-          .insert(schema.ticketTimelineEntries)
-          .values({
-            ticketId: input.ticketId,
-            type: TicketTimelineEntryType.Note,
-            entry: {
-              text: input.text,
-              rawContent: input.rawContent,
-            } satisfies TicketNote,
-            customerId: ticket.customerId,
-            createdAt: creationDate,
-            userCreatedById: ctx.session.user.id,
-          })
-          .returning({
-            id: schema.ticketTimelineEntries.id,
-            createdAt: schema.ticketTimelineEntries.createdAt,
-          })
-          .then((res) => res[0]);
-
-        if (!newNote) {
-          tx.rollback();
-          return;
-        }
-
-        if (mentionIds.length > 0) {
-          await tx.insert(schema.ticketMentions).values(
-            mentionIds.map((mentionId) => ({
-              ticketTimelineEntryId: newNote.id,
-              userId: mentionId,
-              ticketId: ticket.id,
-            }))
-          );
-        }
-
-        return {
-          id: newNote.id,
-        };
-      });
+      return await ticketService.sendNote(
+        input.ticketId,
+        input.text,
+        input.rawContent,
+        ctx.session.user.id
+      );
     }),
 });

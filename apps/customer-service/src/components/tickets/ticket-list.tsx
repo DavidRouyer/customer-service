@@ -5,6 +5,7 @@ import { PartyPopper } from 'lucide-react';
 import { useInView } from 'react-intersection-observer';
 import { FormattedMessage } from 'react-intl';
 
+import { SortDirection } from '@cs/api/src/entities/ticket';
 import { TicketFilter, TicketStatus } from '@cs/lib/tickets';
 
 import { TicketListItem } from '~/components/tickets/ticket-list-item';
@@ -20,9 +21,11 @@ export const TicketList: FC<{
 
   const [data, allTicketsQuery] = api.ticket.all.useSuspenseInfiniteQuery(
     {
-      filter: filter,
       status: status,
-      orderBy: orderBy,
+      sortBy: {
+        createdAt:
+          orderBy === 'newest' ? SortDirection.DESC : SortDirection.ASC,
+      },
     },
     {
       getNextPageParam(lastPage) {
