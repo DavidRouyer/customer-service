@@ -602,8 +602,8 @@ __metadata:
     "@neondatabase/serverless": "npm:^0.6.1"
     "@types/ws": "npm:^8.5.10"
     dotenv-cli: "npm:^7.3.0"
-    drizzle-kit: "npm:^0.20.7"
-    drizzle-orm: "npm:^0.29.1"
+    drizzle-kit: "npm:^0.20.8"
+    drizzle-orm: "npm:^0.29.2"
     eslint: "npm:^8.56.0"
     lexical: "npm:^0.12.5"
     prettier: "npm:^3.1.1"
@@ -4906,9 +4906,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"drizzle-kit@npm:^0.20.7":
-  version: 0.20.7
-  resolution: "drizzle-kit@npm:0.20.7"
+"drizzle-kit@npm:^0.20.8":
+  version: 0.20.8
+  resolution: "drizzle-kit@npm:0.20.8"
   dependencies:
     "@drizzle-team/studio": "npm:^0.0.35"
     "@esbuild-kit/esm-loader": "npm:^2.5.5"
@@ -4926,13 +4926,13 @@ __metadata:
     zod: "npm:^3.20.2"
   bin:
     drizzle-kit: bin.cjs
-  checksum: 68c3c6b62170e4e43502f3bbb52dfe25df4cebdd2b9b27344f0b7376f655241c873335d842c6baa89b1f89d52e999fa2ac21e9a2ef69ba670c1425e67a8a327b
+  checksum: 1cc12f5e1b403b991df57400dcdac9637e2f2ecf1d76a59846b68e6ea8d94ec41997dfc6d7620a0998b14d1db196196afe03ca10ebd8c20dfd8a6913319efd7f
   languageName: node
   linkType: hard
 
-"drizzle-orm@npm:^0.29.1":
-  version: 0.29.1
-  resolution: "drizzle-orm@npm:0.29.1"
+"drizzle-orm@npm:^0.29.2":
+  version: 0.29.2
+  resolution: "drizzle-orm@npm:0.29.2"
   peerDependencies:
     "@aws-sdk/client-rds-data": ">=3"
     "@cloudflare/workers-types": ">=3"
@@ -4942,15 +4942,18 @@ __metadata:
     "@planetscale/database": ">=1"
     "@types/better-sqlite3": "*"
     "@types/pg": "*"
+    "@types/react": ">=18"
     "@types/sql.js": "*"
     "@vercel/postgres": "*"
     better-sqlite3: ">=7"
     bun-types: "*"
+    expo-sqlite: ">=13.2.0"
     knex: "*"
     kysely: "*"
     mysql2: ">=2"
     pg: ">=8"
     postgres: ">=3"
+    react: ">=18"
     sql.js: ">=1"
     sqlite3: ">=5"
   peerDependenciesMeta:
@@ -4992,7 +4995,7 @@ __metadata:
       optional: true
     sqlite3:
       optional: true
-  checksum: 890b8a336325414b708476e111f50d229ac0137ad9aba929cdbfb9338720770f9a8d192a71682b3d207305820d0f362195fcc619ab65973d409ec0ca95eeee0e
+  checksum: 80e527db660adf4044f9a9e5999c1cfb12bd9e5e78818c8ca476811325b0d1244a00d7be724fd8d6d00f0c9649d7a013b21c55119d31debd7e011bc1f01376e7
   languageName: node
   linkType: hard
 
