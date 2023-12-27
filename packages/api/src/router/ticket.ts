@@ -1,26 +1,12 @@
 import { z } from 'zod';
 
-import {
-  and,
-  db,
-  desc,
-  eq,
-  inArray,
-  isNotNull,
-  ne,
-  not,
-  schema,
-  SQL,
-  sql,
-} from '@cs/database';
+import { and, desc, inArray, schema } from '@cs/database';
 import { TicketPriority, TicketStatus } from '@cs/lib/tickets';
 import { TicketTimelineEntryType } from '@cs/lib/ticketTimelineEntries';
 
 import { SortDirection } from '../entities/ticket';
 import TicketService from '../services/ticket';
 import { createTRPCRouter, protectedProcedure } from '../trpc';
-
-const ticketService = new TicketService(db);
 
 export const ticketRouter = createTRPCRouter({
   all: protectedProcedure
@@ -42,7 +28,9 @@ export const ticketRouter = createTRPCRouter({
         limit: z.number().default(50),
       })
     )
-    .query(async ({ input }) => {
+    .query(async ({ ctx, input }) => {
+      const ticketService: TicketService =
+        ctx.container.resolve('ticketService');
       const tickets = await ticketService.list(
         {
           status: input.status,
@@ -82,69 +70,11 @@ export const ticketRouter = createTRPCRouter({
       return { data: tickets, nextCursor };
     }),
 
-  stats: protectedProcedure.query(async ({ ctx }) => {
-    const users = await ctx.db.query.users.findMany({
-      where: and(
-        isNotNull(schema.users.id),
-        ne(schema.users.id, ctx.session.user.id)
-      ),
-    });
-
-    const sqlChunks: SQL[] = [];
-
-    sqlChunks.push(sql`SELECT
-    count(*)::int AS "total",
-    sum(case when ${schema.tickets.status} = ${
-      TicketStatus.Open
-    } then 1 else 0 end)::int AS "open",
-    sum(case when ${schema.tickets.status} = ${
-      TicketStatus.Done
-    } then 1 else 0 end)::int AS "done",
-    sum(case when (${schema.tickets.status} = ${TicketStatus.Open} AND ${
-      schema.tickets.assignedToId
-    } IS NULL) then 1 else 0 end)::int AS "unassigned",
-    sum(case when (${schema.tickets.status} = ${TicketStatus.Open} AND ${
-      schema.tickets.assignedToId
-    } = ${ctx.session.user.id ?? 0}) then 1 else 0 end)::int AS "assignedToMe",
-    (SELECT
-      count(DISTINCT ${schema.tickets.id})::int AS "total"
-      FROM ${schema.tickets}
-      LEFT JOIN ${schema.ticketMentions} ON ${
-        schema.ticketMentions.ticketId
-      } = ${schema.tickets.id}
-      WHERE ${schema.ticketMentions.userId} = ${
-        ctx.session.user.id ?? 0
-      }) as "mentions"`);
-
-    for (const user of users) {
-      sqlChunks.push(sql`,`);
-      sqlChunks.push(
-        sql`sum(case when (${schema.tickets.status} = ${
-          TicketStatus.Open
-        } AND ${schema.tickets.assignedToId} = ${
-          user?.id ?? 0
-        }) then 1 else 0 end)::int AS "${sql.raw(`assignedTo${user.id}`)}"`
-      );
-    }
-    sqlChunks.push(sql`FROM ${schema.tickets}`);
-
-    const results = await ctx.db.execute<
-      {
-        total: number;
-        open: number;
-        done: number;
-        unassigned: number;
-        assignedToMe: number;
-        mentions: number;
-      } & Record<string, number>
-    >(sql.join(sqlChunks, sql.raw(' ')));
-
-    return results.rows[0];
-  }),
-
   byId: protectedProcedure
     .input(z.object({ id: z.string() }))
-    .query(async ({ input }) => {
+    .query(async ({ ctx, input }) => {
+      const ticketService: TicketService =
+        ctx.container.resolve('ticketService');
       return await ticketService.retrieve(input.id, {
         relations: {
           createdBy: true,
@@ -159,19 +89,20 @@ export const ticketRouter = createTRPCRouter({
 
   byCustomerId: protectedProcedure
     .input(z.object({ customerId: z.string(), excludeId: z.string() }))
-    .query(({ ctx, input }) => {
-      return ctx.db.query.tickets.findMany({
-        orderBy: desc(schema.tickets.createdAt),
-        where: and(
-          eq(schema.tickets.customerId, input.customerId),
-          not(eq(schema.tickets.id, input.excludeId))
-        ),
+    .query(async ({ ctx, input }) => {
+      const ticketService: TicketService =
+        ctx.container.resolve('ticketService');
+      return await ticketService.list({
+        customerId: input.customerId,
+        id: { notIn: [input.excludeId] },
       });
     }),
 
   assign: protectedProcedure
     .input(z.object({ id: z.string(), userId: z.string() }))
     .mutation(async ({ ctx, input }) => {
+      const ticketService: TicketService =
+        ctx.container.resolve('ticketService');
       return await ticketService.assign(
         input.id,
         input.userId,
@@ -182,6 +113,8 @@ export const ticketRouter = createTRPCRouter({
   unassign: protectedProcedure
     .input(z.object({ id: z.string() }))
     .mutation(async ({ ctx, input }) => {
+      const ticketService: TicketService =
+        ctx.container.resolve('ticketService');
       return await ticketService.unassign(input.id, ctx.session.user.id);
     }),
 
@@ -198,6 +131,8 @@ export const ticketRouter = createTRPCRouter({
       })
     )
     .mutation(async ({ ctx, input }) => {
+      const ticketService: TicketService =
+        ctx.container.resolve('ticketService');
       return await ticketService.changePriority(
         input.id,
         input.priority,
@@ -208,12 +143,16 @@ export const ticketRouter = createTRPCRouter({
   markAsDone: protectedProcedure
     .input(z.object({ id: z.string() }))
     .mutation(async ({ ctx, input }) => {
+      const ticketService: TicketService =
+        ctx.container.resolve('ticketService');
       return await ticketService.markAsDone(input.id, ctx.session.user.id);
     }),
 
   markAsOpen: protectedProcedure
     .input(z.object({ id: z.string() }))
     .mutation(async ({ ctx, input }) => {
+      const ticketService: TicketService =
+        ctx.container.resolve('ticketService');
       return await ticketService.markAsOpen(input.id, ctx.session.user.id);
     }),
 
@@ -232,6 +171,8 @@ export const ticketRouter = createTRPCRouter({
       })
     )
     .mutation(async ({ ctx, input }) => {
+      const ticketService: TicketService =
+        ctx.container.resolve('ticketService');
       return ticketService.create({
         ...input,
         createdById: ctx.session.user.id,
@@ -247,6 +188,8 @@ export const ticketRouter = createTRPCRouter({
       })
     )
     .mutation(async ({ ctx, input }) => {
+      const ticketService: TicketService =
+        ctx.container.resolve('ticketService');
       return await ticketService.sendChat(
         input.ticketId,
         input.text,
@@ -278,6 +221,8 @@ export const ticketRouter = createTRPCRouter({
         )
     )
     .mutation(async ({ ctx, input }) => {
+      const ticketService: TicketService =
+        ctx.container.resolve('ticketService');
       return await ticketService.sendNote(
         input.ticketId,
         input.text,

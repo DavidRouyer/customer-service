@@ -1,0 +1,183 @@
+import {
+  asc,
+  DataSource,
+  eq,
+  inArray,
+  InferSelectModel,
+  schema,
+} from '@cs/database';
+import {
+  TicketAssignmentChanged,
+  TicketChat,
+  TicketLabelsChanged,
+  TicketNote,
+  TicketPriorityChanged,
+  TicketStatusChanged,
+  TicketTimelineEntryType,
+} from '@cs/lib/ticketTimelineEntries';
+import { User } from '@cs/lib/users';
+
+export type TicketAssignmentChangedWithData = {
+  oldAssignedTo?: User | null;
+  newAssignedTo?: User | null;
+} & TicketAssignmentChanged;
+
+export type TicketLabelsChangedWithData = {
+  oldLabels?: (InferSelectModel<typeof schema.labels> & {
+    labelType: InferSelectModel<typeof schema.labelTypes>;
+  })[];
+  newLabels?: (InferSelectModel<typeof schema.labels> & {
+    labelType: InferSelectModel<typeof schema.labelTypes>;
+  })[];
+} & TicketLabelsChanged;
+
+export default class TicketTimelineService {
+  private readonly dataSource: DataSource;
+
+  constructor({ dataSource }: { dataSource: DataSource }) {
+    this.dataSource = dataSource;
+  }
+
+  async list(ticketId: string) {
+    const ticketTimelineEntries =
+      await this.dataSource.query.ticketTimelineEntries.findMany({
+        orderBy: asc(schema.ticketTimelineEntries.createdAt),
+        where: eq(schema.ticketTimelineEntries.ticketId, ticketId),
+        with: {
+          customerCreatedBy: true,
+          userCreatedBy: {
+            columns: {
+              id: true,
+              email: true,
+              name: true,
+              image: true,
+            },
+          },
+        },
+      });
+    const augmentedTicketTimelineEntries: (Omit<
+      (typeof ticketTimelineEntries)[0],
+      'entry'
+    > & {
+      entry:
+        | TicketAssignmentChangedWithData
+        | TicketChat
+        | TicketLabelsChangedWithData
+        | TicketNote
+        | TicketPriorityChanged
+        | TicketStatusChanged
+        | null;
+    })[] = [];
+
+    const usersToFetch = new Set<string>();
+    const labelsToFetch = new Set<string>();
+    ticketTimelineEntries.forEach((ticketTimelineEntry) => {
+      if (
+        ticketTimelineEntry.type === TicketTimelineEntryType.AssignmentChanged
+      ) {
+        const extraInfo = ticketTimelineEntry.entry as TicketAssignmentChanged;
+        if (extraInfo.oldAssignedToId !== null)
+          usersToFetch.add(extraInfo.oldAssignedToId);
+        if (extraInfo.newAssignedToId !== null)
+          usersToFetch.add(extraInfo.newAssignedToId);
+      }
+      if (ticketTimelineEntry.type === TicketTimelineEntryType.LabelsChanged) {
+        const extraInfo = ticketTimelineEntry.entry as TicketLabelsChanged;
+        extraInfo.oldLabelIds.forEach((labelId) => {
+          labelsToFetch.add(labelId);
+        });
+        extraInfo.newLabelIds.forEach((labelId) => {
+          labelsToFetch.add(labelId);
+        });
+      }
+    });
+
+    const users =
+      usersToFetch.size > 0
+        ? await this.dataSource.query.users.findMany({
+            columns: {
+              id: true,
+              email: true,
+              name: true,
+              image: true,
+            },
+            where: inArray(schema.users.id, [...usersToFetch]),
+          })
+        : [];
+
+    const labels =
+      labelsToFetch.size > 0
+        ? await this.dataSource.query.labels.findMany({
+            where: inArray(schema.labelTypes.id, [...labelsToFetch]),
+            with: { labelType: true },
+          })
+        : [];
+
+    ticketTimelineEntries.forEach((ticketTimelineEntry) => {
+      switch (ticketTimelineEntry.type) {
+        case TicketTimelineEntryType.AssignmentChanged:
+          augmentedTicketTimelineEntries.push({
+            ...ticketTimelineEntry,
+            entry: {
+              ...(ticketTimelineEntry.entry as TicketAssignmentChanged),
+              oldAssignedTo:
+                users.find(
+                  (user) =>
+                    user.id ===
+                    (ticketTimelineEntry.entry as TicketAssignmentChanged)
+                      .oldAssignedToId
+                ) ?? null,
+              newAssignedTo:
+                users.find(
+                  (user) =>
+                    user.id ===
+                    (ticketTimelineEntry.entry as TicketAssignmentChanged)
+                      .newAssignedToId
+                ) ?? null,
+            },
+          });
+          break;
+        case TicketTimelineEntryType.Note:
+          augmentedTicketTimelineEntries.push({
+            ...ticketTimelineEntry,
+            entry: ticketTimelineEntry.entry as TicketNote,
+          });
+          break;
+        case TicketTimelineEntryType.LabelsChanged:
+          augmentedTicketTimelineEntries.push({
+            ...ticketTimelineEntry,
+            entry: {
+              ...(ticketTimelineEntry.entry as TicketLabelsChanged),
+              oldLabels: labels.filter((label) =>
+                (
+                  ticketTimelineEntry.entry as TicketLabelsChanged
+                ).oldLabelIds.includes(label.id)
+              ),
+              newLabels: labels.filter((label) =>
+                (
+                  ticketTimelineEntry.entry as TicketLabelsChanged
+                ).newLabelIds.includes(label.id)
+              ),
+            },
+          });
+          break;
+        case TicketTimelineEntryType.PriorityChanged:
+          augmentedTicketTimelineEntries.push({
+            ...ticketTimelineEntry,
+            entry: ticketTimelineEntry.entry as TicketPriorityChanged,
+          });
+          break;
+        case TicketTimelineEntryType.StatusChanged:
+          augmentedTicketTimelineEntries.push({
+            ...ticketTimelineEntry,
+            entry: ticketTimelineEntry.entry as TicketStatusChanged,
+          });
+          break;
+        default:
+          augmentedTicketTimelineEntries.push({ ...ticketTimelineEntry });
+      }
+    });
+
+    return augmentedTicketTimelineEntries;
+  }
+}

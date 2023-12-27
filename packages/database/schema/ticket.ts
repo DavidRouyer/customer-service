@@ -11,8 +11,8 @@ import {
 import { users } from './auth';
 import { customers } from './customer';
 import { labels } from './label';
-import { ticketMentions } from './ticketMentions';
-import { ticketTimelineEntries } from './ticketTimelineEntry';
+import { ticketMentions } from './ticket-mentions';
+import { ticketTimelineEntries } from './ticket-timeline-entry';
 
 export const ticketStatus = pgEnum('ticketStatus', [
   TicketStatus.Open,

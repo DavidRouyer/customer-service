@@ -79,6 +79,7 @@ async function main() {
     email: 'courtney.henry@example.com',
     avatarUrl:
       'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
+    createdById: botUser.id,
   });
 
   const tomUser = await db
@@ -111,6 +112,7 @@ async function main() {
     email: 'lawrence.brooks@example.com',
     avatarUrl:
       'https://images.unsplash.com/photo-1513910367299-bce8d8a0ebf6?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
+    createdById: botUser.id,
   });
 
   const leslie = await db
@@ -124,6 +126,7 @@ async function main() {
       phone: '+33606060606',
       language: 'fr_FR',
       timezone: 'Europe/Paris',
+      createdById: botUser.id,
     })
     .returning({ id: schema.customers.id })
     .then((res) => res[0]);
@@ -306,6 +309,7 @@ async function main() {
       email: 'michael.foster@example.com',
       avatarUrl:
         'https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
+      createdById: botUser.id,
     })
     .returning({ id: schema.tickets.id })
     .then((res) => res[0]);
@@ -366,6 +370,7 @@ async function main() {
       email: 'dries.vincent@example.com',
       avatarUrl:
         'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
+      createdById: botUser.id,
     })
     .returning({ id: schema.customers.id })
     .then((res) => res[0]);
@@ -423,6 +428,7 @@ async function main() {
         'https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
       language: 'en_GB',
       timezone: 'Europe/London',
+      createdById: botUser.id,
     })
     .returning({ id: schema.customers.id })
     .then((res) => res[0]);

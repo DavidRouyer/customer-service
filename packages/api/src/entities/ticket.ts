@@ -5,7 +5,13 @@ export enum SortDirection {
   'DESC' = 'DESC',
 }
 
-export type FilterOperator<T> = { lt: T } | { gt: T } | { lte: T } | { gte: T };
+export type InclusionFilterOperator<T> = { in: T[] } | { notIn: T[] };
+
+export type QuantityFilterOperator<T> =
+  | { lt: T }
+  | { gt: T }
+  | { lte: T }
+  | { gte: T };
 
 export type Ticket = InferSelectModel<typeof schema.tickets>;
 export type TicketRelations = NonNullable<
@@ -16,9 +22,9 @@ export type TicketSort =
   | { priority: SortDirection }
   | { createdAt: SortDirection };
 
-export type WithConfig<TRelations> = {
+export type WithConfig<TRelations, TSort> = {
   skip?: string;
   take?: number;
   relations: TRelations;
-  sortBy?: TicketSort;
+  sortBy?: TSort;
 };

@@ -3,7 +3,7 @@ import { pgTable, unique, varchar } from 'drizzle-orm/pg-core';
 
 import { generateEntityId } from '@cs/lib/generate-entity-id';
 
-import { labelTypes } from './labelType';
+import { labelTypes } from './label-type';
 import { tickets } from './ticket';
 
 export const labels = pgTable(

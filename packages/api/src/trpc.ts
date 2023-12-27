@@ -7,12 +7,19 @@
  * The pieces you will need to use are documented accordingly near the end
  */
 import { initTRPC, TRPCError } from '@trpc/server';
+import { asClass, asValue, createContainer } from 'awilix';
 import superjson from 'superjson';
 import { ZodError } from 'zod';
 
 import { auth } from '@cs/auth';
 import type { Session } from '@cs/auth';
 import { db } from '@cs/database';
+
+import CustomerService from './services/customer';
+import LabelTypeService from './services/label-type';
+import TicketService from './services/ticket';
+import TicketTimelineService from './services/ticket-timeline';
+import UserService from './services/user';
 
 /**
  * 1. CONTEXT
@@ -27,6 +34,17 @@ type CreateContextOptions = {
   session: Session | null;
 };
 
+const container = createContainer();
+container.register({
+  dataSource: asValue(db),
+  customerService: asClass(CustomerService).scoped(),
+  labelTypeService: asClass(LabelTypeService).scoped(),
+  labelService: asClass(LabelTypeService).scoped(),
+  ticketService: asClass(TicketService).scoped(),
+  ticketTimelineService: asClass(TicketTimelineService).scoped(),
+  userService: asClass(UserService).scoped(),
+});
+
 /**
  * This helper generates the "internals" for a tRPC context. If you need to use
  * it, you can export it from here
@@ -39,7 +57,7 @@ type CreateContextOptions = {
 const createInnerTRPCContext = (opts: CreateContextOptions) => {
   return {
     session: opts.session,
-    db,
+    container,
   };
 };
 

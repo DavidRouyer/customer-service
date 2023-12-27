@@ -12,6 +12,7 @@ import {
   isNull,
   lt,
   lte,
+  notInArray,
   schema,
 } from '@cs/database';
 import { extractMentions } from '@cs/lib/editor';
@@ -30,26 +31,28 @@ import {
 } from '@cs/lib/ticketTimelineEntries';
 
 import {
-  FilterOperator,
+  InclusionFilterOperator,
+  QuantityFilterOperator,
   SortDirection,
   Ticket,
   TicketRelations,
+  TicketSort,
   WithConfig,
 } from '../entities/ticket';
 import KyakuError from '../kyaku-error';
 
 export default class TicketService {
-  private db: DataSource;
+  private readonly dataSource: DataSource;
 
-  constructor(db: DataSource) {
-    this.db = db;
+  constructor({ dataSource }: { dataSource: DataSource }) {
+    this.dataSource = dataSource;
   }
 
-  async retrieve<TRelations extends TicketRelations>(
+  async retrieve(
     ticketId: string,
-    config: WithConfig<TRelations> = { relations: {} as TRelations }
+    config: WithConfig<TicketRelations, TicketSort> = { relations: {} }
   ) {
-    const ticket = await this.db.query.tickets.findFirst({
+    const ticket = await this.dataSource.query.tickets.findFirst({
       where: eq(schema.tickets.id, ticketId),
       with: config.relations,
     });
@@ -60,27 +63,35 @@ export default class TicketService {
     return ticket;
   }
 
-  async list<TRelations extends TicketRelations>(
+  async list(
     filters: {
-      status?: Ticket['status'];
       assignedToId?: NonNullable<Ticket['assignedToId']>[] | null;
-      createdAt?: FilterOperator<Ticket['createdAt']>;
+      createdAt?: QuantityFilterOperator<Ticket['createdAt']>;
+      customerId?: Ticket['customerId'];
+      id?: InclusionFilterOperator<Ticket['id']>;
+      status?: Ticket['status'];
     },
-    config: WithConfig<TRelations> = { relations: {} as TRelations }
+    config: WithConfig<TicketRelations, TicketSort> = { relations: {} }
   ) {
     const whereClause = and(
-      filters.status ? eq(schema.tickets.status, filters.status) : undefined,
       filters.assignedToId !== undefined
         ? filters.assignedToId !== null
           ? inArray(schema.tickets.assignedToId, filters.assignedToId)
           : isNull(schema.tickets.assignedToId)
         : undefined,
-      filters.createdAt
-        ? filterOperator(schema.tickets.createdAt, filters.createdAt)
+      filters.customerId
+        ? eq(schema.tickets.customerId, filters.customerId)
         : undefined,
+      filters.createdAt
+        ? quantityFilterOperator(schema.tickets.createdAt, filters.createdAt)
+        : undefined,
+      filters.id
+        ? inclusionFilterOperator(schema.tickets.id, filters.id)
+        : undefined,
+      filters.status ? eq(schema.tickets.status, filters.status) : undefined,
       config.skip ? lt(schema.tickets.id, config.skip) : undefined
     );
-    return await this.db.query.tickets.findMany({
+    return await this.dataSource.query.tickets.findMany({
       where: whereClause,
       with: config.relations,
       limit: config.take,
@@ -92,7 +103,7 @@ export default class TicketService {
               ? sortDirection(config.sortBy.createdAt)(schema.tickets.createdAt)
               : undefined
           : undefined,
-        config.skip ? desc(schema.tickets.createdAt) : undefined
+        config.skip ? desc(schema.tickets.id) : undefined
       ),
     });
   }
@@ -110,7 +121,7 @@ export default class TicketService {
       | 'updatedAt'
     >
   ) {
-    await this.db.transaction(async (tx) => {
+    await this.dataSource.transaction(async (tx) => {
       const creationDate = new Date();
 
       const newTicket = await tx
@@ -141,7 +152,7 @@ export default class TicketService {
   async assign(ticketId: string, assignedToId: string, userId: string) {
     const ticket = await this.retrieve(ticketId);
 
-    return await this.db.transaction(async (tx) => {
+    return await this.dataSource.transaction(async (tx) => {
       const updatedTicket = await tx
         .update(schema.tickets)
         .set({
@@ -184,7 +195,7 @@ export default class TicketService {
         `Ticket with id:${ticketId} is not assigned`
       );
 
-    return await this.db.transaction(async (tx) => {
+    return await this.dataSource.transaction(async (tx) => {
       const updatedTicket = await tx
         .update(schema.tickets)
         .set({
@@ -225,7 +236,7 @@ export default class TicketService {
   ) {
     const ticket = await this.retrieve(ticketId);
 
-    return await this.db.transaction(async (tx) => {
+    return await this.dataSource.transaction(async (tx) => {
       const updatedTicket = await tx
         .update(schema.tickets)
         .set({
@@ -268,7 +279,7 @@ export default class TicketService {
         `Ticket with id:${ticketId} is already marked as done`
       );
 
-    return await this.db.transaction(async (tx) => {
+    return await this.dataSource.transaction(async (tx) => {
       const updatedTicket = await tx
         .update(schema.tickets)
         .set({
@@ -314,7 +325,7 @@ export default class TicketService {
         `Ticket with id:${ticketId} is already marked as open`
       );
 
-    return await this.db.transaction(async (tx) => {
+    return await this.dataSource.transaction(async (tx) => {
       const updatedTicket = await tx
         .update(schema.tickets)
         .set({
@@ -354,7 +365,7 @@ export default class TicketService {
   async sendChat(ticketId: string, text: string, userId: string) {
     const ticket = await this.retrieve(ticketId);
 
-    return await this.db.transaction(async (tx) => {
+    return await this.dataSource.transaction(async (tx) => {
       const creationDate = new Date();
 
       const newChat = await tx
@@ -407,7 +418,7 @@ export default class TicketService {
 
     const mentionIds = await extractMentions(rawContent);
 
-    return await this.db.transaction(async (tx) => {
+    return await this.dataSource.transaction(async (tx) => {
       const creationDate = new Date();
 
       const newNote = await tx
@@ -451,13 +462,13 @@ export default class TicketService {
   }
 }
 
-const sortDirection = (sortBy: SortDirection) => {
+export const sortDirection = (sortBy: SortDirection) => {
   return sortBy === SortDirection.ASC ? asc : desc;
 };
 
-const filterOperator = <TCol extends Column>(
+const quantityFilterOperator = <TCol extends Column>(
   column: TCol,
-  operator: FilterOperator<GetColumnData<TCol, 'raw'>>
+  operator: QuantityFilterOperator<GetColumnData<TCol, 'raw'>>
 ) => {
   return 'lt' in operator
     ? lt(column, operator.lt)
@@ -468,4 +479,15 @@ const filterOperator = <TCol extends Column>(
         : 'gte' in operator
           ? gte(column, operator.gte)
           : undefined;
+};
+
+const inclusionFilterOperator = <TCol extends Column>(
+  column: TCol,
+  operator: InclusionFilterOperator<GetColumnData<TCol, 'raw'>>
+) => {
+  return 'in' in operator
+    ? inArray(column, operator.in)
+    : 'notIn' in operator
+      ? notInArray(column, operator.notIn)
+      : undefined;
 };
