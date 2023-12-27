@@ -67,7 +67,7 @@ export const ticketTimelineEntries = pgTable('ticketTimelineEntry', {
   }),
 });
 
-export const ticketActivitiesRelations = relations(
+export const ticketTimelineEntriesRelations = relations(
   ticketTimelineEntries,
   ({ one }) => ({
     customer: one(customers, {

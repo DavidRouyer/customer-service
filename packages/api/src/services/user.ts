@@ -1,6 +1,15 @@
-import { and, DataSource, desc, eq, lt, schema } from '@cs/database';
+import {
+  and,
+  DataSource,
+  desc,
+  eq,
+  inArray,
+  lt,
+  notInArray,
+  schema,
+} from '@cs/database';
 
-import { WithConfig } from '../entities/ticket';
+import { InclusionFilterOperator, WithConfig } from '../entities/ticket';
 import { UserRelations, UserSort } from '../entities/user';
 import KyakuError from '../kyaku-error';
 import { sortDirection } from './ticket';
@@ -27,11 +36,20 @@ export default class UserService {
     return user;
   }
 
-  async list(
-    filters: {},
-    config: WithConfig<UserRelations, UserSort> = { relations: {} }
+  async list<T extends UserRelations>(
+    filters: {
+      id?: InclusionFilterOperator<string>;
+    },
+    config: WithConfig<T, UserSort> = { relations: {} as T }
   ) {
     const whereClause = and(
+      filters.id
+        ? 'in' in filters.id
+          ? inArray(schema.labels.id, filters.id.in)
+          : 'notIn' in filters.id
+            ? notInArray(schema.labels.id, filters.id.notIn)
+            : undefined
+        : undefined,
       config.skip ? lt(schema.users.id, config.skip) : undefined
     );
     return await this.dataSource.query.users.findMany({

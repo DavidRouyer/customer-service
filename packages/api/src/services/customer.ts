@@ -30,8 +30,8 @@ export default class CustomerService {
     return customer;
   }
 
-  async list(
-    config: WithConfig<CustomerRelations, CustomerSort> = { relations: {} }
+  async list<T extends CustomerRelations>(
+    config: WithConfig<T, CustomerSort> = { relations: {} as T }
   ) {
     const whereClause = and(
       config.skip ? lt(schema.customers.id, config.skip) : undefined

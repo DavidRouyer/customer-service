@@ -1,8 +1,8 @@
 import {
-  asc,
+  and,
   DataSource,
+  desc,
   eq,
-  inArray,
   InferSelectModel,
   schema,
 } from '@cs/database';
@@ -16,6 +16,15 @@ import {
   TicketTimelineEntryType,
 } from '@cs/lib/ticketTimelineEntries';
 import { User } from '@cs/lib/users';
+
+import { WithConfig } from '../entities/ticket';
+import {
+  TicketTimelineRelations,
+  TicketTimelineSort,
+} from '../entities/ticket-timeline';
+import LabelService from './label';
+import { sortDirection } from './ticket';
+import UserService from './user';
 
 export type TicketAssignmentChangedWithData = {
   oldAssignedTo?: User | null;
@@ -33,27 +42,44 @@ export type TicketLabelsChangedWithData = {
 
 export default class TicketTimelineService {
   private readonly dataSource: DataSource;
+  private readonly labelService: LabelService;
+  private readonly userService: UserService;
 
-  constructor({ dataSource }: { dataSource: DataSource }) {
+  constructor({
+    dataSource,
+    labelService,
+    userService,
+  }: {
+    dataSource: DataSource;
+    labelService: LabelService;
+    userService: UserService;
+  }) {
     this.dataSource = dataSource;
+    this.labelService = labelService;
+    this.userService = userService;
   }
 
-  async list(ticketId: string) {
+  async list<T extends TicketTimelineRelations>(
+    filters: { ticketId: string },
+    config: WithConfig<T, TicketTimelineSort> = {
+      relations: {} as T,
+    }
+  ) {
     const ticketTimelineEntries =
       await this.dataSource.query.ticketTimelineEntries.findMany({
-        orderBy: asc(schema.ticketTimelineEntries.createdAt),
-        where: eq(schema.ticketTimelineEntries.ticketId, ticketId),
-        with: {
-          customerCreatedBy: true,
-          userCreatedBy: {
-            columns: {
-              id: true,
-              email: true,
-              name: true,
-              image: true,
-            },
-          },
-        },
+        where: eq(schema.ticketTimelineEntries.ticketId, filters.ticketId),
+        with: config.relations,
+        limit: config.take,
+        orderBy: and(
+          config.sortBy
+            ? 'createdAt' in config.sortBy
+              ? sortDirection(config.sortBy.createdAt)(
+                  schema.ticketTimelineEntries.createdAt
+                )
+              : undefined
+            : undefined,
+          config.skip ? desc(schema.tickets.id) : undefined
+        ),
       });
     const augmentedTicketTimelineEntries: (Omit<
       (typeof ticketTimelineEntries)[0],
@@ -94,23 +120,27 @@ export default class TicketTimelineService {
 
     const users =
       usersToFetch.size > 0
-        ? await this.dataSource.query.users.findMany({
-            columns: {
-              id: true,
-              email: true,
-              name: true,
-              image: true,
+        ? await this.userService.list({
+            id: {
+              in: [...usersToFetch],
             },
-            where: inArray(schema.users.id, [...usersToFetch]),
           })
         : [];
 
     const labels =
       labelsToFetch.size > 0
-        ? await this.dataSource.query.labels.findMany({
-            where: inArray(schema.labelTypes.id, [...labelsToFetch]),
-            with: { labelType: true },
-          })
+        ? await this.labelService.list(
+            {
+              id: {
+                in: [...labelsToFetch],
+              },
+            },
+            {
+              relations: {
+                labelType: true,
+              },
+            }
+          )
         : [];
 
     ticketTimelineEntries.forEach((ticketTimelineEntry) => {

@@ -3,9 +3,11 @@ import {
   DataSource,
   desc,
   eq,
+  inArray,
   isNotNull,
   isNull,
   lt,
+  notInArray,
   schema,
 } from '@cs/database';
 
@@ -14,7 +16,7 @@ import {
   LabelTypeRelations,
   LabelTypeSort,
 } from '../entities/label-type';
-import { WithConfig } from '../entities/ticket';
+import { InclusionFilterOperator, WithConfig } from '../entities/ticket';
 import KyakuError from '../kyaku-error';
 import { sortDirection } from './ticket';
 
@@ -61,16 +63,26 @@ export default class LabelTypeService {
     return labelType;
   }
 
-  async list(
+  async list<T extends LabelTypeRelations>(
     filters: {
-      isArchived: boolean;
+      id?: InclusionFilterOperator<string>;
+      isArchived?: boolean;
     },
-    config: WithConfig<LabelTypeRelations, LabelTypeSort> = { relations: {} }
+    config: WithConfig<T, LabelTypeSort> = { relations: {} as T }
   ) {
     const whereClause = and(
-      filters.isArchived
-        ? isNotNull(schema.labelTypes.archivedAt)
-        : isNull(schema.labelTypes.archivedAt),
+      filters.id
+        ? 'in' in filters.id
+          ? inArray(schema.labelTypes.id, filters.id.in)
+          : 'notIn' in filters.id
+            ? notInArray(schema.labelTypes.id, filters.id.notIn)
+            : undefined
+        : undefined,
+      filters.isArchived !== undefined
+        ? filters.isArchived
+          ? isNotNull(schema.labelTypes.archivedAt)
+          : isNull(schema.labelTypes.archivedAt)
+        : undefined,
       config.skip ? lt(schema.labelTypes.id, config.skip) : undefined
     );
     return this.dataSource.query.labelTypes.findMany({

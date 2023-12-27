@@ -1,26 +1,40 @@
-import { and, DataSource, eq, inArray, schema } from '@cs/database';
+import {
+  and,
+  DataSource,
+  desc,
+  eq,
+  inArray,
+  lt,
+  notInArray,
+  schema,
+} from '@cs/database';
 import {
   TicketLabelsChanged,
   TicketTimelineEntryType,
 } from '@cs/lib/ticketTimelineEntries';
 
 import { LabelRelations, LabelSort } from '../entities/label';
-import { WithConfig } from '../entities/ticket';
+import { InclusionFilterOperator, WithConfig } from '../entities/ticket';
 import KyakuError from '../kyaku-error';
+import LabelTypeService from './label-type';
 import TicketService from './ticket';
 
 export default class LabelService {
   private readonly dataSource: DataSource;
+  private readonly labelTypeService: LabelTypeService;
   private readonly ticketService: TicketService;
 
   constructor({
     dataSource,
+    labelTypeService,
     ticketService,
   }: {
     dataSource: DataSource;
+    labelTypeService: LabelTypeService;
     ticketService: TicketService;
   }) {
     this.dataSource = dataSource;
+    this.labelTypeService = labelTypeService;
     this.ticketService = ticketService;
   }
 
@@ -39,11 +53,47 @@ export default class LabelService {
     return label;
   }
 
+  async list<T extends LabelRelations>(
+    filters: {
+      id?: InclusionFilterOperator<string>;
+      ticketId?: string;
+      labelTypeId?: string;
+    },
+    config: WithConfig<T, LabelSort> = {
+      relations: {} as T,
+    }
+  ) {
+    const whereClause = and(
+      filters.id
+        ? 'in' in filters.id
+          ? inArray(schema.labels.id, filters.id.in)
+          : 'notIn' in filters.id
+            ? notInArray(schema.labels.id, filters.id.notIn)
+            : undefined
+        : undefined,
+      filters.ticketId
+        ? eq(schema.labels.ticketId, filters.ticketId)
+        : undefined,
+      filters.labelTypeId
+        ? eq(schema.labels.labelTypeId, filters.labelTypeId)
+        : undefined,
+      config.skip ? lt(schema.labels.id, config.skip) : undefined
+    );
+    return await this.dataSource.query.labels.findMany({
+      where: whereClause,
+      with: config.relations,
+      limit: config.take,
+      orderBy: and(config.skip ? desc(schema.tickets.id) : undefined),
+    });
+  }
+
   async addLabels(ticketId: string, labelTypeIds: string[], userId: string) {
     const ticket = await this.ticketService.retrieve(ticketId);
 
-    const labelTypes = await this.dataSource.query.labelTypes.findMany({
-      where: inArray(schema.labelTypes.id, labelTypeIds),
+    const labelTypes = await this.labelTypeService.list({
+      id: {
+        in: labelTypeIds,
+      },
     });
 
     const missingLabelTypes: string[] = [];

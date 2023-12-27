@@ -63,7 +63,7 @@ export default class TicketService {
     return ticket;
   }
 
-  async list(
+  async list<T extends TicketRelations>(
     filters: {
       assignedToId?: NonNullable<Ticket['assignedToId']>[] | null;
       createdAt?: QuantityFilterOperator<Ticket['createdAt']>;
@@ -71,7 +71,7 @@ export default class TicketService {
       id?: InclusionFilterOperator<Ticket['id']>;
       status?: Ticket['status'];
     },
-    config: WithConfig<TicketRelations, TicketSort> = { relations: {} }
+    config: WithConfig<T, TicketSort> = { relations: {} as T }
   ) {
     const whereClause = and(
       filters.assignedToId !== undefined
