@@ -56,12 +56,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@auth/drizzle-adapter@npm:^0.3.11":
-  version: 0.3.11
-  resolution: "@auth/drizzle-adapter@npm:0.3.11"
+"@auth/drizzle-adapter@npm:^0.3.12":
+  version: 0.3.12
+  resolution: "@auth/drizzle-adapter@npm:0.3.12"
   dependencies:
-    "@auth/core": "npm:0.18.6"
-  checksum: 0bd13961ceb775a8f86636a0f04852eccac6e96006a09e848448a9efdd093a2869436604143bc12f734a4c11676f1dc0ac4c078084886343c4b0af2bdb68bf47
+    "@auth/core": "npm:0.19.0"
+  checksum: 990501e6d22f9741212d7d4c3d0605351696dca3cc9a87cd635cdc123504e2255e7824e69029d02071c2c11ca020deef9b97823f352ee6e6ef3269c040d9d4a4
   languageName: node
   linkType: hard
 
@@ -521,7 +521,7 @@ __metadata:
   resolution: "@cs/auth@workspace:packages/auth"
   dependencies:
     "@auth/core": "npm:^0.19.0"
-    "@auth/drizzle-adapter": "npm:^0.3.11"
+    "@auth/drizzle-adapter": "npm:^0.3.12"
     "@cs/database": "npm:*"
     "@cs/eslint-config": "npm:*"
     "@cs/lib": "npm:*"
