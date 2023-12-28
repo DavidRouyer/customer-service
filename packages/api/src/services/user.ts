@@ -1,13 +1,4 @@
-import {
-  and,
-  DataSource,
-  desc,
-  eq,
-  inArray,
-  lt,
-  notInArray,
-  schema,
-} from '@cs/database';
+import { and, desc, eq, inArray, lt, notInArray, schema } from '@cs/database';
 
 import { InclusionFilterOperator, WithConfig } from '../entities/ticket';
 import { UserRelations, UserSort } from '../entities/user';
