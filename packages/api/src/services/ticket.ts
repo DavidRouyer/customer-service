@@ -2,7 +2,6 @@ import {
   and,
   asc,
   Column,
-  DataSource,
   desc,
   eq,
   GetColumnData,
@@ -40,12 +39,11 @@ import {
   WithConfig,
 } from '../entities/ticket';
 import KyakuError from '../kyaku-error';
+import { BaseService } from './base-service';
 
-export default class TicketService {
-  private readonly dataSource: DataSource;
-
-  constructor({ dataSource }: { dataSource: DataSource }) {
-    this.dataSource = dataSource;
+export default class TicketService extends BaseService {
+  constructor() {
+    super(arguments[0]);
   }
 
   async retrieve<T extends TicketRelations>(

@@ -1,6 +1,5 @@
 import {
   and,
-  DataSource,
   desc,
   eq,
   inArray,
@@ -18,13 +17,12 @@ import {
 } from '../entities/label-type';
 import { InclusionFilterOperator, WithConfig } from '../entities/ticket';
 import KyakuError from '../kyaku-error';
+import { BaseService } from './base-service';
 import { sortDirection } from './ticket';
 
-export default class LabelTypeService {
-  private readonly dataSource: DataSource;
-
-  constructor({ dataSource }: { dataSource: DataSource }) {
-    this.dataSource = dataSource;
+export default class LabelTypeService extends BaseService {
+  constructor() {
+    super(arguments[0]);
   }
 
   async retrieve<T extends LabelTypeRelations>(

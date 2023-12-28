@@ -1,15 +1,14 @@
-import { and, DataSource, desc, eq, lt, schema } from '@cs/database';
+import { and, desc, eq, lt, schema } from '@cs/database';
 
 import { CustomerRelations, CustomerSort } from '../entities/customer';
 import { WithConfig } from '../entities/ticket';
 import KyakuError from '../kyaku-error';
+import { BaseService } from './base-service';
 import { sortDirection } from './ticket';
 
-export default class CustomerService {
-  private readonly dataSource: DataSource;
-
-  constructor({ dataSource }: { dataSource: DataSource }) {
-    this.dataSource = dataSource;
+export default class CustomerService extends BaseService {
+  constructor() {
+    super(arguments[0]);
   }
 
   async retrieve<T extends CustomerRelations>(

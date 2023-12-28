@@ -1,11 +1,4 @@
-import {
-  and,
-  DataSource,
-  desc,
-  eq,
-  InferSelectModel,
-  schema,
-} from '@cs/database';
+import { and, desc, eq, InferSelectModel, schema } from '@cs/database';
 import {
   TicketAssignmentChanged,
   TicketChat,
@@ -22,6 +15,7 @@ import {
   TicketTimelineRelations,
   TicketTimelineSort,
 } from '../entities/ticket-timeline';
+import { BaseService } from './base-service';
 import LabelService from './label';
 import { sortDirection } from './ticket';
 import UserService from './user';
@@ -40,21 +34,18 @@ export type TicketLabelsChangedWithData = {
   })[];
 } & TicketLabelsChanged;
 
-export default class TicketTimelineService {
-  private readonly dataSource: DataSource;
+export default class TicketTimelineService extends BaseService {
   private readonly labelService: LabelService;
   private readonly userService: UserService;
 
   constructor({
-    dataSource,
     labelService,
     userService,
   }: {
-    dataSource: DataSource;
     labelService: LabelService;
     userService: UserService;
   }) {
-    this.dataSource = dataSource;
+    super(arguments[0]);
     this.labelService = labelService;
     this.userService = userService;
   }

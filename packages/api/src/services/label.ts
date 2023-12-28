@@ -1,13 +1,4 @@
-import {
-  and,
-  DataSource,
-  desc,
-  eq,
-  inArray,
-  lt,
-  notInArray,
-  schema,
-} from '@cs/database';
+import { and, desc, eq, inArray, lt, notInArray, schema } from '@cs/database';
 import {
   TicketLabelsChanged,
   TicketTimelineEntryType,
@@ -16,24 +7,22 @@ import {
 import { LabelRelations, LabelSort } from '../entities/label';
 import { InclusionFilterOperator, WithConfig } from '../entities/ticket';
 import KyakuError from '../kyaku-error';
+import { BaseService } from './base-service';
 import LabelTypeService from './label-type';
 import TicketService from './ticket';
 
-export default class LabelService {
-  private readonly dataSource: DataSource;
+export default class LabelService extends BaseService {
   private readonly labelTypeService: LabelTypeService;
   private readonly ticketService: TicketService;
 
   constructor({
-    dataSource,
     labelTypeService,
     ticketService,
   }: {
-    dataSource: DataSource;
     labelTypeService: LabelTypeService;
     ticketService: TicketService;
   }) {
-    this.dataSource = dataSource;
+    super(arguments[0]);
     this.labelTypeService = labelTypeService;
     this.ticketService = ticketService;
   }
