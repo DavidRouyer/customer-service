@@ -38,9 +38,9 @@ export default class LabelService {
     this.ticketService = ticketService;
   }
 
-  async retrieve(
+  async retrieve<T extends LabelRelations>(
     labelId: string,
-    config: WithConfig<LabelRelations, LabelSort> = { relations: {} }
+    config: WithConfig<T, LabelSort> = { relations: {} as T }
   ) {
     const label = await this.dataSource.query.labels.findFirst({
       where: eq(schema.labels.id, labelId),

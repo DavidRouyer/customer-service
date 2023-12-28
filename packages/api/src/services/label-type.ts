@@ -27,9 +27,9 @@ export default class LabelTypeService {
     this.dataSource = dataSource;
   }
 
-  async retrieve(
+  async retrieve<T extends LabelTypeRelations>(
     labelTypeId: string,
-    config: WithConfig<LabelTypeRelations, LabelTypeSort> = { relations: {} }
+    config: WithConfig<T, LabelTypeSort> = { relations: {} as T }
   ) {
     const labelType = await this.dataSource.query.labelTypes.findFirst({
       where: eq(schema.labelTypes.id, labelTypeId),
@@ -45,9 +45,9 @@ export default class LabelTypeService {
     return labelType;
   }
 
-  async retrieveByName(
+  async retrieveByName<T extends LabelTypeRelations>(
     labelTypeName: string,
-    config: WithConfig<LabelTypeRelations, LabelTypeSort> = { relations: {} }
+    config: WithConfig<T, LabelTypeSort> = { relations: {} as T }
   ) {
     const labelType = await this.dataSource.query.labelTypes.findFirst({
       where: eq(schema.labelTypes.name, labelTypeName),

@@ -12,9 +12,9 @@ export default class CustomerService {
     this.dataSource = dataSource;
   }
 
-  async retrieve(
+  async retrieve<T extends CustomerRelations>(
     customerId: string,
-    config: WithConfig<CustomerRelations, CustomerSort> = { relations: {} }
+    config: WithConfig<T, CustomerSort> = { relations: {} as T }
   ) {
     const customer = await this.dataSource.query.customers.findFirst({
       where: eq(schema.customers.id, customerId),

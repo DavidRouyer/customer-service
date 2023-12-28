@@ -48,9 +48,9 @@ export default class TicketService {
     this.dataSource = dataSource;
   }
 
-  async retrieve(
+  async retrieve<T extends TicketRelations>(
     ticketId: string,
-    config: WithConfig<TicketRelations, TicketSort> = { relations: {} }
+    config: WithConfig<T, TicketSort> = { relations: {} as T }
   ) {
     const ticket = await this.dataSource.query.tickets.findFirst({
       where: eq(schema.tickets.id, ticketId),

@@ -21,9 +21,9 @@ export default class UserService {
     this.dataSource = dataSource;
   }
 
-  async retrieve(
+  async retrieve<T extends UserRelations>(
     userId: string,
-    config: WithConfig<UserRelations, UserSort> = { relations: {} }
+    config: WithConfig<T, UserSort> = { relations: {} as T }
   ) {
     const user = await this.dataSource.query.users.findFirst({
       where: eq(schema.users.id, userId),
