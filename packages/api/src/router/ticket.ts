@@ -1,8 +1,6 @@
 import { z } from 'zod';
 
-import { and, desc, inArray, schema } from '@cs/database';
 import { TicketPriority, TicketStatus } from '@cs/lib/tickets';
-import { TicketTimelineEntryType } from '@cs/lib/ticketTimelineEntries';
 
 import { SortDirection } from '../entities/ticket';
 import TicketService from '../services/ticket';
@@ -41,16 +39,7 @@ export const ticketRouter = createTRPCRouter({
           relations: {
             createdBy: true,
             customer: true,
-            timeline: {
-              where: and(
-                inArray(schema.ticketTimelineEntries.type, [
-                  TicketTimelineEntryType.Chat,
-                  TicketTimelineEntryType.Note,
-                ])
-              ),
-              orderBy: desc(schema.ticketTimelineEntries.createdAt),
-              limit: 1,
-            },
+            timeline: true,
             labels: {
               columns: {
                 id: true,

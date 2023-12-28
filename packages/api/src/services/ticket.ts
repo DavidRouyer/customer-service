@@ -53,7 +53,21 @@ export default class TicketService extends BaseService {
   ) {
     const ticket = await this.dataSource.query.tickets.findFirst({
       where: eq(schema.tickets.id, ticketId),
-      with: config.relations,
+      with: {
+        ...config.relations,
+        timeline: config.relations?.timeline
+          ? {
+              where: and(
+                inArray(schema.ticketTimelineEntries.type, [
+                  TicketTimelineEntryType.Chat,
+                  TicketTimelineEntryType.Note,
+                ])
+              ),
+              orderBy: desc(schema.ticketTimelineEntries.createdAt),
+              limit: 1,
+            }
+          : undefined,
+      },
     });
 
     if (!ticket)
@@ -92,7 +106,21 @@ export default class TicketService extends BaseService {
     );
     return await this.dataSource.query.tickets.findMany({
       where: whereClause,
-      with: config.relations,
+      with: {
+        ...config.relations,
+        timeline: config.relations?.timeline
+          ? {
+              where: and(
+                inArray(schema.ticketTimelineEntries.type, [
+                  TicketTimelineEntryType.Chat,
+                  TicketTimelineEntryType.Note,
+                ])
+              ),
+              orderBy: desc(schema.ticketTimelineEntries.createdAt),
+              limit: 1,
+            }
+          : undefined,
+      },
       limit: config.take,
       orderBy: and(
         config.sortBy
