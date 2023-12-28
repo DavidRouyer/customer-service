@@ -45,6 +45,7 @@ export default class TicketTimelineService extends BaseService {
     labelService: LabelService;
     userService: UserService;
   }) {
+    // eslint-disable-next-line prefer-rest-params, @typescript-eslint/no-unsafe-argument
     super(arguments[0]);
     this.labelService = labelService;
     this.userService = userService;

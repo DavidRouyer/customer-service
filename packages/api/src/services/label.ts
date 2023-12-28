@@ -22,6 +22,7 @@ export default class LabelService extends BaseService {
     labelTypeService: LabelTypeService;
     ticketService: TicketService;
   }) {
+    // eslint-disable-next-line prefer-rest-params, @typescript-eslint/no-unsafe-argument
     super(arguments[0]);
     this.labelTypeService = labelTypeService;
     this.ticketService = ticketService;

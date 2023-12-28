@@ -8,6 +8,7 @@ import { sortDirection } from './ticket';
 
 export default class CustomerService extends BaseService {
   constructor() {
+    // eslint-disable-next-line prefer-rest-params, @typescript-eslint/no-unsafe-argument
     super(arguments[0]);
   }
 

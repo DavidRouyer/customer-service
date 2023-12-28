@@ -12,13 +12,13 @@ import {
 import { InclusionFilterOperator, WithConfig } from '../entities/ticket';
 import { UserRelations, UserSort } from '../entities/user';
 import KyakuError from '../kyaku-error';
+import { BaseService } from './base-service';
 import { sortDirection } from './ticket';
 
-export default class UserService {
-  private readonly dataSource: DataSource;
-
-  constructor({ dataSource }: { dataSource: DataSource }) {
-    this.dataSource = dataSource;
+export default class UserService extends BaseService {
+  constructor() {
+    // eslint-disable-next-line prefer-rest-params, @typescript-eslint/no-unsafe-argument
+    super(arguments[0]);
   }
 
   async retrieve<T extends UserRelations>(

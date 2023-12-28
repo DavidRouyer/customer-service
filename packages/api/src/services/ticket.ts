@@ -43,6 +43,7 @@ import { BaseService } from './base-service';
 
 export default class TicketService extends BaseService {
   constructor() {
+    // eslint-disable-next-line prefer-rest-params, @typescript-eslint/no-unsafe-argument
     super(arguments[0]);
   }
 
