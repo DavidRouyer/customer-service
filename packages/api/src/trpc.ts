@@ -16,6 +16,7 @@ import type { Session } from '@cs/auth';
 import { db } from '@cs/database';
 
 import CustomerService from './services/customer';
+import LabelService from './services/label';
 import LabelTypeService from './services/label-type';
 import TicketService from './services/ticket';
 import TicketTimelineService from './services/ticket-timeline';
@@ -39,7 +40,7 @@ container.register({
   dataSource: asValue(db),
   customerService: asClass(CustomerService).scoped(),
   labelTypeService: asClass(LabelTypeService).scoped(),
-  labelService: asClass(LabelTypeService).scoped(),
+  labelService: asClass(LabelService).scoped(),
   ticketService: asClass(TicketService).scoped(),
   ticketTimelineService: asClass(TicketTimelineService).scoped(),
   userService: asClass(UserService).scoped(),
