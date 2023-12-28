@@ -1,4 +1,4 @@
-import { SortDirection } from '@cs/kyaku/types/sort-direction';
+import { SortDirection } from '@cs/kyaku/types';
 
 import CustomerService from '../services/customer';
 import { createTRPCRouter, protectedProcedure } from '../trpc';

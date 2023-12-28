@@ -4,7 +4,7 @@ import {
   TicketLabelsChanged,
   User,
 } from '@cs/kyaku/models';
-import { SortDirection } from '@cs/kyaku/types/sort-direction';
+import { SortDirection } from '@cs/kyaku/types';
 
 export type TicketAssignmentChangedWithData = {
   oldAssignedTo?: User | null;

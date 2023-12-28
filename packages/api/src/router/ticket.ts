@@ -6,7 +6,7 @@ import {
   TicketStatus,
   TicketTimelineEntryType,
 } from '@cs/kyaku/models';
-import { SortDirection } from '@cs/kyaku/types/sort-direction';
+import { SortDirection } from '@cs/kyaku/types';
 
 import TicketService from '../services/ticket';
 import { createTRPCRouter, protectedProcedure } from '../trpc';

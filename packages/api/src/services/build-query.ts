@@ -10,7 +10,7 @@ import {
   lte,
   notInArray,
 } from '@cs/database';
-import { SortDirection } from '@cs/kyaku/types/sort-direction';
+import { SortDirection } from '@cs/kyaku/types';
 
 export type InclusionFilterOperator<T> = { in: T[] } | { notIn: T[] };
 

@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { SortDirection } from '@cs/kyaku/types/sort-direction';
+import { SortDirection } from '@cs/kyaku/types';
 
 import LabelTypeService from '../services/label-type';
 import { createTRPCRouter, protectedProcedure } from '../trpc';

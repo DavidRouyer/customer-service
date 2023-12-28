@@ -6,7 +6,7 @@ import { useInView } from 'react-intersection-observer';
 import { FormattedMessage } from 'react-intl';
 
 import { TicketFilter, TicketStatus } from '@cs/kyaku/models';
-import { SortDirection } from '@cs/kyaku/types/sort-direction';
+import { SortDirection } from '@cs/kyaku/types';
 
 import { TicketListItem } from '~/components/tickets/ticket-list-item';
 import { TicketListItemSkeleton } from '~/components/tickets/ticket-list-item-skeleton';

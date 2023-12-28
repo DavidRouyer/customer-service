@@ -1,5 +1,5 @@
 import { db, InferSelectModel, schema } from '@cs/database';
-import { SortDirection } from '@cs/kyaku/types/sort-direction';
+import { SortDirection } from '@cs/kyaku/types';
 
 export type Ticket = InferSelectModel<typeof schema.tickets>;
 export type TicketRelations = NonNullable<

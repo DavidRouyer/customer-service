@@ -3,7 +3,7 @@
 import { FormattedMessage } from 'react-intl';
 
 import { TicketStatus } from '@cs/kyaku/models';
-import { SortDirection } from '@cs/kyaku/types/sort-direction';
+import { SortDirection } from '@cs/kyaku/types';
 
 import { columns, TicketData } from '~/components/data-table/columns';
 import { DataTable } from '~/components/data-table/data-table';

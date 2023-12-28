@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { SortDirection } from '@cs/kyaku/types/sort-direction';
+import { SortDirection } from '@cs/kyaku/types';
 
 import TicketTimelineService from '../services/ticket-timeline';
 import { createTRPCRouter, protectedProcedure } from '../trpc';
