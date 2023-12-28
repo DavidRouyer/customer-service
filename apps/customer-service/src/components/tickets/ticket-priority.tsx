@@ -2,7 +2,7 @@ import { FC } from 'react';
 import { Shield, ShieldAlert } from 'lucide-react';
 import { FormattedMessage } from 'react-intl';
 
-import { TicketPriority as TicketPriorityType } from '@cs/lib/tickets/TicketPriority';
+import { TicketPriority as TicketPriorityType } from '@cs/kyaku/models';
 
 export const TicketPriority: FC<{
   priority: TicketPriorityType;

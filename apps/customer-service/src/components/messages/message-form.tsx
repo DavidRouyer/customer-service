@@ -7,12 +7,12 @@ import { PaperclipIcon, SmilePlusIcon } from 'lucide-react';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
 import { FormattedMessage } from 'react-intl';
 
-import { parseTextFromEditorState } from '@cs/lib/editor';
+import { parseTextFromEditorState } from '@cs/kyaku/editor';
 import {
   TicketChat,
   TicketNote,
   TicketTimelineEntryType,
-} from '@cs/lib/ticketTimelineEntries';
+} from '@cs/kyaku/models';
 import { Button, cn, Label, Switch } from '@cs/ui';
 
 import { messageModeAtom } from '~/components/messages/message-mode-atom';

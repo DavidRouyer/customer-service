@@ -1,22 +1,20 @@
 import { and, desc, eq, inArray, isNull, lt, schema } from '@cs/database';
-import { extractMentions } from '@cs/lib/editor';
-import {
-  TicketPriority,
-  TicketStatus,
-  TicketStatusDetail,
-} from '@cs/lib/tickets';
+import { extractMentions } from '@cs/kyaku/editor';
 import {
   TicketAssignmentChanged,
   TicketChat,
   TicketNote,
+  TicketPriority,
   TicketPriorityChanged,
+  TicketStatus,
   TicketStatusChanged,
+  TicketStatusDetail,
   TicketTimelineEntryType,
-} from '@cs/lib/ticketTimelineEntries';
+} from '@cs/kyaku/models';
+import { WithConfig } from '@cs/kyaku/types';
+import { KyakuError } from '@cs/kyaku/utils';
 
-import { WithConfig } from '../entities/common';
 import { Ticket, TicketRelations, TicketSort } from '../entities/ticket';
-import KyakuError from '../kyaku-error';
 import { BaseService } from './base-service';
 import {
   inclusionFilterOperator,
@@ -38,21 +36,7 @@ export default class TicketService extends BaseService {
   ) {
     const ticket = await this.dataSource.query.tickets.findFirst({
       where: eq(schema.tickets.id, ticketId),
-      with: {
-        ...config.relations,
-        timeline: config.relations?.timeline
-          ? {
-              where: and(
-                inArray(schema.ticketTimelineEntries.type, [
-                  TicketTimelineEntryType.Chat,
-                  TicketTimelineEntryType.Note,
-                ])
-              ),
-              orderBy: desc(schema.ticketTimelineEntries.createdAt),
-              limit: 1,
-            }
-          : undefined,
-      },
+      with: config.relations,
     });
 
     if (!ticket)
@@ -91,21 +75,7 @@ export default class TicketService extends BaseService {
     );
     return await this.dataSource.query.tickets.findMany({
       where: whereClause,
-      with: {
-        ...config.relations,
-        timeline: config.relations?.timeline
-          ? {
-              where: and(
-                inArray(schema.ticketTimelineEntries.type, [
-                  TicketTimelineEntryType.Chat,
-                  TicketTimelineEntryType.Note,
-                ])
-              ),
-              orderBy: desc(schema.ticketTimelineEntries.createdAt),
-              limit: 1,
-            }
-          : undefined,
-      },
+      with: config.relations,
       limit: config.take,
       orderBy: and(
         config.sortBy

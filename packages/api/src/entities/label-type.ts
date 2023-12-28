@@ -1,6 +1,5 @@
 import { db, InferSelectModel, schema } from '@cs/database';
-
-import { SortDirection } from './sort-direction';
+import { SortDirection } from '@cs/kyaku/types/sort-direction';
 
 export type LabelType = InferSelectModel<typeof schema.labelTypes>;
 export type LabelTypeRelations = NonNullable<

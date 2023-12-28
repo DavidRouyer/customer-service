@@ -476,7 +476,7 @@ __metadata:
     "@cs/auth": "npm:*"
     "@cs/database": "npm:*"
     "@cs/eslint-config": "npm:*"
-    "@cs/lib": "npm:*"
+    "@cs/kyaku": "npm:*"
     "@cs/prettier-config": "npm:*"
     "@cs/tsconfig": "npm:*"
     "@trpc/client": "npm:next"
@@ -499,7 +499,7 @@ __metadata:
     "@auth/drizzle-adapter": "npm:^0.3.16"
     "@cs/database": "npm:*"
     "@cs/eslint-config": "npm:*"
-    "@cs/lib": "npm:*"
+    "@cs/kyaku": "npm:*"
     "@cs/prettier-config": "npm:*"
     "@cs/tsconfig": "npm:*"
     "@types/bcrypt": "npm:^5.0.2"
@@ -523,7 +523,7 @@ __metadata:
     "@cs/auth": "npm:*"
     "@cs/database": "npm:*"
     "@cs/eslint-config": "npm:*"
-    "@cs/lib": "npm:*"
+    "@cs/kyaku": "npm:*"
     "@cs/prettier-config": "npm:*"
     "@cs/tailwind-config": "npm:*"
     "@cs/tsconfig": "npm:*"
@@ -547,6 +547,7 @@ __metadata:
     "@types/react-dom": "npm:^18.2.18"
     autoprefixer: "npm:^10.4.17"
     dotenv-cli: "npm:^7.3.0"
+    eslint: "npm:^8.56.0"
     google-libphonenumber: "npm:^3.2.34"
     jotai: "npm:^2.6.3"
     jsdom: "npm:^24.0.0"
@@ -571,7 +572,7 @@ __metadata:
   resolution: "@cs/database@workspace:packages/database"
   dependencies:
     "@cs/eslint-config": "npm:*"
-    "@cs/lib": "npm:*"
+    "@cs/kyaku": "npm:*"
     "@cs/prettier-config": "npm:*"
     "@cs/tsconfig": "npm:*"
     "@neondatabase/serverless": "npm:^0.7.2"
@@ -606,9 +607,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@cs/lib@npm:*, @cs/lib@workspace:packages/lib":
+"@cs/kyaku@npm:*, @cs/kyaku@workspace:packages/kyaku":
   version: 0.0.0-use.local
-  resolution: "@cs/lib@workspace:packages/lib"
+  resolution: "@cs/kyaku@workspace:packages/kyaku"
   dependencies:
     "@cs/eslint-config": "npm:*"
     "@cs/prettier-config": "npm:*"
@@ -681,6 +682,7 @@ __metadata:
     cmdk: "npm:^0.2.0"
     copy-to-clipboard: "npm:^3.3.3"
     cva: "npm:1.0.0-beta.1"
+    eslint: "npm:^8.56.0"
     tailwind-merge: "npm:^2.2.1"
   languageName: unknown
   linkType: soft

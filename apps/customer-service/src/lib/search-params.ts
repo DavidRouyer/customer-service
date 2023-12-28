@@ -1,6 +1,6 @@
 import { ReadonlyURLSearchParams } from 'next/navigation';
 
-import { TicketFilter } from '@cs/lib/tickets';
+import { TicketFilter } from '@cs/kyaku/models';
 
 export const FILTER_QUERY_PARAM = 'filter';
 export const STATUS_QUERY_PARAM = 'status';

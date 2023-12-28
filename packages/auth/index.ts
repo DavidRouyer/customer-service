@@ -5,7 +5,7 @@ import { DrizzleAdapter } from '@auth/drizzle-adapter';
 import NextAuth from 'next-auth';
 
 import { db, tableCreator } from '@cs/database';
-import { User } from '@cs/lib/users';
+import { User } from '@cs/kyaku/models';
 
 export type { Session } from 'next-auth';
 

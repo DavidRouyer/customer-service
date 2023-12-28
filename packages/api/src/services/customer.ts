@@ -1,8 +1,8 @@
 import { and, desc, eq, lt, schema } from '@cs/database';
+import { WithConfig } from '@cs/kyaku/types';
+import { KyakuError } from '@cs/kyaku/utils';
 
-import { WithConfig } from '../entities/common';
 import { CustomerRelations, CustomerSort } from '../entities/customer';
-import KyakuError from '../kyaku-error';
 import { BaseService } from './base-service';
 import { sortDirection } from './build-query';
 

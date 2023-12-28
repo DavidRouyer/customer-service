@@ -3,7 +3,7 @@
 import { Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 
-import { TicketStatus } from '@cs/lib/tickets';
+import { TicketStatus } from '@cs/kyaku/models';
 
 import { TicketList } from '~/components/tickets/ticket-list';
 import { TicketListHeader } from '~/components/tickets/ticket-list-header';

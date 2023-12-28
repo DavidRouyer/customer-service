@@ -8,7 +8,7 @@
     "@cs/api": "*",
     "@cs/auth": "*",
     "@cs/database": "*",
-    "@cs/lib": "*",
+    "@cs/kyaku": "*",
     "@cs/ui": "*",
     "@lexical/react": "^0.12.6",
     "@tanstack/react-query": "^5.17.19",
@@ -57,6 +57,7 @@
     "@types/react-dom": "^18.2.18",
     "autoprefixer": "^10.4.17",
     "dotenv-cli": "^7.3.0",
+    "eslint": "^8.56.0",
     "jsdom": "^24.0.0",
     "tailwindcss": "^3.4.1"
   },

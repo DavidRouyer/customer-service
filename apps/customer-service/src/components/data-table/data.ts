@@ -7,7 +7,7 @@ import {
   ShieldAlert,
 } from 'lucide-react';
 
-import { TicketPriority, TicketStatus } from '@cs/lib/tickets';
+import { TicketPriority, TicketStatus } from '@cs/kyaku/models';
 
 export const labels = [
   {

@@ -5,7 +5,7 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { CheckCircle2, CircleDot } from 'lucide-react';
 import { FormattedMessage } from 'react-intl';
 
-import { TicketStatus } from '@cs/lib/tickets';
+import { TicketStatus } from '@cs/kyaku/models';
 
 import {
   StatusRadioGroup,

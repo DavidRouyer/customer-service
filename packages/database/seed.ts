@@ -1,14 +1,15 @@
 import { neonConfig } from '@neondatabase/serverless';
 import ws from 'ws';
 
-import { generateEntityId } from '@cs/lib/generate-entity-id';
-import { TicketPriority, TicketStatus } from '@cs/lib/tickets';
 import {
   TicketAssignmentChanged,
   TicketChat,
+  TicketPriority,
+  TicketStatus,
   TicketStatusChanged,
   TicketTimelineEntryType,
-} from '@cs/lib/ticketTimelineEntries';
+} from '@cs/kyaku/models';
+import { generateEntityId } from '@cs/kyaku/utils';
 
 import { db, eq, schema } from '.';
 

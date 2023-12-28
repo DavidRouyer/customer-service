@@ -5,8 +5,8 @@ import { PartyPopper } from 'lucide-react';
 import { useInView } from 'react-intersection-observer';
 import { FormattedMessage } from 'react-intl';
 
-import { SortDirection } from '@cs/api/src/entities/ticket';
-import { TicketFilter, TicketStatus } from '@cs/lib/tickets';
+import { TicketFilter, TicketStatus } from '@cs/kyaku/models';
+import { SortDirection } from '@cs/kyaku/types/sort-direction';
 
 import { TicketListItem } from '~/components/tickets/ticket-list-item';
 import { TicketListItemSkeleton } from '~/components/tickets/ticket-list-item-skeleton';

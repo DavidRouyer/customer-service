@@ -9,14 +9,14 @@ import {
   notInArray,
   schema,
 } from '@cs/database';
+import { WithConfig } from '@cs/kyaku/types';
+import { KyakuError } from '@cs/kyaku/utils';
 
-import { WithConfig } from '../entities/common';
 import {
   LabelType,
   LabelTypeRelations,
   LabelTypeSort,
 } from '../entities/label-type';
-import KyakuError from '../kyaku-error';
 import { BaseService } from './base-service';
 import { InclusionFilterOperator, sortDirection } from './build-query';
 

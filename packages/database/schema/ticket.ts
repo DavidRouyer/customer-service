@@ -1,12 +1,12 @@
 import { relations } from 'drizzle-orm';
 import { pgEnum, pgTable, timestamp, varchar } from 'drizzle-orm/pg-core';
 
-import { generateEntityId } from '@cs/lib/generate-entity-id';
 import {
   TicketPriority,
   TicketStatus,
   TicketStatusDetail,
-} from '@cs/lib/tickets';
+} from '@cs/kyaku/models';
+import { generateEntityId } from '@cs/kyaku/utils/generate-entity-id';
 
 import { users } from './auth';
 import { customers } from './customer';

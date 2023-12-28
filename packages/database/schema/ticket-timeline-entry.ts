@@ -1,7 +1,6 @@
 import { relations } from 'drizzle-orm';
 import { json, pgEnum, pgTable, timestamp, varchar } from 'drizzle-orm/pg-core';
 
-import { generateEntityId } from '@cs/lib/generate-entity-id';
 import {
   TicketAssignmentChanged,
   TicketChat,
@@ -10,7 +9,8 @@ import {
   TicketPriorityChanged,
   TicketStatusChanged,
   TicketTimelineEntryType,
-} from '@cs/lib/ticketTimelineEntries';
+} from '@cs/kyaku/models';
+import { generateEntityId } from '@cs/kyaku/utils/generate-entity-id';
 
 import { users } from './auth';
 import { customers } from './customer';

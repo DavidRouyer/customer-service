@@ -1,4 +1,4 @@
-import { TicketStatus } from '@cs/lib/tickets';
+import { TicketStatus } from '@cs/kyaku/models';
 
 import { api, RouterOutputs } from '~/lib/api';
 

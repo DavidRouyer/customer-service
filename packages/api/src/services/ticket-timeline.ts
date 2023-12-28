@@ -1,4 +1,4 @@
-import { and, desc, eq, InferSelectModel, schema } from '@cs/database';
+import { and, desc, eq, schema } from '@cs/database';
 import {
   TicketAssignmentChanged,
   TicketChat,
@@ -7,11 +7,12 @@ import {
   TicketPriorityChanged,
   TicketStatusChanged,
   TicketTimelineEntryType,
-} from '@cs/lib/ticketTimelineEntries';
-import { User } from '@cs/lib/users';
+} from '@cs/kyaku/models';
+import { WithConfig } from '@cs/kyaku/types';
 
-import { WithConfig } from '../entities/common';
 import {
+  TicketAssignmentChangedWithData,
+  TicketLabelsChangedWithData,
   TicketTimelineRelations,
   TicketTimelineSort,
 } from '../entities/ticket-timeline';
@@ -19,20 +20,6 @@ import { BaseService } from './base-service';
 import { sortDirection } from './build-query';
 import LabelService from './label';
 import UserService from './user';
-
-export type TicketAssignmentChangedWithData = {
-  oldAssignedTo?: User | null;
-  newAssignedTo?: User | null;
-} & TicketAssignmentChanged;
-
-export type TicketLabelsChangedWithData = {
-  oldLabels?: (InferSelectModel<typeof schema.labels> & {
-    labelType: InferSelectModel<typeof schema.labelTypes>;
-  })[];
-  newLabels?: (InferSelectModel<typeof schema.labels> & {
-    labelType: InferSelectModel<typeof schema.labelTypes>;
-  })[];
-} & TicketLabelsChanged;
 
 export default class TicketTimelineService extends BaseService {
   private readonly labelService: LabelService;
@@ -105,8 +92,8 @@ export default class TicketTimelineService extends BaseService {
     > & {
       entry:
         | TicketAssignmentChangedWithData
-        | TicketChat
         | TicketLabelsChangedWithData
+        | TicketChat
         | TicketNote
         | TicketPriorityChanged
         | TicketStatusChanged

@@ -1,4 +1,4 @@
-export default class KyakuError extends Error {
+export class KyakuError extends Error {
   type: string;
 
   constructor(type: string, message: string) {

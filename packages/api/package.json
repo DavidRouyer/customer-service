@@ -14,7 +14,7 @@
   "dependencies": {
     "@cs/auth": "*",
     "@cs/database": "*",
-    "@cs/lib": "*",
+    "@cs/kyaku": "*",
     "@trpc/client": "next",
     "@trpc/server": "next",
     "awilix": "^9.0.0",

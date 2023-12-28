@@ -1,6 +1,24 @@
 import { db, InferSelectModel, schema } from '@cs/database';
+import {
+  TicketAssignmentChanged,
+  TicketLabelsChanged,
+  User,
+} from '@cs/kyaku/models';
+import { SortDirection } from '@cs/kyaku/types/sort-direction';
 
-import { SortDirection } from './sort-direction';
+export type TicketAssignmentChangedWithData = {
+  oldAssignedTo?: User | null;
+  newAssignedTo?: User | null;
+} & TicketAssignmentChanged;
+
+export type TicketLabelsChangedWithData = {
+  oldLabels?: (InferSelectModel<typeof schema.labels> & {
+    labelType: InferSelectModel<typeof schema.labelTypes>;
+  })[];
+  newLabels?: (InferSelectModel<typeof schema.labels> & {
+    labelType: InferSelectModel<typeof schema.labelTypes>;
+  })[];
+} & TicketLabelsChanged;
 
 export type TicketTimeline = InferSelectModel<
   typeof schema.ticketTimelineEntries

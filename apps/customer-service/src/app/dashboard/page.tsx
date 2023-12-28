@@ -2,8 +2,8 @@
 
 import { FormattedMessage } from 'react-intl';
 
-import { SortDirection } from '@cs/api/src/entities/ticket';
-import { TicketStatus } from '@cs/lib/tickets';
+import { TicketStatus } from '@cs/kyaku/models';
+import { SortDirection } from '@cs/kyaku/types/sort-direction';
 
 import { columns, TicketData } from '~/components/data-table/columns';
 import { DataTable } from '~/components/data-table/data-table';

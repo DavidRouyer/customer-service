@@ -34,7 +34,8 @@
   "devDependencies": {
     "@cs/eslint-config": "*",
     "@cs/prettier-config": "*",
-    "@cs/tsconfig": "*"
+    "@cs/tsconfig": "*",
+    "eslint": "^8.56.0"
   },
   "eslintConfig": {
     "root": true,

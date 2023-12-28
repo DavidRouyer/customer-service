@@ -8,7 +8,7 @@ import {
   SerializedTextNode,
 } from 'lexical';
 
-import { SerializedEmojiNode } from '@cs/lib/editor';
+import { SerializedEmojiNode } from '@cs/kyaku/editor';
 
 const deserializeChildren = (children: SerializedLexicalNode[]) => {
   const content: ReactNode[] = [];

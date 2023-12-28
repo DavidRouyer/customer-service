@@ -4,7 +4,7 @@ import { FC } from 'react';
 import Link from 'next/link';
 import { FormattedDate, FormattedMessage } from 'react-intl';
 
-import { TicketStatus } from '@cs/lib/tickets';
+import { TicketStatus } from '@cs/kyaku/models';
 import { Badge } from '@cs/ui';
 
 import { api } from '~/lib/api';

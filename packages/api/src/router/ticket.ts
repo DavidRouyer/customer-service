@@ -1,8 +1,13 @@
 import { z } from 'zod';
 
-import { TicketPriority, TicketStatus } from '@cs/lib/tickets';
+import { and, desc, inArray, schema } from '@cs/database';
+import {
+  TicketPriority,
+  TicketStatus,
+  TicketTimelineEntryType,
+} from '@cs/kyaku/models';
+import { SortDirection } from '@cs/kyaku/types/sort-direction';
 
-import { SortDirection } from '../entities/ticket';
 import TicketService from '../services/ticket';
 import { createTRPCRouter, protectedProcedure } from '../trpc';
 
@@ -39,7 +44,16 @@ export const ticketRouter = createTRPCRouter({
           relations: {
             createdBy: true,
             customer: true,
-            timeline: true,
+            timeline: {
+              where: and(
+                inArray(schema.ticketTimelineEntries.type, [
+                  TicketTimelineEntryType.Chat,
+                  TicketTimelineEntryType.Note,
+                ])
+              ),
+              orderBy: desc(schema.ticketTimelineEntries.createdAt),
+              limit: 1,
+            },
             labels: {
               columns: {
                 id: true,
