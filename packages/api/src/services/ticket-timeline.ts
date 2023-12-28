@@ -81,6 +81,32 @@ export default class TicketTimelineService {
           config.skip ? desc(schema.tickets.id) : undefined
         ),
       });
+
+    const ticketAssigmentChangedEntries = ticketTimelineEntries
+      .filter(
+        (ticketTimelineEntry) =>
+          ticketTimelineEntry.type === TicketTimelineEntryType.AssignmentChanged
+      )
+      .map(
+        (ticketTimelineEntry) =>
+          ticketTimelineEntry.entry as TicketAssignmentChanged
+      );
+
+    const ticketLabelsChangedEntries = ticketTimelineEntries
+      .filter(
+        (ticketTimelineEntry) =>
+          ticketTimelineEntry.type === TicketTimelineEntryType.LabelsChanged
+      )
+      .map(
+        (ticketTimelineEntry) =>
+          ticketTimelineEntry.entry as TicketLabelsChanged
+      );
+
+    const [fetchedUsers, fetchedLabels] = await Promise.all([
+      this.retrieveUsers(ticketAssigmentChangedEntries),
+      this.retrieveLabels(ticketLabelsChangedEntries),
+    ]);
+
     const augmentedTicketTimelineEntries: (Omit<
       (typeof ticketTimelineEntries)[0],
       'entry'
@@ -95,54 +121,6 @@ export default class TicketTimelineService {
         | null;
     })[] = [];
 
-    const usersToFetch = new Set<string>();
-    const labelsToFetch = new Set<string>();
-    ticketTimelineEntries.forEach((ticketTimelineEntry) => {
-      if (
-        ticketTimelineEntry.type === TicketTimelineEntryType.AssignmentChanged
-      ) {
-        const extraInfo = ticketTimelineEntry.entry as TicketAssignmentChanged;
-        if (extraInfo.oldAssignedToId !== null)
-          usersToFetch.add(extraInfo.oldAssignedToId);
-        if (extraInfo.newAssignedToId !== null)
-          usersToFetch.add(extraInfo.newAssignedToId);
-      }
-      if (ticketTimelineEntry.type === TicketTimelineEntryType.LabelsChanged) {
-        const extraInfo = ticketTimelineEntry.entry as TicketLabelsChanged;
-        extraInfo.oldLabelIds.forEach((labelId) => {
-          labelsToFetch.add(labelId);
-        });
-        extraInfo.newLabelIds.forEach((labelId) => {
-          labelsToFetch.add(labelId);
-        });
-      }
-    });
-
-    const users =
-      usersToFetch.size > 0
-        ? await this.userService.list({
-            id: {
-              in: [...usersToFetch],
-            },
-          })
-        : [];
-
-    const labels =
-      labelsToFetch.size > 0
-        ? await this.labelService.list(
-            {
-              id: {
-                in: [...labelsToFetch],
-              },
-            },
-            {
-              relations: {
-                labelType: true,
-              },
-            }
-          )
-        : [];
-
     ticketTimelineEntries.forEach((ticketTimelineEntry) => {
       switch (ticketTimelineEntry.type) {
         case TicketTimelineEntryType.AssignmentChanged:
@@ -151,14 +129,14 @@ export default class TicketTimelineService {
             entry: {
               ...(ticketTimelineEntry.entry as TicketAssignmentChanged),
               oldAssignedTo:
-                users.find(
+                fetchedUsers.find(
                   (user) =>
                     user.id ===
                     (ticketTimelineEntry.entry as TicketAssignmentChanged)
                       .oldAssignedToId
                 ) ?? null,
               newAssignedTo:
-                users.find(
+                fetchedUsers.find(
                   (user) =>
                     user.id ===
                     (ticketTimelineEntry.entry as TicketAssignmentChanged)
@@ -178,12 +156,12 @@ export default class TicketTimelineService {
             ...ticketTimelineEntry,
             entry: {
               ...(ticketTimelineEntry.entry as TicketLabelsChanged),
-              oldLabels: labels.filter((label) =>
+              oldLabels: fetchedLabels.filter((label) =>
                 (
                   ticketTimelineEntry.entry as TicketLabelsChanged
                 ).oldLabelIds.includes(label.id)
               ),
-              newLabels: labels.filter((label) =>
+              newLabels: fetchedLabels.filter((label) =>
                 (
                   ticketTimelineEntry.entry as TicketLabelsChanged
                 ).newLabelIds.includes(label.id)
@@ -209,5 +187,46 @@ export default class TicketTimelineService {
     });
 
     return augmentedTicketTimelineEntries;
+  }
+
+  private async retrieveUsers(entries: TicketAssignmentChanged[]) {
+    const usersToFetch = new Set<string>([
+      ...entries
+        .map((entry) => entry.oldAssignedToId)
+        .flatMap((e) => (e ? [e] : [])),
+      ...entries
+        .map((entry) => entry.newAssignedToId)
+        .flatMap((e) => (e ? [e] : [])),
+    ]);
+
+    return usersToFetch.size > 0
+      ? await this.userService.list({
+          id: {
+            in: [...usersToFetch],
+          },
+        })
+      : [];
+  }
+
+  private async retrieveLabels(entries: TicketLabelsChanged[]) {
+    const labelsToFetch = new Set<string>([
+      ...entries.flatMap((entry) => entry.oldLabelIds),
+      ...entries.flatMap((entry) => entry.newLabelIds),
+    ]);
+
+    return labelsToFetch.size > 0
+      ? await this.labelService.list(
+          {
+            id: {
+              in: [...labelsToFetch],
+            },
+          },
+          {
+            relations: {
+              labelType: true,
+            },
+          }
+        )
+      : [];
   }
 }
