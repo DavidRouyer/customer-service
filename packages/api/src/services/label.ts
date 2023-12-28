@@ -1,8 +1,5 @@
 import { and, desc, eq, inArray, lt, notInArray, schema } from '@cs/database';
-import {
-  TicketLabelsChanged,
-  TicketTimelineEntryType,
-} from '@cs/kyaku/ticket-timeline-entries';
+import { TicketLabelsChanged, TicketTimelineEntryType } from '@cs/kyaku/models';
 import { WithConfig } from '@cs/kyaku/types';
 import { KyakuError } from '@cs/kyaku/utils';
 
