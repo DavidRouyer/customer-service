@@ -1,10 +1,10 @@
 import { and, desc, eq, lt, schema } from '@cs/database';
 
+import { WithConfig } from '../entities/common';
 import { CustomerRelations, CustomerSort } from '../entities/customer';
-import { WithConfig } from '../entities/ticket';
 import KyakuError from '../kyaku-error';
 import { BaseService } from './base-service';
-import { sortDirection } from './ticket';
+import { sortDirection } from './build-query';
 
 export default class CustomerService extends BaseService {
   constructor() {

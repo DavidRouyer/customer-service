@@ -1,10 +1,10 @@
 import { and, desc, eq, inArray, lt, notInArray, schema } from '@cs/database';
 
-import { InclusionFilterOperator, WithConfig } from '../entities/ticket';
+import { WithConfig } from '../entities/common';
 import { UserRelations, UserSort } from '../entities/user';
 import KyakuError from '../kyaku-error';
 import { BaseService } from './base-service';
-import { sortDirection } from './ticket';
+import { InclusionFilterOperator, sortDirection } from './build-query';
 
 export default class UserService extends BaseService {
   constructor() {

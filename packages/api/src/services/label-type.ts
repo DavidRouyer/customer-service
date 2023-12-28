@@ -10,15 +10,15 @@ import {
   schema,
 } from '@cs/database';
 
+import { WithConfig } from '../entities/common';
 import {
   LabelType,
   LabelTypeRelations,
   LabelTypeSort,
 } from '../entities/label-type';
-import { InclusionFilterOperator, WithConfig } from '../entities/ticket';
 import KyakuError from '../kyaku-error';
 import { BaseService } from './base-service';
-import { sortDirection } from './ticket';
+import { InclusionFilterOperator, sortDirection } from './build-query';
 
 export default class LabelTypeService extends BaseService {
   constructor() {

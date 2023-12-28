@@ -1,6 +1,6 @@
 import { db, InferSelectModel, schema } from '@cs/database';
 
-import { SortDirection } from './ticket';
+import { SortDirection } from './sort-direction';
 
 export type TicketTimeline = InferSelectModel<
   typeof schema.ticketTimelineEntries

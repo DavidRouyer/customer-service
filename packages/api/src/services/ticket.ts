@@ -1,19 +1,4 @@
-import {
-  and,
-  asc,
-  Column,
-  desc,
-  eq,
-  GetColumnData,
-  gt,
-  gte,
-  inArray,
-  isNull,
-  lt,
-  lte,
-  notInArray,
-  schema,
-} from '@cs/database';
+import { and, desc, eq, inArray, isNull, lt, schema } from '@cs/database';
 import { extractMentions } from '@cs/lib/editor';
 import {
   TicketPriority,
@@ -29,17 +14,17 @@ import {
   TicketTimelineEntryType,
 } from '@cs/lib/ticketTimelineEntries';
 
-import {
-  InclusionFilterOperator,
-  QuantityFilterOperator,
-  SortDirection,
-  Ticket,
-  TicketRelations,
-  TicketSort,
-  WithConfig,
-} from '../entities/ticket';
+import { WithConfig } from '../entities/common';
+import { Ticket, TicketRelations, TicketSort } from '../entities/ticket';
 import KyakuError from '../kyaku-error';
 import { BaseService } from './base-service';
+import {
+  inclusionFilterOperator,
+  InclusionFilterOperator,
+  quantityFilterOperator,
+  QuantityFilterOperator,
+  sortDirection,
+} from './build-query';
 
 export default class TicketService extends BaseService {
   constructor() {
@@ -488,33 +473,3 @@ export default class TicketService extends BaseService {
     });
   }
 }
-
-export const sortDirection = (sortBy: SortDirection) => {
-  return sortBy === SortDirection.ASC ? asc : desc;
-};
-
-const quantityFilterOperator = <TCol extends Column>(
-  column: TCol,
-  operator: QuantityFilterOperator<GetColumnData<TCol, 'raw'>>
-) => {
-  return 'lt' in operator
-    ? lt(column, operator.lt)
-    : 'gt' in operator
-      ? gt(column, operator.gt)
-      : 'lte' in operator
-        ? lte(column, operator.lte)
-        : 'gte' in operator
-          ? gte(column, operator.gte)
-          : undefined;
-};
-
-const inclusionFilterOperator = <TCol extends Column>(
-  column: TCol,
-  operator: InclusionFilterOperator<GetColumnData<TCol, 'raw'>>
-) => {
-  return 'in' in operator
-    ? inArray(column, operator.in)
-    : 'notIn' in operator
-      ? notInArray(column, operator.notIn)
-      : undefined;
-};

@@ -10,14 +10,14 @@ import {
 } from '@cs/lib/ticketTimelineEntries';
 import { User } from '@cs/lib/users';
 
-import { WithConfig } from '../entities/ticket';
+import { WithConfig } from '../entities/common';
 import {
   TicketTimelineRelations,
   TicketTimelineSort,
 } from '../entities/ticket-timeline';
 import { BaseService } from './base-service';
+import { sortDirection } from './build-query';
 import LabelService from './label';
-import { sortDirection } from './ticket';
 import UserService from './user';
 
 export type TicketAssignmentChangedWithData = {

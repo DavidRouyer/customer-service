@@ -1,4 +1,4 @@
-import { SortDirection } from '../entities/ticket';
+import { SortDirection } from '../entities/sort-direction';
 import CustomerService from '../services/customer';
 import { createTRPCRouter, protectedProcedure } from '../trpc';
 

@@ -4,10 +4,11 @@ import {
   TicketTimelineEntryType,
 } from '@cs/lib/ticketTimelineEntries';
 
+import { WithConfig } from '../entities/common';
 import { LabelRelations, LabelSort } from '../entities/label';
-import { InclusionFilterOperator, WithConfig } from '../entities/ticket';
 import KyakuError from '../kyaku-error';
 import { BaseService } from './base-service';
+import { InclusionFilterOperator } from './build-query';
 import LabelTypeService from './label-type';
 import TicketService from './ticket';
 
