@@ -90,31 +90,32 @@ export default class LabelService {
   async addLabels(ticketId: string, labelTypeIds: string[], userId: string) {
     const ticket = await this.ticketService.retrieve(ticketId);
 
-    const labelTypes = await this.labelTypeService.list({
+    const fetchedLabelTypes = await this.labelTypeService.list({
       id: {
         in: labelTypeIds,
       },
     });
+    const fetchedLabelTypeIds = fetchedLabelTypes.map(
+      (labelType) => labelType.id
+    );
 
-    const missingLabelTypes: string[] = [];
-    for (const labelTypeId of labelTypeIds) {
-      if (!labelTypes.find((labelType) => labelType.id === labelTypeId)) {
-        missingLabelTypes.push(labelTypeId);
-      }
-    }
-    if (missingLabelTypes.length > 0)
+    const missingLabelTypeIds = labelTypeIds.filter(
+      (labelTypeId) => !fetchedLabelTypeIds.includes(labelTypeId)
+    );
+
+    if (missingLabelTypeIds.length > 0)
       throw new KyakuError(
         'NOT_FOUND',
-        'Label types with ids: ' + missingLabelTypes.join(',') + ' not found'
+        `Label types with ids: ${missingLabelTypeIds.join(',')} not found`
       );
 
     return await this.dataSource.transaction(async (tx) => {
       const newLabels = await tx
         .insert(schema.labels)
         .values(
-          labelTypes.map((labelType) => ({
+          labelTypeIds.map((labelTypeId) => ({
             ticketId: ticket.id,
-            labelTypeId: labelType.id,
+            labelTypeId: labelTypeId,
           }))
         )
         .returning({ labelId: schema.labels.id });
@@ -154,20 +155,18 @@ export default class LabelService {
   async removeLabels(ticketId: string, labelIds: string[], userId: string) {
     const ticket = await this.ticketService.retrieve(ticketId);
 
-    const labels = await this.dataSource.query.labels.findMany({
+    const fetchedLabels = await this.dataSource.query.labels.findMany({
       where: inArray(schema.labelTypes.id, labelIds),
     });
+    const fetchedLabelIds = fetchedLabels.map((label) => label.id);
 
-    const missingLabels: string[] = [];
-    for (const labelId of labelIds) {
-      if (!labels.find((label) => label.id === labelId)) {
-        missingLabels.push(labelId);
-      }
-    }
-    if (missingLabels.length > 0)
+    const missingLabelIds = labelIds.filter(
+      (labelId) => !fetchedLabelIds.includes(labelId)
+    );
+    if (missingLabelIds.length > 0)
       throw new KyakuError(
         'NOT_FOUND',
-        'Labels with ids: ' + missingLabels.join(',') + ' not found'
+        `Labels with ids: ${missingLabelIds.join(',')} not found`
       );
 
     return await this.dataSource.transaction(async (tx) => {
