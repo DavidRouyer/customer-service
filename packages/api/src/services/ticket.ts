@@ -1,14 +1,4 @@
-import {
-  and,
-  asc,
-  desc,
-  eq,
-  gt,
-  inArray,
-  isNull,
-  schema,
-  SQL,
-} from '@cs/database';
+import { and, asc, desc, eq, gt, inArray, schema, SQL } from '@cs/database';
 import { extractMentions } from '@cs/kyaku/editor';
 import {
   TicketAssignmentChanged,
@@ -35,7 +25,6 @@ import { BaseService } from './base-service';
 import {
   filterBySortDirection,
   inclusionFilterOperator,
-  quantityFilterOperator,
   sortDirection,
 } from './build-query';
 
@@ -70,7 +59,7 @@ export default class TicketService extends BaseService {
       this.getCursorClauses(config);
     const whereClause = this.getWhereClause(filters);
 
-    const fetchedTickets = await this.dataSource.query.tickets.findMany({
+    const filteredTickets = await this.dataSource.query.tickets.findMany({
       where: and(whereClause, cursorWhereClause),
       with: this.getWithClause(config.relations),
       limit: config.take ? config.take + 1 : undefined,
@@ -78,17 +67,17 @@ export default class TicketService extends BaseService {
     });
 
     if (config.take) {
-      const items = fetchedTickets.slice(0, config.take);
+      const items = filteredTickets.slice(0, config.take);
       const lastItem = items.at(-1);
       return {
         items: items,
-        hasNextPage: fetchedTickets.length > config.take,
+        hasNextPage: filteredTickets.length > config.take,
         nextCursor: lastItem ? this.encodeCursor(lastItem, config) : undefined,
       };
     }
 
     return {
-      items: fetchedTickets,
+      items: filteredTickets,
       hasNextPage: false,
       nextCursor: undefined,
     };
@@ -498,21 +487,24 @@ export default class TicketService extends BaseService {
 
   private getWhereClause(filters: TicketFilters) {
     return and(
-      filters.assignedToId !== undefined
-        ? filters.assignedToId !== null
-          ? inArray(schema.tickets.assignedToId, filters.assignedToId)
-          : isNull(schema.tickets.assignedToId)
+      filters.assignedToUser
+        ? inclusionFilterOperator(
+            schema.tickets.assignedToId,
+            filters.assignedToUser
+          )
         : undefined,
       filters.customerId
-        ? eq(schema.tickets.customerId, filters.customerId)
+        ? inclusionFilterOperator(schema.tickets.customerId, filters.customerId)
         : undefined,
-      filters.createdAt
-        ? quantityFilterOperator(schema.tickets.createdAt, filters.createdAt)
+      filters.priority
+        ? inclusionFilterOperator(schema.tickets.priority, filters.priority)
         : undefined,
-      filters.id
-        ? inclusionFilterOperator(schema.tickets.id, filters.id)
+      filters.status
+        ? inclusionFilterOperator(schema.tickets.status, filters.status)
         : undefined,
-      filters.status ? eq(schema.tickets.status, filters.status) : undefined
+      filters.ticketId
+        ? inclusionFilterOperator(schema.tickets.id, filters.ticketId)
+        : undefined
     );
   }
 

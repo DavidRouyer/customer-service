@@ -1,16 +1,10 @@
-import { db, InferSelectModel, schema } from '@cs/database';
+import { InferSelectModel, schema } from '@cs/database';
 import { FindConfig, SortDirection } from '@cs/kyaku/types';
 import { GetConfig } from '@cs/kyaku/types/query';
 
-import {
-  InclusionFilterOperator,
-  QuantityFilterOperator,
-} from '../services/build-query';
+import { InclusionFilterOperator } from '../services/build-query';
 
 export type Ticket = InferSelectModel<typeof schema.tickets>;
-export type DbTicketRelations = NonNullable<
-  Parameters<(typeof db)['query']['tickets']['findFirst']>[0]
->['with'];
 export type GetTicketConfig = GetConfig<TicketRelations>;
 export type TicketRelations = {
   createdBy?: boolean;
@@ -31,9 +25,10 @@ export type TicketCursor = {
   id: string;
 };
 export type TicketFilters = {
-  assignedToId?: NonNullable<Ticket['assignedToId']>[] | null;
-  createdAt?: QuantityFilterOperator<Ticket['createdAt']>;
-  customerId?: Ticket['customerId'];
-  id?: InclusionFilterOperator<Ticket['id']>;
-  status?: Ticket['status'];
+  isAssigned?: boolean;
+  assignedToUser?: InclusionFilterOperator<NonNullable<Ticket['assignedToId']>>;
+  customerId?: InclusionFilterOperator<Ticket['customerId']>;
+  ticketId?: InclusionFilterOperator<Ticket['id']>;
+  priority?: InclusionFilterOperator<Ticket['priority']>;
+  status?: InclusionFilterOperator<Ticket['status']>;
 };

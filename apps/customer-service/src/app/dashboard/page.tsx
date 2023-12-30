@@ -16,7 +16,11 @@ export default function DashboardPage({
 }) {
   const { data: tickets } = api.ticket.all.useQuery(
     {
-      status: (searchParams.status as TicketStatus) ?? TicketStatus.Open,
+      filters: {
+        status: {
+          in: [(searchParams.status as TicketStatus) ?? TicketStatus.Open],
+        },
+      },
       sortBy: {
         createdAt: SortDirection.DESC,
       },
@@ -33,8 +37,8 @@ export default function DashboardPage({
               labels: ticket.labels.map((label) => ({
                 id: label.id,
                 labelType: {
-                  id: label.labelType.id,
-                  name: label.labelType.name,
+                  id: 'labelType' in label ? label.labelType.id : '',
+                  name: 'labelType' in label ? label.labelType.name : '',
                 },
               })),
               assignedTo: ticket.assignedTo,

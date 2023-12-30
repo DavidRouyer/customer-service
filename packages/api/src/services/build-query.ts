@@ -4,46 +4,25 @@ import {
   desc,
   GetColumnData,
   gt,
-  gte,
   inArray,
   lt,
-  lte,
   notInArray,
 } from '@cs/database';
 import { SortDirection } from '@cs/kyaku/types';
 
-export type InclusionFilterOperator<T> = { in: T[] } | { notIn: T[] };
-
-export type QuantityFilterOperator<T> =
-  | { lt: T }
-  | { gt: T }
-  | { lte: T }
-  | { gte: T };
-
-export const quantityFilterOperator = <TCol extends Column>(
-  column: TCol,
-  operator: QuantityFilterOperator<GetColumnData<TCol, 'raw'>>
-) => {
-  return 'lt' in operator
-    ? lt(column, operator.lt)
-    : 'gt' in operator
-      ? gt(column, operator.gt)
-      : 'lte' in operator
-        ? lte(column, operator.lte)
-        : 'gte' in operator
-          ? gte(column, operator.gte)
-          : undefined;
-};
+export type InclusionFilterOperator<T> =
+  | { eq: string | null }
+  | { ne: string | null }
+  | { in: T[] }
+  | { notIn: T[] };
 
 export const inclusionFilterOperator = <TCol extends Column>(
   column: TCol,
   operator: InclusionFilterOperator<GetColumnData<TCol, 'raw'>>
 ) => {
-  return 'in' in operator
-    ? inArray(column, operator.in)
-    : 'notIn' in operator
-      ? notInArray(column, operator.notIn)
-      : undefined;
+  if ('in' in operator) return inArray(column, operator.in);
+  if ('notIn' in operator) return notInArray(column, operator.notIn);
+  return undefined;
 };
 
 export const sortDirection = (sortBy: SortDirection) => {

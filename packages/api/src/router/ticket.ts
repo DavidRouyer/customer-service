@@ -6,12 +6,37 @@ import { SortDirection } from '@cs/kyaku/types';
 import TicketService from '../services/ticket';
 import { createTRPCRouter, protectedProcedure } from '../trpc';
 
+const inclusionFilterRouter = <T extends z.ZodTypeAny>(objectType: T) => {
+  return z
+    .union([
+      z.object({ eq: objectType.nullable() }),
+      z.object({ ne: objectType.nullable() }),
+      z.object({ in: objectType.array() }),
+      z.object({ notIn: objectType.array() }),
+    ])
+    .optional();
+};
+
 export const ticketRouter = createTRPCRouter({
   all: protectedProcedure
     .input(
       z.object({
-        assignedToId: z.string().array().nullish().optional(),
-        status: z.enum([TicketStatus.Open, TicketStatus.Done]),
+        filters: z.object({
+          assignedToUser: inclusionFilterRouter(z.string()),
+          customer: inclusionFilterRouter(z.string()),
+          priority: inclusionFilterRouter(
+            z.enum([
+              TicketPriority.Low,
+              TicketPriority.Medium,
+              TicketPriority.High,
+              TicketPriority.Critical,
+            ])
+          ),
+          status: inclusionFilterRouter(
+            z.enum([TicketStatus.Open, TicketStatus.Done])
+          ),
+          ticketId: inclusionFilterRouter(z.string()),
+        }),
         sortBy: z
           .object({
             createdAt: z.enum([SortDirection.ASC, SortDirection.DESC]),
@@ -22,32 +47,26 @@ export const ticketRouter = createTRPCRouter({
             })
           )
           .optional(),
-        cursor: z.string().nullish(),
+        skip: z.string().nullish(),
         limit: z.number().default(50),
       })
     )
     .query(async ({ ctx, input }) => {
       const ticketService: TicketService =
         ctx.container.resolve('ticketService');
-      const tickets = await ticketService.list(
-        {
-          status: input.status,
-          assignedToId: input.assignedToId,
+      const tickets = await ticketService.list(input.filters, {
+        sortBy: input.sortBy,
+        relations: {
+          assignedTo: true,
+          createdBy: true,
+          customer: true,
+          labels: true,
+          lastTimelineEntry: true,
+          updatedBy: true,
         },
-        {
-          sortBy: input.sortBy,
-          relations: {
-            assignedTo: true,
-            createdBy: true,
-            customer: true,
-            labels: true,
-            lastTimelineEntry: true,
-            updatedBy: true,
-          },
-          take: input.limit,
-          skip: input.cursor ? input.cursor : undefined,
-        }
-      );
+        take: input.limit,
+        skip: input.skip ? input.skip : undefined,
+      });
 
       return {
         data: tickets.items,
@@ -69,17 +88,6 @@ export const ticketRouter = createTRPCRouter({
           labels: true,
           updatedBy: true,
         },
-      });
-    }),
-
-  byCustomerId: protectedProcedure
-    .input(z.object({ customerId: z.string(), excludeId: z.string() }))
-    .query(async ({ ctx, input }) => {
-      const ticketService: TicketService =
-        ctx.container.resolve('ticketService');
-      return await ticketService.list({
-        customerId: input.customerId,
-        id: { notIn: [input.excludeId] },
       });
     }),
 
