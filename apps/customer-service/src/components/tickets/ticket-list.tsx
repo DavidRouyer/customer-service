@@ -21,7 +21,11 @@ export const TicketList: FC<{
 
   const [data, allTicketsQuery] = api.ticket.all.useSuspenseInfiniteQuery(
     {
-      status: status,
+      filters: {
+        status: {
+          in: [status],
+        },
+      },
       sortBy: {
         createdAt:
           orderBy === 'newest' ? SortDirection.DESC : SortDirection.ASC,
