@@ -8,13 +8,13 @@ import {
   TicketStatusChanged,
   TicketTimelineEntryType,
 } from '@cs/kyaku/models';
-import { WithConfig } from '@cs/kyaku/types';
 
 import {
+  DbTicketTimelineRelations,
+  FindTicketTimelineConfig,
   TicketAssignmentChangedWithData,
   TicketLabelsChangedWithData,
   TicketTimelineRelations,
-  TicketTimelineSort,
 } from '../entities/ticket-timeline';
 import { BaseService } from './base-service';
 import { sortDirection } from './build-query';
@@ -38,16 +38,16 @@ export default class TicketTimelineService extends BaseService {
     this.userService = userService;
   }
 
-  async list<T extends TicketTimelineRelations>(
+  async list(
     filters: { ticketId: string },
-    config: WithConfig<T, TicketTimelineSort> = {
-      relations: {} as T,
+    config: FindTicketTimelineConfig = {
+      relations: {},
     }
   ) {
     const ticketTimelineEntries =
       await this.dataSource.query.ticketTimelineEntries.findMany({
         where: eq(schema.ticketTimelineEntries.ticketId, filters.ticketId),
-        with: config.relations,
+        with: this.getWithClause(config.relations),
         limit: config.take,
         orderBy: and(
           config.sortBy
@@ -207,5 +207,25 @@ export default class TicketTimelineService extends BaseService {
           }
         )
       : [];
+  }
+
+  private getWithClause(relations: TicketTimelineRelations) {
+    const withClause: Partial<DbTicketTimelineRelations> = {
+      customer: relations.customer ? true : undefined,
+      customerCreatedBy: relations.customerCreatedBy ? true : undefined,
+      ticket: relations.ticket ? true : undefined,
+      userCreatedBy: relations.userCreatedBy
+        ? {
+            columns: {
+              id: true,
+              email: true,
+              name: true,
+              image: true,
+            },
+          }
+        : undefined,
+    };
+
+    return withClause;
   }
 }

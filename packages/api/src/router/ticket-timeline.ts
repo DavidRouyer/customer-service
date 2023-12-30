@@ -17,14 +17,7 @@ export const ticketTimelineRouter = createTRPCRouter({
         {
           relations: {
             customerCreatedBy: true,
-            userCreatedBy: {
-              columns: {
-                id: true,
-                email: true,
-                name: true,
-                image: true,
-              },
-            },
+            userCreatedBy: true,
           },
           sortBy: {
             createdAt: SortDirection.ASC,

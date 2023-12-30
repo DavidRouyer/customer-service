@@ -1,11 +1,6 @@
 import { z } from 'zod';
 
-import { and, desc, inArray, schema } from '@cs/database';
-import {
-  TicketPriority,
-  TicketStatus,
-  TicketTimelineEntryType,
-} from '@cs/kyaku/models';
+import { TicketPriority, TicketStatus } from '@cs/kyaku/models';
 import { SortDirection } from '@cs/kyaku/types';
 
 import TicketService from '../services/ticket';
@@ -42,27 +37,12 @@ export const ticketRouter = createTRPCRouter({
         {
           sortBy: input.sortBy,
           relations: {
+            assignedTo: true,
             createdBy: true,
             customer: true,
-            timeline: {
-              where: and(
-                inArray(schema.ticketTimelineEntries.type, [
-                  TicketTimelineEntryType.Chat,
-                  TicketTimelineEntryType.Note,
-                ])
-              ),
-              orderBy: desc(schema.ticketTimelineEntries.createdAt),
-              limit: 1,
-            },
-            labels: {
-              columns: {
-                id: true,
-              },
-              with: {
-                labelType: true,
-              },
-            },
-            assignedTo: true,
+            labels: true,
+            lastTimelineEntry: true,
+            updatedBy: true,
           },
           take: input.limit,
         }
@@ -80,12 +60,11 @@ export const ticketRouter = createTRPCRouter({
         ctx.container.resolve('ticketService');
       return await ticketService.retrieve(input.id, {
         relations: {
+          assignedTo: true,
           createdBy: true,
           customer: true,
-          assignedTo: true,
-          labels: {
-            with: { labelType: true },
-          },
+          labels: true,
+          updatedBy: true,
         },
       });
     }),

@@ -93,7 +93,7 @@ export const ticketsRelations = relations(tickets, ({ one, many }) => ({
     fields: [tickets.updatedById],
     references: [users.id],
   }),
-  timeline: many(ticketTimelineEntries),
+  timelineEntries: many(ticketTimelineEntries),
   ticketMentions: many(ticketMentions),
   labels: many(labels),
 }));

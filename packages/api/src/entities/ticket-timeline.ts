@@ -4,7 +4,7 @@ import {
   TicketLabelsChanged,
   User,
 } from '@cs/kyaku/models';
-import { SortDirection } from '@cs/kyaku/types';
+import { FindConfig, SortDirection } from '@cs/kyaku/types';
 
 export type TicketAssignmentChangedWithData = {
   oldAssignedTo?: User | null;
@@ -23,8 +23,18 @@ export type TicketLabelsChangedWithData = {
 export type TicketTimeline = InferSelectModel<
   typeof schema.ticketTimelineEntries
 >;
-export type TicketTimelineRelations = NonNullable<
+export type DbTicketTimelineRelations = NonNullable<
   Parameters<(typeof db)['query']['ticketTimelineEntries']['findFirst']>[0]
 >['with'];
+export type TicketTimelineRelations = {
+  customer?: boolean;
+  customerCreatedBy?: boolean;
+  ticket?: boolean;
+  userCreatedBy?: boolean;
+};
+export type FindTicketTimelineConfig = FindConfig<
+  TicketTimelineRelations,
+  TicketTimelineSort
+>;
 
 export type TicketTimelineSort = { createdAt: SortDirection };

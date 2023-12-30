@@ -11,10 +11,15 @@ import {
   TicketStatusDetail,
   TicketTimelineEntryType,
 } from '@cs/kyaku/models';
-import { WithConfig } from '@cs/kyaku/types';
 import { KyakuError } from '@cs/kyaku/utils';
 
-import { Ticket, TicketRelations, TicketSort } from '../entities/ticket';
+import {
+  DbTicketRelations,
+  FindTicketConfig,
+  GetTicketConfig,
+  Ticket,
+  TicketRelations,
+} from '../entities/ticket';
 import { BaseService } from './base-service';
 import {
   inclusionFilterOperator,
@@ -30,13 +35,13 @@ export default class TicketService extends BaseService {
     super(arguments[0]);
   }
 
-  async retrieve<T extends TicketRelations>(
+  async retrieve(
     ticketId: string,
-    config: WithConfig<T, TicketSort> = { relations: {} as T }
+    config: GetTicketConfig = { relations: {} }
   ) {
     const ticket = await this.dataSource.query.tickets.findFirst({
       where: eq(schema.tickets.id, ticketId),
-      with: config.relations,
+      with: this.getWithClause(config.relations),
     });
 
     if (!ticket)
@@ -45,7 +50,7 @@ export default class TicketService extends BaseService {
     return ticket;
   }
 
-  async list<T extends TicketRelations>(
+  async list(
     filters: {
       assignedToId?: NonNullable<Ticket['assignedToId']>[] | null;
       createdAt?: QuantityFilterOperator<Ticket['createdAt']>;
@@ -53,7 +58,9 @@ export default class TicketService extends BaseService {
       id?: InclusionFilterOperator<Ticket['id']>;
       status?: Ticket['status'];
     },
-    config: WithConfig<T, TicketSort> = { relations: {} as T }
+    config: FindTicketConfig = {
+      relations: {},
+    }
   ) {
     const whereClause = and(
       filters.assignedToId !== undefined
@@ -75,7 +82,7 @@ export default class TicketService extends BaseService {
     );
     return await this.dataSource.query.tickets.findMany({
       where: whereClause,
-      with: config.relations,
+      with: this.getWithClause(config.relations),
       limit: config.take,
       orderBy: and(
         config.sortBy
@@ -441,5 +448,55 @@ export default class TicketService extends BaseService {
         id: newNote.id,
       };
     });
+  }
+
+  private getWithClause(relations: TicketRelations) {
+    const withClause: Partial<DbTicketRelations> = {
+      labels: relations?.labels
+        ? {
+            columns: {
+              id: true,
+            },
+            with: {
+              labelType: true,
+            },
+          }
+        : undefined,
+      timelineEntries: relations?.lastTimelineEntry
+        ? {
+            where: and(
+              inArray(schema.ticketTimelineEntries.type, [
+                TicketTimelineEntryType.Chat,
+                TicketTimelineEntryType.Note,
+              ])
+            ),
+            orderBy: desc(schema.ticketTimelineEntries.createdAt),
+            limit: 1,
+          }
+        : undefined,
+      customer: relations?.customer ? true : undefined,
+      assignedTo: relations?.assignedTo ? true : undefined,
+      createdBy: relations?.createdBy
+        ? {
+            columns: {
+              id: true,
+              email: true,
+              name: true,
+              image: true,
+            },
+          }
+        : undefined,
+      updatedBy: relations?.updatedBy
+        ? {
+            columns: {
+              id: true,
+              email: true,
+              name: true,
+              image: true,
+            },
+          }
+        : undefined,
+    };
+    return withClause;
   }
 }

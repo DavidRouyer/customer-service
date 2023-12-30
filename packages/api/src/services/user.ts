@@ -1,8 +1,12 @@
 import { and, desc, eq, inArray, lt, notInArray, schema } from '@cs/database';
-import { WithConfig } from '@cs/kyaku/types';
 import { KyakuError } from '@cs/kyaku/utils';
 
-import { UserRelations, UserSort } from '../entities/user';
+import {
+  DbUserRelations,
+  FindUserConfig,
+  GetUserConfig,
+  UserRelations,
+} from '../entities/user';
 import { BaseService } from './base-service';
 import { InclusionFilterOperator, sortDirection } from './build-query';
 
@@ -12,13 +16,10 @@ export default class UserService extends BaseService {
     super(arguments[0]);
   }
 
-  async retrieve<T extends UserRelations>(
-    userId: string,
-    config: WithConfig<T, UserSort> = { relations: {} as T }
-  ) {
+  async retrieve(userId: string, config: GetUserConfig = { relations: {} }) {
     const user = await this.dataSource.query.users.findFirst({
       where: eq(schema.users.id, userId),
-      with: config.relations,
+      with: this.getWithClause(config.relations),
     });
 
     if (!user)
@@ -27,11 +28,11 @@ export default class UserService extends BaseService {
     return user;
   }
 
-  async list<T extends UserRelations>(
+  async list(
     filters: {
       id?: InclusionFilterOperator<string>;
     },
-    config: WithConfig<T, UserSort> = { relations: {} as T }
+    config: FindUserConfig = { relations: {} }
   ) {
     const whereClause = and(
       filters.id
@@ -45,7 +46,7 @@ export default class UserService extends BaseService {
     );
     return await this.dataSource.query.users.findMany({
       where: whereClause,
-      with: config.relations,
+      with: this.getWithClause(config.relations),
       limit: config.take,
       columns: {
         id: true,
@@ -64,5 +65,11 @@ export default class UserService extends BaseService {
         config.skip ? desc(schema.tickets.id) : undefined
       ),
     });
+  }
+
+  private getWithClause(relations: UserRelations) {
+    const withClause: Partial<DbUserRelations> = {};
+
+    return withClause;
   }
 }

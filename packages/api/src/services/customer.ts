@@ -1,8 +1,11 @@
 import { and, desc, eq, lt, schema } from '@cs/database';
-import { WithConfig } from '@cs/kyaku/types';
 import { KyakuError } from '@cs/kyaku/utils';
 
-import { CustomerRelations, CustomerSort } from '../entities/customer';
+import {
+  CustomerRelations,
+  DbCustomerRelations,
+  FindCustomerConfig,
+} from '../entities/customer';
 import { BaseService } from './base-service';
 import { sortDirection } from './build-query';
 
@@ -12,13 +15,13 @@ export default class CustomerService extends BaseService {
     super(arguments[0]);
   }
 
-  async retrieve<T extends CustomerRelations>(
+  async retrieve(
     customerId: string,
-    config: WithConfig<T, CustomerSort> = { relations: {} as T }
+    config: FindCustomerConfig = { relations: {} }
   ) {
     const customer = await this.dataSource.query.customers.findFirst({
       where: eq(schema.customers.id, customerId),
-      with: config.relations,
+      with: this.getWithClause(config.relations),
     });
 
     if (!customer)
@@ -30,15 +33,13 @@ export default class CustomerService extends BaseService {
     return customer;
   }
 
-  async list<T extends CustomerRelations>(
-    config: WithConfig<T, CustomerSort> = { relations: {} as T }
-  ) {
+  async list(config: FindCustomerConfig = { relations: {} }) {
     const whereClause = and(
       config.skip ? lt(schema.customers.id, config.skip) : undefined
     );
     return this.dataSource.query.customers.findMany({
       where: whereClause,
-      with: config.relations,
+      with: this.getWithClause(config.relations),
       limit: config.take,
       orderBy: and(
         config.sortBy
@@ -53,5 +54,32 @@ export default class CustomerService extends BaseService {
         config.skip ? desc(schema.customers.id) : undefined
       ),
     });
+  }
+
+  private getWithClause(relations: CustomerRelations) {
+    const withClause: Partial<DbCustomerRelations> = {
+      createdBy: relations.createdBy
+        ? {
+            columns: {
+              id: true,
+              email: true,
+              name: true,
+              image: true,
+            },
+          }
+        : undefined,
+      updatedBy: relations.updatedBy
+        ? {
+            columns: {
+              id: true,
+              email: true,
+              name: true,
+              image: true,
+            },
+          }
+        : undefined,
+    };
+
+    return withClause;
   }
 }

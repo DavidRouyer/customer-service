@@ -21,7 +21,7 @@ export type TicketData = {
     };
   }[];
   priority: string;
-  assignedTo: RouterOutputs['ticket']['byId']['assignedTo'] | null;
+  assignedTo: RouterOutputs['ticket']['byId']['assignedTo'];
 };
 
 export const columns: ColumnDef<TicketData>[] = [

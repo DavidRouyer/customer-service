@@ -9,13 +9,13 @@ import {
   notInArray,
   schema,
 } from '@cs/database';
-import { WithConfig } from '@cs/kyaku/types';
 import { KyakuError } from '@cs/kyaku/utils';
 
 import {
+  DbLabelTypeRelations,
+  FindLabelTypeConfig,
   LabelType,
   LabelTypeRelations,
-  LabelTypeSort,
 } from '../entities/label-type';
 import { BaseService } from './base-service';
 import { InclusionFilterOperator, sortDirection } from './build-query';
@@ -26,13 +26,13 @@ export default class LabelTypeService extends BaseService {
     super(arguments[0]);
   }
 
-  async retrieve<T extends LabelTypeRelations>(
+  async retrieve(
     labelTypeId: string,
-    config: WithConfig<T, LabelTypeSort> = { relations: {} as T }
+    config: FindLabelTypeConfig = { relations: {} }
   ) {
     const labelType = await this.dataSource.query.labelTypes.findFirst({
       where: eq(schema.labelTypes.id, labelTypeId),
-      with: config.relations,
+      with: this.getWithClause(config.relations),
     });
 
     if (!labelType)
@@ -44,13 +44,13 @@ export default class LabelTypeService extends BaseService {
     return labelType;
   }
 
-  async retrieveByName<T extends LabelTypeRelations>(
+  async retrieveByName(
     labelTypeName: string,
-    config: WithConfig<T, LabelTypeSort> = { relations: {} as T }
+    config: FindLabelTypeConfig = { relations: {} }
   ) {
     const labelType = await this.dataSource.query.labelTypes.findFirst({
       where: eq(schema.labelTypes.name, labelTypeName),
-      with: config.relations,
+      with: this.getWithClause(config.relations),
     });
 
     if (!labelType)
@@ -62,12 +62,12 @@ export default class LabelTypeService extends BaseService {
     return labelType;
   }
 
-  async list<T extends LabelTypeRelations>(
+  async list(
     filters: {
       id?: InclusionFilterOperator<string>;
       isArchived?: boolean;
     },
-    config: WithConfig<T, LabelTypeSort> = { relations: {} as T }
+    config: FindLabelTypeConfig = { relations: {} }
   ) {
     const whereClause = and(
       filters.id
@@ -86,7 +86,7 @@ export default class LabelTypeService extends BaseService {
     );
     return this.dataSource.query.labelTypes.findMany({
       where: whereClause,
-      with: config.relations,
+      with: this.getWithClause(config.relations),
       limit: config.take,
       orderBy: and(
         config.sortBy
@@ -186,5 +186,32 @@ export default class LabelTypeService extends BaseService {
         archivedAt: null,
       })
       .returning({ id: schema.labelTypes.id });
+  }
+
+  private getWithClause(relations: LabelTypeRelations) {
+    const withClause: Partial<DbLabelTypeRelations> = {
+      createdBy: relations.createdBy
+        ? {
+            columns: {
+              id: true,
+              email: true,
+              name: true,
+              image: true,
+            },
+          }
+        : undefined,
+      updatedBy: relations.updatedBy
+        ? {
+            columns: {
+              id: true,
+              email: true,
+              name: true,
+              image: true,
+            },
+          }
+        : undefined,
+    };
+
+    return withClause;
   }
 }

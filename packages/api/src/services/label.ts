@@ -1,9 +1,13 @@
 import { and, desc, eq, inArray, lt, notInArray, schema } from '@cs/database';
 import { TicketLabelsChanged, TicketTimelineEntryType } from '@cs/kyaku/models';
-import { WithConfig } from '@cs/kyaku/types';
 import { KyakuError } from '@cs/kyaku/utils';
 
-import { LabelRelations, LabelSort } from '../entities/label';
+import {
+  DbLabelRelations,
+  FindLabelConfig,
+  GetLabelConfig,
+  LabelRelations,
+} from '../entities/label';
 import { BaseService } from './base-service';
 import { InclusionFilterOperator } from './build-query';
 import LabelTypeService from './label-type';
@@ -26,13 +30,10 @@ export default class LabelService extends BaseService {
     this.ticketService = ticketService;
   }
 
-  async retrieve<T extends LabelRelations>(
-    labelId: string,
-    config: WithConfig<T, LabelSort> = { relations: {} as T }
-  ) {
+  async retrieve(labelId: string, config: GetLabelConfig = { relations: {} }) {
     const label = await this.dataSource.query.labels.findFirst({
       where: eq(schema.labels.id, labelId),
-      with: config.relations,
+      with: this.getWithClause(config.relations),
     });
 
     if (!label)
@@ -41,14 +42,14 @@ export default class LabelService extends BaseService {
     return label;
   }
 
-  async list<T extends LabelRelations>(
+  async list(
     filters: {
       id?: InclusionFilterOperator<string>;
       ticketId?: string;
       labelTypeId?: string;
     },
-    config: WithConfig<T, LabelSort> = {
-      relations: {} as T,
+    config: FindLabelConfig = {
+      relations: {},
     }
   ) {
     const whereClause = and(
@@ -69,7 +70,7 @@ export default class LabelService extends BaseService {
     );
     return await this.dataSource.query.labels.findMany({
       where: whereClause,
-      with: config.relations,
+      with: this.getWithClause(config.relations),
       limit: config.take,
       orderBy: and(config.skip ? desc(schema.tickets.id) : undefined),
     });
@@ -198,5 +199,14 @@ export default class LabelService extends BaseService {
         userCreatedById: userId,
       });
     });
+  }
+
+  private getWithClause(relations: LabelRelations) {
+    const withClause: Partial<DbLabelRelations> = {
+      ticket: relations.ticket ? true : undefined,
+      labelType: relations.labelType ? true : undefined,
+    };
+
+    return withClause;
   }
 }
