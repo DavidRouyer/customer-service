@@ -1,11 +1,7 @@
 import { and, desc, eq, lt, schema } from '@cs/database';
 import { KyakuError } from '@cs/kyaku/utils';
 
-import {
-  CustomerRelations,
-  DbCustomerRelations,
-  FindCustomerConfig,
-} from '../entities/customer';
+import { CustomerRelations, FindCustomerConfig } from '../entities/customer';
 import { BaseService } from './base-service';
 import { sortDirection } from './build-query';
 
@@ -57,26 +53,26 @@ export default class CustomerService extends BaseService {
   }
 
   private getWithClause(relations: CustomerRelations) {
-    const withClause: Partial<DbCustomerRelations> = {
+    const withClause = {
       createdBy: relations.createdBy
-        ? {
+        ? ({
             columns: {
               id: true,
               email: true,
               name: true,
               image: true,
             },
-          }
+          } as const)
         : undefined,
       updatedBy: relations.updatedBy
-        ? {
+        ? ({
             columns: {
               id: true,
               email: true,
               name: true,
               image: true,
             },
-          }
+          } as const)
         : undefined,
     };
 

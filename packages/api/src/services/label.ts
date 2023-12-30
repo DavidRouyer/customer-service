@@ -3,7 +3,6 @@ import { TicketLabelsChanged, TicketTimelineEntryType } from '@cs/kyaku/models';
 import { KyakuError } from '@cs/kyaku/utils';
 
 import {
-  DbLabelRelations,
   FindLabelConfig,
   GetLabelConfig,
   LabelRelations,
@@ -202,9 +201,9 @@ export default class LabelService extends BaseService {
   }
 
   private getWithClause(relations: LabelRelations) {
-    const withClause: Partial<DbLabelRelations> = {
-      ticket: relations.ticket ? true : undefined,
-      labelType: relations.labelType ? true : undefined,
+    const withClause = {
+      ticket: relations.ticket ? (true as const) : undefined,
+      labelType: relations.labelType ? (true as const) : undefined,
     };
 
     return withClause;

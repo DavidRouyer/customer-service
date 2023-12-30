@@ -49,3 +49,6 @@ export const inclusionFilterOperator = <TCol extends Column>(
 export const sortDirection = (sortBy: SortDirection) => {
   return sortBy === SortDirection.ASC ? asc : desc;
 };
+export const filterBySortDirection = (sortBy: SortDirection) => {
+  return sortBy === SortDirection.ASC ? gt : lt;
+};

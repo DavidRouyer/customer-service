@@ -18,7 +18,7 @@ export const ticketRouter = createTRPCRouter({
           })
           .or(
             z.object({
-              priority: z.enum([SortDirection.ASC, SortDirection.DESC]),
+              statusChangedAt: z.enum([SortDirection.ASC, SortDirection.DESC]),
             })
           )
           .optional(),
@@ -45,12 +45,15 @@ export const ticketRouter = createTRPCRouter({
             updatedBy: true,
           },
           take: input.limit,
+          skip: input.cursor ? input.cursor : undefined,
         }
       );
 
-      const nextCursor = tickets[tickets.length - 1]?.id ?? null;
-
-      return { data: tickets, nextCursor };
+      return {
+        data: tickets.items,
+        hasNextPage: tickets.hasNextPage,
+        nextCursor: tickets.nextCursor,
+      };
     }),
 
   byId: protectedProcedure

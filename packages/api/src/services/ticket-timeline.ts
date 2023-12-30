@@ -10,7 +10,6 @@ import {
 } from '@cs/kyaku/models';
 
 import {
-  DbTicketTimelineRelations,
   FindTicketTimelineConfig,
   TicketAssignmentChangedWithData,
   TicketLabelsChangedWithData,
@@ -210,19 +209,21 @@ export default class TicketTimelineService extends BaseService {
   }
 
   private getWithClause(relations: TicketTimelineRelations) {
-    const withClause: Partial<DbTicketTimelineRelations> = {
-      customer: relations.customer ? true : undefined,
-      customerCreatedBy: relations.customerCreatedBy ? true : undefined,
-      ticket: relations.ticket ? true : undefined,
+    const withClause = {
+      customer: relations.customer ? (true as const) : undefined,
+      customerCreatedBy: relations.customerCreatedBy
+        ? (true as const)
+        : undefined,
+      ticket: relations.ticket ? (true as const) : undefined,
       userCreatedBy: relations.userCreatedBy
-        ? {
+        ? ({
             columns: {
               id: true,
               email: true,
               name: true,
               image: true,
             },
-          }
+          } as const)
         : undefined,
     };
 

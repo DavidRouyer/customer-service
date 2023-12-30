@@ -1,12 +1,7 @@
 import { and, desc, eq, inArray, lt, notInArray, schema } from '@cs/database';
 import { KyakuError } from '@cs/kyaku/utils';
 
-import {
-  DbUserRelations,
-  FindUserConfig,
-  GetUserConfig,
-  UserRelations,
-} from '../entities/user';
+import { FindUserConfig, GetUserConfig, UserRelations } from '../entities/user';
 import { BaseService } from './base-service';
 import { InclusionFilterOperator, sortDirection } from './build-query';
 
@@ -68,7 +63,7 @@ export default class UserService extends BaseService {
   }
 
   private getWithClause(relations: UserRelations) {
-    const withClause: Partial<DbUserRelations> = {};
+    const withClause = {};
 
     return withClause;
   }

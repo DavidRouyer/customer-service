@@ -1,4 +1,14 @@
-import { and, desc, eq, inArray, isNull, lt, schema } from '@cs/database';
+import {
+  and,
+  asc,
+  desc,
+  eq,
+  gt,
+  inArray,
+  isNull,
+  schema,
+  SQL,
+} from '@cs/database';
 import { extractMentions } from '@cs/kyaku/editor';
 import {
   TicketAssignmentChanged,
@@ -14,18 +24,18 @@ import {
 import { KyakuError } from '@cs/kyaku/utils';
 
 import {
-  DbTicketRelations,
   FindTicketConfig,
   GetTicketConfig,
   Ticket,
+  TicketCursor,
+  TicketFilters,
   TicketRelations,
 } from '../entities/ticket';
 import { BaseService } from './base-service';
 import {
+  filterBySortDirection,
   inclusionFilterOperator,
-  InclusionFilterOperator,
   quantityFilterOperator,
-  QuantityFilterOperator,
   sortDirection,
 } from './build-query';
 
@@ -51,50 +61,37 @@ export default class TicketService extends BaseService {
   }
 
   async list(
-    filters: {
-      assignedToId?: NonNullable<Ticket['assignedToId']>[] | null;
-      createdAt?: QuantityFilterOperator<Ticket['createdAt']>;
-      customerId?: Ticket['customerId'];
-      id?: InclusionFilterOperator<Ticket['id']>;
-      status?: Ticket['status'];
-    },
+    filters: TicketFilters,
     config: FindTicketConfig = {
       relations: {},
     }
   ) {
-    const whereClause = and(
-      filters.assignedToId !== undefined
-        ? filters.assignedToId !== null
-          ? inArray(schema.tickets.assignedToId, filters.assignedToId)
-          : isNull(schema.tickets.assignedToId)
-        : undefined,
-      filters.customerId
-        ? eq(schema.tickets.customerId, filters.customerId)
-        : undefined,
-      filters.createdAt
-        ? quantityFilterOperator(schema.tickets.createdAt, filters.createdAt)
-        : undefined,
-      filters.id
-        ? inclusionFilterOperator(schema.tickets.id, filters.id)
-        : undefined,
-      filters.status ? eq(schema.tickets.status, filters.status) : undefined,
-      config.skip ? lt(schema.tickets.id, config.skip) : undefined
-    );
-    return await this.dataSource.query.tickets.findMany({
-      where: whereClause,
+    const [cursorWhereClause, cursorOrderByClause] =
+      this.getCursorClauses(config);
+    const whereClause = this.getWhereClause(filters);
+
+    const fetchedTickets = await this.dataSource.query.tickets.findMany({
+      where: and(whereClause, cursorWhereClause),
       with: this.getWithClause(config.relations),
-      limit: config.take,
-      orderBy: and(
-        config.sortBy
-          ? 'priority' in config.sortBy
-            ? sortDirection(config.sortBy.priority)(schema.tickets.priority)
-            : 'createdAt' in config.sortBy
-              ? sortDirection(config.sortBy.createdAt)(schema.tickets.createdAt)
-              : undefined
-          : undefined,
-        config.skip ? desc(schema.tickets.id) : undefined
-      ),
+      limit: config.take ? config.take + 1 : undefined,
+      orderBy: cursorOrderByClause,
     });
+
+    if (config.take) {
+      const items = fetchedTickets.slice(0, config.take);
+      const lastItem = items.at(-1);
+      return {
+        items: items,
+        hasNextPage: fetchedTickets.length > config.take,
+        nextCursor: lastItem ? this.encodeCursor(lastItem, config) : undefined,
+      };
+    }
+
+    return {
+      items: fetchedTickets,
+      hasNextPage: false,
+      nextCursor: undefined,
+    };
   }
 
   async create(
@@ -451,16 +448,16 @@ export default class TicketService extends BaseService {
   }
 
   private getWithClause(relations: TicketRelations) {
-    const withClause: Partial<DbTicketRelations> = {
+    return {
       labels: relations?.labels
-        ? {
+        ? ({
             columns: {
               id: true,
             },
             with: {
               labelType: true,
             },
-          }
+          } as const)
         : undefined,
       timelineEntries: relations?.lastTimelineEntry
         ? {
@@ -474,29 +471,140 @@ export default class TicketService extends BaseService {
             limit: 1,
           }
         : undefined,
-      customer: relations?.customer ? true : undefined,
-      assignedTo: relations?.assignedTo ? true : undefined,
+      customer: relations?.customer ? (true as const) : undefined,
+      assignedTo: relations?.assignedTo ? (true as const) : undefined,
       createdBy: relations?.createdBy
-        ? {
+        ? ({
             columns: {
               id: true,
               email: true,
               name: true,
               image: true,
             },
-          }
+          } as const)
         : undefined,
       updatedBy: relations?.updatedBy
-        ? {
+        ? ({
             columns: {
               id: true,
               email: true,
               name: true,
               image: true,
             },
-          }
+          } as const)
         : undefined,
     };
-    return withClause;
+  }
+
+  private getWhereClause(filters: TicketFilters) {
+    return and(
+      filters.assignedToId !== undefined
+        ? filters.assignedToId !== null
+          ? inArray(schema.tickets.assignedToId, filters.assignedToId)
+          : isNull(schema.tickets.assignedToId)
+        : undefined,
+      filters.customerId
+        ? eq(schema.tickets.customerId, filters.customerId)
+        : undefined,
+      filters.createdAt
+        ? quantityFilterOperator(schema.tickets.createdAt, filters.createdAt)
+        : undefined,
+      filters.id
+        ? inclusionFilterOperator(schema.tickets.id, filters.id)
+        : undefined,
+      filters.status ? eq(schema.tickets.status, filters.status) : undefined
+    );
+  }
+
+  private getCursorClauses(config: FindTicketConfig) {
+    const cursor = config.skip ? this.decodeCursor(config.skip) : undefined;
+    let whereClause = cursor ? gt(schema.tickets.id, cursor.id) : undefined;
+
+    let orderByClause: SQL<unknown> | SQL<unknown>[] | undefined = asc(
+      schema.tickets.id
+    );
+    if (config.sortBy) {
+      if ('statusChangedAt' in config.sortBy) {
+        whereClause = cursor
+          ? and(
+              cursor?.statusChangedAt
+                ? filterBySortDirection(config.sortBy.statusChangedAt)(
+                    schema.tickets.statusChangedAt,
+                    new Date(cursor?.statusChangedAt)
+                  )
+                : undefined,
+              cursor?.id
+                ? filterBySortDirection(config.sortBy.statusChangedAt)(
+                    schema.tickets.id,
+                    cursor.id
+                  )
+                : undefined
+            )
+          : undefined;
+        orderByClause = [
+          sortDirection(config.sortBy.statusChangedAt)(
+            schema.tickets.statusChangedAt
+          ),
+          sortDirection(config.sortBy.statusChangedAt)(schema.tickets.id),
+        ];
+      }
+      if ('createdAt' in config.sortBy) {
+        whereClause = cursor
+          ? and(
+              cursor?.createdAt
+                ? filterBySortDirection(config.sortBy.createdAt)(
+                    schema.tickets.createdAt,
+                    new Date(cursor.createdAt)
+                  )
+                : undefined,
+              cursor?.id
+                ? filterBySortDirection(config.sortBy.createdAt)(
+                    schema.tickets.id,
+                    cursor.id
+                  )
+                : undefined
+            )
+          : undefined;
+        orderByClause = [
+          sortDirection(config.sortBy.createdAt)(schema.tickets.createdAt),
+          sortDirection(config.sortBy.createdAt)(schema.tickets.id),
+        ];
+      }
+    }
+
+    return [whereClause, orderByClause] as const;
+  }
+
+  private decodeCursor(cursor: string) {
+    let decodedCursor = null;
+    try {
+      decodedCursor = JSON.parse(atob(cursor)) as TicketCursor;
+    } catch (e) {
+      throw new KyakuError('BAD_REQUEST', 'Invalid cursor');
+    }
+    return decodedCursor;
+  }
+
+  private encodeCursor(
+    ticket: Ticket,
+    config: FindTicketConfig
+  ): string | null {
+    if (!config.sortBy) return null;
+    let cursor: TicketCursor = {
+      id: ticket.id,
+    };
+    if ('createdAt' in config.sortBy) {
+      cursor = {
+        createdAt: ticket.createdAt.toUTCString(),
+        id: ticket.id,
+      };
+    }
+    if ('statusChangedAt' in config.sortBy) {
+      cursor = {
+        statusChangedAt: ticket.statusChangedAt?.toUTCString(),
+        id: ticket.id,
+      };
+    }
+    return btoa(JSON.stringify(cursor));
   }
 }

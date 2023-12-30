@@ -12,7 +12,6 @@ import {
 import { KyakuError } from '@cs/kyaku/utils';
 
 import {
-  DbLabelTypeRelations,
   FindLabelTypeConfig,
   LabelType,
   LabelTypeRelations,
@@ -189,26 +188,26 @@ export default class LabelTypeService extends BaseService {
   }
 
   private getWithClause(relations: LabelTypeRelations) {
-    const withClause: Partial<DbLabelTypeRelations> = {
+    const withClause = {
       createdBy: relations.createdBy
-        ? {
+        ? ({
             columns: {
               id: true,
               email: true,
               name: true,
               image: true,
             },
-          }
+          } as const)
         : undefined,
       updatedBy: relations.updatedBy
-        ? {
+        ? ({
             columns: {
               id: true,
               email: true,
               name: true,
               image: true,
             },
-          }
+          } as const)
         : undefined,
     };
 
