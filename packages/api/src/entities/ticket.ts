@@ -1,10 +1,11 @@
-import { InferSelectModel, schema } from '@cs/database';
+import { InferInsertModel, InferSelectModel, schema } from '@cs/database';
 import { FindConfig, SortDirection } from '@cs/kyaku/types';
 import { GetConfig } from '@cs/kyaku/types/query';
 
 import { InclusionFilterOperator } from '../services/build-query';
 
 export type Ticket = InferSelectModel<typeof schema.tickets>;
+export type TicketInsert = InferInsertModel<typeof schema.tickets>;
 export type GetTicketConfig = GetConfig<TicketRelations>;
 export type TicketRelations = {
   createdBy?: boolean;

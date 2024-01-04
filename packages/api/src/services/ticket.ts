@@ -21,6 +21,9 @@ import {
   TicketFilters,
   TicketRelations,
 } from '../entities/ticket';
+import TicketRepository from '../repositories/ticket';
+import TicketMentionRepository from '../repositories/ticket-mention';
+import TicketTimelineRepository from '../repositories/ticket-timeline';
 import { BaseService } from './base-service';
 import {
   filterBySortDirection,
@@ -29,9 +32,24 @@ import {
 } from './build-query';
 
 export default class TicketService extends BaseService {
-  constructor() {
+  private readonly ticketRepository: TicketRepository;
+  private readonly ticketMentionRepository: TicketMentionRepository;
+  private readonly ticketTimelineRepository: TicketTimelineRepository;
+
+  constructor({
+    ticketRepository,
+    ticketMentionRepository,
+    ticketTimelineRepository,
+  }: {
+    ticketRepository: TicketRepository;
+    ticketMentionRepository: TicketMentionRepository;
+    ticketTimelineRepository: TicketTimelineRepository;
+  }) {
     // eslint-disable-next-line prefer-rest-params, @typescript-eslint/no-unsafe-argument
     super(arguments[0]);
+    this.ticketRepository = ticketRepository;
+    this.ticketMentionRepository = ticketMentionRepository;
+    this.ticketTimelineRepository = ticketTimelineRepository;
   }
 
   async retrieve(
@@ -99,15 +117,17 @@ export default class TicketService extends BaseService {
     await this.dataSource.transaction(async (tx) => {
       const creationDate = new Date();
 
-      const newTicket = await tx
-        .insert(schema.tickets)
-        .values({
-          ...data,
-          status: TicketStatus.Open,
-          statusDetail: TicketStatusDetail.Created,
-          statusChangedAt: creationDate,
-          createdAt: creationDate,
-        })
+      const newTicket = await this.ticketRepository
+        .create(
+          {
+            ...data,
+            status: TicketStatus.Open,
+            statusDetail: TicketStatusDetail.Created,
+            statusChangedAt: creationDate,
+            createdAt: creationDate,
+          },
+          tx
+        )
         .returning({
           id: schema.tickets.id,
         })
@@ -128,13 +148,15 @@ export default class TicketService extends BaseService {
     const ticket = await this.retrieve(ticketId);
 
     return await this.dataSource.transaction(async (tx) => {
-      const updatedTicket = await tx
-        .update(schema.tickets)
-        .set({
-          assignedToId: assignedToId,
-          updatedAt: new Date(),
-          updatedById: userId,
-        })
+      const updatedTicket = await this.ticketRepository
+        .update(
+          {
+            assignedToId: assignedToId,
+            updatedAt: new Date(),
+            updatedById: userId,
+          },
+          tx
+        )
         .where(eq(schema.tickets.id, ticketId))
         .returning({
           id: schema.tickets.id,
@@ -147,17 +169,20 @@ export default class TicketService extends BaseService {
         return;
       }
 
-      await tx.insert(schema.ticketTimelineEntries).values({
-        ticketId: ticketId,
-        customerId: ticket.customerId,
-        type: TicketTimelineEntryType.AssignmentChanged,
-        entry: {
-          oldAssignedToId: ticket.assignedToId,
-          newAssignedToId: assignedToId,
-        } satisfies TicketAssignmentChanged,
-        createdAt: updatedTicket.updatedAt ?? new Date(),
-        userCreatedById: userId,
-      });
+      await this.ticketTimelineRepository.create(
+        {
+          ticketId: ticketId,
+          customerId: ticket.customerId,
+          type: TicketTimelineEntryType.AssignmentChanged,
+          entry: {
+            oldAssignedToId: ticket.assignedToId,
+            newAssignedToId: assignedToId,
+          } satisfies TicketAssignmentChanged,
+          createdAt: updatedTicket.updatedAt ?? new Date(),
+          userCreatedById: userId,
+        },
+        tx
+      );
     });
   }
 
@@ -171,13 +196,15 @@ export default class TicketService extends BaseService {
       );
 
     return await this.dataSource.transaction(async (tx) => {
-      const updatedTicket = await tx
-        .update(schema.tickets)
-        .set({
-          assignedToId: null,
-          updatedAt: new Date(),
-          updatedById: userId,
-        })
+      const updatedTicket = await this.ticketRepository
+        .update(
+          {
+            assignedToId: null,
+            updatedAt: new Date(),
+            updatedById: userId,
+          },
+          tx
+        )
         .where(eq(schema.tickets.id, ticketId))
         .returning({
           id: schema.tickets.id,
@@ -190,17 +217,20 @@ export default class TicketService extends BaseService {
         return;
       }
 
-      await tx.insert(schema.ticketTimelineEntries).values({
-        ticketId: ticketId,
-        customerId: ticket.customerId,
-        type: TicketTimelineEntryType.AssignmentChanged,
-        entry: {
-          oldAssignedToId: ticket.assignedToId,
-          newAssignedToId: null,
-        } satisfies TicketAssignmentChanged,
-        createdAt: updatedTicket.updatedAt ?? new Date(),
-        userCreatedById: userId,
-      });
+      await this.ticketTimelineRepository.create(
+        {
+          ticketId: ticketId,
+          customerId: ticket.customerId,
+          type: TicketTimelineEntryType.AssignmentChanged,
+          entry: {
+            oldAssignedToId: ticket.assignedToId,
+            newAssignedToId: null,
+          } satisfies TicketAssignmentChanged,
+          createdAt: updatedTicket.updatedAt ?? new Date(),
+          userCreatedById: userId,
+        },
+        tx
+      );
     });
   }
 
@@ -212,13 +242,15 @@ export default class TicketService extends BaseService {
     const ticket = await this.retrieve(ticketId);
 
     return await this.dataSource.transaction(async (tx) => {
-      const updatedTicket = await tx
-        .update(schema.tickets)
-        .set({
-          priority: priority,
-          updatedAt: new Date(),
-          updatedById: userId,
-        })
+      const updatedTicket = await this.ticketRepository
+        .update(
+          {
+            priority: priority,
+            updatedAt: new Date(),
+            updatedById: userId,
+          },
+          tx
+        )
         .where(eq(schema.tickets.id, ticketId))
         .returning({
           id: schema.tickets.id,
@@ -231,17 +263,20 @@ export default class TicketService extends BaseService {
         return;
       }
 
-      await tx.insert(schema.ticketTimelineEntries).values({
-        ticketId: ticketId,
-        customerId: ticket.customerId,
-        type: TicketTimelineEntryType.PriorityChanged,
-        entry: {
-          oldPriority: ticket.priority,
-          newPriority: priority,
-        } satisfies TicketPriorityChanged,
-        createdAt: updatedTicket.updatedAt ?? new Date(),
-        userCreatedById: userId,
-      });
+      await this.ticketTimelineRepository.create(
+        {
+          ticketId: ticketId,
+          customerId: ticket.customerId,
+          type: TicketTimelineEntryType.PriorityChanged,
+          entry: {
+            oldPriority: ticket.priority,
+            newPriority: priority,
+          } satisfies TicketPriorityChanged,
+          createdAt: updatedTicket.updatedAt ?? new Date(),
+          userCreatedById: userId,
+        },
+        tx
+      );
     });
   }
 
@@ -255,16 +290,18 @@ export default class TicketService extends BaseService {
       );
 
     return await this.dataSource.transaction(async (tx) => {
-      const updatedTicket = await tx
-        .update(schema.tickets)
-        .set({
-          status: TicketStatus.Done,
-          statusDetail: null,
-          statusChangedAt: new Date(),
-          statusChangedById: userId,
-          updatedAt: new Date(),
-          updatedById: userId,
-        })
+      const updatedTicket = await this.ticketRepository
+        .update(
+          {
+            status: TicketStatus.Done,
+            statusDetail: null,
+            statusChangedAt: new Date(),
+            statusChangedById: userId,
+            updatedAt: new Date(),
+            updatedById: userId,
+          },
+          tx
+        )
         .where(eq(schema.tickets.id, ticketId))
         .returning({
           id: schema.tickets.id,
@@ -277,17 +314,20 @@ export default class TicketService extends BaseService {
         return;
       }
 
-      await tx.insert(schema.ticketTimelineEntries).values({
-        ticketId: ticketId,
-        customerId: ticket.customerId,
-        type: TicketTimelineEntryType.StatusChanged,
-        entry: {
-          oldStatus: ticket.status,
-          newStatus: TicketStatus.Done,
-        } satisfies TicketStatusChanged,
-        createdAt: updatedTicket.updatedAt ?? new Date(),
-        userCreatedById: userId,
-      });
+      await this.ticketTimelineRepository.create(
+        {
+          ticketId: ticketId,
+          customerId: ticket.customerId,
+          type: TicketTimelineEntryType.StatusChanged,
+          entry: {
+            oldStatus: ticket.status,
+            newStatus: TicketStatus.Done,
+          } satisfies TicketStatusChanged,
+          createdAt: updatedTicket.updatedAt ?? new Date(),
+          userCreatedById: userId,
+        },
+        tx
+      );
     });
   }
 
@@ -301,16 +341,18 @@ export default class TicketService extends BaseService {
       );
 
     return await this.dataSource.transaction(async (tx) => {
-      const updatedTicket = await tx
-        .update(schema.tickets)
-        .set({
-          status: TicketStatus.Open,
-          statusDetail: null,
-          statusChangedAt: new Date(),
-          statusChangedById: userId,
-          updatedAt: new Date(),
-          updatedById: userId,
-        })
+      const updatedTicket = await this.ticketRepository
+        .update(
+          {
+            status: TicketStatus.Open,
+            statusDetail: null,
+            statusChangedAt: new Date(),
+            statusChangedById: userId,
+            updatedAt: new Date(),
+            updatedById: userId,
+          },
+          tx
+        )
         .where(eq(schema.tickets.id, ticketId))
         .returning({
           id: schema.tickets.id,
@@ -323,17 +365,20 @@ export default class TicketService extends BaseService {
         return;
       }
 
-      await tx.insert(schema.ticketTimelineEntries).values({
-        ticketId: ticketId,
-        customerId: ticket.customerId,
-        type: TicketTimelineEntryType.StatusChanged,
-        entry: {
-          oldStatus: ticket.status,
-          newStatus: TicketStatus.Open,
-        } satisfies TicketStatusChanged,
-        createdAt: updatedTicket.updatedAt ?? new Date(),
-        userCreatedById: userId,
-      });
+      await this.ticketTimelineRepository.create(
+        {
+          ticketId: ticketId,
+          customerId: ticket.customerId,
+          type: TicketTimelineEntryType.StatusChanged,
+          entry: {
+            oldStatus: ticket.status,
+            newStatus: TicketStatus.Open,
+          } satisfies TicketStatusChanged,
+          createdAt: updatedTicket.updatedAt ?? new Date(),
+          userCreatedById: userId,
+        },
+        tx
+      );
     });
   }
 
@@ -343,18 +388,20 @@ export default class TicketService extends BaseService {
     return await this.dataSource.transaction(async (tx) => {
       const creationDate = new Date();
 
-      const newChat = await tx
-        .insert(schema.ticketTimelineEntries)
-        .values({
-          ticketId: ticketId,
-          type: TicketTimelineEntryType.Chat,
-          entry: {
-            text: text,
-          } satisfies TicketChat,
-          customerId: ticket.customerId,
-          createdAt: creationDate,
-          userCreatedById: userId,
-        })
+      const newChat = await this.ticketTimelineRepository
+        .create(
+          {
+            ticketId: ticketId,
+            type: TicketTimelineEntryType.Chat,
+            entry: {
+              text: text,
+            } satisfies TicketChat,
+            customerId: ticket.customerId,
+            createdAt: creationDate,
+            userCreatedById: userId,
+          },
+          tx
+        )
         .returning({
           id: schema.ticketTimelineEntries.id,
           createdAt: schema.ticketTimelineEntries.createdAt,
@@ -366,15 +413,17 @@ export default class TicketService extends BaseService {
         return;
       }
 
-      await tx
-        .update(schema.tickets)
-        .set({
-          statusDetail: TicketStatusDetail.Replied,
-          statusChangedAt: newChat.createdAt,
-          statusChangedById: userId,
-          updatedAt: newChat.createdAt,
-          updatedById: userId,
-        })
+      await this.ticketRepository
+        .update(
+          {
+            statusDetail: TicketStatusDetail.Replied,
+            statusChangedAt: newChat.createdAt,
+            statusChangedById: userId,
+            updatedAt: newChat.createdAt,
+            updatedById: userId,
+          },
+          tx
+        )
         .where(eq(schema.tickets.id, ticketId));
 
       return {
@@ -396,19 +445,21 @@ export default class TicketService extends BaseService {
     return await this.dataSource.transaction(async (tx) => {
       const creationDate = new Date();
 
-      const newNote = await tx
-        .insert(schema.ticketTimelineEntries)
-        .values({
-          ticketId: ticketId,
-          type: TicketTimelineEntryType.Note,
-          entry: {
-            text: text,
-            rawContent: rawContent,
-          } satisfies TicketNote,
-          customerId: ticket.customerId,
-          createdAt: creationDate,
-          userCreatedById: userId,
-        })
+      const newNote = await this.ticketTimelineRepository
+        .create(
+          {
+            ticketId: ticketId,
+            type: TicketTimelineEntryType.Note,
+            entry: {
+              text: text,
+              rawContent: rawContent,
+            } satisfies TicketNote,
+            customerId: ticket.customerId,
+            createdAt: creationDate,
+            userCreatedById: userId,
+          },
+          tx
+        )
         .returning({
           id: schema.ticketTimelineEntries.id,
           createdAt: schema.ticketTimelineEntries.createdAt,
@@ -421,12 +472,13 @@ export default class TicketService extends BaseService {
       }
 
       if (mentionIds.length > 0) {
-        await tx.insert(schema.ticketMentions).values(
+        await this.ticketMentionRepository.create(
           mentionIds.map((mentionId) => ({
             ticketTimelineEntryId: newNote.id,
             userId: mentionId,
             ticketId: ticket.id,
-          }))
+          })),
+          tx
         );
       }
 

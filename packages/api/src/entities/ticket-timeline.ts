@@ -1,4 +1,4 @@
-import { db, InferSelectModel, schema } from '@cs/database';
+import { InferInsertModel, InferSelectModel, schema } from '@cs/database';
 import {
   TicketAssignmentChanged,
   TicketLabelsChanged,
@@ -23,9 +23,9 @@ export type TicketLabelsChangedWithData = {
 export type TicketTimeline = InferSelectModel<
   typeof schema.ticketTimelineEntries
 >;
-export type DbTicketTimelineRelations = NonNullable<
-  Parameters<(typeof db)['query']['ticketTimelineEntries']['findFirst']>[0]
->['with'];
+export type TicketTimelineInsert = InferInsertModel<
+  typeof schema.ticketTimelineEntries
+>;
 export type TicketTimelineRelations = {
   customer?: boolean;
   customerCreatedBy?: boolean;

@@ -1,7 +1,8 @@
-import { db, InferSelectModel, schema } from '@cs/database';
+import { db, InferInsertModel, InferSelectModel, schema } from '@cs/database';
 import { FindConfig, SortDirection } from '@cs/kyaku/types';
 
 export type LabelType = InferSelectModel<typeof schema.labelTypes>;
+export type LabelTypeInsert = InferInsertModel<typeof schema.labelTypes>;
 export type DbLabelTypeRelations = NonNullable<
   Parameters<(typeof db)['query']['labelTypes']['findFirst']>[0]
 >['with'];

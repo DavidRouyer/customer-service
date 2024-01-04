@@ -16,13 +16,21 @@ import {
   LabelType,
   LabelTypeRelations,
 } from '../entities/label-type';
+import LabelTypeRepository from '../repositories/label-type';
 import { BaseService } from './base-service';
 import { InclusionFilterOperator, sortDirection } from './build-query';
 
 export default class LabelTypeService extends BaseService {
-  constructor() {
+  private readonly labelTypeRepository: LabelTypeRepository;
+
+  constructor({
+    labelTypeRepository,
+  }: {
+    labelTypeRepository: LabelTypeRepository;
+  }) {
     // eslint-disable-next-line prefer-rest-params, @typescript-eslint/no-unsafe-argument
     super(arguments[0]);
+    this.labelTypeRepository = labelTypeRepository;
   }
 
   async retrieve(
@@ -121,12 +129,14 @@ export default class LabelTypeService extends BaseService {
     await this.dataSource.transaction(async (tx) => {
       const creationDate = new Date();
 
-      const newLabelType = await tx
-        .insert(schema.labelTypes)
-        .values({
-          ...data,
-          createdAt: creationDate,
-        })
+      const newLabelType = await this.labelTypeRepository
+        .create(
+          {
+            ...data,
+            createdAt: creationDate,
+          },
+          tx
+        )
         .returning({
           id: schema.labelTypes.id,
         })
@@ -154,15 +164,20 @@ export default class LabelTypeService extends BaseService {
 
     const archiveDate = new Date();
 
-    return this.dataSource
-      .insert(schema.labelTypes)
-      .values({
-        ...labelType,
-        updatedAt: archiveDate,
-        updatedById: userId,
-        archivedAt: archiveDate,
-      })
-      .returning({ id: schema.labelTypes.id });
+    return await this.dataSource.transaction(async (tx) => {
+      return await this.labelTypeRepository
+        .update(
+          {
+            ...labelType,
+            updatedAt: archiveDate,
+            updatedById: userId,
+            archivedAt: archiveDate,
+          },
+          tx
+        )
+        .where(eq(schema.labelTypes.id, labelTypeId))
+        .returning({ id: schema.labelTypes.id });
+    });
   }
 
   async unarchive(labelTypeId: string, userId: string) {
@@ -176,15 +191,20 @@ export default class LabelTypeService extends BaseService {
 
     const unarchiveDate = new Date();
 
-    return this.dataSource
-      .insert(schema.labelTypes)
-      .values({
-        ...labelType,
-        updatedAt: unarchiveDate,
-        updatedById: userId,
-        archivedAt: null,
-      })
-      .returning({ id: schema.labelTypes.id });
+    return await this.dataSource.transaction(async (tx) => {
+      return await this.labelTypeRepository
+        .update(
+          {
+            ...labelType,
+            updatedAt: unarchiveDate,
+            updatedById: userId,
+            archivedAt: null,
+          },
+          tx
+        )
+        .where(eq(schema.labelTypes.id, labelTypeId))
+        .returning({ id: schema.labelTypes.id });
+    });
   }
 
   private getWithClause(relations: LabelTypeRelations) {

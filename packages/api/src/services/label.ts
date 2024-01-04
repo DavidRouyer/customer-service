@@ -7,24 +7,39 @@ import {
   GetLabelConfig,
   LabelRelations,
 } from '../entities/label';
+import LabelRepository from '../repositories/label';
+import TicketRepository from '../repositories/ticket';
+import TicketTimelineRepository from '../repositories/ticket-timeline';
 import { BaseService } from './base-service';
 import { InclusionFilterOperator } from './build-query';
 import LabelTypeService from './label-type';
 import TicketService from './ticket';
 
 export default class LabelService extends BaseService {
+  private readonly labelRepository: LabelRepository;
+  private readonly ticketRepository: TicketRepository;
+  private readonly ticketTimelineRepository: TicketTimelineRepository;
   private readonly labelTypeService: LabelTypeService;
   private readonly ticketService: TicketService;
 
   constructor({
+    labelRepository,
+    ticketRepository,
+    ticketTimelineRepository,
     labelTypeService,
     ticketService,
   }: {
+    labelRepository: LabelRepository;
+    ticketRepository: TicketRepository;
+    ticketTimelineRepository: TicketTimelineRepository;
     labelTypeService: LabelTypeService;
     ticketService: TicketService;
   }) {
     // eslint-disable-next-line prefer-rest-params, @typescript-eslint/no-unsafe-argument
     super(arguments[0]);
+    this.labelRepository = labelRepository;
+    this.ticketRepository = ticketRepository;
+    this.ticketTimelineRepository = ticketTimelineRepository;
     this.labelTypeService = labelTypeService;
     this.ticketService = ticketService;
   }
@@ -98,22 +113,24 @@ export default class LabelService extends BaseService {
       );
 
     return await this.dataSource.transaction(async (tx) => {
-      const newLabels = await tx
-        .insert(schema.labels)
-        .values(
+      const newLabels = await this.labelRepository
+        .create(
           labelTypeIds.map((labelTypeId) => ({
             ticketId: ticket.id,
             labelTypeId: labelTypeId,
-          }))
+          })),
+          tx
         )
         .returning({ labelId: schema.labels.id });
 
-      const updatedTicket = await tx
-        .update(schema.tickets)
-        .set({
-          updatedAt: new Date(),
-          updatedById: userId,
-        })
+      const updatedTicket = await this.ticketRepository
+        .update(
+          {
+            updatedAt: new Date(),
+            updatedById: userId,
+          },
+          tx
+        )
         .where(eq(schema.tickets.id, ticket.id))
         .returning({
           id: schema.tickets.id,
@@ -126,17 +143,20 @@ export default class LabelService extends BaseService {
         return;
       }
 
-      await tx.insert(schema.ticketTimelineEntries).values({
-        ticketId: ticket.id,
-        type: TicketTimelineEntryType.LabelsChanged,
-        entry: {
-          oldLabelIds: [],
-          newLabelIds: newLabels.map((label) => label.labelId),
-        } satisfies TicketLabelsChanged,
-        customerId: ticket.customerId,
-        createdAt: updatedTicket.updatedAt ?? new Date(),
-        userCreatedById: userId,
-      });
+      await this.ticketTimelineRepository.create(
+        {
+          ticketId: ticket.id,
+          type: TicketTimelineEntryType.LabelsChanged,
+          entry: {
+            oldLabelIds: [],
+            newLabelIds: newLabels.map((label) => label.labelId),
+          } satisfies TicketLabelsChanged,
+          customerId: ticket.customerId,
+          createdAt: updatedTicket.updatedAt ?? new Date(),
+          userCreatedById: userId,
+        },
+        tx
+      );
     });
   }
 
@@ -168,12 +188,14 @@ export default class LabelService extends BaseService {
         )
         .returning({ labelId: schema.labels.id });
 
-      const updatedTicket = await tx
-        .update(schema.tickets)
-        .set({
-          updatedAt: new Date(),
-          updatedById: userId,
-        })
+      const updatedTicket = await this.ticketRepository
+        .update(
+          {
+            updatedAt: new Date(),
+            updatedById: userId,
+          },
+          tx
+        )
         .where(eq(schema.tickets.id, ticketId))
         .returning({
           id: schema.tickets.id,
@@ -186,17 +208,20 @@ export default class LabelService extends BaseService {
         return;
       }
 
-      await tx.insert(schema.ticketTimelineEntries).values({
-        ticketId: ticketId,
-        type: TicketTimelineEntryType.LabelsChanged,
-        entry: {
-          oldLabelIds: deletedLabels.map((label) => label.labelId),
-          newLabelIds: [],
-        } satisfies TicketLabelsChanged,
-        customerId: ticket.customerId,
-        createdAt: updatedTicket.updatedAt ?? new Date(),
-        userCreatedById: userId,
-      });
+      await this.ticketTimelineRepository.create(
+        {
+          ticketId: ticketId,
+          type: TicketTimelineEntryType.LabelsChanged,
+          entry: {
+            oldLabelIds: deletedLabels.map((label) => label.labelId),
+            newLabelIds: [],
+          } satisfies TicketLabelsChanged,
+          customerId: ticket.customerId,
+          createdAt: updatedTicket.updatedAt ?? new Date(),
+          userCreatedById: userId,
+        },
+        tx
+      );
     });
   }
 

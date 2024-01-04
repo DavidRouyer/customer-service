@@ -15,6 +15,10 @@ import { auth } from '@cs/auth';
 import type { Session } from '@cs/auth';
 import { db } from '@cs/database';
 
+import LabelTypeRepository from './repositories/label-type';
+import TicketRepository from './repositories/ticket';
+import TicketMentionRepository from './repositories/ticket-mention';
+import TicketTimelineRepository from './repositories/ticket-timeline';
 import CustomerService from './services/customer';
 import LabelService from './services/label';
 import LabelTypeService from './services/label-type';
@@ -38,6 +42,10 @@ type CreateContextOptions = {
 const container = createContainer();
 container.register({
   dataSource: asValue(db),
+  labelTypeRepository: asClass(LabelTypeRepository).scoped(),
+  ticketRepository: asClass(TicketRepository).scoped(),
+  ticketMentionRepository: asClass(TicketMentionRepository).scoped(),
+  ticketTimelineRepository: asClass(TicketTimelineRepository).scoped(),
   customerService: asClass(CustomerService).scoped(),
   labelTypeService: asClass(LabelTypeService).scoped(),
   labelService: asClass(LabelService).scoped(),
