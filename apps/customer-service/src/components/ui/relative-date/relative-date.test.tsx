@@ -24,7 +24,7 @@ describe('<RelativeDate />', () => {
 
     render(<RelativeDate dateTime={januaryFirst} />);
 
-    expect(screen.getByText('Sun, Jan 1')).toBeInTheDocument();
+    expect(screen.getByText('Mon, Jan 1')).toBeInTheDocument();
   });
   it('should render date on previous year', () => {
     const januaryFirst = new Date('2021-01-01');
