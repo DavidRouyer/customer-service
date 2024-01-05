@@ -1,7 +1,10 @@
-import { schema } from '@cs/database';
+import { eq, schema } from '@cs/database';
 
 import { DrizzleTransactionScope } from '../drizzle-transaction';
-import { TicketTimelineInsert } from '../entities/ticket-timeline';
+import {
+  TicketTimeline,
+  TicketTimelineInsert,
+} from '../entities/ticket-timeline';
 import { BaseRepository } from './base-repository';
 
 export default class TicketTimelineRepository extends BaseRepository {
@@ -26,9 +29,13 @@ export default class TicketTimelineRepository extends BaseRepository {
   }
 
   update(
-    entity: Partial<TicketTimelineInsert>,
+    entity: Partial<TicketTimelineInsert> &
+      NonNullable<Pick<TicketTimeline, 'id'>>,
     transactionScope: DrizzleTransactionScope
   ) {
-    return transactionScope.update(schema.ticketTimelineEntries).set(entity);
+    return transactionScope
+      .update(schema.ticketTimelineEntries)
+      .set(entity)
+      .where(eq(schema.ticketTimelineEntries.id, entity.id));
   }
 }
