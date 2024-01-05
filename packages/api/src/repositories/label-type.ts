@@ -1,7 +1,7 @@
-import { schema } from '@cs/database';
+import { eq, schema } from '@cs/database';
 
 import { DrizzleTransactionScope } from '../drizzle-transaction';
-import { LabelTypeInsert } from '../entities/label-type';
+import { LabelType, LabelTypeInsert } from '../entities/label-type';
 import { BaseRepository } from './base-repository';
 
 export default class LabelTypeRepository extends BaseRepository {
@@ -23,9 +23,12 @@ export default class LabelTypeRepository extends BaseRepository {
   }
 
   update(
-    entity: Partial<LabelTypeInsert>,
+    entity: Partial<LabelTypeInsert> & NonNullable<Pick<LabelType, 'id'>>,
     transactionScope: DrizzleTransactionScope
   ) {
-    return transactionScope.update(schema.labelTypes).set(entity);
+    return transactionScope
+      .update(schema.labelTypes)
+      .set(entity)
+      .where(eq(schema.labelTypes.id, entity.id));
   }
 }

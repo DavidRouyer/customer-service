@@ -1,4 +1,14 @@
-import { and, asc, desc, eq, gt, inArray, schema, SQL } from '@cs/database';
+import {
+  and,
+  asc,
+  desc,
+  eq,
+  gt,
+  inArray,
+  isNull,
+  schema,
+  SQL,
+} from '@cs/database';
 import { extractMentions } from '@cs/kyaku/editor';
 import {
   TicketAssignmentChanged,
@@ -151,13 +161,13 @@ export default class TicketService extends BaseService {
       const updatedTicket = await this.ticketRepository
         .update(
           {
+            id: ticketId,
             assignedToId: assignedToId,
             updatedAt: new Date(),
             updatedById: userId,
           },
           tx
         )
-        .where(eq(schema.tickets.id, ticketId))
         .returning({
           id: schema.tickets.id,
           updatedAt: schema.tickets.updatedAt,
@@ -199,13 +209,13 @@ export default class TicketService extends BaseService {
       const updatedTicket = await this.ticketRepository
         .update(
           {
+            id: ticketId,
             assignedToId: null,
             updatedAt: new Date(),
             updatedById: userId,
           },
           tx
         )
-        .where(eq(schema.tickets.id, ticketId))
         .returning({
           id: schema.tickets.id,
           updatedAt: schema.tickets.updatedAt,
@@ -245,13 +255,13 @@ export default class TicketService extends BaseService {
       const updatedTicket = await this.ticketRepository
         .update(
           {
+            id: ticketId,
             priority: priority,
             updatedAt: new Date(),
             updatedById: userId,
           },
           tx
         )
-        .where(eq(schema.tickets.id, ticketId))
         .returning({
           id: schema.tickets.id,
           updatedAt: schema.tickets.updatedAt,
@@ -293,6 +303,7 @@ export default class TicketService extends BaseService {
       const updatedTicket = await this.ticketRepository
         .update(
           {
+            id: ticketId,
             status: TicketStatus.Done,
             statusDetail: null,
             statusChangedAt: new Date(),
@@ -302,7 +313,6 @@ export default class TicketService extends BaseService {
           },
           tx
         )
-        .where(eq(schema.tickets.id, ticketId))
         .returning({
           id: schema.tickets.id,
           updatedAt: schema.tickets.updatedAt,
@@ -344,6 +354,7 @@ export default class TicketService extends BaseService {
       const updatedTicket = await this.ticketRepository
         .update(
           {
+            id: ticketId,
             status: TicketStatus.Open,
             statusDetail: null,
             statusChangedAt: new Date(),
@@ -353,7 +364,6 @@ export default class TicketService extends BaseService {
           },
           tx
         )
-        .where(eq(schema.tickets.id, ticketId))
         .returning({
           id: schema.tickets.id,
           updatedAt: schema.tickets.updatedAt,
@@ -413,18 +423,17 @@ export default class TicketService extends BaseService {
         return;
       }
 
-      await this.ticketRepository
-        .update(
-          {
-            statusDetail: TicketStatusDetail.Replied,
-            statusChangedAt: newChat.createdAt,
-            statusChangedById: userId,
-            updatedAt: newChat.createdAt,
-            updatedById: userId,
-          },
-          tx
-        )
-        .where(eq(schema.tickets.id, ticketId));
+      await this.ticketRepository.update(
+        {
+          id: ticketId,
+          statusDetail: TicketStatusDetail.Replied,
+          statusChangedAt: newChat.createdAt,
+          statusChangedById: userId,
+          updatedAt: newChat.createdAt,
+          updatedById: userId,
+        },
+        tx
+      );
 
       return {
         id: newChat.id,
@@ -498,6 +507,7 @@ export default class TicketService extends BaseService {
             with: {
               labelType: true,
             },
+            where: isNull(schema.labels.archivedAt),
           } as const)
         : undefined,
       timelineEntries: relations?.lastTimelineEntry

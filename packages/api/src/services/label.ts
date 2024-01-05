@@ -121,17 +121,23 @@ export default class LabelService extends BaseService {
           })),
           tx
         )
+        .onConflictDoUpdate({
+          target: [schema.labels.ticketId, schema.labels.labelTypeId],
+          set: {
+            archivedAt: null,
+          },
+        })
         .returning({ labelId: schema.labels.id });
 
       const updatedTicket = await this.ticketRepository
         .update(
           {
+            id: ticket.id,
             updatedAt: new Date(),
             updatedById: userId,
           },
           tx
         )
-        .where(eq(schema.tickets.id, ticket.id))
         .returning({
           id: schema.tickets.id,
           updatedAt: schema.tickets.updatedAt,
@@ -178,25 +184,26 @@ export default class LabelService extends BaseService {
       );
 
     return await this.dataSource.transaction(async (tx) => {
-      const deletedLabels = await tx
-        .delete(schema.labels)
-        .where(
-          and(
-            eq(schema.labels.ticketId, ticketId),
-            inArray(schema.labels.id, labelIds)
-          )
+      const archivedDate = new Date();
+      const deletedLabels = await this.labelRepository
+        .updateMany(
+          labelIds,
+          {
+            archivedAt: archivedDate,
+          },
+          tx
         )
         .returning({ labelId: schema.labels.id });
 
       const updatedTicket = await this.ticketRepository
         .update(
           {
-            updatedAt: new Date(),
+            id: ticketId,
+            updatedAt: archivedDate,
             updatedById: userId,
           },
           tx
         )
-        .where(eq(schema.tickets.id, ticketId))
         .returning({
           id: schema.tickets.id,
           updatedAt: schema.tickets.updatedAt,

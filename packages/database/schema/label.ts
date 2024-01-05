@@ -1,5 +1,5 @@
 import { relations } from 'drizzle-orm';
-import { pgTable, unique, varchar } from 'drizzle-orm/pg-core';
+import { pgTable, timestamp, unique, varchar } from 'drizzle-orm/pg-core';
 
 import { generateEntityId } from '@cs/kyaku/utils/generate-entity-id';
 
@@ -25,6 +25,7 @@ export const labels = pgTable(
         onDelete: 'restrict',
         onUpdate: 'cascade',
       }),
+    archivedAt: timestamp('archivedAt', { precision: 3, mode: 'date' }),
   },
   (table) => ({
     unique: unique().on(table.ticketId, table.labelTypeId),

@@ -168,14 +168,13 @@ export default class LabelTypeService extends BaseService {
       return await this.labelTypeRepository
         .update(
           {
-            ...labelType,
+            id: labelType.id,
             updatedAt: archiveDate,
             updatedById: userId,
             archivedAt: archiveDate,
           },
           tx
         )
-        .where(eq(schema.labelTypes.id, labelTypeId))
         .returning({ id: schema.labelTypes.id });
     });
   }
@@ -195,14 +194,13 @@ export default class LabelTypeService extends BaseService {
       return await this.labelTypeRepository
         .update(
           {
-            ...labelType,
+            id: labelType.id,
             updatedAt: unarchiveDate,
             updatedById: userId,
             archivedAt: null,
           },
           tx
         )
-        .where(eq(schema.labelTypes.id, labelTypeId))
         .returning({ id: schema.labelTypes.id });
     });
   }

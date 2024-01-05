@@ -158,7 +158,7 @@ export const TicketLabelCombobox: FC<TicketLabelComboboxProps> = ({
                 key={labelType.id}
                 onSelect={() => {
                   const labelWithLabelType = labels?.find(
-                    (label) => label.labelTypeId === labelType.id
+                    (label) => label.labelType.id === labelType.id
                   );
                   if (labelWithLabelType) {
                     removeLabels({
@@ -174,7 +174,7 @@ export const TicketLabelCombobox: FC<TicketLabelComboboxProps> = ({
                   className={cn(
                     'mr-2 h-4 w-4 shrink-0',
                     labels
-                      ?.map((label) => label.labelTypeId)
+                      ?.map((label) => label.labelType.id)
                       .includes(labelType.id)
                       ? 'opacity-100'
                       : 'opacity-0'
