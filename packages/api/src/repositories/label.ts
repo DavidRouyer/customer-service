@@ -10,11 +10,19 @@ export default class LabelRepository extends BaseRepository {
     super(arguments[0]);
   }
 
-  findMany(
-    ...[config]: Parameters<
+  find<
+    T extends Parameters<
+      (typeof this.dataSource)['query']['labels']['findFirst']
+    >,
+  >(...[config]: T) {
+    return this.dataSource.query.labels.findFirst(config);
+  }
+
+  findMany<
+    T extends Parameters<
       (typeof this.dataSource)['query']['labels']['findMany']
-    >
-  ) {
+    >,
+  >(...[config]: T) {
     return this.dataSource.query.labels.findMany(config);
   }
 

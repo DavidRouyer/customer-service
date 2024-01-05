@@ -10,11 +10,19 @@ export default class TicketMentionRepository extends BaseRepository {
     super(arguments[0]);
   }
 
-  findMany(
-    ...[config]: Parameters<
+  find<
+    T extends Parameters<
+      (typeof this.dataSource)['query']['ticketMentions']['findFirst']
+    >,
+  >(...[config]: T) {
+    return this.dataSource.query.ticketMentions.findFirst(config);
+  }
+
+  findMany<
+    T extends Parameters<
       (typeof this.dataSource)['query']['ticketMentions']['findMany']
-    >
-  ) {
+    >,
+  >(...[config]: T) {
     return this.dataSource.query.ticketMentions.findMany(config);
   }
 

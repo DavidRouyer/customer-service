@@ -66,7 +66,7 @@ export default class TicketService extends BaseService {
     ticketId: string,
     config: GetTicketConfig = { relations: {} }
   ) {
-    const ticket = await this.dataSource.query.tickets.findFirst({
+    const ticket = await this.ticketRepository.find({
       where: eq(schema.tickets.id, ticketId),
       with: this.getWithClause(config.relations),
     });

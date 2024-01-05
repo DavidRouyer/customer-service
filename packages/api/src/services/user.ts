@@ -2,17 +2,21 @@ import { and, desc, eq, inArray, lt, notInArray, schema } from '@cs/database';
 import { KyakuError } from '@cs/kyaku/utils';
 
 import { FindUserConfig, GetUserConfig, UserRelations } from '../entities/user';
+import UserRepository from '../repositories/user';
 import { BaseService } from './base-service';
 import { InclusionFilterOperator, sortDirection } from './build-query';
 
 export default class UserService extends BaseService {
-  constructor() {
+  private readonly userRepository: UserRepository;
+
+  constructor({ userRepository }: { userRepository: UserRepository }) {
     // eslint-disable-next-line prefer-rest-params, @typescript-eslint/no-unsafe-argument
     super(arguments[0]);
+    this.userRepository = userRepository;
   }
 
   async retrieve(userId: string, config: GetUserConfig = { relations: {} }) {
-    const user = await this.dataSource.query.users.findFirst({
+    const user = await this.userRepository.find({
       where: eq(schema.users.id, userId),
       with: this.getWithClause(config.relations),
     });
@@ -39,7 +43,7 @@ export default class UserService extends BaseService {
         : undefined,
       config.skip ? lt(schema.users.id, config.skip) : undefined
     );
-    return await this.dataSource.query.users.findMany({
+    return await this.userRepository.findMany({
       where: whereClause,
       with: this.getWithClause(config.relations),
       limit: config.take,

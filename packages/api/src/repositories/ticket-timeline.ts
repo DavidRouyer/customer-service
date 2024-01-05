@@ -13,11 +13,19 @@ export default class TicketTimelineRepository extends BaseRepository {
     super(arguments[0]);
   }
 
-  findMany(
-    ...[config]: Parameters<
+  find<
+    T extends Parameters<
+      (typeof this.dataSource)['query']['ticketTimelineEntries']['findFirst']
+    >,
+  >(...[config]: T) {
+    return this.dataSource.query.ticketTimelineEntries.findFirst(config);
+  }
+
+  findMany<
+    T extends Parameters<
       (typeof this.dataSource)['query']['ticketTimelineEntries']['findMany']
-    >
-  ) {
+    >,
+  >(...[config]: T) {
     return this.dataSource.query.ticketTimelineEntries.findMany(config);
   }
 

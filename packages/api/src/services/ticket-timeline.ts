@@ -15,24 +15,29 @@ import {
   TicketLabelsChangedWithData,
   TicketTimelineRelations,
 } from '../entities/ticket-timeline';
+import TicketTimelineRepository from '../repositories/ticket-timeline';
 import { BaseService } from './base-service';
 import { sortDirection } from './build-query';
 import LabelService from './label';
 import UserService from './user';
 
 export default class TicketTimelineService extends BaseService {
+  private readonly ticketTimelineRepository: TicketTimelineRepository;
   private readonly labelService: LabelService;
   private readonly userService: UserService;
 
   constructor({
+    ticketTimelineRepository,
     labelService,
     userService,
   }: {
+    ticketTimelineRepository: TicketTimelineRepository;
     labelService: LabelService;
     userService: UserService;
   }) {
     // eslint-disable-next-line prefer-rest-params, @typescript-eslint/no-unsafe-argument
     super(arguments[0]);
+    this.ticketTimelineRepository = ticketTimelineRepository;
     this.labelService = labelService;
     this.userService = userService;
   }
@@ -43,22 +48,21 @@ export default class TicketTimelineService extends BaseService {
       relations: {},
     }
   ) {
-    const ticketTimelineEntries =
-      await this.dataSource.query.ticketTimelineEntries.findMany({
-        where: eq(schema.ticketTimelineEntries.ticketId, filters.ticketId),
-        with: this.getWithClause(config.relations),
-        limit: config.take,
-        orderBy: and(
-          config.sortBy
-            ? 'createdAt' in config.sortBy
-              ? sortDirection(config.sortBy.createdAt)(
-                  schema.ticketTimelineEntries.createdAt
-                )
-              : undefined
-            : undefined,
-          config.skip ? desc(schema.tickets.id) : undefined
-        ),
-      });
+    const ticketTimelineEntries = await this.ticketTimelineRepository.findMany({
+      where: eq(schema.ticketTimelineEntries.ticketId, filters.ticketId),
+      with: this.getWithClause(config.relations),
+      limit: config.take,
+      orderBy: and(
+        config.sortBy
+          ? 'createdAt' in config.sortBy
+            ? sortDirection(config.sortBy.createdAt)(
+                schema.ticketTimelineEntries.createdAt
+              )
+            : undefined
+          : undefined,
+        config.skip ? desc(schema.tickets.id) : undefined
+      ),
+    });
 
     const ticketAssigmentChangedEntries = ticketTimelineEntries
       .filter(

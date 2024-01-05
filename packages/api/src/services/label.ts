@@ -45,7 +45,7 @@ export default class LabelService extends BaseService {
   }
 
   async retrieve(labelId: string, config: GetLabelConfig = { relations: {} }) {
-    const label = await this.dataSource.query.labels.findFirst({
+    const label = await this.labelRepository.find({
       where: eq(schema.labels.id, labelId),
       with: this.getWithClause(config.relations),
     });
@@ -82,7 +82,7 @@ export default class LabelService extends BaseService {
         : undefined,
       config.skip ? lt(schema.labels.id, config.skip) : undefined
     );
-    return await this.dataSource.query.labels.findMany({
+    return await this.labelRepository.findMany({
       where: whereClause,
       with: this.getWithClause(config.relations),
       limit: config.take,

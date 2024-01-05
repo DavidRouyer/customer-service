@@ -37,7 +37,7 @@ export default class LabelTypeService extends BaseService {
     labelTypeId: string,
     config: FindLabelTypeConfig = { relations: {} }
   ) {
-    const labelType = await this.dataSource.query.labelTypes.findFirst({
+    const labelType = await this.labelTypeRepository.find({
       where: eq(schema.labelTypes.id, labelTypeId),
       with: this.getWithClause(config.relations),
     });
@@ -55,7 +55,7 @@ export default class LabelTypeService extends BaseService {
     labelTypeName: string,
     config: FindLabelTypeConfig = { relations: {} }
   ) {
-    const labelType = await this.dataSource.query.labelTypes.findFirst({
+    const labelType = await this.labelTypeRepository.find({
       where: eq(schema.labelTypes.name, labelTypeName),
       with: this.getWithClause(config.relations),
     });

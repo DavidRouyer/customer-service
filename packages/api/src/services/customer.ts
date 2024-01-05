@@ -2,20 +2,28 @@ import { and, desc, eq, lt, schema } from '@cs/database';
 import { KyakuError } from '@cs/kyaku/utils';
 
 import { CustomerRelations, FindCustomerConfig } from '../entities/customer';
+import CustomerRepository from '../repositories/customer';
 import { BaseService } from './base-service';
 import { sortDirection } from './build-query';
 
 export default class CustomerService extends BaseService {
-  constructor() {
+  private readonly customerRepository: CustomerRepository;
+
+  constructor({
+    customerRepository,
+  }: {
+    customerRepository: CustomerRepository;
+  }) {
     // eslint-disable-next-line prefer-rest-params, @typescript-eslint/no-unsafe-argument
     super(arguments[0]);
+    this.customerRepository = customerRepository;
   }
 
   async retrieve(
     customerId: string,
     config: FindCustomerConfig = { relations: {} }
   ) {
-    const customer = await this.dataSource.query.customers.findFirst({
+    const customer = await this.customerRepository.find({
       where: eq(schema.customers.id, customerId),
       with: this.getWithClause(config.relations),
     });
