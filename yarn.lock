@@ -558,7 +558,7 @@ __metadata:
     "@neondatabase/serverless": "npm:^0.6.1"
     "@types/ws": "npm:^8.5.10"
     dotenv-cli: "npm:^7.3.0"
-    drizzle-kit: "npm:^0.20.9"
+    drizzle-kit: "npm:^0.20.10"
     drizzle-orm: "npm:^0.29.3"
     eslint: "npm:^8.56.0"
     lexical: "npm:^0.12.5"
@@ -4655,9 +4655,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"drizzle-kit@npm:^0.20.9":
-  version: 0.20.9
-  resolution: "drizzle-kit@npm:0.20.9"
+"drizzle-kit@npm:^0.20.10":
+  version: 0.20.10
+  resolution: "drizzle-kit@npm:0.20.10"
   dependencies:
     "@drizzle-team/studio": "npm:^0.0.37"
     "@esbuild-kit/esm-loader": "npm:^2.5.5"
@@ -4675,7 +4675,7 @@ __metadata:
     zod: "npm:^3.20.2"
   bin:
     drizzle-kit: bin.cjs
-  checksum: 5ce0e5b8cad60b275c72669a0320a89ecc54d979c3f164839b3a68905aee2fa2858059d21b7ebdecdc14271034fcb04c573578b6815229d2d0f94e4b94ab4170
+  checksum: 078b7ae225bfe9011d89f3dacb202cd42aace0da8489ab3fe051037831d8bdade3dce627986ccb68c03e78b44e9241beacd78be4af04f36c45f674476cbd1629
   languageName: node
   linkType: hard
 
