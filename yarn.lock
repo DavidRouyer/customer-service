@@ -487,7 +487,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@cs/auth@workspace:packages/auth"
   dependencies:
-    "@auth/core": "npm:^0.19.0"
+    "@auth/core": "npm:^0.20.0"
     "@auth/drizzle-adapter": "npm:^0.3.14"
     "@cs/database": "npm:*"
     "@cs/eslint-config": "npm:*"
