@@ -13,7 +13,7 @@ import { ZodError } from 'zod';
 
 import { auth } from '@cs/auth';
 import type { Session } from '@cs/auth';
-import { db } from '@cs/database';
+import { drizzleConnection } from '@cs/database';
 
 import CustomerRepository from './repositories/customer';
 import LabelRepository from './repositories/label';
@@ -28,6 +28,7 @@ import LabelTypeService from './services/label-type';
 import TicketService from './services/ticket';
 import TicketTimelineService from './services/ticket-timeline';
 import UserService from './services/user';
+import { UnitOfWork } from './unit-of-work';
 
 /**
  * 1. CONTEXT
@@ -44,7 +45,8 @@ type CreateContextOptions = {
 
 const container = createContainer();
 container.register({
-  dataSource: asValue(db),
+  drizzleConnection: asValue(drizzleConnection),
+  unitOfWork: asClass(UnitOfWork).scoped(),
   customerRepository: asClass(CustomerRepository).scoped(),
   labelRepository: asClass(LabelRepository).scoped(),
   labelTypeRepository: asClass(LabelTypeRepository).scoped(),

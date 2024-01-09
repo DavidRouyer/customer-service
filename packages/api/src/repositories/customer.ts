@@ -12,18 +12,18 @@ export default class CustomerRepository extends BaseRepository {
 
   find<
     T extends Parameters<
-      (typeof this.dataSource)['query']['customers']['findFirst']
+      (typeof this.drizzleConnection)['query']['customers']['findFirst']
     >,
   >(...[config]: T) {
-    return this.dataSource.query.customers.findFirst(config);
+    return this.drizzleConnection.query.customers.findFirst(config);
   }
 
   findMany<
     T extends Parameters<
-      (typeof this.dataSource)['query']['customers']['findMany']
+      (typeof this.drizzleConnection)['query']['customers']['findMany']
     >,
   >(...[config]: T) {
-    return this.dataSource.query.customers.findMany(config);
+    return this.drizzleConnection.query.customers.findMany(config);
   }
 
   create(entity: CustomerInsert, transactionScope: DrizzleTransactionScope) {

@@ -1,9 +1,9 @@
-import { DataSource } from '@cs/database';
+import { DrizzleConnection } from '@cs/database';
 
 export abstract class BaseRepository {
-  protected readonly dataSource: DataSource;
+  protected readonly drizzleConnection: DrizzleConnection;
 
-  constructor({ dataSource }: { dataSource: DataSource }) {
-    this.dataSource = dataSource;
+  constructor({ drizzleConnection }: { drizzleConnection: DrizzleConnection }) {
+    this.drizzleConnection = drizzleConnection;
   }
 }

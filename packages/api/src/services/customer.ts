@@ -41,7 +41,7 @@ export default class CustomerService extends BaseService {
     const whereClause = and(
       config.skip ? lt(schema.customers.id, config.skip) : undefined
     );
-    return this.dataSource.query.customers.findMany({
+    return this.customerRepository.findMany({
       where: whereClause,
       with: this.getWithClause(config.relations),
       limit: config.take,

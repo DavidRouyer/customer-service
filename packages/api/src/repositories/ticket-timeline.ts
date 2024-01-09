@@ -15,18 +15,18 @@ export default class TicketTimelineRepository extends BaseRepository {
 
   find<
     T extends Parameters<
-      (typeof this.dataSource)['query']['ticketTimelineEntries']['findFirst']
+      (typeof this.drizzleConnection)['query']['ticketTimelineEntries']['findFirst']
     >,
   >(...[config]: T) {
-    return this.dataSource.query.ticketTimelineEntries.findFirst(config);
+    return this.drizzleConnection.query.ticketTimelineEntries.findFirst(config);
   }
 
   findMany<
     T extends Parameters<
-      (typeof this.dataSource)['query']['ticketTimelineEntries']['findMany']
+      (typeof this.drizzleConnection)['query']['ticketTimelineEntries']['findMany']
     >,
   >(...[config]: T) {
-    return this.dataSource.query.ticketTimelineEntries.findMany(config);
+    return this.drizzleConnection.query.ticketTimelineEntries.findMany(config);
   }
 
   create(

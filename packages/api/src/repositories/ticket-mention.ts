@@ -12,18 +12,18 @@ export default class TicketMentionRepository extends BaseRepository {
 
   find<
     T extends Parameters<
-      (typeof this.dataSource)['query']['ticketMentions']['findFirst']
+      (typeof this.drizzleConnection)['query']['ticketMentions']['findFirst']
     >,
   >(...[config]: T) {
-    return this.dataSource.query.ticketMentions.findFirst(config);
+    return this.drizzleConnection.query.ticketMentions.findFirst(config);
   }
 
   findMany<
     T extends Parameters<
-      (typeof this.dataSource)['query']['ticketMentions']['findMany']
+      (typeof this.drizzleConnection)['query']['ticketMentions']['findMany']
     >,
   >(...[config]: T) {
-    return this.dataSource.query.ticketMentions.findMany(config);
+    return this.drizzleConnection.query.ticketMentions.findMany(config);
   }
 
   create(

@@ -12,18 +12,18 @@ export default class LabelRepository extends BaseRepository {
 
   find<
     T extends Parameters<
-      (typeof this.dataSource)['query']['labels']['findFirst']
+      (typeof this.drizzleConnection)['query']['labels']['findFirst']
     >,
   >(...[config]: T) {
-    return this.dataSource.query.labels.findFirst(config);
+    return this.drizzleConnection.query.labels.findFirst(config);
   }
 
   findMany<
     T extends Parameters<
-      (typeof this.dataSource)['query']['labels']['findMany']
+      (typeof this.drizzleConnection)['query']['labels']['findMany']
     >,
   >(...[config]: T) {
-    return this.dataSource.query.labels.findMany(config);
+    return this.drizzleConnection.query.labels.findMany(config);
   }
 
   create(

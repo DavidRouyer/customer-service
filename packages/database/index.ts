@@ -28,6 +28,6 @@ const databaseClient = new Pool({
   maxUses: typeof EdgeRuntime !== 'undefined' ? 1 : undefined,
 });
 
-export const db = drizzle(databaseClient, { schema });
+export const drizzleConnection = drizzle(databaseClient, { schema });
 
-export type DataSource = typeof db;
+export type DrizzleConnection = typeof drizzleConnection;

@@ -4,7 +4,7 @@ import { Session } from '@auth/core/types';
 import { DrizzleAdapter } from '@auth/drizzle-adapter';
 import NextAuth from 'next-auth';
 
-import { db, tableCreator } from '@cs/database';
+import { drizzleConnection, tableCreator } from '@cs/database';
 import { User } from '@cs/kyaku/models';
 
 export type { Session } from 'next-auth';
@@ -23,7 +23,7 @@ export const {
   signOut,
 } = NextAuth({
   adapter: {
-    ...DrizzleAdapter(db, tableCreator),
+    ...DrizzleAdapter(drizzleConnection, tableCreator),
   },
   providers: [
     GitHub({

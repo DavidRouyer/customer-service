@@ -1,9 +1,9 @@
-import { DataSource } from '@cs/database';
+import { UnitOfWork } from '../unit-of-work';
 
 export abstract class BaseService {
-  protected readonly dataSource: DataSource;
+  protected readonly unitOfWork: UnitOfWork;
 
-  constructor({ dataSource }: { dataSource: DataSource }) {
-    this.dataSource = dataSource;
+  constructor({ unitOfWork }: { unitOfWork: UnitOfWork }) {
+    this.unitOfWork = unitOfWork;
   }
 }

@@ -12,18 +12,18 @@ export default class LabelTypeRepository extends BaseRepository {
 
   find<
     T extends Parameters<
-      (typeof this.dataSource)['query']['labelTypes']['findFirst']
+      (typeof this.drizzleConnection)['query']['labelTypes']['findFirst']
     >,
   >(...[config]: T) {
-    return this.dataSource.query.labelTypes.findFirst(config);
+    return this.drizzleConnection.query.labelTypes.findFirst(config);
   }
 
   findMany<
     T extends Parameters<
-      (typeof this.dataSource)['query']['labelTypes']['findMany']
+      (typeof this.drizzleConnection)['query']['labelTypes']['findMany']
     >,
   >(...[config]: T) {
-    return this.dataSource.query.labelTypes.findMany(config);
+    return this.drizzleConnection.query.labelTypes.findMany(config);
   }
 
   create(entity: LabelTypeInsert, transactionScope: DrizzleTransactionScope) {

@@ -112,7 +112,7 @@ export default class LabelService extends BaseService {
         `Label types with ids: ${missingLabelTypeIds.join(',')} not found`
       );
 
-    return await this.dataSource.transaction(async (tx) => {
+    return await this.unitOfWork.transaction(async (tx) => {
       const newLabels = await this.labelRepository
         .create(
           labelTypeIds.map((labelTypeId) => ({
@@ -163,13 +163,15 @@ export default class LabelService extends BaseService {
         },
         tx
       );
+
+      return newLabels;
     });
   }
 
   async removeLabels(ticketId: string, labelIds: string[], userId: string) {
     const ticket = await this.ticketService.retrieve(ticketId);
 
-    const fetchedLabels = await this.dataSource.query.labels.findMany({
+    const fetchedLabels = await this.labelRepository.findMany({
       where: inArray(schema.labelTypes.id, labelIds),
     });
     const fetchedLabelIds = fetchedLabels.map((label) => label.id);
@@ -183,7 +185,7 @@ export default class LabelService extends BaseService {
         `Labels with ids: ${missingLabelIds.join(',')} not found`
       );
 
-    return await this.dataSource.transaction(async (tx) => {
+    return await this.unitOfWork.transaction(async (tx) => {
       const archivedDate = new Date();
       const deletedLabels = await this.labelRepository
         .updateMany(

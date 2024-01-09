@@ -12,18 +12,18 @@ export default class UserRepository extends BaseRepository {
 
   find<
     T extends Parameters<
-      (typeof this.dataSource)['query']['users']['findFirst']
+      (typeof this.drizzleConnection)['query']['users']['findFirst']
     >,
   >(...[config]: T) {
-    return this.dataSource.query.users.findFirst(config);
+    return this.drizzleConnection.query.users.findFirst(config);
   }
 
   findMany<
     T extends Parameters<
-      (typeof this.dataSource)['query']['users']['findMany']
+      (typeof this.drizzleConnection)['query']['users']['findMany']
     >,
   >(...[config]: T) {
-    return this.dataSource.query.users.findMany(config);
+    return this.drizzleConnection.query.users.findMany(config);
   }
 
   create(

@@ -91,7 +91,7 @@ export default class LabelTypeService extends BaseService {
         : undefined,
       config.skip ? lt(schema.labelTypes.id, config.skip) : undefined
     );
-    return this.dataSource.query.labelTypes.findMany({
+    return this.labelTypeRepository.findMany({
       where: whereClause,
       with: this.getWithClause(config.relations),
       limit: config.take,
@@ -126,7 +126,7 @@ export default class LabelTypeService extends BaseService {
       // Label type not found, continue
     }
 
-    await this.dataSource.transaction(async (tx) => {
+    await this.unitOfWork.transaction(async (tx) => {
       const creationDate = new Date();
 
       const newLabelType = await this.labelTypeRepository
@@ -164,7 +164,7 @@ export default class LabelTypeService extends BaseService {
 
     const archiveDate = new Date();
 
-    return await this.dataSource.transaction(async (tx) => {
+    return await this.unitOfWork.transaction(async (tx) => {
       return await this.labelTypeRepository
         .update(
           {
@@ -190,7 +190,7 @@ export default class LabelTypeService extends BaseService {
 
     const unarchiveDate = new Date();
 
-    return await this.dataSource.transaction(async (tx) => {
+    return await this.unitOfWork.transaction(async (tx) => {
       return await this.labelTypeRepository
         .update(
           {

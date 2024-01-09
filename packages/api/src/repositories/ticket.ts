@@ -12,18 +12,18 @@ export default class TicketRepository extends BaseRepository {
 
   find<
     T extends Parameters<
-      (typeof this.dataSource)['query']['tickets']['findFirst']
+      (typeof this.drizzleConnection)['query']['tickets']['findFirst']
     >,
   >(...[config]: T) {
-    return this.dataSource.query.tickets.findFirst(config);
+    return this.drizzleConnection.query.tickets.findFirst(config);
   }
 
   findMany<
     T extends Parameters<
-      (typeof this.dataSource)['query']['tickets']['findMany']
+      (typeof this.drizzleConnection)['query']['tickets']['findMany']
     >,
   >(...[config]: T) {
-    return this.dataSource.query.tickets.findMany(config);
+    return this.drizzleConnection.query.tickets.findMany(config);
   }
 
   create(entity: TicketInsert, transactionScope: DrizzleTransactionScope) {

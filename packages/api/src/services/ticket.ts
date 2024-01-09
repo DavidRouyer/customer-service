@@ -87,7 +87,7 @@ export default class TicketService extends BaseService {
       this.getCursorClauses(config);
     const whereClause = this.getWhereClause(filters);
 
-    const filteredTickets = await this.dataSource.query.tickets.findMany({
+    const filteredTickets = await this.ticketRepository.findMany({
       where: and(whereClause, cursorWhereClause),
       with: this.getWithClause(config.relations),
       limit: config.take ? config.take + 1 : undefined,
@@ -124,7 +124,7 @@ export default class TicketService extends BaseService {
       | 'updatedAt'
     >
   ) {
-    await this.dataSource.transaction(async (tx) => {
+    await this.unitOfWork.transaction(async (tx) => {
       const creationDate = new Date();
 
       const newTicket = await this.ticketRepository
@@ -157,7 +157,7 @@ export default class TicketService extends BaseService {
   async assign(ticketId: string, assignedToId: string, userId: string) {
     const ticket = await this.retrieve(ticketId);
 
-    return await this.dataSource.transaction(async (tx) => {
+    return await this.unitOfWork.transaction(async (tx) => {
       const updatedTicket = await this.ticketRepository
         .update(
           {
@@ -205,7 +205,7 @@ export default class TicketService extends BaseService {
         `Ticket with id:${ticketId} is not assigned`
       );
 
-    return await this.dataSource.transaction(async (tx) => {
+    return await this.unitOfWork.transaction(async (tx) => {
       const updatedTicket = await this.ticketRepository
         .update(
           {
@@ -251,7 +251,7 @@ export default class TicketService extends BaseService {
   ) {
     const ticket = await this.retrieve(ticketId);
 
-    return await this.dataSource.transaction(async (tx) => {
+    return await this.unitOfWork.transaction(async (tx) => {
       const updatedTicket = await this.ticketRepository
         .update(
           {
@@ -299,7 +299,7 @@ export default class TicketService extends BaseService {
         `Ticket with id:${ticketId} is already marked as done`
       );
 
-    return await this.dataSource.transaction(async (tx) => {
+    return await this.unitOfWork.transaction(async (tx) => {
       const updatedTicket = await this.ticketRepository
         .update(
           {
@@ -350,7 +350,7 @@ export default class TicketService extends BaseService {
         `Ticket with id:${ticketId} is already marked as open`
       );
 
-    return await this.dataSource.transaction(async (tx) => {
+    return await this.unitOfWork.transaction(async (tx) => {
       const updatedTicket = await this.ticketRepository
         .update(
           {
@@ -395,7 +395,7 @@ export default class TicketService extends BaseService {
   async sendChat(ticketId: string, text: string, userId: string) {
     const ticket = await this.retrieve(ticketId);
 
-    return await this.dataSource.transaction(async (tx) => {
+    return await this.unitOfWork.transaction(async (tx) => {
       const creationDate = new Date();
 
       const newChat = await this.ticketTimelineRepository
@@ -451,7 +451,7 @@ export default class TicketService extends BaseService {
 
     const mentionIds = await extractMentions(rawContent);
 
-    return await this.dataSource.transaction(async (tx) => {
+    return await this.unitOfWork.transaction(async (tx) => {
       const creationDate = new Date();
 
       const newNote = await this.ticketTimelineRepository
