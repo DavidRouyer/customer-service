@@ -475,7 +475,7 @@ __metadata:
     "@trpc/client": "npm:next"
     "@trpc/server": "npm:next"
     eslint: "npm:^8.56.0"
-    lexical: "npm:^0.12.5"
+    lexical: "npm:^0.12.6"
     prettier: "npm:^3.1.1"
     superjson: "npm:^2.2.1"
     typescript: "npm:^5.3.3"
@@ -542,7 +542,7 @@ __metadata:
     google-libphonenumber: "npm:^3.2.33"
     jotai: "npm:^2.6.1"
     jsdom: "npm:^23.2.0"
-    lexical: "npm:^0.12.5"
+    lexical: "npm:^0.12.6"
     lucide-react: "npm:^0.308.0"
     negotiator: "npm:^0.6.3"
     next: "npm:^14.0.4"
@@ -572,7 +572,7 @@ __metadata:
     drizzle-kit: "npm:^0.20.10"
     drizzle-orm: "npm:^0.29.3"
     eslint: "npm:^8.56.0"
-    lexical: "npm:^0.12.5"
+    lexical: "npm:^0.12.6"
     prettier: "npm:^3.1.1"
     tsx: "npm:^4.7.0"
     typescript: "npm:^5.3.3"
@@ -607,7 +607,7 @@ __metadata:
     "@cs/tsconfig": "npm:*"
     "@lexical/headless": "npm:^0.12.5"
     eslint: "npm:^8.56.0"
-    lexical: "npm:^0.12.5"
+    lexical: "npm:^0.12.6"
     prettier: "npm:^3.1.1"
     typescript: "npm:^5.3.3"
     ulid: "npm:^2.3.0"
@@ -6871,10 +6871,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lexical@npm:^0.12.5":
-  version: 0.12.5
-  resolution: "lexical@npm:0.12.5"
-  checksum: 762ea620a8d5265fa5a2fb8ff3da7cf2a2823b7e0cb3f34fb639e15e65304eda46dee029142c684446c8464a75071e13a5d08ec99cc05dabb36d6225ff43abdc
+"lexical@npm:^0.12.6":
+  version: 0.12.6
+  resolution: "lexical@npm:0.12.6"
+  checksum: bda556b99777c32b91338e875675449b13f6c3d595b872a61fa76d4da66c846da6525f854adff5382a0cd168b2445fc659072c24c3537dfd6721738b938a1904
   languageName: node
   linkType: hard
 
