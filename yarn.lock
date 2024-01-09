@@ -605,7 +605,7 @@ __metadata:
     "@cs/eslint-config": "npm:*"
     "@cs/prettier-config": "npm:*"
     "@cs/tsconfig": "npm:*"
-    "@lexical/headless": "npm:^0.12.5"
+    "@lexical/headless": "npm:^0.12.6"
     eslint: "npm:^8.56.0"
     lexical: "npm:^0.12.5"
     prettier: "npm:^3.1.1"
@@ -1355,12 +1355,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@lexical/headless@npm:^0.12.5":
-  version: 0.12.5
-  resolution: "@lexical/headless@npm:0.12.5"
+"@lexical/headless@npm:^0.12.6":
+  version: 0.12.6
+  resolution: "@lexical/headless@npm:0.12.6"
   peerDependencies:
-    lexical: 0.12.5
-  checksum: bebf26cf8c1e36a69cf597d3215a31e9a12fcf7941e27398f65fcd4aff043e58e83726258267e2b4248f281062bcaeb2633770c236e5d122841d39425f192202
+    lexical: 0.12.6
+  checksum: c9d375b0e4799ed96e76acd98d765434c65b67a41d9c626f5da0cc5f634f1435e73cd62cf43ee218be653ab6ddf2f0afdda4df1701c7d8cd01abc29c028a03d6
   languageName: node
   linkType: hard
 
