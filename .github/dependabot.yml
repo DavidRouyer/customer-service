@@ -15,7 +15,10 @@ updates:
         patterns:
           - 'drizzle-kit'
           - 'drizzle-orm'
-
+      lexical:
+        patterns:
+          - 'lexical'
+          - '@lexical/*'
       next:
         patterns:
           - 'next'
