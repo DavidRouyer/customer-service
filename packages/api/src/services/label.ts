@@ -51,7 +51,10 @@ export default class LabelService extends BaseService {
     });
 
     if (!label)
-      throw new KyakuError('NOT_FOUND', `Label with id:${labelId} not found`);
+      throw new KyakuError(
+        KyakuError.Types.NOT_FOUND,
+        `Label with id:${labelId} not found`
+      );
 
     return label;
   }
@@ -108,41 +111,32 @@ export default class LabelService extends BaseService {
 
     if (missingLabelTypeIds.length > 0)
       throw new KyakuError(
-        'NOT_FOUND',
+        KyakuError.Types.NOT_FOUND,
         `Label types with ids: ${missingLabelTypeIds.join(',')} not found`
       );
 
     return await this.unitOfWork.transaction(async (tx) => {
-      const newLabels = await this.labelRepository
-        .create(
-          labelTypeIds.map((labelTypeId) => ({
-            ticketId: ticket.id,
-            labelTypeId: labelTypeId,
-          })),
-          tx
-        )
-        .onConflictDoUpdate({
-          target: [schema.labels.ticketId, schema.labels.labelTypeId],
-          set: {
-            archivedAt: null,
-          },
-        })
-        .returning({ labelId: schema.labels.id });
+      const newLabels = await this.labelRepository.createMany(
+        labelTypeIds.map((labelTypeId) => ({
+          ticketId: ticket.id,
+          labelTypeId: labelTypeId,
+        })),
+        tx
+      );
 
-      const updatedTicket = await this.ticketRepository
-        .update(
-          {
-            id: ticket.id,
-            updatedAt: new Date(),
-            updatedById: userId,
-          },
-          tx
-        )
-        .returning({
-          id: schema.tickets.id,
-          updatedAt: schema.tickets.updatedAt,
-        })
-        .then((res) => res[0]);
+      if (!newLabels) {
+        tx.rollback();
+        return;
+      }
+
+      const updatedTicket = await this.ticketRepository.update(
+        {
+          id: ticket.id,
+          updatedAt: new Date(),
+          updatedById: userId,
+        },
+        tx
+      );
 
       if (!updatedTicket) {
         tx.rollback();
@@ -155,7 +149,7 @@ export default class LabelService extends BaseService {
           type: TicketTimelineEntryType.LabelsChanged,
           entry: {
             oldLabelIds: [],
-            newLabelIds: newLabels.map((label) => label.labelId),
+            newLabelIds: newLabels.map((label) => label.id),
           } satisfies TicketLabelsChanged,
           customerId: ticket.customerId,
           createdAt: updatedTicket.updatedAt ?? new Date(),
@@ -181,36 +175,28 @@ export default class LabelService extends BaseService {
     );
     if (missingLabelIds.length > 0)
       throw new KyakuError(
-        'NOT_FOUND',
+        KyakuError.Types.NOT_FOUND,
         `Labels with ids: ${missingLabelIds.join(',')} not found`
       );
 
     return await this.unitOfWork.transaction(async (tx) => {
       const archivedDate = new Date();
-      const deletedLabels = await this.labelRepository
-        .updateMany(
-          labelIds,
-          {
-            archivedAt: archivedDate,
-          },
-          tx
-        )
-        .returning({ labelId: schema.labels.id });
+      const deletedLabels = await this.labelRepository.updateMany(
+        labelIds,
+        {
+          archivedAt: archivedDate,
+        },
+        tx
+      );
 
-      const updatedTicket = await this.ticketRepository
-        .update(
-          {
-            id: ticketId,
-            updatedAt: archivedDate,
-            updatedById: userId,
-          },
-          tx
-        )
-        .returning({
-          id: schema.tickets.id,
-          updatedAt: schema.tickets.updatedAt,
-        })
-        .then((res) => res[0]);
+      const updatedTicket = await this.ticketRepository.update(
+        {
+          id: ticketId,
+          updatedAt: archivedDate,
+          updatedById: userId,
+        },
+        tx
+      );
 
       if (!updatedTicket) {
         tx.rollback();

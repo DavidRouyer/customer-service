@@ -26,14 +26,12 @@ export default class UserRepository extends BaseRepository {
     return this.drizzleConnection.query.users.findMany(config);
   }
 
-  create(
-    entity: UserInsert | UserInsert[],
-    transactionScope: DrizzleTransactionScope
-  ) {
-    if (Array.isArray(entity)) {
-      return transactionScope.insert(schema.users).values(entity);
-    }
-    return transactionScope.insert(schema.users).values(entity);
+  create(entity: UserInsert, transactionScope: DrizzleTransactionScope) {
+    return transactionScope
+      .insert(schema.users)
+      .values(entity)
+      .returning()
+      .then((res) => res[0]);
   }
 
   update(
@@ -43,7 +41,9 @@ export default class UserRepository extends BaseRepository {
     return transactionScope
       .update(schema.users)
       .set(entity)
-      .where(eq(schema.users.id, entity.id));
+      .where(eq(schema.users.id, entity.id))
+      .returning()
+      .then((res) => res[0]);
   }
 
   updateMany(

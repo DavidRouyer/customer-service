@@ -72,7 +72,10 @@ export default class TicketService extends BaseService {
     });
 
     if (!ticket)
-      throw new KyakuError('NOT_FOUND', `Ticket with id:${ticketId} not found`);
+      throw new KyakuError(
+        KyakuError.Types.NOT_FOUND,
+        `Ticket with id:${ticketId} not found`
+      );
 
     return ticket;
   }
@@ -124,33 +127,26 @@ export default class TicketService extends BaseService {
       | 'updatedAt'
     >
   ) {
-    await this.unitOfWork.transaction(async (tx) => {
+    return await this.unitOfWork.transaction(async (tx) => {
       const creationDate = new Date();
 
-      const newTicket = await this.ticketRepository
-        .create(
-          {
-            ...data,
-            status: TicketStatus.Open,
-            statusDetail: TicketStatusDetail.Created,
-            statusChangedAt: creationDate,
-            createdAt: creationDate,
-          },
-          tx
-        )
-        .returning({
-          id: schema.tickets.id,
-        })
-        .then((res) => res[0]);
+      const newTicket = await this.ticketRepository.create(
+        {
+          ...data,
+          status: TicketStatus.Open,
+          statusDetail: TicketStatusDetail.Created,
+          statusChangedAt: creationDate,
+          createdAt: creationDate,
+        },
+        tx
+      );
 
       if (!newTicket) {
         tx.rollback();
         return;
       }
 
-      return {
-        id: newTicket.id,
-      };
+      return newTicket;
     });
   }
 
@@ -158,21 +154,15 @@ export default class TicketService extends BaseService {
     const ticket = await this.retrieve(ticketId);
 
     return await this.unitOfWork.transaction(async (tx) => {
-      const updatedTicket = await this.ticketRepository
-        .update(
-          {
-            id: ticketId,
-            assignedToId: assignedToId,
-            updatedAt: new Date(),
-            updatedById: userId,
-          },
-          tx
-        )
-        .returning({
-          id: schema.tickets.id,
-          updatedAt: schema.tickets.updatedAt,
-        })
-        .then((res) => res[0]);
+      const updatedTicket = await this.ticketRepository.update(
+        {
+          id: ticketId,
+          assignedToId: assignedToId,
+          updatedAt: new Date(),
+          updatedById: userId,
+        },
+        tx
+      );
 
       if (!updatedTicket) {
         tx.rollback();
@@ -201,26 +191,20 @@ export default class TicketService extends BaseService {
 
     if (!ticket.assignedToId)
       throw new KyakuError(
-        'NOT_ALLOWED',
+        KyakuError.Types.NOT_ALLOWED,
         `Ticket with id:${ticketId} is not assigned`
       );
 
     return await this.unitOfWork.transaction(async (tx) => {
-      const updatedTicket = await this.ticketRepository
-        .update(
-          {
-            id: ticketId,
-            assignedToId: null,
-            updatedAt: new Date(),
-            updatedById: userId,
-          },
-          tx
-        )
-        .returning({
-          id: schema.tickets.id,
-          updatedAt: schema.tickets.updatedAt,
-        })
-        .then((res) => res[0]);
+      const updatedTicket = await this.ticketRepository.update(
+        {
+          id: ticketId,
+          assignedToId: null,
+          updatedAt: new Date(),
+          updatedById: userId,
+        },
+        tx
+      );
 
       if (!updatedTicket) {
         tx.rollback();
@@ -252,21 +236,15 @@ export default class TicketService extends BaseService {
     const ticket = await this.retrieve(ticketId);
 
     return await this.unitOfWork.transaction(async (tx) => {
-      const updatedTicket = await this.ticketRepository
-        .update(
-          {
-            id: ticketId,
-            priority: priority,
-            updatedAt: new Date(),
-            updatedById: userId,
-          },
-          tx
-        )
-        .returning({
-          id: schema.tickets.id,
-          updatedAt: schema.tickets.updatedAt,
-        })
-        .then((res) => res[0]);
+      const updatedTicket = await this.ticketRepository.update(
+        {
+          id: ticketId,
+          priority: priority,
+          updatedAt: new Date(),
+          updatedById: userId,
+        },
+        tx
+      );
 
       if (!updatedTicket) {
         tx.rollback();
@@ -295,29 +273,23 @@ export default class TicketService extends BaseService {
 
     if (ticket.status === TicketStatus.Done)
       throw new KyakuError(
-        'NOT_ALLOWED',
+        KyakuError.Types.NOT_ALLOWED,
         `Ticket with id:${ticketId} is already marked as done`
       );
 
     return await this.unitOfWork.transaction(async (tx) => {
-      const updatedTicket = await this.ticketRepository
-        .update(
-          {
-            id: ticketId,
-            status: TicketStatus.Done,
-            statusDetail: null,
-            statusChangedAt: new Date(),
-            statusChangedById: userId,
-            updatedAt: new Date(),
-            updatedById: userId,
-          },
-          tx
-        )
-        .returning({
-          id: schema.tickets.id,
-          updatedAt: schema.tickets.updatedAt,
-        })
-        .then((res) => res[0]);
+      const updatedTicket = await this.ticketRepository.update(
+        {
+          id: ticketId,
+          status: TicketStatus.Done,
+          statusDetail: null,
+          statusChangedAt: new Date(),
+          statusChangedById: userId,
+          updatedAt: new Date(),
+          updatedById: userId,
+        },
+        tx
+      );
 
       if (!updatedTicket) {
         tx.rollback();
@@ -346,29 +318,23 @@ export default class TicketService extends BaseService {
 
     if (ticket.status === TicketStatus.Open)
       throw new KyakuError(
-        'NOT_ALLOWED',
+        KyakuError.Types.NOT_ALLOWED,
         `Ticket with id:${ticketId} is already marked as open`
       );
 
     return await this.unitOfWork.transaction(async (tx) => {
-      const updatedTicket = await this.ticketRepository
-        .update(
-          {
-            id: ticketId,
-            status: TicketStatus.Open,
-            statusDetail: null,
-            statusChangedAt: new Date(),
-            statusChangedById: userId,
-            updatedAt: new Date(),
-            updatedById: userId,
-          },
-          tx
-        )
-        .returning({
-          id: schema.tickets.id,
-          updatedAt: schema.tickets.updatedAt,
-        })
-        .then((res) => res[0]);
+      const updatedTicket = await this.ticketRepository.update(
+        {
+          id: ticketId,
+          status: TicketStatus.Open,
+          statusDetail: null,
+          statusChangedAt: new Date(),
+          statusChangedById: userId,
+          updatedAt: new Date(),
+          updatedById: userId,
+        },
+        tx
+      );
 
       if (!updatedTicket) {
         tx.rollback();
@@ -398,25 +364,19 @@ export default class TicketService extends BaseService {
     return await this.unitOfWork.transaction(async (tx) => {
       const creationDate = new Date();
 
-      const newChat = await this.ticketTimelineRepository
-        .create(
-          {
-            ticketId: ticketId,
-            type: TicketTimelineEntryType.Chat,
-            entry: {
-              text: text,
-            } satisfies TicketChat,
-            customerId: ticket.customerId,
-            createdAt: creationDate,
-            userCreatedById: userId,
-          },
-          tx
-        )
-        .returning({
-          id: schema.ticketTimelineEntries.id,
-          createdAt: schema.ticketTimelineEntries.createdAt,
-        })
-        .then((res) => res[0]);
+      const newChat = await this.ticketTimelineRepository.create(
+        {
+          ticketId: ticketId,
+          type: TicketTimelineEntryType.Chat,
+          entry: {
+            text: text,
+          } satisfies TicketChat,
+          customerId: ticket.customerId,
+          createdAt: creationDate,
+          userCreatedById: userId,
+        },
+        tx
+      );
 
       if (!newChat) {
         tx.rollback();
@@ -454,26 +414,20 @@ export default class TicketService extends BaseService {
     return await this.unitOfWork.transaction(async (tx) => {
       const creationDate = new Date();
 
-      const newNote = await this.ticketTimelineRepository
-        .create(
-          {
-            ticketId: ticketId,
-            type: TicketTimelineEntryType.Note,
-            entry: {
-              text: text,
-              rawContent: rawContent,
-            } satisfies TicketNote,
-            customerId: ticket.customerId,
-            createdAt: creationDate,
-            userCreatedById: userId,
-          },
-          tx
-        )
-        .returning({
-          id: schema.ticketTimelineEntries.id,
-          createdAt: schema.ticketTimelineEntries.createdAt,
-        })
-        .then((res) => res[0]);
+      const newNote = await this.ticketTimelineRepository.create(
+        {
+          ticketId: ticketId,
+          type: TicketTimelineEntryType.Note,
+          entry: {
+            text: text,
+            rawContent: rawContent,
+          } satisfies TicketNote,
+          customerId: ticket.customerId,
+          createdAt: creationDate,
+          userCreatedById: userId,
+        },
+        tx
+      );
 
       if (!newNote) {
         tx.rollback();
@@ -481,7 +435,7 @@ export default class TicketService extends BaseService {
       }
 
       if (mentionIds.length > 0) {
-        await this.ticketMentionRepository.create(
+        await this.ticketMentionRepository.createMany(
           mentionIds.map((mentionId) => ({
             ticketTimelineEntryId: newNote.id,
             userId: mentionId,
@@ -491,9 +445,7 @@ export default class TicketService extends BaseService {
         );
       }
 
-      return {
-        id: newNote.id,
-      };
+      return newNote;
     });
   }
 
@@ -634,7 +586,7 @@ export default class TicketService extends BaseService {
     try {
       decodedCursor = JSON.parse(atob(cursor)) as TicketCursor;
     } catch (e) {
-      throw new KyakuError('BAD_REQUEST', 'Invalid cursor');
+      throw new KyakuError(KyakuError.Types.INVALID_ARGUMENT, 'Invalid cursor');
     }
     return decodedCursor;
   }

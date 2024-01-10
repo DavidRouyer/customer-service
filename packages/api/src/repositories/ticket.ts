@@ -27,7 +27,11 @@ export default class TicketRepository extends BaseRepository {
   }
 
   create(entity: TicketInsert, transactionScope: DrizzleTransactionScope) {
-    return transactionScope.insert(schema.tickets).values(entity);
+    return transactionScope
+      .insert(schema.tickets)
+      .values(entity)
+      .returning()
+      .then((res) => res[0]);
   }
 
   update(
@@ -37,6 +41,8 @@ export default class TicketRepository extends BaseRepository {
     return transactionScope
       .update(schema.tickets)
       .set(entity)
-      .where(eq(schema.tickets.id, entity.id));
+      .where(eq(schema.tickets.id, entity.id))
+      .returning()
+      .then((res) => res[0]);
   }
 }

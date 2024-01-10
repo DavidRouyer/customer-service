@@ -33,7 +33,11 @@ export default class TicketTimelineRepository extends BaseRepository {
     entity: TicketTimelineInsert,
     transactionScope: DrizzleTransactionScope
   ) {
-    return transactionScope.insert(schema.ticketTimelineEntries).values(entity);
+    return transactionScope
+      .insert(schema.ticketTimelineEntries)
+      .values(entity)
+      .returning()
+      .then((res) => res[0]);
   }
 
   update(
@@ -44,6 +48,8 @@ export default class TicketTimelineRepository extends BaseRepository {
     return transactionScope
       .update(schema.ticketTimelineEntries)
       .set(entity)
-      .where(eq(schema.ticketTimelineEntries.id, entity.id));
+      .where(eq(schema.ticketTimelineEntries.id, entity.id))
+      .returning()
+      .then((res) => res[0]);
   }
 }

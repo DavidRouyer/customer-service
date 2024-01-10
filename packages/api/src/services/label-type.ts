@@ -44,7 +44,7 @@ export default class LabelTypeService extends BaseService {
 
     if (!labelType)
       throw new KyakuError(
-        'NOT_FOUND',
+        KyakuError.Types.NOT_FOUND,
         `Label type with id:${labelTypeId} not found`
       );
 
@@ -62,7 +62,7 @@ export default class LabelTypeService extends BaseService {
 
     if (!labelType)
       throw new KyakuError(
-        'NOT_FOUND',
+        KyakuError.Types.NOT_FOUND,
         `Label type with name:${labelTypeName} not found`
       );
 
@@ -119,28 +119,23 @@ export default class LabelTypeService extends BaseService {
     try {
       await this.retrieveByName(data.name);
       throw new KyakuError(
-        'BAD_REQUEST',
+        KyakuError.Types.DUPLICATE_ERROR,
         `Label type with name:${data.name} already exists`
       );
     } catch {
       // Label type not found, continue
     }
 
-    await this.unitOfWork.transaction(async (tx) => {
+    return await this.unitOfWork.transaction(async (tx) => {
       const creationDate = new Date();
 
-      const newLabelType = await this.labelTypeRepository
-        .create(
-          {
-            ...data,
-            createdAt: creationDate,
-          },
-          tx
-        )
-        .returning({
-          id: schema.labelTypes.id,
-        })
-        .then((res) => res[0]);
+      const newLabelType = await this.labelTypeRepository.create(
+        {
+          ...data,
+          createdAt: creationDate,
+        },
+        tx
+      );
 
       if (!newLabelType) {
         tx.rollback();
@@ -158,24 +153,22 @@ export default class LabelTypeService extends BaseService {
 
     if (labelType.archivedAt)
       throw new KyakuError(
-        'NOT_ALLOWED',
+        KyakuError.Types.NOT_ALLOWED,
         `Label type with id:${labelTypeId} already archived`
       );
 
     const archiveDate = new Date();
 
     return await this.unitOfWork.transaction(async (tx) => {
-      return await this.labelTypeRepository
-        .update(
-          {
-            id: labelType.id,
-            updatedAt: archiveDate,
-            updatedById: userId,
-            archivedAt: archiveDate,
-          },
-          tx
-        )
-        .returning({ id: schema.labelTypes.id });
+      return await this.labelTypeRepository.update(
+        {
+          id: labelType.id,
+          updatedAt: archiveDate,
+          updatedById: userId,
+          archivedAt: archiveDate,
+        },
+        tx
+      );
     });
   }
 
@@ -184,24 +177,22 @@ export default class LabelTypeService extends BaseService {
 
     if (labelType.archivedAt)
       throw new KyakuError(
-        'NOT_ALLOWED',
+        KyakuError.Types.NOT_ALLOWED,
         `Label type with id:${labelTypeId} is not archived`
       );
 
     const unarchiveDate = new Date();
 
     return await this.unitOfWork.transaction(async (tx) => {
-      return await this.labelTypeRepository
-        .update(
-          {
-            id: labelType.id,
-            updatedAt: unarchiveDate,
-            updatedById: userId,
-            archivedAt: null,
-          },
-          tx
-        )
-        .returning({ id: schema.labelTypes.id });
+      return await this.labelTypeRepository.update(
+        {
+          id: labelType.id,
+          updatedAt: unarchiveDate,
+          updatedById: userId,
+          archivedAt: null,
+        },
+        tx
+      );
     });
   }
 

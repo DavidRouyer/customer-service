@@ -26,14 +26,23 @@ export default class LabelRepository extends BaseRepository {
     return this.drizzleConnection.query.labels.findMany(config);
   }
 
-  create(
-    entity: LabelInsert | LabelInsert[],
+  create(entity: LabelInsert, transactionScope: DrizzleTransactionScope) {
+    return transactionScope
+      .insert(schema.labels)
+      .values(entity)
+      .returning()
+      .then((res) => res[0]);
+  }
+
+  createMany(
+    entities: LabelInsert[],
     transactionScope: DrizzleTransactionScope
   ) {
-    if (Array.isArray(entity)) {
-      return transactionScope.insert(schema.labels).values(entity);
-    }
-    return transactionScope.insert(schema.labels).values(entity);
+    return transactionScope
+      .insert(schema.labels)
+      .values(entities)
+      .returning()
+      .then((res) => res);
   }
 
   update(
@@ -43,7 +52,9 @@ export default class LabelRepository extends BaseRepository {
     return transactionScope
       .update(schema.labels)
       .set(entity)
-      .where(eq(schema.labels.id, entity.id));
+      .where(eq(schema.labels.id, entity.id))
+      .returning()
+      .then((res) => res[0]);
   }
 
   updateMany(
@@ -54,6 +65,8 @@ export default class LabelRepository extends BaseRepository {
     return transactionScope
       .update(schema.labels)
       .set(entity)
-      .where(inArray(schema.labels.id, entityIds));
+      .where(inArray(schema.labels.id, entityIds))
+      .returning()
+      .then((res) => res);
   }
 }

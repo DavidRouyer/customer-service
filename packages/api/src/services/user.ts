@@ -22,7 +22,10 @@ export default class UserService extends BaseService {
     });
 
     if (!user)
-      throw new KyakuError('NOT_FOUND', `User with id:${userId} not found`);
+      throw new KyakuError(
+        KyakuError.Types.NOT_FOUND,
+        `User with id:${userId} not found`
+      );
 
     return user;
   }

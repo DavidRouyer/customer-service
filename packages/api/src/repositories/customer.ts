@@ -27,7 +27,11 @@ export default class CustomerRepository extends BaseRepository {
   }
 
   create(entity: CustomerInsert, transactionScope: DrizzleTransactionScope) {
-    return transactionScope.insert(schema.customers).values(entity);
+    return transactionScope
+      .insert(schema.customers)
+      .values(entity)
+      .returning()
+      .then((res) => res[0]);
   }
 
   update(
@@ -37,6 +41,8 @@ export default class CustomerRepository extends BaseRepository {
     return transactionScope
       .update(schema.customers)
       .set(entity)
-      .where(eq(schema.customers.id, entity.id));
+      .where(eq(schema.customers.id, entity.id))
+      .returning()
+      .then((res) => res[0]);
   }
 }

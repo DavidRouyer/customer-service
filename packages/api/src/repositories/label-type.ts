@@ -27,7 +27,11 @@ export default class LabelTypeRepository extends BaseRepository {
   }
 
   create(entity: LabelTypeInsert, transactionScope: DrizzleTransactionScope) {
-    return transactionScope.insert(schema.labelTypes).values(entity);
+    return transactionScope
+      .insert(schema.labelTypes)
+      .values(entity)
+      .returning()
+      .then((res) => res[0]);
   }
 
   update(
@@ -37,6 +41,8 @@ export default class LabelTypeRepository extends BaseRepository {
     return transactionScope
       .update(schema.labelTypes)
       .set(entity)
-      .where(eq(schema.labelTypes.id, entity.id));
+      .where(eq(schema.labelTypes.id, entity.id))
+      .returning()
+      .then((res) => res[0]);
   }
 }

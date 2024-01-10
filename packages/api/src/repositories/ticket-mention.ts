@@ -27,19 +27,35 @@ export default class TicketMentionRepository extends BaseRepository {
   }
 
   create(
-    entity: TicketMentionInsert | TicketMentionInsert[],
+    entity: TicketMentionInsert,
     transactionScope: DrizzleTransactionScope
   ) {
-    if (Array.isArray(entity)) {
-      return transactionScope.insert(schema.ticketMentions).values(entity);
-    }
-    return transactionScope.insert(schema.ticketMentions).values(entity);
+    return transactionScope
+      .insert(schema.ticketMentions)
+      .values(entity)
+      .returning()
+      .then((res) => res[0]);
+  }
+
+  createMany(
+    entities: TicketMentionInsert[],
+    transactionScope: DrizzleTransactionScope
+  ) {
+    return transactionScope
+      .insert(schema.ticketMentions)
+      .values(entities)
+      .returning()
+      .then((res) => res);
   }
 
   update(
     entity: Partial<TicketMentionInsert>,
     transactionScope: DrizzleTransactionScope
   ) {
-    return transactionScope.update(schema.ticketMentions).set(entity);
+    return transactionScope
+      .update(schema.ticketMentions)
+      .set(entity)
+      .returning()
+      .then((res) => res[0]);
   }
 }
