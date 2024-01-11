@@ -1,6 +1,7 @@
 import { eq, schema } from '@cs/database';
 import { TicketPriority } from '@cs/kyaku/models';
 
+import TicketRepository from '../../repositories/ticket';
 import TicketMentionRepository from '../../repositories/ticket-mention';
 import TicketTimelineRepository from '../../repositories/ticket-timeline';
 import TicketService from '../ticket';
@@ -17,7 +18,7 @@ describe('TicketService', () => {
     };
 
     const ticketService = new TicketService({
-      ticketRepository: ticketRepo as any,
+      ticketRepository: ticketRepo as unknown as TicketRepository,
       ticketMentionRepository: new TicketMentionRepository(),
       ticketTimelineRepository: new TicketTimelineRepository(),
     });
@@ -58,8 +59,8 @@ describe('TicketService', () => {
     };
 
     const ticketService = new TicketService({
-      unitOfWork: unitOfWork as any,
-      ticketRepository: ticketRepo as any,
+      unitOfWork: unitOfWork as unknown,
+      ticketRepository: ticketRepo as unknown as TicketRepository,
       ticketMentionRepository: new TicketMentionRepository(),
       ticketTimelineRepository: new TicketTimelineRepository(),
     });
