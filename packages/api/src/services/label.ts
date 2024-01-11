@@ -208,7 +208,7 @@ export default class LabelService extends BaseService {
           ticketId: ticketId,
           type: TicketTimelineEntryType.LabelsChanged,
           entry: {
-            oldLabelIds: deletedLabels.map((label) => label.labelId),
+            oldLabelIds: deletedLabels.map((label) => label.id),
             newLabelIds: [],
           } satisfies TicketLabelsChanged,
           customerId: ticket.customerId,
