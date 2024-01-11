@@ -445,6 +445,15 @@ export default class TicketService extends BaseService {
         );
       }
 
+      await this.ticketRepository.update(
+        {
+          id: ticketId,
+          updatedAt: newNote.createdAt,
+          updatedById: userId,
+        },
+        tx
+      );
+
       return newNote;
     });
   }
