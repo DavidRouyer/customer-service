@@ -539,7 +539,7 @@ __metadata:
     "@types/react-dom": "npm:^18.2.18"
     autoprefixer: "npm:^10.4.16"
     dotenv-cli: "npm:^7.3.0"
-    google-libphonenumber: "npm:^3.2.33"
+    google-libphonenumber: "npm:^3.2.34"
     jotai: "npm:^2.6.1"
     jsdom: "npm:^23.2.0"
     lexical: "npm:^0.12.6"
@@ -5972,10 +5972,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"google-libphonenumber@npm:^3.2.33":
-  version: 3.2.33
-  resolution: "google-libphonenumber@npm:3.2.33"
-  checksum: 555a40b61fccfcd4fc818da751a0fc510ce3a4cacc7311296cd7fb4e95d45caca807ddc6aed1f086d7ba3dc683bb0a3a0ed259184e85fd8c425db3a1d14283de
+"google-libphonenumber@npm:^3.2.34":
+  version: 3.2.34
+  resolution: "google-libphonenumber@npm:3.2.34"
+  checksum: dd59889cafddf06c289c59584ce15bda67226f4c2ab17e9b3afcf3aa8c9110fbe729a540ae6a316577480a0c19ca2497e30075c0b6bf6c753c1c78936cdb35c7
   languageName: node
   linkType: hard
 
