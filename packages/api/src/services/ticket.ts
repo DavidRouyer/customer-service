@@ -34,6 +34,7 @@ import {
 import TicketRepository from '../repositories/ticket';
 import TicketMentionRepository from '../repositories/ticket-mention';
 import TicketTimelineRepository from '../repositories/ticket-timeline';
+import { UnitOfWork } from '../unit-of-work';
 import { BaseService } from './base-service';
 import {
   filterBySortDirection,
@@ -54,7 +55,7 @@ export default class TicketService extends BaseService {
     ticketRepository: TicketRepository;
     ticketMentionRepository: TicketMentionRepository;
     ticketTimelineRepository: TicketTimelineRepository;
-  }) {
+  } & { unitOfWork: UnitOfWork }) {
     // eslint-disable-next-line prefer-rest-params, @typescript-eslint/no-unsafe-argument
     super(arguments[0]);
     this.ticketRepository = ticketRepository;
