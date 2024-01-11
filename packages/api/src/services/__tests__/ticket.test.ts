@@ -76,7 +76,7 @@ describe('TicketService', () => {
     });
 
     it('should successfully create a ticket', async () => {
-      const date = new Date(2000, 0, 1, 13);
+      const date = new Date('2000-01-01T12:00:00.000Z');
       vi.setSystemTime(date);
 
       const result = await ticketService.create({
@@ -95,12 +95,12 @@ describe('TicketService', () => {
           title: 'One Piece',
           createdById: 'user-id',
           customerId: 'customer-id',
-          priority: TicketPriority.Low,
+          priority: 'Low',
           statusChangedById: 'user-id',
           status: 'Open',
           statusDetail: 'Created',
-          createdAt: date,
-          statusChangedAt: date,
+          createdAt: new Date('2000-01-01T12:00:00.000Z'),
+          statusChangedAt: new Date('2000-01-01T12:00:00.000Z'),
         },
         undefined
       );
