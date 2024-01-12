@@ -38,6 +38,8 @@ export default class LabelTypeService extends BaseService {
     config: FindLabelTypeConfig = { relations: {} }
   ) {
     const labelType = await this.labelTypeRepository.find({
+      columns: undefined,
+      extras: {},
       where: eq(schema.labelTypes.id, labelTypeId),
       with: this.getWithClause(config.relations),
     });
@@ -56,6 +58,8 @@ export default class LabelTypeService extends BaseService {
     config: FindLabelTypeConfig = { relations: {} }
   ) {
     const labelType = await this.labelTypeRepository.find({
+      columns: undefined,
+      extras: {},
       where: eq(schema.labelTypes.name, labelTypeName),
       with: this.getWithClause(config.relations),
     });
@@ -92,6 +96,8 @@ export default class LabelTypeService extends BaseService {
       config.skip ? lt(schema.labelTypes.id, config.skip) : undefined
     );
     return this.labelTypeRepository.findMany({
+      columns: undefined,
+      extras: {},
       where: whereClause,
       with: this.getWithClause(config.relations),
       limit: config.take,

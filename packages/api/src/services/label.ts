@@ -46,6 +46,8 @@ export default class LabelService extends BaseService {
 
   async retrieve(labelId: string, config: GetLabelConfig = { relations: {} }) {
     const label = await this.labelRepository.find({
+      columns: undefined,
+      extras: {},
       where: eq(schema.labels.id, labelId),
       with: this.getWithClause(config.relations),
     });
@@ -86,6 +88,8 @@ export default class LabelService extends BaseService {
       config.skip ? lt(schema.labels.id, config.skip) : undefined
     );
     return await this.labelRepository.findMany({
+      columns: undefined,
+      extras: {},
       where: whereClause,
       with: this.getWithClause(config.relations),
       limit: config.take,
@@ -166,7 +170,10 @@ export default class LabelService extends BaseService {
     const ticket = await this.ticketService.retrieve(ticketId);
 
     const fetchedLabels = await this.labelRepository.findMany({
+      columns: undefined,
+      extras: {},
       where: inArray(schema.labelTypes.id, labelIds),
+      with: undefined,
     });
     const fetchedLabelIds = fetchedLabels.map((label) => label.id);
 

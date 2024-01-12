@@ -1,8 +1,21 @@
-import { schema } from '@cs/database';
+import { DrizzleConnection, schema } from '@cs/database';
 
 import { DrizzleTransactionScope } from '../drizzle-transaction';
 import { TicketMentionInsert } from '../entities/ticket-mention';
 import { BaseRepository } from './base-repository';
+
+type FindTicketMentionInput = Parameters<
+  DrizzleConnection['query']['ticketMentions']['findMany']
+>;
+
+type ColumnInput = NonNullable<FindTicketMentionInput[0]>['columns'];
+type ExtrasInput = NonNullable<FindTicketMentionInput[0]>['extras'];
+type WhereInput = NonNullable<FindTicketMentionInput[0]>['where'];
+type WithInput = NonNullable<FindTicketMentionInput[0]>['with'];
+type RestInput = Omit<
+  NonNullable<FindTicketMentionInput[0]>,
+  'columns' | 'extras' | 'where' | 'with'
+>;
 
 export default class TicketMentionRepository extends BaseRepository {
   constructor() {
@@ -11,18 +24,27 @@ export default class TicketMentionRepository extends BaseRepository {
   }
 
   find<
-    T extends Parameters<
-      (typeof this.drizzleConnection)['query']['ticketMentions']['findFirst']
-    >,
-  >(...[config]: T) {
+    TColumn extends ColumnInput,
+    TExtras extends ExtrasInput,
+    TWhere extends WhereInput,
+    TWith extends WithInput,
+  >(config: { columns: TColumn; extras: TExtras; where: TWhere; with: TWith }) {
     return this.drizzleConnection.query.ticketMentions.findFirst(config);
   }
 
   findMany<
-    T extends Parameters<
-      (typeof this.drizzleConnection)['query']['ticketMentions']['findMany']
-    >,
-  >(...[config]: T) {
+    TColumn extends ColumnInput,
+    TExtras extends ExtrasInput,
+    TWhere extends WhereInput,
+    TWith extends WithInput,
+  >(
+    config: {
+      columns: TColumn;
+      extras: TExtras;
+      where: TWhere;
+      with: TWith;
+    } & RestInput
+  ) {
     return this.drizzleConnection.query.ticketMentions.findMany(config);
   }
 

@@ -1,8 +1,21 @@
-import { eq, inArray, schema } from '@cs/database';
+import { DrizzleConnection, eq, inArray, schema } from '@cs/database';
 
 import { DrizzleTransactionScope } from '../drizzle-transaction';
 import { User, UserInsert } from '../entities/user';
 import { BaseRepository } from './base-repository';
+
+type FindUserInput = Parameters<
+  DrizzleConnection['query']['users']['findMany']
+>;
+
+type ColumnInput = NonNullable<FindUserInput[0]>['columns'];
+type ExtrasInput = NonNullable<FindUserInput[0]>['extras'];
+type WhereInput = NonNullable<FindUserInput[0]>['where'];
+type WithInput = NonNullable<FindUserInput[0]>['with'];
+type RestInput = Omit<
+  NonNullable<FindUserInput[0]>,
+  'columns' | 'extras' | 'where' | 'with'
+>;
 
 export default class UserRepository extends BaseRepository {
   constructor() {
@@ -11,18 +24,27 @@ export default class UserRepository extends BaseRepository {
   }
 
   find<
-    T extends Parameters<
-      (typeof this.drizzleConnection)['query']['users']['findFirst']
-    >,
-  >(...[config]: T) {
+    TColumn extends ColumnInput,
+    TExtras extends ExtrasInput,
+    TWhere extends WhereInput,
+    TWith extends WithInput,
+  >(config: { columns: TColumn; extras: TExtras; where: TWhere; with: TWith }) {
     return this.drizzleConnection.query.users.findFirst(config);
   }
 
   findMany<
-    T extends Parameters<
-      (typeof this.drizzleConnection)['query']['users']['findMany']
-    >,
-  >(...[config]: T) {
+    TColumn extends ColumnInput,
+    TExtras extends ExtrasInput,
+    TWhere extends WhereInput,
+    TWith extends WithInput,
+  >(
+    config: {
+      columns: TColumn;
+      extras: TExtras;
+      where: TWhere;
+      with: TWith;
+    } & RestInput
+  ) {
     return this.drizzleConnection.query.users.findMany(config);
   }
 

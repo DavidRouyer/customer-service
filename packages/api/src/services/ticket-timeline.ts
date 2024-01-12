@@ -1,4 +1,4 @@
-import { and, desc, eq, schema } from '@cs/database';
+import { and, desc, eq, inArray, schema } from '@cs/database';
 import {
   TicketAssignmentChanged,
   TicketChat,
@@ -15,31 +15,31 @@ import {
   TicketLabelsChangedWithData,
   TicketTimelineRelations,
 } from '../entities/ticket-timeline';
+import LabelRepository from '../repositories/label';
 import TicketTimelineRepository from '../repositories/ticket-timeline';
+import UserRepository from '../repositories/user';
 import { BaseService } from './base-service';
 import { sortDirection } from './build-query';
-import LabelService from './label';
-import UserService from './user';
 
 export default class TicketTimelineService extends BaseService {
   private readonly ticketTimelineRepository: TicketTimelineRepository;
-  private readonly labelService: LabelService;
-  private readonly userService: UserService;
+  private readonly labelRepository: LabelRepository;
+  private readonly userRepository: UserRepository;
 
   constructor({
+    labelRepository,
     ticketTimelineRepository,
-    labelService,
-    userService,
+    userRepository,
   }: {
+    labelRepository: LabelRepository;
     ticketTimelineRepository: TicketTimelineRepository;
-    labelService: LabelService;
-    userService: UserService;
+    userRepository: UserRepository;
   }) {
     // eslint-disable-next-line prefer-rest-params, @typescript-eslint/no-unsafe-argument
     super(arguments[0]);
     this.ticketTimelineRepository = ticketTimelineRepository;
-    this.labelService = labelService;
-    this.userService = userService;
+    this.labelRepository = labelRepository;
+    this.userRepository = userRepository;
   }
 
   async list(
@@ -49,6 +49,8 @@ export default class TicketTimelineService extends BaseService {
     }
   ) {
     const ticketTimelineEntries = await this.ticketTimelineRepository.findMany({
+      columns: undefined,
+      extras: {},
       where: eq(schema.ticketTimelineEntries.ticketId, filters.ticketId),
       with: this.getWithClause(config.relations),
       limit: config.take,
@@ -182,10 +184,16 @@ export default class TicketTimelineService extends BaseService {
     ]);
 
     return usersToFetch.size > 0
-      ? await this.userService.list({
-          id: {
-            in: [...usersToFetch],
+      ? await this.userRepository.findMany({
+          columns: {
+            id: true,
+            email: true,
+            name: true,
+            image: true,
           },
+          extras: {},
+          where: inArray(schema.users.id, Array.from(usersToFetch)),
+          with: undefined,
         })
       : [];
   }
@@ -197,18 +205,14 @@ export default class TicketTimelineService extends BaseService {
     ]);
 
     return labelsToFetch.size > 0
-      ? await this.labelService.list(
-          {
-            id: {
-              in: [...labelsToFetch],
-            },
+      ? await this.labelRepository.findMany({
+          columns: undefined,
+          extras: {},
+          where: inArray(schema.labelTypes.id, Array.from(labelsToFetch)),
+          with: {
+            labelType: true,
           },
-          {
-            relations: {
-              labelType: true,
-            },
-          }
-        )
+        })
       : [];
   }
 

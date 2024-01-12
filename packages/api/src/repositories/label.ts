@@ -1,8 +1,21 @@
-import { eq, inArray, schema } from '@cs/database';
+import { DrizzleConnection, eq, inArray, schema } from '@cs/database';
 
 import { DrizzleTransactionScope } from '../drizzle-transaction';
 import { Label, LabelInsert } from '../entities/label';
 import { BaseRepository } from './base-repository';
+
+type FindLabelInput = Parameters<
+  DrizzleConnection['query']['labels']['findMany']
+>;
+
+type ColumnInput = NonNullable<FindLabelInput[0]>['columns'];
+type ExtrasInput = NonNullable<FindLabelInput[0]>['extras'];
+type WhereInput = NonNullable<FindLabelInput[0]>['where'];
+type WithInput = NonNullable<FindLabelInput[0]>['with'];
+type RestInput = Omit<
+  NonNullable<FindLabelInput[0]>,
+  'columns' | 'extras' | 'where' | 'with'
+>;
 
 export default class LabelRepository extends BaseRepository {
   constructor() {
@@ -11,18 +24,27 @@ export default class LabelRepository extends BaseRepository {
   }
 
   find<
-    T extends Parameters<
-      (typeof this.drizzleConnection)['query']['labels']['findFirst']
-    >,
-  >(...[config]: T) {
+    TColumn extends ColumnInput,
+    TExtras extends ExtrasInput,
+    TWhere extends WhereInput,
+    TWith extends WithInput,
+  >(config: { columns: TColumn; extras: TExtras; where: TWhere; with: TWith }) {
     return this.drizzleConnection.query.labels.findFirst(config);
   }
 
   findMany<
-    T extends Parameters<
-      (typeof this.drizzleConnection)['query']['labels']['findMany']
-    >,
-  >(...[config]: T) {
+    TColumn extends ColumnInput,
+    TExtras extends ExtrasInput,
+    TWhere extends WhereInput,
+    TWith extends WithInput,
+  >(
+    config: {
+      columns: TColumn;
+      extras: TExtras;
+      where: TWhere;
+      with: TWith;
+    } & RestInput
+  ) {
     return this.drizzleConnection.query.labels.findMany(config);
   }
 

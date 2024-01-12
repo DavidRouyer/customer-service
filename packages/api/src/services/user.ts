@@ -17,6 +17,13 @@ export default class UserService extends BaseService {
 
   async retrieve(userId: string, config: GetUserConfig = { relations: {} }) {
     const user = await this.userRepository.find({
+      columns: {
+        id: true,
+        email: true,
+        name: true,
+        image: true,
+      },
+      extras: {},
       where: eq(schema.users.id, userId),
       with: this.getWithClause(config.relations),
     });
@@ -47,15 +54,16 @@ export default class UserService extends BaseService {
       config.skip ? lt(schema.users.id, config.skip) : undefined
     );
     return await this.userRepository.findMany({
-      where: whereClause,
-      with: this.getWithClause(config.relations),
-      limit: config.take,
       columns: {
         id: true,
         email: true,
         name: true,
         image: true,
       },
+      extras: {},
+      where: whereClause,
+      with: this.getWithClause(config.relations),
+      limit: config.take,
       orderBy: and(
         config.sortBy
           ? 'name' in config.sortBy
