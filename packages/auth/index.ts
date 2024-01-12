@@ -1,4 +1,6 @@
+import { AdapterUser } from '@auth/core/adapters';
 import GitHub from '@auth/core/providers/github';
+import { Session } from '@auth/core/types';
 import { DrizzleAdapter } from '@auth/drizzle-adapter';
 import NextAuth from 'next-auth';
 
@@ -43,13 +45,13 @@ export const {
     }),
   ],
   callbacks: {
-    session: ({ session, user }) => ({
-      ...session,
+    session: (params) => ({
+      ...params.session,
       user: {
-        id: user.id,
-        name: user.name ?? null,
-        email: user.email,
-        image: user.image ?? null,
+        id: 'user' in params ? params.user.id : '',
+        name: 'user' in params ? params.user.name : null,
+        email: 'user' in params ? params.user.email : '',
+        image: 'user' in params ? params.user.image : null,
       },
     }),
 
