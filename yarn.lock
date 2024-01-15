@@ -534,7 +534,7 @@ __metadata:
     "@trpc/server": "npm:next"
     "@types/google-libphonenumber": "npm:^7.4.30"
     "@types/negotiator": "npm:^0.6.3"
-    "@types/node": "npm:^20.11.0"
+    "@types/node": "npm:^20.11.2"
     "@types/react": "npm:^18.2.48"
     "@types/react-dom": "npm:^18.2.18"
     autoprefixer: "npm:^10.4.16"
@@ -3226,12 +3226,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:^20.11.0":
-  version: 20.11.0
-  resolution: "@types/node@npm:20.11.0"
+"@types/node@npm:^20.11.2":
+  version: 20.11.2
+  resolution: "@types/node@npm:20.11.2"
   dependencies:
     undici-types: "npm:~5.26.4"
-  checksum: 560aa850dfccb83326f9cba125459f6c3fb0c71ec78f22c61e4d248f1df78bd25fd6792cef573dfbdc49c882f8e38bb1a82ca87e0e28ff2513629c704c2b02af
+  checksum: 11a935f6676f78e1ced4805f9653891d1fc78ecafd78c7352d289be8c1829c88ebfe45ffd6b4687bbfc73edd0e177746d8cefff651a9f13199ac2dd3ca1076b7
   languageName: node
   linkType: hard
 
