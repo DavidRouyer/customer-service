@@ -476,7 +476,7 @@ __metadata:
     "@trpc/server": "npm:next"
     eslint: "npm:^8.56.0"
     lexical: "npm:^0.12.6"
-    prettier: "npm:^3.2.0"
+    prettier: "npm:^3.2.2"
     superjson: "npm:^2.2.1"
     typescript: "npm:^5.3.3"
     zod: "npm:^3.22.4"
@@ -499,7 +499,7 @@ __metadata:
     eslint: "npm:^8.56.0"
     next: "npm:^14.0.4"
     next-auth: "npm:^5.0.0-beta.4"
-    prettier: "npm:^3.2.0"
+    prettier: "npm:^3.2.2"
     react: "npm:18.2.0"
     react-dom: "npm:18.2.0"
     typescript: "npm:^5.3.3"
@@ -573,7 +573,7 @@ __metadata:
     drizzle-orm: "npm:^0.29.3"
     eslint: "npm:^8.56.0"
     lexical: "npm:^0.12.6"
-    prettier: "npm:^3.2.0"
+    prettier: "npm:^3.2.2"
     tsx: "npm:^4.7.0"
     typescript: "npm:^5.3.3"
   languageName: unknown
@@ -608,7 +608,7 @@ __metadata:
     "@lexical/headless": "npm:^0.12.6"
     eslint: "npm:^8.56.0"
     lexical: "npm:^0.12.6"
-    prettier: "npm:^3.2.0"
+    prettier: "npm:^3.2.2"
     typescript: "npm:^5.3.3"
     ulid: "npm:^2.3.0"
   languageName: unknown
@@ -620,7 +620,7 @@ __metadata:
   dependencies:
     "@cs/tsconfig": "npm:*"
     "@ianvs/prettier-plugin-sort-imports": "npm:^4.1.1"
-    prettier: "npm:^3.2.0"
+    prettier: "npm:^3.2.2"
     prettier-plugin-tailwindcss: "npm:^0.5.11"
     typescript: "npm:^5.3.3"
   languageName: unknown
@@ -636,7 +636,7 @@ __metadata:
     autoprefixer: "npm:^10.4.16"
     eslint: "npm:^8.56.0"
     postcss: "npm:^8.4.33"
-    prettier: "npm:^3.2.0"
+    prettier: "npm:^3.2.2"
     tailwindcss: "npm:^3.4.1"
     tailwindcss-animate: "npm:^1.0.7"
     typescript: "npm:^5.3.3"
@@ -8125,12 +8125,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prettier@npm:^3.2.0":
-  version: 3.2.0
-  resolution: "prettier@npm:3.2.0"
+"prettier@npm:^3.2.2":
+  version: 3.2.2
+  resolution: "prettier@npm:3.2.2"
   bin:
     prettier: bin/prettier.cjs
-  checksum: 8ba997430cb3fe88cd749a3521bc15821cadb4b6ff41c626e92cabc342efee712d109921b3de37dcada7326bc1b03e745b802fba5472535eb7880e8e7e073b51
+  checksum: e84d0d2a4ce2b88ee1636904effbdf68b59da63d9f887128f2ed5382206454185432e7c0a9578bc4308bc25d099cfef47fd0b9c211066777854e23e65e34044d
   languageName: node
   linkType: hard
 
@@ -8642,7 +8642,7 @@ __metadata:
     "@vitejs/plugin-react": "npm:^4.2.1"
     "@vitest/coverage-v8": "npm:^1.2.0"
     "@vitest/ui": "npm:^1.2.0"
-    prettier: "npm:^3.2.0"
+    prettier: "npm:^3.2.2"
     turbo: "npm:^1.11.3"
     typescript: "npm:^5.3.3"
     vitest: "npm:^1.2.0"
