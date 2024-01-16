@@ -24,7 +24,7 @@
     "@cs/tsconfig": "*",
     "@types/ws": "^8.5.10",
     "dotenv-cli": "^7.3.0",
-    "drizzle-kit": "^0.20.12",
+    "drizzle-kit": "^0.20.13",
     "eslint": "^8.56.0",
     "lexical": "^0.12.6",
     "prettier": "^3.2.2",
