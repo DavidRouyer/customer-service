@@ -20,7 +20,7 @@
     "@trpc/react-query": "next",
     "@trpc/server": "next",
     "google-libphonenumber": "^3.2.34",
-    "jotai": "^2.6.1",
+    "jotai": "^2.6.2",
     "lexical": "^0.12.6",
     "lucide-react": "^0.311.0",
     "negotiator": "^0.6.3",
