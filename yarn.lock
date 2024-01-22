@@ -521,7 +521,7 @@ __metadata:
     jotai: "npm:^2.6.2"
     jsdom: "npm:^24.0.0"
     lexical: "npm:^0.12.6"
-    lucide-react: "npm:^0.312.0"
+    lucide-react: "npm:^0.314.0"
     negotiator: "npm:^0.6.3"
     next: "npm:^14.1.0"
     next-themes: "npm:^0.2.1"
@@ -6955,12 +6955,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lucide-react@npm:^0.312.0":
-  version: 0.312.0
-  resolution: "lucide-react@npm:0.312.0"
+"lucide-react@npm:^0.314.0":
+  version: 0.314.0
+  resolution: "lucide-react@npm:0.314.0"
   peerDependencies:
     react: ^16.5.1 || ^17.0.0 || ^18.0.0
-  checksum: 491b3403f51a1740c8cb0a558c4151c28eb175fc386099dbf9eaa63a314bb941ecb5cf6434b233ef6708e2af51ebaf8362987cc59958584990c1d1b5f34d4237
+  checksum: b7994d4a11167ca590e9ee2be1d8c9d4e22f860a4d40ff8a24cbb0b4b71f7b60c834c9ffeca72a746d21be9f47ce69d560ba0b0975ee51a35cd0d7e7b4a54365
   languageName: node
   linkType: hard
 
