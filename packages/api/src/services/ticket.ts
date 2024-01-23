@@ -81,8 +81,6 @@ export default class TicketService extends BaseService {
     const whereClause = this.getWhereClause(filters);
 
     const filteredTickets = await this.ticketRepository.findMany({
-      columns: undefined,
-      extras: {},
       where: and(whereClause, cursorWhereClause),
       with: this.getWithClause(config?.relations),
       limit: config?.take ? config.take + 1 : undefined,

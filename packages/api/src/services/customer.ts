@@ -46,8 +46,6 @@ export default class CustomerService extends BaseService {
       config.skip ? lt(schema.customers.id, config.skip) : undefined
     );
     return this.customerRepository.findMany({
-      columns: undefined,
-      extras: {},
       where: whereClause,
       with: this.getWithClause(config.relations),
       limit: config.take,

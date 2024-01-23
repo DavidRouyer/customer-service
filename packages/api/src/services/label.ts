@@ -86,8 +86,6 @@ export default class LabelService extends BaseService {
       config?.skip ? lt(schema.labels.id, config.skip) : undefined
     );
     return await this.labelRepository.findMany({
-      columns: undefined,
-      extras: {},
       where: whereClause,
       with: this.getWithClause(config?.relations),
       limit: config?.take,

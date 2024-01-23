@@ -21,12 +21,11 @@ export default class UserService extends BaseService {
       columns: {
         id: true,
         email: true,
+        emailVerified: true,
         name: true,
         image: true,
       },
-      extras: {},
       where: eq(schema.users.id, userId),
-      with: {},
     });
 
     if (!user)
@@ -58,12 +57,11 @@ export default class UserService extends BaseService {
       columns: {
         id: true,
         email: true,
+        emailVerified: true,
         name: true,
         image: true,
       },
-      extras: {},
       where: whereClause,
-      with: {},
       limit: config?.take,
       orderBy: and(
         config?.sortBy
