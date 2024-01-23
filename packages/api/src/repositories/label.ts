@@ -17,7 +17,9 @@ export default class LabelRepository extends BaseRepository {
     return this.drizzleConnection.query.labels.findFirst(config);
   }
 
-  findMany<T extends KnownKeysOnly<T, IncludeRelation<'labels'>>>(config: T) {
+  findMany<T extends IncludeRelation<'labels'>>(
+    config: KnownKeysOnly<T, IncludeRelation<'labels'>>
+  ) {
     return this.drizzleConnection.query.labels.findMany(config);
   }
 

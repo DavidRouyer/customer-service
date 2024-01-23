@@ -17,7 +17,9 @@ export default class UserRepository extends BaseRepository {
     return this.drizzleConnection.query.users.findFirst(config);
   }
 
-  findMany<T extends KnownKeysOnly<T, IncludeRelation<'users'>>>(config: T) {
+  findMany<T extends IncludeRelation<'users'>>(
+    config: KnownKeysOnly<T, IncludeRelation<'users'>>
+  ) {
     return this.drizzleConnection.query.users.findMany(config);
   }
 

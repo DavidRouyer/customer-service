@@ -19,7 +19,7 @@ type TSchema = ExtractTablesWithRelations<Schema>;
 
 export type IncludeRelation<TableName extends keyof TSchema> = DBQueryConfig<
   'many',
-  boolean,
+  true,
   TSchema,
   TSchema[TableName]
 >;

@@ -17,7 +17,9 @@ export default class TicketRepository extends BaseRepository {
     return this.drizzleConnection.query.tickets.findFirst(config);
   }
 
-  findMany<T extends KnownKeysOnly<T, IncludeRelation<'tickets'>>>(config: T) {
+  findMany<T extends IncludeRelation<'tickets'>>(
+    config: KnownKeysOnly<T, IncludeRelation<'tickets'>>
+  ) {
     return this.drizzleConnection.query.tickets.findMany(config);
   }
 

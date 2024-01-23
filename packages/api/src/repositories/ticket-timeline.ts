@@ -23,9 +23,9 @@ export default class TicketTimelineRepository extends BaseRepository {
     return this.drizzleConnection.query.ticketTimelineEntries.findFirst(config);
   }
 
-  findMany<
-    T extends KnownKeysOnly<T, IncludeRelation<'ticketTimelineEntries'>>,
-  >(config: T) {
+  findMany<T extends IncludeRelation<'ticketTimelineEntries'>>(
+    config: KnownKeysOnly<T, IncludeRelation<'ticketTimelineEntries'>>
+  ) {
     return this.drizzleConnection.query.ticketTimelineEntries.findMany(config);
   }
 

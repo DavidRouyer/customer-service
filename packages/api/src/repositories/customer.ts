@@ -17,8 +17,8 @@ export default class CustomerRepository extends BaseRepository {
     return this.drizzleConnection.query.customers.findFirst(config);
   }
 
-  findMany<T extends KnownKeysOnly<T, IncludeRelation<'customers'>>>(
-    config: T
+  findMany<T extends IncludeRelation<'customers'>>(
+    config: KnownKeysOnly<T, IncludeRelation<'customers'>>
   ) {
     return this.drizzleConnection.query.customers.findMany(config);
   }

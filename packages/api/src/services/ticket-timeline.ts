@@ -49,8 +49,6 @@ export default class TicketTimelineService extends BaseService {
     config: FindConfig<T, TicketTimelineSort>
   ) {
     const ticketTimelineEntries = await this.ticketTimelineRepository.findMany({
-      columns: undefined,
-      extras: {},
       where: eq(schema.ticketTimelineEntries.ticketId, filters.ticketId),
       with: this.getWithClause(config.relations),
       limit: config.take,
@@ -188,12 +186,11 @@ export default class TicketTimelineService extends BaseService {
           columns: {
             id: true,
             email: true,
+            emailVerified: true,
             name: true,
             image: true,
           },
-          extras: {},
           where: inArray(schema.users.id, Array.from(usersToFetch)),
-          with: undefined,
         })
       : [];
   }
