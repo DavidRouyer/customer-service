@@ -21,17 +21,18 @@ import {
   TicketStatusDetail,
   TicketTimelineEntryType,
 } from '@cs/kyaku/models';
+import { FindConfig, GetConfig } from '@cs/kyaku/types/query';
 import { KyakuError } from '@cs/kyaku/utils';
 
 import {
   FindTicketConfig,
-  GetTicketConfig,
   Ticket,
   TicketCursor,
   TicketFilters,
-  TicketRelations,
+  TicketSort,
+  TicketWith,
 } from '../entities/ticket';
-import TicketRepository from '../repositories/ticket';
+import TicketRepository, { IncludeRelation } from '../repositories/ticket';
 import TicketMentionRepository from '../repositories/ticket-mention';
 import TicketTimelineRepository from '../repositories/ticket-timeline';
 import { UnitOfWork } from '../unit-of-work';
@@ -63,15 +64,13 @@ export default class TicketService extends BaseService {
     this.ticketTimelineRepository = ticketTimelineRepository;
   }
 
-  async retrieve(
+  async retrieve<T extends TicketWith<T>>(
     ticketId: string,
-    config: GetTicketConfig = { relations: {} }
+    config?: GetConfig<T>
   ) {
     const ticket = await this.ticketRepository.find({
-      columns: undefined,
-      extras: {},
       where: eq(schema.tickets.id, ticketId),
-      with: this.getWithClause(config.relations),
+      with: this.getWithClause(config?.relations),
     });
 
     if (!ticket)
@@ -83,11 +82,9 @@ export default class TicketService extends BaseService {
     return ticket;
   }
 
-  async list(
+  async list<T extends TicketWith<T>>(
     filters: TicketFilters,
-    config: FindTicketConfig = {
-      relations: {},
-    }
+    config?: FindConfig<T, TicketSort>
   ) {
     const [cursorWhereClause, cursorOrderByClause] =
       this.getCursorClauses(config);
@@ -97,7 +94,7 @@ export default class TicketService extends BaseService {
       columns: undefined,
       extras: {},
       where: and(whereClause, cursorWhereClause),
-      with: this.getWithClause(config.relations),
+      with: this.getWithClause(config?.relations),
       limit: config.take ? config.take + 1 : undefined,
       orderBy: cursorOrderByClause,
     });
@@ -463,53 +460,15 @@ export default class TicketService extends BaseService {
     });
   }
 
-  private getWithClause(relations: TicketRelations) {
+  private getWithClause<T extends TicketWith<T>>(
+    relations: T | undefined
+  ): {
+    assignedTo: T extends { assignedTo: true } ? true : undefined;
+  } {
     return {
-      labels: relations?.labels
-        ? ({
-            columns: {
-              id: true,
-            },
-            with: {
-              labelType: true,
-            },
-            where: isNull(schema.labels.archivedAt),
-          } as const)
-        : undefined,
-      timelineEntries: relations?.lastTimelineEntry
-        ? {
-            where: and(
-              inArray(schema.ticketTimelineEntries.type, [
-                TicketTimelineEntryType.Chat,
-                TicketTimelineEntryType.Note,
-              ])
-            ),
-            orderBy: desc(schema.ticketTimelineEntries.createdAt),
-            limit: 1,
-          }
-        : undefined,
-      customer: relations?.customer ? (true as const) : undefined,
-      assignedTo: relations?.assignedTo ? (true as const) : undefined,
-      createdBy: relations?.createdBy
-        ? ({
-            columns: {
-              id: true,
-              email: true,
-              name: true,
-              image: true,
-            },
-          } as const)
-        : undefined,
-      updatedBy: relations?.updatedBy
-        ? ({
-            columns: {
-              id: true,
-              email: true,
-              name: true,
-              image: true,
-            },
-          } as const)
-        : undefined,
+      assignedTo: (relations && 'assignedTo' in relations
+        ? true
+        : undefined) as T extends { assignedTo: true } ? true : undefined,
     };
   }
 

@@ -1,5 +1,5 @@
 export type GetConfig<TRelations> = {
-  relations: TRelations;
+  relations?: TRelations;
 };
 export type FindConfig<TRelations, TSort> = {
   skip?: string;
