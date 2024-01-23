@@ -1,73 +1,9 @@
-import {
-  BuildQueryResult,
-  DBQueryConfig,
-  DrizzleConnection,
-  eq,
-  ExtractTablesWithRelations,
-  KnownKeysOnly,
-  schema,
-} from '@cs/database';
+import { eq, KnownKeysOnly, schema } from '@cs/database';
 
 import { DrizzleTransactionScope } from '../drizzle-transaction';
 import { Ticket, TicketInsert } from '../entities/ticket';
+import { IncludeRelation } from '../services/build-query';
 import { BaseRepository } from './base-repository';
-
-type DbSchemas = NonNullable<DrizzleConnection['_']['schema']>;
-
-export type SchemaRelations<
-  TTableName extends keyof DbSchemas,
-  TExcludeRelations extends keyof NonNullable<
-    DbSchemas[TTableName]['relations']
-  > = never,
-> = Exclude<
-  keyof NonNullable<DbSchemas[TTableName]['relations']>,
-  TExcludeRelations
->;
-
-export type SchemaWithRelations<
-  TTableName extends keyof DbSchemas,
-  TInclude extends SchemaRelations<TTableName> = never,
-> = BuildQueryResult<
-  DbSchemas,
-  DbSchemas[TTableName],
-  { with: { [Key in TInclude]: true } }
->;
-
-/*export type Ticket<T extends SchemaRelations<'tickets'> = never> =
-  SchemaWithRelations<'tickets', T>;
-export type TicketWithRelations<
-  T extends SchemaRelations<
-    'tickets',
-    | 'assignedTo'
-    | 'createdBy'
-    | 'customer'
-    | 'labels'
-    | 'statusChangedBy'
-    | 'ticketMentions'
-    | 'timelineEntries'
-    | 'updatedBy'
-  > = never,
-> = SchemaWithRelations<'tickets', T>;*/
-
-type Schema = typeof schema;
-type TSchema = ExtractTablesWithRelations<Schema>;
-
-export type IncludeRelation<TableName extends keyof TSchema> = DBQueryConfig<
-  'many',
-  boolean,
-  TSchema,
-  TSchema[TableName]
->;
-export type InferResultType<
-  TableName extends keyof TSchema,
-  With extends IncludeRelation<TableName> | undefined = undefined,
-> = BuildQueryResult<
-  TSchema,
-  TSchema[TableName],
-  {
-    with: With;
-  }
->;
 
 export default class TicketRepository extends BaseRepository {
   constructor() {

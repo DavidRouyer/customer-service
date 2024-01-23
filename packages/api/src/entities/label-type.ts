@@ -1,13 +1,14 @@
 import { InferInsertModel, InferSelectModel, schema } from '@cs/database';
-import { FindConfig, SortDirection } from '@cs/kyaku/types';
+import { SortDirection } from '@cs/kyaku/types';
 
 export type LabelType = InferSelectModel<typeof schema.labelTypes>;
+
 export type LabelTypeInsert = InferInsertModel<typeof schema.labelTypes>;
-export type LabelTypeRelations = {
-  createdBy?: boolean;
-  updatedBy?: boolean;
+
+export type LabelTypeWith<T> = {
+  createdBy?: [T] extends [{ createdBy: true }] ? true : undefined;
+  updatedBy?: [T] extends [{ updatedBy: true }] ? true : undefined;
 };
-export type FindLabelTypeConfig = FindConfig<LabelTypeRelations, LabelTypeSort>;
 
 export type LabelTypeSort =
   | { createdAt: SortDirection }

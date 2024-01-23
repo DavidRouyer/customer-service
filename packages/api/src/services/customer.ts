@@ -1,7 +1,9 @@
 import { and, desc, eq, lt, schema } from '@cs/database';
+import { FindConfig, GetConfig } from '@cs/kyaku/types/query';
 import { KyakuError } from '@cs/kyaku/utils';
 
-import { CustomerRelations, FindCustomerConfig } from '../entities/customer';
+import { CustomerSort, CustomerWith } from '../entities/customer';
+import { User } from '../entities/user';
 import CustomerRepository from '../repositories/customer';
 import { BaseService } from './base-service';
 import { sortDirection } from './build-query';
@@ -19,9 +21,9 @@ export default class CustomerService extends BaseService {
     this.customerRepository = customerRepository;
   }
 
-  async retrieve(
+  async retrieve<T extends CustomerWith<T>>(
     customerId: string,
-    config: FindCustomerConfig = { relations: {} }
+    config: GetConfig<T>
   ) {
     const customer = await this.customerRepository.find({
       columns: undefined,
@@ -39,7 +41,7 @@ export default class CustomerService extends BaseService {
     return customer;
   }
 
-  async list(config: FindCustomerConfig = { relations: {} }) {
+  async list<T extends CustomerWith<T>>(config: FindConfig<T, CustomerSort>) {
     const whereClause = and(
       config.skip ? lt(schema.customers.id, config.skip) : undefined
     );
@@ -64,30 +66,43 @@ export default class CustomerService extends BaseService {
     });
   }
 
-  private getWithClause(relations: CustomerRelations) {
-    const withClause = {
-      createdBy: relations.createdBy
-        ? ({
+  private getWithClause<T extends CustomerWith<T>>(
+    relations: T | undefined
+  ): {
+    createdBy: T extends { createdBy: true }
+      ? { columns: { [K in keyof User]: true } }
+      : undefined;
+    updatedBy: T extends { updatedBy: true }
+      ? { columns: { [K in keyof User]: true } }
+      : undefined;
+  } {
+    return {
+      createdBy: (relations?.createdBy
+        ? {
             columns: {
               id: true,
               email: true,
+              emailVerified: true,
               name: true,
               image: true,
             },
-          } as const)
+          }
+        : undefined) as T extends { createdBy: true }
+        ? { columns: { [K in keyof User]: true } }
         : undefined,
-      updatedBy: relations.updatedBy
-        ? ({
+      updatedBy: (relations?.updatedBy
+        ? {
             columns: {
               id: true,
               email: true,
+              emailVerified: true,
               name: true,
               image: true,
             },
-          } as const)
+          }
+        : undefined) as T extends { updatedBy: true }
+        ? { columns: { [K in keyof User]: true } }
         : undefined,
     };
-
-    return withClause;
   }
 }

@@ -4,6 +4,6 @@ export type GetConfig<TRelations> = {
 export type FindConfig<TRelations, TSort> = {
   skip?: string;
   take?: number;
-  relations: TRelations;
+  relations?: TRelations;
   sortBy?: TSort;
 };

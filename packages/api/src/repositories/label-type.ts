@@ -1,21 +1,9 @@
-import { DrizzleConnection, eq, schema } from '@cs/database';
+import { eq, KnownKeysOnly, schema } from '@cs/database';
 
 import { DrizzleTransactionScope } from '../drizzle-transaction';
 import { LabelType, LabelTypeInsert } from '../entities/label-type';
+import { IncludeRelation } from '../services/build-query';
 import { BaseRepository } from './base-repository';
-
-type FindLabelTypeInput = Parameters<
-  DrizzleConnection['query']['labelTypes']['findMany']
->;
-
-type ColumnInput = NonNullable<FindLabelTypeInput[0]>['columns'];
-type ExtrasInput = NonNullable<FindLabelTypeInput[0]>['extras'];
-type WhereInput = NonNullable<FindLabelTypeInput[0]>['where'];
-type WithInput = NonNullable<FindLabelTypeInput[0]>['with'];
-type RestInput = Omit<
-  NonNullable<FindLabelTypeInput[0]>,
-  'columns' | 'extras' | 'where' | 'with'
->;
 
 export default class LabelTypeRepository extends BaseRepository {
   constructor() {
@@ -23,28 +11,13 @@ export default class LabelTypeRepository extends BaseRepository {
     super(arguments[0]);
   }
 
-  find<
-    TColumn extends ColumnInput,
-    TExtras extends ExtrasInput,
-    TWhere extends WhereInput,
-    TWith extends WithInput,
-  >(config: { columns: TColumn; extras: TExtras; where: TWhere; with: TWith }) {
+  find<T extends Omit<IncludeRelation<'labelTypes'>, 'limit'>>(
+    config: KnownKeysOnly<T, Omit<IncludeRelation<'labelTypes'>, 'limit'>>
+  ) {
     return this.drizzleConnection.query.labelTypes.findFirst(config);
   }
 
-  findMany<
-    TColumn extends ColumnInput,
-    TExtras extends ExtrasInput,
-    TWhere extends WhereInput,
-    TWith extends WithInput,
-  >(
-    config: {
-      columns: TColumn;
-      extras: TExtras;
-      where: TWhere;
-      with: TWith;
-    } & RestInput
-  ) {
+  findMany<T extends KnownKeysOnly<T, IncludeRelation<'users'>>>(config: T) {
     return this.drizzleConnection.query.labelTypes.findMany(config);
   }
 

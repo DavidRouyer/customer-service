@@ -7,13 +7,15 @@ import {
   TicketPriorityChanged,
   TicketStatusChanged,
   TicketTimelineEntryType,
+  User,
 } from '@cs/kyaku/models';
+import { FindConfig } from '@cs/kyaku/types';
 
 import {
-  FindTicketTimelineConfig,
   TicketAssignmentChangedWithData,
   TicketLabelsChangedWithData,
-  TicketTimelineRelations,
+  TicketTimelineSort,
+  TicketTimelineWith,
 } from '../entities/ticket-timeline';
 import LabelRepository from '../repositories/label';
 import TicketTimelineRepository from '../repositories/ticket-timeline';
@@ -42,11 +44,9 @@ export default class TicketTimelineService extends BaseService {
     this.userRepository = userRepository;
   }
 
-  async list(
+  async list<T extends TicketTimelineWith<T>>(
     filters: { ticketId: string },
-    config: FindTicketTimelineConfig = {
-      relations: {},
-    }
+    config: FindConfig<T, TicketTimelineSort>
   ) {
     const ticketTimelineEntries = await this.ticketTimelineRepository.findMany({
       columns: undefined,
@@ -216,25 +216,45 @@ export default class TicketTimelineService extends BaseService {
       : [];
   }
 
-  private getWithClause(relations: TicketTimelineRelations) {
-    const withClause = {
-      customer: relations.customer ? (true as const) : undefined,
-      customerCreatedBy: relations.customerCreatedBy
-        ? (true as const)
+  private getWithClause<T extends TicketTimelineWith<T>>(
+    relations: T | undefined
+  ): {
+    customer: T extends { customer: true } ? true : undefined;
+    customerCreatedBy: T extends { customerCreatedBy: true } ? true : undefined;
+    ticket: T extends { ticket: true } ? true : undefined;
+    userCreatedBy: T extends { userCreatedBy: true }
+      ? { columns: { [K in keyof User]: true } }
+      : undefined;
+  } {
+    return {
+      customer: (relations?.customer ? true : undefined) as T extends {
+        customer: true;
+      }
+        ? true
         : undefined,
-      ticket: relations.ticket ? (true as const) : undefined,
-      userCreatedBy: relations.userCreatedBy
-        ? ({
+      customerCreatedBy: (relations?.customerCreatedBy
+        ? true
+        : undefined) as T extends { customerCreatedBy: true }
+        ? true
+        : undefined,
+      ticket: (relations?.ticket ? true : undefined) as T extends {
+        ticket: true;
+      }
+        ? true
+        : undefined,
+      userCreatedBy: (relations?.userCreatedBy
+        ? {
             columns: {
               id: true,
               email: true,
+              emailVerified: true,
               name: true,
               image: true,
             },
-          } as const)
+          }
+        : undefined) as T extends { userCreatedBy: true }
+        ? { columns: { [K in keyof User]: true } }
         : undefined,
     };
-
-    return withClause;
   }
 }

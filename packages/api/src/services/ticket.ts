@@ -1,14 +1,4 @@
-import {
-  and,
-  asc,
-  desc,
-  eq,
-  gt,
-  inArray,
-  isNull,
-  schema,
-  SQL,
-} from '@cs/database';
+import { and, asc, eq, gt, isNull, schema, SQL } from '@cs/database';
 import { extractMentions } from '@cs/kyaku/editor';
 import {
   TicketAssignmentChanged,
@@ -25,14 +15,14 @@ import { FindConfig, GetConfig } from '@cs/kyaku/types/query';
 import { KyakuError } from '@cs/kyaku/utils';
 
 import {
-  FindTicketConfig,
   Ticket,
   TicketCursor,
   TicketFilters,
   TicketSort,
   TicketWith,
 } from '../entities/ticket';
-import TicketRepository, { IncludeRelation } from '../repositories/ticket';
+import { User } from '../entities/user';
+import TicketRepository from '../repositories/ticket';
 import TicketMentionRepository from '../repositories/ticket-mention';
 import TicketTimelineRepository from '../repositories/ticket-timeline';
 import { UnitOfWork } from '../unit-of-work';
@@ -95,11 +85,11 @@ export default class TicketService extends BaseService {
       extras: {},
       where: and(whereClause, cursorWhereClause),
       with: this.getWithClause(config?.relations),
-      limit: config.take ? config.take + 1 : undefined,
+      limit: config?.take ? config.take + 1 : undefined,
       orderBy: cursorOrderByClause,
     });
 
-    if (config.take) {
+    if (config?.take) {
       const items = filteredTickets.slice(0, config.take);
       const lastItem = items.at(-1);
       return {
@@ -464,11 +454,71 @@ export default class TicketService extends BaseService {
     relations: T | undefined
   ): {
     assignedTo: T extends { assignedTo: true } ? true : undefined;
+    createdBy: T extends { createdBy: true }
+      ? { columns: { [K in keyof User]: true } }
+      : undefined;
+    customer: T extends { customer: true } ? true : undefined;
+    labels: T extends { labels: true }
+      ? {
+          with: { labelType: true };
+        }
+      : undefined;
+    updatedBy: T extends { updatedBy: true }
+      ? { columns: { [K in keyof User]: true } }
+      : undefined;
   } {
     return {
-      assignedTo: (relations && 'assignedTo' in relations
+      assignedTo: (relations?.assignedTo ? true : undefined) as T extends {
+        assignedTo: true;
+      }
         ? true
-        : undefined) as T extends { assignedTo: true } ? true : undefined,
+        : undefined,
+      createdBy: (relations?.createdBy
+        ? {
+            columns: {
+              id: true,
+              name: true,
+              email: true,
+              emailVerified: true,
+              image: true,
+            },
+          }
+        : undefined) as T extends { createdBy: true }
+        ? { columns: { [K in keyof User]: true } }
+        : undefined,
+      customer: (relations?.customer ? true : undefined) as T extends {
+        customer: true;
+      }
+        ? true
+        : undefined,
+      labels: (relations?.labels
+        ? {
+            columns: {
+              id: true,
+            },
+            with: {
+              labelType: true,
+            },
+            where: isNull(schema.labels.archivedAt),
+          }
+        : undefined) as T extends { labels: true }
+        ? {
+            with: { labelType: true };
+          }
+        : undefined,
+      updatedBy: (relations?.updatedBy
+        ? {
+            columns: {
+              id: true,
+              name: true,
+              email: true,
+              emailVerified: true,
+              image: true,
+            },
+          }
+        : undefined) as T extends { updatedBy: true }
+        ? { columns: { [K in keyof User]: true } }
+        : undefined,
     };
   }
 
@@ -495,14 +545,16 @@ export default class TicketService extends BaseService {
     );
   }
 
-  private getCursorClauses(config: FindTicketConfig) {
-    const cursor = config.skip ? this.decodeCursor(config.skip) : undefined;
+  private getCursorClauses<T extends TicketWith<T>>(
+    config?: FindConfig<T, TicketSort>
+  ) {
+    const cursor = config?.skip ? this.decodeCursor(config.skip) : undefined;
     let whereClause = cursor ? gt(schema.tickets.id, cursor.id) : undefined;
 
     let orderByClause: SQL<unknown> | SQL<unknown>[] | undefined = asc(
       schema.tickets.id
     );
-    if (config.sortBy) {
+    if (config?.sortBy) {
       if ('statusChangedAt' in config.sortBy) {
         whereClause = cursor
           ? and(
@@ -564,9 +616,9 @@ export default class TicketService extends BaseService {
     return decodedCursor;
   }
 
-  private encodeCursor(
+  private encodeCursor<T extends TicketWith<T>>(
     ticket: Ticket,
-    config: FindTicketConfig
+    config: FindConfig<T, TicketSort>
   ): string | null {
     if (!config.sortBy) return null;
     let cursor: TicketCursor = {

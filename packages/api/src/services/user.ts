@@ -1,7 +1,8 @@
 import { and, desc, eq, inArray, lt, notInArray, schema } from '@cs/database';
+import { FindConfig, GetConfig } from '@cs/kyaku/types/query';
 import { KyakuError } from '@cs/kyaku/utils';
 
-import { FindUserConfig, GetUserConfig, UserRelations } from '../entities/user';
+import { UserSort, UserWith } from '../entities/user';
 import UserRepository from '../repositories/user';
 import { BaseService } from './base-service';
 import { InclusionFilterOperator, sortDirection } from './build-query';
@@ -15,7 +16,7 @@ export default class UserService extends BaseService {
     this.userRepository = userRepository;
   }
 
-  async retrieve(userId: string, config: GetUserConfig = { relations: {} }) {
+  async retrieve<T extends UserWith<T>>(userId: string, config?: GetConfig<T>) {
     const user = await this.userRepository.find({
       columns: {
         id: true,
@@ -25,7 +26,7 @@ export default class UserService extends BaseService {
       },
       extras: {},
       where: eq(schema.users.id, userId),
-      with: this.getWithClause(config.relations),
+      with: {},
     });
 
     if (!user)
@@ -37,11 +38,11 @@ export default class UserService extends BaseService {
     return user;
   }
 
-  async list(
+  async list<T extends UserWith<T>>(
     filters: {
       id?: InclusionFilterOperator<string>;
     },
-    config: FindUserConfig = { relations: {} }
+    config?: FindConfig<T, UserSort>
   ) {
     const whereClause = and(
       filters.id
@@ -51,7 +52,7 @@ export default class UserService extends BaseService {
             ? notInArray(schema.labels.id, filters.id.notIn)
             : undefined
         : undefined,
-      config.skip ? lt(schema.users.id, config.skip) : undefined
+      config?.skip ? lt(schema.users.id, config.skip) : undefined
     );
     return await this.userRepository.findMany({
       columns: {
@@ -62,24 +63,18 @@ export default class UserService extends BaseService {
       },
       extras: {},
       where: whereClause,
-      with: this.getWithClause(config.relations),
-      limit: config.take,
+      with: {},
+      limit: config?.take,
       orderBy: and(
-        config.sortBy
+        config?.sortBy
           ? 'name' in config.sortBy
             ? sortDirection(config.sortBy.name)(schema.users.name)
             : 'createdAt' in config.sortBy
               ? sortDirection(config.sortBy.createdAt)(schema.tickets.createdAt)
               : undefined
           : undefined,
-        config.skip ? desc(schema.tickets.id) : undefined
+        config?.skip ? desc(schema.tickets.id) : undefined
       ),
     });
-  }
-
-  private getWithClause(relations: UserRelations) {
-    const withClause = {};
-
-    return withClause;
   }
 }

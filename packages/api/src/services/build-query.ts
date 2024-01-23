@@ -1,14 +1,38 @@
 import {
   asc,
+  BuildQueryResult,
   Column,
+  DBQueryConfig,
   desc,
+  ExtractTablesWithRelations,
   GetColumnData,
   gt,
   inArray,
   lt,
   notInArray,
+  schema,
 } from '@cs/database';
 import { SortDirection } from '@cs/kyaku/types';
+
+type Schema = typeof schema;
+type TSchema = ExtractTablesWithRelations<Schema>;
+
+export type IncludeRelation<TableName extends keyof TSchema> = DBQueryConfig<
+  'many',
+  boolean,
+  TSchema,
+  TSchema[TableName]
+>;
+export type InferResultType<
+  TableName extends keyof TSchema,
+  With extends IncludeRelation<TableName> | undefined = undefined,
+> = BuildQueryResult<
+  TSchema,
+  TSchema[TableName],
+  {
+    with: With;
+  }
+>;
 
 export type InclusionFilterOperator<T> =
   | { eq: string | null }

@@ -1,21 +1,9 @@
-import { DrizzleConnection, eq, inArray, schema } from '@cs/database';
+import { eq, inArray, KnownKeysOnly, schema } from '@cs/database';
 
 import { DrizzleTransactionScope } from '../drizzle-transaction';
 import { User, UserInsert } from '../entities/user';
+import { IncludeRelation } from '../services/build-query';
 import { BaseRepository } from './base-repository';
-
-type FindUserInput = Parameters<
-  DrizzleConnection['query']['users']['findMany']
->;
-
-type ColumnInput = NonNullable<FindUserInput[0]>['columns'];
-type ExtrasInput = NonNullable<FindUserInput[0]>['extras'];
-type WhereInput = NonNullable<FindUserInput[0]>['where'];
-type WithInput = NonNullable<FindUserInput[0]>['with'];
-type RestInput = Omit<
-  NonNullable<FindUserInput[0]>,
-  'columns' | 'extras' | 'where' | 'with'
->;
 
 export default class UserRepository extends BaseRepository {
   constructor() {
@@ -23,28 +11,13 @@ export default class UserRepository extends BaseRepository {
     super(arguments[0]);
   }
 
-  find<
-    TColumn extends ColumnInput,
-    TExtras extends ExtrasInput,
-    TWhere extends WhereInput,
-    TWith extends WithInput,
-  >(config: { columns: TColumn; extras: TExtras; where: TWhere; with: TWith }) {
+  find<T extends Omit<IncludeRelation<'users'>, 'limit'>>(
+    config: KnownKeysOnly<T, Omit<IncludeRelation<'users'>, 'limit'>>
+  ) {
     return this.drizzleConnection.query.users.findFirst(config);
   }
 
-  findMany<
-    TColumn extends ColumnInput,
-    TExtras extends ExtrasInput,
-    TWhere extends WhereInput,
-    TWith extends WithInput,
-  >(
-    config: {
-      columns: TColumn;
-      extras: TExtras;
-      where: TWhere;
-      with: TWith;
-    } & RestInput
-  ) {
+  findMany<T extends KnownKeysOnly<T, IncludeRelation<'users'>>>(config: T) {
     return this.drizzleConnection.query.users.findMany(config);
   }
 

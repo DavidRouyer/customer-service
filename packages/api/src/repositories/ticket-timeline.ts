@@ -1,24 +1,12 @@
-import { DrizzleConnection, eq, schema } from '@cs/database';
+import { eq, KnownKeysOnly, schema } from '@cs/database';
 
 import { DrizzleTransactionScope } from '../drizzle-transaction';
 import {
   TicketTimeline,
   TicketTimelineInsert,
 } from '../entities/ticket-timeline';
+import { IncludeRelation } from '../services/build-query';
 import { BaseRepository } from './base-repository';
-
-type FindTicketTimelineInput = Parameters<
-  DrizzleConnection['query']['ticketTimelineEntries']['findMany']
->;
-
-type ColumnInput = NonNullable<FindTicketTimelineInput[0]>['columns'];
-type ExtrasInput = NonNullable<FindTicketTimelineInput[0]>['extras'];
-type WhereInput = NonNullable<FindTicketTimelineInput[0]>['where'];
-type WithInput = NonNullable<FindTicketTimelineInput[0]>['with'];
-type RestInput = Omit<
-  NonNullable<FindTicketTimelineInput[0]>,
-  'columns' | 'extras' | 'where' | 'with'
->;
 
 export default class TicketTimelineRepository extends BaseRepository {
   constructor() {
@@ -26,28 +14,18 @@ export default class TicketTimelineRepository extends BaseRepository {
     super(arguments[0]);
   }
 
-  find<
-    TColumn extends ColumnInput,
-    TExtras extends ExtrasInput,
-    TWhere extends WhereInput,
-    TWith extends WithInput,
-  >(config: { columns: TColumn; extras: TExtras; where: TWhere; with: TWith }) {
+  find<T extends Omit<IncludeRelation<'ticketTimelineEntries'>, 'limit'>>(
+    config: KnownKeysOnly<
+      T,
+      Omit<IncludeRelation<'ticketTimelineEntries'>, 'limit'>
+    >
+  ) {
     return this.drizzleConnection.query.ticketTimelineEntries.findFirst(config);
   }
 
   findMany<
-    TColumn extends ColumnInput,
-    TExtras extends ExtrasInput,
-    TWhere extends WhereInput,
-    TWith extends WithInput,
-  >(
-    config: {
-      columns: TColumn;
-      extras: TExtras;
-      where: TWhere;
-      with: TWith;
-    } & RestInput
-  ) {
+    T extends KnownKeysOnly<T, IncludeRelation<'ticketTimelineEntries'>>,
+  >(config: T) {
     return this.drizzleConnection.query.ticketTimelineEntries.findMany(config);
   }
 

@@ -1,19 +1,13 @@
-import {
-  drizzleConnection,
-  InferInsertModel,
-  InferSelectModel,
-  schema,
-} from '@cs/database';
-import { FindConfig, SortDirection } from '@cs/kyaku/types';
-import { GetConfig } from '@cs/kyaku/types/query';
+import { InferInsertModel, InferSelectModel, schema } from '@cs/database';
+import { SortDirection } from '@cs/kyaku/types';
 
-export type User = InferSelectModel<typeof schema.users>;
-export type UserInsert = InferInsertModel<typeof schema.users>;
-export type DbUserRelations = NonNullable<
-  Parameters<(typeof drizzleConnection)['query']['users']['findFirst']>[0]
->['with'];
-export type GetUserConfig = GetConfig<UserRelations>;
-export type UserRelations = {};
-export type FindUserConfig = FindConfig<UserRelations, UserSort>;
+export type User = Omit<InferSelectModel<typeof schema.users>, 'password'>;
+
+export type UserInsert = Omit<
+  InferInsertModel<typeof schema.users>,
+  'password'
+>;
+
+export type UserWith<T> = {};
 
 export type UserSort = { createdAt: SortDirection } | { name: SortDirection };

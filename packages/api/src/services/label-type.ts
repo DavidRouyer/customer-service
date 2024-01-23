@@ -9,13 +9,15 @@ import {
   notInArray,
   schema,
 } from '@cs/database';
+import { FindConfig, GetConfig } from '@cs/kyaku/types/query';
 import { KyakuError } from '@cs/kyaku/utils';
 
 import {
-  FindLabelTypeConfig,
   LabelType,
-  LabelTypeRelations,
+  LabelTypeSort,
+  LabelTypeWith,
 } from '../entities/label-type';
+import { User } from '../entities/user';
 import LabelTypeRepository from '../repositories/label-type';
 import { BaseService } from './base-service';
 import { InclusionFilterOperator, sortDirection } from './build-query';
@@ -33,15 +35,15 @@ export default class LabelTypeService extends BaseService {
     this.labelTypeRepository = labelTypeRepository;
   }
 
-  async retrieve(
+  async retrieve<T extends LabelTypeWith<T>>(
     labelTypeId: string,
-    config: FindLabelTypeConfig = { relations: {} }
+    config?: GetConfig<T>
   ) {
     const labelType = await this.labelTypeRepository.find({
       columns: undefined,
       extras: {},
       where: eq(schema.labelTypes.id, labelTypeId),
-      with: this.getWithClause(config.relations),
+      with: this.getWithClause(config?.relations),
     });
 
     if (!labelType)
@@ -53,15 +55,15 @@ export default class LabelTypeService extends BaseService {
     return labelType;
   }
 
-  async retrieveByName(
+  async retrieveByName<T extends LabelTypeWith<T>>(
     labelTypeName: string,
-    config: FindLabelTypeConfig = { relations: {} }
+    config?: GetConfig<T>
   ) {
     const labelType = await this.labelTypeRepository.find({
       columns: undefined,
       extras: {},
       where: eq(schema.labelTypes.name, labelTypeName),
-      with: this.getWithClause(config.relations),
+      with: this.getWithClause(config?.relations),
     });
 
     if (!labelType)
@@ -73,12 +75,12 @@ export default class LabelTypeService extends BaseService {
     return labelType;
   }
 
-  async list(
+  async list<T extends LabelTypeWith<T>>(
     filters: {
       id?: InclusionFilterOperator<string>;
       isArchived?: boolean;
     },
-    config: FindLabelTypeConfig = { relations: {} }
+    config?: FindConfig<T, LabelTypeSort>
   ) {
     const whereClause = and(
       filters.id
@@ -93,16 +95,16 @@ export default class LabelTypeService extends BaseService {
           ? isNotNull(schema.labelTypes.archivedAt)
           : isNull(schema.labelTypes.archivedAt)
         : undefined,
-      config.skip ? lt(schema.labelTypes.id, config.skip) : undefined
+      config?.skip ? lt(schema.labelTypes.id, config.skip) : undefined
     );
     return this.labelTypeRepository.findMany({
       columns: undefined,
       extras: {},
       where: whereClause,
-      with: this.getWithClause(config.relations),
-      limit: config.take,
+      with: this.getWithClause(config?.relations),
+      limit: config?.take,
       orderBy: and(
-        config.sortBy
+        config?.sortBy
           ? 'name' in config.sortBy
             ? sortDirection(config.sortBy.name)(schema.labelTypes.name)
             : 'createdAt' in config.sortBy
@@ -111,7 +113,7 @@ export default class LabelTypeService extends BaseService {
                 )
               : undefined
           : undefined,
-        config.skip ? desc(schema.labelTypes.id) : undefined
+        config?.skip ? desc(schema.labelTypes.id) : undefined
       ),
     });
   }
@@ -202,30 +204,43 @@ export default class LabelTypeService extends BaseService {
     });
   }
 
-  private getWithClause(relations: LabelTypeRelations) {
-    const withClause = {
-      createdBy: relations.createdBy
-        ? ({
+  private getWithClause<T extends LabelTypeWith<T>>(
+    relations: T | undefined
+  ): {
+    createdBy: T extends { createdBy: true }
+      ? { columns: { [K in keyof User]: true } }
+      : undefined;
+    updatedBy: T extends { updatedBy: true }
+      ? { columns: { [K in keyof User]: true } }
+      : undefined;
+  } {
+    return {
+      createdBy: (relations?.createdBy
+        ? {
             columns: {
               id: true,
               email: true,
+              emailVerified: true,
               name: true,
               image: true,
             },
-          } as const)
+          }
+        : undefined) as T extends { createdBy: true }
+        ? { columns: { [K in keyof User]: true } }
         : undefined,
-      updatedBy: relations.updatedBy
-        ? ({
+      updatedBy: (relations?.updatedBy
+        ? {
             columns: {
               id: true,
               email: true,
+              emailVerified: true,
               name: true,
               image: true,
             },
-          } as const)
+          }
+        : undefined) as T extends { updatedBy: true }
+        ? { columns: { [K in keyof User]: true } }
         : undefined,
     };
-
-    return withClause;
   }
 }

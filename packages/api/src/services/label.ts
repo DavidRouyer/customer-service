@@ -1,12 +1,9 @@
 import { and, desc, eq, inArray, lt, notInArray, schema } from '@cs/database';
 import { TicketLabelsChanged, TicketTimelineEntryType } from '@cs/kyaku/models';
+import { FindConfig, GetConfig } from '@cs/kyaku/types/query';
 import { KyakuError } from '@cs/kyaku/utils';
 
-import {
-  FindLabelConfig,
-  GetLabelConfig,
-  LabelRelations,
-} from '../entities/label';
+import { LabelSort, LabelWith } from '../entities/label';
 import LabelRepository from '../repositories/label';
 import TicketRepository from '../repositories/ticket';
 import TicketTimelineRepository from '../repositories/ticket-timeline';
@@ -44,12 +41,15 @@ export default class LabelService extends BaseService {
     this.ticketService = ticketService;
   }
 
-  async retrieve(labelId: string, config: GetLabelConfig = { relations: {} }) {
+  async retrieve<T extends LabelWith<T>>(
+    labelId: string,
+    config?: GetConfig<T>
+  ) {
     const label = await this.labelRepository.find({
       columns: undefined,
       extras: {},
       where: eq(schema.labels.id, labelId),
-      with: this.getWithClause(config.relations),
+      with: this.getWithClause(config?.relations),
     });
 
     if (!label)
@@ -61,15 +61,13 @@ export default class LabelService extends BaseService {
     return label;
   }
 
-  async list(
+  async list<T extends LabelWith<T>>(
     filters: {
       id?: InclusionFilterOperator<string>;
       ticketId?: string;
       labelTypeId?: string;
     },
-    config: FindLabelConfig = {
-      relations: {},
-    }
+    config?: FindConfig<T, LabelSort>
   ) {
     const whereClause = and(
       filters.id
@@ -85,15 +83,15 @@ export default class LabelService extends BaseService {
       filters.labelTypeId
         ? eq(schema.labels.labelTypeId, filters.labelTypeId)
         : undefined,
-      config.skip ? lt(schema.labels.id, config.skip) : undefined
+      config?.skip ? lt(schema.labels.id, config.skip) : undefined
     );
     return await this.labelRepository.findMany({
       columns: undefined,
       extras: {},
       where: whereClause,
-      with: this.getWithClause(config.relations),
-      limit: config.take,
-      orderBy: and(config.skip ? desc(schema.tickets.id) : undefined),
+      with: this.getWithClause(config?.relations),
+      limit: config?.take,
+      orderBy: and(config?.skip ? desc(schema.tickets.id) : undefined),
     });
   }
 
@@ -227,12 +225,23 @@ export default class LabelService extends BaseService {
     });
   }
 
-  private getWithClause(relations: LabelRelations) {
-    const withClause = {
-      ticket: relations.ticket ? (true as const) : undefined,
-      labelType: relations.labelType ? (true as const) : undefined,
+  private getWithClause<T extends LabelWith<T>>(
+    relations: T | undefined
+  ): {
+    ticket: T extends { ticket: true } ? true : undefined;
+    labelType: T extends { labelType: true } ? true : undefined;
+  } {
+    return {
+      ticket: (relations?.ticket ? true : undefined) as T extends {
+        ticket: true;
+      }
+        ? true
+        : undefined,
+      labelType: (relations?.labelType ? true : undefined) as T extends {
+        labelType: true;
+      }
+        ? true
+        : undefined,
     };
-
-    return withClause;
   }
 }
