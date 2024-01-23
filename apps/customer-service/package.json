@@ -48,7 +48,7 @@
     "@cs/tailwind-config": "*",
     "@cs/tsconfig": "*",
     "@swc-jotai/react-refresh": "^0.1.0",
-    "@testing-library/jest-dom": "^6.2.0",
+    "@testing-library/jest-dom": "^6.2.1",
     "@testing-library/react": "^14.1.2",
     "@types/google-libphonenumber": "^7.4.30",
     "@types/negotiator": "^0.6.3",
