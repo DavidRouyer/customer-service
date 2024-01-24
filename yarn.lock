@@ -547,7 +547,7 @@ __metadata:
     autoprefixer: "npm:^10.4.17"
     dotenv-cli: "npm:^7.3.0"
     google-libphonenumber: "npm:^3.2.34"
-    jotai: "npm:^2.6.2"
+    jotai: "npm:^2.6.3"
     jsdom: "npm:^24.0.0"
     lexical: "npm:^0.12.6"
     lucide-react: "npm:^0.314.0"
@@ -6690,9 +6690,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jotai@npm:^2.6.2":
-  version: 2.6.2
-  resolution: "jotai@npm:2.6.2"
+"jotai@npm:^2.6.3":
+  version: 2.6.3
+  resolution: "jotai@npm:2.6.3"
   peerDependencies:
     "@types/react": ">=17.0.0"
     react: ">=17.0.0"
@@ -6701,7 +6701,7 @@ __metadata:
       optional: true
     react:
       optional: true
-  checksum: 2b502d4915a3d0a1f507dbefec54fe05e16b10cb0d4bd84ce3f0c1fccc96d09152dbc6fc803ab084882c70de124a38411647b9abb16b186f0512b1fd33201679
+  checksum: efae5f2143ef1d3993ec565115086a1c81300c94a0c86bf86541827165f301a67de52d06f4008dcdf0b7675cd5983e89aaebd8520ecdf9347e18b7d43f7a8346
   languageName: node
   linkType: hard
 
