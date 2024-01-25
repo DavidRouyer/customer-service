@@ -198,8 +198,6 @@ export default class TicketTimelineService extends BaseService {
 
     return labelsToFetch.size > 0
       ? await this.labelRepository.findMany({
-          columns: undefined,
-          extras: {},
           where: inArray(schema.labelTypes.id, Array.from(labelsToFetch)),
           with: {
             labelType: true,

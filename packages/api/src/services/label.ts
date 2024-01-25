@@ -46,8 +46,6 @@ export default class LabelService extends BaseService {
     config?: GetConfig<T>
   ) {
     const label = await this.labelRepository.find({
-      columns: undefined,
-      extras: {},
       where: eq(schema.labels.id, labelId),
       with: this.getWithClause(config?.relations),
     });
@@ -166,8 +164,6 @@ export default class LabelService extends BaseService {
     const ticket = await this.ticketService.retrieve(ticketId);
 
     const fetchedLabels = await this.labelRepository.findMany({
-      columns: undefined,
-      extras: {},
       where: inArray(schema.labelTypes.id, labelIds),
       with: undefined,
     });

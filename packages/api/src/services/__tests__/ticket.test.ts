@@ -41,8 +41,6 @@ describe('TicketService', () => {
 
       expect(ticketRepo.find).toHaveBeenCalledTimes(1);
       expect(ticketRepo.find).toHaveBeenCalledWith({
-        columns: undefined,
-        extras: {},
         where: eq(schema.tickets.id, 'one-piece'),
         with: {
           assignedTo: undefined,

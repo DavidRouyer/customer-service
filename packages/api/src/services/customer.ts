@@ -26,8 +26,6 @@ export default class CustomerService extends BaseService {
     config: GetConfig<T>
   ) {
     const customer = await this.customerRepository.find({
-      columns: undefined,
-      extras: {},
       where: eq(schema.customers.id, customerId),
       with: this.getWithClause(config.relations),
     });
