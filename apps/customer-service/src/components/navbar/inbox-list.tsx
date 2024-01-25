@@ -14,7 +14,13 @@ export const InboxList: FC = () => {
   const { data: sessionData } = api.auth.getSession.useQuery();
   const pathname = usePathname();
 
-  const [statsData] = api.ticket.stats.useSuspenseQuery();
+  //const [statsData] = api.ticket.stats.useSuspenseQuery();
+  const statsData = {
+    total: 0,
+    assignedToMe: 0,
+    unassigned: 0,
+    mentions: 0,
+  };
 
   return (
     <>

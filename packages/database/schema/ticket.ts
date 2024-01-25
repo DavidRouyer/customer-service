@@ -1,19 +1,18 @@
 import { relations } from 'drizzle-orm';
-import { pgEnum, timestamp, varchar } from 'drizzle-orm/pg-core';
+import { pgEnum, pgTable, timestamp, varchar } from 'drizzle-orm/pg-core';
 
-import { generateEntityId } from '@cs/lib/generate-entity-id';
 import {
   TicketPriority,
   TicketStatus,
   TicketStatusDetail,
-} from '@cs/lib/tickets';
+} from '@cs/kyaku/models';
+import { generateEntityId } from '@cs/kyaku/utils/generate-entity-id';
 
-import { pgTable } from './_table';
 import { users } from './auth';
 import { customers } from './customer';
 import { labels } from './label';
-import { ticketMentions } from './ticketMentions';
-import { ticketTimelineEntries } from './ticketTimelineEntry';
+import { ticketMentions } from './ticket-mentions';
+import { ticketTimelineEntries } from './ticket-timeline-entry';
 
 export const ticketStatus = pgEnum('ticketStatus', [
   TicketStatus.Open,
@@ -94,7 +93,7 @@ export const ticketsRelations = relations(tickets, ({ one, many }) => ({
     fields: [tickets.updatedById],
     references: [users.id],
   }),
-  timeline: many(ticketTimelineEntries),
+  timelineEntries: many(ticketTimelineEntries),
   ticketMentions: many(ticketMentions),
   labels: many(labels),
 }));

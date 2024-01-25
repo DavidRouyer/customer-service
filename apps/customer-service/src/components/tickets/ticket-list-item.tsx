@@ -6,7 +6,7 @@ import { usePathname } from 'next/navigation';
 import { FormattedMessage } from 'react-intl';
 
 import { RouterOutputs } from '@cs/api';
-import { TicketChat, TicketNote } from '@cs/lib/ticketTimelineEntries';
+import { TicketChat, TicketNote } from '@cs/kyaku/models';
 import { Avatar, AvatarFallback, AvatarImage } from '@cs/ui';
 
 import { RelativeTime } from '~/components/ui/relative-time/relative-time';

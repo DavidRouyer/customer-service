@@ -1,9 +1,9 @@
 import { authRouter } from './router/auth';
 import { customerRouter } from './router/customer';
 import { labelRouter } from './router/label';
-import { labelTypeRouter } from './router/labelType';
+import { labelTypeRouter } from './router/label-type';
 import { ticketRouter } from './router/ticket';
-import { ticketTimelineRouter } from './router/ticketTimeline';
+import { ticketTimelineRouter } from './router/ticket-timeline';
 import { userRouter } from './router/user';
 import { createTRPCRouter } from './trpc';
 

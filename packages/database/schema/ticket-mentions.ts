@@ -1,10 +1,9 @@
 import { relations } from 'drizzle-orm';
-import { primaryKey, varchar } from 'drizzle-orm/pg-core';
+import { pgTable, primaryKey, varchar } from 'drizzle-orm/pg-core';
 
-import { pgTable } from './_table';
 import { users } from './auth';
 import { tickets } from './ticket';
-import { ticketTimelineEntries } from './ticketTimelineEntry';
+import { ticketTimelineEntries } from './ticket-timeline-entry';
 
 export const ticketMentions = pgTable(
   'ticketMentions',

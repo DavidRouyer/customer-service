@@ -1,7 +1,7 @@
 import { useSearchParams } from 'next/navigation';
 import { FormattedMessage } from 'react-intl';
 
-import { TicketFilter } from '@cs/lib/tickets';
+import { TicketFilter } from '@cs/kyaku/models';
 
 import { TicketDropdownSort } from '~/components/tickets/ticket-dropdown-sort';
 import { ORDER_BY_QUERY_PARAM } from '~/lib/search-params';

@@ -1,7 +1,6 @@
 import { relations } from 'drizzle-orm';
-import { json, pgEnum, timestamp, varchar } from 'drizzle-orm/pg-core';
+import { json, pgEnum, pgTable, timestamp, varchar } from 'drizzle-orm/pg-core';
 
-import { generateEntityId } from '@cs/lib/generate-entity-id';
 import {
   TicketAssignmentChanged,
   TicketChat,
@@ -10,9 +9,9 @@ import {
   TicketPriorityChanged,
   TicketStatusChanged,
   TicketTimelineEntryType,
-} from '@cs/lib/ticketTimelineEntries';
+} from '@cs/kyaku/models';
+import { generateEntityId } from '@cs/kyaku/utils/generate-entity-id';
 
-import { pgTable } from './_table';
 import { users } from './auth';
 import { customers } from './customer';
 import { tickets } from './ticket';
@@ -68,7 +67,7 @@ export const ticketTimelineEntries = pgTable('ticketTimelineEntry', {
   }),
 });
 
-export const ticketActivitiesRelations = relations(
+export const ticketTimelineEntriesRelations = relations(
   ticketTimelineEntries,
   ({ one }) => ({
     customer: one(customers, {

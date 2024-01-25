@@ -3,7 +3,7 @@ import { CheckCircle2, CircleDot } from 'lucide-react';
 import { FormattedMessage } from 'react-intl';
 
 import { RouterOutputs } from '@cs/api';
-import { TicketStatus } from '@cs/lib/tickets';
+import { TicketStatus } from '@cs/kyaku/models';
 import {
   Button,
   DropdownMenu,
@@ -25,8 +25,8 @@ export const TicketStatusDropdowm: FC<TicketChangeAssignmentProps> = ({
   status,
   ticketId,
 }) => {
-  const { resolveTicket } = useMarkAsDoneTicket();
-  const { reopenTicket } = useMarkAsOpenTicket();
+  const { markAsDoneTicket } = useMarkAsDoneTicket();
+  const { markAsOpenTicket } = useMarkAsOpenTicket();
 
   return (
     <DropdownMenu>
@@ -59,7 +59,7 @@ export const TicketStatusDropdowm: FC<TicketChangeAssignmentProps> = ({
         <DropdownMenuGroup>
           <DropdownMenuItem
             key="open"
-            onClick={() => reopenTicket({ id: ticketId })}
+            onClick={() => markAsOpenTicket({ id: ticketId })}
             disabled={status === TicketStatus.Open}
           >
             <div className="flex items-center gap-x-2">
@@ -71,7 +71,7 @@ export const TicketStatusDropdowm: FC<TicketChangeAssignmentProps> = ({
           </DropdownMenuItem>
           <DropdownMenuItem
             key="done"
-            onClick={() => resolveTicket({ id: ticketId })}
+            onClick={() => markAsDoneTicket({ id: ticketId })}
             disabled={status === TicketStatus.Done}
           >
             <div className="flex items-center gap-x-2">

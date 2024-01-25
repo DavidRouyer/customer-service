@@ -2,7 +2,7 @@ import { FC } from 'react';
 import { BookOpenCheck, HardDriveUpload } from 'lucide-react';
 import { FormattedMessage } from 'react-intl';
 
-import { TicketStatus } from '@cs/lib/tickets';
+import { TicketStatus } from '@cs/kyaku/models';
 import { Button } from '@cs/ui';
 
 import { useMarkAsDoneTicket } from '~/hooks/use-mark-as-done-ticket';

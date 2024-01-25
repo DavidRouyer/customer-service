@@ -12,7 +12,13 @@ export const TeamMemberList: FC = () => {
   const { data: sessionData } = api.auth.getSession.useQuery();
   const pathname = usePathname();
   const [usersData] = api.user.all.useSuspenseQuery();
-  const [statsData] = api.ticket.stats.useSuspenseQuery();
+  //const [statsData] = api.ticket.stats.useSuspenseQuery();
+  const statsData = {
+    total: 0,
+    assignedToMe: 0,
+    unassigned: 0,
+    mentions: 0,
+  };
 
   return usersData
     ?.filter((user) => user.id !== sessionData?.user.id)
@@ -33,7 +39,6 @@ export const TeamMemberList: FC = () => {
             </Avatar>
             <span className="truncate">{user.name}</span>
           </div>
-          {statsData?.[`assignedTo${user.id}`]}
         </Link>
       </li>
     ));

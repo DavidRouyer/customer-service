@@ -8,7 +8,7 @@ dotenv.config({
 const config = {
   reactStrictMode: true,
   /** Enables hot reloading for local packages without a build step */
-  transpilePackages: ['@cs/api', '@cs/auth', '@cs/database', '@cs/lib'],
+  transpilePackages: ['@cs/api', '@cs/auth', '@cs/database', '@cs/kyaku'],
   /** We already do linting and typechecking as separate tasks in CI */
   eslint: { ignoreDuringBuilds: true },
   typescript: { ignoreBuildErrors: true },

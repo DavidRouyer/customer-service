@@ -4,7 +4,8 @@ import { FC } from 'react';
 import Link from 'next/link';
 import { FormattedDate, FormattedMessage } from 'react-intl';
 
-import { TicketStatus } from '@cs/lib/tickets';
+import { TicketStatus } from '@cs/kyaku/models';
+import { SortDirection } from '@cs/kyaku/types';
 import { Badge } from '@cs/ui';
 
 import { api } from '~/lib/api';
@@ -18,10 +19,19 @@ export const LinkedTickets: FC<LinkedTicketsProps> = ({
   ticketId,
   customerId,
 }) => {
-  const { data: ticketsData } = api.ticket.byCustomerId.useQuery(
+  const { data: ticketsData } = api.ticket.all.useQuery(
     {
-      customerId: customerId ?? '',
-      excludeId: ticketId,
+      filters: {
+        customer: {
+          eq: customerId ?? '',
+        },
+        ticketId: {
+          ne: ticketId,
+        },
+      },
+      sortBy: {
+        createdAt: SortDirection.DESC,
+      },
     },
     {
       enabled: !!customerId,
@@ -30,7 +40,7 @@ export const LinkedTickets: FC<LinkedTicketsProps> = ({
 
   return (
     <ul className="flex flex-col gap-y-1">
-      {ticketsData?.map((ticket) => (
+      {ticketsData?.data.map((ticket) => (
         <li key={ticket.id}>
           <Link
             href={`/ticket/${ticket.id}`}

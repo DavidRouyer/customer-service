@@ -1,7 +1,7 @@
 import { InitialConfigType } from '@lexical/react/LexicalComposer';
 
-import { MentionNode } from '@cs/lib/editor';
-import { EmojiNode } from '@cs/lib/editor/nodes/emoji-node';
+import { MentionNode } from '@cs/kyaku/editor';
+import { EmojiNode } from '@cs/kyaku/editor/nodes/emoji-node';
 
 import ExampleTheme from './themes/example-theme';
 

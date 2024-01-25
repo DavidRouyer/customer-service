@@ -7,12 +7,28 @@
  * The pieces you will need to use are documented accordingly near the end
  */
 import { initTRPC, TRPCError } from '@trpc/server';
+import { asClass, asValue, createContainer } from 'awilix';
 import superjson from 'superjson';
 import { ZodError } from 'zod';
 
 import { auth } from '@cs/auth';
 import type { Session } from '@cs/auth';
-import { db } from '@cs/database';
+import { drizzleConnection } from '@cs/database';
+
+import CustomerRepository from './repositories/customer';
+import LabelRepository from './repositories/label';
+import LabelTypeRepository from './repositories/label-type';
+import TicketRepository from './repositories/ticket';
+import TicketMentionRepository from './repositories/ticket-mention';
+import TicketTimelineRepository from './repositories/ticket-timeline';
+import UserRepository from './repositories/user';
+import CustomerService from './services/customer';
+import LabelService from './services/label';
+import LabelTypeService from './services/label-type';
+import TicketService from './services/ticket';
+import TicketTimelineService from './services/ticket-timeline';
+import UserService from './services/user';
+import { UnitOfWork } from './unit-of-work';
 
 /**
  * 1. CONTEXT
@@ -27,6 +43,25 @@ type CreateContextOptions = {
   session: Session | null;
 };
 
+const container = createContainer();
+container.register({
+  drizzleConnection: asValue(drizzleConnection),
+  unitOfWork: asClass(UnitOfWork).scoped(),
+  customerRepository: asClass(CustomerRepository).scoped(),
+  labelRepository: asClass(LabelRepository).scoped(),
+  labelTypeRepository: asClass(LabelTypeRepository).scoped(),
+  ticketRepository: asClass(TicketRepository).scoped(),
+  ticketMentionRepository: asClass(TicketMentionRepository).scoped(),
+  ticketTimelineRepository: asClass(TicketTimelineRepository).scoped(),
+  userRepository: asClass(UserRepository).scoped(),
+  customerService: asClass(CustomerService).scoped(),
+  labelTypeService: asClass(LabelTypeService).scoped(),
+  labelService: asClass(LabelService).scoped(),
+  ticketService: asClass(TicketService).scoped(),
+  ticketTimelineService: asClass(TicketTimelineService).scoped(),
+  userService: asClass(UserService).scoped(),
+});
+
 /**
  * This helper generates the "internals" for a tRPC context. If you need to use
  * it, you can export it from here
@@ -39,7 +74,7 @@ type CreateContextOptions = {
 const createInnerTRPCContext = (opts: CreateContextOptions) => {
   return {
     session: opts.session,
-    db,
+    container,
   };
 };
 

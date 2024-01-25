@@ -2,7 +2,8 @@
 
 import { FormattedMessage } from 'react-intl';
 
-import { TicketFilter, TicketStatus } from '@cs/lib/tickets';
+import { TicketStatus } from '@cs/kyaku/models';
+import { SortDirection } from '@cs/kyaku/types';
 
 import { columns, TicketData } from '~/components/data-table/columns';
 import { DataTable } from '~/components/data-table/data-table';
@@ -15,9 +16,14 @@ export default function DashboardPage({
 }) {
   const { data: tickets } = api.ticket.all.useQuery(
     {
-      filter: TicketFilter.All,
-      orderBy: 'newest',
-      status: (searchParams.status as TicketStatus) ?? TicketStatus.Open,
+      filters: {
+        status: {
+          in: [(searchParams.status as TicketStatus) ?? TicketStatus.Open],
+        },
+      },
+      sortBy: {
+        createdAt: SortDirection.DESC,
+      },
     },
     {
       select(data) {

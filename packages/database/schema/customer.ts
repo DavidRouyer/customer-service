@@ -1,9 +1,8 @@
 import { relations } from 'drizzle-orm';
-import { text, timestamp, varchar } from 'drizzle-orm/pg-core';
+import { pgTable, text, timestamp, varchar } from 'drizzle-orm/pg-core';
 
-import { generateEntityId } from '@cs/lib/generate-entity-id';
+import { generateEntityId } from '@cs/kyaku/utils/generate-entity-id';
 
-import { pgTable } from './_table';
 import { users } from './auth';
 import { tickets } from './ticket';
 
@@ -12,22 +11,36 @@ export const customers = pgTable('customer', {
     .primaryKey()
     .notNull()
     .$defaultFn(() => generateEntityId('', 'co')),
-  createdAt: timestamp('createdAt', { precision: 3, mode: 'date' })
-    .defaultNow()
-    .notNull(),
   email: text('email'),
   name: text('name'),
   phone: text('phone'),
   avatarUrl: text('avatarUrl'),
   language: text('language'),
   timezone: text('timezone'),
-  userId: text('userId'),
+  createdAt: timestamp('createdAt', { precision: 3, mode: 'date' })
+    .defaultNow()
+    .notNull(),
+  createdById: varchar('createdById')
+    .notNull()
+    .references(() => users.id, {
+      onDelete: 'restrict',
+      onUpdate: 'cascade',
+    }),
+  updatedAt: timestamp('updatedAt', { precision: 3, mode: 'date' }),
+  updatedById: varchar('updatedById').references(() => users.id, {
+    onDelete: 'restrict',
+    onUpdate: 'cascade',
+  }),
 });
 
 export const customersRelations = relations(customers, ({ one, many }) => ({
   tickets: many(tickets),
-  user: one(users, {
-    fields: [customers.userId],
+  createdBy: one(users, {
+    fields: [customers.createdById],
+    references: [users.id],
+  }),
+  updatedBy: one(users, {
+    fields: [customers.updatedById],
     references: [users.id],
   }),
 }));

@@ -5,15 +5,15 @@ import { FormattedMessage } from 'react-intl';
 import {
   TicketAssignmentChangedWithData,
   TicketLabelsChangedWithData,
-} from '@cs/api/src/router/ticketTimeline';
-import { TicketStatus } from '@cs/lib/tickets';
+} from '@cs/api/src/entities/ticket-timeline';
 import {
   TicketChat,
   TicketNote,
   TicketPriorityChanged,
+  TicketStatus,
   TicketStatusChanged,
   TicketTimelineEntryType,
-} from '@cs/lib/ticketTimelineEntries';
+} from '@cs/kyaku/models';
 import { Avatar, AvatarFallback, AvatarImage, Badge, cn } from '@cs/ui';
 
 import { NodeContent } from '~/components/infos/node-content';

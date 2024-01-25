@@ -1,21 +1,22 @@
 import { neonConfig } from '@neondatabase/serverless';
 import ws from 'ws';
 
-import { generateEntityId } from '@cs/lib/generate-entity-id';
-import { TicketPriority, TicketStatus } from '@cs/lib/tickets';
 import {
   TicketAssignmentChanged,
   TicketChat,
+  TicketPriority,
+  TicketStatus,
   TicketStatusChanged,
   TicketTimelineEntryType,
-} from '@cs/lib/ticketTimelineEntries';
+} from '@cs/kyaku/models';
+import { generateEntityId } from '@cs/kyaku/utils';
 
-import { db, eq, schema } from '.';
+import { drizzleConnection, eq, schema } from '.';
 
 neonConfig.webSocketConstructor = ws;
 
 async function main() {
-  let botUser = await db
+  let botUser = await drizzleConnection
     .insert(schema.users)
     .values({
       id: '40cebacc-c7ae-4b5b-8072-3122d572c6d4',
@@ -27,13 +28,13 @@ async function main() {
     .then((res) => res[0]);
 
   if (!botUser?.id)
-    botUser = await db.query.users.findFirst({
+    botUser = await drizzleConnection.query.users.findFirst({
       where: eq(schema.users.id, '40cebacc-c7ae-4b5b-8072-3122d572c6d4'),
     });
 
   if (!botUser?.id) throw new Error('Could not create user');
 
-  const bugReportLabelType = await db
+  const bugReportLabelType = await drizzleConnection
     .insert(schema.labelTypes)
     .values({
       id: generateEntityId('', 'lt'),
@@ -46,7 +47,7 @@ async function main() {
 
   if (!bugReportLabelType?.id) throw new Error('Could not create label type');
 
-  const featureRequestLabelType = await db
+  const featureRequestLabelType = await drizzleConnection
     .insert(schema.labelTypes)
     .values({
       id: generateEntityId('', 'lt'),
@@ -60,7 +61,7 @@ async function main() {
   if (!featureRequestLabelType?.id)
     throw new Error('Could not create label type');
 
-  const questionLabelType = await db
+  const questionLabelType = await drizzleConnection
     .insert(schema.labelTypes)
     .values({
       id: generateEntityId('', 'lt'),
@@ -73,15 +74,16 @@ async function main() {
 
   if (!questionLabelType?.id) throw new Error('Could not create label type');
 
-  await db.insert(schema.customers).values({
+  await drizzleConnection.insert(schema.customers).values({
     id: generateEntityId('', 'co'),
     name: 'Courtney Henry',
     email: 'courtney.henry@example.com',
     avatarUrl:
       'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
+    createdById: botUser.id,
   });
 
-  const tomUser = await db
+  const tomUser = await drizzleConnection
     .insert(schema.users)
     .values({
       id: crypto.randomUUID(),
@@ -93,7 +95,7 @@ async function main() {
 
   if (!tomUser?.id) throw new Error('Could not create user');
 
-  const jeffUser = await db
+  const jeffUser = await drizzleConnection
     .insert(schema.users)
     .values({
       id: crypto.randomUUID(),
@@ -105,15 +107,16 @@ async function main() {
 
   if (!jeffUser?.id) throw new Error('Could not create user');
 
-  await db.insert(schema.customers).values({
+  await drizzleConnection.insert(schema.customers).values({
     id: generateEntityId('', 'co'),
     name: 'Lawrence Brooks',
     email: 'lawrence.brooks@example.com',
     avatarUrl:
       'https://images.unsplash.com/photo-1513910367299-bce8d8a0ebf6?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
+    createdById: botUser.id,
   });
 
-  const leslie = await db
+  const leslie = await drizzleConnection
     .insert(schema.customers)
     .values({
       id: generateEntityId('', 'co'),
@@ -124,13 +127,14 @@ async function main() {
       phone: '+33606060606',
       language: 'fr_FR',
       timezone: 'Europe/Paris',
+      createdById: botUser.id,
     })
     .returning({ id: schema.customers.id })
     .then((res) => res[0]);
 
   if (!leslie?.id) throw new Error('Could not create customer');
 
-  const leslieTicket = await db
+  const leslieTicket = await drizzleConnection
     .insert(schema.tickets)
     .values({
       id: generateEntityId('', 'ti'),
@@ -147,13 +151,13 @@ async function main() {
 
   if (!leslieTicket?.id) throw new Error('Could not create ticket');
 
-  await db.insert(schema.labels).values({
+  await drizzleConnection.insert(schema.labels).values({
     id: generateEntityId('', 'lb'),
     ticketId: leslieTicket.id,
     labelTypeId: bugReportLabelType.id,
   });
 
-  await db.insert(schema.ticketTimelineEntries).values({
+  await drizzleConnection.insert(schema.ticketTimelineEntries).values({
     id: generateEntityId('', 'te'),
     ticketId: leslieTicket.id,
     customerId: leslie.id,
@@ -166,7 +170,7 @@ async function main() {
     userCreatedById: botUser.id,
   });
 
-  await db.insert(schema.ticketTimelineEntries).values({
+  await drizzleConnection.insert(schema.ticketTimelineEntries).values({
     id: generateEntityId('', 'te'),
     type: TicketTimelineEntryType.Chat,
     entry: {
@@ -177,7 +181,7 @@ async function main() {
     customerCreatedById: leslie.id,
     ticketId: leslieTicket.id,
   });
-  await db.insert(schema.ticketTimelineEntries).values({
+  await drizzleConnection.insert(schema.ticketTimelineEntries).values({
     id: generateEntityId('', 'te'),
     type: TicketTimelineEntryType.Chat,
     entry: {
@@ -189,7 +193,7 @@ async function main() {
     ticketId: leslieTicket.id,
   });
 
-  const leslieTicket2 = await db
+  const leslieTicket2 = await drizzleConnection
     .insert(schema.tickets)
     .values({
       id: generateEntityId('', 'ti'),
@@ -206,13 +210,13 @@ async function main() {
 
   if (!leslieTicket2?.id) throw new Error('Could not create ticket');
 
-  await db.insert(schema.labels).values({
+  await drizzleConnection.insert(schema.labels).values({
     id: generateEntityId('', 'lb'),
     ticketId: leslieTicket2.id,
     labelTypeId: featureRequestLabelType.id,
   });
 
-  await db.insert(schema.ticketTimelineEntries).values({
+  await drizzleConnection.insert(schema.ticketTimelineEntries).values({
     id: generateEntityId('', 'te'),
     type: TicketTimelineEntryType.Chat,
     entry: {
@@ -223,7 +227,7 @@ async function main() {
     customerCreatedById: leslie.id,
     ticketId: leslieTicket2.id,
   });
-  await db.insert(schema.ticketTimelineEntries).values({
+  await drizzleConnection.insert(schema.ticketTimelineEntries).values({
     id: generateEntityId('', 'te'),
     type: TicketTimelineEntryType.Chat,
     entry: {
@@ -234,7 +238,7 @@ async function main() {
     userCreatedById: botUser.id,
     ticketId: leslieTicket2.id,
   });
-  await db.insert(schema.ticketTimelineEntries).values({
+  await drizzleConnection.insert(schema.ticketTimelineEntries).values({
     id: generateEntityId('', 'te'),
     type: TicketTimelineEntryType.Chat,
     entry: {
@@ -246,7 +250,7 @@ async function main() {
     ticketId: leslieTicket2.id,
   });
 
-  const leslieTicket3 = await db
+  const leslieTicket3 = await drizzleConnection
     .insert(schema.tickets)
     .values({
       id: generateEntityId('', 'ti'),
@@ -267,13 +271,13 @@ async function main() {
 
   if (!leslieTicket3?.id) throw new Error('Could not create ticket');
 
-  await db.insert(schema.labels).values({
+  await drizzleConnection.insert(schema.labels).values({
     id: generateEntityId('', 'lb'),
     ticketId: leslieTicket3.id,
     labelTypeId: bugReportLabelType.id,
   });
 
-  await db.insert(schema.ticketTimelineEntries).values({
+  await drizzleConnection.insert(schema.ticketTimelineEntries).values({
     id: generateEntityId('', 'te'),
     type: TicketTimelineEntryType.StatusChanged,
     entry: {
@@ -286,7 +290,7 @@ async function main() {
     userCreatedById: botUser.id,
   });
 
-  await db.insert(schema.ticketTimelineEntries).values({
+  await drizzleConnection.insert(schema.ticketTimelineEntries).values({
     id: generateEntityId('', 'te'),
     type: TicketTimelineEntryType.Chat,
     entry: {
@@ -298,7 +302,7 @@ async function main() {
     ticketId: leslieTicket3.id,
   });
 
-  const michael = await db
+  const michael = await drizzleConnection
     .insert(schema.customers)
     .values({
       id: generateEntityId('', 'co'),
@@ -306,13 +310,14 @@ async function main() {
       email: 'michael.foster@example.com',
       avatarUrl:
         'https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
+      createdById: botUser.id,
     })
     .returning({ id: schema.tickets.id })
     .then((res) => res[0]);
 
   if (!michael?.id) throw new Error('Could not create customer');
 
-  const michaelTicket = await db
+  const michaelTicket = await drizzleConnection
     .insert(schema.tickets)
     .values({
       id: generateEntityId('', 'ti'),
@@ -328,13 +333,13 @@ async function main() {
 
   if (!michaelTicket?.id) throw new Error('Could not create ticket');
 
-  await db.insert(schema.labels).values({
+  await drizzleConnection.insert(schema.labels).values({
     id: generateEntityId('', 'lb'),
     ticketId: michaelTicket.id,
     labelTypeId: bugReportLabelType.id,
   });
 
-  await db.insert(schema.ticketTimelineEntries).values({
+  await drizzleConnection.insert(schema.ticketTimelineEntries).values({
     id: generateEntityId('', 'te'),
     type: TicketTimelineEntryType.Chat,
     entry: {
@@ -346,7 +351,7 @@ async function main() {
     ticketId: michaelTicket.id,
   });
 
-  await db.insert(schema.ticketTimelineEntries).values({
+  await drizzleConnection.insert(schema.ticketTimelineEntries).values({
     id: generateEntityId('', 'te'),
     type: TicketTimelineEntryType.Chat,
     entry: {
@@ -358,7 +363,7 @@ async function main() {
     ticketId: michaelTicket.id,
   });
 
-  const dries = await db
+  const dries = await drizzleConnection
     .insert(schema.customers)
     .values({
       id: generateEntityId('', 'co'),
@@ -366,13 +371,14 @@ async function main() {
       email: 'dries.vincent@example.com',
       avatarUrl:
         'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
+      createdById: botUser.id,
     })
     .returning({ id: schema.customers.id })
     .then((res) => res[0]);
 
   if (!dries?.id) throw new Error('Could not create customer');
 
-  const driesTicket = await db
+  const driesTicket = await drizzleConnection
     .insert(schema.tickets)
     .values({
       id: generateEntityId('', 'ti'),
@@ -388,7 +394,7 @@ async function main() {
 
   if (!driesTicket?.id) throw new Error('Could not create ticket');
 
-  await db.insert(schema.ticketTimelineEntries).values({
+  await drizzleConnection.insert(schema.ticketTimelineEntries).values({
     id: generateEntityId('', 'te'),
     type: TicketTimelineEntryType.Chat,
     entry: {
@@ -400,7 +406,7 @@ async function main() {
     ticketId: driesTicket.id,
   });
 
-  await db.insert(schema.ticketTimelineEntries).values({
+  await drizzleConnection.insert(schema.ticketTimelineEntries).values({
     id: generateEntityId('', 'te'),
     type: TicketTimelineEntryType.Chat,
     entry: {
@@ -412,7 +418,7 @@ async function main() {
     ticketId: driesTicket.id,
   });
 
-  const lindsay = await db
+  const lindsay = await drizzleConnection
     .insert(schema.customers)
     .values({
       id: generateEntityId('', 'co'),
@@ -423,13 +429,14 @@ async function main() {
         'https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
       language: 'en_GB',
       timezone: 'Europe/London',
+      createdById: botUser.id,
     })
     .returning({ id: schema.customers.id })
     .then((res) => res[0]);
 
   if (!lindsay?.id) throw new Error('Could not create customer');
 
-  const lindsayTicket = await db
+  const lindsayTicket = await drizzleConnection
     .insert(schema.tickets)
     .values({
       id: generateEntityId('', 'ti'),
@@ -445,13 +452,13 @@ async function main() {
 
   if (!lindsayTicket?.id) throw new Error('Could not create ticket');
 
-  await db.insert(schema.labels).values({
+  await drizzleConnection.insert(schema.labels).values({
     id: generateEntityId('', 'lb'),
     ticketId: lindsayTicket.id,
     labelTypeId: questionLabelType.id,
   });
 
-  await db.insert(schema.ticketTimelineEntries).values({
+  await drizzleConnection.insert(schema.ticketTimelineEntries).values({
     id: generateEntityId('', 'te'),
     type: TicketTimelineEntryType.Chat,
     entry: {
@@ -463,7 +470,7 @@ async function main() {
     ticketId: lindsayTicket.id,
   });
 
-  await db.insert(schema.ticketTimelineEntries).values({
+  await drizzleConnection.insert(schema.ticketTimelineEntries).values({
     id: generateEntityId('', 'te'),
     type: TicketTimelineEntryType.Chat,
     entry: {

@@ -1,12 +1,20 @@
-import { asc, isNotNull, schema } from '@cs/database';
+import { SortDirection } from '@cs/kyaku/types';
 
+import CustomerService from '../services/customer';
 import { createTRPCRouter, protectedProcedure } from '../trpc';
 
 export const customerRouter = createTRPCRouter({
-  allWithUserId: protectedProcedure.query(({ ctx }) => {
-    return ctx.db.query.customers.findMany({
-      where: isNotNull(schema.customers.userId),
-      orderBy: asc(schema.customers.name),
+  all: protectedProcedure.query(async ({ ctx }) => {
+    const customerService: CustomerService =
+      ctx.container.resolve('customerService');
+    return await customerService.list({
+      relations: {
+        createdBy: true,
+        updatedBy: true,
+      },
+      sortBy: {
+        name: SortDirection.ASC,
+      },
     });
   }),
 });

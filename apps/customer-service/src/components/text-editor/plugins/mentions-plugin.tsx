@@ -18,7 +18,7 @@ import {
 import { COMMAND_PRIORITY_NORMAL, TextNode } from 'lexical';
 import * as ReactDOM from 'react-dom';
 
-import { $createMentionNode } from '@cs/lib/editor';
+import { $createMentionNode } from '@cs/kyaku/editor';
 import { Avatar, AvatarFallback, AvatarImage } from '@cs/ui';
 
 import { api, RouterOutputs } from '~/lib/api';

@@ -3,7 +3,7 @@ import { Shield, ShieldAlert } from 'lucide-react';
 import { FormattedMessage } from 'react-intl';
 
 import { RouterOutputs } from '@cs/api';
-import { TicketPriority as TicketPriorityType } from '@cs/lib/tickets';
+import { TicketPriority as TicketPriorityType } from '@cs/kyaku/models';
 import {
   Button,
   DropdownMenu,
