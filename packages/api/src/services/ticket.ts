@@ -21,7 +21,7 @@ import {
   TicketSort,
   TicketWith,
 } from '../entities/ticket';
-import { User } from '../entities/user';
+import { User, USER_COLUMNS } from '../entities/user';
 import TicketRepository from '../repositories/ticket';
 import TicketMentionRepository from '../repositories/ticket-mention';
 import TicketTimelineRepository from '../repositories/ticket-timeline';
@@ -473,13 +473,7 @@ export default class TicketService extends BaseService {
         : undefined,
       createdBy: (relations?.createdBy
         ? {
-            columns: {
-              id: true,
-              name: true,
-              email: true,
-              emailVerified: true,
-              image: true,
-            },
+            columns: USER_COLUMNS,
           }
         : undefined) as T extends { createdBy: true }
         ? { columns: { [K in keyof User]: true } }
@@ -506,13 +500,7 @@ export default class TicketService extends BaseService {
         : undefined,
       updatedBy: (relations?.updatedBy
         ? {
-            columns: {
-              id: true,
-              name: true,
-              email: true,
-              emailVerified: true,
-              image: true,
-            },
+            columns: USER_COLUMNS,
           }
         : undefined) as T extends { updatedBy: true }
         ? { columns: { [K in keyof User]: true } }

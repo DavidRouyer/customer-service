@@ -3,7 +3,7 @@ import { FindConfig, GetConfig } from '@cs/kyaku/types/query';
 import { KyakuError } from '@cs/kyaku/utils';
 
 import { CustomerSort, CustomerWith } from '../entities/customer';
-import { User } from '../entities/user';
+import { User, USER_COLUMNS } from '../entities/user';
 import CustomerRepository from '../repositories/customer';
 import { BaseService } from './base-service';
 import { sortDirection } from './build-query';
@@ -77,26 +77,14 @@ export default class CustomerService extends BaseService {
     return {
       createdBy: (relations?.createdBy
         ? {
-            columns: {
-              id: true,
-              email: true,
-              emailVerified: true,
-              name: true,
-              image: true,
-            },
+            columns: USER_COLUMNS,
           }
         : undefined) as T extends { createdBy: true }
         ? { columns: { [K in keyof User]: true } }
         : undefined,
       updatedBy: (relations?.updatedBy
         ? {
-            columns: {
-              id: true,
-              email: true,
-              emailVerified: true,
-              name: true,
-              image: true,
-            },
+            columns: USER_COLUMNS,
           }
         : undefined) as T extends { updatedBy: true }
         ? { columns: { [K in keyof User]: true } }

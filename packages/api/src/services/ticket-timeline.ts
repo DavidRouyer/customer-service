@@ -17,6 +17,7 @@ import {
   TicketTimelineSort,
   TicketTimelineWith,
 } from '../entities/ticket-timeline';
+import { USER_COLUMNS } from '../entities/user';
 import LabelRepository from '../repositories/label';
 import TicketTimelineRepository from '../repositories/ticket-timeline';
 import UserRepository from '../repositories/user';
@@ -183,13 +184,7 @@ export default class TicketTimelineService extends BaseService {
 
     return usersToFetch.size > 0
       ? await this.userRepository.findMany({
-          columns: {
-            id: true,
-            email: true,
-            emailVerified: true,
-            name: true,
-            image: true,
-          },
+          columns: USER_COLUMNS,
           where: inArray(schema.users.id, Array.from(usersToFetch)),
         })
       : [];
@@ -241,13 +236,7 @@ export default class TicketTimelineService extends BaseService {
         : undefined,
       userCreatedBy: (relations?.userCreatedBy
         ? {
-            columns: {
-              id: true,
-              email: true,
-              emailVerified: true,
-              name: true,
-              image: true,
-            },
+            columns: USER_COLUMNS,
           }
         : undefined) as T extends { userCreatedBy: true }
         ? { columns: { [K in keyof User]: true } }

@@ -2,7 +2,7 @@ import { and, desc, eq, inArray, lt, notInArray, schema } from '@cs/database';
 import { FindConfig, GetConfig } from '@cs/kyaku/types/query';
 import { KyakuError } from '@cs/kyaku/utils';
 
-import { UserSort, UserWith } from '../entities/user';
+import { USER_COLUMNS, UserSort, UserWith } from '../entities/user';
 import UserRepository from '../repositories/user';
 import { BaseService } from './base-service';
 import { InclusionFilterOperator, sortDirection } from './build-query';
@@ -18,13 +18,7 @@ export default class UserService extends BaseService {
 
   async retrieve<T extends UserWith<T>>(userId: string, config?: GetConfig<T>) {
     const user = await this.userRepository.find({
-      columns: {
-        id: true,
-        email: true,
-        emailVerified: true,
-        name: true,
-        image: true,
-      },
+      columns: USER_COLUMNS,
       where: eq(schema.users.id, userId),
     });
 
@@ -54,13 +48,7 @@ export default class UserService extends BaseService {
       config?.skip ? lt(schema.users.id, config.skip) : undefined
     );
     return await this.userRepository.findMany({
-      columns: {
-        id: true,
-        email: true,
-        emailVerified: true,
-        name: true,
-        image: true,
-      },
+      columns: USER_COLUMNS,
       where: whereClause,
       limit: config?.take,
       orderBy: and(

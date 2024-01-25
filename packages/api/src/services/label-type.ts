@@ -17,7 +17,7 @@ import {
   LabelTypeSort,
   LabelTypeWith,
 } from '../entities/label-type';
-import { User } from '../entities/user';
+import { User, USER_COLUMNS } from '../entities/user';
 import LabelTypeRepository from '../repositories/label-type';
 import { BaseService } from './base-service';
 import { InclusionFilterOperator, sortDirection } from './build-query';
@@ -215,26 +215,14 @@ export default class LabelTypeService extends BaseService {
     return {
       createdBy: (relations?.createdBy
         ? {
-            columns: {
-              id: true,
-              email: true,
-              emailVerified: true,
-              name: true,
-              image: true,
-            },
+            columns: USER_COLUMNS,
           }
         : undefined) as T extends { createdBy: true }
         ? { columns: { [K in keyof User]: true } }
         : undefined,
       updatedBy: (relations?.updatedBy
         ? {
-            columns: {
-              id: true,
-              email: true,
-              emailVerified: true,
-              name: true,
-              image: true,
-            },
+            columns: USER_COLUMNS,
           }
         : undefined) as T extends { updatedBy: true }
         ? { columns: { [K in keyof User]: true } }
