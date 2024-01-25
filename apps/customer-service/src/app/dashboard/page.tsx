@@ -37,8 +37,8 @@ export default function DashboardPage({
               labels: ticket.labels.map((label) => ({
                 id: label.id,
                 labelType: {
-                  id: 'labelType' in label ? label.labelType.id : '',
-                  name: 'labelType' in label ? label.labelType.name : '',
+                  id: label.labelType.id,
+                  name: label.labelType.name,
                 },
               })),
               assignedTo: ticket.assignedTo,
