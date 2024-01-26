@@ -481,7 +481,7 @@ __metadata:
     "@cs/tsconfig": "npm:*"
     "@trpc/client": "npm:next"
     "@trpc/server": "npm:next"
-    awilix: "npm:^9.0.0"
+    awilix: "npm:^10.0.1"
     eslint: "npm:^8.56.0"
     lexical: "npm:^0.13.0"
     prettier: "npm:^3.2.4"
@@ -3889,13 +3889,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"awilix@npm:^9.0.0":
-  version: 9.0.0
-  resolution: "awilix@npm:9.0.0"
+"awilix@npm:^10.0.1":
+  version: 10.0.1
+  resolution: "awilix@npm:10.0.1"
   dependencies:
     camel-case: "npm:^4.1.2"
-    fast-glob: "npm:^3.3.1"
-  checksum: dcb27a46b21b9196fcf7da0a6cc36147c41c04d18c0136785081903e7a73eee0c2f1dd6a44aa5a176ee6ee46abc3772f909eacd996bbeef8aa9c98b2b545d3a5
+    fast-glob: "npm:^3.3.2"
+  checksum: 5e04ea5c475b837f518f7bc06b5ca18ef725ffb83768e0994bd9401a6dc808097725fe17aae1564730204130cc4349d895ffea3951ea36256ce754cac946859d
   languageName: node
   linkType: hard
 
@@ -5588,7 +5588,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fast-glob@npm:^3.2.5, fast-glob@npm:^3.2.9, fast-glob@npm:^3.3.0, fast-glob@npm:^3.3.1, fast-glob@npm:^3.3.2":
+"fast-glob@npm:^3.2.5, fast-glob@npm:^3.2.9, fast-glob@npm:^3.3.0, fast-glob@npm:^3.3.2":
   version: 3.3.2
   resolution: "fast-glob@npm:3.3.2"
   dependencies:
