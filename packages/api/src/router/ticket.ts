@@ -61,7 +61,6 @@ export const ticketRouter = createTRPCRouter({
           createdBy: true,
           customer: true,
           labels: true,
-          lastTimelineEntry: true,
           updatedBy: true,
         },
         take: input.limit,
