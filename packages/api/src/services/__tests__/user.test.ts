@@ -46,4 +46,38 @@ describe('UserService', () => {
       expect(result.id).toEqual('john-doe');
     });
   });
+
+  describe('list', () => {
+    const userRepo = {
+      findMany: vi.fn(() => [
+        {
+          id: 'john-doe',
+        },
+      ]),
+    };
+
+    const userService = new UserService({
+      unitOfWork: {} as unknown as UnitOfWork,
+      userRepository: userRepo as unknown as UserRepository,
+    });
+
+    it('successfully retrieves a list of users', async () => {
+      const result = await userService.list({});
+
+      expect(userRepo.findMany).toHaveBeenCalledTimes(1);
+      expect(userRepo.findMany).toHaveBeenCalledWith({
+        limit: undefined,
+        columns: {
+          email: true,
+          emailVerified: true,
+          id: true,
+          image: true,
+          name: true,
+        },
+        where: undefined,
+      });
+
+      expect(result).toStrictEqual([{ id: 'john-doe' }]);
+    });
+  });
 });

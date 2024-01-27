@@ -21,6 +21,7 @@ import { USER_COLUMNS } from '../entities/user';
 import LabelRepository from '../repositories/label';
 import TicketTimelineRepository from '../repositories/ticket-timeline';
 import UserRepository from '../repositories/user';
+import { UnitOfWork } from '../unit-of-work';
 import { BaseService } from './base-service';
 import { sortDirection } from './build-query';
 
@@ -37,7 +38,7 @@ export default class TicketTimelineService extends BaseService {
     labelRepository: LabelRepository;
     ticketTimelineRepository: TicketTimelineRepository;
     userRepository: UserRepository;
-  }) {
+  } & { unitOfWork: UnitOfWork }) {
     // eslint-disable-next-line prefer-rest-params, @typescript-eslint/no-unsafe-argument
     super(arguments[0]);
     this.ticketTimelineRepository = ticketTimelineRepository;
@@ -47,21 +48,21 @@ export default class TicketTimelineService extends BaseService {
 
   async list<T extends TicketTimelineWith<T>>(
     filters: { ticketId: string },
-    config: FindConfig<T, TicketTimelineSort>
+    config?: FindConfig<T, TicketTimelineSort>
   ) {
     const ticketTimelineEntries = await this.ticketTimelineRepository.findMany({
       where: eq(schema.ticketTimelineEntries.ticketId, filters.ticketId),
-      with: this.getWithClause(config.relations),
-      limit: config.take,
+      with: this.getWithClause(config?.relations),
+      limit: config?.take,
       orderBy: and(
-        config.sortBy
+        config?.sortBy
           ? 'createdAt' in config.sortBy
             ? sortDirection(config.sortBy.createdAt)(
                 schema.ticketTimelineEntries.createdAt
               )
             : undefined
           : undefined,
-        config.skip ? desc(schema.tickets.id) : undefined
+        config?.skip ? desc(schema.tickets.id) : undefined
       ),
     });
 

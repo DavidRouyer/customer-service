@@ -1,4 +1,4 @@
-import { eq, schema } from '@cs/database';
+import { and, eq, isNull, schema } from '@cs/database';
 
 import LabelTypeRepository from '../../repositories/label-type';
 import { UnitOfWork } from '../../unit-of-work';
@@ -70,6 +70,40 @@ describe('LabelTypeService', () => {
       });
 
       expect(result.id).toEqual('one-piece');
+    });
+  });
+
+  describe('list', () => {
+    const labelTypeRepo = {
+      findMany: vi.fn(() => [
+        {
+          id: 'one-piece',
+        },
+      ]),
+    };
+
+    const labelTypeService = new LabelTypeService({
+      unitOfWork: {} as unknown as UnitOfWork,
+      labelTypeRepository: labelTypeRepo as unknown as LabelTypeRepository,
+    });
+
+    it('successfully retrieves a list of label types', async () => {
+      const result = await labelTypeService.list({
+        isArchived: false,
+      });
+
+      expect(labelTypeRepo.findMany).toHaveBeenCalledTimes(1);
+      expect(labelTypeRepo.findMany).toHaveBeenCalledWith({
+        limit: undefined,
+        orderBy: undefined,
+        where: and(isNull(schema.labelTypes.archivedAt)),
+        with: {
+          createdBy: undefined,
+          updatedBy: undefined,
+        },
+      });
+
+      expect(result).toStrictEqual([{ id: 'one-piece' }]);
     });
   });
 

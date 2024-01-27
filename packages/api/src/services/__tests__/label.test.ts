@@ -54,6 +54,39 @@ describe('LabelService', () => {
     });
   });
 
+  describe('list', () => {
+    const labelRepo = {
+      findMany: vi.fn(() => [
+        {
+          id: 'one-piece',
+        },
+      ]),
+    };
+
+    const labelService = new LabelService({
+      unitOfWork: {} as unknown as UnitOfWork,
+      labelRepository: labelRepo as unknown as LabelRepository,
+      labelTypeRepository: new LabelTypeRepository(),
+      ticketRepository: new TicketRepository(),
+      ticketTimelineRepository: new TicketTimelineRepository(),
+    });
+
+    it('successfully retrieves a list of labels', async () => {
+      const result = await labelService.list({});
+
+      expect(labelRepo.findMany).toHaveBeenCalledTimes(1);
+      expect(labelRepo.findMany).toHaveBeenCalledWith({
+        where: undefined,
+        with: {
+          ticket: undefined,
+          labelType: undefined,
+        },
+      });
+
+      expect(result).toStrictEqual([{ id: 'one-piece' }]);
+    });
+  });
+
   describe('addLabels', () => {
     const labelRepo = {
       createMany: vi.fn(() => [

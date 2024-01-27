@@ -43,4 +43,38 @@ describe('CustomerService', () => {
       expect(result.id).toEqual('john-doe');
     });
   });
+
+  describe('list', () => {
+    const customerRepo = {
+      findMany: vi.fn(() => [
+        {
+          id: 'john-doe',
+        },
+      ]),
+    };
+
+    const customerService = new CustomerService({
+      unitOfWork: {} as unknown as UnitOfWork,
+      customerRepository: customerRepo as unknown as CustomerRepository,
+    });
+
+    it('successfully retrieves a list of customers', async () => {
+      const result = await customerService.list({
+        take: 10,
+      });
+
+      expect(customerRepo.findMany).toHaveBeenCalledTimes(1);
+      expect(customerRepo.findMany).toHaveBeenCalledWith({
+        where: undefined,
+        limit: 10,
+        orderBy: undefined,
+        with: {
+          createdBy: undefined,
+          updatedBy: undefined,
+        },
+      });
+
+      expect(result).toStrictEqual([{ id: 'john-doe' }]);
+    });
+  });
 });

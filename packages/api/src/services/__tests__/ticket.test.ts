@@ -1,4 +1,4 @@
-import { eq, schema } from '@cs/database';
+import { and, asc, eq, schema } from '@cs/database';
 import { TicketPriority, TicketStatus } from '@cs/kyaku/models';
 
 import TicketRepository from '../../repositories/ticket';
@@ -53,6 +53,47 @@ describe('TicketService', () => {
       });
 
       expect(result.id).toEqual('one-piece');
+    });
+  });
+
+  describe('list', () => {
+    const ticketRepo = {
+      findMany: vi.fn(() => [
+        {
+          id: 'one-piece',
+        },
+      ]),
+    };
+
+    const ticketService = new TicketService({
+      unitOfWork: {} as unknown as UnitOfWork,
+      ticketRepository: ticketRepo as unknown as TicketRepository,
+      ticketMentionRepository: new TicketMentionRepository(),
+      ticketTimelineRepository: new TicketTimelineRepository(),
+    });
+
+    it('successfully retrieves a list of tickets', async () => {
+      const result = await ticketService.list({});
+
+      expect(ticketRepo.findMany).toHaveBeenCalledTimes(1);
+      expect(ticketRepo.findMany).toHaveBeenCalledWith({
+        limit: undefined,
+        orderBy: asc(schema.tickets.id),
+        where: and(and(undefined)),
+        with: {
+          assignedTo: undefined,
+          createdBy: undefined,
+          customer: undefined,
+          labels: undefined,
+          updatedBy: undefined,
+        },
+      });
+
+      expect(result).toStrictEqual({
+        hasNextPage: false,
+        items: [{ id: 'one-piece' }],
+        nextCursor: undefined,
+      });
     });
   });
 
