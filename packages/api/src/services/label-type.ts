@@ -19,6 +19,7 @@ import {
 } from '../entities/label-type';
 import { User, USER_COLUMNS } from '../entities/user';
 import LabelTypeRepository from '../repositories/label-type';
+import { UnitOfWork } from '../unit-of-work';
 import { BaseService } from './base-service';
 import { InclusionFilterOperator, sortDirection } from './build-query';
 
@@ -29,7 +30,7 @@ export default class LabelTypeService extends BaseService {
     labelTypeRepository,
   }: {
     labelTypeRepository: LabelTypeRepository;
-  }) {
+  } & { unitOfWork: UnitOfWork }) {
     // eslint-disable-next-line prefer-rest-params, @typescript-eslint/no-unsafe-argument
     super(arguments[0]);
     this.labelTypeRepository = labelTypeRepository;

@@ -5,6 +5,7 @@ import { KyakuError } from '@cs/kyaku/utils';
 import { CustomerSort, CustomerWith } from '../entities/customer';
 import { User, USER_COLUMNS } from '../entities/user';
 import CustomerRepository from '../repositories/customer';
+import { UnitOfWork } from '../unit-of-work';
 import { BaseService } from './base-service';
 import { sortDirection } from './build-query';
 
@@ -15,7 +16,7 @@ export default class CustomerService extends BaseService {
     customerRepository,
   }: {
     customerRepository: CustomerRepository;
-  }) {
+  } & { unitOfWork: UnitOfWork }) {
     // eslint-disable-next-line prefer-rest-params, @typescript-eslint/no-unsafe-argument
     super(arguments[0]);
     this.customerRepository = customerRepository;
@@ -23,11 +24,11 @@ export default class CustomerService extends BaseService {
 
   async retrieve<T extends CustomerWith<T>>(
     customerId: string,
-    config: GetConfig<T>
+    config?: GetConfig<T>
   ) {
     const customer = await this.customerRepository.find({
       where: eq(schema.customers.id, customerId),
-      with: this.getWithClause(config.relations),
+      with: this.getWithClause(config?.relations),
     });
 
     if (!customer)
