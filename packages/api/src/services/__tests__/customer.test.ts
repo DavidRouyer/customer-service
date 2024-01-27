@@ -19,7 +19,7 @@ describe('CustomerService', () => {
   describe('retrieve', () => {
     const customerRepo = {
       find: vi.fn(() => ({
-        id: 'one-piece',
+        id: 'john-doe',
       })),
     };
 
@@ -29,18 +29,18 @@ describe('CustomerService', () => {
     });
 
     it('successfully retrieves a customer', async () => {
-      const result = await customerService.retrieve('one-piece');
+      const result = await customerService.retrieve('john-doe');
 
       expect(customerRepo.find).toHaveBeenCalledTimes(1);
       expect(customerRepo.find).toHaveBeenCalledWith({
-        where: eq(schema.customers.id, 'one-piece'),
+        where: eq(schema.customers.id, 'john-doe'),
         with: {
           createdBy: undefined,
           updatedBy: undefined,
         },
       });
 
-      expect(result.id).toEqual('one-piece');
+      expect(result.id).toEqual('john-doe');
     });
   });
 });

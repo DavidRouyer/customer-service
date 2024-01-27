@@ -4,13 +4,16 @@ import { KyakuError } from '@cs/kyaku/utils';
 
 import { USER_COLUMNS, UserSort, UserWith } from '../entities/user';
 import UserRepository from '../repositories/user';
+import { UnitOfWork } from '../unit-of-work';
 import { BaseService } from './base-service';
 import { InclusionFilterOperator, sortDirection } from './build-query';
 
 export default class UserService extends BaseService {
   private readonly userRepository: UserRepository;
 
-  constructor({ userRepository }: { userRepository: UserRepository }) {
+  constructor({
+    userRepository,
+  }: { userRepository: UserRepository } & { unitOfWork: UnitOfWork }) {
     // eslint-disable-next-line prefer-rest-params, @typescript-eslint/no-unsafe-argument
     super(arguments[0]);
     this.userRepository = userRepository;
