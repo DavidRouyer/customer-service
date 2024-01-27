@@ -123,8 +123,8 @@ export default class LabelService extends BaseService {
       (label) => label.labelType.id
     );
 
-    const duplicatedLabelTypeIds = labelTypeIds.filter(
-      (labelTypeId) => !ticketLabelTypes.includes(labelTypeId)
+    const duplicatedLabelTypeIds = labelTypeIds.filter((labelTypeId) =>
+      ticketLabelTypes.includes(labelTypeId)
     );
 
     if (duplicatedLabelTypeIds.length > 0)

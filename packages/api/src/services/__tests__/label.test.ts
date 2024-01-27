@@ -1,15 +1,15 @@
 import { eq, schema } from '@cs/database';
 
 import LabelRepository from '../../repositories/label';
+import LabelTypeRepository from '../../repositories/label-type';
 import TicketRepository from '../../repositories/ticket';
 import TicketTimelineRepository from '../../repositories/ticket-timeline';
 import { UnitOfWork } from '../../unit-of-work';
 import LabelService from '../label';
-import LabelTypeService from '../label-type';
-import TicketService from '../ticket';
 
+vi.mock('../../repositories/label-type');
 vi.mock('../../repositories/ticket');
-vi.mock('../../services/ticket');
+vi.mock('../../repositories/ticket-timeline');
 
 describe('LabelService', () => {
   beforeEach(() => {
@@ -33,27 +33,211 @@ describe('LabelService', () => {
     const labelService = new LabelService({
       unitOfWork: {} as unknown as UnitOfWork,
       labelRepository: labelRepo as unknown as LabelRepository,
+      labelTypeRepository: new LabelTypeRepository(),
       ticketRepository: new TicketRepository(),
       ticketTimelineRepository: new TicketTimelineRepository(),
     });
 
-    it('successfully retrieves a ticket', async () => {
+    it('successfully retrieves a label', async () => {
       const result = await labelService.retrieve('one-piece');
 
       expect(labelRepo.find).toHaveBeenCalledTimes(1);
       expect(labelRepo.find).toHaveBeenCalledWith({
         where: eq(schema.labels.id, 'one-piece'),
         with: {
-          assignedTo: undefined,
-          createdBy: undefined,
-          customer: undefined,
-          labels: undefined,
-          timelineEntries: undefined,
-          updatedBy: undefined,
+          ticket: undefined,
+          labelType: undefined,
         },
       });
 
       expect(result.id).toEqual('one-piece');
+    });
+  });
+
+  describe('addLabels', () => {
+    const labelRepo = {
+      createMany: vi.fn(() => [
+        {
+          id: 'label-1',
+        },
+      ]),
+    };
+    const labelTypeRepo = {
+      findMany: vi.fn(() => [
+        {
+          id: 'label-type-1',
+          name: 'Label Type 1',
+        },
+        {
+          id: 'label-type-2',
+          name: 'Label Type 2',
+        },
+      ]),
+    };
+    const ticketRepo = {
+      find: vi.fn(() => ({
+        id: 'one-piece',
+        title: 'One Piece',
+        labels: [],
+      })),
+      update: vi.fn(() => ({
+        id: 'one-piece',
+        title: 'One Piece',
+      })),
+    };
+    const ticketTimelineRepo = {
+      create: vi.fn(() => ({
+        id: 'one-piece-timeline',
+      })),
+    };
+    const unitOfWork = {
+      transaction: vi.fn((cb) => cb()),
+    };
+
+    const labelService = new LabelService({
+      unitOfWork: unitOfWork as unknown as UnitOfWork,
+      labelRepository: labelRepo as unknown as LabelRepository,
+      labelTypeRepository: labelTypeRepo as unknown as LabelTypeRepository,
+      ticketRepository: ticketRepo as unknown as TicketRepository,
+      ticketTimelineRepository:
+        ticketTimelineRepo as unknown as TicketTimelineRepository,
+    });
+
+    it('should successfully add labels', async () => {
+      const date = new Date('2000-01-01T12:00:00.000Z');
+      vi.setSystemTime(date);
+
+      await labelService.addLabels('one-piece', ['label-type-1'], 'user-id');
+
+      expect(unitOfWork.transaction).toHaveBeenCalledTimes(1);
+
+      expect(ticketRepo.update).toHaveBeenCalledTimes(1);
+      expect(ticketRepo.update).toHaveBeenCalledWith(
+        {
+          id: 'one-piece',
+          updatedAt: new Date('2000-01-01T12:00:00.000Z'),
+          updatedById: 'user-id',
+        },
+        undefined
+      );
+
+      expect(ticketTimelineRepo.create).toHaveBeenCalledTimes(1);
+      expect(ticketTimelineRepo.create).toHaveBeenCalledWith(
+        {
+          ticketId: 'one-piece',
+          customerId: undefined,
+          type: 'LabelsChanged',
+          entry: {
+            newLabelIds: ['label-1'],
+            oldLabelIds: [],
+          },
+          userCreatedById: 'user-id',
+          createdAt: new Date('2000-01-01T12:00:00.000Z'),
+        },
+        undefined
+      );
+    });
+  });
+
+  describe('removeLabels', () => {
+    const labelRepo = {
+      findMany: vi.fn(() => [
+        {
+          id: 'label-1',
+          labelType: {
+            id: 'label-type-1',
+          },
+        },
+      ]),
+      updateMany: vi.fn(() => [
+        {
+          id: 'label-1',
+        },
+      ]),
+    };
+    const labelTypeRepo = {
+      findMany: vi.fn(() => [
+        {
+          id: 'label-type-1',
+          name: 'Label Type 1',
+        },
+        {
+          id: 'label-type-2',
+          name: 'Label Type 2',
+        },
+      ]),
+    };
+    const ticketRepo = {
+      find: vi.fn(() => ({
+        id: 'one-piece',
+        title: 'One Piece',
+        labels: [],
+      })),
+      update: vi.fn(() => ({
+        id: 'one-piece',
+        title: 'One Piece',
+      })),
+    };
+    const ticketTimelineRepo = {
+      create: vi.fn(() => ({
+        id: 'one-piece-timeline',
+      })),
+    };
+    const unitOfWork = {
+      transaction: vi.fn((cb) => cb()),
+    };
+
+    const labelService = new LabelService({
+      unitOfWork: unitOfWork as unknown as UnitOfWork,
+      labelRepository: labelRepo as unknown as LabelRepository,
+      labelTypeRepository: labelTypeRepo as unknown as LabelTypeRepository,
+      ticketRepository: ticketRepo as unknown as TicketRepository,
+      ticketTimelineRepository:
+        ticketTimelineRepo as unknown as TicketTimelineRepository,
+    });
+
+    it('should successfully remove labels', async () => {
+      const date = new Date('2000-01-01T12:00:00.000Z');
+      vi.setSystemTime(date);
+
+      await labelService.removeLabels('one-piece', ['label-1'], 'user-id');
+
+      expect(unitOfWork.transaction).toHaveBeenCalledTimes(1);
+
+      expect(labelRepo.updateMany).toHaveBeenCalledTimes(1);
+      expect(labelRepo.updateMany).toHaveBeenCalledWith(
+        ['label-1'],
+        {
+          archivedAt: new Date('2000-01-01T12:00:00.000Z'),
+        },
+        undefined
+      );
+
+      expect(ticketRepo.update).toHaveBeenCalledTimes(1);
+      expect(ticketRepo.update).toHaveBeenCalledWith(
+        {
+          id: 'one-piece',
+          updatedAt: new Date('2000-01-01T12:00:00.000Z'),
+          updatedById: 'user-id',
+        },
+        undefined
+      );
+
+      expect(ticketTimelineRepo.create).toHaveBeenCalledTimes(1);
+      expect(ticketTimelineRepo.create).toHaveBeenCalledWith(
+        {
+          ticketId: 'one-piece',
+          customerId: undefined,
+          type: 'LabelsChanged',
+          entry: {
+            newLabelIds: [],
+            oldLabelIds: ['label-1'],
+          },
+          userCreatedById: 'user-id',
+          createdAt: new Date('2000-01-01T12:00:00.000Z'),
+        },
+        undefined
+      );
     });
   });
 });
