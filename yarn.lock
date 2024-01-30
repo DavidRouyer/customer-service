@@ -532,7 +532,7 @@ __metadata:
     "@swc-jotai/react-refresh": "npm:^0.1.0"
     "@tanstack/react-query": "npm:^5.17.19"
     "@tanstack/react-query-devtools": "npm:^5.17.21"
-    "@tanstack/react-query-next-experimental": "npm:^5.17.19"
+    "@tanstack/react-query-next-experimental": "npm:^5.18.0"
     "@tanstack/react-table": "npm:^8.11.7"
     "@testing-library/jest-dom": "npm:^6.4.0"
     "@testing-library/react": "npm:^14.1.2"
@@ -2962,14 +2962,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tanstack/react-query-next-experimental@npm:^5.17.19":
-  version: 5.17.19
-  resolution: "@tanstack/react-query-next-experimental@npm:5.17.19"
+"@tanstack/react-query-next-experimental@npm:^5.18.0":
+  version: 5.18.0
+  resolution: "@tanstack/react-query-next-experimental@npm:5.18.0"
   peerDependencies:
-    "@tanstack/react-query": ^5.17.19
+    "@tanstack/react-query": ^5.18.0
     next: ^13 || ^14
     react: ^18.0.0
-  checksum: 213aaea726ceeab12005cdac221af2d9b0b28faca3fea4614e247527de904dc0b1007def39f37916bceab07ef912b73f24d3d6cfae23d8385ef9956cc8a57cf9
+  checksum: 5e290dc262d28558804bb66519ea1667bd1c1b00dc53cff0f832ae3fbeeedb351556f2a82ba5be96d4226a12c190a920c09e81f542dbe07dd08d7aa2060fd4d0
   languageName: node
   linkType: hard
 
