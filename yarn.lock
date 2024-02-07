@@ -62,7 +62,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@auth/core@npm:^0.26.3":
+"@auth/core@npm:0.26.3, @auth/core@npm:^0.26.3":
   version: 0.26.3
   resolution: "@auth/core@npm:0.26.3"
   dependencies:
@@ -88,12 +88,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@auth/drizzle-adapter@npm:^0.6.2":
-  version: 0.6.2
-  resolution: "@auth/drizzle-adapter@npm:0.6.2"
+"@auth/drizzle-adapter@npm:^0.6.3":
+  version: 0.6.3
+  resolution: "@auth/drizzle-adapter@npm:0.6.3"
   dependencies:
-    "@auth/core": "npm:0.26.2"
-  checksum: 896a617f80c713a4e126a0b723fd2ca3617175f8c7ce6814a98221d336c0e8614089282be9c6d9760b15870f43dc024e6b541e83939a4e453abcf6087dc59dc0
+    "@auth/core": "npm:0.26.3"
+  checksum: 86f6f4ba01282c9d8229db724ec7db98178790ceba4591a7ac1beaf41bf9087d649a69ceaf1ddcd7975f69fe563d9c3b8458a563d62a63aaecb188e2bf560fd6
   languageName: node
   linkType: hard
 
@@ -508,7 +508,7 @@ __metadata:
   resolution: "@cs/auth@workspace:packages/auth"
   dependencies:
     "@auth/core": "npm:^0.26.3"
-    "@auth/drizzle-adapter": "npm:^0.6.2"
+    "@auth/drizzle-adapter": "npm:^0.6.3"
     "@cs/database": "npm:*"
     "@cs/eslint-config": "npm:*"
     "@cs/kyaku": "npm:*"
