@@ -18,7 +18,7 @@
     "@cs/kyaku": "*",
     "bcrypt": "^5.1.1",
     "next": "^14.1.0",
-    "next-auth": "^5.0.0-beta.9",
+    "next-auth": "^5.0.0-beta.11",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "zod": "^3.22.4"
