@@ -36,7 +36,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@auth/core@npm:0.26.3, @auth/core@npm:^0.26.3":
+"@auth/core@npm:0.26.3":
   version: 0.26.3
   resolution: "@auth/core@npm:0.26.3"
   dependencies:
@@ -62,7 +62,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@auth/core@npm:0.27.0":
+"@auth/core@npm:0.27.0, @auth/core@npm:^0.27.0":
   version: 0.27.0
   resolution: "@auth/core@npm:0.27.0"
   dependencies:
@@ -507,7 +507,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@cs/auth@workspace:packages/auth"
   dependencies:
-    "@auth/core": "npm:^0.26.3"
+    "@auth/core": "npm:^0.27.0"
     "@auth/drizzle-adapter": "npm:^0.7.0"
     "@cs/database": "npm:*"
     "@cs/eslint-config": "npm:*"
