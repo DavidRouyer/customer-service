@@ -13,7 +13,9 @@ export { Popover, PopoverContent, PopoverTrigger } from './components/popover/po
 export { RadioGroup } from './components/radio-group/radio-group'
 export { Select, SelectContent, SelectGroup,SelectItem,SelectLabel,SelectScrollDownButton,SelectScrollUpButton,SelectSeparator,SelectTrigger,SelectValue } from './components/select/select';
 export { Sheet, SheetContent, SheetDescription,SheetFooter,SheetHeader,SheetTitle,SheetTrigger } from './components/sheet/sheet';
+export { SmartTabs } from './components/smart-tabs/smart-tabs';
 export { Switch } from './components/switch/switch';
+export { Tabs, TabsContent, TabsList, TabsTrigger } from './components/tabs/tabs';
 export { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from './components/tooltip/tooltip';
 
 // Utils
