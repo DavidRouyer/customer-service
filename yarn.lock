@@ -492,7 +492,7 @@ __metadata:
     bcrypt: "npm:^5.1.1"
     eslint: "npm:^8.56.0"
     next: "npm:^14.1.0"
-    next-auth: "npm:^5.0.0-beta.11"
+    next-auth: "npm:^5.0.0-beta.13"
     prettier: "npm:^3.2.5"
     react: "npm:18.2.0"
     react-dom: "npm:18.2.0"
@@ -7373,9 +7373,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"next-auth@npm:^5.0.0-beta.11":
-  version: 5.0.0-beta.11
-  resolution: "next-auth@npm:5.0.0-beta.11"
+"next-auth@npm:^5.0.0-beta.13":
+  version: 5.0.0-beta.13
+  resolution: "next-auth@npm:5.0.0-beta.13"
   dependencies:
     "@auth/core": "npm:0.27.0"
   peerDependencies:
@@ -7391,7 +7391,7 @@ __metadata:
       optional: true
     nodemailer:
       optional: true
-  checksum: 9bb7905f5da7073ce1d28f391ac30977b204e01d634b75aac3d8a4b9267f4f14a413af99c9d8cdc6bdef95a0184dfe5be77d52d96c75931c8229a7540b865733
+  checksum: 5a394fa93e670ac0e55ea459e5770f421fcb40dc3f5a55dbacf54c5cd87211f430c9c673a34eb85cc4904fe7c6674c13d199de89ce67e2f0f23a00b146cccf56
   languageName: node
   linkType: hard
 
