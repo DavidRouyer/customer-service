@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import { TicketStatus } from '@cs/kyaku/models';
@@ -48,6 +49,75 @@ export default function DashboardPage({
       },
     }
   );
+  const [selectedTab, setSelectedTab] = useState('a');
+  const tabs = [
+    {
+      id: 'a',
+      value: 'a',
+      content: 'All customers',
+    },
+    {
+      id: 'b',
+      value: 'b',
+      content: 'Accepts marketing',
+    },
+    {
+      id: 'c',
+      value: 'c',
+      content: 'Repeat customers',
+    },
+    {
+      id: 'd',
+      value: 'd',
+      content: 'Prospects',
+    },
+    {
+      id: 'e',
+      value: 'e',
+      content: 'France',
+    },
+    {
+      id: 'f',
+      value: 'f',
+      content: 'Allemagne',
+    },
+    {
+      id: 'g',
+      value: 'g',
+      content: 'Etats-Unis',
+    },
+    {
+      id: 'h',
+      value: 'h',
+      content: 'Guinée-Bissau',
+    },
+    {
+      id: 'i',
+      value: 'i',
+      content: 'Corée du Nord',
+    },
+    {
+      id: 'j',
+      value: 'j',
+      content: 'Corée du Sud',
+    },
+    {
+      id: 'k',
+      value: 'k',
+      content: 'Japon',
+    },
+    {
+      id: 'l',
+      value: 'l',
+      content: 'Chine',
+    },
+    {
+      id: 'm',
+      value: 'm',
+      content: 'Hong-Kong',
+    },
+  ];
+
   return (
     <main className="py-10 lg:pl-60">
       <div className="space-y-4 px-4 sm:px-6 lg:px-8">
@@ -55,7 +125,12 @@ export default function DashboardPage({
           <FormattedMessage id="page.all_tickets" />
         </h2>
 
-        <SmartTabs selected={0} />
+        <SmartTabs
+          onValueChange={(value) => setSelectedTab(value)}
+          tabs={tabs}
+          selected={tabs.findIndex((tab) => tab.id === selectedTab)}
+          value={selectedTab}
+        />
         <DataTable data={tickets ?? []} columns={columns} />
       </div>
     </main>

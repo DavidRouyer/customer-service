@@ -1,6 +1,6 @@
 'use client';
 
-import { FC, useCallback, useReducer, useState } from 'react';
+import { FC, useCallback, useReducer } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../tabs/tabs';
 import { TabMeasurer } from './tab-measurer';
 import { TabMeasurements, TabProps } from './types';
@@ -10,7 +10,10 @@ import * as TabsPrimitive from "@radix-ui/react-tabs"
 import { cn } from '../../utils/cn';
 
 export type SmartTabsProps = {
+  onValueChange: (value: string) => void;
   selected: number;
+  tabs: TabProps[];
+  value?: string;
 };
 
 export type TabsState = {
@@ -29,76 +32,11 @@ export type TabsState = {
 }
 
 export const SmartTabs: FC<SmartTabsProps> = ({
-  selected
+  onValueChange,
+  selected,
+  tabs,
+  value,
 }: SmartTabsProps) => {
-
-  const [tabs] = useState([
-    {
-      id: 'a',
-      value: 'a',
-      content: 'All customers',
-    },
-    {
-      id: 'b',
-      value: 'b',
-      content: 'Accepts marketing',
-    },
-    {
-      id: 'c',
-      value: 'c',
-      content: 'Repeat customers',
-    },
-    {
-      id: 'd',
-      value: 'd',
-      content: 'Prospects',
-    },
-    {
-      id: 'e',
-      value: 'e',
-      content: 'France',
-    },
-    {
-      id: 'f',
-      value: 'f',
-      content: 'Allemagne',
-    },
-    {
-      id: 'g',
-      value: 'g',
-      content: 'Etats-Unis',
-    },
-    {
-      id: 'h',
-      value: 'h',
-      content: 'Guinée-Bissau',
-    },
-    {
-      id: 'i',
-      value: 'i',
-      content: 'Corée du Nord',
-    },
-    {
-      id: 'j',
-      value: 'j',
-      content: 'Corée du Sud',
-    },
-    {
-      id: 'k',
-      value: 'k',
-      content: 'Japon',
-    },
-    {
-      id: 'l',
-      value: 'l',
-      content: 'Chine',
-    },
-    {
-      id: 'm',
-      value: 'm',
-      content: 'Hong-Kong',
-    },
-  ]);
 
   const [state, setState] = useReducer(
     (data: TabsState, partialData: Partial<TabsState>): TabsState => {
@@ -142,7 +80,6 @@ export const SmartTabs: FC<SmartTabsProps> = ({
         containerWidth,
         disclosureWidth,
       } = measurements;
-      console.log('handleMeasurement', tabWidths, containerWidth, disclosureWidth);
 
       const {visibleTabs, hiddenTabs} = getVisibleAndHiddenTabIndices(
         tabs,
@@ -151,7 +88,6 @@ export const SmartTabs: FC<SmartTabsProps> = ({
         tabWidths,
         containerWidth,
       );
-      console.log('handleMeasurement', visibleTabs, hiddenTabs);
       setState({
         visibleTabs,
         hiddenTabs,
@@ -189,8 +125,7 @@ export const SmartTabs: FC<SmartTabsProps> = ({
           value={tab.value}
           className={cn('flex whitespace-nowrap', {
             "flex-auto": disclosureActivatorVisible
-          })}
-        >{tab.content}</TabsTrigger>
+          })}>{tab.content}</TabsTrigger>
       );
     },
     [
@@ -204,17 +139,17 @@ export const SmartTabs: FC<SmartTabsProps> = ({
   const tabsMarkup = visibleTabs
     .sort((tabA, tabB) => tabA - tabB)
     .filter((tabIndex) => tabs[tabIndex])
-    .map((tabIndex) => renderTabMarkup(tabs[tabIndex], tabIndex));
+    .map((tabIndex) => renderTabMarkup(tabs[tabIndex]!, tabIndex));
 
-  return <Tabs defaultValue="account">
+  return <Tabs value={value} onValueChange={onValueChange}>
       <TabsPrimitive.List>{tabMeasurer}</TabsPrimitive.List>
       <div className='flex flex-wrap justify-start items-stretch'>
         <TabsList>
           {tabsMarkup}
-          {visibleTabs.length > 0 ? activator : null}
+          {disclosureActivatorVisible ? activator : null}
         </TabsList>
       </div>
-      <TabsContent value="account">Make changes to your account here.</TabsContent>
-      <TabsContent value="password">Change your password here.</TabsContent>
+      <TabsContent value="a">Make changes to your account here.</TabsContent>
+      <TabsContent value="b">Change your password here.</TabsContent>
     </Tabs>;
 };
