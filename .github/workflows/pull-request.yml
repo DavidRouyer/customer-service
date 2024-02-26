@@ -36,7 +36,7 @@ jobs:
           echo $pull_request_sha
 
       - name: Neon Database Create Branch Action
-        uses: neondatabase/create-branch-action@v4
+        uses: neondatabase/create-branch-action@v5
         id: create_branch
         if: github.actor != 'dependabot[bot]'
         with:
