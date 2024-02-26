@@ -35,7 +35,7 @@
     "@cs/eslint-config": "*",
     "@cs/prettier-config": "*",
     "@cs/tsconfig": "*",
-    "eslint": "^8.56.0"
+    "eslint": "^8.57.0"
   },
   "eslintConfig": {
     "root": true,
