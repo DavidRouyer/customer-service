@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import i18nConfig from '~/app/i18n/config.mjs';
 import localeDetector from '~/app/i18n/localeDetector';
 
-export function middleware(request: NextRequest) {
+export const middleware = (request: NextRequest) => {
   const { defaultLocale, locales, localeCookie = 'NEXT_LOCALE' } = i18nConfig;
 
   let locale;
@@ -32,7 +32,7 @@ export function middleware(request: NextRequest) {
   response.cookies.set(localeCookie, locale);
 
   return response;
-}
+};
 
 export const config = {
   matcher: ['/((?!api|_next/static|_next/image|favicon.ico).*)'],
