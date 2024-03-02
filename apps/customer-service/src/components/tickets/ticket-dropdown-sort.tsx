@@ -5,14 +5,13 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { ChevronDown } from 'lucide-react';
 import { FormattedMessage } from 'react-intl';
 
+import { Button } from '@cs/ui/button';
 import {
-  Button,
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@cs/ui';
+} from '@cs/ui/dropdown-menu';
 
 import {
   getUpdatedSearchParams,
@@ -41,7 +40,7 @@ export const TicketDropdownSort: FC<{
                 oldest: <FormattedMessage id="ticket.sort_by.oldest" />,
               }[orderBy]
             }
-            <ChevronDown className="h-5 w-5" />
+            <ChevronDown className="size-5" />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">

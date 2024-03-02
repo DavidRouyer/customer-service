@@ -4,14 +4,14 @@ import { FormattedMessage } from 'react-intl';
 
 import { RouterOutputs } from '@cs/api';
 import { TicketPriority as TicketPriorityType } from '@cs/kyaku/models';
+import { Button } from '@cs/ui/button';
 import {
-  Button,
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@cs/ui';
+} from '@cs/ui/dropdown-menu';
 
 import { TicketPriority } from '~/components/tickets/ticket-priority';
 import { api } from '~/lib/api';
@@ -85,7 +85,7 @@ export const TicketPriorityDropdowm: FC<TicketChangePriorityProps> = ({
             disabled={priority === TicketPriorityType.Critical}
           >
             <div className="flex items-center gap-x-2">
-              <ShieldAlert className="h-5 w-5 text-destructive" />
+              <ShieldAlert className="size-5 text-destructive" />
               <p className="text-xs text-muted-foreground">
                 <FormattedMessage id="ticket.priorities.critical" />
               </p>
@@ -99,7 +99,7 @@ export const TicketPriorityDropdowm: FC<TicketChangePriorityProps> = ({
             disabled={priority === TicketPriorityType.High}
           >
             <div className="flex items-center gap-x-2">
-              <Shield className="h-5 w-5 text-destructive" />
+              <Shield className="size-5 text-destructive" />
               <p className="text-xs text-muted-foreground">
                 <FormattedMessage id="ticket.priorities.high" />
               </p>
@@ -113,7 +113,7 @@ export const TicketPriorityDropdowm: FC<TicketChangePriorityProps> = ({
             disabled={priority === TicketPriorityType.Medium}
           >
             <div className="flex items-center gap-x-2">
-              <Shield className="h-5 w-5 text-warning" />
+              <Shield className="size-5 text-warning" />
               <p className="text-xs text-muted-foreground">
                 <FormattedMessage id="ticket.priorities.medium" />
               </p>
@@ -127,7 +127,7 @@ export const TicketPriorityDropdowm: FC<TicketChangePriorityProps> = ({
             disabled={priority === TicketPriorityType.Low}
           >
             <div className="flex items-center gap-x-2">
-              <Shield className="h-5 w-5 text-muted-foreground" />
+              <Shield className="size-5 text-muted-foreground" />
               <p className="text-xs text-muted-foreground">
                 <FormattedMessage id="ticket.priorities.low" />
               </p>

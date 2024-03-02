@@ -4,7 +4,7 @@ import { FC, Suspense, useState } from 'react';
 import { AlignJustify } from 'lucide-react';
 import { FormattedMessage } from 'react-intl';
 
-import { Sheet, SheetContent } from '@cs/ui';
+import { Sheet, SheetContent } from '@cs/ui/sheet';
 
 import { DashboardCommandMenu } from '~/components/dashboard-command-menu';
 import { Logo } from '~/components/logo';
@@ -88,7 +88,7 @@ export const SidebarNav: FC = () => {
           <span className="sr-only">
             <FormattedMessage id="layout.open_sidebar" />
           </span>
-          <AlignJustify className="h-6 w-6" aria-hidden="true" />
+          <AlignJustify className="size-6" aria-hidden="true" />
         </button>
         <div className="flex-1 text-sm font-semibold leading-6 text-foreground">
           Help Desk

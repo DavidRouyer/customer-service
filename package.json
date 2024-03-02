@@ -5,7 +5,6 @@
   "workspaces": [
     "apps/*",
     "packages/*",
-    "packages/design-system/*",
     "tooling/*"
   ],
   "scripts": {

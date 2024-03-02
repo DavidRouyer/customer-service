@@ -19,7 +19,7 @@ import { COMMAND_PRIORITY_NORMAL, TextNode } from 'lexical';
 import * as ReactDOM from 'react-dom';
 
 import { $createMentionNode } from '@cs/kyaku/editor';
-import { Avatar, AvatarFallback, AvatarImage } from '@cs/ui';
+import { Avatar, AvatarFallback, AvatarImage } from '@cs/ui/avatar';
 
 import { api, RouterOutputs } from '~/lib/api';
 import { getInitials } from '~/lib/string';
@@ -100,8 +100,8 @@ function useMentionLookupService(mentionString: string | null) {
     }
 
     if (data) {
-      const searchResults = data?.filter(
-        (user) => user.name?.toLowerCase().includes(mentionString.toLowerCase())
+      const searchResults = data?.filter((user) =>
+        user.name?.toLowerCase().includes(mentionString.toLowerCase())
       );
       setResults(searchResults);
     }
@@ -208,7 +208,7 @@ export default function NewMentionsPlugin(): JSX.Element | null {
               result.id,
               result.name ?? '',
               (
-                <Avatar className="relative mr-2 h-5 w-5 flex-none text-xs">
+                <Avatar className="relative mr-2 size-5 flex-none text-xs">
                   <AvatarImage src={result.image ?? undefined} />
                   <AvatarFallback>
                     {getInitials(result.name ?? '')}

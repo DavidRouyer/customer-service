@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
-import { Copy } from '@cs/ui';
+import { Copy } from '@cs/ui/copy';
 
 import { PhoneNumber } from '~/components/infos/phone-number';
 import { api } from '~/lib/api';

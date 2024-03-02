@@ -6,7 +6,7 @@ import { FormattedDate, FormattedMessage } from 'react-intl';
 
 import { TicketStatus } from '@cs/kyaku/models';
 import { SortDirection } from '@cs/kyaku/types';
-import { Badge } from '@cs/ui';
+import { Badge } from '@cs/ui/badge';
 
 import { api } from '~/lib/api';
 

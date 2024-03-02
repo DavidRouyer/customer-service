@@ -2,7 +2,8 @@ import { FC } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
-import { Avatar, AvatarFallback, AvatarImage, cn } from '@cs/ui';
+import { cn } from '@cs/ui';
+import { Avatar, AvatarFallback, AvatarImage } from '@cs/ui/avatar';
 
 import { api } from '~/lib/api';
 import { matchPath } from '~/lib/path';
@@ -33,7 +34,7 @@ export const TeamMemberList: FC = () => {
           )}
         >
           <div className="flex items-center gap-x-3 truncate">
-            <Avatar className="h-4 w-4 shrink-0">
+            <Avatar className="size-4 shrink-0">
               <AvatarImage src={user.image ?? undefined} />
               <AvatarFallback>{getInitials(user.name ?? '')}</AvatarFallback>
             </Avatar>

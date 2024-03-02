@@ -4,7 +4,8 @@ import { usePathname } from 'next/navigation';
 import { AtSign, BarChart3, BookmarkX, Users } from 'lucide-react';
 import { FormattedMessage } from 'react-intl';
 
-import { Avatar, AvatarFallback, AvatarImage, cn } from '@cs/ui';
+import { cn } from '@cs/ui';
+import { Avatar, AvatarFallback, AvatarImage } from '@cs/ui/avatar';
 
 import { api } from '~/lib/api';
 import { matchPath } from '~/lib/path';
@@ -33,7 +34,7 @@ export const InboxList: FC = () => {
           )}
         >
           <div className="flex items-center gap-x-3 truncate">
-            <Users className="h-4 w-4 shrink-0" aria-hidden="true" />
+            <Users className="size-4 shrink-0" aria-hidden="true" />
             <span className="truncate">
               <FormattedMessage id="layout.tickets.all_tickets" />
             </span>
@@ -52,7 +53,7 @@ export const InboxList: FC = () => {
           )}
         >
           <div className="flex items-center gap-x-3 truncate">
-            <Avatar className="h-4 w-4 shrink-0">
+            <Avatar className="size-4 shrink-0">
               <AvatarImage src={sessionData?.user.image ?? undefined} />
               <AvatarFallback>
                 {getInitials(sessionData?.user.name ?? '')}
@@ -76,7 +77,7 @@ export const InboxList: FC = () => {
           )}
         >
           <div className="flex items-center gap-x-3 truncate">
-            <BookmarkX className="h-4 w-4 shrink-0" aria-hidden="true" />
+            <BookmarkX className="size-4 shrink-0" aria-hidden="true" />
             <span className="truncate">
               <FormattedMessage id="layout.tickets.unassigned_tickets" />
             </span>
@@ -95,7 +96,7 @@ export const InboxList: FC = () => {
           )}
         >
           <div className="flex items-center gap-x-3 truncate">
-            <AtSign className="h-4 w-4 shrink-0" aria-hidden="true" />
+            <AtSign className="size-4 shrink-0" aria-hidden="true" />
             <span className="truncate">
               <FormattedMessage id="layout.tickets.mentions" />
             </span>
@@ -112,7 +113,7 @@ export const InboxList: FC = () => {
             matchPath(pathname, '/reports') && 'bg-muted text-foreground'
           )}
         >
-          <BarChart3 className="h-4 w-4 shrink-0" aria-hidden="true" />
+          <BarChart3 className="size-4 shrink-0" aria-hidden="true" />
           <span className="truncate">
             <FormattedMessage id="layout.reports" />
           </span>

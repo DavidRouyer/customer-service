@@ -4,14 +4,13 @@ import { FormattedMessage } from 'react-intl';
 
 import { RouterOutputs } from '@cs/api';
 import { TicketStatus } from '@cs/kyaku/models';
+import { Button } from '@cs/ui/button';
 import {
-  Button,
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@cs/ui';
+} from '@cs/ui/dropdown-menu';
 
 import { useMarkAsDoneTicket } from '~/hooks/use-mark-as-done-ticket';
 import { useMarkAsOpenTicket } from '~/hooks/use-mark-as-open-ticket';
@@ -39,14 +38,14 @@ export const TicketStatusDropdowm: FC<TicketChangeAssignmentProps> = ({
           <div className="flex items-center gap-x-2">
             {status === TicketStatus.Open ? (
               <>
-                <CircleDot className="h-4 w-4 text-warning" />
+                <CircleDot className="size-4 text-warning" />
                 <p className="text-xs text-muted-foreground">
                   <FormattedMessage id="ticket.statuses.open" />
                 </p>
               </>
             ) : (
               <>
-                <CheckCircle2 className="h-4 w-4 text-valid" />
+                <CheckCircle2 className="size-4 text-valid" />
                 <p className="text-xs text-muted-foreground">
                   <FormattedMessage id="ticket.statuses.done" />
                 </p>
@@ -63,7 +62,7 @@ export const TicketStatusDropdowm: FC<TicketChangeAssignmentProps> = ({
             disabled={status === TicketStatus.Open}
           >
             <div className="flex items-center gap-x-2">
-              <CircleDot className="h-5 w-5 text-warning" />
+              <CircleDot className="size-5 text-warning" />
               <p className="text-xs text-muted-foreground">
                 <FormattedMessage id="ticket.statuses.open" />
               </p>
@@ -75,7 +74,7 @@ export const TicketStatusDropdowm: FC<TicketChangeAssignmentProps> = ({
             disabled={status === TicketStatus.Done}
           >
             <div className="flex items-center gap-x-2">
-              <CheckCircle2 className="h-5 w-5 text-valid" />
+              <CheckCircle2 className="size-5 text-valid" />
               <p className="text-xs text-muted-foreground">
                 <FormattedMessage id="ticket.statuses.done" />
               </p>

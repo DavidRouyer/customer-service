@@ -4,7 +4,9 @@ import { ColumnDef } from '@tanstack/react-table';
 import { Plus } from 'lucide-react';
 
 import { RouterOutputs } from '@cs/api';
-import { Avatar, AvatarFallback, AvatarImage, Badge, Checkbox } from '@cs/ui';
+import { Avatar, AvatarFallback, AvatarImage } from '@cs/ui/avatar';
+import { Badge } from '@cs/ui/badge';
+import { Checkbox } from '@cs/ui/checkbox';
 
 import { getInitials } from '~/lib/string';
 import { priorities, statuses } from './data';
@@ -69,7 +71,7 @@ export const columns: ColumnDef<TicketData>[] = [
         <div className="flex p-2 align-middle">
           <div className="flex items-center">
             {priority.icon && (
-              <priority.icon className="h-4 w-4 text-muted-foreground" />
+              <priority.icon className="size-4 text-muted-foreground" />
             )}
           </div>
         </div>
@@ -105,7 +107,7 @@ export const columns: ColumnDef<TicketData>[] = [
         <div className="flex p-2 align-middle">
           <div className="flex items-center">
             {status.icon && (
-              <status.icon className="h-4 w-4 text-muted-foreground" />
+              <status.icon className="size-4 text-muted-foreground" />
             )}
           </div>
         </div>
@@ -162,7 +164,7 @@ export const columns: ColumnDef<TicketData>[] = [
       <div className="flex p-2 align-middle">
         {row.original.assignedTo ? (
           <div className="flex items-center gap-x-2">
-            <Avatar className="h-4 w-4">
+            <Avatar className="size-4">
               <AvatarImage src={row.original.assignedTo?.image ?? undefined} />
               <AvatarFallback>
                 {getInitials(row.original.assignedTo?.name ?? '')}
@@ -171,7 +173,7 @@ export const columns: ColumnDef<TicketData>[] = [
           </div>
         ) : (
           <div className="flex items-center gap-x-2 text-xs">
-            <Plus className="h-4 w-4" />
+            <Plus className="size-4" />
           </div>
         )}
       </div>

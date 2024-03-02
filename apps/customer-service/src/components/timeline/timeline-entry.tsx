@@ -14,7 +14,9 @@ import {
   TicketStatusChanged,
   TicketTimelineEntryType,
 } from '@cs/kyaku/models';
-import { Avatar, AvatarFallback, AvatarImage, Badge, cn } from '@cs/ui';
+import { cn } from '@cs/ui';
+import { Avatar, AvatarFallback, AvatarImage } from '@cs/ui/avatar';
+import { Badge } from '@cs/ui/badge';
 
 import { NodeContent } from '~/components/infos/node-content';
 import { TicketPriority } from '~/components/tickets/ticket-priority';
@@ -33,7 +35,7 @@ export const TimelineEntry: FC<{
       <div className="my-2 flex">
         <div className="flex-auto rounded-md bg-accent p-4">
           <div className="grid grid-cols-[24px_auto] gap-x-3">
-            <Avatar className="relative h-6 w-6 flex-none text-xs">
+            <Avatar className="relative size-6 flex-none text-xs">
               <AvatarImage
                 src={
                   entry.userCreatedBy?.image ??
@@ -53,7 +55,7 @@ export const TimelineEntry: FC<{
               <span className="text-sm text-foreground">
                 {entry.userCreatedBy?.name ?? entry.customerCreatedBy?.name}
               </span>
-              <span className="mx-1.5 h-[3px] w-[3px] rounded-full bg-gray-500"></span>
+              <span className="mx-1.5 size-[3px] rounded-full bg-gray-500"></span>
               <time
                 dateTime={entry.createdAt.toISOString()}
                 className="text-xs text-muted-foreground"
@@ -81,7 +83,7 @@ export const TimelineEntry: FC<{
       <div className="my-2 flex">
         <div className="flex-auto rounded-md bg-warning/30 p-4">
           <div className="grid grid-cols-[24px_auto] gap-x-3">
-            <Avatar className="relative h-6 w-6 flex-none text-xs">
+            <Avatar className="relative size-6 flex-none text-xs">
               <AvatarImage
                 src={
                   entry.userCreatedBy?.image ??
@@ -101,7 +103,7 @@ export const TimelineEntry: FC<{
               <span className="text-sm text-foreground">
                 {entry.userCreatedBy?.name ?? entry.customerCreatedBy?.name}
               </span>
-              <span className="mx-1.5 h-[3px] w-[3px] rounded-full bg-gray-500"></span>
+              <span className="mx-1.5 size-[3px] rounded-full bg-gray-500"></span>
               <time
                 dateTime={entry.createdAt.toISOString()}
                 className="text-xs text-muted-foreground"
@@ -119,7 +121,7 @@ export const TimelineEntry: FC<{
                 />
               </div>
               <div className="mt-1 flex items-center gap-x-2 text-xs text-gray-500">
-                <EyeOff className="h-3 w-3" />{' '}
+                <EyeOff className="size-3" />{' '}
                 <FormattedMessage id="ticket.not_visible" /> {customer?.name}
               </div>
             </div>
@@ -132,17 +134,17 @@ export const TimelineEntry: FC<{
   if (activity === null) {
     activity = (
       <div className="flex gap-x-4">
-        <div className="flex h-6 w-6 flex-none items-center justify-center bg-background">
+        <div className="flex size-6 flex-none items-center justify-center bg-background">
           {entry.type === TicketTimelineEntryType.StatusChanged &&
           (entry.entry as TicketStatusChanged)?.newStatus ===
             TicketStatus.Done ? (
-            <CheckCircle2 className="h-6 w-6 text-valid" aria-hidden="true" />
+            <CheckCircle2 className="size-6 text-valid" aria-hidden="true" />
           ) : entry.type === TicketTimelineEntryType.StatusChanged &&
             (entry.entry as TicketStatusChanged)?.newStatus ===
               TicketStatus.Open ? (
-            <CircleDot className="h-6 w-6 text-warning" aria-hidden="true" />
+            <CircleDot className="size-6 text-warning" aria-hidden="true" />
           ) : (
-            <div className="h-1.5 w-1.5 rounded-full bg-gray-100 ring-1 ring-gray-300" />
+            <div className="size-1.5 rounded-full bg-gray-100 ring-1 ring-gray-300" />
           )}
         </div>
 

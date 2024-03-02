@@ -11,7 +11,7 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from '@cs/ui';
+} from '@cs/ui/command';
 
 import { messageModeAtom } from '~/components/messages/message-mode-atom';
 

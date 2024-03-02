@@ -1,5 +1,5 @@
 import { signIn } from '@cs/auth';
-import { Button } from '@cs/ui';
+import { Button } from '@cs/ui/button';
 
 import getIntl from '~/app/i18n/server';
 

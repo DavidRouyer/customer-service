@@ -644,9 +644,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@cs/ui@npm:*, @cs/ui@workspace:packages/design-system/ui":
+"@cs/ui@npm:*, @cs/ui@workspace:packages/ui":
   version: 0.0.0-use.local
-  resolution: "@cs/ui@workspace:packages/design-system/ui"
+  resolution: "@cs/ui@workspace:packages/ui"
   dependencies:
     "@cs/eslint-config": "npm:*"
     "@cs/prettier-config": "npm:*"
@@ -664,7 +664,6 @@ __metadata:
     "@radix-ui/react-slot": "npm:^1.0.2"
     "@radix-ui/react-switch": "npm:^1.0.3"
     "@radix-ui/react-tooltip": "npm:^1.0.7"
-    clsx: "npm:^2.1.0"
     cmdk: "npm:^0.2.1"
     copy-to-clipboard: "npm:^3.3.3"
     cva: "npm:1.0.0-beta.1"
@@ -4239,13 +4238,6 @@ __metadata:
   version: 2.0.0
   resolution: "clsx@npm:2.0.0"
   checksum: c09f43b3144a0b7826b6b11b6a111b2c7440831004eecc02d333533c5e58ef0aa5f2dce071d3b25fbb8c8ea97b45df96c74bcc1d51c8c2027eb981931107b0cd
-  languageName: node
-  linkType: hard
-
-"clsx@npm:^2.1.0":
-  version: 2.1.0
-  resolution: "clsx@npm:2.1.0"
-  checksum: c09c00ad14f638366ca814097e6cab533dfa1972a358da5b557be487168acbb25b4c1395e89ffa842a8a61ba87a462d2b4885bc9d4f8410b598f3cb339599cdb
   languageName: node
   linkType: hard
 

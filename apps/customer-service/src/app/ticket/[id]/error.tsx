@@ -4,7 +4,7 @@ import { TRPCClientError } from '@trpc/client';
 import { XIcon } from 'lucide-react';
 import { FormattedMessage } from 'react-intl';
 
-import { Button } from '@cs/ui';
+import { Button } from '@cs/ui/button';
 
 export default function Error({
   error,
@@ -28,8 +28,8 @@ export default function Error({
       <div className="flex items-center justify-center xl:mr-96 xl:h-[100dvh] xl:overflow-y-auto xl:pl-96">
         <div className="sm:w-full sm:max-w-sm">
           <div>
-            <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-destructive-foreground">
-              <XIcon className="h-6 w-6 text-destructive" aria-hidden="true" />
+            <div className="mx-auto flex size-12 items-center justify-center rounded-full bg-destructive-foreground">
+              <XIcon className="size-6 text-destructive" aria-hidden="true" />
             </div>
             <div className="mt-3 text-center sm:mt-5">
               <h3 className="text-base font-semibold leading-6 text-foreground">

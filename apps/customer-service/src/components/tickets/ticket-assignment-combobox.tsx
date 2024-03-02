@@ -3,21 +3,17 @@ import { Check, Plus } from 'lucide-react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
 import { RouterOutputs } from '@cs/api';
+import { cn } from '@cs/ui';
+import { Avatar, AvatarFallback, AvatarImage } from '@cs/ui/avatar';
+import { Button } from '@cs/ui/button';
 import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-  Button,
-  cn,
   Command,
   CommandEmpty,
   CommandGroup,
   CommandInput,
   CommandItem,
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@cs/ui';
+} from '@cs/ui/command';
+import { Popover, PopoverContent, PopoverTrigger } from '@cs/ui/popover';
 
 import { api } from '~/lib/api';
 import { getInitials } from '~/lib/string';
@@ -153,7 +149,7 @@ export const TicketAssignmentCombobox: FC<TicketAssignmentComboboxProps> = ({
         >
           {assignedTo ? (
             <div className="flex items-center gap-x-2">
-              <Avatar className="h-4 w-4">
+              <Avatar className="size-4">
                 <AvatarImage src={assignedTo?.image ?? undefined} />
                 <AvatarFallback>
                   {getInitials(assignedTo?.name ?? '')}
@@ -165,7 +161,7 @@ export const TicketAssignmentCombobox: FC<TicketAssignmentComboboxProps> = ({
             </div>
           ) : (
             <div className="flex items-center gap-x-2 text-xs">
-              <Plus className="h-4 w-4" />
+              <Plus className="size-4" />
               <span>
                 <FormattedMessage id="ticket.actions.assign_to" />
               </span>
@@ -206,7 +202,7 @@ export const TicketAssignmentCombobox: FC<TicketAssignmentComboboxProps> = ({
                   )}
                 />
                 <div className="flex items-center gap-x-2 truncate">
-                  <Avatar className="h-5 w-5">
+                  <Avatar className="size-5">
                     <AvatarImage src={user?.image ?? undefined} />
                     <AvatarFallback>
                       {getInitials(user?.name ?? '')}

@@ -7,7 +7,7 @@ import { FormattedMessage } from 'react-intl';
 
 import { RouterOutputs } from '@cs/api';
 import { TicketChat, TicketNote } from '@cs/kyaku/models';
-import { Avatar, AvatarFallback, AvatarImage } from '@cs/ui';
+import { Avatar, AvatarFallback, AvatarImage } from '@cs/ui/avatar';
 
 import { RelativeTime } from '~/components/ui/relative-time/relative-time';
 import { getInitials } from '~/lib/string';
@@ -32,7 +32,7 @@ export const TicketListItem: FC<TicketListItemProps> = ({
         href={`/ticket/${ticket.id}`}
         className="mx-4 flex gap-x-4 border-b py-5 last:border-0 sm:mx-6"
       >
-        <Avatar className="h-12 w-12">
+        <Avatar className="size-12">
           <AvatarImage
             src={ticket.customer.avatarUrl ?? undefined}
             alt={ticket.customer.name ?? ''}

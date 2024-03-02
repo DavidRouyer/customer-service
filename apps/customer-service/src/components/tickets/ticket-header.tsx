@@ -3,7 +3,7 @@ import { BookOpenCheck, HardDriveUpload } from 'lucide-react';
 import { FormattedMessage } from 'react-intl';
 
 import { TicketStatus } from '@cs/kyaku/models';
-import { Button } from '@cs/ui';
+import { Button } from '@cs/ui/button';
 
 import { useMarkAsDoneTicket } from '~/hooks/use-mark-as-done-ticket';
 import { useMarkAsOpenTicket } from '~/hooks/use-mark-as-open-ticket';
@@ -30,7 +30,7 @@ export const TicketHeader: FC<{ ticketId: string }> = ({ ticketId }) => {
             }}
             className="flex items-center gap-x-1"
           >
-            <HardDriveUpload className="h-4 w-4" />
+            <HardDriveUpload className="size-4" />
             <FormattedMessage id="ticket.actions.reopen" />
           </Button>
         ) : (
@@ -41,7 +41,7 @@ export const TicketHeader: FC<{ ticketId: string }> = ({ ticketId }) => {
             }}
             className="flex items-center gap-x-1"
           >
-            <BookOpenCheck className="h-4 w-4" />
+            <BookOpenCheck className="size-4" />
             <FormattedMessage id="ticket.actions.resolve" />
           </Button>
         )}

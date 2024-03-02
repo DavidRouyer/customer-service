@@ -13,7 +13,10 @@ import {
   TicketNote,
   TicketTimelineEntryType,
 } from '@cs/kyaku/models';
-import { Button, cn, Label, Switch } from '@cs/ui';
+import { cn } from '@cs/ui';
+import { Button } from '@cs/ui/button';
+import { Label } from '@cs/ui/label';
+import { Switch } from '@cs/ui/switch';
 
 import { messageModeAtom } from '~/components/messages/message-mode-atom';
 import { api, RouterOutputs } from '~/lib/api';
@@ -201,9 +204,9 @@ export const MessageForm: FC<{ ticketId: string }> = ({ ticketId }) => {
               <div className="flex items-center">
                 <button
                   type="button"
-                  className="-m-2.5 flex h-10 w-10 items-center justify-center rounded-full text-gray-400 hover:text-gray-500"
+                  className="-m-2.5 flex size-10 items-center justify-center rounded-full text-gray-400 hover:text-gray-500"
                 >
-                  <PaperclipIcon className="h-5 w-5" aria-hidden="true" />
+                  <PaperclipIcon className="size-5" aria-hidden="true" />
                   <span className="sr-only">
                     <FormattedMessage id="text_editor.attach_files" />
                   </span>
@@ -212,9 +215,9 @@ export const MessageForm: FC<{ ticketId: string }> = ({ ticketId }) => {
               <div className="flex items-center">
                 <button
                   type="button"
-                  className="-m-2.5 flex h-10 w-10 items-center justify-center rounded-full text-gray-400 hover:text-gray-500"
+                  className="-m-2.5 flex size-10 items-center justify-center rounded-full text-gray-400 hover:text-gray-500"
                 >
-                  <SmilePlusIcon className="h-5 w-5" aria-hidden="true" />
+                  <SmilePlusIcon className="size-5" aria-hidden="true" />
                   <span className="sr-only">
                     <FormattedMessage id="text_editor.add_emoticons" />
                   </span>

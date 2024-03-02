@@ -10,7 +10,7 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from '@cs/ui';
+} from '@cs/ui/command';
 
 export function DashboardCommandMenu() {
   const { formatMessage } = useIntl();

@@ -3,11 +3,9 @@
 import { useRef } from 'react';
 import { FormattedMessage } from 'react-intl';
 
+import { Avatar, AvatarFallback, AvatarImage } from '@cs/ui/avatar';
+import { Button } from '@cs/ui/button';
 import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-  Button,
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
@@ -15,7 +13,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuShortcut,
   DropdownMenuTrigger,
-} from '@cs/ui';
+} from '@cs/ui/dropdown-menu';
 
 import { handleSignOut } from '~/components/sign-out';
 import { api } from '~/lib/api';
@@ -41,7 +39,7 @@ export function UserNav({ showLabel = false }: UserNavProps) {
               type="button"
               className="flex w-full items-center gap-x-4 px-6 py-3 text-sm font-semibold leading-6 text-foreground hover:bg-gray-50 dark:hover:bg-gray-900"
             >
-              <Avatar className="h-8 w-8">
+              <Avatar className="size-8">
                 <AvatarImage src={sessionData.user.image ?? undefined} />
                 <AvatarFallback>
                   {getInitials(sessionData.user.name ?? '')}
@@ -56,9 +54,9 @@ export function UserNav({ showLabel = false }: UserNavProps) {
             <Button
               type="button"
               variant="ghost"
-              className="relative h-8 w-8 rounded-full"
+              className="relative size-8 rounded-full"
             >
-              <Avatar className="h-9 w-9">
+              <Avatar className="size-9">
                 <AvatarImage
                   src={sessionData.user.image ?? undefined}
                   alt={sessionData.user.name ?? ''}

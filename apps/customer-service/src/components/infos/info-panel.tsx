@@ -3,15 +3,16 @@
 import { FC } from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { CustomerInfo } from '~/components/infos/customer-info';
-import { LinkedTickets } from '~/components/infos/linked-tickets';
-import { TicketInfo } from '~/components/infos/ticket-info';
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from '@cs/ui';
+} from '@cs/ui/accordion';
+
+import { CustomerInfo } from '~/components/infos/customer-info';
+import { LinkedTickets } from '~/components/infos/linked-tickets';
+import { TicketInfo } from '~/components/infos/ticket-info';
 import { api } from '~/lib/api';
 
 export const InfoPanel: FC<{

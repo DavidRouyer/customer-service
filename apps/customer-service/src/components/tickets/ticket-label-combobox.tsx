@@ -3,19 +3,17 @@ import { Check, Plus } from 'lucide-react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
 import { RouterOutputs } from '@cs/api';
+import { cn } from '@cs/ui';
+import { Badge } from '@cs/ui/badge';
+import { Button } from '@cs/ui/button';
 import {
-  Badge,
-  Button,
-  cn,
   Command,
   CommandEmpty,
   CommandGroup,
   CommandInput,
   CommandItem,
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@cs/ui';
+} from '@cs/ui/command';
+import { Popover, PopoverContent, PopoverTrigger } from '@cs/ui/popover';
 
 import { api } from '~/lib/api';
 
@@ -134,7 +132,7 @@ export const TicketLabelCombobox: FC<TicketLabelComboboxProps> = ({
             </div>
           ) : (
             <div className="flex items-center gap-x-2 text-xs">
-              <Plus className="h-4 w-4" />
+              <Plus className="size-4" />
               <span>
                 <FormattedMessage id="ticket.actions.add_label" />
               </span>
