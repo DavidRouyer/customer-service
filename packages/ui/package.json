@@ -5,6 +5,7 @@
   "type": "module",
   "exports": {
     ".": "./src/index.ts",
+    "./accordion": "./src/accordion.tsx",
     "./avatar": "./src/avatar.tsx",
     "./badge": "./src/badge.tsx",
     "./button": "./src/button.tsx",
