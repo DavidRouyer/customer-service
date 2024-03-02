@@ -7,7 +7,7 @@ import { User, USER_COLUMNS } from '../entities/user';
 import CustomerRepository from '../repositories/customer';
 import { UnitOfWork } from '../unit-of-work';
 import { BaseService } from './base-service';
-import { sortDirection } from './build-query';
+import { sortBySortDirection } from './build-query';
 
 export default class CustomerService extends BaseService {
   private readonly customerRepository: CustomerRepository;
@@ -42,23 +42,23 @@ export default class CustomerService extends BaseService {
 
   async list<T extends CustomerWith<T>>(config: FindConfig<T, CustomerSort>) {
     const whereClause = and(
-      config.skip ? lt(schema.customers.id, config.skip) : undefined
+      config.cursor ? lt(schema.customers.id, config.cursor) : undefined
     );
     return this.customerRepository.findMany({
       where: whereClause,
       with: this.getWithClause(config.relations),
-      limit: config.take,
+      limit: config.limit,
       orderBy: and(
         config.sortBy
           ? 'name' in config.sortBy
-            ? sortDirection(config.sortBy.name)(schema.customers.name)
+            ? sortBySortDirection(config.sortBy.name)(schema.customers.name)
             : 'createdAt' in config.sortBy
-              ? sortDirection(config.sortBy.createdAt)(
+              ? sortBySortDirection(config.sortBy.createdAt)(
                   schema.customers.createdAt
                 )
               : undefined
           : undefined,
-        config.skip ? desc(schema.customers.id) : undefined
+        config.cursor ? desc(schema.customers.id) : undefined
       ),
     });
   }

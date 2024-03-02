@@ -1,13 +1,12 @@
-import type { Metadata } from 'next';
-import { headers } from 'next/headers';
+import type { Metadata, Viewport } from 'next';
 
-import { TRPCReactProvider } from './providers';
+import { TRPCReactProvider } from '~/trpc/react';
 
-import '~/styles/globals.css';
+import '~/app/globals.css';
 
+import { ThemeProvider } from '~/app/_components/theme-provider';
 import getIntl from '~/app/i18n/server';
 import ServerIntlProvider from '~/app/i18n/ServerIntlProvider';
-import { ThemeProvider } from '~/components/theme-provider';
 
 export const dynamic = 'force-dynamic';
 
@@ -20,6 +19,13 @@ export const metadata: Metadata = {
     url: 'https://github.com/DavidRouyer/customer-service',
     siteName: 'Kyaku',
   },
+};
+
+export const viewport: Viewport = {
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: 'white' },
+    { media: '(prefers-color-scheme: dark)', color: 'black' },
+  ],
 };
 
 export default async function RootLayout({
@@ -36,9 +42,7 @@ export default async function RootLayout({
           <ServerIntlProvider
             intl={{ messages: intl.messages, locale: intl.locale }}
           >
-            <TRPCReactProvider headers={headers()}>
-              {children}
-            </TRPCReactProvider>
+            <TRPCReactProvider>{children}</TRPCReactProvider>
           </ServerIntlProvider>
         </ThemeProvider>
       </body>

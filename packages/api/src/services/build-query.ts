@@ -13,6 +13,7 @@ import {
   schema,
 } from '@cs/database';
 import { SortDirection } from '@cs/kyaku/types';
+import { Direction } from '@cs/kyaku/types/query';
 
 type Schema = typeof schema;
 type TSchema = ExtractTablesWithRelations<Schema>;
@@ -49,9 +50,30 @@ export const inclusionFilterOperator = <TCol extends Column>(
   return undefined;
 };
 
-export const sortDirection = (sortBy: SortDirection) => {
-  return sortBy === SortDirection.ASC ? asc : desc;
+export const sortByDirection = (direction: Direction) => {
+  return direction === Direction.Forward ? asc : desc;
 };
-export const filterBySortDirection = (sortBy: SortDirection) => {
-  return sortBy === SortDirection.ASC ? gt : lt;
+
+export const sortBySortDirection = (
+  sortBy: SortDirection,
+  direction: Direction
+) => {
+  return (sortBy === SortDirection.ASC && direction === Direction.Forward) ||
+    (sortBy === SortDirection.DESC && direction === Direction.Backward)
+    ? asc
+    : desc;
+};
+
+export const filterByDirection = (direction: Direction) => {
+  return direction === Direction.Forward ? gt : lt;
+};
+
+export const filterBySortDirection = (
+  sortBy: SortDirection,
+  direction: Direction
+) => {
+  return (sortBy === SortDirection.ASC && direction === Direction.Forward) ||
+    (sortBy === SortDirection.DESC && direction === Direction.Backward)
+    ? gt
+    : lt;
 };

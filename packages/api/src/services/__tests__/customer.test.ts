@@ -1,4 +1,5 @@
 import { eq, schema } from '@cs/database';
+import { Direction } from '@cs/kyaku/types/query';
 
 import CustomerRepository from '../../repositories/customer';
 import { UnitOfWork } from '../../unit-of-work';
@@ -60,7 +61,8 @@ describe('CustomerService', () => {
 
     it('successfully retrieves a list of customers', async () => {
       const result = await customerService.list({
-        take: 10,
+        limit: 10,
+        direction: Direction.Forward,
       });
 
       expect(customerRepo.findMany).toHaveBeenCalledTimes(1);

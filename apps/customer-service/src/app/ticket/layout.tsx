@@ -2,7 +2,7 @@ import { redirect } from 'next/navigation';
 
 import { auth } from '@cs/auth';
 
-import { TicketListContainer } from '~/components/tickets/ticket-list-container';
+import { TicketListContainer } from '~/app/_components/tickets/ticket-list-container';
 
 type TicketLayoutProps = {
   children: React.ReactNode;

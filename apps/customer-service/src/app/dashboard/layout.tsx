@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation';
 
-import { SidebarNav } from '~/components/sidebar-nav';
-import { getCurrentUser } from '~/lib/session';
+import { SidebarNav } from '~/app/_components/sidebar-nav';
+import { getCurrentUser } from '~/app/lib/session';
 
 type DashboardLayoutProps = {
   children: React.ReactNode;

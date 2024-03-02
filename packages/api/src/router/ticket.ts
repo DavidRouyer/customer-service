@@ -2,6 +2,7 @@ import { z } from 'zod';
 
 import { TicketPriority, TicketStatus } from '@cs/kyaku/models';
 import { SortDirection } from '@cs/kyaku/types';
+import { Direction } from '@cs/kyaku/types/query';
 
 import TicketService from '../services/ticket';
 import { createTRPCRouter, protectedProcedure } from '../trpc';
@@ -47,8 +48,11 @@ export const ticketRouter = createTRPCRouter({
             })
           )
           .optional(),
-        skip: z.string().nullish(),
+        cursor: z.string().nullish(),
         limit: z.number().default(50),
+        direction: z
+          .enum([Direction.Forward, Direction.Backward])
+          .default(Direction.Forward),
       })
     )
     .query(async ({ ctx, input }) => {
@@ -63,8 +67,9 @@ export const ticketRouter = createTRPCRouter({
           labels: true,
           updatedBy: true,
         },
-        take: input.limit,
-        skip: input.skip ? input.skip : undefined,
+        limit: input.limit,
+        cursor: input.cursor ? input.cursor : undefined,
+        direction: input.direction,
       });
 
       return {

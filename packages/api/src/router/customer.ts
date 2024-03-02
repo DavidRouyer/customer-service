@@ -1,4 +1,5 @@
 import { SortDirection } from '@cs/kyaku/types';
+import { Direction } from '@cs/kyaku/types/query';
 
 import CustomerService from '../services/customer';
 import { createTRPCRouter, protectedProcedure } from '../trpc';
@@ -15,6 +16,7 @@ export const customerRouter = createTRPCRouter({
       sortBy: {
         name: SortDirection.ASC,
       },
+      direction: Direction.Forward,
     });
   }),
 });

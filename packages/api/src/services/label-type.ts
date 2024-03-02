@@ -21,7 +21,7 @@ import { User, USER_COLUMNS } from '../entities/user';
 import LabelTypeRepository from '../repositories/label-type';
 import { UnitOfWork } from '../unit-of-work';
 import { BaseService } from './base-service';
-import { InclusionFilterOperator, sortDirection } from './build-query';
+import { InclusionFilterOperator, sortBySortDirection } from './build-query';
 
 export default class LabelTypeService extends BaseService {
   private readonly labelTypeRepository: LabelTypeRepository;
@@ -92,23 +92,23 @@ export default class LabelTypeService extends BaseService {
           ? isNotNull(schema.labelTypes.archivedAt)
           : isNull(schema.labelTypes.archivedAt)
         : undefined,
-      config?.skip ? lt(schema.labelTypes.id, config.skip) : undefined
+      config?.cursor ? lt(schema.labelTypes.id, config.cursor) : undefined
     );
     return this.labelTypeRepository.findMany({
       where: whereClause,
       with: this.getWithClause(config?.relations),
-      limit: config?.take,
+      limit: config?.limit,
       orderBy: and(
         config?.sortBy
           ? 'name' in config.sortBy
-            ? sortDirection(config.sortBy.name)(schema.labelTypes.name)
+            ? sortBySortDirection(config.sortBy.name)(schema.labelTypes.name)
             : 'createdAt' in config.sortBy
-              ? sortDirection(config.sortBy.createdAt)(
+              ? sortBySortDirection(config.sortBy.createdAt)(
                   schema.labelTypes.createdAt
                 )
               : undefined
           : undefined,
-        config?.skip ? desc(schema.labelTypes.id) : undefined
+        config?.limit ? desc(schema.labelTypes.id) : undefined
       ),
     });
   }

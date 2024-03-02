@@ -2,9 +2,9 @@ import { Suspense } from 'react';
 import { notFound } from 'next/navigation';
 import { Loader2 } from 'lucide-react';
 
-import { InfoPanel } from '~/components/infos/info-panel';
-import { Ticket } from '~/components/tickets/ticket';
-import { TicketNavbar } from '~/components/tickets/ticket-navbar';
+import { InfoPanel } from '~/app/_components/infos/info-panel';
+import { Ticket } from '~/app/_components/tickets/ticket';
+import { TicketNavbar } from '~/app/_components/tickets/ticket-navbar';
 
 type TicketPageProps = {
   params: {

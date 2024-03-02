@@ -1,8 +1,8 @@
-import { Logo } from '~/components/logo';
+import { Logo } from '~/app/_components/logo';
 
 export default function NotFound() {
   return (
-    <div className="flex h-full w-full">
+    <div className="flex size-full">
       <div className="contents">
         <div className="flex grow flex-col">
           <div>
@@ -16,7 +16,7 @@ export default function NotFound() {
             ></div>
           </div>
           <div className="flex grow flex-col items-center justify-center">
-            <div className="flex h-full w-full grow items-center justify-center">
+            <div className="flex size-full grow items-center justify-center">
               <div>
                 <h1 className="text-3xl font-bold">404</h1>
                 <p className="text-xl text-muted-foreground">Page not found</p>

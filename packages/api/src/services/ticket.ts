@@ -1,4 +1,4 @@
-import { and, asc, eq, gt, isNull, schema, SQL } from '@cs/database';
+import { and, asc, eq, isNull, schema } from '@cs/database';
 import { extractMentions } from '@cs/kyaku/editor';
 import {
   TicketAssignmentChanged,
@@ -28,9 +28,11 @@ import TicketTimelineRepository from '../repositories/ticket-timeline';
 import { UnitOfWork } from '../unit-of-work';
 import { BaseService } from './base-service';
 import {
+  filterByDirection,
   filterBySortDirection,
   inclusionFilterOperator,
-  sortDirection,
+  sortByDirection,
+  sortBySortDirection,
 } from './build-query';
 
 export default class TicketService extends BaseService {
@@ -76,23 +78,25 @@ export default class TicketService extends BaseService {
     filters: TicketFilters,
     config?: FindConfig<T, TicketSort>
   ) {
-    const [cursorWhereClause, cursorOrderByClause] =
-      this.getCursorClauses(config);
+    const cursor = this.decodeCursor(config?.cursor);
+
+    const cursorOrderByClause = this.getCursorOrderByClause(config);
+    const cursorWhereClause = this.getCursorWhereClause(cursor, config);
     const whereClause = this.getWhereClause(filters);
 
     const filteredTickets = await this.ticketRepository.findMany({
       where: and(whereClause, cursorWhereClause),
       with: this.getWithClause(config?.relations),
-      limit: config?.take ? config.take + 1 : undefined,
+      limit: config?.limit ? config.limit + 1 : undefined,
       orderBy: cursorOrderByClause,
     });
 
-    if (config?.take) {
-      const items = filteredTickets.slice(0, config.take);
+    if (config?.limit) {
+      const items = filteredTickets.slice(0, config.limit);
       const lastItem = items.at(-1);
       return {
         items: items,
-        hasNextPage: filteredTickets.length > config.take,
+        hasNextPage: filteredTickets.length > config.limit,
         nextCursor: lastItem ? this.encodeCursor(lastItem, config) : undefined,
       };
     }
@@ -531,75 +535,88 @@ export default class TicketService extends BaseService {
     );
   }
 
-  private getCursorClauses<T extends TicketWith<T>>(
+  private getCursorWhereClause<T extends TicketWith<T>>(
+    cursor: TicketCursor | undefined,
     config?: FindConfig<T, TicketSort>
   ) {
-    const cursor = config?.skip ? this.decodeCursor(config.skip) : undefined;
-    let whereClause = cursor ? gt(schema.tickets.id, cursor.id) : undefined;
+    if (!config) return undefined;
 
-    let orderByClause: SQL<unknown> | SQL<unknown>[] | undefined = asc(
-      schema.tickets.id
-    );
-    if (config?.sortBy) {
-      if ('statusChangedAt' in config.sortBy) {
-        whereClause = cursor
-          ? and(
-              cursor?.statusChangedAt
-                ? filterBySortDirection(config.sortBy.statusChangedAt)(
-                    schema.tickets.statusChangedAt,
-                    new Date(cursor?.statusChangedAt)
-                  )
-                : undefined,
-              cursor?.id
-                ? filterBySortDirection(config.sortBy.statusChangedAt)(
-                    schema.tickets.id,
-                    cursor.id
-                  )
-                : undefined
-            )
-          : undefined;
-        orderByClause = [
-          sortDirection(config.sortBy.statusChangedAt)(
-            schema.tickets.statusChangedAt
-          ),
-          sortDirection(config.sortBy.statusChangedAt)(schema.tickets.id),
-        ];
-      }
-      if ('createdAt' in config.sortBy) {
-        whereClause = cursor
-          ? and(
-              cursor?.createdAt
-                ? filterBySortDirection(config.sortBy.createdAt)(
-                    schema.tickets.createdAt,
-                    new Date(cursor.createdAt)
-                  )
-                : undefined,
-              cursor?.id
-                ? filterBySortDirection(config.sortBy.createdAt)(
-                    schema.tickets.id,
-                    cursor.id
-                  )
-                : undefined
-            )
-          : undefined;
-        orderByClause = [
-          sortDirection(config.sortBy.createdAt)(schema.tickets.createdAt),
-          sortDirection(config.sortBy.createdAt)(schema.tickets.id),
-        ];
-      }
+    const idWhereClause = cursor
+      ? filterByDirection(config.direction)(schema.tickets.id, cursor.id)
+      : undefined;
+
+    if (!config?.sortBy) {
+      return idWhereClause;
     }
 
-    return [whereClause, orderByClause] as const;
+    if ('statusChangedAt' in config.sortBy) {
+      return and(
+        cursor?.statusChangedAt
+          ? filterBySortDirection(
+              config.sortBy.statusChangedAt,
+              config.direction
+            )(schema.tickets.statusChangedAt, new Date(cursor?.statusChangedAt))
+          : undefined,
+        idWhereClause
+      );
+    }
+    if ('createdAt' in config.sortBy) {
+      return and(
+        cursor?.createdAt
+          ? filterBySortDirection(config.sortBy.createdAt, config.direction)(
+              schema.tickets.createdAt,
+              new Date(cursor.createdAt)
+            )
+          : undefined,
+        idWhereClause
+      );
+    }
+
+    return idWhereClause;
   }
 
-  private decodeCursor(cursor: string) {
-    let decodedCursor = null;
+  private getCursorOrderByClause<T extends TicketWith<T>>(
+    config?: FindConfig<T, TicketSort>
+  ) {
+    if (!config) return asc(schema.tickets.id);
+
+    const idOrderByClause = sortByDirection(config.direction)(
+      schema.tickets.id
+    );
+
+    if (!config?.sortBy) {
+      return idOrderByClause;
+    }
+
+    if ('statusChangedAt' in config.sortBy) {
+      return [
+        sortBySortDirection(
+          config.sortBy.statusChangedAt,
+          config.direction
+        )(schema.tickets.statusChangedAt),
+        idOrderByClause,
+      ];
+    }
+    if ('createdAt' in config.sortBy) {
+      return [
+        sortBySortDirection(
+          config.sortBy.createdAt,
+          config.direction
+        )(schema.tickets.createdAt),
+        idOrderByClause,
+      ];
+    }
+
+    return idOrderByClause;
+  }
+
+  private decodeCursor(cursor?: string) {
+    if (!cursor) return undefined;
     try {
-      decodedCursor = JSON.parse(atob(cursor)) as TicketCursor;
+      return JSON.parse(atob(cursor)) as TicketCursor;
     } catch (e) {
       throw new KyakuError(KyakuError.Types.INVALID_ARGUMENT, 'Invalid cursor');
     }
-    return decodedCursor;
   }
 
   private encodeCursor<T extends TicketWith<T>>(
@@ -607,20 +624,14 @@ export default class TicketService extends BaseService {
     config: FindConfig<T, TicketSort>
   ): string | null {
     if (!config.sortBy) return null;
-    let cursor: TicketCursor = {
+    const cursor: TicketCursor = {
       id: ticket.id,
     };
     if ('createdAt' in config.sortBy) {
-      cursor = {
-        createdAt: ticket.createdAt.toUTCString(),
-        id: ticket.id,
-      };
+      cursor.createdAt = ticket.createdAt.toISOString();
     }
     if ('statusChangedAt' in config.sortBy) {
-      cursor = {
-        statusChangedAt: ticket.statusChangedAt?.toUTCString(),
-        id: ticket.id,
-      };
+      cursor.statusChangedAt = ticket.statusChangedAt?.toISOString();
     }
     return btoa(JSON.stringify(cursor));
   }

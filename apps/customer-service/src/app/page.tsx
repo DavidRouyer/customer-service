@@ -2,7 +2,7 @@ import { redirect } from 'next/navigation';
 
 import { auth } from '@cs/auth';
 
-import { SignIn } from '~/components/sign-in';
+import { SignIn } from '~/app/_components/sign-in';
 
 export const runtime = 'nodejs';
 

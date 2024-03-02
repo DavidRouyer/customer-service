@@ -23,7 +23,7 @@ import TicketTimelineRepository from '../repositories/ticket-timeline';
 import UserRepository from '../repositories/user';
 import { UnitOfWork } from '../unit-of-work';
 import { BaseService } from './base-service';
-import { sortDirection } from './build-query';
+import { sortBySortDirection } from './build-query';
 
 export default class TicketTimelineService extends BaseService {
   private readonly ticketTimelineRepository: TicketTimelineRepository;
@@ -53,16 +53,16 @@ export default class TicketTimelineService extends BaseService {
     const ticketTimelineEntries = await this.ticketTimelineRepository.findMany({
       where: eq(schema.ticketTimelineEntries.ticketId, filters.ticketId),
       with: this.getWithClause(config?.relations),
-      limit: config?.take,
+      limit: config?.limit,
       orderBy: and(
         config?.sortBy
           ? 'createdAt' in config.sortBy
-            ? sortDirection(config.sortBy.createdAt)(
+            ? sortBySortDirection(config.sortBy.createdAt)(
                 schema.ticketTimelineEntries.createdAt
               )
             : undefined
           : undefined,
-        config?.skip ? desc(schema.tickets.id) : undefined
+        config?.cursor ? desc(schema.tickets.id) : undefined
       ),
     });
 

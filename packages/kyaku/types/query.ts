@@ -1,9 +1,15 @@
 export type GetConfig<TRelations> = {
   relations?: TRelations;
 };
+export enum Direction {
+  Forward = 'forward',
+  Backward = 'backward',
+}
+
 export type FindConfig<TRelations, TSort> = {
-  skip?: string;
-  take?: number;
+  cursor?: string;
+  limit?: number;
+  direction: Direction;
   relations?: TRelations;
   sortBy?: TSort;
 };

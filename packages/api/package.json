@@ -2,7 +2,10 @@
   "name": "@cs/api",
   "version": "0.0.0",
   "private": true,
-  "main": "./index.ts",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
   "license": "MIT",
   "scripts": {
     "build": "tsc",

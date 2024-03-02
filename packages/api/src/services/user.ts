@@ -6,7 +6,7 @@ import { USER_COLUMNS, UserSort, UserWith } from '../entities/user';
 import UserRepository from '../repositories/user';
 import { UnitOfWork } from '../unit-of-work';
 import { BaseService } from './base-service';
-import { InclusionFilterOperator, sortDirection } from './build-query';
+import { InclusionFilterOperator, sortBySortDirection } from './build-query';
 
 export default class UserService extends BaseService {
   private readonly userRepository: UserRepository;
@@ -48,21 +48,23 @@ export default class UserService extends BaseService {
             ? notInArray(schema.labels.id, filters.id.notIn)
             : undefined
         : undefined,
-      config?.skip ? lt(schema.users.id, config.skip) : undefined
+      config?.cursor ? lt(schema.users.id, config.cursor) : undefined
     );
     return await this.userRepository.findMany({
       columns: USER_COLUMNS,
       where: whereClause,
-      limit: config?.take,
+      limit: config?.limit,
       orderBy: and(
         config?.sortBy
           ? 'name' in config.sortBy
-            ? sortDirection(config.sortBy.name)(schema.users.name)
+            ? sortBySortDirection(config.sortBy.name)(schema.users.name)
             : 'createdAt' in config.sortBy
-              ? sortDirection(config.sortBy.createdAt)(schema.tickets.createdAt)
+              ? sortBySortDirection(config.sortBy.createdAt)(
+                  schema.tickets.createdAt
+                )
               : undefined
           : undefined,
-        config?.skip ? desc(schema.tickets.id) : undefined
+        config?.limit ? desc(schema.tickets.id) : undefined
       ),
     });
   }

@@ -5,9 +5,9 @@ import { FormattedMessage } from 'react-intl';
 import { TicketStatus } from '@cs/kyaku/models';
 import { SortDirection } from '@cs/kyaku/types';
 
-import { columns, TicketData } from '~/components/data-table/columns';
-import { DataTable } from '~/components/data-table/data-table';
-import { api } from '~/lib/api';
+import { columns, TicketData } from '~/app/_components/data-table/columns';
+import { DataTable } from '~/app/_components/data-table/data-table';
+import { api } from '~/trpc/react';
 
 export default function DashboardPage({
   searchParams,

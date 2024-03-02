@@ -1,6 +1,4 @@
-import { AdapterUser } from '@auth/core/adapters';
 import GitHub from '@auth/core/providers/github';
-import { Session } from '@auth/core/types';
 import { DrizzleAdapter } from '@auth/drizzle-adapter';
 import NextAuth from 'next-auth';
 
@@ -12,7 +10,9 @@ export type { Session } from 'next-auth';
 declare module 'next-auth' {
   // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
   interface Session {
-    user: User;
+    user: {
+      id: string;
+    } & User;
   }
 }
 
@@ -32,18 +32,16 @@ export const {
     }),
   ],
   callbacks: {
-    session: (params) => ({
-      ...params.session,
-      user: {
-        id: 'user' in params ? params.user.id : '',
-        name: 'user' in params ? params.user.name : null,
-        email: 'user' in params ? params.user.email : '',
-        image: 'user' in params ? params.user.image : null,
-      },
-    }),
+    session: (opts) => {
+      if (!('user' in opts)) throw 'unreachable with session strategy';
 
-    authorized({ auth }) {
-      return !!auth?.user;
+      return {
+        ...opts.session,
+        user: {
+          ...opts.session.user,
+          id: opts.user.id,
+        },
+      };
     },
   },
 });
