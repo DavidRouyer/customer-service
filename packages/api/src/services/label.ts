@@ -1,13 +1,4 @@
-import {
-  and,
-  desc,
-  eq,
-  inArray,
-  isNull,
-  lt,
-  notInArray,
-  schema,
-} from '@cs/database';
+import { and, eq, inArray, isNull, notInArray, schema } from '@cs/database';
 import { TicketLabelsChanged, TicketTimelineEntryType } from '@cs/kyaku/models';
 import { FindConfig, GetConfig } from '@cs/kyaku/types/query';
 import { KyakuError } from '@cs/kyaku/utils';
@@ -19,7 +10,11 @@ import TicketRepository from '../repositories/ticket';
 import TicketTimelineRepository from '../repositories/ticket-timeline';
 import { UnitOfWork } from '../unit-of-work';
 import { BaseService } from './base-service';
-import { InclusionFilterOperator } from './build-query';
+import {
+  filterByDirection,
+  InclusionFilterOperator,
+  sortByDirection,
+} from './build-query';
 
 export default class LabelService extends BaseService {
   private readonly labelRepository: LabelRepository;
@@ -86,13 +81,19 @@ export default class LabelService extends BaseService {
       filters.labelTypeId
         ? eq(schema.labels.labelTypeId, filters.labelTypeId)
         : undefined,
-      config?.skip ? lt(schema.labels.id, config.skip) : undefined
+      config?.cursor
+        ? filterByDirection(config.direction)(schema.labels.id, config.cursor)
+        : undefined
     );
     return await this.labelRepository.findMany({
       where: whereClause,
       with: this.getWithClause(config?.relations),
-      limit: config?.take,
-      orderBy: and(config?.skip ? desc(schema.tickets.id) : undefined),
+      limit: config?.limit,
+      orderBy: and(
+        config?.cursor
+          ? sortByDirection(config.direction)(schema.tickets.id)
+          : undefined
+      ),
     });
   }
 

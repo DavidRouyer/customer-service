@@ -1,4 +1,4 @@
-import { and, desc, eq, lt, schema } from '@cs/database';
+import { and, eq, schema } from '@cs/database';
 import { FindConfig, GetConfig } from '@cs/kyaku/types/query';
 import { KyakuError } from '@cs/kyaku/utils';
 
@@ -7,7 +7,11 @@ import { User, USER_COLUMNS } from '../entities/user';
 import CustomerRepository from '../repositories/customer';
 import { UnitOfWork } from '../unit-of-work';
 import { BaseService } from './base-service';
-import { sortBySortDirection } from './build-query';
+import {
+  filterByDirection,
+  sortByDirection,
+  sortBySortDirection,
+} from './build-query';
 
 export default class CustomerService extends BaseService {
   private readonly customerRepository: CustomerRepository;
@@ -42,7 +46,12 @@ export default class CustomerService extends BaseService {
 
   async list<T extends CustomerWith<T>>(config: FindConfig<T, CustomerSort>) {
     const whereClause = and(
-      config.cursor ? lt(schema.customers.id, config.cursor) : undefined
+      config.cursor
+        ? filterByDirection(config.direction)(
+            schema.customers.id,
+            config.cursor
+          )
+        : undefined
     );
     return this.customerRepository.findMany({
       where: whereClause,
@@ -51,14 +60,20 @@ export default class CustomerService extends BaseService {
       orderBy: and(
         config.sortBy
           ? 'name' in config.sortBy
-            ? sortBySortDirection(config.sortBy.name)(schema.customers.name)
+            ? sortBySortDirection(
+                config.sortBy.name,
+                config.direction
+              )(schema.customers.name)
             : 'createdAt' in config.sortBy
-              ? sortBySortDirection(config.sortBy.createdAt)(
-                  schema.customers.createdAt
-                )
+              ? sortBySortDirection(
+                  config.sortBy.createdAt,
+                  config.direction
+                )(schema.customers.createdAt)
               : undefined
           : undefined,
-        config.cursor ? desc(schema.customers.id) : undefined
+        config.cursor
+          ? sortByDirection(config.direction)(schema.customers.id)
+          : undefined
       ),
     });
   }

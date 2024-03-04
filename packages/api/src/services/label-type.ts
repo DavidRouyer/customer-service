@@ -1,11 +1,9 @@
 import {
   and,
-  desc,
   eq,
   inArray,
   isNotNull,
   isNull,
-  lt,
   notInArray,
   schema,
 } from '@cs/database';
@@ -21,7 +19,12 @@ import { User, USER_COLUMNS } from '../entities/user';
 import LabelTypeRepository from '../repositories/label-type';
 import { UnitOfWork } from '../unit-of-work';
 import { BaseService } from './base-service';
-import { InclusionFilterOperator, sortBySortDirection } from './build-query';
+import {
+  filterByDirection,
+  InclusionFilterOperator,
+  sortByDirection,
+  sortBySortDirection,
+} from './build-query';
 
 export default class LabelTypeService extends BaseService {
   private readonly labelTypeRepository: LabelTypeRepository;
@@ -92,7 +95,12 @@ export default class LabelTypeService extends BaseService {
           ? isNotNull(schema.labelTypes.archivedAt)
           : isNull(schema.labelTypes.archivedAt)
         : undefined,
-      config?.cursor ? lt(schema.labelTypes.id, config.cursor) : undefined
+      config?.cursor
+        ? filterByDirection(config.direction)(
+            schema.labelTypes.id,
+            config.cursor
+          )
+        : undefined
     );
     return this.labelTypeRepository.findMany({
       where: whereClause,
@@ -112,7 +120,9 @@ export default class LabelTypeService extends BaseService {
                 )(schema.labelTypes.createdAt)
               : undefined
           : undefined,
-        config?.limit ? desc(schema.labelTypes.id) : undefined
+        config?.limit
+          ? sortByDirection(config.direction)(schema.labelTypes.id)
+          : undefined
       ),
     });
   }

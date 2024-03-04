@@ -1,6 +1,7 @@
 import { z } from 'zod';
 
 import { SortDirection } from '@cs/kyaku/types';
+import { Direction } from '@cs/kyaku/types/query';
 
 import LabelTypeService from '../services/label-type';
 import { createTRPCRouter, protectedProcedure } from '../trpc';
@@ -12,6 +13,7 @@ export const labelTypeRouter = createTRPCRouter({
       const labelTypeService: LabelTypeService =
         ctx.container.resolve('labelTypeService');
       return await labelTypeService.list(input, {
+        direction: Direction.Forward,
         relations: {},
         sortBy: {
           name: SortDirection.ASC,

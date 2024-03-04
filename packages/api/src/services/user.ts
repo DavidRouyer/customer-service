@@ -1,4 +1,4 @@
-import { and, desc, eq, inArray, lt, notInArray, schema } from '@cs/database';
+import { and, eq, inArray, notInArray, schema } from '@cs/database';
 import { FindConfig, GetConfig } from '@cs/kyaku/types/query';
 import { KyakuError } from '@cs/kyaku/utils';
 
@@ -6,7 +6,12 @@ import { USER_COLUMNS, UserSort, UserWith } from '../entities/user';
 import UserRepository from '../repositories/user';
 import { UnitOfWork } from '../unit-of-work';
 import { BaseService } from './base-service';
-import { InclusionFilterOperator, sortBySortDirection } from './build-query';
+import {
+  filterByDirection,
+  InclusionFilterOperator,
+  sortByDirection,
+  sortBySortDirection,
+} from './build-query';
 
 export default class UserService extends BaseService {
   private readonly userRepository: UserRepository;
@@ -48,7 +53,9 @@ export default class UserService extends BaseService {
             ? notInArray(schema.labels.id, filters.id.notIn)
             : undefined
         : undefined,
-      config?.cursor ? lt(schema.users.id, config.cursor) : undefined
+      config?.cursor
+        ? filterByDirection(config.direction)(schema.users.id, config.cursor)
+        : undefined
     );
     return await this.userRepository.findMany({
       columns: USER_COLUMNS,
@@ -68,7 +75,9 @@ export default class UserService extends BaseService {
                 )(schema.tickets.createdAt)
               : undefined
           : undefined,
-        config?.limit ? desc(schema.tickets.id) : undefined
+        config?.limit
+          ? sortByDirection(config.direction)(schema.tickets.id)
+          : undefined
       ),
     });
   }
