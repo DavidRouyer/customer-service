@@ -57,9 +57,10 @@ export default class TicketTimelineService extends BaseService {
       orderBy: and(
         config?.sortBy
           ? 'createdAt' in config.sortBy
-            ? sortBySortDirection(config.sortBy.createdAt)(
-                schema.ticketTimelineEntries.createdAt
-              )
+            ? sortBySortDirection(
+                config.sortBy.createdAt,
+                config.direction
+              )(schema.ticketTimelineEntries.createdAt)
             : undefined
           : undefined,
         config?.cursor ? desc(schema.tickets.id) : undefined
