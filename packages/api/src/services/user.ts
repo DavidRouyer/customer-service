@@ -57,11 +57,15 @@ export default class UserService extends BaseService {
       orderBy: and(
         config?.sortBy
           ? 'name' in config.sortBy
-            ? sortBySortDirection(config.sortBy.name)(schema.users.name)
+            ? sortBySortDirection(
+                config.sortBy.name,
+                config.direction
+              )(schema.users.name)
             : 'createdAt' in config.sortBy
-              ? sortBySortDirection(config.sortBy.createdAt)(
-                  schema.tickets.createdAt
-                )
+              ? sortBySortDirection(
+                  config.sortBy.createdAt,
+                  config.direction
+                )(schema.tickets.createdAt)
               : undefined
           : undefined,
         config?.limit ? desc(schema.tickets.id) : undefined
