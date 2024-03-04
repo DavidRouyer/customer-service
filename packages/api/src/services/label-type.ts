@@ -101,11 +101,15 @@ export default class LabelTypeService extends BaseService {
       orderBy: and(
         config?.sortBy
           ? 'name' in config.sortBy
-            ? sortBySortDirection(config.sortBy.name)(schema.labelTypes.name)
+            ? sortBySortDirection(
+                config.sortBy.name,
+                config.direction
+              )(schema.labelTypes.name)
             : 'createdAt' in config.sortBy
-              ? sortBySortDirection(config.sortBy.createdAt)(
-                  schema.labelTypes.createdAt
-                )
+              ? sortBySortDirection(
+                  config.sortBy.createdAt,
+                  config.direction
+                )(schema.labelTypes.createdAt)
               : undefined
           : undefined,
         config?.limit ? desc(schema.labelTypes.id) : undefined
