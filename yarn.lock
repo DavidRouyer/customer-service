@@ -565,7 +565,7 @@ __metadata:
     "@types/ws": "npm:^8.5.10"
     dotenv-cli: "npm:^7.3.0"
     drizzle-kit: "npm:^0.20.14"
-    drizzle-orm: "npm:^0.29.5"
+    drizzle-orm: "npm:^0.30.1"
     eslint: "npm:^8.57.0"
     lexical: "npm:^0.13.1"
     prettier: "npm:^3.2.5"
@@ -4827,14 +4827,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"drizzle-orm@npm:^0.29.5":
-  version: 0.29.5
-  resolution: "drizzle-orm@npm:0.29.5"
+"drizzle-orm@npm:^0.30.1":
+  version: 0.30.1
+  resolution: "drizzle-orm@npm:0.30.1"
   peerDependencies:
     "@aws-sdk/client-rds-data": ">=3"
     "@cloudflare/workers-types": ">=3"
     "@libsql/client": "*"
     "@neondatabase/serverless": ">=0.1"
+    "@op-engineering/op-sqlite": ">=2"
     "@opentelemetry/api": ^1.4.1
     "@planetscale/database": ">=1"
     "@types/better-sqlite3": "*"
@@ -4861,6 +4862,8 @@ __metadata:
     "@libsql/client":
       optional: true
     "@neondatabase/serverless":
+      optional: true
+    "@op-engineering/op-sqlite":
       optional: true
     "@opentelemetry/api":
       optional: true
@@ -4898,7 +4901,7 @@ __metadata:
       optional: true
     sqlite3:
       optional: true
-  checksum: 187771340951bb154d2e101a4ffa288dd2d127fecc12ebfd494170076121b73456b9fd13b5a0b69ffcce388d288e664b1c9347d7fb5f4ee64894be2a2429d885
+  checksum: 1cc88489447606054283159dfa8ca1d7a885991f6bcb2f857cb217d443d86300de0e2ff50099c99779f613e04427e70f0116368df5a7a316eed7ccdbdd6e7740
   languageName: node
   linkType: hard
 
