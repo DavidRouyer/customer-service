@@ -23,7 +23,7 @@
     "@cs/prettier-config": "*",
     "@cs/tsconfig": "*",
     "@types/ws": "^8.5.10",
-    "dotenv-cli": "^7.4.0",
+    "dotenv-cli": "^7.4.1",
     "drizzle-kit": "^0.20.14",
     "eslint": "^8.57.0",
     "lexical": "^0.13.1",
