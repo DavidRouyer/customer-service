@@ -1,8 +1,10 @@
 import { and, desc, eq, inArray, schema } from '@cs/database';
 import {
   TicketAssignmentChanged,
+  TicketAssignmentChangedWithData,
   TicketChat,
   TicketLabelsChanged,
+  TicketLabelsChangedWithData,
   TicketNote,
   TicketPriorityChanged,
   TicketStatusChanged,
@@ -12,8 +14,6 @@ import {
 import { FindConfig } from '@cs/kyaku/types';
 
 import {
-  TicketAssignmentChangedWithData,
-  TicketLabelsChangedWithData,
   TicketTimelineSort,
   TicketTimelineWith,
 } from '../entities/ticket-timeline';

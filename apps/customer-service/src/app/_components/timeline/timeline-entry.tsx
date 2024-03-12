@@ -5,9 +5,6 @@ import { FormattedMessage } from 'react-intl';
 import { RouterOutputs } from '@cs/api';
 import {
   TicketAssignmentChangedWithData,
-  TicketLabelsChangedWithData,
-} from '@cs/api/src/entities/ticket-timeline';
-import {
   TicketChat,
   TicketNote,
   TicketPriorityChanged,

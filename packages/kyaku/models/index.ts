@@ -6,8 +6,10 @@ import {
 } from './ticket';
 import {
   TicketAssignmentChanged,
+  TicketAssignmentChangedWithData,
   TicketChat,
   TicketLabelsChanged,
+  TicketLabelsChangedWithData,
   TicketNote,
   TicketPriorityChanged,
   TicketStatusChanged,
@@ -17,8 +19,10 @@ import { User } from './user';
 
 export {
   type TicketAssignmentChanged,
+  type TicketAssignmentChangedWithData,
   type TicketChat,
   type TicketLabelsChanged,
+  type TicketLabelsChangedWithData,
   type TicketNote,
   type TicketPriorityChanged,
   type TicketStatusChanged,
