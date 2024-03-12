@@ -631,7 +631,6 @@ __metadata:
     "@cs/eslint-config": "npm:*"
     "@cs/prettier-config": "npm:*"
     "@cs/tsconfig": "npm:*"
-    autoprefixer: "npm:^10.4.18"
     eslint: "npm:^8.57.0"
     postcss: "npm:^8.4.35"
     prettier: "npm:^3.2.5"
