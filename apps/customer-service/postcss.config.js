@@ -1,1 +1,1 @@
-import('@cs/tailwind-config/postcss');
+import '@cs/tailwind-config/postcss';
