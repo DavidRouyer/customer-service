@@ -2,7 +2,10 @@
   "name": "@cs/prettier-config",
   "version": "0.0.0",
   "private": true,
-  "main": "index.mjs",
+  "type": "module",
+  "exports": {
+    ".": "./index.js"
+  },
   "license": "MIT",
   "scripts": {
     "clean": "rm -rf .turbo node_modules",

@@ -2,12 +2,12 @@
   "name": "@cs/tailwind-config",
   "version": "0.0.0",
   "private": true,
-  "main": "index.ts",
+  "type": "module",
+  "exports": {
+    "./index": "./index.ts",
+    "./postcss": "./postcss.ts"
+  },
   "license": "MIT",
-  "files": [
-    "index.ts",
-    "postcss.js"
-  ],
   "scripts": {
     "clean": "rm -rf .turbo node_modules",
     "lint": "eslint .",

@@ -2,13 +2,14 @@
   "name": "@cs/eslint-config",
   "version": "0.0.0",
   "private": true,
+  "type": "module",
+  "exports": {
+    "./base": "./base.js",
+    "./nextjs": "./nextjs.js",
+    "./react": "./react.js",
+    "./tailwind": "./tailwind.js"
+  },
   "license": "MIT",
-  "files": [
-    "base.js",
-    "nextjs.js",
-    "react.js",
-    "tailwind.js"
-  ],
   "scripts": {
     "clean": "rm -rf .turbo node_modules",
     "lint": "eslint .",
