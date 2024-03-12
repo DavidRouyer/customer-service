@@ -6,6 +6,7 @@ import { RouterOutputs } from '@cs/api';
 import {
   TicketAssignmentChangedWithData,
   TicketChat,
+  TicketLabelsChangedWithData,
   TicketNote,
   TicketPriorityChanged,
   TicketStatus,
