@@ -20,8 +20,6 @@
   "license": "MIT",
   "dependencies": {
     "@cs/prettier-config": "*",
-    "@typescript-eslint/eslint-plugin": "^7.2.0",
-    "@typescript-eslint/parser": "^7.2.0",
     "@vitejs/plugin-react": "^4.2.1",
     "@vitest/coverage-v8": "^1.3.1",
     "@vitest/ui": "^1.3.1",
