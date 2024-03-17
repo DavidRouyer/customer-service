@@ -1,8 +1,9 @@
-import { FC, ReactNode } from 'react';
-import { CheckCircle2, CircleDot, EyeOff } from 'lucide-react';
+'use client';
+
+import { ReactNode } from 'react';
+import { Badge, CheckCircle2, CircleDot, EyeOff } from 'lucide-react';
 import { FormattedMessage } from 'react-intl';
 
-import { RouterOutputs } from '@cs/api';
 import {
   TicketAssignmentChangedWithData,
   TicketChat,
@@ -15,18 +16,29 @@ import {
 } from '@cs/kyaku/models';
 import { cn } from '@cs/ui';
 import { Avatar, AvatarFallback, AvatarImage } from '@cs/ui/avatar';
-import { Badge } from '@cs/ui/badge';
 
 import { NodeContent } from '~/app/_components/infos/node-content';
 import { TicketPriority } from '~/app/_components/tickets/ticket-priority';
+import { useTimeline } from '~/app/_components/tickets/use-timeline';
 import { RelativeTime } from '~/app/_components/ui/relative-time/relative-time';
 import { getInitials } from '~/app/lib/string';
 
-export const TimelineEntry: FC<{
-  customer?: RouterOutputs['ticket']['byId']['customer'];
-  entry: RouterOutputs['ticketTimeline']['byTicketId'][0];
-  isLast: boolean;
-}> = ({ customer, entry, isLast }) => {
+export const TimelineItem = ({
+  itemId,
+  nextEntryId,
+  ticketId,
+}: {
+  itemId: string;
+  nextEntryId: string | undefined;
+  ticketId: string;
+}) => {
+  const timeline = useTimeline(ticketId);
+  const entry = timeline.data?.find((entry) => entry.id === itemId);
+
+  if (!entry) {
+    return null;
+  }
+
   let activity: ReactNode = null;
   if (entry.type === TicketTimelineEntryType.Chat) {
     activity = (
@@ -120,7 +132,7 @@ export const TimelineEntry: FC<{
               </div>
               <div className="mt-1 flex items-center gap-x-2 text-xs text-gray-500">
                 <EyeOff className="size-3" />{' '}
-                <FormattedMessage id="ticket.not_visible" /> {customer?.name}
+                <FormattedMessage id="ticket.not_visible" /> Test
               </div>
             </div>
           </div>
@@ -293,16 +305,13 @@ export const TimelineEntry: FC<{
       {activity}
       <div className="grid grid-cols-[24px_auto] gap-6">
         <div
-          className={cn(
-            !isLast
-              ? 'm-auto h-full w-0 border-l border-muted-foreground bg-gray-200'
-              : undefined
-          )}
+          className={cn({
+            'm-auto h-full w-0 border-l border-muted-foreground bg-gray-200':
+              nextEntryId,
+          })}
         ></div>
         <div className="mb-6"></div>
       </div>
     </>
   );
 };
-
-TimelineEntry.displayName = 'ActivityPanel';
