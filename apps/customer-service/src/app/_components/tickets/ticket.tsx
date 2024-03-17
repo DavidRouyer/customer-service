@@ -4,7 +4,7 @@ import { FC } from 'react';
 
 import { MessageForm } from '~/app/_components/messages/message-form';
 import { TicketHeader } from '~/app/_components/tickets/ticket-header';
-import { Timeline } from '~/app/_components/timeline/timeline';
+import { TicketTimeline } from '~/app/_components/tickets/ticket-timeline';
 import { api } from '~/trpc/react';
 
 export const Ticket: FC<{
@@ -18,7 +18,7 @@ export const Ticket: FC<{
     <>
       <TicketHeader ticketId={ticketId} />
 
-      <Timeline ticketId={ticketId} />
+      <TicketTimeline ticketId={ticketId} />
       <MessageForm ticketId={ticketId} />
     </>
   );
