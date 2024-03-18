@@ -708,7 +708,7 @@ __metadata:
   resolution: "@cs/prettier-config@workspace:tooling/prettier"
   dependencies:
     "@cs/tsconfig": "npm:*"
-    "@ianvs/prettier-plugin-sort-imports": "npm:^4.2.0"
+    "@ianvs/prettier-plugin-sort-imports": "npm:^4.2.1"
     prettier: "npm:^3.2.5"
     prettier-plugin-tailwindcss: "npm:^0.5.12"
     typescript: "npm:^5.4.2"
@@ -1305,9 +1305,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ianvs/prettier-plugin-sort-imports@npm:^4.2.0":
-  version: 4.2.0
-  resolution: "@ianvs/prettier-plugin-sort-imports@npm:4.2.0"
+"@ianvs/prettier-plugin-sort-imports@npm:^4.2.1":
+  version: 4.2.1
+  resolution: "@ianvs/prettier-plugin-sort-imports@npm:4.2.1"
   dependencies:
     "@babel/core": "npm:^7.24.0"
     "@babel/generator": "npm:^7.23.6"
@@ -1321,7 +1321,7 @@ __metadata:
   peerDependenciesMeta:
     "@vue/compiler-sfc":
       optional: true
-  checksum: 71d473f861400c3ea5d7b5fd738df672c7099b8a819fac466dc32950f3e73eedfee80b194b7abcbc7d7268175df4f8b1ba4ea67867567a13bd97e15141754da5
+  checksum: 76e5c79a72ca35e03f52059d039a037b2a29224582aca6590ba08a17d85e5143673bee301d3a9cc2e0257570801e6d0ec30ffd01e1f5f0d973a986c6c359f9a8
   languageName: node
   linkType: hard
 
