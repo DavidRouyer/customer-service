@@ -635,7 +635,7 @@ __metadata:
     next-themes: "npm:^0.3.0"
     react: "npm:^18.2.0"
     react-dom: "npm:^18.2.0"
-    react-hook-form: "npm:^7.51.0"
+    react-hook-form: "npm:^7.51.1"
     react-intersection-observer: "npm:^9.8.1"
     react-intl: "npm:^6.6.2"
     superjson: "npm:^2.2.1"
@@ -8548,12 +8548,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-hook-form@npm:^7.51.0":
-  version: 7.51.0
-  resolution: "react-hook-form@npm:7.51.0"
+"react-hook-form@npm:^7.51.1":
+  version: 7.51.1
+  resolution: "react-hook-form@npm:7.51.1"
   peerDependencies:
     react: ^16.8.0 || ^17 || ^18
-  checksum: 929464db00d1bc60bb7de41ab7c05cd2b28afba1d4d4ed10b02288919fb95fa81667e467bc571cbb403bec2bb9116b465211ce9962c3c0120a49dcbf47bfa699
+  checksum: f0acbf27fc548d3cd0e4db40b84d9dfe6c24209e4421fffbd422da15e32cc98f877ab0af9e06cb1deaf4205ec655b56020ff9f8b2bae6ada5e619890f174c374
   languageName: node
   linkType: hard
 
