@@ -610,7 +610,7 @@ __metadata:
     "@swc-jotai/react-refresh": "npm:^0.1.0"
     "@tanstack/react-query": "npm:^5.28.4"
     "@tanstack/react-query-devtools": "npm:^5.28.4"
-    "@tanstack/react-table": "npm:^8.13.2"
+    "@tanstack/react-table": "npm:^8.14.0"
     "@testing-library/jest-dom": "npm:^6.4.2"
     "@testing-library/react": "npm:^14.2.2"
     "@trpc/client": "npm:next"
@@ -2851,22 +2851,22 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tanstack/react-table@npm:^8.13.2":
-  version: 8.13.2
-  resolution: "@tanstack/react-table@npm:8.13.2"
+"@tanstack/react-table@npm:^8.14.0":
+  version: 8.14.0
+  resolution: "@tanstack/react-table@npm:8.14.0"
   dependencies:
-    "@tanstack/table-core": "npm:8.13.2"
+    "@tanstack/table-core": "npm:8.14.0"
   peerDependencies:
     react: ">=16"
     react-dom: ">=16"
-  checksum: 780f206c29bcd4386638cb935d27df2db002026c8a3c06eacbf4fcedaeefd20b212ccc4eea2f00feee66840c8d401b478b21d83ab69902341402cb2d3aa5cb60
+  checksum: fd5ebc50b5570c3ec7b392738975ebe1e06c51b070b584c89b415e7cd8dfc76a2a44cae336e2ac7703ce3229bb3c97c3374e14bd010cd92e4a25aafab2e87327
   languageName: node
   linkType: hard
 
-"@tanstack/table-core@npm:8.13.2":
-  version: 8.13.2
-  resolution: "@tanstack/table-core@npm:8.13.2"
-  checksum: e81934be7792ee24d66e22471849659abfb926f0e9fda22eea3a94060f4c6d9197b1d5a901700adafe84263950acb97816b7b4736e14353ef58f49a10f8400aa
+"@tanstack/table-core@npm:8.14.0":
+  version: 8.14.0
+  resolution: "@tanstack/table-core@npm:8.14.0"
+  checksum: 1ace39fd500c32f110512c4ba519d7c0e3c57d3b4f353e114d1ec12d069265678fb37b9063cfcfe1cb1fb35f57959a6e2536914093b0b33d3aef9861be32b117
   languageName: node
   linkType: hard
 
