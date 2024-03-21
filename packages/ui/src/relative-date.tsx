@@ -3,7 +3,7 @@
 import { FC, useEffect, useMemo, useState } from 'react';
 import { useIntl } from 'react-intl';
 
-import { useMounted } from '~/app/_hooks/use-mounted';
+import { useMounted } from './use-mounted';
 
 type RelativeDateProps = {
   dateTime: Date;

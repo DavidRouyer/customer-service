@@ -16,31 +16,33 @@ import {
 } from '@cs/kyaku/models';
 import { cn } from '@cs/ui';
 import { Avatar, AvatarFallback, AvatarImage } from '@cs/ui/avatar';
+import { RelativeTime } from '@cs/ui/relative-time';
 
 import { NodeContent } from '~/app/_components/infos/node-content';
 import { TicketPriority } from '~/app/_components/tickets/ticket-priority';
 import { useTimeline } from '~/app/_components/tickets/use-timeline';
-import { RelativeTime } from '~/app/_components/ui/relative-time/relative-time';
 import { getInitials } from '~/app/lib/string';
 
 export const TimelineItem = ({
   itemId,
-  nextEntryId,
+  nextItemId,
+  previousItemId,
   ticketId,
 }: {
   itemId: string;
-  nextEntryId: string | undefined;
+  nextItemId: string | undefined;
+  previousItemId: string | undefined;
   ticketId: string;
 }) => {
   const timeline = useTimeline(ticketId);
-  const entry = timeline.data?.find((entry) => entry.id === itemId);
+  const item = timeline.data?.find((entry) => entry.id === itemId);
 
-  if (!entry) {
+  if (!item) {
     return null;
   }
 
   let activity: ReactNode = null;
-  if (entry.type === TicketTimelineEntryType.Chat) {
+  if (item.type === TicketTimelineEntryType.Chat) {
     activity = (
       <div className="my-2 flex">
         <div className="flex-auto rounded-md bg-accent p-4">
@@ -48,29 +50,27 @@ export const TimelineItem = ({
             <Avatar className="relative size-6 flex-none text-xs">
               <AvatarImage
                 src={
-                  entry.userCreatedBy?.image ??
-                  entry.customerCreatedBy?.avatarUrl ??
+                  item.userCreatedBy?.image ??
+                  item.customerCreatedBy?.avatarUrl ??
                   undefined
                 }
               />
               <AvatarFallback>
                 {getInitials(
-                  entry.userCreatedBy?.name ??
-                    entry.customerCreatedBy?.name ??
-                    ''
+                  item.userCreatedBy?.name ?? item.customerCreatedBy?.name ?? ''
                 )}
               </AvatarFallback>
             </Avatar>
             <div className="flex items-center">
               <span className="text-sm text-foreground">
-                {entry.userCreatedBy?.name ?? entry.customerCreatedBy?.name}
+                {item.userCreatedBy?.name ?? item.customerCreatedBy?.name}
               </span>
               <span className="mx-1.5 size-[3px] rounded-full bg-gray-500"></span>
               <time
-                dateTime={entry.createdAt.toISOString()}
+                dateTime={item.createdAt.toISOString()}
                 className="text-xs text-muted-foreground"
               >
-                <RelativeTime dateTime={new Date(entry.createdAt)} />
+                <RelativeTime dateTime={new Date(item.createdAt)} />
               </time>
             </div>
           </div>
@@ -79,7 +79,7 @@ export const TimelineItem = ({
             <div></div>
             <div className="mt-3 border-t border-muted-foreground pt-3">
               <div className="whitespace-pre-line text-sm leading-6 ">
-                {(entry.entry as TicketChat)?.text}
+                {(item.entry as TicketChat)?.text}
               </div>
             </div>
           </div>
@@ -88,7 +88,7 @@ export const TimelineItem = ({
     );
   }
 
-  if (entry.type === TicketTimelineEntryType.Note) {
+  if (item.type === TicketTimelineEntryType.Note) {
     activity = (
       <div className="my-2 flex">
         <div className="flex-auto rounded-md bg-warning/30 p-4">
@@ -96,29 +96,27 @@ export const TimelineItem = ({
             <Avatar className="relative size-6 flex-none text-xs">
               <AvatarImage
                 src={
-                  entry.userCreatedBy?.image ??
-                  entry.customerCreatedBy?.avatarUrl ??
+                  item.userCreatedBy?.image ??
+                  item.customerCreatedBy?.avatarUrl ??
                   undefined
                 }
               />
               <AvatarFallback>
                 {getInitials(
-                  entry.userCreatedBy?.name ??
-                    entry.customerCreatedBy?.name ??
-                    ''
+                  item.userCreatedBy?.name ?? item.customerCreatedBy?.name ?? ''
                 )}
               </AvatarFallback>
             </Avatar>
             <div className="flex items-center">
               <span className="text-sm text-foreground">
-                {entry.userCreatedBy?.name ?? entry.customerCreatedBy?.name}
+                {item.userCreatedBy?.name ?? item.customerCreatedBy?.name}
               </span>
               <span className="mx-1.5 size-[3px] rounded-full bg-gray-500"></span>
               <time
-                dateTime={entry.createdAt.toISOString()}
+                dateTime={item.createdAt.toISOString()}
                 className="text-xs text-muted-foreground"
               >
-                <RelativeTime dateTime={new Date(entry.createdAt)} />
+                <RelativeTime dateTime={new Date(item.createdAt)} />
               </time>
             </div>
           </div>
@@ -126,9 +124,7 @@ export const TimelineItem = ({
             <div></div>
             <div className="mt-3 border-t border-muted-foreground pt-3">
               <div className="whitespace-pre-line text-sm leading-6">
-                <NodeContent
-                  content={(entry.entry as TicketNote)?.rawContent}
-                />
+                <NodeContent content={(item.entry as TicketNote)?.rawContent} />
               </div>
               <div className="mt-1 flex items-center gap-x-2 text-xs text-gray-500">
                 <EyeOff className="size-3" />{' '}
@@ -145,12 +141,12 @@ export const TimelineItem = ({
     activity = (
       <div className="flex gap-x-4">
         <div className="flex size-6 flex-none items-center justify-center bg-background">
-          {entry.type === TicketTimelineEntryType.StatusChanged &&
-          (entry.entry as TicketStatusChanged)?.newStatus ===
+          {item.type === TicketTimelineEntryType.StatusChanged &&
+          (item.entry as TicketStatusChanged)?.newStatus ===
             TicketStatus.Done ? (
             <CheckCircle2 className="size-6 text-valid" aria-hidden="true" />
-          ) : entry.type === TicketTimelineEntryType.StatusChanged &&
-            (entry.entry as TicketStatusChanged)?.newStatus ===
+          ) : item.type === TicketTimelineEntryType.StatusChanged &&
+            (item.entry as TicketStatusChanged)?.newStatus ===
               TicketStatus.Open ? (
             <CircleDot className="size-6 text-warning" aria-hidden="true" />
           ) : (
@@ -160,66 +156,66 @@ export const TimelineItem = ({
 
         <div className="py-0.5 text-xs leading-5 text-muted-foreground">
           <span className="font-medium text-foreground">
-            {entry.userCreatedBy?.name}
+            {item.userCreatedBy?.name}
           </span>{' '}
           {
             {
               AssignmentChanged: (
                 <>
-                  {(entry.entry as TicketAssignmentChangedWithData)
+                  {(item.entry as TicketAssignmentChangedWithData)
                     ?.oldAssignedToId === null &&
-                  (entry.entry as TicketAssignmentChangedWithData)
+                  (item.entry as TicketAssignmentChangedWithData)
                     ?.newAssignedToId !== null ? (
-                    (entry.entry as TicketAssignmentChangedWithData)
-                      ?.newAssignedToId === entry.userCreatedById ? (
+                    (item.entry as TicketAssignmentChangedWithData)
+                      ?.newAssignedToId === item.userCreatedById ? (
                       <FormattedMessage id="ticket.activity.type.ticket_assignment.self_assigned" />
                     ) : (
                       <>
                         <FormattedMessage id="ticket.activity.type.ticket_assignment.assigned" />{' '}
                         <span className="font-medium text-foreground">
                           {
-                            (entry.entry as TicketAssignmentChangedWithData)
+                            (item.entry as TicketAssignmentChangedWithData)
                               ?.newAssignedTo?.name
                           }
                         </span>
                       </>
                     )
                   ) : null}
-                  {(entry.entry as TicketAssignmentChangedWithData)
+                  {(item.entry as TicketAssignmentChangedWithData)
                     ?.oldAssignedToId !== null &&
-                  (entry.entry as TicketAssignmentChangedWithData)
+                  (item.entry as TicketAssignmentChangedWithData)
                     ?.newAssignedToId !== null ? (
                     <>
                       <FormattedMessage id="ticket.activity.type.ticket_assignment.assigned" />{' '}
                       <span className="font-medium text-foreground">
                         {
-                          (entry.entry as TicketAssignmentChangedWithData)
+                          (item.entry as TicketAssignmentChangedWithData)
                             ?.newAssignedTo?.name
                         }
                       </span>{' '}
                       <FormattedMessage id="ticket.activity.type.ticket_assignment.and_unassigned" />{' '}
                       <span className="font-medium text-foreground">
                         {
-                          (entry.entry as TicketAssignmentChangedWithData)
+                          (item.entry as TicketAssignmentChangedWithData)
                             ?.oldAssignedTo?.name
                         }
                       </span>
                     </>
                   ) : null}
-                  {(entry.entry as TicketAssignmentChangedWithData)
+                  {(item.entry as TicketAssignmentChangedWithData)
                     ?.oldAssignedToId !== null &&
-                  (entry.entry as TicketAssignmentChangedWithData)
+                  (item.entry as TicketAssignmentChangedWithData)
                     ?.newAssignedToId === null ? (
                     <>
-                      {(entry.entry as TicketAssignmentChangedWithData)
-                        ?.oldAssignedToId === entry.userCreatedById ? (
+                      {(item.entry as TicketAssignmentChangedWithData)
+                        ?.oldAssignedToId === item.userCreatedById ? (
                         <FormattedMessage id="ticket.activity.type.ticket_assignment.self_unassigned" />
                       ) : (
                         <>
                           <FormattedMessage id="ticket.activity.type.ticket_assignment.unassigned" />{' '}
                           <span className="font-medium text-foreground">
                             {
-                              (entry.entry as TicketAssignmentChangedWithData)
+                              (item.entry as TicketAssignmentChangedWithData)
                                 ?.oldAssignedTo?.name
                             }
                           </span>
@@ -231,23 +227,23 @@ export const TimelineItem = ({
               ),
               LabelsChanged: (
                 <>
-                  {(entry.entry as TicketLabelsChangedWithData)?.oldLabelIds
+                  {(item.entry as TicketLabelsChangedWithData)?.oldLabelIds
                     ?.length === 0 ? (
                     <>
                       <FormattedMessage id="ticket.activity.type.ticket_label.added" />{' '}
                       {(
-                        entry.entry as TicketLabelsChangedWithData
+                        item.entry as TicketLabelsChangedWithData
                       )?.newLabels?.map((label) => (
                         <Badge key={label.id}>{label.labelType.name}</Badge>
                       ))}
                     </>
                   ) : null}
-                  {(entry.entry as TicketLabelsChangedWithData)?.newLabelIds
+                  {(item.entry as TicketLabelsChangedWithData)?.newLabelIds
                     ?.length === 0 ? (
                     <>
                       <FormattedMessage id="ticket.activity.type.ticket_label.removed" />{' '}
                       {(
-                        entry.entry as TicketLabelsChangedWithData
+                        item.entry as TicketLabelsChangedWithData
                       )?.oldLabels?.map((label) => (
                         <Badge key={label.id}>{label.labelType.name}</Badge>
                       ))}
@@ -261,7 +257,7 @@ export const TimelineItem = ({
                   <span className="space-x-1">
                     <TicketPriority
                       priority={
-                        (entry.entry as TicketPriorityChanged)?.oldPriority
+                        (item.entry as TicketPriorityChanged)?.oldPriority
                       }
                     />
                   </span>{' '}
@@ -269,7 +265,7 @@ export const TimelineItem = ({
                   <span className="space-x-1">
                     <TicketPriority
                       priority={
-                        (entry.entry as TicketPriorityChanged)?.newPriority
+                        (item.entry as TicketPriorityChanged)?.newPriority
                       }
                     />
                   </span>
@@ -277,9 +273,9 @@ export const TimelineItem = ({
               ),
               StatusChanged: (
                 <>
-                  {(entry.entry as TicketStatusChanged)?.oldStatus ===
+                  {(item.entry as TicketStatusChanged)?.oldStatus ===
                     TicketStatus.Done &&
-                  (entry.entry as TicketStatusChanged)?.newStatus ===
+                  (item.entry as TicketStatusChanged)?.newStatus ===
                     TicketStatus.Open ? (
                     <FormattedMessage id="ticket.activity.type.ticket_marked_as_open" />
                   ) : (
@@ -289,11 +285,11 @@ export const TimelineItem = ({
               ),
               Chat: null,
               Note: null,
-            }[entry.type]
+            }[item.type]
           }
           <span className="px-1.5">•</span>
-          <time dateTime={entry.createdAt.toISOString()}>
-            <RelativeTime dateTime={new Date(entry.createdAt)} />
+          <time dateTime={item.createdAt.toISOString()}>
+            <RelativeTime dateTime={new Date(item.createdAt)} />
           </time>
         </div>
       </div>
@@ -307,7 +303,7 @@ export const TimelineItem = ({
         <div
           className={cn({
             'm-auto h-full w-0 border-l border-muted-foreground bg-gray-200':
-              nextEntryId,
+              nextItemId,
           })}
         ></div>
         <div className="mb-6"></div>

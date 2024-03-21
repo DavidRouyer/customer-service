@@ -9,7 +9,7 @@ import { RouterOutputs } from '@cs/api';
 import { TicketChat, TicketNote } from '@cs/kyaku/models';
 import { Avatar, AvatarFallback, AvatarImage } from '@cs/ui/avatar';
 
-import { RelativeTime } from '~/app/_components/ui/relative-time/relative-time';
+import { RelativeTime } from '~/app/_components/ui/relative-time';
 import { getInitials } from '~/app/lib/string';
 
 export type TicketListItemProps = {
