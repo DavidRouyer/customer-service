@@ -2,18 +2,21 @@
 
 import { ReactNode, useRef, useState } from 'react';
 
-import { TimelineItem } from '~/app/_components/timeline/timeline-item';
-import {
-  createScrollerLock,
-  ScrollerLockContext,
-} from '~/app/_components/timeline/use-scroll-lock';
+import { createScrollerLock, ScrollerLockContext } from './use-scroll-lock';
 
 export type TimelineProps = {
   items: readonly string[];
+  renderItem: (props: {
+    itemId: string;
+    nextItemId: string | undefined;
+    previousItemId: string | undefined;
+    ticketId: string;
+  }) => ReactNode;
   ticketId: string;
 };
 
 const AT_BOTTOM_THRESHOLD = 15;
+const AT_BOTTOM_DETECTOR_STYLE = { height: AT_BOTTOM_THRESHOLD };
 
 export const getScrollBottom = (
   el: Readonly<Pick<HTMLElement, 'clientHeight' | 'scrollHeight' | 'scrollTop'>>
@@ -27,7 +30,8 @@ export function clearTimeoutIfNecessary(
   }
 }
 
-export const Timeline = ({ items, ticketId }: TimelineProps) => {
+export const Timeline = ({ items, renderItem, ticketId }: TimelineProps) => {
+  const atBottomDetectorRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [state, setState] = useState({
     scrollLocked: false,
@@ -45,29 +49,30 @@ export const Timeline = ({ items, ticketId }: TimelineProps) => {
 
   const itemNodes: Array<ReactNode> = [];
   for (let itemIndex = 0; itemIndex < items.length; itemIndex += 1) {
-    const previousEntryIndex = itemIndex - 1;
-    const nextEntryIndex = itemIndex + 1;
+    const previousItemIndex = itemIndex - 1;
+    const nextItemIndex = itemIndex + 1;
 
-    const previousEntryId: undefined | string = items[previousEntryIndex];
-    const nextEntryId: undefined | string = items[nextEntryIndex];
-    const entryId = items[itemIndex];
+    const previousItemId: undefined | string = items[previousItemIndex];
+    const nextItemId: undefined | string = items[nextItemIndex];
+    const itemId = items[itemIndex];
 
-    if (!entryId) {
+    if (!itemId) {
       continue;
     }
 
     itemNodes.push(
       <div
-        key={entryId}
+        key={itemId}
         data-item-index={itemIndex}
-        data-message-id={entryId}
+        data-message-id={itemId}
         role="listitem"
       >
-        <TimelineItem
-          itemId={entryId}
-          nextEntryId={nextEntryId}
-          ticketId={ticketId}
-        />
+        {renderItem({
+          itemId,
+          previousItemId,
+          nextItemId,
+          ticketId,
+        })}
       </div>
     );
   }
@@ -132,6 +137,12 @@ export const Timeline = ({ items, ticketId }: TimelineProps) => {
             className="relative flex flex-1 flex-col justify-end"
           >
             {itemNodes}
+
+            <div
+              className="absolute bottom-0"
+              ref={atBottomDetectorRef}
+              style={AT_BOTTOM_DETECTOR_STYLE}
+            />
           </div>
         </div>
       </div>
