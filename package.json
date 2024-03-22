@@ -24,7 +24,7 @@
     "@vitest/coverage-v8": "^1.4.0",
     "@vitest/ui": "^1.4.0",
     "prettier": "^3.2.5",
-    "turbo": "^1.12.5",
+    "turbo": "^1.13.0",
     "typescript": "^5.4.3",
     "vitest": "^1.4.0"
   },
