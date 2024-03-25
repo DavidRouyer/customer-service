@@ -610,7 +610,7 @@ __metadata:
     "@swc-jotai/react-refresh": "npm:^0.1.0"
     "@tanstack/react-query": "npm:^5.28.6"
     "@tanstack/react-query-devtools": "npm:^5.28.6"
-    "@tanstack/react-table": "npm:^8.14.0"
+    "@tanstack/react-table": "npm:^8.15.0"
     "@testing-library/jest-dom": "npm:^6.4.2"
     "@testing-library/react": "npm:^14.2.2"
     "@trpc/client": "npm:next"
@@ -2851,15 +2851,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tanstack/react-table@npm:^8.14.0":
-  version: 8.14.0
-  resolution: "@tanstack/react-table@npm:8.14.0"
+"@tanstack/react-table@npm:^8.15.0":
+  version: 8.15.0
+  resolution: "@tanstack/react-table@npm:8.15.0"
   dependencies:
     "@tanstack/table-core": "npm:8.14.0"
   peerDependencies:
-    react: ">=16"
-    react-dom: ">=16"
-  checksum: fd5ebc50b5570c3ec7b392738975ebe1e06c51b070b584c89b415e7cd8dfc76a2a44cae336e2ac7703ce3229bb3c97c3374e14bd010cd92e4a25aafab2e87327
+    react: ">=16.8"
+    react-dom: ">=16.8"
+  checksum: fa82e413d66127090b33ff4a8e13cbad275bc3c3295c37031a7cccd5fa881ee36fa627c2b7a65300cb0c0e889fca6055939802776f2df8a997533d71686fde98
   languageName: node
   linkType: hard
 
