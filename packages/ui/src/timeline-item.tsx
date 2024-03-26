@@ -14,29 +14,47 @@ import {
   TicketStatusChanged,
   TicketTimelineEntryType,
 } from '@cs/kyaku/models';
+import { getInitials } from '@cs/kyaku/utils';
 import { cn } from '@cs/ui';
 import { Avatar, AvatarFallback, AvatarImage } from '@cs/ui/avatar';
+import { NodeContent } from '@cs/ui/node-content';
 import { RelativeTime } from '@cs/ui/relative-time';
+import { TicketPriorityBadge } from '@cs/ui/ticket-priority-badge';
 
-import { NodeContent } from '~/app/_components/infos/node-content';
-import { TicketPriority } from '~/app/_components/tickets/ticket-priority';
-import { useTimeline } from '~/app/_components/tickets/use-timeline';
-import { getInitials } from '~/app/lib/string';
+export type TimelineItemType = {
+  id: string;
+  type: TicketTimelineEntryType;
+  createdAt: Date;
+  customerId: string;
+  entry:
+    | TicketAssignmentChangedWithData
+    | TicketLabelsChangedWithData
+    | TicketChat
+    | TicketNote
+    | TicketPriorityChanged
+    | TicketStatusChanged
+    | null;
+  customerCreatedBy: {
+    id: string;
+    name: string | null;
+    avatarUrl: string | null;
+  } | null;
+  userCreatedBy: {
+    id: string;
+    name: string | null;
+    image: string | null;
+  } | null;
+};
 
 export const TimelineItem = ({
-  itemId,
+  item,
   nextItemId,
   previousItemId,
-  ticketId,
 }: {
-  itemId: string;
+  item: TimelineItemType | undefined;
   nextItemId: string | undefined;
   previousItemId: string | undefined;
-  ticketId: string;
 }) => {
-  const timeline = useTimeline(ticketId);
-  const item = timeline.data?.find((entry) => entry.id === itemId);
-
   if (!item) {
     return null;
   }
@@ -167,7 +185,7 @@ export const TimelineItem = ({
                   (item.entry as TicketAssignmentChangedWithData)
                     ?.newAssignedToId !== null ? (
                     (item.entry as TicketAssignmentChangedWithData)
-                      ?.newAssignedToId === item.userCreatedById ? (
+                      ?.newAssignedToId === item.userCreatedBy?.id ? (
                       <FormattedMessage id="ticket.activity.type.ticket_assignment.self_assigned" />
                     ) : (
                       <>
@@ -208,7 +226,7 @@ export const TimelineItem = ({
                     ?.newAssignedToId === null ? (
                     <>
                       {(item.entry as TicketAssignmentChangedWithData)
-                        ?.oldAssignedToId === item.userCreatedById ? (
+                        ?.oldAssignedToId === item.userCreatedBy?.id ? (
                         <FormattedMessage id="ticket.activity.type.ticket_assignment.self_unassigned" />
                       ) : (
                         <>
@@ -255,7 +273,7 @@ export const TimelineItem = ({
                 <>
                   <FormattedMessage id="ticket.activity.type.ticket_priority.changed" />{' '}
                   <span className="space-x-1">
-                    <TicketPriority
+                    <TicketPriorityBadge
                       priority={
                         (item.entry as TicketPriorityChanged)?.oldPriority
                       }
@@ -263,7 +281,7 @@ export const TimelineItem = ({
                   </span>{' '}
                   <FormattedMessage id="ticket.activity.type.ticket_priority.to" />{' '}
                   <span className="space-x-1">
-                    <TicketPriority
+                    <TicketPriorityBadge
                       priority={
                         (item.entry as TicketPriorityChanged)?.newPriority
                       }

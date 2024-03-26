@@ -3,6 +3,7 @@
 import { useRef } from 'react';
 import { FormattedMessage } from 'react-intl';
 
+import { getInitials } from '@cs/kyaku/utils';
 import { Avatar, AvatarFallback, AvatarImage } from '@cs/ui/avatar';
 import { Button } from '@cs/ui/button';
 import {
@@ -16,7 +17,6 @@ import {
 } from '@cs/ui/dropdown-menu';
 
 import { handleSignOut } from '~/app/_components/sign-out';
-import { getInitials } from '~/app/lib/string';
 import { api } from '~/trpc/react';
 
 type UserNavProps = {

@@ -12,8 +12,8 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@cs/ui/dropdown-menu';
+import { TicketPriorityBadge } from '@cs/ui/ticket-priority-badge';
 
-import { TicketPriority } from '~/app/_components/tickets/ticket-priority';
 import { api } from '~/trpc/react';
 
 type TicketChangePriorityProps = {
@@ -68,7 +68,7 @@ export const TicketPriorityDropdowm: FC<TicketChangePriorityProps> = ({
           className="flex h-auto items-center justify-between gap-x-1 px-2 text-sm leading-6"
         >
           <div className="flex items-center gap-x-2">
-            <TicketPriority priority={priority} />
+            <TicketPriorityBadge priority={priority} />
           </div>
         </Button>
       </DropdownMenuTrigger>
