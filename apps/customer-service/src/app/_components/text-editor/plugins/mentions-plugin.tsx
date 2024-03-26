@@ -20,9 +20,9 @@ import * as ReactDOM from 'react-dom';
 
 import { RouterOutputs } from '@cs/api';
 import { $createMentionNode } from '@cs/kyaku/editor';
+import { getInitials } from '@cs/kyaku/utils';
 import { Avatar, AvatarFallback, AvatarImage } from '@cs/ui/avatar';
 
-import { getInitials } from '~/app/lib/string';
 import { api } from '~/trpc/react';
 
 const PUNCTUATION =

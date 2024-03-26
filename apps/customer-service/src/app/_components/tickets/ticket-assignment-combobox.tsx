@@ -3,6 +3,7 @@ import { Check, Plus } from 'lucide-react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
 import { RouterOutputs } from '@cs/api';
+import { getInitials } from '@cs/kyaku/utils';
 import { cn } from '@cs/ui';
 import { Avatar, AvatarFallback, AvatarImage } from '@cs/ui/avatar';
 import { Button } from '@cs/ui/button';
@@ -15,7 +16,6 @@ import {
 } from '@cs/ui/command';
 import { Popover, PopoverContent, PopoverTrigger } from '@cs/ui/popover';
 
-import { getInitials } from '~/app/lib/string';
 import { api } from '~/trpc/react';
 
 type TicketAssignmentComboboxProps = {
