@@ -11,11 +11,20 @@ export const SmartTimelineItem: FC<{ itemId: string; ticketId: string }> = ({
   const timeline = useTimeline(ticketId);
   const item = timeline.data?.find((entry) => entry.id === itemId);
 
+  const previousItemId =
+    timeline.data?.[
+      timeline.data?.findIndex((entry) => entry.id === itemId) - 1
+    ];
+  const nextItemId =
+    timeline.data?.[
+      timeline.data?.findIndex((entry) => entry.id === itemId) + 1
+    ];
+
   return (
     <TimelineItem
       item={item}
-      nextItemId={undefined}
-      previousItemId={undefined}
+      nextItemId={nextItemId?.id}
+      previousItemId={previousItemId?.id}
     />
   );
 };
