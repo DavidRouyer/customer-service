@@ -36,11 +36,13 @@ export type TimelineItemType = {
     | null;
   customerCreatedBy: {
     id: string;
+    email: string | null;
     name: string | null;
     avatarUrl: string | null;
   } | null;
   userCreatedBy: {
     id: string;
+    email: string | null;
     name: string | null;
     image: string | null;
   } | null;
