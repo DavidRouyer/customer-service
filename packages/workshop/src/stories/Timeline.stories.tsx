@@ -95,6 +95,15 @@ export default meta;
 
 export const Test = () => {
   return <IntlProvider locale="en">
-    <Timeline items={Object.keys(items)} renderItem={({itemId}) => <TimelineItem item={items[itemId]} nextItemId={undefined} previousItemId={undefined} />} ticketId="ticket-id" />
+    <Timeline
+      items={Object.keys(items)}
+      renderItem={({itemId}) =>
+        <TimelineItem
+          item={items[itemId]}
+          nextItemId={items[(Number(itemId) + 1).toString()] !== undefined ? (Number(itemId) + 1).toString() : undefined}
+          previousItemId={items[(Number(itemId) - 1).toString()] !== undefined ? (Number(itemId) - 1).toString() : undefined}
+        />}
+      ticketId="ticket-id"
+    />
   </IntlProvider>
 }
