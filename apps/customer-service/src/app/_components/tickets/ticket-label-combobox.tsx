@@ -149,10 +149,10 @@ export const TicketLabelCombobox: FC<TicketLabelComboboxProps> = ({
               id: 'ticket.labeling.search.placeholder',
             })}
           />
-          <CommandEmpty>
-            <FormattedMessage id="ticket.labeling.no_results" />
-          </CommandEmpty>
           <CommandList>
+            <CommandEmpty>
+              <FormattedMessage id="ticket.labeling.no_results" />
+            </CommandEmpty>
             <CommandGroup>
               {(labelTypesData ?? []).map((labelType) => (
                 <CommandItem

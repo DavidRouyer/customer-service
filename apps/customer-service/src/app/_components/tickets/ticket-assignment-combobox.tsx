@@ -177,10 +177,10 @@ export const TicketAssignmentCombobox: FC<TicketAssignmentComboboxProps> = ({
               id: 'ticket.assignment.search.placeholder',
             })}
           />
-          <CommandEmpty>
-            <FormattedMessage id="ticket.assignment.no_results" />
-          </CommandEmpty>
           <CommandList>
+            <CommandEmpty>
+              <FormattedMessage id="ticket.assignment.no_results" />
+            </CommandEmpty>
             <CommandGroup>
               {(usersData ?? []).map((user) => (
                 <CommandItem
