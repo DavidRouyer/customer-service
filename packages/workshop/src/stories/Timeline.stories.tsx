@@ -1,7 +1,7 @@
 import { Timeline } from "@cs/ui/timeline";
 import { TimelineItem, TimelineItemType } from "@cs/ui/timeline-item";
 import type { Meta } from '@storybook/react';
-import { TicketTimelineEntryType } from '@cs/kyaku/models';
+import { TicketPriority, TicketTimelineEntryType } from '@cs/kyaku/models';
 import { IntlProvider } from "react-intl";
 
 const meta = {
@@ -15,61 +15,74 @@ const meta = {
   },
 } satisfies Meta<typeof Timeline>;
 
+const customer = {
+  id: '1',
+  email: 'leslie.alexandre@example.com',
+  name: 'Leslie Alexandre',
+  avatarUrl: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
+}
+
+const user = {
+  id: '2',
+  email: 'bot@example.com',
+  name: 'Bot',
+  image: null
+}
+
+const bugLabelType = {
+  id: '1',
+  name: 'Bug',
+  createdAt: new Date("2023-05-06T11:23:45.389Z"),
+  createdById: '1',
+  updatedAt: null,
+  updatedById: null,
+  icon: 'bug',
+  archivedAt: null
+}
+
 const items: Record<string, TimelineItemType> = 
  {
   '1': {
     id: '1',
     type: TicketTimelineEntryType.Chat,
     createdAt: new Date("2023-05-06T11:23:45.389Z"),
-    customerId: '1',
+    customer: customer,
     entry: {
       text: 'can ya help me change a product of purchase?'
     },
-    customerCreatedBy: {
-      id: '1',
-      email: 'leslie.alexandre@example.com',
-      name: 'Leslie Alexandre',
-      avatarUrl: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
-    },
+    customerCreatedBy: customer,
     userCreatedBy: null,
   },
   '2': {
     id: '2',
     type: TicketTimelineEntryType.Chat,
     createdAt: new Date("2023-05-07T22:40:00.000Z"),
-    customerId: '1',
+    customer: customer,
     entry: {
       text: 'Can you tell me which product you would like to change?'
     },
     customerCreatedBy: null,
-    userCreatedBy: {
-      id: '2',
-      email: 'bot@example.com',
-      name: 'Bot',
-      image: null
-    },
+    userCreatedBy: user,
   },
   '3': {
     id: '3',
     type: TicketTimelineEntryType.Chat,
     createdAt: new Date("2023-05-08T22:40:00.000Z"),
-    customerId: '1',
+    customer: {
+      id: '1',
+      name: 'Leslie Alexandre'
+    },
     entry: {
       text: 'Can you tell me which product you would like to change?'
     },
-    customerCreatedBy: {
-      id: '1',
-      email: 'leslie.alexandre@example.com',
-      name: 'Leslie Alexandre',
-      avatarUrl: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
-    },
+    customerCreatedBy: customer,
     userCreatedBy: null,
   },
   '4': {
     id: '4',
     type: TicketTimelineEntryType.AssignmentChanged,
     createdAt: new Date("2023-05-20T20:54:41.389Z"),
-    customerId: '1',
+    customer: customer,
     entry: {
       oldAssignedToId: null,
       newAssignedToId: "3cd0ab05-252f-4294-85f4-190e071db486",
@@ -81,19 +94,58 @@ const items: Record<string, TimelineItemType> =
         image: null
       }
     },
-    customerCreatedBy: {
-      id: "40cebacc-c7ae-4b5b-8072-3122d572c6d4",
-      email: "bot@example.com",
-      name: "Bot",
-      avatarUrl: null
+    customerCreatedBy: null,
+    userCreatedBy: user,
+  },
+  '5': {
+    id: '5',
+    type: TicketTimelineEntryType.Note,
+    createdAt: new Date("2023-05-21T20:54:41.389Z"),
+    customer: customer,
+    entry: {
+      text: '',
+      rawContent: '{\"root\":{\"children\":[{\"children\":[{\"detail\":0,\"format\":0,\"mode\":\"normal\",\"style\":\"\",\"text\":\"test\",\"type\":\"text\",\"version\":1}],\"direction\":\"ltr\",\"format\":\"\",\"indent\":0,\"type\":\"paragraph\",\"version\":1}],\"direction\":\"ltr\",\"format\":\"\",\"indent\":0,\"type\":\"root\",\"version\":1}}'
     },
-    userCreatedBy: null,
+    customerCreatedBy: null,
+    userCreatedBy: user,
+  },
+  '6': {
+    id: '6',
+    type: TicketTimelineEntryType.PriorityChanged,
+    createdAt: new Date("2023-05-22T20:54:51.389Z"),
+    customer: customer,
+    entry: {
+      oldPriority: TicketPriority.Low,
+      newPriority: TicketPriority.High
+    },
+    customerCreatedBy: null,
+    userCreatedBy: user,
+  },
+  '7': {
+    id: '7',
+    type: TicketTimelineEntryType.LabelsChanged,
+    createdAt: new Date("2023-05-22T20:55:41.389Z"),
+    customer: customer,
+    entry: {
+      newLabelIds: ['1'],
+      oldLabels: [],
+      oldLabelIds: [],
+      newLabels: [{
+        id: '1',
+        ticketId: '1',
+        labelTypeId: '1',
+        archivedAt: null,
+        labelType: bugLabelType
+      }]
+    },
+    customerCreatedBy: null,
+    userCreatedBy: user,
   }
  }
 
 export default meta;
 
-export const Test = () => {
+export const OldestToNewest = () => {
   return <IntlProvider locale="en">
     <Timeline
       items={Object.keys(items)}
