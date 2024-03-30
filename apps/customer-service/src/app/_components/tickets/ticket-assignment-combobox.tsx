@@ -13,6 +13,7 @@ import {
   CommandGroup,
   CommandInput,
   CommandItem,
+  CommandList,
 } from '@cs/ui/command';
 import { Popover, PopoverContent, PopoverTrigger } from '@cs/ui/popover';
 
@@ -179,42 +180,44 @@ export const TicketAssignmentCombobox: FC<TicketAssignmentComboboxProps> = ({
           <CommandEmpty>
             <FormattedMessage id="ticket.assignment.no_results" />
           </CommandEmpty>
-          <CommandGroup>
-            {usersData?.map((user) => (
-              <CommandItem
-                key={user.id}
-                onSelect={() => {
-                  if (assignedTo && user.id === assignedTo.id) {
-                    unassign({ id: ticketId });
-                  } else {
-                    assign({
-                      id: ticketId,
-                      userId: user.id,
-                    });
-                  }
-                  setOpen(false);
-                }}
-              >
-                <Check
-                  className={cn(
-                    'mr-2 h-4 w-4 shrink-0',
-                    assignedTo?.id === user.id ? 'opacity-100' : 'opacity-0'
-                  )}
-                />
-                <div className="flex items-center gap-x-2 truncate">
-                  <Avatar className="size-5">
-                    <AvatarImage src={user?.image ?? undefined} />
-                    <AvatarFallback>
-                      {getInitials(user?.name ?? '')}
-                    </AvatarFallback>
-                  </Avatar>
-                  <p className="truncate text-xs text-muted-foreground">
-                    {user?.name}
-                  </p>
-                </div>
-              </CommandItem>
-            ))}
-          </CommandGroup>
+          <CommandList>
+            <CommandGroup>
+              {(usersData ?? []).map((user) => (
+                <CommandItem
+                  key={user.id}
+                  onSelect={() => {
+                    if (assignedTo && user.id === assignedTo.id) {
+                      unassign({ id: ticketId });
+                    } else {
+                      assign({
+                        id: ticketId,
+                        userId: user.id,
+                      });
+                    }
+                    setOpen(false);
+                  }}
+                >
+                  <Check
+                    className={cn(
+                      'mr-2 h-4 w-4 shrink-0',
+                      assignedTo?.id === user.id ? 'opacity-100' : 'opacity-0'
+                    )}
+                  />
+                  <div className="flex items-center gap-x-2 truncate">
+                    <Avatar className="size-5">
+                      <AvatarImage src={user?.image ?? undefined} />
+                      <AvatarFallback>
+                        {getInitials(user?.name ?? '')}
+                      </AvatarFallback>
+                    </Avatar>
+                    <p className="truncate text-xs text-muted-foreground">
+                      {user?.name}
+                    </p>
+                  </div>
+                </CommandItem>
+              ))}
+            </CommandGroup>
+          </CommandList>
         </Command>
       </PopoverContent>
     </Popover>
