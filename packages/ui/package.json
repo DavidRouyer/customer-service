@@ -55,12 +55,18 @@
     "copy-to-clipboard": "^3.3.3",
     "cva": "1.0.0-beta.1",
     "lucide-react": "^0.363.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "tailwind-merge": "^2.2.2"
   },
   "devDependencies": {
     "@cs/eslint-config": "*",
     "@cs/prettier-config": "*",
     "@cs/tsconfig": "*",
+    "@testing-library/jest-dom": "^6.4.2",
+    "@testing-library/react": "^14.2.2",
+    "@types/react": "^18.2.73",
+    "@types/react-dom": "^18.2.23",
     "eslint": "^8.57.0"
   },
   "eslintConfig": {

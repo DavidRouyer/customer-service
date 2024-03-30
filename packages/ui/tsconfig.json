@@ -4,6 +4,6 @@
     "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json",
     "types": ["vitest/globals", "@testing-library/jest-dom/vitest"]
   },
-  "include": ["."],
+  "include": [".", ".vitest/setup.ts"],
   "exclude": ["node_modules"]
 }
