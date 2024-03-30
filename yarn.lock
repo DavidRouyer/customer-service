@@ -4417,7 +4417,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@storybook/addon-essentials@npm:^8.0.4":
+"@storybook/addon-essentials@npm:^8.0.5":
   version: 8.0.5
   resolution: "@storybook/addon-essentials@npm:8.0.5"
   dependencies:
@@ -4448,7 +4448,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@storybook/addon-interactions@npm:^8.0.4":
+"@storybook/addon-interactions@npm:^8.0.5":
   version: 8.0.5
   resolution: "@storybook/addon-interactions@npm:8.0.5"
   dependencies:
@@ -4462,7 +4462,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@storybook/addon-links@npm:^8.0.4":
+"@storybook/addon-links@npm:^8.0.5":
   version: 8.0.5
   resolution: "@storybook/addon-links@npm:8.0.5"
   dependencies:
@@ -4488,7 +4488,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@storybook/addon-onboarding@npm:^8.0.4":
+"@storybook/addon-onboarding@npm:^8.0.5":
   version: 8.0.5
   resolution: "@storybook/addon-onboarding@npm:8.0.5"
   checksum: c0e34262abfb368e4a7ab61b0dfd0d75b4c8668b3fe9494f8a99d2649f97c7108170e376416cbff87fbed4e7f00708cb9ddec338ed61908723b142f092e3bc49
@@ -4505,12 +4505,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@storybook/addon-themes@npm:^8.0.4":
-  version: 8.0.4
-  resolution: "@storybook/addon-themes@npm:8.0.4"
+"@storybook/addon-themes@npm:^8.0.5":
+  version: 8.0.5
+  resolution: "@storybook/addon-themes@npm:8.0.5"
   dependencies:
     ts-dedent: "npm:^2.0.0"
-  checksum: af0825832809e8a967ea44d6f34d24e201bd8f752bd3f08daf2a5e79b46b5d2cec398bf226b359476e8717109a3dcb311d70feef816f6427a21c917e07437ced
+  checksum: 5409cbe7b6f285b781e4aab7c3c0d4fc4cb59ddcc8e4f4902461e74e589c8b9f7048d9d2e7c396446a865c3736ef50cad3482bfa3c6f5a8e225d7f952f8dc9cf
   languageName: node
   linkType: hard
 
@@ -4530,7 +4530,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@storybook/blocks@npm:8.0.5, @storybook/blocks@npm:^8.0.4":
+"@storybook/blocks@npm:8.0.5, @storybook/blocks@npm:^8.0.5":
   version: 8.0.5
   resolution: "@storybook/blocks@npm:8.0.5"
   dependencies:
@@ -5012,7 +5012,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@storybook/react-vite@npm:^8.0.4":
+"@storybook/react-vite@npm:^8.0.5":
   version: 8.0.5
   resolution: "@storybook/react-vite@npm:8.0.5"
   dependencies:
@@ -5034,7 +5034,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@storybook/react@npm:8.0.5, @storybook/react@npm:^8.0.4":
+"@storybook/react@npm:8.0.5, @storybook/react@npm:^8.0.5":
   version: 8.0.5
   resolution: "@storybook/react@npm:8.0.5"
   dependencies:
@@ -5097,7 +5097,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@storybook/test@npm:8.0.5, @storybook/test@npm:^8.0.4":
+"@storybook/test@npm:8.0.5, @storybook/test@npm:^8.0.5":
   version: 8.0.5
   resolution: "@storybook/test@npm:8.0.5"
   dependencies:
@@ -13921,7 +13921,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"storybook@npm:^8.0.4":
+"storybook@npm:^8.0.5":
   version: 8.0.5
   resolution: "storybook@npm:8.0.5"
   dependencies:
@@ -15525,15 +15525,15 @@ __metadata:
     "@cs/kyaku": "npm:*"
     "@cs/prettier-config": "npm:*"
     "@cs/ui": "npm:*"
-    "@storybook/addon-essentials": "npm:^8.0.4"
-    "@storybook/addon-interactions": "npm:^8.0.4"
-    "@storybook/addon-links": "npm:^8.0.4"
-    "@storybook/addon-onboarding": "npm:^8.0.4"
-    "@storybook/addon-themes": "npm:^8.0.4"
-    "@storybook/blocks": "npm:^8.0.4"
-    "@storybook/react": "npm:^8.0.4"
-    "@storybook/react-vite": "npm:^8.0.4"
-    "@storybook/test": "npm:^8.0.4"
+    "@storybook/addon-essentials": "npm:^8.0.5"
+    "@storybook/addon-interactions": "npm:^8.0.5"
+    "@storybook/addon-links": "npm:^8.0.5"
+    "@storybook/addon-onboarding": "npm:^8.0.5"
+    "@storybook/addon-themes": "npm:^8.0.5"
+    "@storybook/blocks": "npm:^8.0.5"
+    "@storybook/react": "npm:^8.0.5"
+    "@storybook/react-vite": "npm:^8.0.5"
+    "@storybook/test": "npm:^8.0.5"
     "@types/react": "npm:^18.2.66"
     "@types/react-dom": "npm:^18.2.22"
     "@typescript-eslint/eslint-plugin": "npm:^7.2.0"
@@ -15548,7 +15548,7 @@ __metadata:
     react: "npm:^18.2.0"
     react-dom: "npm:^18.2.0"
     react-intl: "npm:^6.6.4"
-    storybook: "npm:^8.0.4"
+    storybook: "npm:^8.0.5"
     tailwindcss: "npm:^3.4.3"
     typescript: "npm:^5.2.2"
     vite: "npm:^5.2.0"
