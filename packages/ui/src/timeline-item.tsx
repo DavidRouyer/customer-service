@@ -20,28 +20,23 @@ import { TimelineNote } from './timeline-note';
 import { TimelinePriorityChanged } from './timeline-priority-changed';
 import { TimelineStatusChanged } from './timeline-status-changed';
 
-export type TimelineItemType = {
+type TimelineItem<T extends TicketTimelineEntryType, U> = {
   id: string;
-  type: TicketTimelineEntryType;
   createdAt: Date;
   customer: {
+    avatarUrl: string | null;
+    email: string | null;
     id: string;
     name: string | null;
   };
-  entry:
-    | TicketAssignmentChangedWithData
-    | TicketLabelsChangedWithData
-    | TicketChat
-    | TicketNote
-    | TicketPriorityChanged
-    | TicketStatusChanged
-    | null;
   customerCreatedBy: {
-    id: string;
-    email: string | null;
-    name: string | null;
     avatarUrl: string | null;
+    email: string | null;
+    id: string;
+    name: string | null;
   } | null;
+  entry: U;
+  type: T;
   userCreatedBy: {
     id: string;
     email: string | null;
@@ -49,6 +44,20 @@ export type TimelineItemType = {
     image: string | null;
   } | null;
 };
+
+export type TimelineItemType =
+  | TimelineItem<
+      TicketTimelineEntryType.AssignmentChanged,
+      TicketAssignmentChangedWithData
+    >
+  | TimelineItem<TicketTimelineEntryType.Chat, TicketChat>
+  | TimelineItem<
+      TicketTimelineEntryType.LabelsChanged,
+      TicketLabelsChangedWithData
+    >
+  | TimelineItem<TicketTimelineEntryType.Note, TicketNote>
+  | TimelineItem<TicketTimelineEntryType.PriorityChanged, TicketPriorityChanged>
+  | TimelineItem<TicketTimelineEntryType.StatusChanged, TicketStatusChanged>;
 
 export const TimelineItem = ({
   item,
@@ -65,27 +74,27 @@ export const TimelineItem = ({
 
   let activity: ReactNode = null;
   if (item.type === TicketTimelineEntryType.Chat) {
-    activity = <TimelineChat item={item as any} />;
+    activity = <TimelineChat item={item} />;
   }
 
   if (item.type === TicketTimelineEntryType.Note) {
-    activity = <TimelineNote item={item as any} />;
+    activity = <TimelineNote item={item} />;
   }
 
   if (item.type === TicketTimelineEntryType.StatusChanged) {
-    activity = <TimelineStatusChanged item={item as any} />;
+    activity = <TimelineStatusChanged item={item} />;
   }
 
   if (item.type === TicketTimelineEntryType.AssignmentChanged) {
-    activity = <TimelineAssigmentChanged item={item as any} />;
+    activity = <TimelineAssigmentChanged item={item} />;
   }
 
   if (item.type === TicketTimelineEntryType.LabelsChanged) {
-    activity = <TimelineLabelsChanged item={item as any} />;
+    activity = <TimelineLabelsChanged item={item} />;
   }
 
   if (item.type === TicketTimelineEntryType.PriorityChanged) {
-    activity = <TimelinePriorityChanged item={item as any} />;
+    activity = <TimelinePriorityChanged item={item} />;
   }
 
   return (
