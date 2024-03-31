@@ -1,4 +1,5 @@
 import { FC } from 'react';
+import { Tag } from 'lucide-react';
 import { FormattedMessage } from 'react-intl';
 
 import { TicketLabelsChangedWithData } from '@cs/kyaku/models';
@@ -34,6 +35,7 @@ export const TimelineLabelsChanged: FC<TimelineLabelsChangedProps> = ({
             {item.entry?.oldLabels?.map((label) => (
               <span key={label.id} className="space-x-1">
                 <Icon
+                  fallback={<Tag className="inline-flex size-4" />}
                   name={label.labelType.icon as IconType}
                   className="inline-flex size-4"
                 />
@@ -48,6 +50,7 @@ export const TimelineLabelsChanged: FC<TimelineLabelsChangedProps> = ({
             {item.entry?.newLabels?.map((label) => (
               <span key={label.id} className="space-x-1">
                 <Icon
+                  fallback={<Tag className="inline-flex size-4" />}
                   name={label.labelType.icon as IconType}
                   className="inline-flex size-4"
                 />
