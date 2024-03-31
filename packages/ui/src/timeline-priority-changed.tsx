@@ -28,16 +28,14 @@ export const TimelinePriorityChanged: FC<TimelinePriorityChangedProps> = ({
         <span className="font-medium text-foreground">
           {item.userCreatedBy?.name}
         </span>{' '}
-        <>
-          <FormattedMessage id="ticket.activity.type.ticket_priority.changed" />{' '}
-          <span className="space-x-1">
-            <TicketPriorityBadge priority={item.entry?.oldPriority} />
-          </span>{' '}
-          <FormattedMessage id="ticket.activity.type.ticket_priority.to" />{' '}
-          <span className="space-x-1">
-            <TicketPriorityBadge priority={item.entry?.newPriority} />
-          </span>
-        </>
+        <FormattedMessage id="ticket.activity.type.ticket_priority.changed" />{' '}
+        <span className="space-x-1">
+          <TicketPriorityBadge priority={item.entry?.oldPriority} />
+        </span>{' '}
+        <FormattedMessage id="ticket.activity.type.ticket_priority.to" />{' '}
+        <span className="space-x-1">
+          <TicketPriorityBadge priority={item.entry?.newPriority} />
+        </span>
         <span className="px-1.5">•</span>
         <time dateTime={item.createdAt.toISOString()}>
           <RelativeTime dateTime={new Date(item.createdAt)} />

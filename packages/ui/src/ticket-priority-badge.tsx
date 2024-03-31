@@ -10,7 +10,7 @@ export const TicketPriorityBadge: FC<{
   return {
     Critical: (
       <>
-        <ShieldAlert className="inline-flex h-4 w-4 text-destructive" />
+        <ShieldAlert className="inline-flex size-4 text-destructive" />
         <span className="text-xs text-muted-foreground">
           <FormattedMessage id="ticket.priorities.critical" />
         </span>
@@ -18,7 +18,7 @@ export const TicketPriorityBadge: FC<{
     ),
     High: (
       <>
-        <Shield className="inline-flex h-4 w-4 text-destructive" />
+        <Shield className="inline-flex size-4 text-destructive" />
         <span className="text-xs text-muted-foreground">
           <FormattedMessage id="ticket.priorities.high" />
         </span>
@@ -26,7 +26,7 @@ export const TicketPriorityBadge: FC<{
     ),
     Medium: (
       <>
-        <Shield className="inline-flex h-4 w-4 text-warning" />
+        <Shield className="inline-flex size-4 text-warning" />
         <span className="text-xs text-muted-foreground">
           <FormattedMessage id="ticket.priorities.medium" />
         </span>
@@ -34,7 +34,7 @@ export const TicketPriorityBadge: FC<{
     ),
     Low: (
       <>
-        <Shield className="inline-flex h-4 w-4 text-muted-foreground" />
+        <Shield className="inline-flex size-4 text-muted-foreground" />
         <span className="text-xs text-muted-foreground">
           <FormattedMessage id="ticket.priorities.low" />
         </span>

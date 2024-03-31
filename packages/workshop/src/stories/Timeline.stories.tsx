@@ -68,10 +68,7 @@ const items: Record<string, TimelineItemType> =
     id: '3',
     type: TicketTimelineEntryType.Chat,
     createdAt: new Date("2023-05-08T22:40:00.000Z"),
-    customer: {
-      id: '1',
-      name: 'Leslie Alexandre'
-    },
+    customer: customer,
     entry: {
       text: 'Can you tell me which product you would like to change?'
     },
@@ -127,9 +124,9 @@ const items: Record<string, TimelineItemType> =
     createdAt: new Date("2023-05-22T20:55:41.389Z"),
     customer: customer,
     entry: {
-      newLabelIds: ['1'],
-      oldLabels: [],
       oldLabelIds: [],
+      oldLabels: [],
+      newLabelIds: ['1'],
       newLabels: [{
         id: '1',
         ticketId: '1',
