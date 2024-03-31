@@ -1,7 +1,7 @@
 import { Timeline } from "@cs/ui/timeline";
 import { TimelineItem, TimelineItemType } from "@cs/ui/timeline-item";
 import type { Meta } from '@storybook/react';
-import { TicketPriority, TicketTimelineEntryType } from '@cs/kyaku/models';
+import { TicketPriority, TicketStatus, TicketTimelineEntryType } from '@cs/kyaku/models';
 import { IntlProvider } from "react-intl";
 
 const meta = {
@@ -134,6 +134,18 @@ const items: Record<string, TimelineItemType> =
         archivedAt: null,
         labelType: bugLabelType
       }]
+    },
+    customerCreatedBy: null,
+    userCreatedBy: user,
+  },
+  '8': {
+    id: '8',
+    type: TicketTimelineEntryType.StatusChanged,
+    createdAt: new Date("2023-05-23T20:55:41.389Z"),
+    customer: customer,
+    entry: {
+      oldStatus: TicketStatus.Open,
+      newStatus: TicketStatus.Done
     },
     customerCreatedBy: null,
     userCreatedBy: user,
