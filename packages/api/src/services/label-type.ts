@@ -80,7 +80,7 @@ export default class LabelTypeService extends BaseService {
       id?: InclusionFilterOperator<string>;
       isArchived?: boolean;
     },
-    config?: FindConfig<T, LabelTypeSort>
+    config: FindConfig<T, LabelTypeSort>
   ) {
     const whereClause = and(
       filters.id
@@ -106,24 +106,10 @@ export default class LabelTypeService extends BaseService {
       where: whereClause,
       with: this.getWithClause(config?.relations),
       limit: config?.limit,
-      orderBy: and(
-        config?.sortBy
-          ? 'name' in config.sortBy
-            ? sortBySortDirection(
-                config.sortBy.name,
-                config.direction
-              )(schema.labelTypes.name)
-            : 'createdAt' in config.sortBy
-              ? sortBySortDirection(
-                  config.sortBy.createdAt,
-                  config.direction
-                )(schema.labelTypes.createdAt)
-              : undefined
-          : undefined,
-        config?.limit
-          ? sortByDirection(config.direction)(schema.labelTypes.id)
-          : undefined
-      ),
+      orderBy: [
+        ...this.getOrderByClause(config),
+        sortByDirection(config.direction)(schema.labelTypes.id),
+      ],
     });
   }
 
@@ -239,5 +225,30 @@ export default class LabelTypeService extends BaseService {
         ? { columns: { [K in keyof User]: true } }
         : undefined,
     };
+  }
+
+  private getOrderByClause<T extends LabelTypeWith<T>>(
+    config: FindConfig<T, LabelTypeSort>
+  ) {
+    if (!config.sortBy) return [];
+
+    if ('name' in config.sortBy) {
+      return [
+        sortBySortDirection(
+          config.sortBy.name,
+          config.direction
+        )(schema.labelTypes.name),
+      ];
+    }
+    if ('createdAt' in config.sortBy) {
+      return [
+        sortBySortDirection(
+          config.sortBy.createdAt,
+          config.direction
+        )(schema.labelTypes.createdAt),
+      ];
+    }
+
+    return [];
   }
 }
