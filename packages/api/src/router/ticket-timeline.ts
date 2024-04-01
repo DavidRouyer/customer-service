@@ -20,6 +20,7 @@ export const ticketTimelineRouter = createTRPCRouter({
             customerCreatedBy: true,
             userCreatedBy: true,
           },
+          limit: 50,
           sortBy: {
             createdAt: SortDirection.ASC,
           },
