@@ -8,7 +8,7 @@ export enum Direction {
 
 export type FindConfig<TRelations, TSort> = {
   cursor?: string;
-  limit?: number;
+  limit: number;
   direction: Direction;
   relations?: TRelations;
   sortBy?: TSort;

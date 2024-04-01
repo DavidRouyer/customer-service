@@ -77,9 +77,9 @@ describe('TicketService', () => {
 
       expect(ticketRepo.findMany).toHaveBeenCalledTimes(1);
       expect(ticketRepo.findMany).toHaveBeenCalledWith({
-        limit: undefined,
-        orderBy: asc(schema.tickets.id),
-        where: and(and(undefined)),
+        limit: 51,
+        orderBy: [asc(schema.tickets.id)],
+        where: and(undefined),
         with: {
           assignedTo: undefined,
           createdBy: undefined,

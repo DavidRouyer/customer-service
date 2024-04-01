@@ -11,7 +11,7 @@ import {
   TicketStatusDetail,
   TicketTimelineEntryType,
 } from '@cs/kyaku/models';
-import { FindConfig, GetConfig } from '@cs/kyaku/types/query';
+import { Direction, FindConfig, GetConfig } from '@cs/kyaku/types/query';
 import { KyakuError } from '@cs/kyaku/utils';
 
 import {
@@ -76,19 +76,27 @@ export default class TicketService extends BaseService {
 
   async list<T extends TicketWith<T>>(
     filters: TicketFilters,
-    config?: FindConfig<T, TicketSort>
+    config: FindConfig<T, TicketSort> = {
+      limit: 50,
+      direction: Direction.Forward,
+    }
   ) {
     const cursor = this.decodeCursor(config?.cursor);
 
-    const cursorOrderByClause = this.getCursorOrderByClause(config);
-    const cursorWhereClause = this.getCursorWhereClause(cursor, config);
-    const whereClause = this.getWhereClause(filters);
-
     const filteredTickets = await this.ticketRepository.findMany({
-      where: and(whereClause, cursorWhereClause),
+      where: and(
+        this.getWhereClause(filters),
+        this.getCursorWhereClause(cursor, config),
+        cursor
+          ? filterByDirection(config.direction)(schema.tickets.id, cursor.id)
+          : undefined
+      ),
       with: this.getWithClause(config?.relations),
-      limit: config?.limit ? config.limit + 1 : undefined,
-      orderBy: cursorOrderByClause,
+      limit: config.limit + 1,
+      orderBy: [
+        ...this.getOrderByClause(config),
+        sortByDirection(config.direction)(schema.tickets.id),
+      ],
     });
 
     if (config?.limit) {
@@ -517,6 +525,8 @@ export default class TicketService extends BaseService {
   }
 
   private getWhereClause(filters: TicketFilters) {
+    if (!Object.keys(filters).length) return undefined;
+
     return and(
       filters.assignedToUser
         ? inclusionFilterOperator(
@@ -541,56 +551,34 @@ export default class TicketService extends BaseService {
 
   private getCursorWhereClause<T extends TicketWith<T>>(
     cursor: TicketCursor | undefined,
-    config?: FindConfig<T, TicketSort>
+    config: FindConfig<T, TicketSort>
   ) {
-    if (!config) return undefined;
-
-    const idWhereClause = cursor
-      ? filterByDirection(config.direction)(schema.tickets.id, cursor.id)
-      : undefined;
-
-    if (!config?.sortBy) {
-      return idWhereClause;
-    }
+    if (!config.sortBy) return undefined;
 
     if ('statusChangedAt' in config.sortBy) {
-      return and(
-        cursor?.statusChangedAt
-          ? filterBySortDirection(
-              config.sortBy.statusChangedAt,
-              config.direction
-            )(schema.tickets.statusChangedAt, new Date(cursor?.statusChangedAt))
-          : undefined,
-        idWhereClause
-      );
+      return cursor?.statusChangedAt
+        ? filterBySortDirection(
+            config.sortBy.statusChangedAt,
+            config.direction
+          )(schema.tickets.statusChangedAt, new Date(cursor?.statusChangedAt))
+        : undefined;
     }
     if ('createdAt' in config.sortBy) {
-      return and(
-        cursor?.createdAt
-          ? filterBySortDirection(config.sortBy.createdAt, config.direction)(
-              schema.tickets.createdAt,
-              new Date(cursor.createdAt)
-            )
-          : undefined,
-        idWhereClause
-      );
+      return cursor?.createdAt
+        ? filterBySortDirection(config.sortBy.createdAt, config.direction)(
+            schema.tickets.createdAt,
+            new Date(cursor.createdAt)
+          )
+        : undefined;
     }
 
-    return idWhereClause;
+    return undefined;
   }
 
-  private getCursorOrderByClause<T extends TicketWith<T>>(
-    config?: FindConfig<T, TicketSort>
+  private getOrderByClause<T extends TicketWith<T>>(
+    config: FindConfig<T, TicketSort>
   ) {
-    if (!config) return asc(schema.tickets.id);
-
-    const idOrderByClause = sortByDirection(config.direction)(
-      schema.tickets.id
-    );
-
-    if (!config?.sortBy) {
-      return idOrderByClause;
-    }
+    if (!config.sortBy) return [];
 
     if ('statusChangedAt' in config.sortBy) {
       return [
@@ -598,7 +586,6 @@ export default class TicketService extends BaseService {
           config.sortBy.statusChangedAt,
           config.direction
         )(schema.tickets.statusChangedAt),
-        idOrderByClause,
       ];
     }
     if ('createdAt' in config.sortBy) {
@@ -607,11 +594,10 @@ export default class TicketService extends BaseService {
           config.sortBy.createdAt,
           config.direction
         )(schema.tickets.createdAt),
-        idOrderByClause,
       ];
     }
 
-    return idOrderByClause;
+    return [];
   }
 
   private decodeCursor(cursor?: string) {
