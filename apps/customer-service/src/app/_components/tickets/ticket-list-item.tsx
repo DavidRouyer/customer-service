@@ -7,10 +7,9 @@ import { FormattedMessage } from 'react-intl';
 
 import { RouterOutputs } from '@cs/api';
 import { TicketChat, TicketNote } from '@cs/kyaku/models';
+import { getInitials } from '@cs/kyaku/utils';
 import { Avatar, AvatarFallback, AvatarImage } from '@cs/ui/avatar';
-
-import { RelativeTime } from '~/app/_components/ui/relative-time/relative-time';
-import { getInitials } from '~/app/lib/string';
+import { RelativeTime } from '@cs/ui/relative-time';
 
 export type TicketListItemProps = {
   ticket: NonNullable<RouterOutputs['ticket']['all']['data'][0]>;

@@ -2,11 +2,11 @@ import { FC } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
+import { getInitials } from '@cs/kyaku/utils';
 import { cn } from '@cs/ui';
 import { Avatar, AvatarFallback, AvatarImage } from '@cs/ui/avatar';
 
 import { matchPath } from '~/app/lib/path';
-import { getInitials } from '~/app/lib/string';
 import { api } from '~/trpc/react';
 
 export const TeamMemberList: FC = () => {

@@ -1,7 +1,7 @@
 import { screen } from '@testing-library/react';
 
-import { RelativeDate } from '~/app/_components/ui/relative-date/relative-date';
-import { render } from '~/app/lib/test-utils';
+import { RelativeDate } from './relative-date';
+import { render } from './test-utils';
 
 describe('<RelativeDate />', () => {
   it('should render today', () => {

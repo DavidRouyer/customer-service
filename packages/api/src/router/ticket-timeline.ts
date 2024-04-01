@@ -17,6 +17,7 @@ export const ticketTimelineRouter = createTRPCRouter({
         { ticketId: input.ticketId },
         {
           relations: {
+            customer: true,
             customerCreatedBy: true,
             userCreatedBy: true,
           },

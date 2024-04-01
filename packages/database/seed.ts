@@ -66,7 +66,7 @@ async function main() {
     .values({
       id: generateEntityId('', 'lt'),
       name: 'General question',
-      icon: 'help-circle',
+      icon: 'circle-help',
       createdById: botUser.id,
     })
     .returning({ id: schema.labelTypes.id })

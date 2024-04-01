@@ -12,6 +12,7 @@ import {
   CommandGroup,
   CommandInput,
   CommandItem,
+  CommandList,
 } from '@cs/ui/command';
 import { Popover, PopoverContent, PopoverTrigger } from '@cs/ui/popover';
 
@@ -60,6 +61,7 @@ export const TicketLabelCombobox: FC<TicketLabelComboboxProps> = ({
                   (labelType) => labelType.id === labelTypeId
                 )!,
                 ticketId: newLabels.ticketId,
+                archivedAt: null,
               }))
             ),
           }) as NonNullable<RouterOutputs['ticket']['byId']>
@@ -147,45 +149,47 @@ export const TicketLabelCombobox: FC<TicketLabelComboboxProps> = ({
               id: 'ticket.labeling.search.placeholder',
             })}
           />
-          <CommandEmpty>
-            <FormattedMessage id="ticket.labeling.no_results" />
-          </CommandEmpty>
-          <CommandGroup>
-            {labelTypesData?.map((labelType) => (
-              <CommandItem
-                key={labelType.id}
-                onSelect={() => {
-                  const labelWithLabelType = labels?.find(
-                    (label) => label.labelType.id === labelType.id
-                  );
-                  if (labelWithLabelType) {
-                    removeLabels({
-                      ticketId,
-                      labelIds: [labelWithLabelType.id],
-                    });
-                  } else {
-                    addLabels({ ticketId, labelTypeIds: [labelType.id] });
-                  }
-                }}
-              >
-                <Check
-                  className={cn(
-                    'mr-2 h-4 w-4 shrink-0',
-                    labels
-                      ?.map((label) => label.labelType.id)
-                      .includes(labelType.id)
-                      ? 'opacity-100'
-                      : 'opacity-0'
-                  )}
-                />
-                <div className="flex items-center gap-x-2 truncate">
-                  <p className="truncate text-xs text-muted-foreground">
-                    {labelType?.name}
-                  </p>
-                </div>
-              </CommandItem>
-            ))}
-          </CommandGroup>
+          <CommandList>
+            <CommandEmpty>
+              <FormattedMessage id="ticket.labeling.no_results" />
+            </CommandEmpty>
+            <CommandGroup>
+              {(labelTypesData ?? []).map((labelType) => (
+                <CommandItem
+                  key={labelType.id}
+                  onSelect={() => {
+                    const labelWithLabelType = labels?.find(
+                      (label) => label.labelType.id === labelType.id
+                    );
+                    if (labelWithLabelType) {
+                      removeLabels({
+                        ticketId,
+                        labelIds: [labelWithLabelType.id],
+                      });
+                    } else {
+                      addLabels({ ticketId, labelTypeIds: [labelType.id] });
+                    }
+                  }}
+                >
+                  <Check
+                    className={cn(
+                      'mr-2 h-4 w-4 shrink-0',
+                      labels
+                        ?.map((label) => label.labelType.id)
+                        .includes(labelType.id)
+                        ? 'opacity-100'
+                        : 'opacity-0'
+                    )}
+                  />
+                  <div className="flex items-center gap-x-2 truncate">
+                    <p className="truncate text-xs text-muted-foreground">
+                      {labelType?.name}
+                    </p>
+                  </div>
+                </CommandItem>
+              ))}
+            </CommandGroup>
+          </CommandList>
         </Command>
       </PopoverContent>
     </Popover>

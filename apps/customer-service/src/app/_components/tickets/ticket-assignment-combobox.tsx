@@ -3,6 +3,7 @@ import { Check, Plus } from 'lucide-react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
 import { RouterOutputs } from '@cs/api';
+import { getInitials } from '@cs/kyaku/utils';
 import { cn } from '@cs/ui';
 import { Avatar, AvatarFallback, AvatarImage } from '@cs/ui/avatar';
 import { Button } from '@cs/ui/button';
@@ -12,10 +13,10 @@ import {
   CommandGroup,
   CommandInput,
   CommandItem,
+  CommandList,
 } from '@cs/ui/command';
 import { Popover, PopoverContent, PopoverTrigger } from '@cs/ui/popover';
 
-import { getInitials } from '~/app/lib/string';
 import { api } from '~/trpc/react';
 
 type TicketAssignmentComboboxProps = {
@@ -176,45 +177,47 @@ export const TicketAssignmentCombobox: FC<TicketAssignmentComboboxProps> = ({
               id: 'ticket.assignment.search.placeholder',
             })}
           />
-          <CommandEmpty>
-            <FormattedMessage id="ticket.assignment.no_results" />
-          </CommandEmpty>
-          <CommandGroup>
-            {usersData?.map((user) => (
-              <CommandItem
-                key={user.id}
-                onSelect={() => {
-                  if (assignedTo && user.id === assignedTo.id) {
-                    unassign({ id: ticketId });
-                  } else {
-                    assign({
-                      id: ticketId,
-                      userId: user.id,
-                    });
-                  }
-                  setOpen(false);
-                }}
-              >
-                <Check
-                  className={cn(
-                    'mr-2 h-4 w-4 shrink-0',
-                    assignedTo?.id === user.id ? 'opacity-100' : 'opacity-0'
-                  )}
-                />
-                <div className="flex items-center gap-x-2 truncate">
-                  <Avatar className="size-5">
-                    <AvatarImage src={user?.image ?? undefined} />
-                    <AvatarFallback>
-                      {getInitials(user?.name ?? '')}
-                    </AvatarFallback>
-                  </Avatar>
-                  <p className="truncate text-xs text-muted-foreground">
-                    {user?.name}
-                  </p>
-                </div>
-              </CommandItem>
-            ))}
-          </CommandGroup>
+          <CommandList>
+            <CommandEmpty>
+              <FormattedMessage id="ticket.assignment.no_results" />
+            </CommandEmpty>
+            <CommandGroup>
+              {(usersData ?? []).map((user) => (
+                <CommandItem
+                  key={user.id}
+                  onSelect={() => {
+                    if (assignedTo && user.id === assignedTo.id) {
+                      unassign({ id: ticketId });
+                    } else {
+                      assign({
+                        id: ticketId,
+                        userId: user.id,
+                      });
+                    }
+                    setOpen(false);
+                  }}
+                >
+                  <Check
+                    className={cn(
+                      'mr-2 h-4 w-4 shrink-0',
+                      assignedTo?.id === user.id ? 'opacity-100' : 'opacity-0'
+                    )}
+                  />
+                  <div className="flex items-center gap-x-2 truncate">
+                    <Avatar className="size-5">
+                      <AvatarImage src={user?.image ?? undefined} />
+                      <AvatarFallback>
+                        {getInitials(user?.name ?? '')}
+                      </AvatarFallback>
+                    </Avatar>
+                    <p className="truncate text-xs text-muted-foreground">
+                      {user?.name}
+                    </p>
+                  </div>
+                </CommandItem>
+              ))}
+            </CommandGroup>
+          </CommandList>
         </Command>
       </PopoverContent>
     </Popover>
