@@ -15,6 +15,7 @@ export const labelTypeRouter = createTRPCRouter({
       return await labelTypeService.list(input, {
         direction: Direction.Forward,
         relations: {},
+        limit: 50,
         sortBy: {
           name: SortDirection.ASC,
         },

@@ -8,7 +8,7 @@ export const userRouter = createTRPCRouter({
     const userService: UserService = ctx.container.resolve('userService');
     return await userService.list(
       {},
-      { relations: {}, direction: Direction.Forward }
+      { relations: {}, limit: 50, direction: Direction.Forward }
     );
   }),
 });

@@ -13,6 +13,7 @@ export const customerRouter = createTRPCRouter({
         createdBy: true,
         updatedBy: true,
       },
+      limit: 50,
       sortBy: {
         name: SortDirection.ASC,
       },
