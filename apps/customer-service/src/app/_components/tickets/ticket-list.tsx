@@ -47,21 +47,19 @@ export const TicketList: FC<{
     }
   }, [inView, hasNextPage, isFetching, fetchNextPage]);
 
+  const tickets = data?.pages?.flatMap((page) => page.data) ?? [];
+
   return (
     <div className="no-scrollbar flex-auto overflow-y-auto">
-      {(data?.pages?.flatMap((page) => page.data).length ?? 0) > 0 ? (
+      {(tickets.length ?? 0) > 0 ? (
         <>
           <div>
-            {data?.pages.map((page) => (
-              <Fragment key={page.nextCursor}>
-                {page.data.map((ticket) => (
-                  <TicketListItem
-                    key={ticket.id}
-                    ticket={ticket}
-                    currentUserId={session?.user.id}
-                  />
-                ))}
-              </Fragment>
+            {tickets.map((ticket) => (
+              <TicketListItem
+                key={ticket.id}
+                ticket={ticket}
+                currentUserId={session?.user.id}
+              />
             ))}
           </div>
           {isFetching && (

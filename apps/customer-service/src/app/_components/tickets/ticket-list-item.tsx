@@ -24,10 +24,7 @@ export const TicketListItem: FC<TicketListItemProps> = ({
   const pathname = usePathname();
 
   return (
-    <section
-      key={ticket.id}
-      className={pathname === `/ticket/${ticket.id}` ? 'bg-muted' : ''}
-    >
+    <section className={pathname === `/ticket/${ticket.id}` ? 'bg-muted' : ''}>
       <Link
         href={`/ticket/${ticket.id}`}
         className="mx-4 flex gap-x-4 border-b py-5 last:border-0 sm:mx-6"

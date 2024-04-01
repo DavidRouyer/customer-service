@@ -93,11 +93,15 @@ export default class TicketService extends BaseService {
 
     if (config?.limit) {
       const items = filteredTickets.slice(0, config.limit);
+      const hasNextPage = filteredTickets.length > config.limit;
       const lastItem = items.at(-1);
       return {
         items: items,
-        hasNextPage: filteredTickets.length > config.limit,
-        nextCursor: lastItem ? this.encodeCursor(lastItem, config) : undefined,
+        hasNextPage: hasNextPage,
+        nextCursor:
+          lastItem && hasNextPage
+            ? this.encodeCursor(lastItem, config)
+            : undefined,
       };
     }
 
