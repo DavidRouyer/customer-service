@@ -1,0 +1,18 @@
+/*
+This is a modified version of ["Pin Scrolling to Bottom"][0].
+[0]: https://css-tricks.com/books/greatest-css-tricks/pin-scrolling-to-bottom/
+*/
+.timeline-list::after {
+  content: '';
+  height: 1px; /* Always show the element to not mess with the height of the scroll area */
+  display: block;
+}
+
+.timeline-list--have-newest:not(.timeline-list--scroll-locked) {
+  & > * {
+    overflow-anchor: none;
+  }
+  &::after {
+    overflow-anchor: auto;
+  }
+}

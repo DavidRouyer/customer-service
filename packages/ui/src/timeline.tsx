@@ -2,7 +2,10 @@
 
 import { ReactNode, useRef, useState } from 'react';
 
+import { cn } from '.';
 import { createScrollerLock, ScrollerLockContext } from './use-scroll-lock';
+
+import './timeline.css';
 
 export type TimelineProps = {
   items: readonly string[];
@@ -134,7 +137,13 @@ export const Timeline = ({ items, renderItem, ticketId }: TimelineProps) => {
         >
           <div
             role="list"
-            className="relative flex flex-1 flex-col justify-end"
+            className={cn(
+              'timeline-list relative flex flex-1 flex-col justify-end',
+              {
+                'timeline-list--have-newest': true,
+                'timeline-list--scroll-locked': state.scrollLocked,
+              }
+            )}
           >
             {itemNodes}
 
