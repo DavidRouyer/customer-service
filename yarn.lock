@@ -5012,22 +5012,22 @@ __metadata:
   linkType: hard
 
 "@trpc/client@npm:next":
-  version: 11.0.0-rc.330
-  resolution: "@trpc/client@npm:11.0.0-rc.330"
+  version: 11.0.0-rc.332
+  resolution: "@trpc/client@npm:11.0.0-rc.332"
   peerDependencies:
-    "@trpc/server": 11.0.0-rc.330+c89fb11f2
-  checksum: 234324f04f4c2939959390d882b62fc8bc126523f5ff072e4f2b6130fdb2b7119a9c2eab8edb9e30f9995fc3a0bd03bde323faa760076b64f41a3c80a8cfbba3
+    "@trpc/server": 11.0.0-rc.332+67c093749
+  checksum: 11b7b5fb1f559fd6deba3916bd07d879067c396a95e48c51b85f6949e907df0c10e10ef424fed870d1c10905fec6b7d2c578ba0206f5bf3438c42dda636d44b1
   languageName: node
   linkType: hard
 
 "@trpc/next@npm:next":
-  version: 11.0.0-rc.330
-  resolution: "@trpc/next@npm:11.0.0-rc.330"
+  version: 11.0.0-rc.332
+  resolution: "@trpc/next@npm:11.0.0-rc.332"
   peerDependencies:
     "@tanstack/react-query": ^5.25.0
-    "@trpc/client": 11.0.0-rc.330+c89fb11f2
-    "@trpc/react-query": 11.0.0-rc.330+c89fb11f2
-    "@trpc/server": 11.0.0-rc.330+c89fb11f2
+    "@trpc/client": 11.0.0-rc.332+67c093749
+    "@trpc/react-query": 11.0.0-rc.332+67c093749
+    "@trpc/server": 11.0.0-rc.332+67c093749
     next: "*"
     react: ">=16.8.0"
     react-dom: ">=16.8.0"
@@ -5036,27 +5036,27 @@ __metadata:
       optional: true
     "@trpc/react-query":
       optional: true
-  checksum: df4dc760d7873631e1354e1460d5021910243af27ac491fda1668de389ef95cc1f80ba6122ec744df09beb3081516554c97921758efed298c8e592fa3ca4b7d6
+  checksum: df7a9cfd68331bb7238497dbb707ed7e2f68ff29857864bbbc823d7770b625bc21a625b2cd6be12c8f1b61adef2be83b1bfea79a308f4039fb4d7eb8819583e8
   languageName: node
   linkType: hard
 
 "@trpc/react-query@npm:next":
-  version: 11.0.0-rc.330
-  resolution: "@trpc/react-query@npm:11.0.0-rc.330"
+  version: 11.0.0-rc.332
+  resolution: "@trpc/react-query@npm:11.0.0-rc.332"
   peerDependencies:
     "@tanstack/react-query": ^5.25.0
-    "@trpc/client": 11.0.0-rc.330+c89fb11f2
-    "@trpc/server": 11.0.0-rc.330+c89fb11f2
+    "@trpc/client": 11.0.0-rc.332+67c093749
+    "@trpc/server": 11.0.0-rc.332+67c093749
     react: ">=18.2.0"
     react-dom: ">=18.2.0"
-  checksum: ebd928b3007b91bb5e332157ea1a25201a4be2bf8070c6b6a90c66b6a5397ca9795cfebf48344f6210b9c185ed75457a59403ff70beddfdce63ca7b1e8d94d9a
+  checksum: ce1aa923efd3f2f50ea4e4f1dcbe4d1fdbe064fede6aa8c777f13c285fac1c1a84c0dc10a813a81d8bfef8f6986876c662274ccd04488897df5c9a208d63472d
   languageName: node
   linkType: hard
 
 "@trpc/server@npm:next":
-  version: 11.0.0-rc.330
-  resolution: "@trpc/server@npm:11.0.0-rc.330"
-  checksum: 0b573660d9a175850d005c7cb377226588268feb2f270d0d64c8c9e46a1ef26bc9359804b1f10d6ebb0d17643615ee57759049f5f32af7a05236aff213935e24
+  version: 11.0.0-rc.332
+  resolution: "@trpc/server@npm:11.0.0-rc.332"
+  checksum: 5c7c9bc487fdfcd9fe680be1b93be09f5ceea7092c1d1dd49668368d158780559ba2fa5d6ce044633087273cd411ea2029b0fcf08392dbb7a2726f379daca62d
   languageName: node
   linkType: hard
 
