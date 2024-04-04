@@ -52,7 +52,7 @@
     "@testing-library/react": "^14.2.2",
     "@types/google-libphonenumber": "^7.4.30",
     "@types/negotiator": "^0.6.3",
-    "@types/node": "^20.12.3",
+    "@types/node": "^20.12.4",
     "@types/react": "^18.2.74",
     "@types/react-dom": "^18.2.24",
     "autoprefixer": "^10.4.19",
