@@ -21,7 +21,7 @@
     "@cs/eslint-config": "*",
     "@cs/prettier-config": "*",
     "@storybook/addon-essentials": "^8.0.5",
-    "@storybook/addon-interactions": "^8.0.5",
+    "@storybook/addon-interactions": "^8.0.6",
     "@storybook/addon-links": "^8.0.5",
     "@storybook/addon-onboarding": "^8.0.5",
     "@storybook/addon-themes": "^8.0.5",
