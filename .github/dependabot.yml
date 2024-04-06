@@ -23,6 +23,10 @@ updates:
         patterns:
           - 'next'
           - '@next*'
+      storybook:
+        patterns:
+          - '@storybook*'
+          - 'storybook'
       tanstack-query:
         patterns:
           - '@tanstack/react-query*'
