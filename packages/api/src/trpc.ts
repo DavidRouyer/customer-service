@@ -30,7 +30,7 @@ import TicketTimelineService from './services/ticket-timeline';
 import UserService from './services/user';
 import { UnitOfWork } from './unit-of-work';
 
-const container = createContainer();
+export const container = createContainer();
 container.register({
   drizzleConnection: asValue(drizzleConnection),
   unitOfWork: asClass(UnitOfWork).scoped(),

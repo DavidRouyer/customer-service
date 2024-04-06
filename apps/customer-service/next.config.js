@@ -19,6 +19,15 @@ const config = {
   /** We already do linting and typechecking as separate tasks in CI */
   eslint: { ignoreDuringBuilds: true },
   typescript: { ignoreBuildErrors: true },
+  webpack: (config) => {
+    config.module.rules.push({
+      test: /\.(graphql|gql)/,
+      exclude: /node_modules/,
+      loader: 'graphql-tag/loader',
+    });
+
+    return config;
+  },
 };
 
 export default config;

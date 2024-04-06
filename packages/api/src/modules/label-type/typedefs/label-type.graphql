@@ -1,0 +1,29 @@
+type LabelType implements Node {
+  id: ID!
+  name: String!
+  icon: String
+  archivedAt: DateTime
+  createdAt: DateTime!
+  createdBy: User!
+  updatedAt: DateTime!
+  updatedBy: User
+}
+
+type LabelTypeConnection {
+  edges: [LabelTypeEdge!]!
+  pageInfo: PageInfo!
+}
+
+type LabelTypeEdge {
+  cursor: String!
+  node: LabelType!
+}
+
+type Query {
+  labelTypes(
+    first: Int
+    after: String
+    last: Int
+    before: String
+  ): LabelTypeConnection!
+}
