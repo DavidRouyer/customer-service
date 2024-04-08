@@ -1,8 +1,10 @@
+import { GraphQLError } from 'graphql';
 import { createModule } from 'graphql-modules';
 
 import { SortDirection } from '@cs/kyaku/types';
 import { Direction } from '@cs/kyaku/types/query';
 
+import { InputMaybe } from '../../generated-types/graphql';
 import LabelTypeService from '../../services/label-type';
 import { base64 } from './base64';
 import { LabelTypeModule } from './generated-types/module-types';
@@ -15,6 +17,55 @@ export interface ConnectionArguments {
   last?: number | null;
 }
 
+const validatePaginationArguments = (
+  { before, after, first, last }: ConnectionArguments,
+  { min = 1, max = 100 }
+) => {
+  if (typeof first === 'number' && typeof last === 'number') {
+    throw new GraphQLError(
+      'Passing both "first" and "last" to paginate is not supported'
+    );
+  }
+  if (typeof first === 'number' && typeof before === 'string') {
+    throw new GraphQLError(
+      'Passing both "first" and "before" to paginate is not supported'
+    );
+  }
+  if (typeof last === 'number' && typeof after === 'string') {
+    throw new GraphQLError(
+      'Passing both "last" and "after" to paginate is not supported'
+    );
+  }
+  if (typeof first === 'number') {
+    if (first < min || first > max) {
+      throw new GraphQLError(
+        `"first" argument value is outside the valid range of '${min}' to '${max}'`
+      );
+    }
+  }
+  if (typeof last === 'number') {
+    if (last < min || last > max) {
+      throw new GraphQLError(
+        `"last" argument value is outside the valid range of '${min}' to '${max}'`
+      );
+    }
+  }
+};
+
+const getPaginationLimit = (
+  first: InputMaybe<number> | undefined,
+  last: InputMaybe<number> | undefined
+) => {
+  let limit = 50; // default limit
+  if (typeof first === 'number') {
+    limit = first;
+  }
+  if (typeof last === 'number') {
+    limit = last;
+  }
+  return limit + 1;
+};
+
 const paginate = <T>({
   array,
   args: { before, after, first, last },
@@ -25,24 +76,11 @@ const paginate = <T>({
   let startOffset = 0;
   let endOffset = array.length;
 
-  if (typeof first === 'number' && typeof last === 'number') {
-    throw new Error(
-      'Passing both "first" and "last" to paginate is not supported'
-    );
-  }
-
   if (typeof first === 'number') {
-    if (first < 0) {
-      throw new Error('Argument "first" must be a non-negative integer');
-    }
-
     endOffset = Math.min(endOffset, startOffset + first);
   }
   if (typeof last === 'number') {
-    if (last < 0) {
-      throw new Error('Argument "last" must be a non-negative integer');
-    }
-
+    startOffset++;
     endOffset = Math.min(endOffset, startOffset + last);
   }
 
@@ -79,24 +117,11 @@ const resolvers: LabelTypeModule.Resolvers = {
       { before, after, first, last },
       ctx: GraphQLModules.ModuleContext
     ) => {
-      let limit = 50;
-      if (typeof first === 'number' && typeof last === 'number') {
-        throw new Error(
-          'Passing both "first" and "last" to paginate is not supported'
-        );
-      }
-      if (typeof first === 'number') {
-        if (first < 0) {
-          throw new Error('Argument "first" must be a non-negative integer');
-        }
-        limit = first + 1;
-      }
-      if (typeof last === 'number') {
-        if (last < 0) {
-          throw new Error('Argument "last" must be a non-negative integer');
-        }
-        limit = last + 1;
-      }
+      validatePaginationArguments(
+        { before, after, first, last },
+        { min: 1, max: 100 }
+      );
+      let limit = getPaginationLimit(first, last);
 
       const labelTypeService: LabelTypeService =
         ctx.container.resolve('labelTypeService');
@@ -106,7 +131,8 @@ const resolvers: LabelTypeModule.Resolvers = {
           isArchived: false,
         },
         {
-          direction: Direction.Forward,
+          direction:
+            typeof first === 'number' ? Direction.Forward : Direction.Backward,
           relations: {
             createdBy: true,
             updatedBy: true,

@@ -7,7 +7,7 @@ import {
   notInArray,
   schema,
 } from '@cs/database';
-import { FindConfig, GetConfig } from '@cs/kyaku/types/query';
+import { Direction, FindConfig, GetConfig } from '@cs/kyaku/types/query';
 import { KyakuError } from '@cs/kyaku/utils';
 
 import {
@@ -102,15 +102,21 @@ export default class LabelTypeService extends BaseService {
           )
         : undefined
     );
-    return this.labelTypeRepository.findMany({
-      where: whereClause,
-      with: this.getWithClause(config?.relations),
-      limit: config?.limit,
-      orderBy: [
-        ...this.getOrderByClause(config),
-        sortByDirection(config.direction)(schema.labelTypes.id),
-      ],
-    });
+    return this.labelTypeRepository
+      .findMany({
+        where: whereClause,
+        with: this.getWithClause(config?.relations),
+        limit: config?.limit,
+        orderBy: [
+          ...this.getOrderByClause(config),
+          sortByDirection(config.direction)(schema.labelTypes.id),
+        ],
+      })
+      .then((labelTypes) =>
+        config.direction === Direction.Backward
+          ? labelTypes.toReversed()
+          : labelTypes
+      );
   }
 
   async create(
