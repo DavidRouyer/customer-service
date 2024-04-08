@@ -1635,7 +1635,7 @@ __metadata:
     "@tanstack/react-query-devtools": "npm:^5.29.0"
     "@tanstack/react-table": "npm:^8.15.3"
     "@testing-library/jest-dom": "npm:^6.4.2"
-    "@testing-library/react": "npm:^14.2.2"
+    "@testing-library/react": "npm:^14.3.0"
     "@trpc/client": "npm:next"
     "@trpc/next": "npm:next"
     "@trpc/react-query": "npm:next"
@@ -1781,7 +1781,7 @@ __metadata:
     "@radix-ui/react-switch": "npm:^1.0.3"
     "@radix-ui/react-tooltip": "npm:^1.0.7"
     "@testing-library/jest-dom": "npm:^6.4.2"
-    "@testing-library/react": "npm:^14.2.2"
+    "@testing-library/react": "npm:^14.3.0"
     "@types/react": "npm:^18.2.74"
     "@types/react-dom": "npm:^18.2.24"
     cmdk: "npm:^1.0.0"
@@ -4977,9 +4977,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@testing-library/react@npm:^14.2.2":
-  version: 14.2.2
-  resolution: "@testing-library/react@npm:14.2.2"
+"@testing-library/react@npm:^14.3.0":
+  version: 14.3.0
+  resolution: "@testing-library/react@npm:14.3.0"
   dependencies:
     "@babel/runtime": "npm:^7.12.5"
     "@testing-library/dom": "npm:^9.0.0"
@@ -4987,7 +4987,7 @@ __metadata:
   peerDependencies:
     react: ^18.0.0
     react-dom: ^18.0.0
-  checksum: ab36707f6701a4a56dd217e16e00d6326e0f760bb2e716245422c7500a0b94efcd351d0aa89c4fab2916e6ebc68c983cec6b3ae0804de813cafc913a612668f6
+  checksum: 2a2529d2bd428074654f75a313c55a33b59e7ab497ff5adcf208b59afd96b19e1e565da48289fdcf898348a0227caef4b43ac888003b6a992331d4c12a488bfc
   languageName: node
   linkType: hard
 
