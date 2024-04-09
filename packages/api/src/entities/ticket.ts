@@ -1,5 +1,4 @@
 import { InferInsertModel, InferSelectModel, schema } from '@cs/database';
-import { SortDirection } from '@cs/kyaku/types';
 
 import { InclusionFilterOperator } from '../services/build-query';
 
@@ -24,12 +23,7 @@ export type TicketFilters = {
   status?: InclusionFilterOperator<Ticket['status']>;
 };
 
-export type TicketSort =
-  | { statusChangedAt: SortDirection }
-  | { createdAt: SortDirection };
-
-export type TicketCursor = {
-  statusChangedAt?: string;
-  createdAt?: string;
-  id: string;
-};
+export enum TicketSortField {
+  createdAt = 'createdAt',
+  statusChangedAt = 'statusChangedAt',
+}

@@ -1,30 +1,18 @@
-import {
-  and,
-  eq,
-  inArray,
-  isNotNull,
-  isNull,
-  notInArray,
-  schema,
-} from '@cs/database';
+import { and, eq, isNotNull, isNull, schema } from '@cs/database';
 import { Direction, FindConfig, GetConfig } from '@cs/kyaku/types/query';
 import { KyakuError } from '@cs/kyaku/utils';
 
 import {
   LabelType,
-  LabelTypeSort,
+  LabelTypeFilters,
+  LabelTypeSortField,
   LabelTypeWith,
 } from '../entities/label-type';
 import { User, USER_COLUMNS } from '../entities/user';
 import LabelTypeRepository from '../repositories/label-type';
 import { UnitOfWork } from '../unit-of-work';
 import { BaseService } from './base-service';
-import {
-  filterByDirection,
-  InclusionFilterOperator,
-  sortByDirection,
-  sortBySortDirection,
-} from './build-query';
+import { filterByDirection, sortByDirection } from './build-query';
 
 export default class LabelTypeService extends BaseService {
   private readonly labelTypeRepository: LabelTypeRepository;
@@ -76,35 +64,20 @@ export default class LabelTypeService extends BaseService {
   }
 
   async list<T extends LabelTypeWith<T>>(
-    filters: {
-      id?: InclusionFilterOperator<string>;
-      isArchived?: boolean;
-    },
-    config: FindConfig<T, LabelTypeSort>
+    filters: LabelTypeFilters,
+    config: FindConfig<T, LabelTypeSortField> = {
+      limit: 50,
+      direction: Direction.Forward,
+      sortBy: LabelTypeSortField.name,
+    }
   ) {
-    const whereClause = and(
-      filters.id
-        ? 'in' in filters.id
-          ? inArray(schema.labelTypes.id, filters.id.in)
-          : 'notIn' in filters.id
-            ? notInArray(schema.labelTypes.id, filters.id.notIn)
-            : undefined
-        : undefined,
-      filters.isArchived !== undefined
-        ? filters.isArchived
-          ? isNotNull(schema.labelTypes.archivedAt)
-          : isNull(schema.labelTypes.archivedAt)
-        : undefined,
-      config?.cursor
-        ? filterByDirection(config.direction)(
-            schema.labelTypes.id,
-            config.cursor
-          )
-        : undefined
-    );
     return this.labelTypeRepository
       .findMany({
-        where: whereClause,
+        where: and(
+          this.getFilterWhereClause(filters),
+          this.getSortWhereClause(config),
+          this.getIdWhereClause(config)
+        ),
         with: this.getWithClause(config?.relations),
         limit: config?.limit,
         orderBy: [
@@ -233,26 +206,65 @@ export default class LabelTypeService extends BaseService {
     };
   }
 
+  private getFilterWhereClause(filters: LabelTypeFilters) {
+    if (!Object.keys(filters).length) return undefined;
+
+    return and(
+      filters.isArchived !== undefined
+        ? filters.isArchived
+          ? isNotNull(schema.labelTypes.archivedAt)
+          : isNull(schema.labelTypes.archivedAt)
+        : undefined
+    );
+  }
+
+  private getSortWhereClause<T extends LabelTypeWith<T>>(
+    config: FindConfig<T, LabelTypeSortField>
+  ) {
+    if (
+      !config.sortBy ||
+      !config.cursor?.lastValue ||
+      config.cursor?.lastValue === config.cursor?.lastId
+    )
+      return undefined;
+
+    if (config.sortBy === LabelTypeSortField.createdAt) {
+      return filterByDirection(config.direction)(
+        schema.labelTypes.createdAt,
+        new Date(config.cursor.lastValue)
+      );
+    }
+    if (config.sortBy === LabelTypeSortField.name) {
+      return filterByDirection(config.direction)(
+        schema.labelTypes.name,
+        config.cursor.lastValue
+      );
+    }
+
+    return undefined;
+  }
+
+  private getIdWhereClause<T extends LabelTypeWith<T>>(
+    config: FindConfig<T, LabelTypeSortField>
+  ) {
+    if (!config.cursor?.lastId) return undefined;
+
+    return filterByDirection(config.direction)(
+      schema.labelTypes.id,
+      config.cursor.lastId
+    );
+  }
+
   private getOrderByClause<T extends LabelTypeWith<T>>(
-    config: FindConfig<T, LabelTypeSort>
+    config: FindConfig<T, LabelTypeSortField>
   ) {
     if (!config.sortBy) return [];
 
-    if ('name' in config.sortBy) {
-      return [
-        sortBySortDirection(
-          config.sortBy.name,
-          config.direction
-        )(schema.labelTypes.name),
-      ];
+    if (config.sortBy === LabelTypeSortField.createdAt) {
+      return [sortByDirection(config.direction)(schema.labelTypes.createdAt)];
     }
-    if ('createdAt' in config.sortBy) {
-      return [
-        sortBySortDirection(
-          config.sortBy.createdAt,
-          config.direction
-        )(schema.labelTypes.createdAt),
-      ];
+    if (config.sortBy === LabelTypeSortField.name) {
+      return [sortByDirection(config.direction)(schema.labelTypes.name)];
     }
 
     return [];

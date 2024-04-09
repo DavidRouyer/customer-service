@@ -1,5 +1,4 @@
 import { InferInsertModel, InferSelectModel, schema } from '@cs/database';
-import { SortDirection } from '@cs/kyaku/types';
 
 export type LabelType = InferSelectModel<typeof schema.labelTypes>;
 
@@ -10,6 +9,11 @@ export type LabelTypeWith<T> = {
   updatedBy?: [T] extends [{ updatedBy: true }] ? true : undefined;
 };
 
-export type LabelTypeSort =
-  | { createdAt: SortDirection }
-  | { name: SortDirection };
+export type LabelTypeFilters = {
+  isArchived?: boolean;
+};
+
+export enum LabelTypeSortField {
+  createdAt = 'createdAt',
+  name = 'name',
+}
