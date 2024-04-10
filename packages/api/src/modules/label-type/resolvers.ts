@@ -1,12 +1,10 @@
 import { GraphQLError } from 'graphql';
 import { createModule } from 'graphql-modules';
 
-import { SortDirection } from '@cs/kyaku/types';
-import { Direction } from '@cs/kyaku/types/query';
+import { Cursor, Direction } from '@cs/kyaku/types/query';
 
-import { InputMaybe } from '../../generated-types/graphql';
+import { LabelTypeSortField } from '../../entities/label-type';
 import LabelTypeService from '../../services/label-type';
-import { base64 } from './base64';
 import { LabelTypeModule } from './generated-types/module-types';
 import typeDefs from './typedefs/label-type.graphql';
 
@@ -17,10 +15,34 @@ export interface ConnectionArguments {
   last?: number | null;
 }
 
+const parseCursor = (cursor: string) => {
+  const cursorStringified = Buffer.from(cursor, 'base64').toString('utf8');
+  try {
+    const parsedCursor: Cursor = JSON.parse(cursorStringified);
+    if (
+      typeof parsedCursor.lastId !== 'string' ||
+      typeof parsedCursor.lastValue !== 'string'
+    ) {
+      throw new Error();
+    }
+    return parsedCursor;
+  } catch (e) {
+    throw new GraphQLError('Invalid cursor');
+  }
+};
+
+export function composeCursor(cursor: Cursor): string {
+  return Buffer.from(JSON.stringify(cursor), 'utf8').toString('base64');
+}
+
 const validatePaginationArguments = (
   { before, after, first, last }: ConnectionArguments,
   { min = 1, max = 100 }
 ) => {
+  let cursor: Cursor | null = null; // default cursor
+  let direction = Direction.Forward; // default direction
+  let limit = 50; // default limit
+
   if (typeof first === 'number' && typeof last === 'number') {
     throw new GraphQLError(
       'Passing both "first" and "last" to paginate is not supported'
@@ -42,6 +64,8 @@ const validatePaginationArguments = (
         `"first" argument value is outside the valid range of '${min}' to '${max}'`
       );
     }
+    limit = first;
+    direction = Direction.Forward;
   }
   if (typeof last === 'number') {
     if (last < min || last > max) {
@@ -49,46 +73,35 @@ const validatePaginationArguments = (
         `"last" argument value is outside the valid range of '${min}' to '${max}'`
       );
     }
-  }
-};
-
-const getPaginationLimit = (
-  first: InputMaybe<number> | undefined,
-  last: InputMaybe<number> | undefined
-) => {
-  let limit = 50; // default limit
-  if (typeof first === 'number') {
-    limit = first;
-  }
-  if (typeof last === 'number') {
     limit = last;
+    direction = Direction.Backward;
   }
-  return limit + 1;
+  if (typeof before === 'string') {
+    cursor = parseCursor(before);
+    direction = Direction.Backward;
+  }
+  if (typeof after === 'string') {
+    cursor = parseCursor(after);
+    direction = Direction.Forward;
+  }
+
+  return { cursor, direction, limit };
 };
 
-const paginate = <T>({
+const paginate = <T extends { id: string }>({
   array,
+  hasNextPage,
+  getLastValue,
   args: { before, after, first, last },
 }: {
   array: ReadonlyArray<T>;
+  hasNextPage: boolean;
+  getLastValue: (item: T) => string;
   args: ConnectionArguments;
 }) => {
-  let startOffset = 0;
-  let endOffset = array.length;
-
-  if (typeof first === 'number') {
-    endOffset = Math.min(endOffset, startOffset + first);
-  }
-  if (typeof last === 'number') {
-    startOffset++;
-    endOffset = Math.min(endOffset, startOffset + last);
-  }
-
-  const slice = array.slice(startOffset, endOffset);
-
-  const edges = slice.map((value, index) => ({
-    cursor: offsetToCursor(index),
-    node: value,
+  const edges = array.map((item) => ({
+    cursor: composeCursor({ lastId: item.id, lastValue: getLastValue(item) }),
+    node: item,
   }));
 
   const firstEdge = edges[0];
@@ -98,54 +111,49 @@ const paginate = <T>({
     pageInfo: {
       startCursor: firstEdge ? firstEdge.cursor : null,
       endCursor: lastEdge ? lastEdge.cursor : null,
-      hasPreviousPage: typeof last === 'number' ? array.length > last : false,
-      hasNextPage: typeof first === 'number' ? array.length > first : false,
+      hasPreviousPage:
+        typeof last === 'number' ? hasNextPage : typeof after === 'number',
+      hasNextPage:
+        typeof first === 'number' ? hasNextPage : typeof before === 'number',
     },
   };
 };
-
-const PREFIX = 'arrayconnection:';
-
-export function offsetToCursor(offset: number): string {
-  return base64(PREFIX + offset.toString());
-}
 
 const resolvers: LabelTypeModule.Resolvers = {
   Query: {
     labelTypes: async (
       _,
-      { before, after, first, last },
+      { filters, before, after, first, last },
       ctx: GraphQLModules.ModuleContext
     ) => {
-      validatePaginationArguments(
+      const { cursor, direction, limit } = validatePaginationArguments(
         { before, after, first, last },
         { min: 1, max: 100 }
       );
-      let limit = getPaginationLimit(first, last);
 
       const labelTypeService: LabelTypeService =
         ctx.container.resolve('labelTypeService');
 
-      const labelTypes = await labelTypeService.list(
+      const labelTypeResult = await labelTypeService.list(
         {
-          isArchived: false,
+          isArchived: filters?.isArchived ?? false,
         },
         {
-          direction:
-            typeof first === 'number' ? Direction.Forward : Direction.Backward,
+          cursor: cursor ?? undefined,
+          direction: direction,
+          limit: limit,
           relations: {
             createdBy: true,
             updatedBy: true,
           },
-          limit: limit,
-          sortBy: {
-            name: SortDirection.ASC,
-          },
+          sortBy: LabelTypeSortField.name,
         }
       );
 
       return paginate({
-        array: labelTypes,
+        array: labelTypeResult.items,
+        hasNextPage: labelTypeResult.hasNextPage,
+        getLastValue: (item) => item.name,
         args: { before, after, first, last },
       });
     },

@@ -6,11 +6,13 @@ export enum Direction {
   Backward = 'backward',
 }
 
+export type Cursor = {
+  lastId: string;
+  lastValue: string;
+};
+
 export type FindConfig<TRelations, TSortField> = {
-  cursor?: {
-    lastId: string;
-    lastValue: string;
-  };
+  cursor?: Cursor;
   limit: number;
   direction: Direction;
   relations?: TRelations;

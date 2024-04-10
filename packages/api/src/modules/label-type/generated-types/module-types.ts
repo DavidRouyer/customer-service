@@ -9,6 +9,10 @@ export namespace LabelTypeModule {
     Query: 'labelTypes';
   };
   
+  interface DefinedInputFields {
+    LabelTypeFilter: 'isArchived';
+  };
+  
   export type LabelType = Pick<Types.LabelType, DefinedFields['LabelType']>;
   export type DateTime = Types.DateTime;
   export type User = Types.User;
@@ -16,6 +20,7 @@ export namespace LabelTypeModule {
   export type LabelTypeConnection = Pick<Types.LabelTypeConnection, DefinedFields['LabelTypeConnection']>;
   export type LabelTypeEdge = Pick<Types.LabelTypeEdge, DefinedFields['LabelTypeEdge']>;
   export type PageInfo = Types.PageInfo;
+  export type LabelTypeFilter = Pick<Types.LabelTypeFilter, DefinedInputFields['LabelTypeFilter']>;
   export type Query = Pick<Types.Query, DefinedFields['Query']>;
   
   export type LabelTypeResolvers = Pick<Types.LabelTypeResolvers, DefinedFields['LabelType'] | '__isTypeOf'>;

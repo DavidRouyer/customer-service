@@ -41,6 +41,10 @@ export type LabelTypeEdge = {
   node: LabelType;
 };
 
+export type LabelTypeFilter = {
+  isArchived?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
 export type Node = {
   id: Scalars['ID']['output'];
 };
@@ -63,6 +67,7 @@ export type Query = {
 export type QueryLabelTypesArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
+  filters?: InputMaybe<LabelTypeFilter>;
   first?: InputMaybe<Scalars['Int']['input']>;
   last?: InputMaybe<Scalars['Int']['input']>;
 };
@@ -158,6 +163,7 @@ export type ResolversTypes = {
   LabelType: ResolverTypeWrapper<LabelType>;
   LabelTypeConnection: ResolverTypeWrapper<LabelTypeConnection>;
   LabelTypeEdge: ResolverTypeWrapper<LabelTypeEdge>;
+  LabelTypeFilter: LabelTypeFilter;
   Node: ResolverTypeWrapper<ResolversInterfaceTypes<ResolversTypes>['Node']>;
   PageInfo: ResolverTypeWrapper<PageInfo>;
   Query: ResolverTypeWrapper<{}>;
@@ -174,6 +180,7 @@ export type ResolversParentTypes = {
   LabelType: LabelType;
   LabelTypeConnection: LabelTypeConnection;
   LabelTypeEdge: LabelTypeEdge;
+  LabelTypeFilter: LabelTypeFilter;
   Node: ResolversInterfaceTypes<ResolversParentTypes>['Node'];
   PageInfo: PageInfo;
   Query: {};

@@ -35,6 +35,9 @@
     },
     "//#clean": {
       "cache": false
+    },
+    "codegen:graphql": {
+      "cache": false
     }
   },
   "globalEnv": [

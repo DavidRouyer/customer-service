@@ -71,25 +71,27 @@ export default class LabelTypeService extends BaseService {
       sortBy: LabelTypeSortField.name,
     }
   ) {
-    return this.labelTypeRepository
-      .findMany({
-        where: and(
-          this.getFilterWhereClause(filters),
-          this.getSortWhereClause(config),
-          this.getIdWhereClause(config)
-        ),
-        with: this.getWithClause(config?.relations),
-        limit: config?.limit,
-        orderBy: [
-          ...this.getOrderByClause(config),
-          sortByDirection(config.direction)(schema.labelTypes.id),
-        ],
-      })
-      .then((labelTypes) =>
-        config.direction === Direction.Backward
-          ? labelTypes.toReversed()
-          : labelTypes
-      );
+    const labelTypes = await this.labelTypeRepository.findMany({
+      where: and(
+        this.getFilterWhereClause(filters),
+        this.getSortWhereClause(config),
+        this.getIdWhereClause(config)
+      ),
+      with: this.getWithClause(config?.relations),
+      limit: config?.limit + 1,
+      orderBy: [
+        ...this.getOrderByClause(config),
+        sortByDirection(config.direction)(schema.labelTypes.id),
+      ],
+    });
+
+    const items = labelTypes.slice(0, config.limit);
+    const hasNextPage = labelTypes.length > config.limit;
+    return {
+      items:
+        config.direction === Direction.Forward ? items : items.toReversed(),
+      hasNextPage: hasNextPage,
+    };
   }
 
   async create(

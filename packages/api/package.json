@@ -13,8 +13,8 @@
     "lint": "eslint .",
     "format": "prettier --check \"**/*.{mjs,ts,md,json}\"",
     "typecheck": "tsc --noEmit",
-    "generate": "graphql-codegen",
-    "generate:watch": "graphql-codegen --watch"
+    "codegen:graphql": "graphql-codegen",
+    "codegen:graphql:watch": "graphql-codegen --watch"
   },
   "dependencies": {
     "@cs/auth": "*",

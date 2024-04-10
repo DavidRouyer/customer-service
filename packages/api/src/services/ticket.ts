@@ -79,7 +79,7 @@ export default class TicketService extends BaseService {
       sortBy: TicketSortField.createdAt,
     }
   ) {
-    const filteredTickets = await this.ticketRepository.findMany({
+    const tickets = await this.ticketRepository.findMany({
       where: and(
         this.getFilterWhereClause(filters),
         this.getSortWhereClause(config),
@@ -93,8 +93,8 @@ export default class TicketService extends BaseService {
       ],
     });
 
-    const items = filteredTickets.slice(0, config.limit);
-    const hasNextPage = filteredTickets.length > config.limit;
+    const items = tickets.slice(0, config.limit);
+    const hasNextPage = tickets.length > config.limit;
     return {
       items: items,
       hasNextPage: hasNextPage,
