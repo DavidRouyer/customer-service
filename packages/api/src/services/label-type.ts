@@ -213,13 +213,11 @@ export default class LabelTypeService extends BaseService {
   private getFilterWhereClause(filters: LabelTypeFilters) {
     if (!Object.keys(filters).length) return undefined;
 
-    return and(
-      filters.isArchived !== undefined
-        ? filters.isArchived
-          ? isNotNull(schema.labelTypes.archivedAt)
-          : isNull(schema.labelTypes.archivedAt)
-        : undefined
-    );
+    return filters.isArchived !== undefined
+      ? filters.isArchived
+        ? isNotNull(schema.labelTypes.archivedAt)
+        : isNull(schema.labelTypes.archivedAt)
+      : undefined;
   }
 
   private getSortWhereClause<T extends LabelTypeWith<T>>(
