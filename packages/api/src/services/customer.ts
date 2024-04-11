@@ -1,17 +1,13 @@
 import { and, eq, schema } from '@cs/database';
-import { FindConfig, GetConfig } from '@cs/kyaku/types/query';
+import { Direction, FindConfig, GetConfig } from '@cs/kyaku/types/query';
 import { KyakuError } from '@cs/kyaku/utils';
 
-import { CustomerSort, CustomerWith } from '../entities/customer';
+import { CustomerSortField, CustomerWith } from '../entities/customer';
 import { User, USER_COLUMNS } from '../entities/user';
 import CustomerRepository from '../repositories/customer';
 import { UnitOfWork } from '../unit-of-work';
 import { BaseService } from './base-service';
-import {
-  filterByDirection,
-  sortByDirection,
-  sortBySortDirection,
-} from './build-query';
+import { filterByDirection, sortByDirection } from './build-query';
 
 export default class CustomerService extends BaseService {
   private readonly customerRepository: CustomerRepository;
@@ -44,37 +40,24 @@ export default class CustomerService extends BaseService {
     return customer;
   }
 
-  async list<T extends CustomerWith<T>>(config: FindConfig<T, CustomerSort>) {
-    const whereClause = and(
-      config.cursor
-        ? filterByDirection(config.direction)(
-            schema.customers.id,
-            config.cursor
-          )
-        : undefined
-    );
+  async list<T extends CustomerWith<T>>(
+    config: FindConfig<T, CustomerSortField> = {
+      direction: Direction.Forward,
+      limit: 50,
+      sortBy: CustomerSortField.createdAt,
+    }
+  ) {
     return this.customerRepository.findMany({
-      where: whereClause,
-      with: this.getWithClause(config.relations),
-      limit: config.limit,
-      orderBy: and(
-        config.sortBy
-          ? 'name' in config.sortBy
-            ? sortBySortDirection(
-                config.sortBy.name,
-                config.direction
-              )(schema.customers.name)
-            : 'createdAt' in config.sortBy
-              ? sortBySortDirection(
-                  config.sortBy.createdAt,
-                  config.direction
-                )(schema.customers.createdAt)
-              : undefined
-          : undefined,
-        config.cursor
-          ? sortByDirection(config.direction)(schema.customers.id)
-          : undefined
+      limit: config.limit + 1,
+      orderBy: [
+        ...this.getOrderByClause(config),
+        sortByDirection(config.direction)(schema.customers.id),
+      ],
+      where: and(
+        this.getSortWhereClause(config),
+        this.getIdWhereClause(config)
       ),
+      with: this.getWithClause(config.relations),
     });
   }
 
@@ -104,5 +87,57 @@ export default class CustomerService extends BaseService {
         ? { columns: { [K in keyof User]: true } }
         : undefined,
     };
+  }
+
+  private getSortWhereClause<T extends CustomerWith<T>>(
+    config: FindConfig<T, CustomerSortField>
+  ) {
+    if (
+      !config.sortBy ||
+      !config.cursor?.lastValue ||
+      config.cursor?.lastValue === config.cursor?.lastId
+    )
+      return undefined;
+
+    if (config.sortBy === CustomerSortField.createdAt) {
+      return filterByDirection(config.direction)(
+        schema.customers.createdAt,
+        new Date(config.cursor.lastValue)
+      );
+    }
+    if (config.sortBy === CustomerSortField.name) {
+      return filterByDirection(config.direction)(
+        schema.customers.name,
+        config.cursor.lastValue
+      );
+    }
+
+    return undefined;
+  }
+
+  private getIdWhereClause<T extends CustomerWith<T>>(
+    config: FindConfig<T, CustomerSortField>
+  ) {
+    if (!config.cursor?.lastId) return undefined;
+
+    return filterByDirection(config.direction)(
+      schema.customers.id,
+      config.cursor.lastId
+    );
+  }
+
+  private getOrderByClause<T extends CustomerWith<T>>(
+    config: FindConfig<T, CustomerSortField>
+  ) {
+    if (!config.sortBy) return [];
+
+    if (config.sortBy === CustomerSortField.createdAt) {
+      return [sortByDirection(config.direction)(schema.customers.createdAt)];
+    }
+    if (config.sortBy === CustomerSortField.name) {
+      return [sortByDirection(config.direction)(schema.customers.name)];
+    }
+
+    return [];
   }
 }

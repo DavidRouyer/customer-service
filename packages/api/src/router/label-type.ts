@@ -1,8 +1,8 @@
 import { z } from 'zod';
 
-import { SortDirection } from '@cs/kyaku/types';
 import { Direction } from '@cs/kyaku/types/query';
 
+import { LabelTypeSortField } from '../entities/label-type';
 import LabelTypeService from '../services/label-type';
 import { createTRPCRouter, protectedProcedure } from '../trpc';
 
@@ -16,9 +16,7 @@ export const labelTypeRouter = createTRPCRouter({
         direction: Direction.Forward,
         relations: {},
         limit: 50,
-        sortBy: {
-          name: SortDirection.ASC,
-        },
+        sortBy: LabelTypeSortField.name,
       });
     }),
 

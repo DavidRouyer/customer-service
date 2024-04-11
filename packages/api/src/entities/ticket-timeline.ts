@@ -1,5 +1,4 @@
 import { InferInsertModel, InferSelectModel, schema } from '@cs/database';
-import { SortDirection } from '@cs/kyaku/types';
 
 export type TicketTimeline = InferSelectModel<
   typeof schema.ticketTimelineEntries
@@ -19,4 +18,6 @@ export type TicketTimelineWith<T> = {
   userCreatedBy?: [T] extends [{ userCreatedBy: true }] ? true : undefined;
 };
 
-export type TicketTimelineSort = { createdAt: SortDirection };
+export enum TicketTimelineSortField {
+  createdAt = 'createdAt',
+}

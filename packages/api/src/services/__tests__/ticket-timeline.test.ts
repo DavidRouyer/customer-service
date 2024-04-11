@@ -1,4 +1,4 @@
-import { eq, schema } from '@cs/database';
+import { asc, eq, schema } from '@cs/database';
 
 import LabelRepository from '../../repositories/label';
 import TicketTimelineRepository from '../../repositories/ticket-timeline';
@@ -45,7 +45,11 @@ describe('TicketTimelineService', () => {
 
       expect(ticketTimelineRepo.findMany).toHaveBeenCalledTimes(1);
       expect(ticketTimelineRepo.findMany).toHaveBeenCalledWith({
-        limit: undefined,
+        limit: 51,
+        orderBy: [
+          asc(schema.ticketTimelineEntries.createdAt),
+          asc(schema.ticketTimelineEntries.id),
+        ],
         where: eq(schema.ticketTimelineEntries.ticketId, 'john-doe'),
         with: {
           customer: undefined,

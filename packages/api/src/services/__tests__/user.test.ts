@@ -1,4 +1,4 @@
-import { eq, schema } from '@cs/database';
+import { asc, eq, schema } from '@cs/database';
 
 import UserRepository from '../../repositories/user';
 import { UnitOfWork } from '../../unit-of-work';
@@ -62,11 +62,10 @@ describe('UserService', () => {
     });
 
     it('successfully retrieves a list of users', async () => {
-      const result = await userService.list({});
+      const result = await userService.list();
 
       expect(userRepo.findMany).toHaveBeenCalledTimes(1);
       expect(userRepo.findMany).toHaveBeenCalledWith({
-        limit: undefined,
         columns: {
           email: true,
           emailVerified: true,
@@ -74,6 +73,8 @@ describe('UserService', () => {
           image: true,
           name: true,
         },
+        limit: 51,
+        orderBy: [asc(schema.users.name), asc(schema.users.id)],
         where: undefined,
       });
 

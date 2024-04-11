@@ -75,7 +75,7 @@ export const ticketRouter = createTRPCRouter({
       return {
         data: tickets.items,
         hasNextPage: tickets.hasNextPage,
-        nextCursor: tickets.nextCursor,
+        nextCursor: 'tickets.nextCursor',
       };
     }),
 

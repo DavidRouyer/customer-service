@@ -54,16 +54,6 @@ export const sortByDirection = (direction: Direction) => {
   return direction === Direction.Forward ? asc : desc;
 };
 
-export const sortBySortDirection = (
-  sortBy: SortDirection,
-  direction: Direction
-) => {
-  return (sortBy === SortDirection.ASC && direction === Direction.Forward) ||
-    (sortBy === SortDirection.DESC && direction === Direction.Backward)
-    ? asc
-    : desc;
-};
-
 export const filterByDirection = (direction: Direction) => {
   return direction === Direction.Forward ? gt : lt;
 };

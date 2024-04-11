@@ -1,6 +1,5 @@
 import { Cursor } from '@cs/kyaku/types/query';
-
-import { composeCursor, parseCursor } from '../pagination';
+import { composeCursor, parseCursor } from '@cs/kyaku/utils/pagination';
 
 const encodedCursor = 'eyJsYXN0SWQiOiIxIiwibGFzdFZhbHVlIjoiMSJ9';
 const decodedCursor: Cursor = { lastId: '1', lastValue: '1' };

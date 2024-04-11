@@ -1,5 +1,6 @@
 import { InferInsertModel, InferSelectModel, schema } from '@cs/database';
-import { SortDirection } from '@cs/kyaku/types';
+
+import { InclusionFilterOperator } from '../services/build-query';
 
 export type User = Omit<InferSelectModel<typeof schema.users>, 'password'>;
 
@@ -18,4 +19,10 @@ export const USER_COLUMNS = {
   image: true,
 } as const;
 
-export type UserSort = { createdAt: SortDirection } | { name: SortDirection };
+export type UserFilters = {
+  id?: InclusionFilterOperator<User['id']>;
+};
+
+export enum UserSortField {
+  name = 'name',
+}

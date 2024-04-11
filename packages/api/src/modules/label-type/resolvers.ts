@@ -1,9 +1,13 @@
 import { createModule } from 'graphql-modules';
 
+import {
+  paginate,
+  validatePaginationArguments,
+} from '@cs/kyaku/utils/pagination';
+
 import { LabelTypeSortField } from '../../entities/label-type';
 import LabelTypeService from '../../services/label-type';
 import { LabelTypeModule } from './generated-types/module-types';
-import { paginate, validatePaginationArguments } from './pagination';
 import typeDefs from './typedefs/label-type.graphql';
 
 const resolvers: LabelTypeModule.Resolvers = {

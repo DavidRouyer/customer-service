@@ -1,8 +1,8 @@
 import { z } from 'zod';
 
-import { SortDirection } from '@cs/kyaku/types';
 import { Direction } from '@cs/kyaku/types/query';
 
+import { TicketTimelineSortField } from '../entities/ticket-timeline';
 import TicketTimelineService from '../services/ticket-timeline';
 import { createTRPCRouter, protectedProcedure } from '../trpc';
 
@@ -22,9 +22,7 @@ export const ticketTimelineRouter = createTRPCRouter({
             userCreatedBy: true,
           },
           limit: 50,
-          sortBy: {
-            createdAt: SortDirection.ASC,
-          },
+          sortBy: TicketTimelineSortField.createdAt,
           direction: Direction.Forward,
         }
       );

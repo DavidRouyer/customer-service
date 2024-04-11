@@ -12,9 +12,10 @@ import {
   User,
 } from '@cs/kyaku/models';
 import { FindConfig } from '@cs/kyaku/types';
+import { Direction } from '@cs/kyaku/types/query';
 
 import {
-  TicketTimelineSort,
+  TicketTimelineSortField,
   TicketTimelineWith,
 } from '../entities/ticket-timeline';
 import { USER_COLUMNS } from '../entities/user';
@@ -23,7 +24,7 @@ import TicketTimelineRepository from '../repositories/ticket-timeline';
 import UserRepository from '../repositories/user';
 import { UnitOfWork } from '../unit-of-work';
 import { BaseService } from './base-service';
-import { sortBySortDirection } from './build-query';
+import { sortByDirection } from './build-query';
 
 export default class TicketTimelineService extends BaseService {
   private readonly ticketTimelineRepository: TicketTimelineRepository;
@@ -48,23 +49,20 @@ export default class TicketTimelineService extends BaseService {
 
   async list<T extends TicketTimelineWith<T>>(
     filters: { ticketId: string },
-    config?: FindConfig<T, TicketTimelineSort>
+    config: FindConfig<T, TicketTimelineSortField> = {
+      direction: Direction.Forward,
+      limit: 50,
+      sortBy: TicketTimelineSortField.createdAt,
+    }
   ) {
     const ticketTimelineEntries = await this.ticketTimelineRepository.findMany({
+      limit: config.limit + 1,
+      orderBy: [
+        ...this.getOrderByClause(config),
+        sortByDirection(config.direction)(schema.ticketTimelineEntries.id),
+      ],
       where: eq(schema.ticketTimelineEntries.ticketId, filters.ticketId),
       with: this.getWithClause(config?.relations),
-      limit: config?.limit,
-      orderBy: and(
-        config?.sortBy
-          ? 'createdAt' in config.sortBy
-            ? sortBySortDirection(
-                config.sortBy.createdAt,
-                config.direction
-              )(schema.ticketTimelineEntries.createdAt)
-            : undefined
-          : undefined,
-        config?.cursor ? desc(schema.tickets.id) : undefined
-      ),
     });
 
     const ticketAssigmentChangedEntries = ticketTimelineEntries
@@ -242,5 +240,21 @@ export default class TicketTimelineService extends BaseService {
         ? { columns: { [K in keyof User]: true } }
         : undefined,
     };
+  }
+
+  private getOrderByClause<T extends TicketTimelineWith<T>>(
+    config: FindConfig<T, TicketTimelineSortField>
+  ) {
+    if (!config.sortBy) return [];
+
+    if (config.sortBy === TicketTimelineSortField.createdAt) {
+      return [
+        sortByDirection(config.direction)(
+          schema.ticketTimelineEntries.createdAt
+        ),
+      ];
+    }
+
+    return [];
   }
 }

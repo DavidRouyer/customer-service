@@ -1,5 +1,4 @@
-import { eq, schema } from '@cs/database';
-import { Direction } from '@cs/kyaku/types/query';
+import { asc, eq, schema } from '@cs/database';
 
 import CustomerRepository from '../../repositories/customer';
 import { UnitOfWork } from '../../unit-of-work';
@@ -60,16 +59,13 @@ describe('CustomerService', () => {
     });
 
     it('successfully retrieves a list of customers', async () => {
-      const result = await customerService.list({
-        limit: 10,
-        direction: Direction.Forward,
-      });
+      const result = await customerService.list();
 
       expect(customerRepo.findMany).toHaveBeenCalledTimes(1);
       expect(customerRepo.findMany).toHaveBeenCalledWith({
+        limit: 51,
+        orderBy: [asc(schema.customers.createdAt), asc(schema.customers.id)],
         where: undefined,
-        limit: 10,
-        orderBy: undefined,
         with: {
           createdBy: undefined,
           updatedBy: undefined,
