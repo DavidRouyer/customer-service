@@ -73,12 +73,12 @@ describe('TicketService', () => {
     });
 
     it('successfully retrieves a list of tickets', async () => {
-      const result = await ticketService.list({});
+      const result = await ticketService.list();
 
       expect(ticketRepo.findMany).toHaveBeenCalledTimes(1);
       expect(ticketRepo.findMany).toHaveBeenCalledWith({
         limit: 51,
-        orderBy: [asc(schema.tickets.id)],
+        orderBy: [asc(schema.tickets.createdAt), asc(schema.tickets.id)],
         where: and(undefined),
         with: {
           assignedTo: undefined,
@@ -92,7 +92,6 @@ describe('TicketService', () => {
       expect(result).toStrictEqual({
         hasNextPage: false,
         items: [{ id: 'one-piece' }],
-        nextCursor: undefined,
       });
     });
   });

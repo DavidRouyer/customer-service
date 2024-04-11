@@ -5,6 +5,7 @@ import { Cursor, Direction } from '@cs/kyaku/types/query';
 
 import { LabelTypeSortField } from '../../entities/label-type';
 import LabelTypeService from '../../services/label-type';
+import { base64, unbase64 } from './base64';
 import { LabelTypeModule } from './generated-types/module-types';
 import typeDefs from './typedefs/label-type.graphql';
 
@@ -15,8 +16,8 @@ export interface ConnectionArguments {
   last?: number | null;
 }
 
-const parseCursor = (cursor: string) => {
-  const cursorStringified = Buffer.from(cursor, 'base64').toString('utf8');
+export const parseCursor = (cursor: string) => {
+  const cursorStringified = unbase64(cursor);
   try {
     const parsedCursor: Cursor = JSON.parse(cursorStringified);
     if (
@@ -32,7 +33,7 @@ const parseCursor = (cursor: string) => {
 };
 
 export function composeCursor(cursor: Cursor): string {
-  return Buffer.from(JSON.stringify(cursor), 'utf8').toString('base64');
+  return base64(JSON.stringify(cursor));
 }
 
 const validatePaginationArguments = (

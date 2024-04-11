@@ -64,25 +64,27 @@ export default class LabelTypeService extends BaseService {
   }
 
   async list<T extends LabelTypeWith<T>>(
-    filters: LabelTypeFilters,
+    filters: LabelTypeFilters = {
+      isArchived: false,
+    },
     config: FindConfig<T, LabelTypeSortField> = {
-      limit: 50,
       direction: Direction.Forward,
+      limit: 50,
       sortBy: LabelTypeSortField.name,
     }
   ) {
     const labelTypes = await this.labelTypeRepository.findMany({
+      limit: config.limit + 1,
+      orderBy: [
+        ...this.getOrderByClause(config),
+        sortByDirection(config.direction)(schema.labelTypes.id),
+      ],
       where: and(
         this.getFilterWhereClause(filters),
         this.getSortWhereClause(config),
         this.getIdWhereClause(config)
       ),
-      with: this.getWithClause(config?.relations),
-      limit: config?.limit + 1,
-      orderBy: [
-        ...this.getOrderByClause(config),
-        sortByDirection(config.direction)(schema.labelTypes.id),
-      ],
+      with: this.getWithClause(config.relations),
     });
 
     const items = labelTypes.slice(0, config.limit);

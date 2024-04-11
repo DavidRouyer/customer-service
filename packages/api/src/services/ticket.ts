@@ -72,31 +72,32 @@ export default class TicketService extends BaseService {
   }
 
   async list<T extends TicketWith<T>>(
-    filters: TicketFilters,
+    filters: TicketFilters = {},
     config: FindConfig<T, TicketSortField> = {
-      limit: 50,
       direction: Direction.Forward,
+      limit: 50,
       sortBy: TicketSortField.createdAt,
     }
   ) {
     const tickets = await this.ticketRepository.findMany({
-      where: and(
-        this.getFilterWhereClause(filters),
-        this.getSortWhereClause(config),
-        this.getIdWhereClause(config)
-      ),
-      with: this.getWithClause(config?.relations),
       limit: config.limit + 1,
       orderBy: [
         ...this.getOrderByClause(config),
         sortByDirection(config.direction)(schema.tickets.id),
       ],
+      where: and(
+        this.getFilterWhereClause(filters),
+        this.getSortWhereClause(config),
+        this.getIdWhereClause(config)
+      ),
+      with: this.getWithClause(config.relations),
     });
 
     const items = tickets.slice(0, config.limit);
     const hasNextPage = tickets.length > config.limit;
     return {
-      items: items,
+      items:
+        config.direction === Direction.Forward ? items : items.toReversed(),
       hasNextPage: hasNextPage,
     };
   }

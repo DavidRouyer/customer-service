@@ -1,4 +1,4 @@
-import { and, eq, isNull, schema } from '@cs/database';
+import { and, asc, eq, isNull, schema } from '@cs/database';
 
 import LabelTypeRepository from '../../repositories/label-type';
 import { UnitOfWork } from '../../unit-of-work';
@@ -88,14 +88,12 @@ describe('LabelTypeService', () => {
     });
 
     it('successfully retrieves a list of label types', async () => {
-      const result = await labelTypeService.list({
-        isArchived: false,
-      });
+      const result = await labelTypeService.list();
 
       expect(labelTypeRepo.findMany).toHaveBeenCalledTimes(1);
       expect(labelTypeRepo.findMany).toHaveBeenCalledWith({
-        limit: undefined,
-        orderBy: undefined,
+        limit: 51,
+        orderBy: [asc(schema.labelTypes.name), asc(schema.labelTypes.id)],
         where: and(isNull(schema.labelTypes.archivedAt)),
         with: {
           createdBy: undefined,
@@ -103,7 +101,10 @@ describe('LabelTypeService', () => {
         },
       });
 
-      expect(result).toStrictEqual([{ id: 'one-piece' }]);
+      expect(result).toStrictEqual({
+        items: [{ id: 'one-piece' }],
+        hasNextPage: false,
+      });
     });
   });
 
