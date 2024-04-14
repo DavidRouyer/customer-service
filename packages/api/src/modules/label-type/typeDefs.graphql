@@ -5,7 +5,7 @@ type LabelType implements Node {
   archivedAt: DateTime
   createdAt: DateTime!
   createdBy: User!
-  updatedAt: DateTime!
+  updatedAt: DateTime
   updatedBy: User
 }
 
