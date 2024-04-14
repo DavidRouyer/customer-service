@@ -10,11 +10,11 @@
   "scripts": {
     "build": "tsc",
     "clean": "rm -rf .turbo node_modules",
+    "codegen:graphql": "graphql-codegen",
+    "codegen:graphql:watch": "graphql-codegen --watch",
     "lint": "eslint .",
     "format": "prettier --check \"**/*.{mjs,ts,md,json}\"",
-    "typecheck": "tsc --noEmit",
-    "codegen:graphql": "graphql-codegen",
-    "codegen:graphql:watch": "graphql-codegen --watch"
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@cs/auth": "*",

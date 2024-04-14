@@ -2,13 +2,15 @@
 import { createYoga } from 'graphql-yoga';
 
 import { container, schema } from '@cs/api';
+import { auth } from '@cs/auth';
 
 export const runtime = 'nodejs';
 
 const { handleRequest } = createYoga({
   schema: schema,
-  context: () => ({
+  context: async () => ({
     container,
+    session: await auth(),
   }),
 
   // While using Next.js file convention for routing, we need to configure Yoga to use the correct endpoint

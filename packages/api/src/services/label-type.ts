@@ -3,10 +3,11 @@ import { Direction, FindConfig, GetConfig } from '@cs/kyaku/types/query';
 import { KyakuError } from '@cs/kyaku/utils';
 
 import {
-  LabelType,
+  CreateLabelType,
   LabelTypeFilters,
   LabelTypeSortField,
   LabelTypeWith,
+  UpdateLabelType,
 } from '../entities/label-type';
 import { User, USER_COLUMNS } from '../entities/user';
 import LabelTypeRepository from '../repositories/label-type';
@@ -96,12 +97,7 @@ export default class LabelTypeService extends BaseService {
     };
   }
 
-  async create(
-    data: Omit<
-      LabelType,
-      'id' | 'createdAt' | 'updatedAt' | 'updatedById' | 'archivedAt'
-    >
-  ) {
+  async create(data: CreateLabelType, userId: string) {
     try {
       await this.retrieveByName(data.name);
       throw new KyakuError(
@@ -119,6 +115,7 @@ export default class LabelTypeService extends BaseService {
         {
           ...data,
           createdAt: creationDate,
+          createdById: userId,
         },
         tx
       );
@@ -130,6 +127,32 @@ export default class LabelTypeService extends BaseService {
 
       return {
         id: newLabelType.id,
+      };
+    });
+  }
+
+  async update(data: UpdateLabelType, userId: string) {
+    await this.retrieve(data.id);
+
+    return await this.unitOfWork.transaction(async (tx) => {
+      const updateDate = new Date();
+
+      const updatedLabelType = await this.labelTypeRepository.update(
+        {
+          ...data,
+          updatedAt: updateDate,
+          updatedById: userId,
+        },
+        tx
+      );
+
+      if (!updatedLabelType) {
+        tx.rollback();
+        return;
+      }
+
+      return {
+        id: updatedLabelType.id,
       };
     });
   }

@@ -1,0 +1,24 @@
+query labelTypes(
+  $filters: LabelTypeFilter
+  $first: Int
+  $last: Int
+  $before: String
+  $after: String
+) {
+  labelTypes(
+    filters: $filters
+    first: $first
+    last: $last
+    before: $before
+    after: $after
+  ) {
+    edges {
+      cursor
+      node {
+        id
+        name
+        icon
+      }
+    }
+  }
+}

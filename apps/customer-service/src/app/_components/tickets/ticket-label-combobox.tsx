@@ -16,6 +16,7 @@ import {
 } from '@cs/ui/command';
 import { Popover, PopoverContent, PopoverTrigger } from '@cs/ui/popover';
 
+import { useLabelTypesQuery } from '~/graphql/generated/client';
 import { api } from '~/trpc/react';
 
 type TicketLabelComboboxProps = {
@@ -32,9 +33,16 @@ export const TicketLabelCombobox: FC<TicketLabelComboboxProps> = ({
 
   const utils = api.useUtils();
 
-  const { data: labelTypesData } = api.labelType.all.useQuery({
-    isArchived: false,
-  });
+  const { data: labelTypesData } = useLabelTypesQuery(
+    {
+      filters: {
+        isArchived: false,
+      },
+    },
+    {
+      select: (data) => data.labelTypes,
+    }
+  );
 
   const { mutateAsync: addLabels } = api.label.addLabels.useMutation({
     onMutate: async (newLabels) => {
@@ -57,7 +65,7 @@ export const TicketLabelCombobox: FC<TicketLabelComboboxProps> = ({
               newLabels.labelTypeIds.map((labelTypeId) => ({
                 id: `${newLabels.ticketId}-${labelTypeId}`,
                 labelTypeId,
-                labelType: labelTypesData?.find(
+                labelType: labelTypesData?.edges?.find(
                   (labelType) => labelType.id === labelTypeId
                 )!,
                 ticketId: newLabels.ticketId,
@@ -154,12 +162,12 @@ export const TicketLabelCombobox: FC<TicketLabelComboboxProps> = ({
               <FormattedMessage id="ticket.labeling.no_results" />
             </CommandEmpty>
             <CommandGroup>
-              {(labelTypesData ?? []).map((labelType) => (
+              {(labelTypesData?.edges ?? []).map((labelType) => (
                 <CommandItem
-                  key={labelType.id}
+                  key={labelType.node.id}
                   onSelect={() => {
                     const labelWithLabelType = labels?.find(
-                      (label) => label.labelType.id === labelType.id
+                      (label) => label.labelType.id === labelType.node.id
                     );
                     if (labelWithLabelType) {
                       removeLabels({
@@ -167,7 +175,10 @@ export const TicketLabelCombobox: FC<TicketLabelComboboxProps> = ({
                         labelIds: [labelWithLabelType.id],
                       });
                     } else {
-                      addLabels({ ticketId, labelTypeIds: [labelType.id] });
+                      addLabels({
+                        ticketId,
+                        labelTypeIds: [labelType.node.id],
+                      });
                     }
                   }}
                 >
@@ -176,14 +187,14 @@ export const TicketLabelCombobox: FC<TicketLabelComboboxProps> = ({
                       'mr-2 h-4 w-4 shrink-0',
                       labels
                         ?.map((label) => label.labelType.id)
-                        .includes(labelType.id)
+                        .includes(labelType.node.id)
                         ? 'opacity-100'
                         : 'opacity-0'
                     )}
                   />
                   <div className="flex items-center gap-x-2 truncate">
                     <p className="truncate text-xs text-muted-foreground">
-                      {labelType?.name}
+                      {labelType.node.name}
                     </p>
                   </div>
                 </CommandItem>

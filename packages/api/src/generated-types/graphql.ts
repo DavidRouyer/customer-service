@@ -8,6 +8,7 @@ export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: 
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
 export type MakeEmpty<T extends { [key: string]: unknown }, K extends keyof T> = { [_ in K]?: never };
 export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
+export type RequireFields<T, K extends keyof T> = Omit<T, K> & { [P in K]-?: NonNullable<T[P]> };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: { input: string; output: string; }
@@ -16,6 +17,15 @@ export type Scalars = {
   Int: { input: number; output: number; }
   Float: { input: number; output: number; }
   DateTime: { input: any; output: any; }
+};
+
+export type ArchiveLabelTypeInput = {
+  id: Scalars['ID']['input'];
+};
+
+export type CreateLabelTypeInput = {
+  icon?: InputMaybe<Scalars['String']['input']>;
+  name: Scalars['String']['input'];
 };
 
 export type LabelType = Node & {
@@ -46,6 +56,34 @@ export type LabelTypeFilter = {
   isArchived?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
+export type Mutation = {
+  __typename?: 'Mutation';
+  archiveLabelType?: Maybe<LabelType>;
+  createLabelType?: Maybe<LabelType>;
+  unarchiveLabelType?: Maybe<LabelType>;
+  updateLabelType?: Maybe<LabelType>;
+};
+
+
+export type MutationArchiveLabelTypeArgs = {
+  input: ArchiveLabelTypeInput;
+};
+
+
+export type MutationCreateLabelTypeArgs = {
+  input: CreateLabelTypeInput;
+};
+
+
+export type MutationUnarchiveLabelTypeArgs = {
+  input: UnarchiveLabelTypeInput;
+};
+
+
+export type MutationUpdateLabelTypeArgs = {
+  input: UpdateLabelTypeInput;
+};
+
 export type Node = {
   id: Scalars['ID']['output'];
 };
@@ -60,8 +98,14 @@ export type PageInfo = {
 
 export type Query = {
   __typename?: 'Query';
+  labelType?: Maybe<LabelType>;
   labelTypes: LabelTypeConnection;
   users: Array<User>;
+};
+
+
+export type QueryLabelTypeArgs = {
+  id: Scalars['ID']['input'];
 };
 
 
@@ -71,6 +115,16 @@ export type QueryLabelTypesArgs = {
   filters?: InputMaybe<LabelTypeFilter>;
   first?: InputMaybe<Scalars['Int']['input']>;
   last?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type UnarchiveLabelTypeInput = {
+  id: Scalars['ID']['input'];
+};
+
+export type UpdateLabelTypeInput = {
+  icon?: InputMaybe<Scalars['String']['input']>;
+  id: Scalars['ID']['input'];
+  name?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type User = {
@@ -157,7 +211,9 @@ export type ResolversInterfaceTypes<RefType extends Record<string, unknown>> = {
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
+  ArchiveLabelTypeInput: ArchiveLabelTypeInput;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
+  CreateLabelTypeInput: CreateLabelTypeInput;
   DateTime: ResolverTypeWrapper<Scalars['DateTime']['output']>;
   ID: ResolverTypeWrapper<Scalars['ID']['output']>;
   Int: ResolverTypeWrapper<Scalars['Int']['output']>;
@@ -165,16 +221,21 @@ export type ResolversTypes = {
   LabelTypeConnection: ResolverTypeWrapper<LabelTypeConnection>;
   LabelTypeEdge: ResolverTypeWrapper<LabelTypeEdge>;
   LabelTypeFilter: LabelTypeFilter;
+  Mutation: ResolverTypeWrapper<{}>;
   Node: ResolverTypeWrapper<ResolversInterfaceTypes<ResolversTypes>['Node']>;
   PageInfo: ResolverTypeWrapper<PageInfo>;
   Query: ResolverTypeWrapper<{}>;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
+  UnarchiveLabelTypeInput: UnarchiveLabelTypeInput;
+  UpdateLabelTypeInput: UpdateLabelTypeInput;
   User: ResolverTypeWrapper<User>;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
+  ArchiveLabelTypeInput: ArchiveLabelTypeInput;
   Boolean: Scalars['Boolean']['output'];
+  CreateLabelTypeInput: CreateLabelTypeInput;
   DateTime: Scalars['DateTime']['output'];
   ID: Scalars['ID']['output'];
   Int: Scalars['Int']['output'];
@@ -182,10 +243,13 @@ export type ResolversParentTypes = {
   LabelTypeConnection: LabelTypeConnection;
   LabelTypeEdge: LabelTypeEdge;
   LabelTypeFilter: LabelTypeFilter;
+  Mutation: {};
   Node: ResolversInterfaceTypes<ResolversParentTypes>['Node'];
   PageInfo: PageInfo;
   Query: {};
   String: Scalars['String']['output'];
+  UnarchiveLabelTypeInput: UnarchiveLabelTypeInput;
+  UpdateLabelTypeInput: UpdateLabelTypeInput;
   User: User;
 };
 
@@ -217,6 +281,13 @@ export type LabelTypeEdgeResolvers<ContextType = Context, ParentType extends Res
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type MutationResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
+  archiveLabelType?: Resolver<Maybe<ResolversTypes['LabelType']>, ParentType, ContextType, RequireFields<MutationArchiveLabelTypeArgs, 'input'>>;
+  createLabelType?: Resolver<Maybe<ResolversTypes['LabelType']>, ParentType, ContextType, RequireFields<MutationCreateLabelTypeArgs, 'input'>>;
+  unarchiveLabelType?: Resolver<Maybe<ResolversTypes['LabelType']>, ParentType, ContextType, RequireFields<MutationUnarchiveLabelTypeArgs, 'input'>>;
+  updateLabelType?: Resolver<Maybe<ResolversTypes['LabelType']>, ParentType, ContextType, RequireFields<MutationUpdateLabelTypeArgs, 'input'>>;
+};
+
 export type NodeResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Node'] = ResolversParentTypes['Node']> = {
   __resolveType: TypeResolveFn<'LabelType', ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
@@ -231,6 +302,7 @@ export type PageInfoResolvers<ContextType = Context, ParentType extends Resolver
 };
 
 export type QueryResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
+  labelType?: Resolver<Maybe<ResolversTypes['LabelType']>, ParentType, ContextType, RequireFields<QueryLabelTypeArgs, 'id'>>;
   labelTypes?: Resolver<ResolversTypes['LabelTypeConnection'], ParentType, ContextType, Partial<QueryLabelTypesArgs>>;
   users?: Resolver<Array<ResolversTypes['User']>, ParentType, ContextType>;
 };
@@ -249,6 +321,7 @@ export type Resolvers<ContextType = Context> = {
   LabelType?: LabelTypeResolvers<ContextType>;
   LabelTypeConnection?: LabelTypeConnectionResolvers<ContextType>;
   LabelTypeEdge?: LabelTypeEdgeResolvers<ContextType>;
+  Mutation?: MutationResolvers<ContextType>;
   Node?: NodeResolvers<ContextType>;
   PageInfo?: PageInfoResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;

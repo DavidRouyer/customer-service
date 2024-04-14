@@ -128,11 +128,13 @@ describe('LabelTypeService', () => {
       const date = new Date('2000-01-01T12:00:00.000Z');
       vi.setSystemTime(date);
 
-      await labelTypeService.create({
-        name: 'One Piece',
-        icon: 'icon',
-        createdById: 'user-id',
-      });
+      await labelTypeService.create(
+        {
+          name: 'One Piece',
+          icon: 'icon',
+        },
+        'user-id'
+      );
 
       expect(unitOfWork.transaction).toHaveBeenCalledTimes(1);
 
@@ -152,6 +154,62 @@ describe('LabelTypeService', () => {
           icon: 'icon',
           createdAt: new Date('2000-01-01T12:00:00.000Z'),
           createdById: 'user-id',
+        },
+        undefined
+      );
+    });
+  });
+
+  describe('update', () => {
+    const labelTypeRepo = {
+      find: vi.fn(() => ({
+        id: 'one-piece',
+      })),
+      update: vi.fn(() => ({
+        id: 'one-piece',
+      })),
+    };
+    const unitOfWork = {
+      transaction: vi.fn((cb) => cb()),
+    };
+
+    const labelTypeService = new LabelTypeService({
+      unitOfWork: unitOfWork as unknown as UnitOfWork,
+      labelTypeRepository: labelTypeRepo as unknown as LabelTypeRepository,
+    });
+
+    it('should successfully update a label type', async () => {
+      const date = new Date('2000-01-01T12:00:00.000Z');
+      vi.setSystemTime(date);
+
+      await labelTypeService.update(
+        {
+          id: 'one-piece',
+          name: 'New One Piece',
+          icon: 'new-icon',
+        },
+        'user-id'
+      );
+
+      expect(unitOfWork.transaction).toHaveBeenCalledTimes(1);
+
+      expect(labelTypeRepo.find).toHaveBeenCalledTimes(1);
+      expect(labelTypeRepo.find).toHaveBeenCalledWith({
+        where: eq(schema.labelTypes.id, 'one-piece'),
+        with: {
+          createdBy: undefined,
+          updatedBy: undefined,
+        },
+      });
+
+      expect(labelTypeRepo.update).toHaveBeenCalledTimes(1);
+      expect(labelTypeRepo.update).toHaveBeenCalledWith(
+        {
+          id: 'one-piece',
+          name: 'New One Piece',
+          icon: 'new-icon',
+          updatedAt: new Date('2000-01-01T12:00:00.000Z'),
+          updatedById: 'user-id',
         },
         undefined
       );

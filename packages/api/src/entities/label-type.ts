@@ -17,3 +17,17 @@ export enum LabelTypeSortField {
   createdAt = 'createdAt',
   name = 'name',
 }
+
+export type CreateLabelType = Omit<
+  LabelTypeInsert,
+  | 'id'
+  | 'createdAt'
+  | 'createdById'
+  | 'updatedAt'
+  | 'updatedById'
+  | 'archivedAt'
+>;
+
+export type UpdateLabelType = Partial<CreateLabelType> & {
+  id: NonNullable<LabelTypeInsert['id']>;
+};

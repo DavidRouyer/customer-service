@@ -39,6 +39,8 @@
   "scripts": {
     "build": "next build",
     "clean": "git clean -xdf .next .turbo node_modules",
+    "codegen:graphql": "graphql-codegen",
+    "codegen:graphql:watch": "graphql-codegen --watch",
     "format": "prettier --check \"**/*.{js,cjs,mjs,ts,tsx,md,json}\"",
     "dev": "next dev",
     "lint": "eslint .",
@@ -49,6 +51,9 @@
     "@cs/prettier-config": "*",
     "@cs/tailwind-config": "*",
     "@cs/tsconfig": "*",
+    "@graphql-codegen/cli": "^5.0.2",
+    "@graphql-codegen/typescript": "^4.0.6",
+    "@graphql-codegen/typescript-react-query": "^6.1.0",
     "@testing-library/jest-dom": "^6.4.5",
     "@testing-library/react": "^16.0.0",
     "@types/google-libphonenumber": "^7.4.30",

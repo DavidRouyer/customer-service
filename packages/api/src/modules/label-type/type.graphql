@@ -23,7 +23,28 @@ input LabelTypeFilter {
   isArchived: Boolean
 }
 
+input ArchiveLabelTypeInput {
+  id: ID!
+}
+
+input CreateLabelTypeInput {
+  name: String!
+  icon: String
+}
+
+input UnarchiveLabelTypeInput {
+  id: ID!
+}
+
+input UpdateLabelTypeInput {
+  id: ID!
+  name: String
+  icon: String
+}
+
 type Query {
+  labelType(id: ID!): LabelType
+
   labelTypes(
     filters: LabelTypeFilter
     first: Int
@@ -31,4 +52,14 @@ type Query {
     last: Int
     before: String
   ): LabelTypeConnection!
+}
+
+type Mutation {
+  archiveLabelType(input: ArchiveLabelTypeInput!): LabelType
+
+  createLabelType(input: CreateLabelTypeInput!): LabelType
+
+  unarchiveLabelType(input: UnarchiveLabelTypeInput!): LabelType
+
+  updateLabelType(input: UpdateLabelTypeInput!): LabelType
 }
