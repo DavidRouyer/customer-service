@@ -1,10 +1,10 @@
-import { DateResolver } from 'graphql-scalars';
+import { DateTimeResolver } from 'graphql-scalars';
 
 import { Resolvers } from '../../generated-types/graphql';
 import typeDefs from './typeDefs.graphql';
 
 const resolvers: Resolvers = {
-  DateTime: DateResolver,
+  DateTime: DateTimeResolver,
 };
 
 export const commonModule = {
