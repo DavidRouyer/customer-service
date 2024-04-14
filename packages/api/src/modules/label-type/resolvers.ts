@@ -1,22 +1,16 @@
-import { createModule } from 'graphql-modules';
-
 import {
   paginate,
   validatePaginationArguments,
 } from '@cs/kyaku/utils/pagination';
 
 import { LabelTypeSortField } from '../../entities/label-type';
+import { Resolvers } from '../../generated-types/graphql';
 import LabelTypeService from '../../services/label-type';
-import { LabelTypeModule } from './generated-types/module-types';
 import typeDefs from './typedefs/label-type.graphql';
 
-const resolvers: LabelTypeModule.Resolvers = {
+const resolvers: Resolvers = {
   Query: {
-    labelTypes: async (
-      _,
-      { filters, before, after, first, last },
-      ctx: GraphQLModules.ModuleContext
-    ) => {
+    labelTypes: async (_, { filters, before, after, first, last }, ctx) => {
       const { cursor, direction, limit } = validatePaginationArguments(
         { before, after, first, last },
         { min: 1, max: 100 }
@@ -51,9 +45,7 @@ const resolvers: LabelTypeModule.Resolvers = {
   },
 };
 
-export const labelTypeModule = createModule({
-  id: 'labelType-module',
-  dirname: __dirname,
-  typeDefs: [typeDefs],
-  resolvers: [resolvers],
-});
+export const labelTypeModule = {
+  typeDefs: typeDefs,
+  resolvers: resolvers,
+};

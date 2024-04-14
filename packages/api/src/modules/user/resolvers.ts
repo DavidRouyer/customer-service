@@ -1,14 +1,12 @@
-import { createModule } from 'graphql-modules';
-
 import { Direction } from '@cs/kyaku/types/query';
 
+import { Resolvers } from '../../generated-types/graphql';
 import UserService from '../../services/user';
-import { UserModule } from './generated-types/module-types';
 import typeDefs from './typedefs/user.graphql';
 
-const resolvers: UserModule.Resolvers = {
+const resolvers: Resolvers = {
   Query: {
-    users: async (_, __, ctx: GraphQLModules.ModuleContext) => {
+    users: async (_, __, ctx) => {
       const userService: UserService = ctx.container.resolve('userService');
 
       const users = await userService.list(
@@ -21,9 +19,7 @@ const resolvers: UserModule.Resolvers = {
   },
 };
 
-export const userModule = createModule({
-  id: 'user-module',
-  dirname: __dirname,
-  typeDefs: [typeDefs],
-  resolvers: [resolvers],
-});
+export const userModule = {
+  typeDefs: typeDefs,
+  resolvers: resolvers,
+};

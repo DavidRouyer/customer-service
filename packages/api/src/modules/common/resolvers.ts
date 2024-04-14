@@ -1,16 +1,13 @@
-import { createModule } from 'graphql-modules';
 import { DateResolver } from 'graphql-scalars';
 
-import { CommonModule } from './generated-types/module-types';
+import { Resolvers } from '../../generated-types/graphql';
 import typeDefs from './typedefs/common.graphql';
 
-const resolvers: CommonModule.Resolvers = {
+const resolvers: Resolvers = {
   DateTime: DateResolver,
 };
 
-export const commonModule = createModule({
-  id: 'common-module',
-  dirname: __dirname,
-  typeDefs: [typeDefs],
-  resolvers: [resolvers],
-});
+export const commonModule = {
+  typeDefs: typeDefs,
+  resolvers: resolvers,
+};
