@@ -1630,7 +1630,6 @@ __metadata:
     "@cs/tsconfig": "npm:*"
     "@cs/ui": "npm:*"
     "@lexical/react": "npm:^0.14.3"
-    "@swc-jotai/react-refresh": "npm:^0.1.0"
     "@tanstack/react-query": "npm:^5.29.2"
     "@tanstack/react-query-devtools": "npm:^5.29.2"
     "@tanstack/react-table": "npm:^8.16.0"
@@ -4853,13 +4852,6 @@ __metadata:
     "@types/express": "npm:^4.7.0"
     file-system-cache: "npm:2.3.0"
   checksum: ec1c70d72473d1a8b11281d7ea0b55580b0810e0173ce77b71d838766b60a0e28427e964172d88e88bb7794a498afc65451bc7a16b3a908361c16169d8f67f8e
-  languageName: node
-  linkType: hard
-
-"@swc-jotai/react-refresh@npm:^0.1.0":
-  version: 0.1.0
-  resolution: "@swc-jotai/react-refresh@npm:0.1.0"
-  checksum: c83a70d810a3aba305846ba702d391db85bd129a4691d2f7c557464e102a604341e6fbad5810b7f089f1c7692b2d0c7573d53698b5de1e1eb76f7bbfce4bca28
   languageName: node
   linkType: hard
 
