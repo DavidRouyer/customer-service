@@ -98,15 +98,7 @@ export default class LabelTypeService extends BaseService {
   }
 
   async create(data: CreateLabelType, userId: string) {
-    try {
-      await this.retrieveByName(data.name);
-      throw new KyakuError(
-        KyakuError.Types.DUPLICATE_ERROR,
-        `Label type with name:${data.name} already exists`
-      );
-    } catch {
-      // Label type not found, continue
-    }
+    await this.checkExistingLabelTypeWithName(data.name);
 
     return await this.unitOfWork.transaction(async (tx) => {
       const creationDate = new Date();
@@ -133,6 +125,10 @@ export default class LabelTypeService extends BaseService {
 
   async update(data: UpdateLabelType, userId: string) {
     await this.retrieve(data.id);
+
+    if (data.name) {
+      await this.checkExistingLabelTypeWithName(data.name);
+    }
 
     return await this.unitOfWork.transaction(async (tx) => {
       const updateDate = new Date();
@@ -204,6 +200,22 @@ export default class LabelTypeService extends BaseService {
       );
     });
   }
+
+  private checkExistingLabelTypeWithName = async (name: string) => {
+    let existingLabelType = undefined;
+    try {
+      existingLabelType = await this.retrieveByName(name);
+    } catch {
+      // Label type not found, continue
+    }
+
+    if (existingLabelType) {
+      throw new KyakuError(
+        KyakuError.Types.DUPLICATE_ERROR,
+        `Label type with name:${name} already exists`
+      );
+    }
+  };
 
   private getWithClause<T extends LabelTypeWith<T>>(
     relations: T | undefined
