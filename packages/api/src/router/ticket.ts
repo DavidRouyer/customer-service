@@ -1,9 +1,9 @@
 import { z } from 'zod';
 
 import { TicketPriority, TicketStatus } from '@cs/kyaku/models';
-import { SortDirection } from '@cs/kyaku/types';
 import { Direction } from '@cs/kyaku/types/query';
 
+import { TicketSortField } from '../entities/ticket';
 import TicketService from '../services/ticket';
 import { createTRPCRouter, protectedProcedure } from '../trpc';
 
@@ -39,15 +39,8 @@ export const ticketRouter = createTRPCRouter({
           ticketId: inclusionFilterRouter(z.string()),
         }),
         sortBy: z
-          .object({
-            createdAt: z.enum([SortDirection.ASC, SortDirection.DESC]),
-          })
-          .or(
-            z.object({
-              statusChangedAt: z.enum([SortDirection.ASC, SortDirection.DESC]),
-            })
-          )
-          .optional(),
+          .enum([TicketSortField.createdAt, TicketSortField.statusChangedAt])
+          .default(TicketSortField.createdAt),
         cursor: z.string().nullish(),
         limit: z.number().default(50),
         direction: z
@@ -68,7 +61,7 @@ export const ticketRouter = createTRPCRouter({
           updatedBy: true,
         },
         limit: input.limit,
-        cursor: input.cursor ? input.cursor : undefined,
+        //cursor: input.cursor ? input.cursor : undefined,
         direction: input.direction,
       });
 

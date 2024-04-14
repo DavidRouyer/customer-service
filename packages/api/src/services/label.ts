@@ -1,20 +1,15 @@
-import { and, eq, inArray, isNull, notInArray, schema } from '@cs/database';
+import { eq, inArray, isNull, schema } from '@cs/database';
 import { TicketLabelsChanged, TicketTimelineEntryType } from '@cs/kyaku/models';
-import { FindConfig, GetConfig } from '@cs/kyaku/types/query';
+import { GetConfig } from '@cs/kyaku/types/query';
 import { KyakuError } from '@cs/kyaku/utils';
 
-import { LabelSort, LabelWith } from '../entities/label';
+import { LabelWith } from '../entities/label';
 import LabelRepository from '../repositories/label';
 import LabelTypeRepository from '../repositories/label-type';
 import TicketRepository from '../repositories/ticket';
 import TicketTimelineRepository from '../repositories/ticket-timeline';
 import { UnitOfWork } from '../unit-of-work';
 import { BaseService } from './base-service';
-import {
-  filterByDirection,
-  InclusionFilterOperator,
-  sortByDirection,
-} from './build-query';
 
 export default class LabelService extends BaseService {
   private readonly labelRepository: LabelRepository;
@@ -57,44 +52,6 @@ export default class LabelService extends BaseService {
       );
 
     return label;
-  }
-
-  async list<T extends LabelWith<T>>(
-    filters: {
-      id?: InclusionFilterOperator<string>;
-      ticketId?: string;
-      labelTypeId?: string;
-    },
-    config?: FindConfig<T, LabelSort>
-  ) {
-    const whereClause = and(
-      filters.id
-        ? 'in' in filters.id
-          ? inArray(schema.labels.id, filters.id.in)
-          : 'notIn' in filters.id
-            ? notInArray(schema.labels.id, filters.id.notIn)
-            : undefined
-        : undefined,
-      filters.ticketId
-        ? eq(schema.labels.ticketId, filters.ticketId)
-        : undefined,
-      filters.labelTypeId
-        ? eq(schema.labels.labelTypeId, filters.labelTypeId)
-        : undefined,
-      config?.cursor
-        ? filterByDirection(config.direction)(schema.labels.id, config.cursor)
-        : undefined
-    );
-    return await this.labelRepository.findMany({
-      where: whereClause,
-      with: this.getWithClause(config?.relations),
-      limit: config?.limit,
-      orderBy: and(
-        config?.cursor
-          ? sortByDirection(config.direction)(schema.tickets.id)
-          : undefined
-      ),
-    });
   }
 
   async addLabels(ticketId: string, labelTypeIds: string[], userId: string) {
