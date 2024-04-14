@@ -2,7 +2,7 @@ import { Direction } from '@cs/kyaku/types/query';
 
 import { Resolvers } from '../../generated-types/graphql';
 import UserService from '../../services/user';
-import typeDefs from './typedefs/user.graphql';
+import typeDefs from './typeDefs.graphql';
 
 const resolvers: Resolvers = {
   Query: {

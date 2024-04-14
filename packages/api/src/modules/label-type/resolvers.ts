@@ -6,7 +6,7 @@ import {
 import { LabelTypeSortField } from '../../entities/label-type';
 import { Resolvers } from '../../generated-types/graphql';
 import LabelTypeService from '../../services/label-type';
-import typeDefs from './typedefs/label-type.graphql';
+import typeDefs from './typeDefs.graphql';
 
 const resolvers: Resolvers = {
   Query: {
