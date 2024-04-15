@@ -1674,7 +1674,7 @@ __metadata:
     "@cs/kyaku": "npm:*"
     "@cs/prettier-config": "npm:*"
     "@cs/tsconfig": "npm:*"
-    "@neondatabase/serverless": "npm:^0.9.0"
+    "@neondatabase/serverless": "npm:^0.9.1"
     "@types/ws": "npm:^8.5.10"
     dotenv-cli: "npm:^7.4.1"
     drizzle-kit: "npm:^0.20.14"
@@ -2912,12 +2912,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@neondatabase/serverless@npm:^0.9.0":
-  version: 0.9.0
-  resolution: "@neondatabase/serverless@npm:0.9.0"
+"@neondatabase/serverless@npm:^0.9.1":
+  version: 0.9.1
+  resolution: "@neondatabase/serverless@npm:0.9.1"
   dependencies:
     "@types/pg": "npm:8.6.6"
-  checksum: 10c0/acddf16d414e8991b0a71785e61ea5bf484c7cb88af12177fd8e124e41cd180b8e676e3228f7bfe2146453e9323d50aca88731d4a8d5db4e974f9aa80989a4b7
+  checksum: 10c0/f11dfbdc822ec58af471914380431372f88b4b8c6ee1e5d8ffb900c9e5b5f03c38da3f2c083832ca6310695bfc0906314dcb14eb3589beb6ed4f568c7c594818
   languageName: node
   linkType: hard
 
