@@ -30,10 +30,12 @@ export const labelTypeRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       const labelTypeService: LabelTypeService =
         ctx.container.resolve('labelTypeService');
-      return await labelTypeService.create({
-        ...input,
-        createdById: ctx.session.user.id,
-      });
+      return await labelTypeService.create(
+        {
+          ...input,
+        },
+        ctx.session.user.id
+      );
     }),
 
   archive: protectedProcedure
