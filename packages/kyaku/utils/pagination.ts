@@ -11,6 +11,12 @@ export interface ConnectionArguments {
   last?: number | null;
 }
 
+interface ArrayMetaInfo<T> {
+  direction: Direction;
+  getLastValue: (item: T) => string;
+  limit: number;
+}
+
 export const parseCursor = (cursor: string) => {
   const cursorStringified = unbase64(cursor);
   try {
@@ -84,24 +90,28 @@ export const validatePaginationArguments = (
   return { cursor, direction, limit };
 };
 
-export const paginate = <T extends { id: string }>({
+export const connectionFromArray = <T extends { id: string }>({
   array,
-  hasNextPage,
-  getLastValue,
   args: { before, after, first, last },
+  meta: { direction, getLastValue, limit },
 }: {
   array: ReadonlyArray<T>;
-  hasNextPage: boolean;
-  getLastValue: (item: T) => string;
   args: ConnectionArguments;
+  meta: ArrayMetaInfo<T>;
 }) => {
-  const edges = array.map((item) => ({
-    cursor: composeCursor({ lastId: item.id, lastValue: getLastValue(item) }),
-    node: item,
+  let slice = array.slice(0, limit);
+  if (direction === Direction.Backward) {
+    slice = slice.toReversed();
+  }
+
+  const edges = slice.map((value) => ({
+    cursor: composeCursor({ lastId: value.id, lastValue: getLastValue(value) }),
+    node: value,
   }));
 
   const firstEdge = edges[0];
   const lastEdge = edges[edges.length - 1];
+  const hasNextPage = array.length > limit;
   return {
     edges,
     pageInfo: {

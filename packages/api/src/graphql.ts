@@ -1,10 +1,13 @@
 import { mergeResolvers, mergeTypeDefs } from '@graphql-tools/merge';
 import { makeExecutableSchema } from '@graphql-tools/schema';
 import { asClass, asValue, createContainer } from 'awilix';
+import DataLoader from 'dataloader';
 
 import { auth } from '@cs/auth';
 import { drizzleConnection } from '@cs/database';
+import { User } from '@cs/kyaku/models';
 
+import { LabelType } from './entities/label-type';
 import { commonModule } from './modules/common/resolvers';
 import { labelTypeModule } from './modules/label-type/resolvers';
 import { userModule } from './modules/user/resolvers';
@@ -45,6 +48,22 @@ container.register({
 const getContext = async () => ({
   container,
   session: await auth(),
+  dataloaders: {
+    labelTypeLoader: new DataLoader<string, LabelType, string>((ids) =>
+      (container.resolve('labelTypeService') as LabelTypeService).list({
+        id: {
+          in: [...ids],
+        },
+      })
+    ),
+    userLoader: new DataLoader<string, User, string>((ids) =>
+      (container.resolve('userService') as UserService).list({
+        id: {
+          in: [...ids],
+        },
+      })
+    ),
+  },
 });
 
 const schema = makeExecutableSchema({

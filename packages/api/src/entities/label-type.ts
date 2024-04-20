@@ -1,5 +1,7 @@
 import { InferInsertModel, InferSelectModel, schema } from '@cs/database';
 
+import { InclusionFilterOperator } from '../services/build-query';
+
 export type LabelType = InferSelectModel<typeof schema.labelTypes>;
 
 export type LabelTypeInsert = InferInsertModel<typeof schema.labelTypes>;
@@ -10,6 +12,7 @@ export type LabelTypeWith<T> = {
 };
 
 export type LabelTypeFilters = {
+  id?: InclusionFilterOperator<LabelType['id']>;
   isArchived?: boolean;
 };
 

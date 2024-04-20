@@ -1,5 +1,5 @@
 import { and, eq, schema } from '@cs/database';
-import { Direction, FindConfig, GetConfig } from '@cs/kyaku/types/query';
+import { Direction, FindConfig } from '@cs/kyaku/types/query';
 import { KyakuError } from '@cs/kyaku/utils';
 
 import {
@@ -28,7 +28,7 @@ export default class UserService extends BaseService {
     this.userRepository = userRepository;
   }
 
-  async retrieve<T extends UserWith<T>>(userId: string, config?: GetConfig<T>) {
+  async retrieve<T extends UserWith<T>>(userId: string) {
     const user = await this.userRepository.find({
       columns: USER_COLUMNS,
       where: eq(schema.users.id, userId),

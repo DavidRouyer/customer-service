@@ -1,5 +1,5 @@
 import {
-  paginate,
+  connectionFromArray,
   validatePaginationArguments,
 } from '@cs/kyaku/utils/pagination';
 
@@ -10,48 +10,75 @@ import typeDefs from './typeDefs.graphql';
 
 const resolvers: Resolvers = {
   Query: {
-    labelType: async (_, { id }, ctx) => {
-      const labelTypeService: LabelTypeService =
-        ctx.container.resolve('labelTypeService');
-
-      return await labelTypeService.retrieve(id, {
-        relations: {
-          createdBy: true,
-          updatedBy: true,
+    labelType: async (_, { id }, { dataloaders }) => {
+      const labelType = await dataloaders.labelTypeLoader.load(id);
+      return {
+        ...labelType,
+        createdBy: {
+          id: labelType.createdById,
         },
-      });
+        updatedBy: labelType.updatedById
+          ? {
+              id: labelType.updatedById,
+            }
+          : null,
+      };
     },
-    labelTypes: async (_, { filters, before, after, first, last }, ctx) => {
+    labelTypes: async (
+      _,
+      { filters, before, after, first, last },
+      { container }
+    ) => {
       const { cursor, direction, limit } = validatePaginationArguments(
         { before, after, first, last },
         { min: 1, max: 100 }
       );
 
       const labelTypeService: LabelTypeService =
-        ctx.container.resolve('labelTypeService');
+        container.resolve('labelTypeService');
 
-      const labelTypeResult = await labelTypeService.list(
+      const labelTypes = await labelTypeService.list(
         {
           isArchived: filters?.isArchived ?? false,
         },
         {
           cursor: cursor ?? undefined,
           direction: direction,
-          limit: limit,
-          relations: {
-            createdBy: true,
-            updatedBy: true,
-          },
+          limit: limit + 1,
           sortBy: LabelTypeSortField.name,
         }
       );
 
-      return paginate({
-        array: labelTypeResult.items,
-        hasNextPage: labelTypeResult.hasNextPage,
-        getLastValue: (item) => item.name,
+      return connectionFromArray({
+        array: labelTypes.map((labelType) => ({
+          ...labelType,
+          createdBy: {
+            id: labelType.createdById,
+          },
+          updatedBy: labelType.updatedById
+            ? {
+                id: labelType.updatedById,
+              }
+            : null,
+        })),
         args: { before, after, first, last },
+        meta: {
+          direction,
+          getLastValue: (item) => item.name,
+          limit,
+        },
       });
+    },
+  },
+  LabelType: {
+    createdBy: async ({ createdBy }, _, { dataloaders }) => {
+      return dataloaders.userLoader.load(createdBy.id);
+    },
+    updatedBy: async ({ updatedBy }, _, { dataloaders }) => {
+      if (!updatedBy) {
+        return null;
+      }
+      return dataloaders.userLoader.load(updatedBy.id);
     },
   },
   Mutation: {

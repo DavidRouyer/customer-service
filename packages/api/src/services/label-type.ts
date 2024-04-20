@@ -1,4 +1,4 @@
-import { and, eq, isNotNull, isNull, schema } from '@cs/database';
+import { and, eq, isNotNull, isNull, schema, SQL } from '@cs/database';
 import { Direction, FindConfig, GetConfig } from '@cs/kyaku/types/query';
 import { KyakuError } from '@cs/kyaku/utils';
 
@@ -13,7 +13,11 @@ import { User, USER_COLUMNS } from '../entities/user';
 import LabelTypeRepository from '../repositories/label-type';
 import { UnitOfWork } from '../unit-of-work';
 import { BaseService } from './base-service';
-import { filterByDirection, sortByDirection } from './build-query';
+import {
+  filterByDirection,
+  inclusionFilterOperator,
+  sortByDirection,
+} from './build-query';
 
 export default class LabelTypeService extends BaseService {
   private readonly labelTypeRepository: LabelTypeRepository;
@@ -74,8 +78,8 @@ export default class LabelTypeService extends BaseService {
       sortBy: LabelTypeSortField.name,
     }
   ) {
-    const labelTypes = await this.labelTypeRepository.findMany({
-      limit: config.limit + 1,
+    return await this.labelTypeRepository.findMany({
+      limit: config.limit,
       orderBy: [
         ...this.getOrderByClause(config),
         sortByDirection(config.direction)(schema.labelTypes.id),
@@ -87,14 +91,6 @@ export default class LabelTypeService extends BaseService {
       ),
       with: this.getWithClause(config.relations),
     });
-
-    const items = labelTypes.slice(0, config.limit);
-    const hasNextPage = labelTypes.length > config.limit;
-    return {
-      items:
-        config.direction === Direction.Forward ? items : items.toReversed(),
-      hasNextPage: hasNextPage,
-    };
   }
 
   async create(data: CreateLabelType, userId: string) {
@@ -248,11 +244,25 @@ export default class LabelTypeService extends BaseService {
   private getFilterWhereClause(filters: LabelTypeFilters) {
     if (!Object.keys(filters).length) return undefined;
 
-    return filters.isArchived !== undefined
-      ? filters.isArchived
-        ? isNotNull(schema.labelTypes.archivedAt)
-        : isNull(schema.labelTypes.archivedAt)
-      : undefined;
+    const buildFilters: SQL[] = [];
+
+    if (filters.id) {
+      const idFilter = inclusionFilterOperator(
+        schema.labelTypes.id,
+        filters.id
+      );
+      if (idFilter) buildFilters.push(idFilter);
+    }
+
+    if (filters.isArchived !== undefined) {
+      buildFilters.push(
+        filters.isArchived
+          ? isNotNull(schema.labelTypes.archivedAt)
+          : isNull(schema.labelTypes.archivedAt)
+      );
+    }
+
+    return and(...buildFilters);
   }
 
   private getSortWhereClause<T extends LabelTypeWith<T>>(
