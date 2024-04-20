@@ -11,18 +11,22 @@ import typeDefs from './typeDefs.graphql';
 const resolvers: Resolvers = {
   Query: {
     labelType: async (_, { id }, { dataloaders }) => {
-      const labelType = await dataloaders.labelTypeLoader.load(id);
-      return {
-        ...labelType,
-        createdBy: {
-          id: labelType.createdById,
-        },
-        updatedBy: labelType.updatedById
-          ? {
-              id: labelType.updatedById,
-            }
-          : null,
-      };
+      try {
+        const labelType = await dataloaders.labelTypeLoader.load(id);
+        return {
+          ...labelType,
+          createdBy: {
+            id: labelType.createdById,
+          },
+          updatedBy: labelType.updatedById
+            ? {
+                id: labelType.updatedById,
+              }
+            : null,
+        };
+      } catch (error) {
+        return null;
+      }
     },
     labelTypes: async (
       _,

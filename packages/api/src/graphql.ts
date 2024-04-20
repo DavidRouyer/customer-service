@@ -49,20 +49,31 @@ const getContext = async () => ({
   container,
   session: await auth(),
   dataloaders: {
-    labelTypeLoader: new DataLoader<string, LabelType, string>((ids) =>
-      (container.resolve('labelTypeService') as LabelTypeService).list({
+    labelTypeLoader: new DataLoader<string, LabelType, string>(async (ids) => {
+      const labelTypeService: LabelTypeService =
+        container.resolve('labelTypeService');
+      const rows = await labelTypeService.list({
         id: {
           in: [...ids],
         },
-      })
-    ),
-    userLoader: new DataLoader<string, User, string>((ids) =>
-      (container.resolve('userService') as UserService).list({
+      });
+      return ids.map(
+        (id) =>
+          rows.find((row) => row.id === id) || new Error(`Row not found: ${id}`)
+      );
+    }),
+    userLoader: new DataLoader<string, User, string>(async (ids) => {
+      const userService: UserService = container.resolve('userService');
+      const rows = await userService.list({
         id: {
           in: [...ids],
         },
-      })
-    ),
+      });
+      return ids.map(
+        (id) =>
+          rows.find((row) => row.id === id) || new Error(`Row not found: ${id}`)
+      );
+    }),
   },
 });
 

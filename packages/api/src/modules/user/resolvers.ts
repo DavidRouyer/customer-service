@@ -1,20 +1,49 @@
-import { Direction } from '@cs/kyaku/types/query';
+import {
+  connectionFromArray,
+  validatePaginationArguments,
+} from '@cs/kyaku/utils/pagination';
 
+import { UserSortField } from '../../entities/user';
 import { Resolvers } from '../../generated-types/graphql';
 import UserService from '../../services/user';
 import typeDefs from './typeDefs.graphql';
 
 const resolvers: Resolvers = {
   Query: {
-    users: async (_, __, ctx) => {
-      const userService: UserService = ctx.container.resolve('userService');
+    user: async (_, { id }, { dataloaders }) => {
+      try {
+        return await dataloaders.userLoader.load(id);
+      } catch (error) {
+        return null;
+      }
+    },
+    users: async (_, { before, after, first, last }, { container }) => {
+      const { cursor, direction, limit } = validatePaginationArguments(
+        { before, after, first, last },
+        { min: 1, max: 100 }
+      );
+
+      const userService: UserService = container.resolve('userService');
 
       const users = await userService.list(
         {},
-        { relations: {}, limit: 50, direction: Direction.Forward }
+        {
+          cursor: cursor ?? undefined,
+          direction: direction,
+          limit: limit + 1,
+          sortBy: UserSortField.name,
+        }
       );
 
-      return users;
+      return connectionFromArray({
+        array: users,
+        args: { before, after, first, last },
+        meta: {
+          direction,
+          getLastValue: (item) => item.name ?? '',
+          limit,
+        },
+      });
     },
   },
 };
