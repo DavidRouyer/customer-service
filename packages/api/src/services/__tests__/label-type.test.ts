@@ -92,19 +92,16 @@ describe('LabelTypeService', () => {
 
       expect(labelTypeRepo.findMany).toHaveBeenCalledTimes(1);
       expect(labelTypeRepo.findMany).toHaveBeenCalledWith({
-        limit: 51,
+        limit: 50,
         orderBy: [asc(schema.labelTypes.name), asc(schema.labelTypes.id)],
-        where: and(isNull(schema.labelTypes.archivedAt)),
+        where: and(and(isNull(schema.labelTypes.archivedAt))),
         with: {
           createdBy: undefined,
           updatedBy: undefined,
         },
       });
 
-      expect(result).toStrictEqual({
-        items: [{ id: 'one-piece' }],
-        hasNextPage: false,
-      });
+      expect(result).toStrictEqual([{ id: 'one-piece' }]);
     });
   });
 

@@ -1,4 +1,4 @@
-import { and, eq, isNotNull, isNull, schema, SQL } from '@cs/database';
+import { and, eq, isNotNull, isNull, schema } from '@cs/database';
 import { Direction, FindConfig, GetConfig } from '@cs/kyaku/types/query';
 import { KyakuError } from '@cs/kyaku/utils';
 
@@ -244,25 +244,16 @@ export default class LabelTypeService extends BaseService {
   private getFilterWhereClause(filters: LabelTypeFilters) {
     if (!Object.keys(filters).length) return undefined;
 
-    const buildFilters: SQL[] = [];
-
-    if (filters.id) {
-      const idFilter = inclusionFilterOperator(
-        schema.labelTypes.id,
-        filters.id
-      );
-      if (idFilter) buildFilters.push(idFilter);
-    }
-
-    if (filters.isArchived !== undefined) {
-      buildFilters.push(
-        filters.isArchived
+    return and(
+      filters.id
+        ? inclusionFilterOperator(schema.labelTypes.id, filters.id)
+        : undefined,
+      filters.isArchived !== undefined
+        ? filters.isArchived
           ? isNotNull(schema.labelTypes.archivedAt)
           : isNull(schema.labelTypes.archivedAt)
-      );
-    }
-
-    return and(...buildFilters);
+        : undefined
+    );
   }
 
   private getSortWhereClause<T extends LabelTypeWith<T>>(
