@@ -79,8 +79,8 @@ export default class TicketService extends BaseService {
       sortBy: TicketSortField.createdAt,
     }
   ) {
-    const tickets = await this.ticketRepository.findMany({
-      limit: config.limit + 1,
+    return await this.ticketRepository.findMany({
+      limit: config.limit,
       orderBy: [
         ...this.getOrderByClause(config),
         sortByDirection(config.direction)(schema.tickets.id),
@@ -92,14 +92,6 @@ export default class TicketService extends BaseService {
       ),
       with: this.getWithClause(config.relations),
     });
-
-    const items = tickets.slice(0, config.limit);
-    const hasNextPage = tickets.length > config.limit;
-    return {
-      items:
-        config.direction === Direction.Forward ? items : items.toReversed(),
-      hasNextPage: hasNextPage,
-    };
   }
 
   async create(

@@ -77,7 +77,7 @@ describe('TicketService', () => {
 
       expect(ticketRepo.findMany).toHaveBeenCalledTimes(1);
       expect(ticketRepo.findMany).toHaveBeenCalledWith({
-        limit: 51,
+        limit: 50,
         orderBy: [asc(schema.tickets.createdAt), asc(schema.tickets.id)],
         where: and(undefined),
         with: {
@@ -89,10 +89,7 @@ describe('TicketService', () => {
         },
       });
 
-      expect(result).toStrictEqual({
-        hasNextPage: false,
-        items: [{ id: 'one-piece' }],
-      });
+      expect(result).toStrictEqual([{ id: 'one-piece' }]);
     });
   });
 
