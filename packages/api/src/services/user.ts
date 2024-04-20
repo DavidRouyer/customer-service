@@ -71,7 +71,7 @@ export default class UserService extends BaseService {
 
     return and(
       filters.id
-        ? inclusionFilterOperator(schema.tickets.assignedToId, filters.id)
+        ? inclusionFilterOperator(schema.users.id, filters.id)
         : undefined
     );
   }
