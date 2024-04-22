@@ -245,8 +245,8 @@ export default class LabelTypeService extends BaseService {
     if (!Object.keys(filters).length) return undefined;
 
     return and(
-      filters.id
-        ? inclusionFilterOperator(schema.labelTypes.id, filters.id)
+      filters.labelTypeIds
+        ? inclusionFilterOperator(schema.labelTypes.id, filters.labelTypeIds)
         : undefined,
       filters.isArchived !== undefined
         ? filters.isArchived

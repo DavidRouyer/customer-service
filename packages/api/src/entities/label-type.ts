@@ -12,7 +12,7 @@ export type LabelTypeWith<T> = {
 };
 
 export type LabelTypeFilters = {
-  id?: InclusionFilterOperator<LabelType['id']>;
+  labelTypeIds?: InclusionFilterOperator<LabelType['id']>;
   isArchived?: boolean;
 };
 

@@ -5,11 +5,13 @@ import { Session } from '@cs/auth';
 import { User } from '@cs/kyaku/models';
 
 import { LabelType } from '../entities/label-type';
+import { Ticket } from '../entities/ticket';
 
 export type Context = {
   container: AwilixContainer;
   dataloaders: {
     labelTypeLoader: DataLoader<string, LabelType, string>;
+    ticketLoader: DataLoader<string, Ticket, string>;
     userLoader: DataLoader<string, User, string>;
   };
   session: Session | null;

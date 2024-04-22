@@ -52,7 +52,7 @@ export type LabelTypeEdge = {
   node: LabelType;
 };
 
-export type LabelTypeFilter = {
+export type LabelTypesFilter = {
   isArchived?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
@@ -100,6 +100,8 @@ export type Query = {
   __typename?: 'Query';
   labelType?: Maybe<LabelType>;
   labelTypes: LabelTypeConnection;
+  ticket?: Maybe<Ticket>;
+  tickets: TicketConnection;
   user?: Maybe<User>;
   users: UserConnection;
 };
@@ -113,7 +115,21 @@ export type QueryLabelTypeArgs = {
 export type QueryLabelTypesArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
-  filters?: InputMaybe<LabelTypeFilter>;
+  filters?: InputMaybe<LabelTypesFilter>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+};
+
+
+export type QueryTicketArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type QueryTicketsArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  filters?: InputMaybe<TicketsFilter>;
   first?: InputMaybe<Scalars['Int']['input']>;
   last?: InputMaybe<Scalars['Int']['input']>;
 };
@@ -129,6 +145,57 @@ export type QueryUsersArgs = {
   before?: InputMaybe<Scalars['String']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
   last?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type Ticket = Node & {
+  __typename?: 'Ticket';
+  assignedTo?: Maybe<User>;
+  createdAt: Scalars['DateTime']['output'];
+  createdBy: User;
+  customer: User;
+  id: Scalars['ID']['output'];
+  priority: TicketPriority;
+  status: TicketStatus;
+  statusChangedAt?: Maybe<Scalars['DateTime']['output']>;
+  statusChangedBy?: Maybe<User>;
+  statusDetail?: Maybe<TicketStatusDetail>;
+  title?: Maybe<Scalars['String']['output']>;
+  updatedAt?: Maybe<Scalars['DateTime']['output']>;
+  updatedBy?: Maybe<User>;
+};
+
+export type TicketConnection = {
+  __typename?: 'TicketConnection';
+  edges: Array<TicketEdge>;
+  pageInfo: PageInfo;
+};
+
+export type TicketEdge = {
+  __typename?: 'TicketEdge';
+  cursor: Scalars['String']['output'];
+  node: Ticket;
+};
+
+export enum TicketPriority {
+  Critical = 'CRITICAL',
+  High = 'HIGH',
+  Low = 'LOW',
+  Medium = 'MEDIUM'
+}
+
+export enum TicketStatus {
+  Done = 'DONE',
+  Open = 'OPEN'
+}
+
+export enum TicketStatusDetail {
+  Created = 'CREATED',
+  NewReply = 'NEW_REPLY',
+  Replied = 'REPLIED'
+}
+
+export type TicketsFilter = {
+  isArchived?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 export type UnarchiveLabelTypeInput = {
@@ -232,7 +299,7 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 
 /** Mapping of interface types */
 export type ResolversInterfaceTypes<RefType extends Record<string, unknown>> = {
-  Node: ( LabelType );
+  Node: ( LabelType ) | ( Ticket );
 };
 
 /** Mapping between all available schema types and the resolvers types */
@@ -246,12 +313,19 @@ export type ResolversTypes = {
   LabelType: ResolverTypeWrapper<LabelType>;
   LabelTypeConnection: ResolverTypeWrapper<LabelTypeConnection>;
   LabelTypeEdge: ResolverTypeWrapper<LabelTypeEdge>;
-  LabelTypeFilter: LabelTypeFilter;
+  LabelTypesFilter: LabelTypesFilter;
   Mutation: ResolverTypeWrapper<{}>;
   Node: ResolverTypeWrapper<ResolversInterfaceTypes<ResolversTypes>['Node']>;
   PageInfo: ResolverTypeWrapper<PageInfo>;
   Query: ResolverTypeWrapper<{}>;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
+  Ticket: ResolverTypeWrapper<Ticket>;
+  TicketConnection: ResolverTypeWrapper<TicketConnection>;
+  TicketEdge: ResolverTypeWrapper<TicketEdge>;
+  TicketPriority: TicketPriority;
+  TicketStatus: TicketStatus;
+  TicketStatusDetail: TicketStatusDetail;
+  TicketsFilter: TicketsFilter;
   UnarchiveLabelTypeInput: UnarchiveLabelTypeInput;
   UpdateLabelTypeInput: UpdateLabelTypeInput;
   User: ResolverTypeWrapper<User>;
@@ -270,12 +344,16 @@ export type ResolversParentTypes = {
   LabelType: LabelType;
   LabelTypeConnection: LabelTypeConnection;
   LabelTypeEdge: LabelTypeEdge;
-  LabelTypeFilter: LabelTypeFilter;
+  LabelTypesFilter: LabelTypesFilter;
   Mutation: {};
   Node: ResolversInterfaceTypes<ResolversParentTypes>['Node'];
   PageInfo: PageInfo;
   Query: {};
   String: Scalars['String']['output'];
+  Ticket: Ticket;
+  TicketConnection: TicketConnection;
+  TicketEdge: TicketEdge;
+  TicketsFilter: TicketsFilter;
   UnarchiveLabelTypeInput: UnarchiveLabelTypeInput;
   UpdateLabelTypeInput: UpdateLabelTypeInput;
   User: User;
@@ -319,7 +397,7 @@ export type MutationResolvers<ContextType = Context, ParentType extends Resolver
 };
 
 export type NodeResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Node'] = ResolversParentTypes['Node']> = {
-  __resolveType: TypeResolveFn<'LabelType', ParentType, ContextType>;
+  __resolveType: TypeResolveFn<'LabelType' | 'Ticket', ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
 };
 
@@ -334,8 +412,39 @@ export type PageInfoResolvers<ContextType = Context, ParentType extends Resolver
 export type QueryResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   labelType?: Resolver<Maybe<ResolversTypes['LabelType']>, ParentType, ContextType, RequireFields<QueryLabelTypeArgs, 'id'>>;
   labelTypes?: Resolver<ResolversTypes['LabelTypeConnection'], ParentType, ContextType, Partial<QueryLabelTypesArgs>>;
+  ticket?: Resolver<Maybe<ResolversTypes['Ticket']>, ParentType, ContextType, RequireFields<QueryTicketArgs, 'id'>>;
+  tickets?: Resolver<ResolversTypes['TicketConnection'], ParentType, ContextType, Partial<QueryTicketsArgs>>;
   user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryUserArgs, 'id'>>;
   users?: Resolver<ResolversTypes['UserConnection'], ParentType, ContextType, Partial<QueryUsersArgs>>;
+};
+
+export type TicketResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Ticket'] = ResolversParentTypes['Ticket']> = {
+  assignedTo?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
+  createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  createdBy?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
+  customer?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  priority?: Resolver<ResolversTypes['TicketPriority'], ParentType, ContextType>;
+  status?: Resolver<ResolversTypes['TicketStatus'], ParentType, ContextType>;
+  statusChangedAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
+  statusChangedBy?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
+  statusDetail?: Resolver<Maybe<ResolversTypes['TicketStatusDetail']>, ParentType, ContextType>;
+  title?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  updatedAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
+  updatedBy?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type TicketConnectionResolvers<ContextType = Context, ParentType extends ResolversParentTypes['TicketConnection'] = ResolversParentTypes['TicketConnection']> = {
+  edges?: Resolver<Array<ResolversTypes['TicketEdge']>, ParentType, ContextType>;
+  pageInfo?: Resolver<ResolversTypes['PageInfo'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type TicketEdgeResolvers<ContextType = Context, ParentType extends ResolversParentTypes['TicketEdge'] = ResolversParentTypes['TicketEdge']> = {
+  cursor?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  node?: Resolver<ResolversTypes['Ticket'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type UserResolvers<ContextType = Context, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = {
@@ -368,6 +477,9 @@ export type Resolvers<ContextType = Context> = {
   Node?: NodeResolvers<ContextType>;
   PageInfo?: PageInfoResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
+  Ticket?: TicketResolvers<ContextType>;
+  TicketConnection?: TicketConnectionResolvers<ContextType>;
+  TicketEdge?: TicketEdgeResolvers<ContextType>;
   User?: UserResolvers<ContextType>;
   UserConnection?: UserConnectionResolvers<ContextType>;
   UserEdge?: UserEdgeResolvers<ContextType>;

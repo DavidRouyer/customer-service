@@ -70,8 +70,8 @@ export default class UserService extends BaseService {
     if (!Object.keys(filters).length) return undefined;
 
     return and(
-      filters.id
-        ? inclusionFilterOperator(schema.users.id, filters.id)
+      filters.userIds
+        ? inclusionFilterOperator(schema.users.id, filters.userIds)
         : undefined
     );
   }

@@ -20,7 +20,7 @@ export const USER_COLUMNS = {
 } as const;
 
 export type UserFilters = {
-  id?: InclusionFilterOperator<User['id']>;
+  userIds?: InclusionFilterOperator<User['id']>;
 };
 
 export enum UserSortField {

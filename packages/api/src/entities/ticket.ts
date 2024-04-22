@@ -17,8 +17,8 @@ export type TicketWith<T> = {
 export type TicketFilters = {
   isAssigned?: boolean;
   assignedToUser?: InclusionFilterOperator<NonNullable<Ticket['assignedToId']>>;
-  customerId?: InclusionFilterOperator<Ticket['customerId']>;
-  ticketId?: InclusionFilterOperator<Ticket['id']>;
+  customerIds?: InclusionFilterOperator<Ticket['customerId']>;
+  ticketIds?: InclusionFilterOperator<Ticket['id']>;
   priority?: InclusionFilterOperator<Ticket['priority']>;
   status?: InclusionFilterOperator<Ticket['status']>;
 };

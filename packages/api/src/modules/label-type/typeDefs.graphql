@@ -19,7 +19,7 @@ type LabelTypeEdge {
   node: LabelType!
 }
 
-input LabelTypeFilter {
+input LabelTypesFilter {
   isArchived: Boolean
 }
 
@@ -46,7 +46,7 @@ type Query {
   labelType(id: ID!): LabelType
 
   labelTypes(
-    filters: LabelTypeFilter
+    filters: LabelTypesFilter
     first: Int
     after: String
     last: Int

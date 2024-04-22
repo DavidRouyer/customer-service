@@ -8,6 +8,7 @@ import { drizzleConnection } from '@cs/database';
 import { User } from '@cs/kyaku/models';
 
 import { LabelType } from './entities/label-type';
+import { Ticket } from './entities/ticket';
 import { commonModule } from './modules/common/resolvers';
 import { labelTypeModule } from './modules/label-type/resolvers';
 import { userModule } from './modules/user/resolvers';
@@ -53,7 +54,19 @@ const getContext = async () => ({
       const labelTypeService: LabelTypeService =
         container.resolve('labelTypeService');
       const rows = await labelTypeService.list({
-        id: {
+        labelTypeIds: {
+          in: [...ids],
+        },
+      });
+      return ids.map(
+        (id) =>
+          rows.find((row) => row.id === id) || new Error(`Row not found: ${id}`)
+      );
+    }),
+    ticketLoader: new DataLoader<string, Ticket, string>(async (ids) => {
+      const ticketService: TicketService = container.resolve('ticketService');
+      const rows = await ticketService.list({
+        ticketIds: {
           in: [...ids],
         },
       });
@@ -65,7 +78,7 @@ const getContext = async () => ({
     userLoader: new DataLoader<string, User, string>(async (ids) => {
       const userService: UserService = container.resolve('userService');
       const rows = await userService.list({
-        id: {
+        userIds: {
           in: [...ids],
         },
       });

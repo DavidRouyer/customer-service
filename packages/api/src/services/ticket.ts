@@ -508,8 +508,11 @@ export default class TicketService extends BaseService {
             filters.assignedToUser
           )
         : undefined,
-      filters.customerId
-        ? inclusionFilterOperator(schema.tickets.customerId, filters.customerId)
+      filters.customerIds
+        ? inclusionFilterOperator(
+            schema.tickets.customerId,
+            filters.customerIds
+          )
         : undefined,
       filters.priority
         ? inclusionFilterOperator(schema.tickets.priority, filters.priority)
@@ -517,8 +520,8 @@ export default class TicketService extends BaseService {
       filters.status
         ? inclusionFilterOperator(schema.tickets.status, filters.status)
         : undefined,
-      filters.ticketId
-        ? inclusionFilterOperator(schema.tickets.id, filters.ticketId)
+      filters.ticketIds
+        ? inclusionFilterOperator(schema.tickets.id, filters.ticketIds)
         : undefined
     );
   }

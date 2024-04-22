@@ -69,7 +69,7 @@ export type LabelTypeEdge = {
   node: LabelType;
 };
 
-export type LabelTypeFilter = {
+export type LabelTypesFilter = {
   isArchived?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
@@ -117,6 +117,8 @@ export type Query = {
   __typename?: 'Query';
   labelType?: Maybe<LabelType>;
   labelTypes: LabelTypeConnection;
+  ticket?: Maybe<Ticket>;
+  tickets: TicketConnection;
   user?: Maybe<User>;
   users: UserConnection;
 };
@@ -130,7 +132,21 @@ export type QueryLabelTypeArgs = {
 export type QueryLabelTypesArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
-  filters?: InputMaybe<LabelTypeFilter>;
+  filters?: InputMaybe<LabelTypesFilter>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+};
+
+
+export type QueryTicketArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type QueryTicketsArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  filters?: InputMaybe<TicketsFilter>;
   first?: InputMaybe<Scalars['Int']['input']>;
   last?: InputMaybe<Scalars['Int']['input']>;
 };
@@ -146,6 +162,57 @@ export type QueryUsersArgs = {
   before?: InputMaybe<Scalars['String']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
   last?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type Ticket = Node & {
+  __typename?: 'Ticket';
+  assignedTo?: Maybe<User>;
+  createdAt: Scalars['DateTime']['output'];
+  createdBy: User;
+  customer: User;
+  id: Scalars['ID']['output'];
+  priority: TicketPriority;
+  status: TicketStatus;
+  statusChangedAt?: Maybe<Scalars['DateTime']['output']>;
+  statusChangedBy?: Maybe<User>;
+  statusDetail?: Maybe<TicketStatusDetail>;
+  title?: Maybe<Scalars['String']['output']>;
+  updatedAt?: Maybe<Scalars['DateTime']['output']>;
+  updatedBy?: Maybe<User>;
+};
+
+export type TicketConnection = {
+  __typename?: 'TicketConnection';
+  edges: Array<TicketEdge>;
+  pageInfo: PageInfo;
+};
+
+export type TicketEdge = {
+  __typename?: 'TicketEdge';
+  cursor: Scalars['String']['output'];
+  node: Ticket;
+};
+
+export enum TicketPriority {
+  Critical = 'CRITICAL',
+  High = 'HIGH',
+  Low = 'LOW',
+  Medium = 'MEDIUM'
+}
+
+export enum TicketStatus {
+  Done = 'DONE',
+  Open = 'OPEN'
+}
+
+export enum TicketStatusDetail {
+  Created = 'CREATED',
+  NewReply = 'NEW_REPLY',
+  Replied = 'REPLIED'
+}
+
+export type TicketsFilter = {
+  isArchived?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 export type UnarchiveLabelTypeInput = {
@@ -180,7 +247,7 @@ export type UserEdge = {
 };
 
 export type LabelTypesQueryVariables = Exact<{
-  filters?: InputMaybe<LabelTypeFilter>;
+  filters?: InputMaybe<LabelTypesFilter>;
   first?: InputMaybe<Scalars['Int']['input']>;
   last?: InputMaybe<Scalars['Int']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
@@ -193,7 +260,7 @@ export type LabelTypesQuery = { __typename?: 'Query', labelTypes: { __typename?:
 
 
 export const LabelTypesDocument = `
-    query labelTypes($filters: LabelTypeFilter, $first: Int, $last: Int, $before: String, $after: String) {
+    query labelTypes($filters: LabelTypesFilter, $first: Int, $last: Int, $before: String, $after: String) {
   labelTypes(
     filters: $filters
     first: $first

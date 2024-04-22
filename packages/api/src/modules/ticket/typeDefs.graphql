@@ -1,0 +1,58 @@
+enum TicketStatus {
+  OPEN
+  DONE
+}
+
+enum TicketStatusDetail {
+  CREATED
+  NEW_REPLY
+  REPLIED
+}
+
+enum TicketPriority {
+  CRITICAL
+  HIGH
+  MEDIUM
+  LOW
+}
+
+type Ticket implements Node {
+  id: ID!
+  title: String
+  status: TicketStatus!
+  statusDetail: TicketStatusDetail
+  statusChangedAt: DateTime
+  statusChangedBy: User
+  priority: TicketPriority!
+  assignedTo: User
+  customer: User!
+  createdAt: DateTime!
+  createdBy: User!
+  updatedAt: DateTime
+  updatedBy: User
+}
+
+type TicketConnection {
+  edges: [TicketEdge!]!
+  pageInfo: PageInfo!
+}
+
+type TicketEdge {
+  cursor: String!
+  node: Ticket!
+}
+
+input TicketsFilter {
+  isAssigned: Boolean
+}
+
+type Query {
+  ticket(id: ID!): Ticket
+  tickets(
+    filters: TicketsFilter
+    first: Int
+    after: String
+    last: Int
+    before: String
+  ): TicketConnection!
+}

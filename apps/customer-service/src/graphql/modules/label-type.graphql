@@ -1,5 +1,5 @@
 query labelTypes(
-  $filters: LabelTypeFilter
+  $filters: LabelTypesFilter
   $first: Int
   $last: Int
   $before: String
