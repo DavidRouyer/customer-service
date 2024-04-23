@@ -8,7 +8,7 @@ export const TicketPriorityBadge: FC<{
   priority: TicketPriority;
 }> = ({ priority }) => {
   return {
-    Critical: (
+    CRITICAL: (
       <>
         <ShieldAlert className="inline-flex size-4 text-destructive" />
         <span className="text-xs text-muted-foreground">
@@ -16,7 +16,7 @@ export const TicketPriorityBadge: FC<{
         </span>
       </>
     ),
-    High: (
+    HIGH: (
       <>
         <Shield className="inline-flex size-4 text-destructive" />
         <span className="text-xs text-muted-foreground">
@@ -24,7 +24,7 @@ export const TicketPriorityBadge: FC<{
         </span>
       </>
     ),
-    Medium: (
+    MEDIUM: (
       <>
         <Shield className="inline-flex size-4 text-warning" />
         <span className="text-xs text-muted-foreground">
@@ -32,7 +32,7 @@ export const TicketPriorityBadge: FC<{
         </span>
       </>
     ),
-    Low: (
+    LOW: (
       <>
         <Shield className="inline-flex size-4 text-muted-foreground" />
         <span className="text-xs text-muted-foreground">
