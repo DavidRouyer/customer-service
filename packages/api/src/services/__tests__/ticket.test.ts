@@ -131,10 +131,10 @@ describe('TicketService', () => {
           title: 'One Piece',
           createdById: 'user-id',
           customerId: 'customer-id',
-          priority: 'Low',
+          priority: 'LOW',
           statusChangedById: 'user-id',
-          status: 'Open',
-          statusDetail: 'Created',
+          status: 'OPEN',
+          statusDetail: 'CREATED',
           createdAt: new Date('2000-01-01T12:00:00.000Z'),
           statusChangedAt: new Date('2000-01-01T12:00:00.000Z'),
         },
@@ -319,7 +319,7 @@ describe('TicketService', () => {
       expect(ticketRepo.update).toHaveBeenCalledWith(
         {
           id: 'one-piece',
-          priority: 'Critical',
+          priority: 'CRITICAL',
           updatedAt: new Date('2000-01-01T12:00:00.000Z'),
           updatedById: 'user-id',
         },
@@ -333,7 +333,7 @@ describe('TicketService', () => {
           customerId: undefined,
           type: 'PriorityChanged',
           entry: {
-            newPriority: 'Critical',
+            newPriority: 'CRITICAL',
             oldPriority: null,
           },
           userCreatedById: 'user-id',
@@ -384,7 +384,7 @@ describe('TicketService', () => {
       expect(ticketRepo.update).toHaveBeenCalledWith(
         {
           id: 'one-piece',
-          status: 'Done',
+          status: 'DONE',
           statusChangedAt: new Date('2000-01-01T12:00:00.000Z'),
           statusChangedById: 'user-id',
           statusDetail: null,
@@ -401,8 +401,8 @@ describe('TicketService', () => {
           customerId: undefined,
           type: 'StatusChanged',
           entry: {
-            newStatus: 'Done',
-            oldStatus: 'Open',
+            newStatus: 'DONE',
+            oldStatus: 'OPEN',
           },
           userCreatedById: 'user-id',
           createdAt: new Date('2000-01-01T12:00:00.000Z'),
@@ -452,7 +452,7 @@ describe('TicketService', () => {
       expect(ticketRepo.update).toHaveBeenCalledWith(
         {
           id: 'one-piece',
-          status: 'Open',
+          status: 'OPEN',
           statusChangedAt: new Date('2000-01-01T12:00:00.000Z'),
           statusChangedById: 'user-id',
           statusDetail: null,
@@ -469,8 +469,8 @@ describe('TicketService', () => {
           customerId: undefined,
           type: 'StatusChanged',
           entry: {
-            newStatus: 'Open',
-            oldStatus: 'Done',
+            newStatus: 'OPEN',
+            oldStatus: 'DONE',
           },
           userCreatedById: 'user-id',
           createdAt: new Date('2000-01-01T12:00:00.000Z'),
@@ -538,7 +538,7 @@ describe('TicketService', () => {
           id: 'one-piece',
           statusChangedAt: new Date('2000-01-01T12:00:00.000Z'),
           statusChangedById: 'user-id',
-          statusDetail: 'Replied',
+          statusDetail: 'REPLIED',
           updatedAt: new Date('2000-01-01T12:00:00.000Z'),
           updatedById: 'user-id',
         },
