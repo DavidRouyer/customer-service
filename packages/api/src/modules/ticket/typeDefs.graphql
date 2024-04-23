@@ -16,6 +16,15 @@ enum TicketPriority {
   LOW
 }
 
+enum TimelineEntryType {
+  ASSIGNMENT_CHANGED
+  CHAT
+  LABELS_CHANGED
+  NOTE
+  PRIORITY_CHANGED
+  STATUS_CHANGED
+}
+
 type Ticket implements Node {
   id: ID!
   title: String
@@ -24,6 +33,12 @@ type Ticket implements Node {
   statusChangedAt: DateTime
   statusChangedBy: User
   priority: TicketPriority!
+  timelineEntries(
+    first: Int
+    after: String
+    last: Int
+    before: String
+  ): TimelineEntryConnection!
   assignedTo: User
   customer: User!
   createdAt: DateTime!
@@ -32,14 +47,74 @@ type Ticket implements Node {
   updatedBy: User
 }
 
+type TicketEdge {
+  cursor: String!
+  node: Ticket!
+}
+
 type TicketConnection {
   edges: [TicketEdge!]!
   pageInfo: PageInfo!
 }
 
+type AssignmentChangedEntry {
+  oldAssignedTo: User
+  newAssignedTo: User
+}
+
+type ChatEntry {
+  text: String!
+}
+
+type LabelsChangedEntry {
+  oldLabels: [String!]!
+  newLabels: [String!]!
+}
+
+type NoteEntry {
+  text: String!
+  rawContent: String!
+}
+
+type PriorityChanged {
+  oldPriority: TicketPriority
+  newPriority: TicketPriority
+}
+
+type StatusChanged {
+  oldStatus: TicketStatus
+  newStatus: TicketStatus
+}
+
+union Entry =
+  | AssignmentChangedEntry
+  | ChatEntry
+  | LabelsChangedEntry
+  | NoteEntry
+  | PriorityChanged
+  | StatusChanged
+
 type TicketEdge {
   cursor: String!
   node: Ticket!
+}
+
+type TimelineEntry implements Node {
+  id: ID!
+  customerId: ID!
+  entry: Entry!
+  ticketId: ID!
+  createdAt: DateTime!
+}
+
+type TimelineEntryConnection {
+  edges: [TimelineEntryEdge!]!
+  pageInfo: PageInfo!
+}
+
+type TimelineEntryEdge {
+  cursor: String!
+  node: TimelineEntry!
 }
 
 input TicketsFilter {

@@ -1,5 +1,5 @@
 import { eq, inArray, isNull, schema } from '@cs/database';
-import { TicketLabelsChanged, TicketTimelineEntryType } from '@cs/kyaku/models';
+import { TicketLabelsChanged, TimelineEntryType } from '@cs/kyaku/models';
 import { GetConfig } from '@cs/kyaku/types/query';
 import { KyakuError } from '@cs/kyaku/utils';
 
@@ -139,7 +139,7 @@ export default class LabelService extends BaseService {
       await this.ticketTimelineRepository.create(
         {
           ticketId: ticket.id,
-          type: TicketTimelineEntryType.LabelsChanged,
+          type: TimelineEntryType.LabelsChanged,
           entry: {
             oldLabelIds: [],
             newLabelIds: newLabels.map((label) => label.id),
@@ -211,7 +211,7 @@ export default class LabelService extends BaseService {
       await this.ticketTimelineRepository.create(
         {
           ticketId: ticketId,
-          type: TicketTimelineEntryType.LabelsChanged,
+          type: TimelineEntryType.LabelsChanged,
           entry: {
             oldLabelIds: archivedLabels.map((label) => label.id),
             newLabelIds: [],

@@ -48,7 +48,7 @@ export default class CustomerService extends BaseService {
     }
   ) {
     return this.customerRepository.findMany({
-      limit: config.limit + 1,
+      limit: config.limit,
       orderBy: [
         ...this.getOrderByClause(config),
         sortByDirection(config.direction)(schema.customers.id),

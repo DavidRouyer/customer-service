@@ -7,7 +7,7 @@ import {
   TicketPriority,
   TicketStatus,
   TicketStatusChanged,
-  TicketTimelineEntryType,
+  TimelineEntryType,
 } from '@cs/kyaku/models';
 import { generateEntityId } from '@cs/kyaku/utils';
 
@@ -161,7 +161,7 @@ async function main() {
     id: generateEntityId('', 'te'),
     ticketId: leslieTicket.id,
     customerId: leslie.id,
-    type: TicketTimelineEntryType.AssignmentChanged,
+    type: TimelineEntryType.AssignmentChanged,
     entry: {
       oldAssignedToId: null,
       newAssignedToId: tomUser.id,
@@ -172,7 +172,7 @@ async function main() {
 
   await drizzleConnection.insert(schema.ticketTimelineEntries).values({
     id: generateEntityId('', 'te'),
-    type: TicketTimelineEntryType.Chat,
+    type: TimelineEntryType.Chat,
     entry: {
       text: "My order hasn't arrived yet.",
     } satisfies TicketChat,
@@ -183,7 +183,7 @@ async function main() {
   });
   await drizzleConnection.insert(schema.ticketTimelineEntries).values({
     id: generateEntityId('', 'te'),
-    type: TicketTimelineEntryType.Chat,
+    type: TimelineEntryType.Chat,
     entry: {
       text: 'We apologize for the inconvenience. Can you please provide your order number so we can investigate?',
     } satisfies TicketChat,
@@ -218,7 +218,7 @@ async function main() {
 
   await drizzleConnection.insert(schema.ticketTimelineEntries).values({
     id: generateEntityId('', 'te'),
-    type: TicketTimelineEntryType.Chat,
+    type: TimelineEntryType.Chat,
     entry: {
       text: 'can ya help me change a product of purchase?',
     } satisfies TicketChat,
@@ -229,7 +229,7 @@ async function main() {
   });
   await drizzleConnection.insert(schema.ticketTimelineEntries).values({
     id: generateEntityId('', 'te'),
-    type: TicketTimelineEntryType.Chat,
+    type: TimelineEntryType.Chat,
     entry: {
       text: 'Can you tell me which product you would like to change?',
     } satisfies TicketChat,
@@ -240,7 +240,7 @@ async function main() {
   });
   await drizzleConnection.insert(schema.ticketTimelineEntries).values({
     id: generateEntityId('', 'te'),
-    type: TicketTimelineEntryType.Chat,
+    type: TimelineEntryType.Chat,
     entry: {
       text: 'The socks, please',
     } satisfies TicketChat,
@@ -279,7 +279,7 @@ async function main() {
 
   await drizzleConnection.insert(schema.ticketTimelineEntries).values({
     id: generateEntityId('', 'te'),
-    type: TicketTimelineEntryType.StatusChanged,
+    type: TimelineEntryType.StatusChanged,
     entry: {
       oldStatus: TicketStatus.Open,
       newStatus: TicketStatus.Done,
@@ -292,7 +292,7 @@ async function main() {
 
   await drizzleConnection.insert(schema.ticketTimelineEntries).values({
     id: generateEntityId('', 'te'),
-    type: TicketTimelineEntryType.Chat,
+    type: TimelineEntryType.Chat,
     entry: {
       text: 'problems with canceling purchase',
     } satisfies TicketChat,
@@ -341,7 +341,7 @@ async function main() {
 
   await drizzleConnection.insert(schema.ticketTimelineEntries).values({
     id: generateEntityId('', 'te'),
-    type: TicketTimelineEntryType.Chat,
+    type: TimelineEntryType.Chat,
     entry: {
       text: 'I received a damaged product.',
     } satisfies TicketChat,
@@ -353,7 +353,7 @@ async function main() {
 
   await drizzleConnection.insert(schema.ticketTimelineEntries).values({
     id: generateEntityId('', 'te'),
-    type: TicketTimelineEntryType.Chat,
+    type: TimelineEntryType.Chat,
     entry: {
       text: 'We apologize for the inconvenience. Can you please provide a photo of the damaged product so we can assist you further?',
     } satisfies TicketChat,
@@ -396,7 +396,7 @@ async function main() {
 
   await drizzleConnection.insert(schema.ticketTimelineEntries).values({
     id: generateEntityId('', 'te'),
-    type: TicketTimelineEntryType.Chat,
+    type: TimelineEntryType.Chat,
     entry: {
       text: 'I need to return an item.',
     } satisfies TicketChat,
@@ -408,7 +408,7 @@ async function main() {
 
   await drizzleConnection.insert(schema.ticketTimelineEntries).values({
     id: generateEntityId('', 'te'),
-    type: TicketTimelineEntryType.Chat,
+    type: TimelineEntryType.Chat,
     entry: {
       text: 'Certainly. Please provide your order number and reason for return, and we will provide you with instructions on how to proceed.',
     } satisfies TicketChat,
@@ -460,7 +460,7 @@ async function main() {
 
   await drizzleConnection.insert(schema.ticketTimelineEntries).values({
     id: generateEntityId('', 'te'),
-    type: TicketTimelineEntryType.Chat,
+    type: TimelineEntryType.Chat,
     entry: {
       text: 'I want to change my shipping address.',
     } satisfies TicketChat,
@@ -472,7 +472,7 @@ async function main() {
 
   await drizzleConnection.insert(schema.ticketTimelineEntries).values({
     id: generateEntityId('', 'te'),
-    type: TicketTimelineEntryType.Chat,
+    type: TimelineEntryType.Chat,
     entry: {
       text: "No problem. Can you please provide your order number and the new shipping address you'd like to use?",
     } satisfies TicketChat,

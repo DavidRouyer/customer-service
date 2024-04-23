@@ -11,6 +11,7 @@ import { LabelType } from './entities/label-type';
 import { Ticket } from './entities/ticket';
 import { commonModule } from './modules/common/resolvers';
 import { labelTypeModule } from './modules/label-type/resolvers';
+import { ticketModule } from './modules/ticket/resolvers';
 import { userModule } from './modules/user/resolvers';
 import CustomerRepository from './repositories/customer';
 import LabelRepository from './repositories/label';
@@ -94,11 +95,13 @@ const schema = makeExecutableSchema({
   typeDefs: mergeTypeDefs([
     commonModule.typeDefs,
     labelTypeModule.typeDefs,
+    ticketModule.typeDefs,
     userModule.typeDefs,
   ]),
   resolvers: mergeResolvers([
     commonModule.resolvers,
     labelTypeModule.resolvers,
+    ticketModule.resolvers,
     userModule.resolvers,
   ]),
 });

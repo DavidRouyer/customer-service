@@ -53,7 +53,7 @@ export default class UserService extends BaseService {
   ) {
     return await this.userRepository.findMany({
       columns: USER_COLUMNS,
-      limit: config.limit + 1,
+      limit: config.limit,
       orderBy: [
         ...this.getOrderByClause(config),
         sortByDirection(config.direction)(schema.users.id),

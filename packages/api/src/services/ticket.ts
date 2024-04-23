@@ -9,7 +9,7 @@ import {
   TicketStatus,
   TicketStatusChanged,
   TicketStatusDetail,
-  TicketTimelineEntryType,
+  TimelineEntryType,
 } from '@cs/kyaku/models';
 import { Direction, FindConfig, GetConfig } from '@cs/kyaku/types/query';
 import { KyakuError } from '@cs/kyaku/utils';
@@ -153,7 +153,7 @@ export default class TicketService extends BaseService {
         {
           ticketId: ticketId,
           customerId: ticket.customerId,
-          type: TicketTimelineEntryType.AssignmentChanged,
+          type: TimelineEntryType.AssignmentChanged,
           entry: {
             oldAssignedToId: ticket.assignedToId,
             newAssignedToId: assignedToId,
@@ -195,7 +195,7 @@ export default class TicketService extends BaseService {
         {
           ticketId: ticketId,
           customerId: ticket.customerId,
-          type: TicketTimelineEntryType.AssignmentChanged,
+          type: TimelineEntryType.AssignmentChanged,
           entry: {
             oldAssignedToId: ticket.assignedToId,
             newAssignedToId: null,
@@ -235,7 +235,7 @@ export default class TicketService extends BaseService {
         {
           ticketId: ticketId,
           customerId: ticket.customerId,
-          type: TicketTimelineEntryType.PriorityChanged,
+          type: TimelineEntryType.PriorityChanged,
           entry: {
             oldPriority: ticket.priority,
             newPriority: priority,
@@ -280,7 +280,7 @@ export default class TicketService extends BaseService {
         {
           ticketId: ticketId,
           customerId: ticket.customerId,
-          type: TicketTimelineEntryType.StatusChanged,
+          type: TimelineEntryType.StatusChanged,
           entry: {
             oldStatus: ticket.status,
             newStatus: TicketStatus.Done,
@@ -325,7 +325,7 @@ export default class TicketService extends BaseService {
         {
           ticketId: ticketId,
           customerId: ticket.customerId,
-          type: TicketTimelineEntryType.StatusChanged,
+          type: TimelineEntryType.StatusChanged,
           entry: {
             oldStatus: ticket.status,
             newStatus: TicketStatus.Open,
@@ -347,7 +347,7 @@ export default class TicketService extends BaseService {
       const newChat = await this.ticketTimelineRepository.create(
         {
           ticketId: ticketId,
-          type: TicketTimelineEntryType.Chat,
+          type: TimelineEntryType.Chat,
           entry: {
             text: text,
           } satisfies TicketChat,
@@ -397,7 +397,7 @@ export default class TicketService extends BaseService {
       const newNote = await this.ticketTimelineRepository.create(
         {
           ticketId: ticketId,
-          type: TicketTimelineEntryType.Note,
+          type: TimelineEntryType.Note,
           entry: {
             text: text,
             rawContent: rawContent,

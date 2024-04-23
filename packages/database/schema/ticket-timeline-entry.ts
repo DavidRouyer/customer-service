@@ -8,7 +8,7 @@ import {
   TicketNote,
   TicketPriorityChanged,
   TicketStatusChanged,
-  TicketTimelineEntryType,
+  TimelineEntryType,
 } from '@cs/kyaku/models';
 import { generateEntityId } from '@cs/kyaku/utils/generate-entity-id';
 
@@ -17,12 +17,12 @@ import { customers } from './customer';
 import { tickets } from './ticket';
 
 export const ticketTimelineEntryType = pgEnum('ticketTimelineEntryType', [
-  TicketTimelineEntryType.AssignmentChanged,
-  TicketTimelineEntryType.Chat,
-  TicketTimelineEntryType.LabelsChanged,
-  TicketTimelineEntryType.Note,
-  TicketTimelineEntryType.PriorityChanged,
-  TicketTimelineEntryType.StatusChanged,
+  TimelineEntryType.AssignmentChanged,
+  TimelineEntryType.Chat,
+  TimelineEntryType.LabelsChanged,
+  TimelineEntryType.Note,
+  TimelineEntryType.PriorityChanged,
+  TimelineEntryType.StatusChanged,
 ]);
 
 export const ticketTimelineEntries = pgTable('ticketTimelineEntry', {
@@ -31,14 +31,16 @@ export const ticketTimelineEntries = pgTable('ticketTimelineEntry', {
     .notNull()
     .$defaultFn(() => generateEntityId('', 'te')),
   type: ticketTimelineEntryType('type').notNull(),
-  entry: json('entry').$type<
-    | TicketAssignmentChanged
-    | TicketChat
-    | TicketLabelsChanged
-    | TicketNote
-    | TicketPriorityChanged
-    | TicketStatusChanged
-  >(),
+  entry: json('entry')
+    .notNull()
+    .$type<
+      | TicketAssignmentChanged
+      | TicketChat
+      | TicketLabelsChanged
+      | TicketNote
+      | TicketPriorityChanged
+      | TicketStatusChanged
+    >(),
   ticketId: varchar('ticketId')
     .notNull()
     .references(() => tickets.id, {

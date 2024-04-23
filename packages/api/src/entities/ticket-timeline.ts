@@ -1,4 +1,14 @@
 import { InferInsertModel, InferSelectModel, schema } from '@cs/database';
+import {
+  TicketAssignmentChanged,
+  TicketChat,
+  TicketLabelsChanged,
+  TicketNote,
+  TicketPriorityChanged,
+  TicketStatusChanged,
+  TimelineEntry,
+  TimelineEntryType,
+} from '@cs/kyaku/models/ticket-timeline-entry';
 
 export type TicketTimeline = InferSelectModel<
   typeof schema.ticketTimelineEntries
@@ -7,6 +17,39 @@ export type TicketTimeline = InferSelectModel<
 export type TicketTimelineInsert = InferInsertModel<
   typeof schema.ticketTimelineEntries
 >;
+
+export type TicketTimelineUnion =
+  | (Omit<TicketTimeline, 'entry' | 'type'> & {
+      type: TimelineEntryType.AssignmentChanged;
+      entry: TicketAssignmentChanged;
+    })
+  | (Omit<TicketTimeline, 'entry' | 'type'> & {
+      type: TimelineEntryType.Chat;
+      entry: TicketChat;
+    })
+  | (Omit<TicketTimeline, 'entry' | 'type'> & {
+      type: TimelineEntryType.LabelsChanged;
+      entry: TicketLabelsChanged;
+    })
+  | (Omit<TicketTimeline, 'entry' | 'type'> & {
+      type: TimelineEntryType.Note;
+      entry: TicketNote;
+    })
+  | (Omit<TicketTimeline, 'entry' | 'type'> & {
+      type: TimelineEntryType.PriorityChanged;
+      entry: TicketPriorityChanged;
+    })
+  | (Omit<TicketTimeline, 'entry' | 'type'> & {
+      type: TimelineEntryType.StatusChanged;
+      entry: TicketStatusChanged;
+    });
+
+type TicketTimelineGeneric<T extends TimelineEntry> = Omit<
+  TicketTimeline,
+  'entry'
+> & {
+  entry: T;
+};
 
 export type TicketTimelineWith<T> = {
   assignedTo?: [T] extends [{ assignedTo: true }] ? true : undefined;

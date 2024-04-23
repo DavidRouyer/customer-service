@@ -1,13 +1,21 @@
 import { TicketPriority, TicketStatus, User } from '../models';
 
-export enum TicketTimelineEntryType {
-  AssignmentChanged = 'AssignmentChanged',
-  Chat = 'Chat',
-  LabelsChanged = 'LabelsChanged',
-  Note = 'Note',
-  PriorityChanged = 'PriorityChanged',
-  StatusChanged = 'StatusChanged',
+export enum TimelineEntryType {
+  AssignmentChanged = 'ASSIGNMENT_CHANGED',
+  Chat = 'CHAT',
+  LabelsChanged = 'LABELS_CHANGED',
+  Note = 'NOTE',
+  PriorityChanged = 'PRIORITY_CHANGED',
+  StatusChanged = 'STATUS_CHANGED',
 }
+
+export type TimelineEntry =
+  | TicketAssignmentChanged
+  | TicketChat
+  | TicketLabelsChanged
+  | TicketNote
+  | TicketPriorityChanged
+  | TicketStatusChanged;
 
 export type TicketAssignmentChanged = {
   oldAssignedToId: string | null;

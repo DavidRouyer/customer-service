@@ -40,10 +40,23 @@ export type ArchiveLabelTypeInput = {
   id: Scalars['ID']['input'];
 };
 
+export type AssignmentChangedEntry = {
+  __typename?: 'AssignmentChangedEntry';
+  newAssignedTo?: Maybe<User>;
+  oldAssignedTo?: Maybe<User>;
+};
+
+export type ChatEntry = {
+  __typename?: 'ChatEntry';
+  text: Scalars['String']['output'];
+};
+
 export type CreateLabelTypeInput = {
   icon?: InputMaybe<Scalars['String']['input']>;
   name: Scalars['String']['input'];
 };
+
+export type Entry = AssignmentChangedEntry | ChatEntry | LabelsChangedEntry | NoteEntry | PriorityChanged | StatusChanged;
 
 export type LabelType = Node & {
   __typename?: 'LabelType';
@@ -71,6 +84,12 @@ export type LabelTypeEdge = {
 
 export type LabelTypesFilter = {
   isArchived?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+export type LabelsChangedEntry = {
+  __typename?: 'LabelsChangedEntry';
+  newLabels: Array<Scalars['String']['output']>;
+  oldLabels: Array<Scalars['String']['output']>;
 };
 
 export type Mutation = {
@@ -105,12 +124,24 @@ export type Node = {
   id: Scalars['ID']['output'];
 };
 
+export type NoteEntry = {
+  __typename?: 'NoteEntry';
+  rawContent: Scalars['String']['output'];
+  text: Scalars['String']['output'];
+};
+
 export type PageInfo = {
   __typename?: 'PageInfo';
   endCursor?: Maybe<Scalars['String']['output']>;
   hasNextPage: Scalars['Boolean']['output'];
   hasPreviousPage: Scalars['Boolean']['output'];
   startCursor?: Maybe<Scalars['String']['output']>;
+};
+
+export type PriorityChanged = {
+  __typename?: 'PriorityChanged';
+  newPriority?: Maybe<TicketPriority>;
+  oldPriority?: Maybe<TicketPriority>;
 };
 
 export type Query = {
@@ -164,6 +195,12 @@ export type QueryUsersArgs = {
   last?: InputMaybe<Scalars['Int']['input']>;
 };
 
+export type StatusChanged = {
+  __typename?: 'StatusChanged';
+  newStatus?: Maybe<TicketStatus>;
+  oldStatus?: Maybe<TicketStatus>;
+};
+
 export type Ticket = Node & {
   __typename?: 'Ticket';
   assignedTo?: Maybe<User>;
@@ -176,9 +213,18 @@ export type Ticket = Node & {
   statusChangedAt?: Maybe<Scalars['DateTime']['output']>;
   statusChangedBy?: Maybe<User>;
   statusDetail?: Maybe<TicketStatusDetail>;
+  timelineEntries: TimelineEntryConnection;
   title?: Maybe<Scalars['String']['output']>;
   updatedAt?: Maybe<Scalars['DateTime']['output']>;
   updatedBy?: Maybe<User>;
+};
+
+
+export type TicketTimelineEntriesArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type TicketConnection = {
@@ -212,8 +258,38 @@ export enum TicketStatusDetail {
 }
 
 export type TicketsFilter = {
-  isArchived?: InputMaybe<Scalars['Boolean']['input']>;
+  isAssigned?: InputMaybe<Scalars['Boolean']['input']>;
 };
+
+export type TimelineEntry = Node & {
+  __typename?: 'TimelineEntry';
+  createdAt: Scalars['DateTime']['output'];
+  customerId: Scalars['ID']['output'];
+  entry: Entry;
+  id: Scalars['ID']['output'];
+  ticketId: Scalars['ID']['output'];
+};
+
+export type TimelineEntryConnection = {
+  __typename?: 'TimelineEntryConnection';
+  edges: Array<TimelineEntryEdge>;
+  pageInfo: PageInfo;
+};
+
+export type TimelineEntryEdge = {
+  __typename?: 'TimelineEntryEdge';
+  cursor: Scalars['String']['output'];
+  node: TimelineEntry;
+};
+
+export enum TimelineEntryType {
+  AssignmentChanged = 'ASSIGNMENT_CHANGED',
+  Chat = 'CHAT',
+  LabelsChanged = 'LABELS_CHANGED',
+  Note = 'NOTE',
+  PriorityChanged = 'PRIORITY_CHANGED',
+  StatusChanged = 'STATUS_CHANGED'
+}
 
 export type UnarchiveLabelTypeInput = {
   id: Scalars['ID']['input'];

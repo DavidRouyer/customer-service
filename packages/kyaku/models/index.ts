@@ -13,7 +13,7 @@ import {
   TicketNote,
   TicketPriorityChanged,
   TicketStatusChanged,
-  TicketTimelineEntryType,
+  TimelineEntryType,
 } from './ticket-timeline-entry';
 import { User } from './user';
 
@@ -31,5 +31,5 @@ export {
   TicketPriority,
   TicketStatus,
   TicketStatusDetail,
-  TicketTimelineEntryType,
+  TimelineEntryType,
 };

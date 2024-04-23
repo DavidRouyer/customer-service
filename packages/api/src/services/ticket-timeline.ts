@@ -1,21 +1,21 @@
-import { and, desc, eq, inArray, schema } from '@cs/database';
+import { eq, inArray, schema } from '@cs/database';
 import {
   TicketAssignmentChanged,
-  TicketAssignmentChangedWithData,
   TicketChat,
   TicketLabelsChanged,
-  TicketLabelsChangedWithData,
   TicketNote,
   TicketPriorityChanged,
   TicketStatusChanged,
-  TicketTimelineEntryType,
+  TimelineEntryType,
   User,
 } from '@cs/kyaku/models';
 import { FindConfig } from '@cs/kyaku/types';
 import { Direction } from '@cs/kyaku/types/query';
 
 import {
+  TicketTimeline,
   TicketTimelineSortField,
+  TicketTimelineUnion,
   TicketTimelineWith,
 } from '../entities/ticket-timeline';
 import { USER_COLUMNS } from '../entities/user';
@@ -56,7 +56,7 @@ export default class TicketTimelineService extends BaseService {
     }
   ) {
     const ticketTimelineEntries = await this.ticketTimelineRepository.findMany({
-      limit: config.limit + 1,
+      limit: config.limit,
       orderBy: [
         ...this.getOrderByClause(config),
         sortByDirection(config.direction)(schema.ticketTimelineEntries.id),
@@ -65,10 +65,12 @@ export default class TicketTimelineService extends BaseService {
       with: this.getWithClause(config?.relations),
     });
 
-    const ticketAssigmentChangedEntries = ticketTimelineEntries
+    const blabla = ticketTimelineEntries.map((entry) => this.mapEntry(entry));
+    return blabla;
+    /*const ticketAssigmentChangedEntries = ticketTimelineEntries
       .filter(
         (ticketTimelineEntry) =>
-          ticketTimelineEntry.type === TicketTimelineEntryType.AssignmentChanged
+          ticketTimelineEntry.type === TimelineEntryType.AssignmentChanged
       )
       .map(
         (ticketTimelineEntry) =>
@@ -78,7 +80,7 @@ export default class TicketTimelineService extends BaseService {
     const ticketLabelsChangedEntries = ticketTimelineEntries
       .filter(
         (ticketTimelineEntry) =>
-          ticketTimelineEntry.type === TicketTimelineEntryType.LabelsChanged
+          ticketTimelineEntry.type === TimelineEntryType.LabelsChanged
       )
       .map(
         (ticketTimelineEntry) =>
@@ -100,13 +102,12 @@ export default class TicketTimelineService extends BaseService {
         | TicketChat
         | TicketNote
         | TicketPriorityChanged
-        | TicketStatusChanged
-        | null;
+        | TicketStatusChanged;
     })[] = [];
 
     ticketTimelineEntries.forEach((ticketTimelineEntry) => {
       switch (ticketTimelineEntry.type) {
-        case TicketTimelineEntryType.AssignmentChanged:
+        case TimelineEntryType.AssignmentChanged:
           augmentedTicketTimelineEntries.push({
             ...ticketTimelineEntry,
             entry: {
@@ -128,13 +129,13 @@ export default class TicketTimelineService extends BaseService {
             },
           });
           break;
-        case TicketTimelineEntryType.Note:
+        case TimelineEntryType.Note:
           augmentedTicketTimelineEntries.push({
             ...ticketTimelineEntry,
             entry: ticketTimelineEntry.entry as TicketNote,
           });
           break;
-        case TicketTimelineEntryType.LabelsChanged:
+        case TimelineEntryType.LabelsChanged:
           augmentedTicketTimelineEntries.push({
             ...ticketTimelineEntry,
             entry: {
@@ -152,13 +153,13 @@ export default class TicketTimelineService extends BaseService {
             },
           });
           break;
-        case TicketTimelineEntryType.PriorityChanged:
+        case TimelineEntryType.PriorityChanged:
           augmentedTicketTimelineEntries.push({
             ...ticketTimelineEntry,
             entry: ticketTimelineEntry.entry as TicketPriorityChanged,
           });
           break;
-        case TicketTimelineEntryType.StatusChanged:
+        case TimelineEntryType.StatusChanged:
           augmentedTicketTimelineEntries.push({
             ...ticketTimelineEntry,
             entry: ticketTimelineEntry.entry as TicketStatusChanged,
@@ -169,7 +170,50 @@ export default class TicketTimelineService extends BaseService {
       }
     });
 
-    return augmentedTicketTimelineEntries;
+    return augmentedTicketTimelineEntries;*/
+  }
+
+  private mapEntry(entry: TicketTimeline): TicketTimelineUnion {
+    switch (entry.type) {
+      case TimelineEntryType.AssignmentChanged:
+        return {
+          ...entry,
+          type: TimelineEntryType.AssignmentChanged,
+          entry: entry.entry as TicketAssignmentChanged,
+        };
+      case TimelineEntryType.Chat:
+        return {
+          ...entry,
+          type: TimelineEntryType.Chat,
+          entry: entry.entry as TicketChat,
+        };
+      case TimelineEntryType.LabelsChanged:
+        return {
+          ...entry,
+          type: TimelineEntryType.LabelsChanged,
+          entry: entry.entry as TicketLabelsChanged,
+        };
+      case TimelineEntryType.Note:
+        return {
+          ...entry,
+          type: TimelineEntryType.Note,
+          entry: entry.entry as TicketNote,
+        };
+      case TimelineEntryType.PriorityChanged:
+        return {
+          ...entry,
+          type: TimelineEntryType.PriorityChanged,
+          entry: entry.entry as TicketPriorityChanged,
+        };
+      case TimelineEntryType.StatusChanged:
+        return {
+          ...entry,
+          type: TimelineEntryType.StatusChanged,
+          entry: entry.entry as TicketStatusChanged,
+        };
+      default:
+        throw new Error('Invalid timeline entry type');
+    }
   }
 
   private async retrieveUsers(entries: TicketAssignmentChanged[]) {
