@@ -1,15 +1,20 @@
-import { eq, inArray, isNull, schema } from '@cs/database';
+import { and, eq, inArray, isNull, schema } from '@cs/database';
 import { TicketLabelsChanged, TimelineEntryType } from '@cs/kyaku/models';
-import { GetConfig } from '@cs/kyaku/types/query';
+import { Direction, FindConfig, GetConfig } from '@cs/kyaku/types/query';
 import { KyakuError } from '@cs/kyaku/utils';
 
-import { LabelWith } from '../entities/label';
+import { LabelFilters, LabelSortField, LabelWith } from '../entities/label';
 import LabelRepository from '../repositories/label';
 import LabelTypeRepository from '../repositories/label-type';
 import TicketRepository from '../repositories/ticket';
 import TicketTimelineRepository from '../repositories/ticket-timeline';
 import { UnitOfWork } from '../unit-of-work';
 import { BaseService } from './base-service';
+import {
+  filterByDirection,
+  inclusionFilterOperator,
+  sortByDirection,
+} from './build-query';
 
 export default class LabelService extends BaseService {
   private readonly labelRepository: LabelRepository;
@@ -52,6 +57,25 @@ export default class LabelService extends BaseService {
       );
 
     return label;
+  }
+
+  async list<T extends LabelWith<T>>(
+    filters: LabelFilters = {},
+    config: FindConfig<T, LabelSortField> = {
+      direction: Direction.Forward,
+      limit: 50,
+      sortBy: LabelSortField.id,
+    }
+  ) {
+    return await this.labelRepository.findMany({
+      limit: config.limit,
+      orderBy: [sortByDirection(config.direction)(schema.labelTypes.id)],
+      where: and(
+        this.getFilterWhereClause(filters),
+        this.getIdWhereClause(config)
+      ),
+      with: this.getWithClause(config.relations),
+    });
   }
 
   async addLabels(ticketId: string, labelTypeIds: string[], userId: string) {
@@ -243,5 +267,26 @@ export default class LabelService extends BaseService {
         ? true
         : undefined,
     };
+  }
+
+  private getFilterWhereClause(filters: LabelFilters) {
+    if (!Object.keys(filters).length) return undefined;
+
+    return and(
+      filters.labelIds
+        ? inclusionFilterOperator(schema.labelTypes.id, filters.labelIds)
+        : undefined
+    );
+  }
+
+  private getIdWhereClause<T extends LabelWith<T>>(
+    config: FindConfig<T, LabelSortField>
+  ) {
+    if (!config.cursor?.lastId) return undefined;
+
+    return filterByDirection(config.direction)(
+      schema.labelTypes.id,
+      config.cursor.lastId
+    );
   }
 }

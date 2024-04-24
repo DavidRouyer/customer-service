@@ -1,8 +1,7 @@
 import { asc, eq, schema } from '@cs/database';
+import { TimelineEntryType } from '@cs/kyaku/models';
 
-import LabelRepository from '../../repositories/label';
 import TicketTimelineRepository from '../../repositories/ticket-timeline';
-import UserRepository from '../../repositories/user';
 import { UnitOfWork } from '../../unit-of-work';
 import TicketTimelineService from '../ticket-timeline';
 
@@ -26,16 +25,18 @@ describe('TicketTimelineService', () => {
       findMany: vi.fn(() => [
         {
           id: 'john-doe',
+          type: TimelineEntryType.Chat,
+          entry: {
+            text: 'Hello, world!',
+          },
         },
       ]),
     };
 
     const ticketTimelineService = new TicketTimelineService({
       unitOfWork: {} as unknown as UnitOfWork,
-      labelRepository: new LabelRepository(),
       ticketTimelineRepository:
         ticketTimelineRepo as unknown as TicketTimelineRepository,
-      userRepository: new UserRepository(),
     });
 
     it('successfully retrieves a list of timeline entries', async () => {
@@ -45,7 +46,7 @@ describe('TicketTimelineService', () => {
 
       expect(ticketTimelineRepo.findMany).toHaveBeenCalledTimes(1);
       expect(ticketTimelineRepo.findMany).toHaveBeenCalledWith({
-        limit: 51,
+        limit: 50,
         orderBy: [
           asc(schema.ticketTimelineEntries.createdAt),
           asc(schema.ticketTimelineEntries.id),
@@ -59,7 +60,9 @@ describe('TicketTimelineService', () => {
         },
       });
 
-      expect(result).toStrictEqual([{ id: 'john-doe' }]);
+      expect(result).toStrictEqual([
+        { id: 'john-doe', entry: { text: 'Hello, world!' }, type: 'CHAT' },
+      ]);
     });
   });
 });

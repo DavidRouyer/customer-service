@@ -7,10 +7,12 @@ import { auth } from '@cs/auth';
 import { drizzleConnection } from '@cs/database';
 import { User } from '@cs/kyaku/models';
 
+import { Label } from './entities/label';
 import { LabelType } from './entities/label-type';
 import { Ticket } from './entities/ticket';
 import { commonModule } from './modules/common/resolvers';
 import { labelTypeModule } from './modules/label-type/resolvers';
+import { labelModule } from './modules/label/resolvers';
 import { ticketModule } from './modules/ticket/resolvers';
 import { userModule } from './modules/user/resolvers';
 import CustomerRepository from './repositories/customer';
@@ -51,6 +53,18 @@ const getContext = async () => ({
   container,
   session: await auth(),
   dataloaders: {
+    labelLoader: new DataLoader<string, Label, string>(async (ids) => {
+      const labelService: LabelService = container.resolve('labelService');
+      const rows = await labelService.list({
+        labelIds: {
+          in: [...ids],
+        },
+      });
+      return ids.map(
+        (id) =>
+          rows.find((row) => row.id === id) || new Error(`Row not found: ${id}`)
+      );
+    }),
     labelTypeLoader: new DataLoader<string, LabelType, string>(async (ids) => {
       const labelTypeService: LabelTypeService =
         container.resolve('labelTypeService');
@@ -94,12 +108,14 @@ const getContext = async () => ({
 const schema = makeExecutableSchema({
   typeDefs: mergeTypeDefs([
     commonModule.typeDefs,
+    labelModule.typeDefs,
     labelTypeModule.typeDefs,
     ticketModule.typeDefs,
     userModule.typeDefs,
   ]),
   resolvers: mergeResolvers([
     commonModule.resolvers,
+    labelModule.resolvers,
     labelTypeModule.resolvers,
     ticketModule.resolvers,
     userModule.resolvers,

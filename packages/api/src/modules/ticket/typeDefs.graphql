@@ -16,15 +16,6 @@ enum TicketPriority {
   LOW
 }
 
-enum TimelineEntryType {
-  ASSIGNMENT_CHANGED
-  CHAT
-  LABELS_CHANGED
-  NOTE
-  PRIORITY_CHANGED
-  STATUS_CHANGED
-}
-
 type Ticket implements Node {
   id: ID!
   title: String
@@ -67,8 +58,8 @@ type ChatEntry {
 }
 
 type LabelsChangedEntry {
-  oldLabels: [String!]!
-  newLabels: [String!]!
+  oldLabels: [Label!]!
+  newLabels: [Label!]!
 }
 
 type NoteEntry {
@@ -76,12 +67,12 @@ type NoteEntry {
   rawContent: String!
 }
 
-type PriorityChanged {
+type PriorityChangedEntry {
   oldPriority: TicketPriority
   newPriority: TicketPriority
 }
 
-type StatusChanged {
+type StatusChangedEntry {
   oldStatus: TicketStatus
   newStatus: TicketStatus
 }
@@ -91,8 +82,8 @@ union Entry =
   | ChatEntry
   | LabelsChangedEntry
   | NoteEntry
-  | PriorityChanged
-  | StatusChanged
+  | PriorityChangedEntry
+  | StatusChangedEntry
 
 type TicketEdge {
   cursor: String!

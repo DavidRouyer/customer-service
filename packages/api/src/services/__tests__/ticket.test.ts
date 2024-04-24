@@ -197,7 +197,7 @@ describe('TicketService', () => {
         {
           ticketId: 'one-piece',
           customerId: undefined,
-          type: 'AssignmentChanged',
+          type: 'ASSIGNMENT_CHANGED',
           entry: {
             newAssignedToId: 'luffy',
             oldAssignedToId: null,
@@ -262,7 +262,7 @@ describe('TicketService', () => {
         {
           ticketId: 'one-piece',
           customerId: undefined,
-          type: 'AssignmentChanged',
+          type: 'ASSIGNMENT_CHANGED',
           entry: {
             newAssignedToId: null,
             oldAssignedToId: 'luffy',
@@ -331,7 +331,7 @@ describe('TicketService', () => {
         {
           ticketId: 'one-piece',
           customerId: undefined,
-          type: 'PriorityChanged',
+          type: 'PRIORITY_CHANGED',
           entry: {
             newPriority: 'CRITICAL',
             oldPriority: null,
@@ -399,7 +399,7 @@ describe('TicketService', () => {
         {
           ticketId: 'one-piece',
           customerId: undefined,
-          type: 'StatusChanged',
+          type: 'STATUS_CHANGED',
           entry: {
             newStatus: 'DONE',
             oldStatus: 'OPEN',
@@ -467,7 +467,7 @@ describe('TicketService', () => {
         {
           ticketId: 'one-piece',
           customerId: undefined,
-          type: 'StatusChanged',
+          type: 'STATUS_CHANGED',
           entry: {
             newStatus: 'OPEN',
             oldStatus: 'DONE',
@@ -522,7 +522,7 @@ describe('TicketService', () => {
         {
           ticketId: 'one-piece',
           customerId: undefined,
-          type: 'Chat',
+          type: 'CHAT',
           entry: {
             text: 'test chat',
           },
@@ -594,7 +594,7 @@ describe('TicketService', () => {
         {
           ticketId: 'one-piece',
           customerId: undefined,
-          type: 'Note',
+          type: 'NOTE',
           entry: {
             rawContent:
               '{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"blabla","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}',

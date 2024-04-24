@@ -1,4 +1,4 @@
-import { eq, schema } from '@cs/database';
+import { and, asc, eq, isNull, schema } from '@cs/database';
 
 import LabelRepository from '../../repositories/label';
 import LabelTypeRepository from '../../repositories/label-type';
@@ -51,6 +51,41 @@ describe('LabelService', () => {
       });
 
       expect(result.id).toEqual('one-piece');
+    });
+  });
+
+  describe('list', () => {
+    const labelRepo = {
+      findMany: vi.fn(() => [
+        {
+          id: 'one-piece',
+        },
+      ]),
+    };
+
+    const labelService = new LabelService({
+      unitOfWork: {} as unknown as UnitOfWork,
+      labelRepository: labelRepo as unknown as LabelRepository,
+      labelTypeRepository: new LabelTypeRepository(),
+      ticketRepository: new TicketRepository(),
+      ticketTimelineRepository: new TicketTimelineRepository(),
+    });
+
+    it('successfully retrieves a list of labels', async () => {
+      const result = await labelService.list();
+
+      expect(labelRepo.findMany).toHaveBeenCalledTimes(1);
+      expect(labelRepo.findMany).toHaveBeenCalledWith({
+        limit: 50,
+        orderBy: [asc(schema.labelTypes.id)],
+        where: and(undefined),
+        with: {
+          createdBy: undefined,
+          updatedBy: undefined,
+        },
+      });
+
+      expect(result).toStrictEqual([{ id: 'one-piece' }]);
     });
   });
 
@@ -126,7 +161,7 @@ describe('LabelService', () => {
         {
           ticketId: 'one-piece',
           customerId: undefined,
-          type: 'LabelsChanged',
+          type: 'LABELS_CHANGED',
           entry: {
             newLabelIds: ['label-1'],
             oldLabelIds: [],
@@ -228,7 +263,7 @@ describe('LabelService', () => {
         {
           ticketId: 'one-piece',
           customerId: undefined,
-          type: 'LabelsChanged',
+          type: 'LABELS_CHANGED',
           entry: {
             newLabelIds: [],
             oldLabelIds: ['label-1'],

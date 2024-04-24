@@ -4,8 +4,18 @@ import {
   validatePaginationArguments,
 } from '@cs/kyaku/utils/pagination';
 
+import { TicketSortField } from '../../entities/ticket';
 import { TicketTimelineUnion } from '../../entities/ticket-timeline';
-import { Resolvers } from '../../generated-types/graphql';
+import {
+  AssignmentChangedEntry,
+  ChatEntry,
+  LabelsChangedEntry,
+  NoteEntry,
+  PriorityChangedEntry,
+  Resolvers,
+  StatusChangedEntry,
+} from '../../generated-types/graphql';
+import TicketService from '../../services/ticket';
 import TicketTimelineService from '../../services/ticket-timeline';
 import typeDefs from './typeDefs.graphql';
 
@@ -79,15 +89,138 @@ const resolvers: Resolvers = {
         return null;
       }
     },
-  },
-  // TODO
-  /*Entry: {
-    __resolveType: (obj) => {
-      if (obj as AssignmentChangedEntry) return null;
+    tickets: async (
+      _,
+      { filters, before, after, first, last },
+      { container }
+    ) => {
+      const { cursor, direction, limit } = validatePaginationArguments(
+        { before, after, first, last },
+        { min: 1, max: 100 }
+      );
+
+      const ticketService: TicketService = container.resolve('ticketService');
+
+      const tickets = await ticketService.list(
+        {
+          isAssigned: filters?.isAssigned ?? undefined,
+        },
+        {
+          cursor: cursor ?? undefined,
+          direction: direction,
+          limit: limit + 1,
+          sortBy: TicketSortField.createdAt,
+        }
+      );
+
+      return connectionFromArray({
+        array: tickets.map((ticket) => ({
+          ...ticket,
+          timelineEntries: {
+            edges: [],
+            pageInfo: {
+              hasNextPage: false,
+              hasPreviousPage: false,
+            },
+          },
+          assignedTo: ticket.assignedToId ? { id: ticket.assignedToId } : null,
+          customer: { id: ticket.customerId },
+          createdBy: {
+            id: ticket.createdById,
+          },
+          statusChangedBy: ticket.statusChangedById
+            ? { id: ticket.statusChangedById }
+            : null,
+          updatedBy: ticket.updatedById
+            ? {
+                id: ticket.updatedById,
+              }
+            : null,
+        })),
+        args: { before, after, first, last },
+        meta: {
+          direction,
+          getLastValue: (item) => item.createdAt.toISOString(),
+          limit,
+        },
+      });
     },
   },
-  ChatEntry: {
-    __isTypeOf: (obj) => obj,
+  Entry: {
+    __resolveType: (obj) => {
+      if (
+        typeof (obj as AssignmentChangedEntry).oldAssignedTo === 'object' ||
+        typeof (obj as AssignmentChangedEntry).newAssignedTo === 'object'
+      ) {
+        return 'AssignmentChangedEntry';
+      }
+      if (
+        typeof (obj as ChatEntry).text === 'string' &&
+        !Object.hasOwn(obj, 'rawContent')
+      ) {
+        return 'ChatEntry';
+      }
+      if (
+        Array.isArray((obj as LabelsChangedEntry).oldLabels) ||
+        Array.isArray((obj as LabelsChangedEntry).newLabels)
+      ) {
+        return 'LabelsChangedEntry';
+      }
+      if (
+        typeof (obj as NoteEntry).text === 'string' &&
+        typeof (obj as NoteEntry).rawContent === 'string'
+      ) {
+        return 'NoteEntry';
+      }
+      if (
+        typeof (obj as PriorityChangedEntry).oldPriority === 'string' ||
+        typeof (obj as PriorityChangedEntry).newPriority === 'string'
+      ) {
+        return 'PriorityChangedEntry';
+      }
+
+      if (
+        typeof (obj as StatusChangedEntry).oldStatus === 'string' ||
+        typeof (obj as StatusChangedEntry).newStatus === 'string'
+      ) {
+        return 'StatusChangedEntry';
+      }
+      throw new Error('Invalid entry type');
+    },
+  },
+  AssignmentChangedEntry: {
+    oldAssignedTo: async ({ oldAssignedTo }, _, { dataloaders }) => {
+      if (!oldAssignedTo) {
+        return null;
+      }
+
+      return dataloaders.userLoader.load(oldAssignedTo.id);
+    },
+    newAssignedTo: async ({ newAssignedTo }, _, { dataloaders }) => {
+      if (!newAssignedTo) {
+        return null;
+      }
+      return dataloaders.userLoader.load(newAssignedTo.id);
+    },
+  },
+  /*LabelsChangedEntry: {
+    oldLabels: async ({ oldLabels }, _, { dataloaders }) => {
+      return (
+        await dataloaders.labelLoader.loadMany(
+          oldLabels.map((label) => label.id)
+        )
+      ).map((label) => ({
+        ...label,
+        labelType: {
+          id: label.labelTypeId,
+        },
+      }));
+    },
+    newLabels: async ({ newLabels }, _, { dataloaders }) => {
+      return Promise.all(
+        newLabels.map((label) => dataloaders.labelLoader.load(label.id))
+      );
+    },
   },*/
   Ticket: {
     assignedTo: async ({ assignedTo }, _, { dataloaders }) => {

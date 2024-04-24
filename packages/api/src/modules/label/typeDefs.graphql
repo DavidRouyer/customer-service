@@ -1,0 +1,9 @@
+type Label implements Node {
+  id: ID!
+  labelType: LabelType!
+  archivedAt: DateTime
+}
+
+type Query {
+  label(id: ID!): Label
+}

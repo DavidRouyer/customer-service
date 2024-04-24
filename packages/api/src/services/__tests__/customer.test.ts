@@ -63,7 +63,7 @@ describe('CustomerService', () => {
 
       expect(customerRepo.findMany).toHaveBeenCalledTimes(1);
       expect(customerRepo.findMany).toHaveBeenCalledWith({
-        limit: 51,
+        limit: 50,
         orderBy: [asc(schema.customers.createdAt), asc(schema.customers.id)],
         where: undefined,
         with: {

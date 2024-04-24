@@ -73,7 +73,7 @@ describe('UserService', () => {
           image: true,
           name: true,
         },
-        limit: 51,
+        limit: 50,
         orderBy: [asc(schema.users.name), asc(schema.users.id)],
         where: undefined,
       });

@@ -56,7 +56,14 @@ export type CreateLabelTypeInput = {
   name: Scalars['String']['input'];
 };
 
-export type Entry = AssignmentChangedEntry | ChatEntry | LabelsChangedEntry | NoteEntry | PriorityChanged | StatusChanged;
+export type Entry = AssignmentChangedEntry | ChatEntry | LabelsChangedEntry | NoteEntry | PriorityChangedEntry | StatusChangedEntry;
+
+export type Label = Node & {
+  __typename?: 'Label';
+  archivedAt?: Maybe<Scalars['DateTime']['output']>;
+  id: Scalars['ID']['output'];
+  labelType: LabelType;
+};
 
 export type LabelType = Node & {
   __typename?: 'LabelType';
@@ -88,8 +95,8 @@ export type LabelTypesFilter = {
 
 export type LabelsChangedEntry = {
   __typename?: 'LabelsChangedEntry';
-  newLabels: Array<Scalars['String']['output']>;
-  oldLabels: Array<Scalars['String']['output']>;
+  newLabels: Array<Label>;
+  oldLabels: Array<Label>;
 };
 
 export type Mutation = {
@@ -138,20 +145,26 @@ export type PageInfo = {
   startCursor?: Maybe<Scalars['String']['output']>;
 };
 
-export type PriorityChanged = {
-  __typename?: 'PriorityChanged';
+export type PriorityChangedEntry = {
+  __typename?: 'PriorityChangedEntry';
   newPriority?: Maybe<TicketPriority>;
   oldPriority?: Maybe<TicketPriority>;
 };
 
 export type Query = {
   __typename?: 'Query';
+  label?: Maybe<Label>;
   labelType?: Maybe<LabelType>;
   labelTypes: LabelTypeConnection;
   ticket?: Maybe<Ticket>;
   tickets: TicketConnection;
   user?: Maybe<User>;
   users: UserConnection;
+};
+
+
+export type QueryLabelArgs = {
+  id: Scalars['ID']['input'];
 };
 
 
@@ -195,8 +208,8 @@ export type QueryUsersArgs = {
   last?: InputMaybe<Scalars['Int']['input']>;
 };
 
-export type StatusChanged = {
-  __typename?: 'StatusChanged';
+export type StatusChangedEntry = {
+  __typename?: 'StatusChangedEntry';
   newStatus?: Maybe<TicketStatus>;
   oldStatus?: Maybe<TicketStatus>;
 };
@@ -281,15 +294,6 @@ export type TimelineEntryEdge = {
   cursor: Scalars['String']['output'];
   node: TimelineEntry;
 };
-
-export enum TimelineEntryType {
-  AssignmentChanged = 'ASSIGNMENT_CHANGED',
-  Chat = 'CHAT',
-  LabelsChanged = 'LABELS_CHANGED',
-  Note = 'NOTE',
-  PriorityChanged = 'PRIORITY_CHANGED',
-  StatusChanged = 'STATUS_CHANGED'
-}
 
 export type UnarchiveLabelTypeInput = {
   id: Scalars['ID']['input'];
