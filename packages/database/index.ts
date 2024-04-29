@@ -19,8 +19,6 @@ export const schema = {
   ...ticketTimelineEntries,
 };
 
-export { pgTable as tableCreator } from 'drizzle-orm/pg-core';
-
 export * from 'drizzle-orm';
 
 const databaseClient = new Pool({
