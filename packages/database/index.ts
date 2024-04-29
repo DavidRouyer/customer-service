@@ -25,7 +25,6 @@ export * from 'drizzle-orm';
 
 const databaseClient = new Pool({
   connectionString: process.env.DATABASE_URL,
-  maxUses: typeof EdgeRuntime !== 'undefined' ? 1 : undefined,
 });
 
 export const drizzleConnection = drizzle(databaseClient, { schema });
