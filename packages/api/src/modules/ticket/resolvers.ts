@@ -203,7 +203,7 @@ const resolvers: Resolvers = {
       return dataloaders.userLoader.load(newAssignedTo.id);
     },
   },
-  /*LabelsChangedEntry: {
+  LabelsChangedEntry: {
     oldLabels: async ({ oldLabels }, _, { dataloaders }) => {
       return (
         await dataloaders.labelLoader.loadMany(
@@ -221,7 +221,7 @@ const resolvers: Resolvers = {
         newLabels.map((label) => dataloaders.labelLoader.load(label.id))
       );
     },
-  },*/
+  },
   Ticket: {
     assignedTo: async ({ assignedTo }, _, { dataloaders }) => {
       if (!assignedTo) {
