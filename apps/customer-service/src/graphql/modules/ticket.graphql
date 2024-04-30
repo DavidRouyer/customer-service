@@ -12,6 +12,7 @@ query ticket($id: ID!) {
       name
       email
       avatarUrl
+      phone
     }
     labels {
       id

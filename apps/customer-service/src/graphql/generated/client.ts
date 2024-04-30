@@ -354,7 +354,7 @@ export type TicketQueryVariables = Exact<{
 }>;
 
 
-export type TicketQuery = { __typename?: 'Query', ticket?: { __typename?: 'Ticket', id: string, status: TicketStatus, assignedTo?: { __typename?: 'User', id: string, name?: string | null, email?: string | null, image?: string | null } | null, customer: { __typename?: 'Customer', id: string, name?: string | null, email?: string | null, avatarUrl?: string | null }, labels: Array<{ __typename?: 'Label', id: string, archivedAt?: any | null, labelType: { __typename?: 'LabelType', id: string, name: string, icon?: string | null, archivedAt?: any | null } }> } | null };
+export type TicketQuery = { __typename?: 'Query', ticket?: { __typename?: 'Ticket', id: string, status: TicketStatus, assignedTo?: { __typename?: 'User', id: string, name?: string | null, email?: string | null, image?: string | null } | null, customer: { __typename?: 'Customer', id: string, name?: string | null, email?: string | null, avatarUrl?: string | null, phone?: string | null }, labels: Array<{ __typename?: 'Label', id: string, archivedAt?: any | null, labelType: { __typename?: 'LabelType', id: string, name: string, icon?: string | null, archivedAt?: any | null } }> } | null };
 
 export type TicketTimelineQueryVariables = Exact<{
   ticketId: Scalars['ID']['input'];
@@ -422,6 +422,7 @@ export const TicketDocument = `
       name
       email
       avatarUrl
+      phone
     }
     labels {
       id

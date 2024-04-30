@@ -13,14 +13,19 @@ import {
 import { CustomerInfo } from '~/app/_components/infos/customer-info';
 import { LinkedTickets } from '~/app/_components/infos/linked-tickets';
 import { TicketInfo } from '~/app/_components/infos/ticket-info';
-import { api } from '~/trpc/react';
+import { useTicketQuery } from '~/graphql/generated/client';
 
 export const InfoPanel: FC<{
   ticketId: string;
 }> = ({ ticketId }) => {
-  const { data: ticketData } = api.ticket.byId.useQuery({
-    id: ticketId,
-  });
+  const { data: ticketData } = useTicketQuery(
+    {
+      id: ticketId,
+    },
+    {
+      select: (data) => data.ticket,
+    }
+  );
 
   if (!ticketData) {
     return null;
@@ -55,7 +60,7 @@ export const InfoPanel: FC<{
             <AccordionContent>
               <LinkedTickets
                 ticketId={ticketId}
-                customerId={ticketData?.customerId}
+                customerId={ticketData?.customer?.id}
               />
             </AccordionContent>
           </AccordionItem>

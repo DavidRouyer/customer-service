@@ -4,7 +4,7 @@ import { FormattedMessage, useIntl } from 'react-intl';
 import { Copy } from '@cs/ui/copy';
 
 import { PhoneNumber } from '~/app/_components/infos/phone-number';
-import { api } from '~/trpc/react';
+import { useTicketQuery } from '~/graphql/generated/client';
 
 const user = {
   app: {
@@ -15,9 +15,14 @@ const user = {
 
 export const CustomerInfo: FC<{ ticketId: string }> = ({ ticketId }) => {
   const { formatMessage } = useIntl();
-  const { data: ticketData } = api.ticket.byId.useQuery({
-    id: ticketId,
-  });
+  const { data: ticketData } = useTicketQuery(
+    {
+      id: ticketId,
+    },
+    {
+      select: (data) => data.ticket,
+    }
+  );
 
   if (!ticketData) {
     return null;
