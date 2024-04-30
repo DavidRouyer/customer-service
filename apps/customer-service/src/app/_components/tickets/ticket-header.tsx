@@ -7,10 +7,15 @@ import { Button } from '@cs/ui/button';
 
 import { useMarkAsDoneTicket } from '~/app/_hooks/use-mark-as-done-ticket';
 import { useMarkAsOpenTicket } from '~/app/_hooks/use-mark-as-open-ticket';
-import { api } from '~/trpc/react';
+import { useTicketQuery } from '~/graphql/generated/client';
 
 export const TicketHeader: FC<{ ticketId: string }> = ({ ticketId }) => {
-  const { data: ticketData } = api.ticket.byId.useQuery({ id: ticketId });
+  const { data: ticketData } = useTicketQuery(
+    { id: ticketId },
+    {
+      select: (data) => data.ticket,
+    }
+  );
 
   const { markAsDoneTicket } = useMarkAsDoneTicket();
   const { markAsOpenTicket } = useMarkAsOpenTicket();

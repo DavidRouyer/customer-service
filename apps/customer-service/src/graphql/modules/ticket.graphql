@@ -1,0 +1,91 @@
+query ticket($id: ID!) {
+  ticket(id: $id) {
+    id
+    assignedTo {
+      id
+      name
+      email
+      image
+    }
+    customer {
+      id
+      name
+      email
+      image
+    }
+    labels {
+      id
+      labelType {
+        id
+        name
+        icon
+        archivedAt
+      }
+      archivedAt
+    }
+    status
+    timelineEntries {
+      edges {
+        cursor
+        node {
+          id
+          entry {
+            ... on AssignmentChangedEntry {
+              oldAssignedTo {
+                id
+                name
+                email
+                emailVerified
+                image
+              }
+              newAssignedTo {
+                id
+                name
+                email
+                emailVerified
+                image
+              }
+            }
+            ... on ChatEntry {
+              text
+            }
+            ... on LabelsChangedEntry {
+              oldLabels {
+                id
+                labelType {
+                  id
+                  name
+                  icon
+                  archivedAt
+                }
+                archivedAt
+              }
+              newLabels {
+                id
+                labelType {
+                  id
+                  name
+                  icon
+                  archivedAt
+                }
+                archivedAt
+              }
+            }
+            ... on NoteEntry {
+              text
+              rawContent
+            }
+            ... on PriorityChangedEntry {
+              oldPriority
+              newPriority
+            }
+            ... on StatusChangedEntry {
+              oldStatus
+              newStatus
+            }
+          }
+        }
+      }
+    }
+  }
+}

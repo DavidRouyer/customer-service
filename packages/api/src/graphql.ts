@@ -7,6 +7,7 @@ import { auth } from '@cs/auth';
 import { drizzleConnection } from '@cs/database';
 import { User } from '@cs/kyaku/models';
 
+import { Customer } from './entities/customer';
 import { Label } from './entities/label';
 import { LabelType } from './entities/label-type';
 import { Ticket } from './entities/ticket';
@@ -53,6 +54,19 @@ const getContext = async () => ({
   container,
   session: await auth(),
   dataloaders: {
+    customerLoader: new DataLoader<string, Customer, string>(async (ids) => {
+      const customerService: CustomerService =
+        container.resolve('customerService');
+      const rows = await customerService.list({
+        customerIds: {
+          in: [...ids],
+        },
+      });
+      return ids.map(
+        (id) =>
+          rows.find((row) => row.id === id) || new Error(`Row not found: ${id}`)
+      );
+    }),
     labelLoader: new DataLoader<string, Label, string>(async (ids) => {
       const labelService: LabelService = container.resolve('labelService');
       const rows = await labelService.list({

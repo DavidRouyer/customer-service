@@ -5,14 +5,10 @@ import { TicketPriorityChanged } from '@cs/kyaku/models';
 
 import { RelativeTime } from './relative-time';
 import { TicketPriorityBadge } from './ticket-priority-badge';
-import { TimelineItemType } from './timeline-item';
-
-type TimelinePriorityChangedType = {
-  entry: TicketPriorityChanged;
-} & Omit<TimelineItemType, 'entry'>;
+import { TimelineItemNarrowed } from './timeline-item';
 
 type TimelinePriorityChangedProps = {
-  item: TimelinePriorityChangedType;
+  item: TimelineItemNarrowed<TicketPriorityChanged>;
 };
 
 export const TimelinePriorityChanged: FC<TimelinePriorityChangedProps> = ({

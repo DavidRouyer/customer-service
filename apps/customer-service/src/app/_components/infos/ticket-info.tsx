@@ -5,12 +5,17 @@ import { TicketAssignmentCombobox } from '~/app/_components/tickets/ticket-assig
 import { TicketLabelCombobox } from '~/app/_components/tickets/ticket-label-combobox';
 import { TicketPriorityDropdowm } from '~/app/_components/tickets/ticket-priority-dropdown';
 import { TicketStatusDropdowm } from '~/app/_components/tickets/ticket-status-dropdown';
-import { api } from '~/trpc/react';
+import { useTicketQuery } from '~/graphql/generated/client';
 
 export const TicketInfo: FC<{ ticketId: string }> = ({ ticketId }) => {
-  const { data: ticketData } = api.ticket.byId.useQuery({
-    id: ticketId,
-  });
+  const { data: ticketData } = useTicketQuery(
+    {
+      id: ticketId,
+    },
+    {
+      select: (data) => data.ticket,
+    }
+  );
 
   if (!ticketData) {
     return null;

@@ -153,18 +153,12 @@ export type PriorityChangedEntry = {
 
 export type Query = {
   __typename?: 'Query';
-  label?: Maybe<Label>;
   labelType?: Maybe<LabelType>;
   labelTypes: LabelTypeConnection;
   ticket?: Maybe<Ticket>;
   tickets: TicketConnection;
   user?: Maybe<User>;
   users: UserConnection;
-};
-
-
-export type QueryLabelArgs = {
-  id: Scalars['ID']['input'];
 };
 
 
@@ -221,6 +215,7 @@ export type Ticket = Node & {
   createdBy: User;
   customer: User;
   id: Scalars['ID']['output'];
+  labels: Array<Label>;
   priority: TicketPriority;
   status: TicketStatus;
   statusChangedAt?: Maybe<Scalars['DateTime']['output']>;
@@ -337,6 +332,13 @@ export type LabelTypesQueryVariables = Exact<{
 
 export type LabelTypesQuery = { __typename?: 'Query', labelTypes: { __typename?: 'LabelTypeConnection', edges: Array<{ __typename?: 'LabelTypeEdge', cursor: string, node: { __typename?: 'LabelType', id: string, name: string, icon?: string | null } }> } };
 
+export type TicketQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type TicketQuery = { __typename?: 'Query', ticket?: { __typename?: 'Ticket', id: string, status: TicketStatus, assignedTo?: { __typename?: 'User', id: string, name?: string | null, email?: string | null, image?: string | null } | null, customer: { __typename?: 'User', id: string, name?: string | null, email?: string | null, image?: string | null }, labels: Array<{ __typename?: 'Label', id: string, archivedAt?: any | null, labelType: { __typename?: 'LabelType', id: string, name: string, icon?: string | null, archivedAt?: any | null } }>, timelineEntries: { __typename?: 'TimelineEntryConnection', edges: Array<{ __typename?: 'TimelineEntryEdge', cursor: string, node: { __typename?: 'TimelineEntry', id: string, entry: { __typename?: 'AssignmentChangedEntry', oldAssignedTo?: { __typename?: 'User', id: string, name?: string | null, email?: string | null, emailVerified?: any | null, image?: string | null } | null, newAssignedTo?: { __typename?: 'User', id: string, name?: string | null, email?: string | null, emailVerified?: any | null, image?: string | null } | null } | { __typename?: 'ChatEntry', text: string } | { __typename?: 'LabelsChangedEntry', oldLabels: Array<{ __typename?: 'Label', id: string, archivedAt?: any | null, labelType: { __typename?: 'LabelType', id: string, name: string, icon?: string | null, archivedAt?: any | null } }>, newLabels: Array<{ __typename?: 'Label', id: string, archivedAt?: any | null, labelType: { __typename?: 'LabelType', id: string, name: string, icon?: string | null, archivedAt?: any | null } }> } | { __typename?: 'NoteEntry', text: string, rawContent: string } | { __typename?: 'PriorityChangedEntry', oldPriority?: TicketPriority | null, newPriority?: TicketPriority | null } | { __typename?: 'StatusChangedEntry', oldStatus?: TicketStatus | null, newStatus?: TicketStatus | null } } }> } } | null };
+
 
 
 export const LabelTypesDocument = `
@@ -380,3 +382,118 @@ useLabelTypesQuery.getKey = (variables?: LabelTypesQueryVariables) => variables 
 
 
 useLabelTypesQuery.fetcher = (variables?: LabelTypesQueryVariables) => fetcher<LabelTypesQuery, LabelTypesQueryVariables>(LabelTypesDocument, variables);
+
+export const TicketDocument = `
+    query ticket($id: ID!) {
+  ticket(id: $id) {
+    id
+    assignedTo {
+      id
+      name
+      email
+      image
+    }
+    customer {
+      id
+      name
+      email
+      image
+    }
+    labels {
+      id
+      labelType {
+        id
+        name
+        icon
+        archivedAt
+      }
+      archivedAt
+    }
+    status
+    timelineEntries {
+      edges {
+        cursor
+        node {
+          id
+          entry {
+            ... on AssignmentChangedEntry {
+              oldAssignedTo {
+                id
+                name
+                email
+                emailVerified
+                image
+              }
+              newAssignedTo {
+                id
+                name
+                email
+                emailVerified
+                image
+              }
+            }
+            ... on ChatEntry {
+              text
+            }
+            ... on LabelsChangedEntry {
+              oldLabels {
+                id
+                labelType {
+                  id
+                  name
+                  icon
+                  archivedAt
+                }
+                archivedAt
+              }
+              newLabels {
+                id
+                labelType {
+                  id
+                  name
+                  icon
+                  archivedAt
+                }
+                archivedAt
+              }
+            }
+            ... on NoteEntry {
+              text
+              rawContent
+            }
+            ... on PriorityChangedEntry {
+              oldPriority
+              newPriority
+            }
+            ... on StatusChangedEntry {
+              oldStatus
+              newStatus
+            }
+          }
+        }
+      }
+    }
+  }
+}
+    `;
+
+export const useTicketQuery = <
+      TData = TicketQuery,
+      TError = unknown
+    >(
+      variables: TicketQueryVariables,
+      options?: Omit<UseQueryOptions<TicketQuery, TError, TData>, 'queryKey'> & { queryKey?: UseQueryOptions<TicketQuery, TError, TData>['queryKey'] }
+    ) => {
+    
+    return useQuery<TicketQuery, TError, TData>(
+      {
+    queryKey: ['ticket', variables],
+    queryFn: fetcher<TicketQuery, TicketQueryVariables>(TicketDocument, variables),
+    ...options
+  }
+    )};
+
+useTicketQuery.getKey = (variables: TicketQueryVariables) => ['ticket', variables];
+
+
+useTicketQuery.fetcher = (variables: TicketQueryVariables) => fetcher<TicketQuery, TicketQueryVariables>(TicketDocument, variables);

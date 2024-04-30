@@ -17,10 +17,11 @@ import {
 } from '@cs/ui/command';
 import { Popover, PopoverContent, PopoverTrigger } from '@cs/ui/popover';
 
+import { TicketQuery } from '~/graphql/generated/client';
 import { api } from '~/trpc/react';
 
 type TicketAssignmentComboboxProps = {
-  assignedTo?: NonNullable<RouterOutputs['ticket']['byId']>['assignedTo'];
+  assignedTo?: NonNullable<TicketQuery['ticket']>['assignedTo'];
   ticketId: string;
 };
 

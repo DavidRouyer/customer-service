@@ -6,7 +6,6 @@ import {
   TicketNote,
   TicketPriorityChanged,
   TicketStatusChanged,
-  TimelineEntry,
   TimelineEntryType,
 } from '@cs/kyaku/models/ticket-timeline-entry';
 
@@ -43,13 +42,6 @@ export type TicketTimelineUnion =
       type: TimelineEntryType.StatusChanged;
       entry: TicketStatusChanged;
     });
-
-type TicketTimelineGeneric<T extends TimelineEntry> = Omit<
-  TicketTimeline,
-  'entry'
-> & {
-  entry: T;
-};
 
 export type TicketTimelineWith<T> = {
   assignedTo?: [T] extends [{ assignedTo: true }] ? true : undefined;

@@ -137,18 +137,12 @@ export type PriorityChangedEntry = {
 
 export type Query = {
   __typename?: 'Query';
-  label?: Maybe<Label>;
   labelType?: Maybe<LabelType>;
   labelTypes: LabelTypeConnection;
   ticket?: Maybe<Ticket>;
   tickets: TicketConnection;
   user?: Maybe<User>;
   users: UserConnection;
-};
-
-
-export type QueryLabelArgs = {
-  id: Scalars['ID']['input'];
 };
 
 
@@ -205,6 +199,7 @@ export type Ticket = Node & {
   createdBy: User;
   customer: User;
   id: Scalars['ID']['output'];
+  labels: Array<Label>;
   priority: TicketPriority;
   status: TicketStatus;
   statusChangedAt?: Maybe<Scalars['DateTime']['output']>;
@@ -557,7 +552,6 @@ export type PriorityChangedEntryResolvers<ContextType = Context, ParentType exte
 };
 
 export type QueryResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
-  label?: Resolver<Maybe<ResolversTypes['Label']>, ParentType, ContextType, RequireFields<QueryLabelArgs, 'id'>>;
   labelType?: Resolver<Maybe<ResolversTypes['LabelType']>, ParentType, ContextType, RequireFields<QueryLabelTypeArgs, 'id'>>;
   labelTypes?: Resolver<ResolversTypes['LabelTypeConnection'], ParentType, ContextType, Partial<QueryLabelTypesArgs>>;
   ticket?: Resolver<Maybe<ResolversTypes['Ticket']>, ParentType, ContextType, RequireFields<QueryTicketArgs, 'id'>>;
@@ -578,6 +572,7 @@ export type TicketResolvers<ContextType = Context, ParentType extends ResolversP
   createdBy?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
   customer?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  labels?: Resolver<Array<ResolversTypes['Label']>, ParentType, ContextType>;
   priority?: Resolver<ResolversTypes['TicketPriority'], ParentType, ContextType>;
   status?: Resolver<ResolversTypes['TicketStatus'], ParentType, ContextType>;
   statusChangedAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;

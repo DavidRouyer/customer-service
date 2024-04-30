@@ -23,6 +23,7 @@ type Ticket implements Node {
   statusDetail: TicketStatusDetail
   statusChangedAt: DateTime
   statusChangedBy: User
+  labels: [Label!]!
   priority: TicketPriority!
   timelineEntries(
     first: Int

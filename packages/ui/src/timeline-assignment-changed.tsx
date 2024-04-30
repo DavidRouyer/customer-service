@@ -4,14 +4,10 @@ import { FormattedMessage } from 'react-intl';
 import { TicketAssignmentChangedWithData } from '@cs/kyaku/models';
 
 import { RelativeTime } from './relative-time';
-import { TimelineItemType } from './timeline-item';
-
-type TimelineAssigmentChangedType = {
-  entry: TicketAssignmentChangedWithData;
-} & Omit<TimelineItemType, 'entry'>;
+import { AssignmentChangedEntry, TimelineItemNarrowed } from './timeline-item';
 
 type TimelineAssigmentChangedProps = {
-  item: TimelineAssigmentChangedType;
+  item: TimelineItemNarrowed<AssignmentChangedEntry>;
 };
 
 export const TimelineAssigmentChanged: FC<TimelineAssigmentChangedProps> = ({

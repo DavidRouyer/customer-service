@@ -3,7 +3,3 @@ type Label implements Node {
   labelType: LabelType!
   archivedAt: DateTime
 }
-
-type Query {
-  label(id: ID!): Label
-}

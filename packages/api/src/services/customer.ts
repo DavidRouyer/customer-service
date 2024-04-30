@@ -2,12 +2,20 @@ import { and, eq, schema } from '@cs/database';
 import { Direction, FindConfig, GetConfig } from '@cs/kyaku/types/query';
 import { KyakuError } from '@cs/kyaku/utils';
 
-import { CustomerSortField, CustomerWith } from '../entities/customer';
+import {
+  CustomerFilters,
+  CustomerSortField,
+  CustomerWith,
+} from '../entities/customer';
 import { User, USER_COLUMNS } from '../entities/user';
 import CustomerRepository from '../repositories/customer';
 import { UnitOfWork } from '../unit-of-work';
 import { BaseService } from './base-service';
-import { filterByDirection, sortByDirection } from './build-query';
+import {
+  filterByDirection,
+  inclusionFilterOperator,
+  sortByDirection,
+} from './build-query';
 
 export default class CustomerService extends BaseService {
   private readonly customerRepository: CustomerRepository;
@@ -41,6 +49,7 @@ export default class CustomerService extends BaseService {
   }
 
   async list<T extends CustomerWith<T>>(
+    filters: CustomerFilters,
     config: FindConfig<T, CustomerSortField> = {
       direction: Direction.Forward,
       limit: 50,
@@ -54,6 +63,7 @@ export default class CustomerService extends BaseService {
         sortByDirection(config.direction)(schema.customers.id),
       ],
       where: and(
+        this.getFilterWhereClause(filters),
         this.getSortWhereClause(config),
         this.getIdWhereClause(config)
       ),
@@ -87,6 +97,16 @@ export default class CustomerService extends BaseService {
         ? { columns: { [K in keyof User]: true } }
         : undefined,
     };
+  }
+
+  private getFilterWhereClause(filters: CustomerFilters) {
+    if (!Object.keys(filters).length) return undefined;
+
+    return and(
+      filters.customerIds
+        ? inclusionFilterOperator(schema.customers.id, filters.customerIds)
+        : undefined
+    );
   }
 
   private getSortWhereClause<T extends CustomerWith<T>>(

@@ -1,9 +1,12 @@
+import { GraphQLError } from 'graphql';
+
 import { TimelineEntryType } from '@cs/kyaku/models';
 import {
   connectionFromArray,
   validatePaginationArguments,
 } from '@cs/kyaku/utils/pagination';
 
+import { Label } from '../../entities/label';
 import { TicketSortField } from '../../entities/ticket';
 import { TicketTimelineUnion } from '../../entities/ticket-timeline';
 import {
@@ -205,11 +208,16 @@ const resolvers: Resolvers = {
   },
   LabelsChangedEntry: {
     oldLabels: async ({ oldLabels }, _, { dataloaders }) => {
-      return (
-        await dataloaders.labelLoader.loadMany(
-          oldLabels.map((label) => label.id)
-        )
-      ).map((label) => ({
+      const labels = await dataloaders.labelLoader.loadMany(
+        oldLabels.map((label) => label.id)
+      );
+      if (labels.some((label) => label instanceof Error)) {
+        throw new GraphQLError('Failed to load labels');
+      }
+      const filteredLabels = labels.filter(
+        (label): label is Label => !(label instanceof Error)
+      );
+      return filteredLabels.map((label) => ({
         ...label,
         labelType: {
           id: label.labelTypeId,
@@ -217,9 +225,21 @@ const resolvers: Resolvers = {
       }));
     },
     newLabels: async ({ newLabels }, _, { dataloaders }) => {
-      return Promise.all(
-        newLabels.map((label) => dataloaders.labelLoader.load(label.id))
+      const labels = await dataloaders.labelLoader.loadMany(
+        newLabels.map((label) => label.id)
       );
+      if (labels.some((label) => label instanceof Error)) {
+        throw new GraphQLError('Failed to load labels');
+      }
+      const filteredLabels = labels.filter(
+        (label): label is Label => !(label instanceof Error)
+      );
+      return filteredLabels.map((label) => ({
+        ...label,
+        labelType: {
+          id: label.labelTypeId,
+        },
+      }));
     },
   },
   Ticket: {
@@ -233,7 +253,10 @@ const resolvers: Resolvers = {
       return dataloaders.userLoader.load(createdBy.id);
     },
     customer: async ({ customer }, _, { dataloaders }) => {
-      return dataloaders.userLoader.load(customer.id);
+      return dataloaders.customerLoader.load(customer.id);
+    },
+    labels: async ({ labels }, _, { dataloaders }) => {
+      // TODO: Implement dataloader for labels
     },
     statusChangedBy: async ({ statusChangedBy }, _, { dataloaders }) => {
       if (!statusChangedBy) {

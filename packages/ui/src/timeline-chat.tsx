@@ -1,18 +1,13 @@
 import { FC } from 'react';
 
-import { TicketChat } from '@cs/kyaku/models';
 import { getInitials } from '@cs/kyaku/utils';
 
 import { Avatar, AvatarFallback, AvatarImage } from './avatar';
 import { RelativeTime } from './relative-time';
-import { TimelineItemType } from './timeline-item';
-
-type TimelineChatType = {
-  entry: TicketChat;
-} & Omit<TimelineItemType, 'entry'>;
+import { ChatEntry, TimelineItemNarrowed } from './timeline-item';
 
 type TimelineChatProps = {
-  item: TimelineChatType;
+  item: TimelineItemNarrowed<ChatEntry>;
 };
 
 export const TimelineChat: FC<TimelineChatProps> = ({ item }) => {

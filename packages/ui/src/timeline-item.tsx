@@ -9,7 +9,6 @@ import {
   TicketNote,
   TicketPriorityChanged,
   TicketStatusChanged,
-  TicketTimelineEntryType,
 } from '@cs/kyaku/models';
 import { cn } from '@cs/ui';
 
@@ -20,7 +19,31 @@ import { TimelineNote } from './timeline-note';
 import { TimelinePriorityChanged } from './timeline-priority-changed';
 import { TimelineStatusChanged } from './timeline-status-changed';
 
-type TimelineItem<T extends TicketTimelineEntryType, U> = {
+export type AssignmentChangedEntry = {
+  __typename: 'AssignmentChangedEntry';
+} & TicketAssignmentChangedWithData;
+
+export type ChatEntry = {
+  __typename: 'ChatEntry';
+} & TicketChat;
+
+export type LabelsChangedEntry = {
+  __typename: 'LabelsChangedEntry';
+} & TicketLabelsChangedWithData;
+
+export type NoteEntry = {
+  __typename: 'NoteEntry';
+} & TicketNote;
+
+export type PriorityChangedEntry = {
+  __typename: 'PriorityChangedEntry';
+} & TicketPriorityChanged;
+
+export type StatusChangedEntry = {
+  __typename: 'StatusChangedEntry';
+} & TicketStatusChanged;
+
+export type TimelineItem = {
   id: string;
   createdAt: Date;
   customer: {
@@ -35,8 +58,13 @@ type TimelineItem<T extends TicketTimelineEntryType, U> = {
     id: string;
     name: string | null;
   } | null;
-  entry: U;
-  type: T;
+  entry:
+    | AssignmentChangedEntry
+    | ChatEntry
+    | LabelsChangedEntry
+    | NoteEntry
+    | PriorityChangedEntry
+    | StatusChangedEntry;
   userCreatedBy: {
     id: string;
     email: string | null;
@@ -45,26 +73,16 @@ type TimelineItem<T extends TicketTimelineEntryType, U> = {
   } | null;
 };
 
-export type TimelineItemType =
-  | TimelineItem<
-      TicketTimelineEntryType.AssignmentChanged,
-      TicketAssignmentChangedWithData
-    >
-  | TimelineItem<TicketTimelineEntryType.Chat, TicketChat>
-  | TimelineItem<
-      TicketTimelineEntryType.LabelsChanged,
-      TicketLabelsChangedWithData
-    >
-  | TimelineItem<TicketTimelineEntryType.Note, TicketNote>
-  | TimelineItem<TicketTimelineEntryType.PriorityChanged, TicketPriorityChanged>
-  | TimelineItem<TicketTimelineEntryType.StatusChanged, TicketStatusChanged>;
+export type TimelineItemNarrowed<T> = Omit<TimelineItem, 'entry'> & {
+  entry: T;
+};
 
 export const TimelineItem = ({
   item,
   nextItemId,
   previousItemId,
 }: {
-  item: TimelineItemType | undefined;
+  item: TimelineItem;
   nextItemId: string | undefined;
   previousItemId: string | undefined;
 }) => {
@@ -73,27 +91,27 @@ export const TimelineItem = ({
   }
 
   let activity: ReactNode = null;
-  if (item.type === TicketTimelineEntryType.Chat) {
+  if (item.entry.__typename === 'ChatEntry') {
     activity = <TimelineChat item={item} />;
   }
 
-  if (item.type === TicketTimelineEntryType.Note) {
+  if (item.entry.__typename === 'NoteEntry') {
     activity = <TimelineNote item={item} />;
   }
 
-  if (item.type === TicketTimelineEntryType.StatusChanged) {
+  if (item.entry.__typename === 'StatusChangedEntry') {
     activity = <TimelineStatusChanged item={item} />;
   }
 
-  if (item.type === TicketTimelineEntryType.AssignmentChanged) {
+  if (item.entry.__typename === 'AssignmentChangedEntry') {
     activity = <TimelineAssigmentChanged item={item} />;
   }
 
-  if (item.type === TicketTimelineEntryType.LabelsChanged) {
+  if (item.entry.__typename === 'LabelsChangedEntry') {
     activity = <TimelineLabelsChanged item={item} />;
   }
 
-  if (item.type === TicketTimelineEntryType.PriorityChanged) {
+  if (item.entry.__typename === 'PriorityChangedEntry') {
     activity = <TimelinePriorityChanged item={item} />;
   }
 

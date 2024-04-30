@@ -2,20 +2,15 @@ import { FC } from 'react';
 import { EyeOff } from 'lucide-react';
 import { FormattedMessage } from 'react-intl';
 
-import { TicketNote } from '@cs/kyaku/models';
 import { getInitials } from '@cs/kyaku/utils';
 
 import { Avatar, AvatarFallback, AvatarImage } from './avatar';
 import { NodeContent } from './node-content';
 import { RelativeTime } from './relative-time';
-import { TimelineItemType } from './timeline-item';
-
-type TimelineNoteType = {
-  entry: TicketNote;
-} & Omit<TimelineItemType, 'entry'>;
+import { NoteEntry, TimelineItemNarrowed } from './timeline-item';
 
 type TimelineNoteProps = {
-  item: TimelineNoteType;
+  item: TimelineItemNarrowed<NoteEntry>;
 };
 
 export const TimelineNote: FC<TimelineNoteProps> = ({ item }) => {

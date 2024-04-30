@@ -9,14 +9,6 @@ export enum TimelineEntryType {
   StatusChanged = 'STATUS_CHANGED',
 }
 
-export type TimelineEntry =
-  | TicketAssignmentChanged
-  | TicketChat
-  | TicketLabelsChanged
-  | TicketNote
-  | TicketPriorityChanged
-  | TicketStatusChanged;
-
 export type TicketAssignmentChanged = {
   oldAssignedToId: string | null;
   newAssignedToId: string | null;

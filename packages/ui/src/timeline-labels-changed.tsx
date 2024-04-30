@@ -2,18 +2,12 @@ import { FC } from 'react';
 import { Tag } from 'lucide-react';
 import { FormattedMessage } from 'react-intl';
 
-import { TicketLabelsChangedWithData } from '@cs/kyaku/models';
-
 import { Icon, IconType } from './icon';
 import { RelativeTime } from './relative-time';
-import { TimelineItemType } from './timeline-item';
-
-type TimelineLabelsChangedType = {
-  entry: TicketLabelsChangedWithData;
-} & Omit<TimelineItemType, 'entry'>;
+import { LabelsChangedEntry, TimelineItemNarrowed } from './timeline-item';
 
 type TimelineLabelsChangedProps = {
-  item: TimelineLabelsChangedType;
+  item: TimelineItemNarrowed<LabelsChangedEntry>;
 };
 
 export const TimelineLabelsChanged: FC<TimelineLabelsChangedProps> = ({
