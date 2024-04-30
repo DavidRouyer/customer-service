@@ -49,7 +49,7 @@ export default class CustomerService extends BaseService {
   }
 
   async list<T extends CustomerWith<T>>(
-    filters: CustomerFilters,
+    filters: CustomerFilters = {},
     config: FindConfig<T, CustomerSortField> = {
       direction: Direction.Forward,
       limit: 50,
