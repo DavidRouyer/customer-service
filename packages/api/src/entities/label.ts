@@ -12,6 +12,7 @@ export type LabelWith<T> = {
 };
 
 export type LabelFilters = {
+  ticketId?: string;
   labelIds?: InclusionFilterOperator<Label['id']>;
 };
 

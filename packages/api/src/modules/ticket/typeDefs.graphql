@@ -32,7 +32,7 @@ type Ticket implements Node {
     before: String
   ): TimelineEntryConnection!
   assignedTo: User
-  customer: User!
+  customer: Customer!
   createdAt: DateTime!
   createdBy: User!
   updatedAt: DateTime
@@ -93,10 +93,12 @@ type TicketEdge {
 
 type TimelineEntry implements Node {
   id: ID!
-  customerId: ID!
+  customer: Customer!
   entry: Entry!
   ticketId: ID!
   createdAt: DateTime!
+  customerCreatedBy: Customer
+  userCreatedBy: User
 }
 
 type TimelineEntryConnection {

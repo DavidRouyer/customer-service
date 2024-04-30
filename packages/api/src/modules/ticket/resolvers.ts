@@ -18,6 +18,7 @@ import {
   Resolvers,
   StatusChangedEntry,
 } from '../../generated-types/graphql';
+import LabelService from '../../services/label';
 import TicketService from '../../services/ticket';
 import TicketTimelineService from '../../services/ticket-timeline';
 import typeDefs from './typeDefs.graphql';
@@ -149,6 +150,23 @@ const resolvers: Resolvers = {
       });
     },
   },
+  TimelineEntry: {
+    customer: async ({ customer }, _, { dataloaders }) => {
+      return dataloaders.customerLoader.load(customer.id);
+    },
+    customerCreatedBy: async ({ customerCreatedBy }, _, { dataloaders }) => {
+      if (!customerCreatedBy) {
+        return null;
+      }
+      return dataloaders.customerLoader.load(customerCreatedBy.id);
+    },
+    userCreatedBy: async ({ userCreatedBy }, _, { dataloaders }) => {
+      if (!userCreatedBy) {
+        return null;
+      }
+      return dataloaders.userLoader.load(userCreatedBy.id);
+    },
+  },
   Entry: {
     __resolveType: (obj) => {
       if (
@@ -255,8 +273,15 @@ const resolvers: Resolvers = {
     customer: async ({ customer }, _, { dataloaders }) => {
       return dataloaders.customerLoader.load(customer.id);
     },
-    labels: async ({ labels }, _, { dataloaders }) => {
-      // TODO: Implement dataloader for labels
+    labels: async ({ id }, _, { container }) => {
+      const labelService: LabelService = container.resolve('labelService');
+      const labels = await labelService.list({ ticketId: id });
+      return labels.map((label) => ({
+        ...label,
+        labelType: {
+          id: label.labelTypeId,
+        },
+      }));
     },
     statusChangedBy: async ({ statusChangedBy }, _, { dataloaders }) => {
       if (!statusChangedBy) {
@@ -290,7 +315,18 @@ const resolvers: Resolvers = {
       );
 
       return connectionFromArray({
-        array: timelineEntries.map((timelineEntry) => mapEntry(timelineEntry)),
+        array: timelineEntries.map((timelineEntry) => ({
+          ...mapEntry(timelineEntry),
+          customer: { id: timelineEntry.customerId },
+          customerCreatedBy: timelineEntry.customerCreatedById
+            ? {
+                id: timelineEntry.customerCreatedById,
+              }
+            : null,
+          userCreatedBy: timelineEntry.userCreatedById
+            ? { id: timelineEntry.userCreatedById }
+            : null,
+        })),
         args: { before, after, first, last },
         meta: {
           direction,

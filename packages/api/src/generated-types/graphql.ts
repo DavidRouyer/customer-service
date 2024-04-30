@@ -40,6 +40,21 @@ export type CreateLabelTypeInput = {
   name: Scalars['String']['input'];
 };
 
+export type Customer = Node & {
+  __typename?: 'Customer';
+  avatarUrl?: Maybe<Scalars['String']['output']>;
+  createdAt: Scalars['DateTime']['output'];
+  createdBy: User;
+  email?: Maybe<Scalars['String']['output']>;
+  id: Scalars['ID']['output'];
+  language?: Maybe<Scalars['String']['output']>;
+  name?: Maybe<Scalars['String']['output']>;
+  phone?: Maybe<Scalars['String']['output']>;
+  timezone?: Maybe<Scalars['String']['output']>;
+  updatedAt?: Maybe<Scalars['DateTime']['output']>;
+  updatedBy?: Maybe<User>;
+};
+
 export type Entry = AssignmentChangedEntry | ChatEntry | LabelsChangedEntry | NoteEntry | PriorityChangedEntry | StatusChangedEntry;
 
 export type Label = Node & {
@@ -197,7 +212,7 @@ export type Ticket = Node & {
   assignedTo?: Maybe<User>;
   createdAt: Scalars['DateTime']['output'];
   createdBy: User;
-  customer: User;
+  customer: Customer;
   id: Scalars['ID']['output'];
   labels: Array<Label>;
   priority: TicketPriority;
@@ -256,10 +271,12 @@ export type TicketsFilter = {
 export type TimelineEntry = Node & {
   __typename?: 'TimelineEntry';
   createdAt: Scalars['DateTime']['output'];
-  customerId: Scalars['ID']['output'];
+  customer: Customer;
+  customerCreatedBy?: Maybe<Customer>;
   entry: Entry;
   id: Scalars['ID']['output'];
   ticketId: Scalars['ID']['output'];
+  userCreatedBy?: Maybe<User>;
 };
 
 export type TimelineEntryConnection = {
@@ -284,7 +301,7 @@ export type UpdateLabelTypeInput = {
   name?: InputMaybe<Scalars['String']['input']>;
 };
 
-export type User = {
+export type User = Node & {
   __typename?: 'User';
   email?: Maybe<Scalars['String']['output']>;
   emailVerified?: Maybe<Scalars['DateTime']['output']>;
@@ -379,7 +396,7 @@ export type ResolversUnionTypes<RefType extends Record<string, unknown>> = {
 
 /** Mapping of interface types */
 export type ResolversInterfaceTypes<RefType extends Record<string, unknown>> = {
-  Node: ( Label ) | ( LabelType ) | ( Ticket ) | ( Omit<TimelineEntry, 'entry'> & { entry: RefType['Entry'] } );
+  Node: ( Customer ) | ( Label ) | ( LabelType ) | ( Ticket ) | ( Omit<TimelineEntry, 'entry'> & { entry: RefType['Entry'] } ) | ( User );
 };
 
 /** Mapping between all available schema types and the resolvers types */
@@ -389,6 +406,7 @@ export type ResolversTypes = {
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
   ChatEntry: ResolverTypeWrapper<ChatEntry>;
   CreateLabelTypeInput: CreateLabelTypeInput;
+  Customer: ResolverTypeWrapper<Customer>;
   DateTime: ResolverTypeWrapper<Scalars['DateTime']['output']>;
   Entry: ResolverTypeWrapper<ResolversUnionTypes<ResolversTypes>['Entry']>;
   ID: ResolverTypeWrapper<Scalars['ID']['output']>;
@@ -431,6 +449,7 @@ export type ResolversParentTypes = {
   Boolean: Scalars['Boolean']['output'];
   ChatEntry: ChatEntry;
   CreateLabelTypeInput: CreateLabelTypeInput;
+  Customer: Customer;
   DateTime: Scalars['DateTime']['output'];
   Entry: ResolversUnionTypes<ResolversParentTypes>['Entry'];
   ID: Scalars['ID']['output'];
@@ -471,6 +490,21 @@ export type AssignmentChangedEntryResolvers<ContextType = Context, ParentType ex
 
 export type ChatEntryResolvers<ContextType = Context, ParentType extends ResolversParentTypes['ChatEntry'] = ResolversParentTypes['ChatEntry']> = {
   text?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type CustomerResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Customer'] = ResolversParentTypes['Customer']> = {
+  avatarUrl?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  createdBy?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
+  email?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  language?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  phone?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  timezone?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  updatedAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
+  updatedBy?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -527,7 +561,7 @@ export type MutationResolvers<ContextType = Context, ParentType extends Resolver
 };
 
 export type NodeResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Node'] = ResolversParentTypes['Node']> = {
-  __resolveType: TypeResolveFn<'Label' | 'LabelType' | 'Ticket' | 'TimelineEntry', ParentType, ContextType>;
+  __resolveType: TypeResolveFn<'Customer' | 'Label' | 'LabelType' | 'Ticket' | 'TimelineEntry' | 'User', ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
 };
 
@@ -570,7 +604,7 @@ export type TicketResolvers<ContextType = Context, ParentType extends ResolversP
   assignedTo?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   createdBy?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
-  customer?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
+  customer?: Resolver<ResolversTypes['Customer'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   labels?: Resolver<Array<ResolversTypes['Label']>, ParentType, ContextType>;
   priority?: Resolver<ResolversTypes['TicketPriority'], ParentType, ContextType>;
@@ -599,10 +633,12 @@ export type TicketEdgeResolvers<ContextType = Context, ParentType extends Resolv
 
 export type TimelineEntryResolvers<ContextType = Context, ParentType extends ResolversParentTypes['TimelineEntry'] = ResolversParentTypes['TimelineEntry']> = {
   createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
-  customerId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  customer?: Resolver<ResolversTypes['Customer'], ParentType, ContextType>;
+  customerCreatedBy?: Resolver<Maybe<ResolversTypes['Customer']>, ParentType, ContextType>;
   entry?: Resolver<ResolversTypes['Entry'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   ticketId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  userCreatedBy?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -642,6 +678,7 @@ export type UserEdgeResolvers<ContextType = Context, ParentType extends Resolver
 export type Resolvers<ContextType = Context> = {
   AssignmentChangedEntry?: AssignmentChangedEntryResolvers<ContextType>;
   ChatEntry?: ChatEntryResolvers<ContextType>;
+  Customer?: CustomerResolvers<ContextType>;
   DateTime?: GraphQLScalarType;
   Entry?: EntryResolvers<ContextType>;
   Label?: LabelResolvers<ContextType>;

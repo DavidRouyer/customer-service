@@ -12,6 +12,7 @@ import { Label } from './entities/label';
 import { LabelType } from './entities/label-type';
 import { Ticket } from './entities/ticket';
 import { commonModule } from './modules/common/resolvers';
+import { customerModule } from './modules/customer/resolvers';
 import { labelTypeModule } from './modules/label-type/resolvers';
 import { labelModule } from './modules/label/resolvers';
 import { ticketModule } from './modules/ticket/resolvers';
@@ -122,6 +123,7 @@ const getContext = async () => ({
 const schema = makeExecutableSchema({
   typeDefs: mergeTypeDefs([
     commonModule.typeDefs,
+    customerModule.typeDefs,
     labelModule.typeDefs,
     labelTypeModule.typeDefs,
     ticketModule.typeDefs,
@@ -129,6 +131,7 @@ const schema = makeExecutableSchema({
   ]),
   resolvers: mergeResolvers([
     commonModule.resolvers,
+    customerModule.resolvers,
     labelModule.resolvers,
     labelTypeModule.resolvers,
     ticketModule.resolvers,

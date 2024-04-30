@@ -2,17 +2,14 @@ import { FC } from 'react';
 
 import { TimelineItem } from '@cs/ui/timeline-item';
 
-import { useTicketQuery } from '~/graphql/generated/client';
+import { useTimeline } from '~/app/_components/tickets/use-timeline';
 
 export const SmartTimelineItem: FC<{ itemId: string; ticketId: string }> = ({
   itemId,
   ticketId,
 }) => {
-  const { data: ticketData } = useTicketQuery(
-    { id: ticketId },
-    { select: (data) => data.ticket }
-  );
-  const timeline = ticketData?.timelineEntries?.edges;
+  const { data: timelineData } = useTimeline(ticketId);
+  const timeline = timelineData?.edges;
   const item = timeline?.find((entry) => entry.node.id === itemId);
 
   if (!timeline) return null;

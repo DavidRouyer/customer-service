@@ -5,14 +5,10 @@ import { FormattedMessage } from 'react-intl';
 import { TicketStatus, TicketStatusChanged } from '@cs/kyaku/models';
 
 import { RelativeTime } from './relative-time';
-import { TimelineItemType } from './timeline-item';
-
-type TimelineStatusChangedType = {
-  entry: TicketStatusChanged;
-} & Omit<TimelineItemType, 'entry'>;
+import { TimelineItemNarrowed } from './timeline-item';
 
 type TimelineStatusChangedProps = {
-  item: TimelineStatusChangedType;
+  item: TimelineItemNarrowed<TicketStatusChanged>;
 };
 
 export const TimelineStatusChanged: FC<TimelineStatusChangedProps> = ({
@@ -41,7 +37,7 @@ export const TimelineStatusChanged: FC<TimelineStatusChangedProps> = ({
           <FormattedMessage id="ticket.activity.type.ticket_marked_as_done" />
         )}
         <span className="px-1.5">•</span>
-        <time dateTime={item.createdAt.toISOString()}>
+        <time dateTime={item.createdAt}>
           <RelativeTime dateTime={new Date(item.createdAt)} />
         </time>
       </div>

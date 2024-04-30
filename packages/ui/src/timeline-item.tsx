@@ -45,18 +45,18 @@ export type StatusChangedEntry = {
 
 export type TimelineItem = {
   id: string;
-  createdAt: Date;
-  customer: {
-    avatarUrl: string | null;
-    email: string | null;
+  createdAt: string;
+  customer?: {
+    avatarUrl?: string | null;
+    email?: string | null;
     id: string;
-    name: string | null;
+    name?: string | null;
   };
-  customerCreatedBy: {
-    avatarUrl: string | null;
-    email: string | null;
+  customerCreatedBy?: {
+    avatarUrl?: string | null;
+    email?: string | null;
     id: string;
-    name: string | null;
+    name?: string | null;
   } | null;
   entry:
     | AssignmentChangedEntry
@@ -89,6 +89,7 @@ export const TimelineItem = ({
   if (!item) {
     return null;
   }
+  console.log(item.entry.__typename);
 
   let activity: ReactNode = null;
   if (item.entry.__typename === 'ChatEntry') {

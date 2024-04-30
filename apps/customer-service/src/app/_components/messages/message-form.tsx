@@ -9,11 +9,7 @@ import { FormattedMessage } from 'react-intl';
 
 import { RouterOutputs } from '@cs/api';
 import { parseTextFromEditorState } from '@cs/kyaku/editor';
-import {
-  TicketChat,
-  TicketNote,
-  TicketTimelineEntryType,
-} from '@cs/kyaku/models';
+import { TicketChat, TicketNote } from '@cs/kyaku/models';
 import { cn } from '@cs/ui';
 import { Button } from '@cs/ui/button';
 import { Label } from '@cs/ui/label';
@@ -66,7 +62,6 @@ export const MessageForm: FC<{ ticketId: string }> = ({ ticketId }) => {
           {
             id: self.crypto.randomUUID(),
             customerId: oldQueryData?.[0]?.customerId ?? '',
-            type: TicketTimelineEntryType.Chat,
             ticketId: newMessage.ticketId,
             entry: {
               text: newMessage.text,
@@ -115,7 +110,6 @@ export const MessageForm: FC<{ ticketId: string }> = ({ ticketId }) => {
           {
             id: self.crypto.randomUUID(),
             customerId: oldQueryData?.[0]?.customerId ?? '',
-            type: TicketTimelineEntryType.Note,
             ticketId: newTicket.ticketId,
             entry: {
               text: newTicket.text,

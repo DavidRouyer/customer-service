@@ -33,7 +33,7 @@ export const TimelinePriorityChanged: FC<TimelinePriorityChangedProps> = ({
           <TicketPriorityBadge priority={item.entry?.newPriority} />
         </span>
         <span className="px-1.5">•</span>
-        <time dateTime={item.createdAt.toISOString()}>
+        <time dateTime={item.createdAt}>
           <RelativeTime dateTime={new Date(item.createdAt)} />
         </time>
       </div>

@@ -38,7 +38,7 @@ export const TimelineNote: FC<TimelineNoteProps> = ({ item }) => {
             </span>
             <span className="mx-1.5 size-[3px] rounded-full bg-gray-500"></span>
             <time
-              dateTime={item.createdAt.toISOString()}
+              dateTime={item.createdAt}
               className="text-xs text-muted-foreground"
             >
               <RelativeTime dateTime={new Date(item.createdAt)} />

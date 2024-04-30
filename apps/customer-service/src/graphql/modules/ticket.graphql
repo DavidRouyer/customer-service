@@ -11,7 +11,7 @@ query ticket($id: ID!) {
       id
       name
       email
-      image
+      avatarUrl
     }
     labels {
       id
@@ -24,12 +24,24 @@ query ticket($id: ID!) {
       archivedAt
     }
     status
+  }
+}
+
+query ticketTimeline($ticketId: ID!) {
+  ticket(id: $ticketId) {
     timelineEntries {
       edges {
         cursor
         node {
           id
+          customer {
+            id
+            email
+            name
+            avatarUrl
+          }
           entry {
+            __typename
             ... on AssignmentChangedEntry {
               oldAssignedTo {
                 id
@@ -83,6 +95,19 @@ query ticket($id: ID!) {
               oldStatus
               newStatus
             }
+          }
+          createdAt
+          userCreatedBy {
+            id
+            email
+            name
+            image
+          }
+          customerCreatedBy {
+            id
+            email
+            name
+            avatarUrl
           }
         }
       }
