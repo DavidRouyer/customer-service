@@ -19,7 +19,7 @@
   "dependencies": {
     "@cs/kyaku": "*",
     "@neondatabase/serverless": "^0.9.1",
-    "drizzle-orm": "^0.30.9"
+    "drizzle-orm": "^0.30.10"
   },
   "devDependencies": {
     "@cs/eslint-config": "*",
