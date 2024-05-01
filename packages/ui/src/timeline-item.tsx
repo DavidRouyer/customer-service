@@ -89,7 +89,6 @@ export const TimelineItem = ({
   if (!item) {
     return null;
   }
-  console.log(item.entry.__typename);
 
   let activity: ReactNode = null;
   if (item.entry.__typename === 'ChatEntry') {
