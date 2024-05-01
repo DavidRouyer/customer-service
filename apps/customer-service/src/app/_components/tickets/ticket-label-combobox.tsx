@@ -66,7 +66,7 @@ export const TicketLabelCombobox: FC<TicketLabelComboboxProps> = ({
                 id: `${newLabels.ticketId}-${labelTypeId}`,
                 labelTypeId,
                 labelType: labelTypesData?.edges?.find(
-                  (labelType) => labelType.id === labelTypeId
+                  (labelType) => labelType.node.id === labelTypeId
                 )!,
                 ticketId: newLabels.ticketId,
                 archivedAt: null,

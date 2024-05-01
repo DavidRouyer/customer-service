@@ -1,7 +1,7 @@
 type User implements Node {
   id: ID!
   name: String
-  email: String
+  email: String!
   emailVerified: DateTime
   image: String
 }

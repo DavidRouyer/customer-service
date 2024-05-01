@@ -67,9 +67,9 @@ export type TimelineItem = {
     | StatusChangedEntry;
   userCreatedBy: {
     id: string;
-    email: string | null;
-    name: string | null;
-    image: string | null;
+    email?: string | null;
+    name?: string | null;
+    image?: string | null;
   } | null;
 };
 
@@ -92,27 +92,43 @@ export const TimelineItem = ({
 
   let activity: ReactNode = null;
   if (item.entry.__typename === 'ChatEntry') {
-    activity = <TimelineChat item={item} />;
+    activity = <TimelineChat item={item as TimelineItemNarrowed<ChatEntry>} />;
   }
 
   if (item.entry.__typename === 'NoteEntry') {
-    activity = <TimelineNote item={item} />;
+    activity = <TimelineNote item={item as TimelineItemNarrowed<NoteEntry>} />;
   }
 
   if (item.entry.__typename === 'StatusChangedEntry') {
-    activity = <TimelineStatusChanged item={item} />;
+    activity = (
+      <TimelineStatusChanged
+        item={item as TimelineItemNarrowed<StatusChangedEntry>}
+      />
+    );
   }
 
   if (item.entry.__typename === 'AssignmentChangedEntry') {
-    activity = <TimelineAssigmentChanged item={item} />;
+    activity = (
+      <TimelineAssigmentChanged
+        item={item as TimelineItemNarrowed<AssignmentChangedEntry>}
+      />
+    );
   }
 
   if (item.entry.__typename === 'LabelsChangedEntry') {
-    activity = <TimelineLabelsChanged item={item} />;
+    activity = (
+      <TimelineLabelsChanged
+        item={item as TimelineItemNarrowed<LabelsChangedEntry>}
+      />
+    );
   }
 
   if (item.entry.__typename === 'PriorityChangedEntry') {
-    activity = <TimelinePriorityChanged item={item} />;
+    activity = (
+      <TimelinePriorityChanged
+        item={item as TimelineItemNarrowed<PriorityChangedEntry>}
+      />
+    );
   }
 
   return (
