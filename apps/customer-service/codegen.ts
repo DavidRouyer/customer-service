@@ -12,7 +12,11 @@ const config: CodegenConfig = {
         'typescript-react-query',
       ],
       config: {
+        scalars: {
+          DateTime: 'string',
+        },
         reactQueryVersion: 5,
+        addInfiniteQuery: true,
         exposeQueryKeys: true,
         exposeFetcher: true,
         withHooks: true,

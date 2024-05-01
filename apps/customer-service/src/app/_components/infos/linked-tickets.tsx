@@ -5,10 +5,9 @@ import Link from 'next/link';
 import { FormattedDate, FormattedMessage } from 'react-intl';
 
 import { TicketStatus } from '@cs/kyaku/models';
-import { SortDirection } from '@cs/kyaku/types';
 import { Badge } from '@cs/ui/badge';
 
-import { api } from '~/trpc/react';
+import { useTicketsQuery } from '~/graphql/generated/client';
 
 type LinkedTicketsProps = {
   ticketId: string;
@@ -19,90 +18,85 @@ export const LinkedTickets: FC<LinkedTicketsProps> = ({
   ticketId,
   customerId,
 }) => {
-  const { data: ticketsData } = api.ticket.all.useQuery(
+  const { data: ticketsData } = useTicketsQuery(
     {
       filters: {
-        customer: {
-          eq: customerId ?? '',
-        },
-        ticketId: {
-          ne: ticketId,
-        },
-      },
-      sortBy: {
-        createdAt: SortDirection.DESC,
+        customerIds: [customerId ?? ''],
       },
     },
     {
       enabled: !!customerId,
+      select: (data) => data.tickets,
     }
   );
 
   return (
     <ul className="flex flex-col gap-y-1">
-      {ticketsData?.data.map((ticket) => (
-        <li key={ticket.id}>
-          <Link
-            href={`/ticket/${ticket.id}`}
-            className="block flex-auto rounded-md p-3 ring-1 ring-inset ring-border"
-          >
-            <div className="flex items-start gap-x-3">
-              <p className="text-sm font-semibold leading-6 text-foreground">
-                #{ticket.id}
-              </p>
-              <Badge
-                variant={
-                  (
-                    {
-                      Done: 'success',
-                      Open: 'neutral',
-                    } as const
-                  )[ticket.status]
-                }
-                className="mt-0.5 whitespace-nowrap"
-              >
-                {
+      {ticketsData?.edges
+        .filter((ticket) => ticket.node.id !== ticketId)
+        .map((ticket) => (
+          <li key={ticket.node.id}>
+            <Link
+              href={`/ticket/${ticket.node.id}`}
+              className="block flex-auto rounded-md p-3 ring-1 ring-inset ring-border"
+            >
+              <div className="flex items-start gap-x-3">
+                <p className="text-sm font-semibold leading-6 text-foreground">
+                  #{ticket.node.id}
+                </p>
+                <Badge
+                  variant={
+                    (
+                      {
+                        DONE: 'success',
+                        OPEN: 'neutral',
+                      } as const
+                    )[ticket.node.status]
+                  }
+                  className="mt-0.5 whitespace-nowrap"
+                >
                   {
-                    Done: <FormattedMessage id="ticket.statuses.done" />,
-                    Open: <FormattedMessage id="ticket.statuses.open" />,
-                  }[ticket.status]
-                }
-              </Badge>
-            </div>
-            <div className="mt-1 flex items-center gap-x-2 text-xs leading-5 text-muted-foreground">
-              <p className="whitespace-nowrap">
-                {ticket.status === TicketStatus.Open ? (
-                  <>
-                    <FormattedMessage id="ticket.opened_on" />{' '}
-                    <time dateTime={ticket.createdAt.toISOString()}>
-                      <FormattedDate
-                        value={new Date(ticket.createdAt)}
-                        year="numeric"
-                        month="long"
-                        day="numeric"
-                      />
-                    </time>
-                  </>
-                ) : (
-                  <>
-                    <FormattedMessage id="ticket.marked_as_done_on" />{' '}
-                    {ticket.statusChangedAt ? (
-                      <time dateTime={ticket.statusChangedAt.toISOString()}>
+                    {
+                      DONE: <FormattedMessage id="ticket.statuses.done" />,
+                      OPEN: <FormattedMessage id="ticket.statuses.open" />,
+                    }[ticket.node.status]
+                  }
+                </Badge>
+              </div>
+              <div className="mt-1 flex items-center gap-x-2 text-xs leading-5 text-muted-foreground">
+                <p className="whitespace-nowrap">
+                  {ticket.node.status === TicketStatus.Open ? (
+                    <>
+                      <FormattedMessage id="ticket.opened_on" />{' '}
+                      <time dateTime={ticket.node.createdAt}>
                         <FormattedDate
-                          value={new Date(ticket.statusChangedAt)}
+                          value={new Date(ticket.node.createdAt)}
                           year="numeric"
                           month="long"
                           day="numeric"
                         />
                       </time>
-                    ) : null}
-                  </>
-                )}
-              </p>
-            </div>
-          </Link>
-        </li>
-      ))}
+                    </>
+                  ) : (
+                    <>
+                      <FormattedMessage id="ticket.marked_as_done_on" />{' '}
+                      {ticket.node.statusChangedAt ? (
+                        <time dateTime={ticket.node.statusChangedAt}>
+                          <FormattedDate
+                            value={new Date(ticket.node.statusChangedAt)}
+                            year="numeric"
+                            month="long"
+                            day="numeric"
+                          />
+                        </time>
+                      ) : null}
+                    </>
+                  )}
+                </p>
+              </div>
+            </Link>
+          </li>
+        ))}
     </ul>
   );
 };

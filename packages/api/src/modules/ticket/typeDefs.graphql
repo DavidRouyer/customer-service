@@ -112,6 +112,8 @@ type TimelineEntryEdge {
 }
 
 input TicketsFilter {
+  statuses: [TicketStatus!]
+  customerIds: [ID!]
   isAssigned: Boolean
 }
 

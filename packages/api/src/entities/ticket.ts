@@ -20,7 +20,7 @@ export type TicketFilters = {
   customerIds?: InclusionFilterOperator<Ticket['customerId']>;
   ticketIds?: InclusionFilterOperator<Ticket['id']>;
   priority?: InclusionFilterOperator<Ticket['priority']>;
-  status?: InclusionFilterOperator<Ticket['status']>;
+  statuses?: InclusionFilterOperator<Ticket['status']>;
 };
 
 export enum TicketSortField {

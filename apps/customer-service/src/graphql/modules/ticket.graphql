@@ -115,3 +115,59 @@ query ticketTimeline($ticketId: ID!) {
     }
   }
 }
+
+query tickets(
+  $filters: TicketsFilter
+  $first: Int
+  $after: String
+  $last: Int
+  $before: String
+) {
+  tickets(
+    filters: $filters
+    first: $first
+    after: $after
+    last: $last
+    before: $before
+  ) {
+    edges {
+      node {
+        id
+        assignedTo {
+          id
+          name
+          email
+          image
+        }
+        title
+        customer {
+          id
+          name
+          email
+          avatarUrl
+          phone
+        }
+        status
+        statusChangedAt
+        priority
+        labels {
+          id
+          labelType {
+            id
+            name
+            icon
+            archivedAt
+          }
+          archivedAt
+        }
+        createdAt
+      }
+    }
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+  }
+}

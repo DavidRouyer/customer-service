@@ -1,15 +1,15 @@
 'use client';
 
-import { FC, Fragment, useEffect } from 'react';
+import { FC, useEffect } from 'react';
 import { PartyPopper } from 'lucide-react';
 import { useInView } from 'react-intersection-observer';
 import { FormattedMessage } from 'react-intl';
 
 import { TicketFilter, TicketStatus } from '@cs/kyaku/models';
-import { SortDirection } from '@cs/kyaku/types';
 
 import { TicketListItem } from '~/app/_components/tickets/ticket-list-item';
 import { TicketListItemSkeleton } from '~/app/_components/tickets/ticket-list-item-skeleton';
+import { useInfiniteTicketsQuery } from '~/graphql/generated/client';
 import { api } from '~/trpc/react';
 
 export const TicketList: FC<{
@@ -20,22 +20,18 @@ export const TicketList: FC<{
   const { ref, inView } = useInView();
 
   const { data, isFetching, fetchNextPage, hasNextPage } =
-    api.ticket.all.useInfiniteQuery(
+    useInfiniteTicketsQuery(
       {
         filters: {
-          status: {
-            in: [status],
-          },
+          statuses: [status],
         },
-        sortBy: {
-          createdAt:
-            orderBy === 'newest' ? SortDirection.DESC : SortDirection.ASC,
-        },
-        limit: 2,
+        first: 10,
       },
       {
+        initialPageParam: 0,
         getNextPageParam(lastPage) {
-          return lastPage.nextCursor;
+          if (!lastPage.tickets.pageInfo.hasNextPage) return undefined;
+          return lastPage.tickets.pageInfo.endCursor;
         },
       }
     );
@@ -47,7 +43,7 @@ export const TicketList: FC<{
     }
   }, [inView, hasNextPage, isFetching, fetchNextPage]);
 
-  const tickets = data?.pages?.flatMap((page) => page.data) ?? [];
+  const tickets = data?.pages?.flatMap((page) => page.tickets.edges) ?? [];
 
   return (
     <div className="no-scrollbar flex-auto overflow-y-auto">
@@ -56,8 +52,8 @@ export const TicketList: FC<{
           <div>
             {tickets.map((ticket) => (
               <TicketListItem
-                key={ticket.id}
-                ticket={ticket}
+                key={ticket.node.id}
+                ticket={ticket.node}
                 currentUserId={session?.user.id}
               />
             ))}

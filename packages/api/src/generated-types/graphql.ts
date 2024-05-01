@@ -265,7 +265,9 @@ export enum TicketStatusDetail {
 }
 
 export type TicketsFilter = {
+  customerIds?: InputMaybe<Array<Scalars['ID']['input']>>;
   isAssigned?: InputMaybe<Scalars['Boolean']['input']>;
+  statuses?: InputMaybe<Array<TicketStatus>>;
 };
 
 export type TimelineEntry = Node & {

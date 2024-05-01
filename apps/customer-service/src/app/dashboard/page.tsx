@@ -3,45 +3,39 @@
 import { FormattedMessage } from 'react-intl';
 
 import { TicketStatus } from '@cs/kyaku/models';
-import { SortDirection } from '@cs/kyaku/types';
 
 import { columns, TicketData } from '~/app/_components/data-table/columns';
 import { DataTable } from '~/app/_components/data-table/data-table';
-import { api } from '~/trpc/react';
+import { useTicketsQuery } from '~/graphql/generated/client';
 
 export default function DashboardPage({
   searchParams,
 }: {
   searchParams: Record<string, string | string[] | undefined>;
 }) {
-  const { data: tickets } = api.ticket.all.useQuery(
+  const { data: tickets } = useTicketsQuery(
     {
       filters: {
-        status: {
-          in: [(searchParams.status as TicketStatus) ?? TicketStatus.Open],
-        },
-      },
-      sortBy: {
-        createdAt: SortDirection.DESC,
+        statuses: [(searchParams.status as TicketStatus) ?? TicketStatus.Open],
       },
     },
     {
       select(data) {
-        return data.data.map(
+        return data.tickets.edges.map(
           (ticket) =>
             ({
-              id: ticket.id,
-              title: ticket.title ?? '',
-              status: ticket.status as string,
-              priority: ticket.priority as string,
-              labels: ticket.labels.map((label) => ({
+              id: ticket.node.id,
+              title: ticket.node.title ?? '',
+              status: ticket.node.status,
+              priority: ticket.node.priority,
+              labels: ticket.node.labels.map((label) => ({
                 id: label.id,
                 labelType: {
                   id: label.labelType.id,
                   name: label.labelType.name,
                 },
               })),
-              assignedTo: ticket.assignedTo,
+              assignedTo: ticket.node.assignedTo,
             }) satisfies TicketData
         );
       },

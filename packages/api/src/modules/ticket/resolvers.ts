@@ -12,7 +12,9 @@ import { TicketTimelineUnion } from '../../entities/ticket-timeline';
 import {
   AssignmentChangedEntry,
   ChatEntry,
+  Customer,
   LabelsChangedEntry,
+  LabelType,
   NoteEntry,
   PriorityChangedEntry,
   Resolvers,
@@ -75,8 +77,9 @@ const resolvers: Resolvers = {
               hasPreviousPage: false,
             },
           },
+          labels: [],
           assignedTo: ticket.assignedToId ? { id: ticket.assignedToId } : null,
-          customer: { id: ticket.customerId },
+          customer: { id: ticket.customerId } as Customer,
           createdBy: {
             id: ticket.createdById,
           },
@@ -107,6 +110,16 @@ const resolvers: Resolvers = {
 
       const tickets = await ticketService.list(
         {
+          statuses: filters?.statuses
+            ? {
+                in: filters.statuses,
+              }
+            : undefined,
+          customerIds: filters?.customerIds
+            ? {
+                in: filters.customerIds,
+              }
+            : undefined,
           isAssigned: filters?.isAssigned ?? undefined,
         },
         {
@@ -127,8 +140,9 @@ const resolvers: Resolvers = {
               hasPreviousPage: false,
             },
           },
+          labels: [],
           assignedTo: ticket.assignedToId ? { id: ticket.assignedToId } : null,
-          customer: { id: ticket.customerId },
+          customer: { id: ticket.customerId } as Customer,
           createdBy: {
             id: ticket.createdById,
           },
@@ -152,13 +166,35 @@ const resolvers: Resolvers = {
   },
   TimelineEntry: {
     customer: async ({ customer }, _, { dataloaders }) => {
-      return dataloaders.customerLoader.load(customer.id);
+      const c = await dataloaders.customerLoader.load(customer.id);
+      return {
+        ...c,
+        createdBy: {
+          id: c.createdById,
+        },
+        updatedBy: c.updatedById
+          ? {
+              id: c.updatedById,
+            }
+          : null,
+      };
     },
     customerCreatedBy: async ({ customerCreatedBy }, _, { dataloaders }) => {
       if (!customerCreatedBy) {
         return null;
       }
-      return dataloaders.customerLoader.load(customerCreatedBy.id);
+      const c = await dataloaders.customerLoader.load(customerCreatedBy.id);
+      return {
+        ...c,
+        createdBy: {
+          id: c.createdById,
+        },
+        updatedBy: c.updatedById
+          ? {
+              id: c.updatedById,
+            }
+          : null,
+      };
     },
     userCreatedBy: async ({ userCreatedBy }, _, { dataloaders }) => {
       if (!userCreatedBy) {
@@ -239,7 +275,7 @@ const resolvers: Resolvers = {
         ...label,
         labelType: {
           id: label.labelTypeId,
-        },
+        } as LabelType,
       }));
     },
     newLabels: async ({ newLabels }, _, { dataloaders }) => {
@@ -256,7 +292,7 @@ const resolvers: Resolvers = {
         ...label,
         labelType: {
           id: label.labelTypeId,
-        },
+        } as LabelType,
       }));
     },
   },
@@ -271,7 +307,18 @@ const resolvers: Resolvers = {
       return dataloaders.userLoader.load(createdBy.id);
     },
     customer: async ({ customer }, _, { dataloaders }) => {
-      return dataloaders.customerLoader.load(customer.id);
+      const c = await dataloaders.customerLoader.load(customer.id);
+      return {
+        ...c,
+        createdBy: {
+          id: c.createdById,
+        },
+        updatedBy: c.updatedById
+          ? {
+              id: c.updatedById,
+            }
+          : null,
+      };
     },
     labels: async ({ id }, _, { container }) => {
       const labelService: LabelService = container.resolve('labelService');
@@ -280,7 +327,7 @@ const resolvers: Resolvers = {
         ...label,
         labelType: {
           id: label.labelTypeId,
-        },
+        } as LabelType,
       }));
     },
     statusChangedBy: async ({ statusChangedBy }, _, { dataloaders }) => {
@@ -317,11 +364,11 @@ const resolvers: Resolvers = {
       return connectionFromArray({
         array: timelineEntries.map((timelineEntry) => ({
           ...mapEntry(timelineEntry),
-          customer: { id: timelineEntry.customerId },
+          customer: { id: timelineEntry.customerId } as Customer,
           customerCreatedBy: timelineEntry.customerCreatedById
-            ? {
+            ? ({
                 id: timelineEntry.customerCreatedById,
-              }
+              } as Customer)
             : null,
           userCreatedBy: timelineEntry.userCreatedById
             ? { id: timelineEntry.userCreatedById }

@@ -1,4 +1,4 @@
-import { useQuery, UseQueryOptions } from '@tanstack/react-query';
+import { useQuery, useInfiniteQuery, UseQueryOptions, UseInfiniteQueryOptions, InfiniteData } from '@tanstack/react-query';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
@@ -33,7 +33,7 @@ export type Scalars = {
   Boolean: { input: boolean; output: boolean; }
   Int: { input: number; output: number; }
   Float: { input: number; output: number; }
-  DateTime: { input: any; output: any; }
+  DateTime: { input: string; output: string; }
 };
 
 export type ArchiveLabelTypeInput = {
@@ -281,7 +281,9 @@ export enum TicketStatusDetail {
 }
 
 export type TicketsFilter = {
+  customerIds?: InputMaybe<Array<Scalars['ID']['input']>>;
   isAssigned?: InputMaybe<Scalars['Boolean']['input']>;
+  statuses?: InputMaybe<Array<TicketStatus>>;
 };
 
 export type TimelineEntry = Node & {
@@ -354,14 +356,25 @@ export type TicketQueryVariables = Exact<{
 }>;
 
 
-export type TicketQuery = { __typename?: 'Query', ticket?: { __typename?: 'Ticket', id: string, status: TicketStatus, assignedTo?: { __typename?: 'User', id: string, name?: string | null, email?: string | null, image?: string | null } | null, customer: { __typename?: 'Customer', id: string, name?: string | null, email?: string | null, avatarUrl?: string | null, phone?: string | null }, labels: Array<{ __typename?: 'Label', id: string, archivedAt?: any | null, labelType: { __typename?: 'LabelType', id: string, name: string, icon?: string | null, archivedAt?: any | null } }> } | null };
+export type TicketQuery = { __typename?: 'Query', ticket?: { __typename?: 'Ticket', id: string, status: TicketStatus, assignedTo?: { __typename?: 'User', id: string, name?: string | null, email?: string | null, image?: string | null } | null, customer: { __typename?: 'Customer', id: string, name?: string | null, email?: string | null, avatarUrl?: string | null, phone?: string | null }, labels: Array<{ __typename?: 'Label', id: string, archivedAt?: string | null, labelType: { __typename?: 'LabelType', id: string, name: string, icon?: string | null, archivedAt?: string | null } }> } | null };
 
 export type TicketTimelineQueryVariables = Exact<{
   ticketId: Scalars['ID']['input'];
 }>;
 
 
-export type TicketTimelineQuery = { __typename?: 'Query', ticket?: { __typename?: 'Ticket', timelineEntries: { __typename?: 'TimelineEntryConnection', edges: Array<{ __typename?: 'TimelineEntryEdge', cursor: string, node: { __typename?: 'TimelineEntry', id: string, createdAt: any, customer: { __typename?: 'Customer', id: string, email?: string | null, name?: string | null, avatarUrl?: string | null }, entry: { __typename: 'AssignmentChangedEntry', oldAssignedTo?: { __typename?: 'User', id: string, name?: string | null, email?: string | null, emailVerified?: any | null, image?: string | null } | null, newAssignedTo?: { __typename?: 'User', id: string, name?: string | null, email?: string | null, emailVerified?: any | null, image?: string | null } | null } | { __typename: 'ChatEntry', text: string } | { __typename: 'LabelsChangedEntry', oldLabels: Array<{ __typename?: 'Label', id: string, archivedAt?: any | null, labelType: { __typename?: 'LabelType', id: string, name: string, icon?: string | null, archivedAt?: any | null } }>, newLabels: Array<{ __typename?: 'Label', id: string, archivedAt?: any | null, labelType: { __typename?: 'LabelType', id: string, name: string, icon?: string | null, archivedAt?: any | null } }> } | { __typename: 'NoteEntry', text: string, rawContent: string } | { __typename: 'PriorityChangedEntry', oldPriority?: TicketPriority | null, newPriority?: TicketPriority | null } | { __typename: 'StatusChangedEntry', oldStatus?: TicketStatus | null, newStatus?: TicketStatus | null }, userCreatedBy?: { __typename?: 'User', id: string, email?: string | null, name?: string | null, image?: string | null } | null, customerCreatedBy?: { __typename?: 'Customer', id: string, email?: string | null, name?: string | null, avatarUrl?: string | null } | null } }> } } | null };
+export type TicketTimelineQuery = { __typename?: 'Query', ticket?: { __typename?: 'Ticket', timelineEntries: { __typename?: 'TimelineEntryConnection', edges: Array<{ __typename?: 'TimelineEntryEdge', cursor: string, node: { __typename?: 'TimelineEntry', id: string, createdAt: string, customer: { __typename?: 'Customer', id: string, email?: string | null, name?: string | null, avatarUrl?: string | null }, entry: { __typename: 'AssignmentChangedEntry', oldAssignedTo?: { __typename?: 'User', id: string, name?: string | null, email?: string | null, emailVerified?: string | null, image?: string | null } | null, newAssignedTo?: { __typename?: 'User', id: string, name?: string | null, email?: string | null, emailVerified?: string | null, image?: string | null } | null } | { __typename: 'ChatEntry', text: string } | { __typename: 'LabelsChangedEntry', oldLabels: Array<{ __typename?: 'Label', id: string, archivedAt?: string | null, labelType: { __typename?: 'LabelType', id: string, name: string, icon?: string | null, archivedAt?: string | null } }>, newLabels: Array<{ __typename?: 'Label', id: string, archivedAt?: string | null, labelType: { __typename?: 'LabelType', id: string, name: string, icon?: string | null, archivedAt?: string | null } }> } | { __typename: 'NoteEntry', text: string, rawContent: string } | { __typename: 'PriorityChangedEntry', oldPriority?: TicketPriority | null, newPriority?: TicketPriority | null } | { __typename: 'StatusChangedEntry', oldStatus?: TicketStatus | null, newStatus?: TicketStatus | null }, userCreatedBy?: { __typename?: 'User', id: string, email?: string | null, name?: string | null, image?: string | null } | null, customerCreatedBy?: { __typename?: 'Customer', id: string, email?: string | null, name?: string | null, avatarUrl?: string | null } | null } }> } } | null };
+
+export type TicketsQueryVariables = Exact<{
+  filters?: InputMaybe<TicketsFilter>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  after?: InputMaybe<Scalars['String']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+}>;
+
+
+export type TicketsQuery = { __typename?: 'Query', tickets: { __typename?: 'TicketConnection', edges: Array<{ __typename?: 'TicketEdge', node: { __typename?: 'Ticket', id: string, title?: string | null, status: TicketStatus, statusChangedAt?: string | null, priority: TicketPriority, createdAt: string, assignedTo?: { __typename?: 'User', id: string, name?: string | null, email?: string | null, image?: string | null } | null, customer: { __typename?: 'Customer', id: string, name?: string | null, email?: string | null, avatarUrl?: string | null, phone?: string | null }, labels: Array<{ __typename?: 'Label', id: string, archivedAt?: string | null, labelType: { __typename?: 'LabelType', id: string, name: string, icon?: string | null, archivedAt?: string | null } }> } }>, pageInfo: { __typename?: 'PageInfo', startCursor?: string | null, endCursor?: string | null, hasPreviousPage: boolean, hasNextPage: boolean } } };
 
 
 
@@ -403,6 +416,27 @@ export const useLabelTypesQuery = <
     )};
 
 useLabelTypesQuery.getKey = (variables?: LabelTypesQueryVariables) => variables === undefined ? ['labelTypes'] : ['labelTypes', variables];
+
+export const useInfiniteLabelTypesQuery = <
+      TData = InfiniteData<LabelTypesQuery>,
+      TError = unknown
+    >(
+      variables: LabelTypesQueryVariables,
+      options: Omit<UseInfiniteQueryOptions<LabelTypesQuery, TError, TData>, 'queryKey'> & { queryKey?: UseInfiniteQueryOptions<LabelTypesQuery, TError, TData>['queryKey'] }
+    ) => {
+    
+    return useInfiniteQuery<LabelTypesQuery, TError, TData>(
+      (() => {
+    const { queryKey: optionsQueryKey, ...restOptions } = options;
+    return {
+      queryKey: optionsQueryKey ?? variables === undefined ? ['labelTypes.infinite'] : ['labelTypes.infinite', variables],
+      queryFn: (metaData) => fetcher<LabelTypesQuery, LabelTypesQueryVariables>(LabelTypesDocument, {...variables, ...(metaData.pageParam ?? {})})(),
+      ...restOptions
+    }
+  })()
+    )};
+
+useInfiniteLabelTypesQuery.getKey = (variables?: LabelTypesQueryVariables) => variables === undefined ? ['labelTypes.infinite'] : ['labelTypes.infinite', variables];
 
 
 useLabelTypesQuery.fetcher = (variables?: LabelTypesQueryVariables) => fetcher<LabelTypesQuery, LabelTypesQueryVariables>(LabelTypesDocument, variables);
@@ -456,6 +490,27 @@ export const useTicketQuery = <
     )};
 
 useTicketQuery.getKey = (variables: TicketQueryVariables) => ['ticket', variables];
+
+export const useInfiniteTicketQuery = <
+      TData = InfiniteData<TicketQuery>,
+      TError = unknown
+    >(
+      variables: TicketQueryVariables,
+      options: Omit<UseInfiniteQueryOptions<TicketQuery, TError, TData>, 'queryKey'> & { queryKey?: UseInfiniteQueryOptions<TicketQuery, TError, TData>['queryKey'] }
+    ) => {
+    
+    return useInfiniteQuery<TicketQuery, TError, TData>(
+      (() => {
+    const { queryKey: optionsQueryKey, ...restOptions } = options;
+    return {
+      queryKey: optionsQueryKey ?? ['ticket.infinite', variables],
+      queryFn: (metaData) => fetcher<TicketQuery, TicketQueryVariables>(TicketDocument, {...variables, ...(metaData.pageParam ?? {})})(),
+      ...restOptions
+    }
+  })()
+    )};
+
+useInfiniteTicketQuery.getKey = (variables: TicketQueryVariables) => ['ticket.infinite', variables];
 
 
 useTicketQuery.fetcher = (variables: TicketQueryVariables) => fetcher<TicketQuery, TicketQueryVariables>(TicketDocument, variables);
@@ -568,5 +623,120 @@ export const useTicketTimelineQuery = <
 
 useTicketTimelineQuery.getKey = (variables: TicketTimelineQueryVariables) => ['ticketTimeline', variables];
 
+export const useInfiniteTicketTimelineQuery = <
+      TData = InfiniteData<TicketTimelineQuery>,
+      TError = unknown
+    >(
+      variables: TicketTimelineQueryVariables,
+      options: Omit<UseInfiniteQueryOptions<TicketTimelineQuery, TError, TData>, 'queryKey'> & { queryKey?: UseInfiniteQueryOptions<TicketTimelineQuery, TError, TData>['queryKey'] }
+    ) => {
+    
+    return useInfiniteQuery<TicketTimelineQuery, TError, TData>(
+      (() => {
+    const { queryKey: optionsQueryKey, ...restOptions } = options;
+    return {
+      queryKey: optionsQueryKey ?? ['ticketTimeline.infinite', variables],
+      queryFn: (metaData) => fetcher<TicketTimelineQuery, TicketTimelineQueryVariables>(TicketTimelineDocument, {...variables, ...(metaData.pageParam ?? {})})(),
+      ...restOptions
+    }
+  })()
+    )};
+
+useInfiniteTicketTimelineQuery.getKey = (variables: TicketTimelineQueryVariables) => ['ticketTimeline.infinite', variables];
+
 
 useTicketTimelineQuery.fetcher = (variables: TicketTimelineQueryVariables) => fetcher<TicketTimelineQuery, TicketTimelineQueryVariables>(TicketTimelineDocument, variables);
+
+export const TicketsDocument = `
+    query tickets($filters: TicketsFilter, $first: Int, $after: String, $last: Int, $before: String) {
+  tickets(
+    filters: $filters
+    first: $first
+    after: $after
+    last: $last
+    before: $before
+  ) {
+    edges {
+      node {
+        id
+        assignedTo {
+          id
+          name
+          email
+          image
+        }
+        title
+        customer {
+          id
+          name
+          email
+          avatarUrl
+          phone
+        }
+        status
+        statusChangedAt
+        priority
+        labels {
+          id
+          labelType {
+            id
+            name
+            icon
+            archivedAt
+          }
+          archivedAt
+        }
+        createdAt
+      }
+    }
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+  }
+}
+    `;
+
+export const useTicketsQuery = <
+      TData = TicketsQuery,
+      TError = unknown
+    >(
+      variables?: TicketsQueryVariables,
+      options?: Omit<UseQueryOptions<TicketsQuery, TError, TData>, 'queryKey'> & { queryKey?: UseQueryOptions<TicketsQuery, TError, TData>['queryKey'] }
+    ) => {
+    
+    return useQuery<TicketsQuery, TError, TData>(
+      {
+    queryKey: variables === undefined ? ['tickets'] : ['tickets', variables],
+    queryFn: fetcher<TicketsQuery, TicketsQueryVariables>(TicketsDocument, variables),
+    ...options
+  }
+    )};
+
+useTicketsQuery.getKey = (variables?: TicketsQueryVariables) => variables === undefined ? ['tickets'] : ['tickets', variables];
+
+export const useInfiniteTicketsQuery = <
+      TData = InfiniteData<TicketsQuery>,
+      TError = unknown
+    >(
+      variables: TicketsQueryVariables,
+      options: Omit<UseInfiniteQueryOptions<TicketsQuery, TError, TData>, 'queryKey'> & { queryKey?: UseInfiniteQueryOptions<TicketsQuery, TError, TData>['queryKey'] }
+    ) => {
+    
+    return useInfiniteQuery<TicketsQuery, TError, TData>(
+      (() => {
+    const { queryKey: optionsQueryKey, ...restOptions } = options;
+    return {
+      queryKey: optionsQueryKey ?? variables === undefined ? ['tickets.infinite'] : ['tickets.infinite', variables],
+      queryFn: (metaData) => fetcher<TicketsQuery, TicketsQueryVariables>(TicketsDocument, {...variables, ...(metaData.pageParam ?? {})})(),
+      ...restOptions
+    }
+  })()
+    )};
+
+useInfiniteTicketsQuery.getKey = (variables?: TicketsQueryVariables) => variables === undefined ? ['tickets.infinite'] : ['tickets.infinite', variables];
+
+
+useTicketsQuery.fetcher = (variables?: TicketsQueryVariables) => fetcher<TicketsQuery, TicketsQueryVariables>(TicketsDocument, variables);

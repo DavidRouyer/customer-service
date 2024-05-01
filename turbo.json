@@ -38,6 +38,9 @@
     },
     "codegen:graphql": {
       "cache": false
+    },
+    "codegen:graphql:watch": {
+      "cache": false
     }
   },
   "globalEnv": [

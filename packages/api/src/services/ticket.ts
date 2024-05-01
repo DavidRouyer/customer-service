@@ -517,8 +517,8 @@ export default class TicketService extends BaseService {
       filters.priority
         ? inclusionFilterOperator(schema.tickets.priority, filters.priority)
         : undefined,
-      filters.status
-        ? inclusionFilterOperator(schema.tickets.status, filters.status)
+      filters.statuses
+        ? inclusionFilterOperator(schema.tickets.status, filters.statuses)
         : undefined,
       filters.ticketIds
         ? inclusionFilterOperator(schema.tickets.id, filters.ticketIds)
