@@ -95,25 +95,15 @@ export default class LabelService extends BaseService {
       },
     });
 
-    if (!ticket)
-      throw new KyakuError(
-        KyakuError.Types.NOT_FOUND,
-        `Ticket with id:${ticketId} not found`
-      );
+    if (!ticket) return [];
 
-    const ticketLabelTypes = ticket.labels.flatMap(
+    const affectedLabelTypeIds = ticket.labels.flatMap(
       (label) => label.labelType.id
     );
 
-    const duplicatedLabelTypeIds = labelTypeIds.filter((labelTypeId) =>
-      ticketLabelTypes.includes(labelTypeId)
+    const nonAffectedLabelTypeIds = labelTypeIds.filter(
+      (labelTypeId) => !affectedLabelTypeIds.includes(labelTypeId)
     );
-
-    if (duplicatedLabelTypeIds.length > 0)
-      throw new KyakuError(
-        KyakuError.Types.DUPLICATE_ERROR,
-        `Label types with ids: ${duplicatedLabelTypeIds.join(',')} already added to ticket`
-      );
 
     const fetchedLabelTypes = await this.labelTypeRepository.findMany({
       where: inArray(schema.labelTypes.id, labelTypeIds),
@@ -122,15 +112,11 @@ export default class LabelService extends BaseService {
       (labelType) => labelType.id
     );
 
-    const missingLabelTypeIds = labelTypeIds.filter(
+    const validLabelTypeIds = nonAffectedLabelTypeIds.filter(
       (labelTypeId) => !fetchedLabelTypeIds.includes(labelTypeId)
     );
 
-    if (missingLabelTypeIds.length > 0)
-      throw new KyakuError(
-        KyakuError.Types.NOT_FOUND,
-        `Label types with ids: ${missingLabelTypeIds.join(',')} not found`
-      );
+    if (!validLabelTypeIds.length) return [];
 
     return await this.unitOfWork.transaction(async (tx) => {
       const newLabels = await this.labelRepository.createMany(
