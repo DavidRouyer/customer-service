@@ -346,6 +346,10 @@ export type UserEdge = {
   node: User;
 };
 
+export type CustomerPartsFragment = { __typename?: 'Customer', id: string, name?: string | null, email?: string | null, phone?: string | null, avatarUrl?: string | null };
+
+export type LabelTypePartsFragment = { __typename?: 'LabelType', id: string, name: string, icon?: string | null };
+
 export type LabelTypesQueryVariables = Exact<{
   filters?: InputMaybe<LabelTypesFilter>;
   first?: InputMaybe<Scalars['Int']['input']>;
@@ -357,19 +361,21 @@ export type LabelTypesQueryVariables = Exact<{
 
 export type LabelTypesQuery = { __typename?: 'Query', labelTypes: { __typename?: 'LabelTypeConnection', edges: Array<{ __typename?: 'LabelTypeEdge', cursor: string, node: { __typename?: 'LabelType', id: string, name: string, icon?: string | null } }> } };
 
+export type LabelPartsFragment = { __typename?: 'Label', id: string, archivedAt?: string | null, labelType: { __typename?: 'LabelType', archivedAt?: string | null, id: string, name: string, icon?: string | null } };
+
 export type TicketQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
 
 
-export type TicketQuery = { __typename?: 'Query', ticket?: { __typename?: 'Ticket', id: string, status: TicketStatus, assignedTo?: { __typename?: 'User', id: string, name?: string | null, email: string, image?: string | null } | null, customer: { __typename?: 'Customer', id: string, name?: string | null, email?: string | null, avatarUrl?: string | null, phone?: string | null }, labels: Array<{ __typename?: 'Label', id: string, archivedAt?: string | null, labelType: { __typename?: 'LabelType', id: string, name: string, icon?: string | null, archivedAt?: string | null } }> } | null };
+export type TicketQuery = { __typename?: 'Query', ticket?: { __typename?: 'Ticket', id: string, status: TicketStatus, assignedTo?: { __typename?: 'User', id: string, name?: string | null, email: string, image?: string | null } | null, customer: { __typename?: 'Customer', id: string, name?: string | null, email?: string | null, phone?: string | null, avatarUrl?: string | null }, labels: Array<{ __typename?: 'Label', id: string, archivedAt?: string | null, labelType: { __typename?: 'LabelType', archivedAt?: string | null, id: string, name: string, icon?: string | null } }> } | null };
 
 export type TicketTimelineQueryVariables = Exact<{
   ticketId: Scalars['ID']['input'];
 }>;
 
 
-export type TicketTimelineQuery = { __typename?: 'Query', ticket?: { __typename?: 'Ticket', timelineEntries: { __typename?: 'TimelineEntryConnection', edges: Array<{ __typename?: 'TimelineEntryEdge', cursor: string, node: { __typename?: 'TimelineEntry', id: string, createdAt: string, customer: { __typename?: 'Customer', id: string, email?: string | null, name?: string | null, avatarUrl?: string | null }, entry: { __typename: 'AssignmentChangedEntry', oldAssignedTo?: { __typename?: 'User', id: string, name?: string | null, email: string, emailVerified?: string | null, image?: string | null } | null, newAssignedTo?: { __typename?: 'User', id: string, name?: string | null, email: string, emailVerified?: string | null, image?: string | null } | null } | { __typename: 'ChatEntry', text: string } | { __typename: 'LabelsChangedEntry', oldLabels: Array<{ __typename?: 'Label', id: string, archivedAt?: string | null, labelType: { __typename?: 'LabelType', id: string, name: string, icon?: string | null, archivedAt?: string | null } }>, newLabels: Array<{ __typename?: 'Label', id: string, archivedAt?: string | null, labelType: { __typename?: 'LabelType', id: string, name: string, icon?: string | null, archivedAt?: string | null } }> } | { __typename: 'NoteEntry', text: string, rawContent: string } | { __typename: 'PriorityChangedEntry', oldPriority?: TicketPriority | null, newPriority?: TicketPriority | null } | { __typename: 'StatusChangedEntry', oldStatus?: TicketStatus | null, newStatus?: TicketStatus | null }, userCreatedBy?: { __typename?: 'User', id: string, email: string, name?: string | null, image?: string | null } | null, customerCreatedBy?: { __typename?: 'Customer', id: string, email?: string | null, name?: string | null, avatarUrl?: string | null } | null } }> } } | null };
+export type TicketTimelineQuery = { __typename?: 'Query', ticket?: { __typename?: 'Ticket', timelineEntries: { __typename?: 'TimelineEntryConnection', edges: Array<{ __typename?: 'TimelineEntryEdge', cursor: string, node: { __typename?: 'TimelineEntry', id: string, createdAt: string, customer: { __typename?: 'Customer', id: string, name?: string | null, email?: string | null, phone?: string | null, avatarUrl?: string | null }, entry: { __typename: 'AssignmentChangedEntry', oldAssignedTo?: { __typename?: 'User', id: string, name?: string | null, email: string, image?: string | null } | null, newAssignedTo?: { __typename?: 'User', id: string, name?: string | null, email: string, image?: string | null } | null } | { __typename: 'ChatEntry', text: string } | { __typename: 'LabelsChangedEntry', oldLabels: Array<{ __typename?: 'Label', id: string, archivedAt?: string | null, labelType: { __typename?: 'LabelType', archivedAt?: string | null, id: string, name: string, icon?: string | null } }>, newLabels: Array<{ __typename?: 'Label', id: string, archivedAt?: string | null, labelType: { __typename?: 'LabelType', archivedAt?: string | null, id: string, name: string, icon?: string | null } }> } | { __typename: 'NoteEntry', text: string, rawContent: string } | { __typename: 'PriorityChangedEntry', oldPriority?: TicketPriority | null, newPriority?: TicketPriority | null } | { __typename: 'StatusChangedEntry', oldStatus?: TicketStatus | null, newStatus?: TicketStatus | null }, userCreatedBy?: { __typename?: 'User', id: string, name?: string | null, email: string, image?: string | null } | null, customerCreatedBy?: { __typename?: 'Customer', id: string, name?: string | null, email?: string | null, phone?: string | null, avatarUrl?: string | null } | null } }> } } | null };
 
 export type TicketsQueryVariables = Exact<{
   filters?: InputMaybe<TicketsFilter>;
@@ -380,10 +386,55 @@ export type TicketsQueryVariables = Exact<{
 }>;
 
 
-export type TicketsQuery = { __typename?: 'Query', tickets: { __typename?: 'TicketConnection', edges: Array<{ __typename?: 'TicketEdge', node: { __typename?: 'Ticket', id: string, title?: string | null, status: TicketStatus, statusChangedAt?: string | null, priority: TicketPriority, createdAt: string, assignedTo?: { __typename?: 'User', id: string, name?: string | null, email: string, image?: string | null } | null, customer: { __typename?: 'Customer', id: string, name?: string | null, email?: string | null, avatarUrl?: string | null, phone?: string | null }, labels: Array<{ __typename?: 'Label', id: string, archivedAt?: string | null, labelType: { __typename?: 'LabelType', id: string, name: string, icon?: string | null, archivedAt?: string | null } }> } }>, pageInfo: { __typename?: 'PageInfo', startCursor?: string | null, endCursor?: string | null, hasPreviousPage: boolean, hasNextPage: boolean } } };
+export type TicketsQuery = { __typename?: 'Query', tickets: { __typename?: 'TicketConnection', edges: Array<{ __typename?: 'TicketEdge', node: { __typename?: 'Ticket', id: string, title?: string | null, status: TicketStatus, statusChangedAt?: string | null, priority: TicketPriority, createdAt: string, assignedTo?: { __typename?: 'User', id: string, name?: string | null, email: string, image?: string | null } | null, customer: { __typename?: 'Customer', id: string, name?: string | null, email?: string | null, phone?: string | null, avatarUrl?: string | null }, labels: Array<{ __typename?: 'Label', id: string, archivedAt?: string | null, labelType: { __typename?: 'LabelType', archivedAt?: string | null, id: string, name: string, icon?: string | null } }> } }>, pageInfo: { __typename?: 'PageInfo', startCursor?: string | null, endCursor?: string | null, hasPreviousPage: boolean, hasNextPage: boolean } } };
+
+export type UserPartsFragment = { __typename?: 'User', id: string, name?: string | null, email: string, image?: string | null };
+
+export type UsersQueryVariables = Exact<{
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  after?: InputMaybe<Scalars['String']['input']>;
+}>;
 
 
+export type UsersQuery = { __typename?: 'Query', users: { __typename?: 'UserConnection', edges: Array<{ __typename?: 'UserEdge', cursor: string, node: { __typename?: 'User', id: string, name?: string | null, email: string, image?: string | null } }> } };
 
+
+export const CustomerPartsFragmentDoc = `
+    fragment CustomerParts on Customer {
+  id
+  name
+  email
+  phone
+  avatarUrl
+}
+    `;
+export const LabelTypePartsFragmentDoc = `
+    fragment LabelTypeParts on LabelType {
+  id
+  name
+  icon
+}
+    `;
+export const LabelPartsFragmentDoc = `
+    fragment LabelParts on Label {
+  id
+  labelType {
+    ...LabelTypeParts
+    archivedAt
+  }
+  archivedAt
+}
+    `;
+export const UserPartsFragmentDoc = `
+    fragment UserParts on User {
+  id
+  name
+  email
+  image
+}
+    `;
 export const LabelTypesDocument = `
     query labelTypes($filters: LabelTypesFilter, $first: Int, $last: Int, $before: String, $after: String) {
   labelTypes(
@@ -396,14 +447,12 @@ export const LabelTypesDocument = `
     edges {
       cursor
       node {
-        id
-        name
-        icon
+        ...LabelTypeParts
       }
     }
   }
 }
-    `;
+    ${LabelTypePartsFragmentDoc}`;
 
 export const useLabelTypesQuery = <
       TData = LabelTypesQuery,
@@ -452,32 +501,21 @@ export const TicketDocument = `
   ticket(id: $id) {
     id
     assignedTo {
-      id
-      name
-      email
-      image
+      ...UserParts
     }
     customer {
-      id
-      name
-      email
-      avatarUrl
-      phone
+      ...CustomerParts
     }
     labels {
-      id
-      labelType {
-        id
-        name
-        icon
-        archivedAt
-      }
-      archivedAt
+      ...LabelParts
     }
     status
   }
 }
-    `;
+    ${UserPartsFragmentDoc}
+${CustomerPartsFragmentDoc}
+${LabelPartsFragmentDoc}
+${LabelTypePartsFragmentDoc}`;
 
 export const useTicketQuery = <
       TData = TicketQuery,
@@ -530,27 +568,16 @@ export const TicketTimelineDocument = `
         node {
           id
           customer {
-            id
-            email
-            name
-            avatarUrl
+            ...CustomerParts
           }
           entry {
             __typename
             ... on AssignmentChangedEntry {
               oldAssignedTo {
-                id
-                name
-                email
-                emailVerified
-                image
+                ...UserParts
               }
               newAssignedTo {
-                id
-                name
-                email
-                emailVerified
-                image
+                ...UserParts
               }
             }
             ... on ChatEntry {
@@ -558,24 +585,10 @@ export const TicketTimelineDocument = `
             }
             ... on LabelsChangedEntry {
               oldLabels {
-                id
-                labelType {
-                  id
-                  name
-                  icon
-                  archivedAt
-                }
-                archivedAt
+                ...LabelParts
               }
               newLabels {
-                id
-                labelType {
-                  id
-                  name
-                  icon
-                  archivedAt
-                }
-                archivedAt
+                ...LabelParts
               }
             }
             ... on NoteEntry {
@@ -593,23 +606,20 @@ export const TicketTimelineDocument = `
           }
           createdAt
           userCreatedBy {
-            id
-            email
-            name
-            image
+            ...UserParts
           }
           customerCreatedBy {
-            id
-            email
-            name
-            avatarUrl
+            ...CustomerParts
           }
         }
       }
     }
   }
 }
-    `;
+    ${CustomerPartsFragmentDoc}
+${UserPartsFragmentDoc}
+${LabelPartsFragmentDoc}
+${LabelTypePartsFragmentDoc}`;
 
 export const useTicketTimelineQuery = <
       TData = TicketTimelineQuery,
@@ -666,31 +676,17 @@ export const TicketsDocument = `
       node {
         id
         assignedTo {
-          id
-          name
-          email
-          image
+          ...UserParts
         }
         title
         customer {
-          id
-          name
-          email
-          avatarUrl
-          phone
+          ...CustomerParts
         }
         status
         statusChangedAt
         priority
         labels {
-          id
-          labelType {
-            id
-            name
-            icon
-            archivedAt
-          }
-          archivedAt
+          ...LabelParts
         }
         createdAt
       }
@@ -703,7 +699,10 @@ export const TicketsDocument = `
     }
   }
 }
-    `;
+    ${UserPartsFragmentDoc}
+${CustomerPartsFragmentDoc}
+${LabelPartsFragmentDoc}
+${LabelTypePartsFragmentDoc}`;
 
 export const useTicketsQuery = <
       TData = TicketsQuery,
@@ -746,3 +745,58 @@ useInfiniteTicketsQuery.getKey = (variables?: TicketsQueryVariables) => variable
 
 
 useTicketsQuery.fetcher = (variables?: TicketsQueryVariables) => fetcher<TicketsQuery, TicketsQueryVariables>(TicketsDocument, variables);
+
+export const UsersDocument = `
+    query users($first: Int, $last: Int, $before: String, $after: String) {
+  users(first: $first, last: $last, before: $before, after: $after) {
+    edges {
+      cursor
+      node {
+        ...UserParts
+      }
+    }
+  }
+}
+    ${UserPartsFragmentDoc}`;
+
+export const useUsersQuery = <
+      TData = UsersQuery,
+      TError = unknown
+    >(
+      variables?: UsersQueryVariables,
+      options?: Omit<UseQueryOptions<UsersQuery, TError, TData>, 'queryKey'> & { queryKey?: UseQueryOptions<UsersQuery, TError, TData>['queryKey'] }
+    ) => {
+    
+    return useQuery<UsersQuery, TError, TData>(
+      {
+    queryKey: variables === undefined ? ['users'] : ['users', variables],
+    queryFn: fetcher<UsersQuery, UsersQueryVariables>(UsersDocument, variables),
+    ...options
+  }
+    )};
+
+useUsersQuery.getKey = (variables?: UsersQueryVariables) => variables === undefined ? ['users'] : ['users', variables];
+
+export const useInfiniteUsersQuery = <
+      TData = InfiniteData<UsersQuery>,
+      TError = unknown
+    >(
+      variables: UsersQueryVariables,
+      options: Omit<UseInfiniteQueryOptions<UsersQuery, TError, TData>, 'queryKey'> & { queryKey?: UseInfiniteQueryOptions<UsersQuery, TError, TData>['queryKey'] }
+    ) => {
+    
+    return useInfiniteQuery<UsersQuery, TError, TData>(
+      (() => {
+    const { queryKey: optionsQueryKey, ...restOptions } = options;
+    return {
+      queryKey: optionsQueryKey ?? variables === undefined ? ['users.infinite'] : ['users.infinite', variables],
+      queryFn: (metaData) => fetcher<UsersQuery, UsersQueryVariables>(UsersDocument, {...variables, ...(metaData.pageParam ?? {})})(),
+      ...restOptions
+    }
+  })()
+    )};
+
+useInfiniteUsersQuery.getKey = (variables?: UsersQueryVariables) => variables === undefined ? ['users.infinite'] : ['users.infinite', variables];
+
+
+useUsersQuery.fetcher = (variables?: UsersQueryVariables) => fetcher<UsersQuery, UsersQueryVariables>(UsersDocument, variables);

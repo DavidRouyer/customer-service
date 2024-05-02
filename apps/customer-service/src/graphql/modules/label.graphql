@@ -1,0 +1,8 @@
+fragment LabelParts on Label {
+  id
+  labelType {
+    ...LabelTypeParts
+    archivedAt
+  }
+  archivedAt
+}

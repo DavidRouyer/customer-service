@@ -2,27 +2,13 @@ query ticket($id: ID!) {
   ticket(id: $id) {
     id
     assignedTo {
-      id
-      name
-      email
-      image
+      ...UserParts
     }
     customer {
-      id
-      name
-      email
-      avatarUrl
-      phone
+      ...CustomerParts
     }
     labels {
-      id
-      labelType {
-        id
-        name
-        icon
-        archivedAt
-      }
-      archivedAt
+      ...LabelParts
     }
     status
   }
@@ -36,27 +22,16 @@ query ticketTimeline($ticketId: ID!) {
         node {
           id
           customer {
-            id
-            email
-            name
-            avatarUrl
+            ...CustomerParts
           }
           entry {
             __typename
             ... on AssignmentChangedEntry {
               oldAssignedTo {
-                id
-                name
-                email
-                emailVerified
-                image
+                ...UserParts
               }
               newAssignedTo {
-                id
-                name
-                email
-                emailVerified
-                image
+                ...UserParts
               }
             }
             ... on ChatEntry {
@@ -64,24 +39,10 @@ query ticketTimeline($ticketId: ID!) {
             }
             ... on LabelsChangedEntry {
               oldLabels {
-                id
-                labelType {
-                  id
-                  name
-                  icon
-                  archivedAt
-                }
-                archivedAt
+                ...LabelParts
               }
               newLabels {
-                id
-                labelType {
-                  id
-                  name
-                  icon
-                  archivedAt
-                }
-                archivedAt
+                ...LabelParts
               }
             }
             ... on NoteEntry {
@@ -99,16 +60,10 @@ query ticketTimeline($ticketId: ID!) {
           }
           createdAt
           userCreatedBy {
-            id
-            email
-            name
-            image
+            ...UserParts
           }
           customerCreatedBy {
-            id
-            email
-            name
-            avatarUrl
+            ...CustomerParts
           }
         }
       }
@@ -134,31 +89,17 @@ query tickets(
       node {
         id
         assignedTo {
-          id
-          name
-          email
-          image
+          ...UserParts
         }
         title
         customer {
-          id
-          name
-          email
-          avatarUrl
-          phone
+          ...CustomerParts
         }
         status
         statusChangedAt
         priority
         labels {
-          id
-          labelType {
-            id
-            name
-            icon
-            archivedAt
-          }
-          archivedAt
+          ...LabelParts
         }
         createdAt
       }

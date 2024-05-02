@@ -1,4 +1,5 @@
 import { FC, useState } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
 import { Check, Plus } from 'lucide-react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
@@ -16,7 +17,10 @@ import {
 } from '@cs/ui/command';
 import { Popover, PopoverContent, PopoverTrigger } from '@cs/ui/popover';
 
-import { useLabelTypesQuery } from '~/graphql/generated/client';
+import {
+  useInfiniteTicketTimelineQuery,
+  useLabelTypesQuery,
+} from '~/graphql/generated/client';
 import { api } from '~/trpc/react';
 
 type TicketLabelComboboxProps = {
@@ -32,6 +36,7 @@ export const TicketLabelCombobox: FC<TicketLabelComboboxProps> = ({
   const [open, setOpen] = useState(false);
 
   const utils = api.useUtils();
+  const queryClient = useQueryClient();
 
   const { data: labelTypesData } = useLabelTypesQuery(
     {
@@ -56,24 +61,20 @@ export const TicketLabelCombobox: FC<TicketLabelComboboxProps> = ({
       });
 
       // Optimistically update to the new value
-      utils.ticket.byId.setData(
-        { id: newLabels.ticketId },
-        (oldQueryData) =>
-          ({
-            ...oldQueryData,
-            labels: previousTicket?.labels?.concat(
-              newLabels.labelTypeIds.map((labelTypeId) => ({
-                id: `${newLabels.ticketId}-${labelTypeId}`,
-                labelTypeId,
-                labelType: labelTypesData?.edges?.find(
-                  (labelType) => labelType.node.id === labelTypeId
-                )!,
-                ticketId: newLabels.ticketId,
-                archivedAt: null,
-              }))
-            ),
-          }) as NonNullable<RouterOutputs['ticket']['byId']>
-      );
+      utils.ticket.byId.setData({ id: newLabels.ticketId }, (oldQueryData) => ({
+        ...oldQueryData,
+        labels: previousTicket?.labels?.concat(
+          newLabels.labelTypeIds.map((labelTypeId) => ({
+            id: `${newLabels.ticketId}-${labelTypeId}`,
+            labelTypeId,
+            labelType: labelTypesData?.edges?.find(
+              (labelType) => labelType.node.id === labelTypeId
+            )!,
+            ticketId: newLabels.ticketId,
+            archivedAt: null,
+          }))
+        ),
+      }));
 
       // Return a context object with the snapshotted value
       return { previousTicket: previousTicket };
@@ -84,7 +85,9 @@ export const TicketLabelCombobox: FC<TicketLabelComboboxProps> = ({
     },
     onSettled: (_, __, { ticketId }) => {
       void utils.ticket.byId.invalidate({ id: ticketId });
-      void utils.ticketTimeline.byTicketId.invalidate({ ticketId });
+      void queryClient.invalidateQueries({
+        queryKey: useInfiniteTicketTimelineQuery.getKey({ ticketId: ticketId }),
+      });
     },
   });
 
@@ -102,13 +105,12 @@ export const TicketLabelCombobox: FC<TicketLabelComboboxProps> = ({
       // Optimistically update to the new value
       utils.ticket.byId.setData(
         { id: removeLabels.ticketId },
-        (oldQueryData) =>
-          ({
-            ...oldQueryData,
-            labels: previousTicket?.labels?.filter(
-              (label) => !removeLabels.labelIds.includes(label.id)
-            ),
-          }) as NonNullable<RouterOutputs['ticket']['byId']>
+        (oldQueryData) => ({
+          ...oldQueryData,
+          labels: previousTicket?.labels?.filter(
+            (label) => !removeLabels.labelIds.includes(label.id)
+          ),
+        })
       );
 
       // Return a context object with the snapshotted value
@@ -120,7 +122,9 @@ export const TicketLabelCombobox: FC<TicketLabelComboboxProps> = ({
     },
     onSettled: (_, __, { ticketId }) => {
       void utils.ticket.byId.invalidate({ id: ticketId });
-      void utils.ticketTimeline.byTicketId.invalidate({ ticketId });
+      void queryClient.invalidateQueries({
+        queryKey: useInfiniteTicketTimelineQuery.getKey({ ticketId: ticketId }),
+      });
     },
   });
 

@@ -1,10 +1,14 @@
+import { useQueryClient } from '@tanstack/react-query';
+
 import { RouterOutputs } from '@cs/api';
 import { TicketStatus } from '@cs/kyaku/models';
 
+import { useInfiniteTicketTimelineQuery } from '~/graphql/generated/client';
 import { api } from '~/trpc/react';
 
 export const useMarkAsOpenTicket = () => {
   const utils = api.useUtils();
+  const queryClient = useQueryClient();
 
   const { mutateAsync } = api.ticket.markAsOpen.useMutation({
     onMutate: async ({ id }) => {
@@ -34,7 +38,9 @@ export const useMarkAsOpenTicket = () => {
     },
     onSettled: (_, __, { id }) => {
       void utils.ticket.byId.invalidate({ id });
-      void utils.ticketTimeline.byTicketId.invalidate({ ticketId: id });
+      void queryClient.invalidateQueries({
+        queryKey: useInfiniteTicketTimelineQuery.getKey({ ticketId: id }),
+      });
     },
   });
 

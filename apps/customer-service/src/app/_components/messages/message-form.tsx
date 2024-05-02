@@ -2,6 +2,7 @@
 
 import { createContext, FC, RefObject, useRef } from 'react';
 import dynamic from 'next/dynamic';
+import { useQueryClient } from '@tanstack/react-query';
 import { useAtom } from 'jotai';
 import { PaperclipIcon, SmilePlusIcon } from 'lucide-react';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
@@ -16,6 +17,7 @@ import { Label } from '@cs/ui/label';
 import { Switch } from '@cs/ui/switch';
 
 import { messageModeAtom } from '~/app/_components/messages/message-mode-atom';
+import { useInfiniteTicketTimelineQuery } from '~/graphql/generated/client';
 import { api } from '~/trpc/react';
 
 type TimelineItem = RouterOutputs['ticketTimeline']['byTicketId'][0];
@@ -37,7 +39,7 @@ export const FormElementContext =
 export const MessageForm: FC<{ ticketId: string }> = ({ ticketId }) => {
   const formRef = useRef<HTMLFormElement>(null);
   const { data: session } = api.auth.getSession.useQuery();
-  const utils = api.useUtils();
+  const queryClient = useQueryClient();
 
   const [messageMode, setMessageMode] = useAtom(messageModeAtom);
 
@@ -45,18 +47,24 @@ export const MessageForm: FC<{ ticketId: string }> = ({ ticketId }) => {
     onMutate: async (newMessage) => {
       // Cancel any outgoing refetches
       // (so they don't overwrite our optimistic update)
-      await utils.ticketTimeline.byTicketId.cancel({
-        ticketId: newMessage.ticketId,
+      await queryClient.cancelQueries({
+        queryKey: useInfiniteTicketTimelineQuery.getKey({
+          ticketId: newMessage.ticketId,
+        }),
       });
 
       // Snapshot the previous value
-      const previousMessages = utils.ticketTimeline.byTicketId.getData({
-        ticketId: newMessage.ticketId,
-      });
+      const previousMessages = queryClient.getQueryData(
+        useInfiniteTicketTimelineQuery.getKey({
+          ticketId: newMessage.ticketId,
+        })
+      );
 
       // Optimistically update to the new value
-      utils.ticketTimeline.byTicketId.setData(
-        { ticketId: newMessage.ticketId },
+      queryClient.setQueryData(
+        useInfiniteTicketTimelineQuery.getKey({
+          ticketId: newMessage.ticketId,
+        }),
         (oldQueryData: TimelineItem[] | undefined) => [
           ...(oldQueryData ?? []),
           {
@@ -80,40 +88,48 @@ export const MessageForm: FC<{ ticketId: string }> = ({ ticketId }) => {
     },
     onError: (err, _newMessage, context) => {
       // TODO: handle failed queries
-      utils.ticketTimeline.byTicketId.setData(
-        { ticketId: _newMessage.ticketId },
+      queryClient.setQueryData(
+        useInfiniteTicketTimelineQuery.getKey({
+          ticketId: _newMessage.ticketId,
+        }),
         context?.previousMessages ?? []
       );
     },
     onSettled: (_, __, { ticketId }) => {
-      void utils.ticketTimeline.byTicketId.invalidate({ ticketId: ticketId });
+      void queryClient.invalidateQueries({
+        queryKey: useInfiniteTicketTimelineQuery.getKey({ ticketId: ticketId }),
+      });
     },
   });
   const { mutateAsync: sendNote } = api.ticket.sendNote.useMutation({
-    onMutate: async (newTicket) => {
+    onMutate: async (newNote) => {
       // Cancel any outgoing refetches
       // (so they don't overwrite our optimistic update)
-      await utils.ticketTimeline.byTicketId.cancel({
-        ticketId: newTicket.ticketId,
+      await queryClient.cancelQueries({
+        queryKey: useInfiniteTicketTimelineQuery.getKey({
+          ticketId: newNote.ticketId,
+        }),
       });
 
       // Snapshot the previous value
-      const previousTimelineItem = utils.ticketTimeline.byTicketId.getData({
-        ticketId: newTicket.ticketId,
-      });
+      const previousTimelineItem = queryClient.getQueryData(
+        useInfiniteTicketTimelineQuery.getKey({
+          ticketId: newNote.ticketId,
+        })
+      );
 
       // Optimistically update to the new value
-      utils.ticketTimeline.byTicketId.setData(
-        { ticketId: newTicket.ticketId },
+      queryClient.setQueryData(
+        useInfiniteTicketTimelineQuery.getKey({ ticketId: newNote.ticketId }),
         (oldQueryData: TimelineItem[] | undefined) => [
           ...(oldQueryData ?? []),
           {
             id: self.crypto.randomUUID(),
             customerId: oldQueryData?.[0]?.customerId ?? '',
-            ticketId: newTicket.ticketId,
+            ticketId: newNote.ticketId,
             entry: {
-              text: newTicket.text,
-              rawContent: newTicket.rawContent,
+              text: newNote.text,
+              rawContent: newNote.rawContent,
             } satisfies TicketNote,
             createdAt: new Date(),
             userCreatedById: session?.user?.id ?? null,
@@ -127,15 +143,17 @@ export const MessageForm: FC<{ ticketId: string }> = ({ ticketId }) => {
       // Return a context object with the snapshotted value
       return { previousNotes: previousTimelineItem };
     },
-    onError: (err, _newTicket, context) => {
+    onError: (err, _newNote, context) => {
       // TODO: handle failed queries
-      utils.ticketTimeline.byTicketId.setData(
-        { ticketId: _newTicket.ticketId },
+      queryClient.setQueryData(
+        useInfiniteTicketTimelineQuery.getKey({ ticketId: _newNote.ticketId }),
         context?.previousNotes ?? []
       );
     },
     onSettled: (_, __, { ticketId }) => {
-      void utils.ticketTimeline.byTicketId.invalidate({ ticketId: ticketId });
+      void queryClient.invalidateQueries({
+        queryKey: useInfiniteTicketTimelineQuery.getKey({ ticketId: ticketId }),
+      });
     },
   });
   const form = useForm<MessageFormSchema>();

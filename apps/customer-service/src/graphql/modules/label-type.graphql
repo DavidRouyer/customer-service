@@ -1,3 +1,9 @@
+fragment LabelTypeParts on LabelType {
+  id
+  name
+  icon
+}
+
 query labelTypes(
   $filters: LabelTypesFilter
   $first: Int
@@ -15,9 +21,7 @@ query labelTypes(
     edges {
       cursor
       node {
-        id
-        name
-        icon
+        ...LabelTypeParts
       }
     }
   }

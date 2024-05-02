@@ -1,4 +1,5 @@
 import { FC } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
 import { Shield, ShieldAlert } from 'lucide-react';
 import { FormattedMessage } from 'react-intl';
 
@@ -14,6 +15,7 @@ import {
 } from '@cs/ui/dropdown-menu';
 import { TicketPriorityBadge } from '@cs/ui/ticket-priority-badge';
 
+import { useInfiniteTicketTimelineQuery } from '~/graphql/generated/client';
 import { api } from '~/trpc/react';
 
 type TicketChangePriorityProps = {
@@ -26,6 +28,7 @@ export const TicketPriorityDropdowm: FC<TicketChangePriorityProps> = ({
   ticketId,
 }) => {
   const utils = api.useUtils();
+  const queryClient = useQueryClient();
 
   const { mutateAsync } = api.ticket.changePriority.useMutation({
     onMutate: async (newPriority) => {
@@ -55,7 +58,9 @@ export const TicketPriorityDropdowm: FC<TicketChangePriorityProps> = ({
     },
     onSettled: (_, __, { id }) => {
       void utils.ticket.byId.invalidate({ id });
-      void utils.ticketTimeline.byTicketId.invalidate({ ticketId: id });
+      void queryClient.invalidateQueries({
+        queryKey: useInfiniteTicketTimelineQuery.getKey({ ticketId: ticketId }),
+      });
     },
   });
 

@@ -23,7 +23,7 @@ import { $createMentionNode } from '@cs/kyaku/editor';
 import { getInitials } from '@cs/kyaku/utils';
 import { Avatar, AvatarFallback, AvatarImage } from '@cs/ui/avatar';
 
-import { api } from '~/trpc/react';
+import { UsersQuery, useUsersQuery } from '~/graphql/generated/client';
 
 const PUNCTUATION =
   '\\.,\\+\\*\\?\\$\\@\\|#{}\\(\\)\\^\\-\\[\\]\\\\/!%\'"~=<>_:;';
@@ -90,9 +90,14 @@ const SUGGESTION_LIST_LENGTH_LIMIT = 4;
 
 function useMentionLookupService(mentionString: string | null) {
   const [results, setResults] = useState<
-    RouterOutputs['ticket']['byId']['createdBy'][]
+    UsersQuery['users']['edges'][number]['node'][]
   >([]);
-  const { data } = api.user.all.useQuery();
+  const { data } = useUsersQuery(
+    {},
+    {
+      select: (data) => data.users,
+    }
+  );
 
   useEffect(() => {
     if (mentionString == null) {
@@ -101,9 +106,11 @@ function useMentionLookupService(mentionString: string | null) {
     }
 
     if (data) {
-      const searchResults = data?.filter((user) =>
-        user.name?.toLowerCase().includes(mentionString.toLowerCase())
-      );
+      const searchResults = data?.edges
+        ?.filter((user) =>
+          user.node.name?.toLowerCase().includes(mentionString.toLowerCase())
+        )
+        .map((user) => user.node);
       setResults(searchResults);
     }
   }, [data, mentionString]);

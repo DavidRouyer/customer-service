@@ -1,4 +1,5 @@
 import { FC, useCallback, useState } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
 import { Check, Plus } from 'lucide-react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
@@ -17,7 +18,10 @@ import {
 } from '@cs/ui/command';
 import { Popover, PopoverContent, PopoverTrigger } from '@cs/ui/popover';
 
-import { TicketQuery } from '~/graphql/generated/client';
+import {
+  TicketQuery,
+  useInfiniteTicketTimelineQuery,
+} from '~/graphql/generated/client';
 import { api } from '~/trpc/react';
 
 type TicketAssignmentComboboxProps = {
@@ -35,6 +39,7 @@ export const TicketAssignmentCombobox: FC<TicketAssignmentComboboxProps> = ({
   const [open, setOpen] = useState(false);
 
   const utils = api.useUtils();
+  const queryClient = useQueryClient();
 
   const { data: usersData } = api.user.all.useQuery(undefined, {
     select: useCallback(
@@ -102,7 +107,9 @@ export const TicketAssignmentCombobox: FC<TicketAssignmentComboboxProps> = ({
     },
     onSettled: (_, __, { id }) => {
       void utils.ticket.byId.invalidate({ id });
-      void utils.ticketTimeline.byTicketId.invalidate({ ticketId: id });
+      void queryClient.invalidateQueries({
+        queryKey: useInfiniteTicketTimelineQuery.getKey({ ticketId: ticketId }),
+      });
     },
   });
 
@@ -135,7 +142,9 @@ export const TicketAssignmentCombobox: FC<TicketAssignmentComboboxProps> = ({
     },
     onSettled: (_, __, { id }) => {
       void utils.ticket.byId.invalidate({ id });
-      void utils.ticketTimeline.byTicketId.invalidate({ ticketId: id });
+      void queryClient.invalidateQueries({
+        queryKey: useInfiniteTicketTimelineQuery.getKey({ ticketId: ticketId }),
+      });
     },
   });
 
