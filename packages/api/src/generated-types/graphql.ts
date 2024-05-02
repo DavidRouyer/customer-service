@@ -20,6 +20,17 @@ export type Scalars = {
   DateTime: { input: any; output: any; }
 };
 
+export type AddLabelsInput = {
+  labelTypeIds: Array<Scalars['ID']['input']>;
+  ticketId: Scalars['ID']['input'];
+};
+
+export type AddLabelsOutput = {
+  __typename?: 'AddLabelsOutput';
+  errors?: Maybe<Array<MutationError>>;
+  labels: Array<Label>;
+};
+
 export type ArchiveLabelTypeInput = {
   id: Scalars['ID']['input'];
 };
@@ -100,10 +111,17 @@ export type LabelsChangedEntry = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  addLabels?: Maybe<AddLabelsOutput>;
   archiveLabelType?: Maybe<LabelType>;
   createLabelType?: Maybe<LabelType>;
+  removeLabels?: Maybe<RemoveLabelsOutput>;
   unarchiveLabelType?: Maybe<LabelType>;
   updateLabelType?: Maybe<LabelType>;
+};
+
+
+export type MutationAddLabelsArgs = {
+  input: AddLabelsInput;
 };
 
 
@@ -117,6 +135,11 @@ export type MutationCreateLabelTypeArgs = {
 };
 
 
+export type MutationRemoveLabelsArgs = {
+  input: RemoveLabelsInput;
+};
+
+
 export type MutationUnarchiveLabelTypeArgs = {
   input: UnarchiveLabelTypeInput;
 };
@@ -124,6 +147,13 @@ export type MutationUnarchiveLabelTypeArgs = {
 
 export type MutationUpdateLabelTypeArgs = {
   input: UpdateLabelTypeInput;
+};
+
+export type MutationError = {
+  __typename?: 'MutationError';
+  code: Scalars['String']['output'];
+  fields: Array<Scalars['String']['output']>;
+  message: Scalars['String']['output'];
 };
 
 export type Node = {
@@ -205,6 +235,16 @@ export type QueryUsersArgs = {
   before?: InputMaybe<Scalars['String']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
   last?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type RemoveLabelsInput = {
+  labelIds: Array<Scalars['ID']['input']>;
+  ticketId: Scalars['ID']['input'];
+};
+
+export type RemoveLabelsOutput = {
+  __typename?: 'RemoveLabelsOutput';
+  errors?: Maybe<Array<MutationError>>;
 };
 
 export type StatusChangedEntry = {
@@ -409,6 +449,8 @@ export type ResolversInterfaceTypes<RefType extends Record<string, unknown>> = {
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
+  AddLabelsInput: AddLabelsInput;
+  AddLabelsOutput: ResolverTypeWrapper<AddLabelsOutput>;
   ArchiveLabelTypeInput: ArchiveLabelTypeInput;
   AssignmentChangedEntry: ResolverTypeWrapper<AssignmentChangedEntry>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
@@ -426,11 +468,14 @@ export type ResolversTypes = {
   LabelTypesFilter: LabelTypesFilter;
   LabelsChangedEntry: ResolverTypeWrapper<LabelsChangedEntry>;
   Mutation: ResolverTypeWrapper<{}>;
+  MutationError: ResolverTypeWrapper<MutationError>;
   Node: ResolverTypeWrapper<ResolversInterfaceTypes<ResolversTypes>['Node']>;
   NoteEntry: ResolverTypeWrapper<NoteEntry>;
   PageInfo: ResolverTypeWrapper<PageInfo>;
   PriorityChangedEntry: ResolverTypeWrapper<PriorityChangedEntry>;
   Query: ResolverTypeWrapper<{}>;
+  RemoveLabelsInput: RemoveLabelsInput;
+  RemoveLabelsOutput: ResolverTypeWrapper<RemoveLabelsOutput>;
   StatusChangedEntry: ResolverTypeWrapper<StatusChangedEntry>;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
   Ticket: ResolverTypeWrapper<Ticket>;
@@ -452,6 +497,8 @@ export type ResolversTypes = {
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
+  AddLabelsInput: AddLabelsInput;
+  AddLabelsOutput: AddLabelsOutput;
   ArchiveLabelTypeInput: ArchiveLabelTypeInput;
   AssignmentChangedEntry: AssignmentChangedEntry;
   Boolean: Scalars['Boolean']['output'];
@@ -469,11 +516,14 @@ export type ResolversParentTypes = {
   LabelTypesFilter: LabelTypesFilter;
   LabelsChangedEntry: LabelsChangedEntry;
   Mutation: {};
+  MutationError: MutationError;
   Node: ResolversInterfaceTypes<ResolversParentTypes>['Node'];
   NoteEntry: NoteEntry;
   PageInfo: PageInfo;
   PriorityChangedEntry: PriorityChangedEntry;
   Query: {};
+  RemoveLabelsInput: RemoveLabelsInput;
+  RemoveLabelsOutput: RemoveLabelsOutput;
   StatusChangedEntry: StatusChangedEntry;
   String: Scalars['String']['output'];
   Ticket: Ticket;
@@ -488,6 +538,12 @@ export type ResolversParentTypes = {
   User: User;
   UserConnection: UserConnection;
   UserEdge: UserEdge;
+};
+
+export type AddLabelsOutputResolvers<ContextType = Context, ParentType extends ResolversParentTypes['AddLabelsOutput'] = ResolversParentTypes['AddLabelsOutput']> = {
+  errors?: Resolver<Maybe<Array<ResolversTypes['MutationError']>>, ParentType, ContextType>;
+  labels?: Resolver<Array<ResolversTypes['Label']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type AssignmentChangedEntryResolvers<ContextType = Context, ParentType extends ResolversParentTypes['AssignmentChangedEntry'] = ResolversParentTypes['AssignmentChangedEntry']> = {
@@ -562,10 +618,19 @@ export type LabelsChangedEntryResolvers<ContextType = Context, ParentType extend
 };
 
 export type MutationResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
+  addLabels?: Resolver<Maybe<ResolversTypes['AddLabelsOutput']>, ParentType, ContextType, RequireFields<MutationAddLabelsArgs, 'input'>>;
   archiveLabelType?: Resolver<Maybe<ResolversTypes['LabelType']>, ParentType, ContextType, RequireFields<MutationArchiveLabelTypeArgs, 'input'>>;
   createLabelType?: Resolver<Maybe<ResolversTypes['LabelType']>, ParentType, ContextType, RequireFields<MutationCreateLabelTypeArgs, 'input'>>;
+  removeLabels?: Resolver<Maybe<ResolversTypes['RemoveLabelsOutput']>, ParentType, ContextType, RequireFields<MutationRemoveLabelsArgs, 'input'>>;
   unarchiveLabelType?: Resolver<Maybe<ResolversTypes['LabelType']>, ParentType, ContextType, RequireFields<MutationUnarchiveLabelTypeArgs, 'input'>>;
   updateLabelType?: Resolver<Maybe<ResolversTypes['LabelType']>, ParentType, ContextType, RequireFields<MutationUpdateLabelTypeArgs, 'input'>>;
+};
+
+export type MutationErrorResolvers<ContextType = Context, ParentType extends ResolversParentTypes['MutationError'] = ResolversParentTypes['MutationError']> = {
+  code?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  fields?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
+  message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type NodeResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Node'] = ResolversParentTypes['Node']> = {
@@ -601,6 +666,11 @@ export type QueryResolvers<ContextType = Context, ParentType extends ResolversPa
   tickets?: Resolver<ResolversTypes['TicketConnection'], ParentType, ContextType, Partial<QueryTicketsArgs>>;
   user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryUserArgs, 'id'>>;
   users?: Resolver<ResolversTypes['UserConnection'], ParentType, ContextType, Partial<QueryUsersArgs>>;
+};
+
+export type RemoveLabelsOutputResolvers<ContextType = Context, ParentType extends ResolversParentTypes['RemoveLabelsOutput'] = ResolversParentTypes['RemoveLabelsOutput']> = {
+  errors?: Resolver<Maybe<Array<ResolversTypes['MutationError']>>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type StatusChangedEntryResolvers<ContextType = Context, ParentType extends ResolversParentTypes['StatusChangedEntry'] = ResolversParentTypes['StatusChangedEntry']> = {
@@ -685,6 +755,7 @@ export type UserEdgeResolvers<ContextType = Context, ParentType extends Resolver
 };
 
 export type Resolvers<ContextType = Context> = {
+  AddLabelsOutput?: AddLabelsOutputResolvers<ContextType>;
   AssignmentChangedEntry?: AssignmentChangedEntryResolvers<ContextType>;
   ChatEntry?: ChatEntryResolvers<ContextType>;
   Customer?: CustomerResolvers<ContextType>;
@@ -696,11 +767,13 @@ export type Resolvers<ContextType = Context> = {
   LabelTypeEdge?: LabelTypeEdgeResolvers<ContextType>;
   LabelsChangedEntry?: LabelsChangedEntryResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
+  MutationError?: MutationErrorResolvers<ContextType>;
   Node?: NodeResolvers<ContextType>;
   NoteEntry?: NoteEntryResolvers<ContextType>;
   PageInfo?: PageInfoResolvers<ContextType>;
   PriorityChangedEntry?: PriorityChangedEntryResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
+  RemoveLabelsOutput?: RemoveLabelsOutputResolvers<ContextType>;
   StatusChangedEntry?: StatusChangedEntryResolvers<ContextType>;
   Ticket?: TicketResolvers<ContextType>;
   TicketConnection?: TicketConnectionResolvers<ContextType>;

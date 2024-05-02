@@ -36,6 +36,17 @@ export type Scalars = {
   DateTime: { input: string; output: string; }
 };
 
+export type AddLabelsInput = {
+  labelTypeIds: Array<Scalars['ID']['input']>;
+  ticketId: Scalars['ID']['input'];
+};
+
+export type AddLabelsOutput = {
+  __typename?: 'AddLabelsOutput';
+  errors?: Maybe<Array<MutationError>>;
+  labels: Array<Label>;
+};
+
 export type ArchiveLabelTypeInput = {
   id: Scalars['ID']['input'];
 };
@@ -116,10 +127,17 @@ export type LabelsChangedEntry = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  addLabels?: Maybe<AddLabelsOutput>;
   archiveLabelType?: Maybe<LabelType>;
   createLabelType?: Maybe<LabelType>;
+  removeLabels?: Maybe<RemoveLabelsOutput>;
   unarchiveLabelType?: Maybe<LabelType>;
   updateLabelType?: Maybe<LabelType>;
+};
+
+
+export type MutationAddLabelsArgs = {
+  input: AddLabelsInput;
 };
 
 
@@ -133,6 +151,11 @@ export type MutationCreateLabelTypeArgs = {
 };
 
 
+export type MutationRemoveLabelsArgs = {
+  input: RemoveLabelsInput;
+};
+
+
 export type MutationUnarchiveLabelTypeArgs = {
   input: UnarchiveLabelTypeInput;
 };
@@ -140,6 +163,13 @@ export type MutationUnarchiveLabelTypeArgs = {
 
 export type MutationUpdateLabelTypeArgs = {
   input: UpdateLabelTypeInput;
+};
+
+export type MutationError = {
+  __typename?: 'MutationError';
+  code: Scalars['String']['output'];
+  fields: Array<Scalars['String']['output']>;
+  message: Scalars['String']['output'];
 };
 
 export type Node = {
@@ -221,6 +251,16 @@ export type QueryUsersArgs = {
   before?: InputMaybe<Scalars['String']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
   last?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type RemoveLabelsInput = {
+  labelIds: Array<Scalars['ID']['input']>;
+  ticketId: Scalars['ID']['input'];
+};
+
+export type RemoveLabelsOutput = {
+  __typename?: 'RemoveLabelsOutput';
+  errors?: Maybe<Array<MutationError>>;
 };
 
 export type StatusChangedEntry = {

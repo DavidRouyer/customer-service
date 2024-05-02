@@ -1,3 +1,5 @@
+import { GraphQLError } from 'graphql';
+
 import {
   connectionFromArray,
   validatePaginationArguments,
@@ -82,17 +84,21 @@ const resolvers: Resolvers = {
     },
   },
   Mutation: {
-    archiveLabelType: async (_, { input: { id } }, ctx) => {
-      if (!ctx.session) {
-        throw new Error('Unauthorized');
+    archiveLabelType: async (_, { input: { id } }, { container, session }) => {
+      if (!session) {
+        throw new GraphQLError('Unauthorized', {
+          extensions: {
+            code: 'UNAUTHORIZED',
+          },
+        });
       }
 
       const labelTypeService: LabelTypeService =
-        ctx.container.resolve('labelTypeService');
+        container.resolve('labelTypeService');
 
       const archivedLabelType = await labelTypeService.archive(
         id,
-        ctx.session.user.id
+        session.user.id
       );
 
       if (!archivedLabelType) {
@@ -106,20 +112,24 @@ const resolvers: Resolvers = {
         },
       });
     },
-    createLabelType: async (_, { input }, ctx) => {
-      if (!ctx.session) {
-        throw new Error('Unauthorized');
+    createLabelType: async (_, { input }, { container, session }) => {
+      if (!session) {
+        throw new GraphQLError('Unauthorized', {
+          extensions: {
+            code: 'UNAUTHORIZED',
+          },
+        });
       }
 
       const labelTypeService: LabelTypeService =
-        ctx.container.resolve('labelTypeService');
+        container.resolve('labelTypeService');
 
       const createdLabelType = await labelTypeService.create(
         {
           ...input,
           icon: input.icon ?? null,
         },
-        ctx.session.user.id
+        session.user.id
       );
 
       if (!createdLabelType) {
@@ -135,7 +145,11 @@ const resolvers: Resolvers = {
     },
     unarchiveLabelType: async (_, { input: { id } }, ctx) => {
       if (!ctx.session) {
-        throw new Error('Unauthorized');
+        throw new GraphQLError('Unauthorized', {
+          extensions: {
+            code: 'UNAUTHORIZED',
+          },
+        });
       }
 
       const labelTypeService: LabelTypeService =
@@ -159,7 +173,11 @@ const resolvers: Resolvers = {
     },
     updateLabelType: async (_, { input }, ctx) => {
       if (!ctx.session) {
-        throw new Error('Unauthorized');
+        throw new GraphQLError('Unauthorized', {
+          extensions: {
+            code: 'UNAUTHORIZED',
+          },
+        });
       }
 
       const labelTypeService: LabelTypeService =

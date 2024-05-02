@@ -3,3 +3,28 @@ type Label implements Node {
   labelType: LabelType!
   archivedAt: DateTime
 }
+
+input AddLabelsInput {
+  labelTypeIds: [ID!]!
+  ticketId: ID!
+}
+
+type AddLabelsOutput {
+  labels: [Label!]!
+  errors: [MutationError!]
+}
+
+input RemoveLabelsInput {
+  labelIds: [ID!]!
+  ticketId: ID!
+}
+
+type RemoveLabelsOutput {
+  errors: [MutationError!]
+}
+
+type Mutation {
+  addLabels(input: AddLabelsInput!): AddLabelsOutput
+
+  removeLabels(input: RemoveLabelsInput!): RemoveLabelsOutput
+}
