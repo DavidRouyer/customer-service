@@ -21,6 +21,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@cs/ui/popover';
 import {
   TicketQuery,
   useInfiniteTicketTimelineQuery,
+  useTicketQuery,
 } from '~/graphql/generated/client';
 import { api } from '~/trpc/react';
 
@@ -38,7 +39,6 @@ export const TicketAssignmentCombobox: FC<TicketAssignmentComboboxProps> = ({
 
   const [open, setOpen] = useState(false);
 
-  const utils = api.useUtils();
   const queryClient = useQueryClient();
 
   const { data: usersData } = api.user.all.useQuery(undefined, {
@@ -78,35 +78,43 @@ export const TicketAssignmentCombobox: FC<TicketAssignmentComboboxProps> = ({
     onMutate: async (newAssignment) => {
       // Cancel any outgoing refetches
       // (so they don't overwrite our optimistic update)
-      await utils.ticket.byId.cancel({ id: newAssignment.id });
-
-      // Snapshot the previous value
-      const previousTicket = utils.ticket.byId.getData({
-        id: newAssignment.id,
+      await queryClient.cancelQueries({
+        queryKey: useTicketQuery.getKey({ id: newAssignment.id }),
       });
 
+      // Snapshot the previous value
+      const previousTicket = queryClient.getQueryData<TicketQuery['ticket']>(
+        useTicketQuery.getKey({ id: newAssignment.id })
+      );
+
       // Optimistically update to the new value
-      utils.ticket.byId.setData(
-        { id: newAssignment.id },
+      queryClient.setQueryData<TicketQuery['ticket']>(
+        useTicketQuery.getKey({ id: newAssignment.id }),
         (oldQueryData) =>
-          ({
-            ...oldQueryData,
-            assignedToId: newAssignment.userId,
-            assignedTo: usersData?.find(
-              (user) => user.id === newAssignment.userId
-            ),
-          }) as NonNullable<RouterOutputs['ticket']['byId']>
+          oldQueryData
+            ? {
+                ...oldQueryData,
+                assignedTo: usersData?.find(
+                  (user) => user.id === newAssignment.userId
+                ),
+              }
+            : undefined
       );
 
       // Return a context object with the snapshotted value
-      return { previousTicket: previousTicket };
+      return { previousTicket };
     },
     onError: (err, { id }, context) => {
       // TODO: handle failed queries
-      utils.ticket.byId.setData({ id }, context?.previousTicket);
+      queryClient.setQueryData<TicketQuery['ticket']>(
+        useTicketQuery.getKey({ id }),
+        context?.previousTicket
+      );
     },
     onSettled: (_, __, { id }) => {
-      void utils.ticket.byId.invalidate({ id });
+      void queryClient.invalidateQueries({
+        queryKey: useTicketQuery.getKey({ id }),
+      });
       void queryClient.invalidateQueries({
         queryKey: useInfiniteTicketTimelineQuery.getKey({ ticketId: ticketId }),
       });
@@ -117,31 +125,41 @@ export const TicketAssignmentCombobox: FC<TicketAssignmentComboboxProps> = ({
     onMutate: async ({ id }) => {
       // Cancel any outgoing refetches
       // (so they don't overwrite our optimistic update)
-      await utils.ticket.byId.cancel({ id });
+      await queryClient.cancelQueries({
+        queryKey: useTicketQuery.getKey({ id }),
+      });
 
       // Snapshot the previous value
-      const previousTicket = utils.ticket.byId.getData({ id });
+      const previousTicket = queryClient.getQueryData<TicketQuery['ticket']>(
+        useTicketQuery.getKey({ id })
+      );
 
       // Optimistically update to the new value
-      utils.ticket.byId.setData(
-        { id },
+      queryClient.setQueryData<TicketQuery['ticket']>(
+        useTicketQuery.getKey({ id }),
         (oldQueryData) =>
-          ({
-            ...oldQueryData,
-            assignedToId: null,
-            assignedTo: null,
-          }) as NonNullable<RouterOutputs['ticket']['byId']>
+          oldQueryData
+            ? {
+                ...oldQueryData,
+                assignedTo: null,
+              }
+            : undefined
       );
 
       // Return a context object with the snapshotted value
-      return { previousTicket: previousTicket };
+      return { previousTicket };
     },
     onError: (err, { id }, context) => {
       // TODO: handle failed queries
-      utils.ticket.byId.setData({ id }, context?.previousTicket);
+      queryClient.setQueryData<TicketQuery['ticket']>(
+        useTicketQuery.getKey({ id }),
+        context?.previousTicket
+      );
     },
     onSettled: (_, __, { id }) => {
-      void utils.ticket.byId.invalidate({ id });
+      void queryClient.invalidateQueries({
+        queryKey: useTicketQuery.getKey({ id }),
+      });
       void queryClient.invalidateQueries({
         queryKey: useInfiniteTicketTimelineQuery.getKey({ ticketId: ticketId }),
       });

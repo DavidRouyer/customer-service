@@ -15,7 +15,11 @@ import {
 } from '@cs/ui/dropdown-menu';
 import { TicketPriorityBadge } from '@cs/ui/ticket-priority-badge';
 
-import { useInfiniteTicketTimelineQuery } from '~/graphql/generated/client';
+import {
+  TicketQuery,
+  useInfiniteTicketTimelineQuery,
+  useTicketQuery,
+} from '~/graphql/generated/client';
 import { api } from '~/trpc/react';
 
 type TicketChangePriorityProps = {
@@ -27,37 +31,47 @@ export const TicketPriorityDropdowm: FC<TicketChangePriorityProps> = ({
   priority,
   ticketId,
 }) => {
-  const utils = api.useUtils();
   const queryClient = useQueryClient();
 
   const { mutateAsync } = api.ticket.changePriority.useMutation({
     onMutate: async (newPriority) => {
       // Cancel any outgoing refetches
       // (so they don't overwrite our optimistic update)
-      await utils.ticket.byId.cancel({ id: newPriority.id });
+      await queryClient.cancelQueries({
+        queryKey: useTicketQuery.getKey({ id: newPriority.id }),
+      });
 
       // Snapshot the previous value
-      const previousTicket = utils.ticket.byId.getData({ id: newPriority.id });
+      const previousTicket = queryClient.getQueryData<TicketQuery['ticket']>(
+        useTicketQuery.getKey({ id: newPriority.id })
+      );
 
       // Optimistically update to the new value
-      utils.ticket.byId.setData(
-        { id: newPriority.id },
+      queryClient.setQueryData<TicketQuery['ticket']>(
+        useTicketQuery.getKey({ id: newPriority.id }),
         (oldQueryData) =>
-          ({
-            ...oldQueryData,
-            priority: newPriority.priority,
-          }) as NonNullable<RouterOutputs['ticket']['byId']>
+          oldQueryData
+            ? {
+                ...oldQueryData,
+                priority: newPriority.priority,
+              }
+            : undefined
       );
 
       // Return a context object with the snapshotted value
-      return { previousTicket: previousTicket };
+      return { previousTicket };
     },
     onError: (err, { id }, context) => {
       // TODO: handle failed queries
-      utils.ticket.byId.setData({ id }, context?.previousTicket);
+      queryClient.setQueryData<TicketQuery['ticket']>(
+        useTicketQuery.getKey({ id: ticketId }),
+        context?.previousTicket
+      );
     },
     onSettled: (_, __, { id }) => {
-      void utils.ticket.byId.invalidate({ id });
+      void queryClient.invalidateQueries({
+        queryKey: useTicketQuery.getKey({ id }),
+      });
       void queryClient.invalidateQueries({
         queryKey: useInfiniteTicketTimelineQuery.getKey({ ticketId: ticketId }),
       });
