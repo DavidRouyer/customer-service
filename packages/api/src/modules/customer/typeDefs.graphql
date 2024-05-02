@@ -11,3 +11,7 @@ type Customer implements Node {
   updatedAt: DateTime
   updatedBy: User
 }
+
+type Query {
+  customer(id: ID!): Customer
+}

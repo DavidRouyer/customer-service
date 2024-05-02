@@ -168,12 +168,18 @@ export type PriorityChangedEntry = {
 
 export type Query = {
   __typename?: 'Query';
+  customer?: Maybe<Customer>;
   labelType?: Maybe<LabelType>;
   labelTypes: LabelTypeConnection;
   ticket?: Maybe<Ticket>;
   tickets: TicketConnection;
   user?: Maybe<User>;
   users: UserConnection;
+};
+
+
+export type QueryCustomerArgs = {
+  id: Scalars['ID']['input'];
 };
 
 

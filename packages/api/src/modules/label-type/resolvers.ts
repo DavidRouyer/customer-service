@@ -4,26 +4,32 @@ import {
 } from '@cs/kyaku/utils/pagination';
 
 import { LabelTypeSortField } from '../../entities/label-type';
-import { Resolvers } from '../../generated-types/graphql';
+import { Resolvers, User } from '../../generated-types/graphql';
 import LabelTypeService from '../../services/label-type';
 import typeDefs from './typeDefs.graphql';
+
+export const mapLabelType = (
+  labelType: Awaited<ReturnType<LabelTypeService['list']>>[number]
+) => {
+  return {
+    ...labelType,
+    createdBy: {
+      id: labelType.createdById,
+    } as User,
+    updatedBy: labelType.updatedById
+      ? ({
+          id: labelType.updatedById,
+        } as User)
+      : null,
+  };
+};
 
 const resolvers: Resolvers = {
   Query: {
     labelType: async (_, { id }, { dataloaders }) => {
       try {
         const labelType = await dataloaders.labelTypeLoader.load(id);
-        return {
-          ...labelType,
-          createdBy: {
-            id: labelType.createdById,
-          },
-          updatedBy: labelType.updatedById
-            ? {
-                id: labelType.updatedById,
-              }
-            : null,
-        };
+        return mapLabelType(labelType);
       } catch (error) {
         return null;
       }
@@ -54,17 +60,7 @@ const resolvers: Resolvers = {
       );
 
       return connectionFromArray({
-        array: labelTypes.map((labelType) => ({
-          ...labelType,
-          createdBy: {
-            id: labelType.createdById,
-          },
-          updatedBy: labelType.updatedById
-            ? {
-                id: labelType.updatedById,
-              }
-            : null,
-        })),
+        array: labelTypes.map((labelType) => mapLabelType(labelType)),
         args: { before, after, first, last },
         meta: {
           direction,

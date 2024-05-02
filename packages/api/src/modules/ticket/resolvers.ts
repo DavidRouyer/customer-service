@@ -14,16 +14,66 @@ import {
   ChatEntry,
   Customer,
   LabelsChangedEntry,
-  LabelType,
   NoteEntry,
   PriorityChangedEntry,
   Resolvers,
   StatusChangedEntry,
+  User,
 } from '../../generated-types/graphql';
 import LabelService from '../../services/label';
 import TicketService from '../../services/ticket';
 import TicketTimelineService from '../../services/ticket-timeline';
+import { mapCustomer } from '../customer/resolvers';
+import { mapLabel } from '../label/resolvers';
 import typeDefs from './typeDefs.graphql';
+
+const mapTicket = (
+  ticket: Awaited<ReturnType<TicketService['list']>>[number]
+) => {
+  return {
+    ...ticket,
+    timelineEntries: {
+      edges: [],
+      pageInfo: {
+        hasNextPage: false,
+        hasPreviousPage: false,
+      },
+    },
+    labels: [],
+    assignedTo: ticket.assignedToId
+      ? ({ id: ticket.assignedToId } as User)
+      : null,
+    customer: { id: ticket.customerId } as Customer,
+    createdBy: {
+      id: ticket.createdById,
+    } as User,
+    statusChangedBy: ticket.statusChangedById
+      ? ({ id: ticket.statusChangedById } as User)
+      : null,
+    updatedBy: ticket.updatedById
+      ? ({
+          id: ticket.updatedById,
+        } as User)
+      : null,
+  };
+};
+
+const mapTimelineEntry = (
+  timelineEntry: Awaited<ReturnType<TicketTimelineService['list']>>[number]
+) => {
+  return {
+    ...mapEntry(timelineEntry),
+    customer: { id: timelineEntry.customerId } as Customer,
+    customerCreatedBy: timelineEntry.customerCreatedById
+      ? ({
+          id: timelineEntry.customerCreatedById,
+        } as Customer)
+      : null,
+    userCreatedBy: timelineEntry.userCreatedById
+      ? ({ id: timelineEntry.userCreatedById } as User)
+      : null,
+  };
+};
 
 const mapEntry = (entry: TicketTimelineUnion) => {
   switch (entry.type) {
@@ -43,9 +93,12 @@ const mapEntry = (entry: TicketTimelineUnion) => {
       return {
         ...entry,
         entry: {
-          oldLabels: entry.entry.oldLabelIds.map((labelId) => ({
-            id: labelId,
-          })),
+          oldLabels: entry.entry.oldLabelIds.map(
+            (labelId) =>
+              ({
+                id: labelId,
+              }) as Label
+          ),
           newLabels: entry.entry.newLabelIds.map((labelId) => ({
             id: labelId,
           })),
@@ -68,30 +121,7 @@ const resolvers: Resolvers = {
     ticket: async (_, { id }, { dataloaders }) => {
       try {
         const ticket = await dataloaders.ticketLoader.load(id);
-        return {
-          ...ticket,
-          timelineEntries: {
-            edges: [],
-            pageInfo: {
-              hasNextPage: false,
-              hasPreviousPage: false,
-            },
-          },
-          labels: [],
-          assignedTo: ticket.assignedToId ? { id: ticket.assignedToId } : null,
-          customer: { id: ticket.customerId } as Customer,
-          createdBy: {
-            id: ticket.createdById,
-          },
-          statusChangedBy: ticket.statusChangedById
-            ? { id: ticket.statusChangedById }
-            : null,
-          updatedBy: ticket.updatedById
-            ? {
-                id: ticket.updatedById,
-              }
-            : null,
-        };
+        return mapTicket(ticket);
       } catch (error) {
         return null;
       }
@@ -131,30 +161,7 @@ const resolvers: Resolvers = {
       );
 
       return connectionFromArray({
-        array: tickets.map((ticket) => ({
-          ...ticket,
-          timelineEntries: {
-            edges: [],
-            pageInfo: {
-              hasNextPage: false,
-              hasPreviousPage: false,
-            },
-          },
-          labels: [],
-          assignedTo: ticket.assignedToId ? { id: ticket.assignedToId } : null,
-          customer: { id: ticket.customerId } as Customer,
-          createdBy: {
-            id: ticket.createdById,
-          },
-          statusChangedBy: ticket.statusChangedById
-            ? { id: ticket.statusChangedById }
-            : null,
-          updatedBy: ticket.updatedById
-            ? {
-                id: ticket.updatedById,
-              }
-            : null,
-        })),
+        array: tickets.map((ticket) => mapTicket(ticket)),
         args: { before, after, first, last },
         meta: {
           direction,
@@ -167,34 +174,14 @@ const resolvers: Resolvers = {
   TimelineEntry: {
     customer: async ({ customer }, _, { dataloaders }) => {
       const c = await dataloaders.customerLoader.load(customer.id);
-      return {
-        ...c,
-        createdBy: {
-          id: c.createdById,
-        },
-        updatedBy: c.updatedById
-          ? {
-              id: c.updatedById,
-            }
-          : null,
-      };
+      return mapCustomer(c);
     },
     customerCreatedBy: async ({ customerCreatedBy }, _, { dataloaders }) => {
       if (!customerCreatedBy) {
         return null;
       }
       const c = await dataloaders.customerLoader.load(customerCreatedBy.id);
-      return {
-        ...c,
-        createdBy: {
-          id: c.createdById,
-        },
-        updatedBy: c.updatedById
-          ? {
-              id: c.updatedById,
-            }
-          : null,
-      };
+      return mapCustomer(c);
     },
     userCreatedBy: async ({ userCreatedBy }, _, { dataloaders }) => {
       if (!userCreatedBy) {
@@ -271,12 +258,7 @@ const resolvers: Resolvers = {
       const filteredLabels = labels.filter(
         (label): label is Label => !(label instanceof Error)
       );
-      return filteredLabels.map((label) => ({
-        ...label,
-        labelType: {
-          id: label.labelTypeId,
-        } as LabelType,
-      }));
+      return filteredLabels.map((label) => mapLabel(label));
     },
     newLabels: async ({ newLabels }, _, { dataloaders }) => {
       const labels = await dataloaders.labelLoader.loadMany(
@@ -288,12 +270,7 @@ const resolvers: Resolvers = {
       const filteredLabels = labels.filter(
         (label): label is Label => !(label instanceof Error)
       );
-      return filteredLabels.map((label) => ({
-        ...label,
-        labelType: {
-          id: label.labelTypeId,
-        } as LabelType,
-      }));
+      return filteredLabels.map((label) => mapLabel(label));
     },
   },
   Ticket: {
@@ -308,27 +285,12 @@ const resolvers: Resolvers = {
     },
     customer: async ({ customer }, _, { dataloaders }) => {
       const c = await dataloaders.customerLoader.load(customer.id);
-      return {
-        ...c,
-        createdBy: {
-          id: c.createdById,
-        },
-        updatedBy: c.updatedById
-          ? {
-              id: c.updatedById,
-            }
-          : null,
-      };
+      return mapCustomer(c);
     },
     labels: async ({ id }, _, { container }) => {
       const labelService: LabelService = container.resolve('labelService');
       const labels = await labelService.list({ ticketId: id });
-      return labels.map((label) => ({
-        ...label,
-        labelType: {
-          id: label.labelTypeId,
-        } as LabelType,
-      }));
+      return labels.map((label) => mapLabel(label));
     },
     statusChangedBy: async ({ statusChangedBy }, _, { dataloaders }) => {
       if (!statusChangedBy) {
@@ -362,18 +324,9 @@ const resolvers: Resolvers = {
       );
 
       return connectionFromArray({
-        array: timelineEntries.map((timelineEntry) => ({
-          ...mapEntry(timelineEntry),
-          customer: { id: timelineEntry.customerId } as Customer,
-          customerCreatedBy: timelineEntry.customerCreatedById
-            ? ({
-                id: timelineEntry.customerCreatedById,
-              } as Customer)
-            : null,
-          userCreatedBy: timelineEntry.userCreatedById
-            ? { id: timelineEntry.userCreatedById }
-            : null,
-        })),
+        array: timelineEntries.map((timelineEntry) =>
+          mapTimelineEntry(timelineEntry)
+        ),
         args: { before, after, first, last },
         meta: {
           direction,

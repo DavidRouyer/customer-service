@@ -152,12 +152,18 @@ export type PriorityChangedEntry = {
 
 export type Query = {
   __typename?: 'Query';
+  customer?: Maybe<Customer>;
   labelType?: Maybe<LabelType>;
   labelTypes: LabelTypeConnection;
   ticket?: Maybe<Ticket>;
   tickets: TicketConnection;
   user?: Maybe<User>;
   users: UserConnection;
+};
+
+
+export type QueryCustomerArgs = {
+  id: Scalars['ID']['input'];
 };
 
 
@@ -588,6 +594,7 @@ export type PriorityChangedEntryResolvers<ContextType = Context, ParentType exte
 };
 
 export type QueryResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
+  customer?: Resolver<Maybe<ResolversTypes['Customer']>, ParentType, ContextType, RequireFields<QueryCustomerArgs, 'id'>>;
   labelType?: Resolver<Maybe<ResolversTypes['LabelType']>, ParentType, ContextType, RequireFields<QueryLabelTypeArgs, 'id'>>;
   labelTypes?: Resolver<ResolversTypes['LabelTypeConnection'], ParentType, ContextType, Partial<QueryLabelTypesArgs>>;
   ticket?: Resolver<Maybe<ResolversTypes['Ticket']>, ParentType, ContextType, RequireFields<QueryTicketArgs, 'id'>>;
