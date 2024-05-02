@@ -1,93 +1,11 @@
 import { z } from 'zod';
 
-import { TicketPriority, TicketStatus } from '@cs/kyaku/models';
-import { Direction } from '@cs/kyaku/types/query';
+import { TicketPriority } from '@cs/kyaku/models';
 
-import { TicketSortField } from '../entities/ticket';
 import TicketService from '../services/ticket';
 import { createTRPCRouter, protectedProcedure } from '../trpc';
 
-const inclusionFilterRouter = <T extends z.ZodTypeAny>(objectType: T) => {
-  return z
-    .union([
-      z.object({ eq: objectType.nullable() }),
-      z.object({ ne: objectType.nullable() }),
-      z.object({ in: objectType.array() }),
-      z.object({ notIn: objectType.array() }),
-    ])
-    .optional();
-};
-
 export const ticketRouter = createTRPCRouter({
-  all: protectedProcedure
-    .input(
-      z.object({
-        filters: z.object({
-          assignedToUser: inclusionFilterRouter(z.string()),
-          customer: inclusionFilterRouter(z.string()),
-          priority: inclusionFilterRouter(
-            z.enum([
-              TicketPriority.Low,
-              TicketPriority.Medium,
-              TicketPriority.High,
-              TicketPriority.Critical,
-            ])
-          ),
-          status: inclusionFilterRouter(
-            z.enum([TicketStatus.Open, TicketStatus.Done])
-          ),
-          ticketId: inclusionFilterRouter(z.string()),
-        }),
-        sortBy: z
-          .enum([TicketSortField.createdAt, TicketSortField.statusChangedAt])
-          .default(TicketSortField.createdAt),
-        cursor: z.string().nullish(),
-        limit: z.number().default(50),
-        direction: z
-          .enum([Direction.Forward, Direction.Backward])
-          .default(Direction.Forward),
-      })
-    )
-    .query(async ({ ctx, input }) => {
-      const ticketService: TicketService =
-        ctx.container.resolve('ticketService');
-      const tickets = await ticketService.list(input.filters, {
-        sortBy: input.sortBy,
-        relations: {
-          assignedTo: true,
-          createdBy: true,
-          customer: true,
-          labels: true,
-          updatedBy: true,
-        },
-        limit: input.limit,
-        //cursor: input.cursor ? input.cursor : undefined,
-        direction: input.direction,
-      });
-
-      return {
-        data: tickets,
-        hasNextPage: false,
-        nextCursor: 'tickets.nextCursor',
-      };
-    }),
-
-  byId: protectedProcedure
-    .input(z.object({ id: z.string() }))
-    .query(async ({ ctx, input }) => {
-      const ticketService: TicketService =
-        ctx.container.resolve('ticketService');
-      return await ticketService.retrieve(input.id, {
-        relations: {
-          assignedTo: true,
-          createdBy: true,
-          customer: true,
-          labels: true,
-          updatedBy: true,
-        },
-      });
-    }),
-
   assign: protectedProcedure
     .input(z.object({ id: z.string(), userId: z.string() }))
     .mutation(async ({ ctx, input }) => {

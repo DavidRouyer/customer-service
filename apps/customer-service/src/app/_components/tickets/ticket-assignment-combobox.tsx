@@ -21,7 +21,9 @@ import { Popover, PopoverContent, PopoverTrigger } from '@cs/ui/popover';
 import {
   TicketQuery,
   useInfiniteTicketTimelineQuery,
+  UsersQuery,
   useTicketQuery,
+  useUsersQuery,
 } from '~/graphql/generated/client';
 import { api } from '~/trpc/react';
 
@@ -41,38 +43,43 @@ export const TicketAssignmentCombobox: FC<TicketAssignmentComboboxProps> = ({
 
   const queryClient = useQueryClient();
 
-  const { data: usersData } = api.user.all.useQuery(undefined, {
-    select: useCallback(
-      (data: RouterOutputs['user']['all']) => {
-        let newUsers = data.map((user) => user);
-        if (session?.user.id) {
-          const loggedUser = newUsers.find(
-            (user) => user.id === session.user.id
-          );
-          if (loggedUser) {
-            newUsers = [
-              loggedUser,
-              ...newUsers.filter((user) => user.id !== loggedUser.id),
-            ];
+  const { data: usersData } = useUsersQuery(
+    {
+      first: 100,
+    },
+    {
+      select: useCallback(
+        (data: UsersQuery) => {
+          let newUsers = data.users.edges.map((user) => user.node);
+          if (session?.user.id) {
+            const loggedUser = newUsers.find(
+              (user) => user.id === session.user.id
+            );
+            if (loggedUser) {
+              newUsers = [
+                loggedUser,
+                ...newUsers.filter((user) => user.id !== loggedUser.id),
+              ];
+            }
           }
-        }
-        if (assignedTo) {
-          const assignedToUser = newUsers.find(
-            (user) => user.id === assignedTo.id
-          );
-          if (assignedToUser) {
-            newUsers = [
-              assignedToUser,
-              ...newUsers.filter((user) => user.id !== assignedToUser.id),
-            ];
+          if (assignedTo) {
+            const assignedToUser = newUsers.find(
+              (user) => user.id === assignedTo.id
+            );
+            if (assignedToUser) {
+              newUsers = [
+                assignedToUser,
+                ...newUsers.filter((user) => user.id !== assignedToUser.id),
+              ];
+            }
           }
-        }
 
-        return newUsers;
-      },
-      [assignedTo, session?.user]
-    ),
-  });
+          return newUsers;
+        },
+        [assignedTo, session?.user]
+      ),
+    }
+  );
 
   const { mutateAsync: assign } = api.ticket.assign.useMutation({
     onMutate: async (newAssignment) => {
