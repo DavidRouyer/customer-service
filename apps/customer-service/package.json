@@ -32,7 +32,7 @@
     "react-intersection-observer": "^9.10.1",
     "react-intl": "^6.6.5",
     "superjson": "^2.2.1",
-    "zod": "^3.23.5"
+    "zod": "^3.23.6"
   },
   "scripts": {
     "build": "next build",
