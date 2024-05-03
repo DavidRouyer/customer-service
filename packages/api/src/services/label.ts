@@ -97,30 +97,30 @@ export default class LabelService extends BaseService {
 
     if (!ticket) return [];
 
-    const affectedLabelTypeIds = ticket.labels.flatMap(
-      (label) => label.labelType.id
+    const affectedLabelTypeIds = new Set(
+      ticket.labels.flatMap((label) => label.labelType.id)
     );
 
     const nonAffectedLabelTypeIds = labelTypeIds.filter(
-      (labelTypeId) => !affectedLabelTypeIds.includes(labelTypeId)
+      (labelTypeId) => !affectedLabelTypeIds.has(labelTypeId)
     );
 
     const fetchedLabelTypes = await this.labelTypeRepository.findMany({
       where: inArray(schema.labelTypes.id, labelTypeIds),
     });
-    const fetchedLabelTypeIds = fetchedLabelTypes.map(
-      (labelType) => labelType.id
+    const fetchedLabelTypeIds = new Set(
+      fetchedLabelTypes.map((labelType) => labelType.id)
     );
 
-    const validLabelTypeIds = nonAffectedLabelTypeIds.filter(
-      (labelTypeId) => !fetchedLabelTypeIds.includes(labelTypeId)
+    const validLabelTypeIds = nonAffectedLabelTypeIds.filter((labelTypeId) =>
+      fetchedLabelTypeIds.has(labelTypeId)
     );
 
     if (!validLabelTypeIds.length) return [];
 
     return await this.unitOfWork.transaction(async (tx) => {
       const newLabels = await this.labelRepository.createMany(
-        labelTypeIds.map((labelTypeId) => ({
+        validLabelTypeIds.map((labelTypeId) => ({
           ticketId: ticket.id,
           labelTypeId: labelTypeId,
         })),
