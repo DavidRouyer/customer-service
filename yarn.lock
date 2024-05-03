@@ -1616,7 +1616,7 @@ __metadata:
     "@tanstack/react-query": "npm:^5.32.1"
     "@tanstack/react-query-devtools": "npm:^5.32.1"
     "@tanstack/react-table": "npm:^8.16.0"
-    "@testing-library/jest-dom": "npm:^6.4.2"
+    "@testing-library/jest-dom": "npm:^6.4.4"
     "@testing-library/react": "npm:^15.0.6"
     "@trpc/client": "npm:next"
     "@trpc/next": "npm:next"
@@ -1762,7 +1762,7 @@ __metadata:
     "@radix-ui/react-slot": "npm:^1.0.2"
     "@radix-ui/react-switch": "npm:^1.0.3"
     "@radix-ui/react-tooltip": "npm:^1.0.7"
-    "@testing-library/jest-dom": "npm:^6.4.2"
+    "@testing-library/jest-dom": "npm:^6.4.4"
     "@testing-library/react": "npm:^15.0.6"
     "@types/react": "npm:^18.3.1"
     "@types/react-dom": "npm:^18.3.0"
@@ -4999,6 +4999,39 @@ __metadata:
     vitest:
       optional: true
   checksum: 10c0/e7eba527b34ce30cde94424d2ec685bdfed51daaafb7df9b68b51aec6052e99a50c8bfe654612dacdf857a1eb81d68cf294fc89de558ee3a992bf7a6019fffcc
+  languageName: node
+  linkType: hard
+
+"@testing-library/jest-dom@npm:^6.4.4":
+  version: 6.4.4
+  resolution: "@testing-library/jest-dom@npm:6.4.4"
+  dependencies:
+    "@adobe/css-tools": "npm:^4.3.2"
+    "@babel/runtime": "npm:^7.9.2"
+    aria-query: "npm:^5.0.0"
+    chalk: "npm:^3.0.0"
+    css.escape: "npm:^1.5.1"
+    dom-accessibility-api: "npm:^0.6.3"
+    lodash: "npm:^4.17.21"
+    redent: "npm:^3.0.0"
+  peerDependencies:
+    "@jest/globals": ">= 28"
+    "@types/bun": "*"
+    "@types/jest": ">= 28"
+    jest: ">= 28"
+    vitest: ">= 0.32"
+  peerDependenciesMeta:
+    "@jest/globals":
+      optional: true
+    "@types/bun":
+      optional: true
+    "@types/jest":
+      optional: true
+    jest:
+      optional: true
+    vitest:
+      optional: true
+  checksum: 10c0/13c7d9d18ffe913677157e4cd9934de48f105221eb5f6030a749979426fae81587b20fe4efb9ad28a633184684e2de292a43fd7587bd3c32c4c285f7c5e3a504
   languageName: node
   linkType: hard
 
