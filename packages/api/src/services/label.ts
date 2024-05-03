@@ -1,4 +1,4 @@
-import { and, eq, inArray, isNull, schema } from '@cs/database';
+import { and, eq, inArray, isNotNull, isNull, schema } from '@cs/database';
 import { TicketLabelsChanged, TimelineEntryType } from '@cs/kyaku/models';
 import { Direction, FindConfig, GetConfig } from '@cs/kyaku/types/query';
 import { KyakuError } from '@cs/kyaku/utils';
@@ -256,7 +256,12 @@ export default class LabelService extends BaseService {
         ? eq(schema.labels.ticketId, filters.ticketId)
         : undefined,
       filters.labelIds
-        ? inclusionFilterOperator(schema.labelTypes.id, filters.labelIds)
+        ? inclusionFilterOperator(schema.labels.id, filters.labelIds)
+        : undefined,
+      filters.isArchived !== undefined
+        ? filters.isArchived
+          ? isNotNull(schema.labels.archivedAt)
+          : isNull(schema.labels.archivedAt)
         : undefined
     );
   }

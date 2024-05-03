@@ -1,4 +1,4 @@
-import { useQuery, useInfiniteQuery, UseQueryOptions, UseInfiniteQueryOptions, InfiniteData } from '@tanstack/react-query';
+import { useQuery, useInfiniteQuery, useMutation, UseQueryOptions, UseInfiniteQueryOptions, InfiniteData, UseMutationOptions } from '@tanstack/react-query';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
@@ -403,6 +403,20 @@ export type LabelTypesQuery = { __typename?: 'Query', labelTypes: { __typename?:
 
 export type LabelPartsFragment = { __typename?: 'Label', id: string, archivedAt?: string | null, labelType: { __typename?: 'LabelType', archivedAt?: string | null, id: string, name: string, icon?: string | null } };
 
+export type AddLabelsMutationVariables = Exact<{
+  input: AddLabelsInput;
+}>;
+
+
+export type AddLabelsMutation = { __typename?: 'Mutation', addLabels?: { __typename?: 'AddLabelsOutput', labels: Array<{ __typename?: 'Label', id: string }>, errors?: Array<{ __typename?: 'MutationError', message: string }> | null } | null };
+
+export type RemoveLabelsMutationVariables = Exact<{
+  input: RemoveLabelsInput;
+}>;
+
+
+export type RemoveLabelsMutation = { __typename?: 'Mutation', removeLabels?: { __typename?: 'RemoveLabelsOutput', errors?: Array<{ __typename?: 'MutationError', message: string }> | null } | null };
+
 export type TicketQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
@@ -535,6 +549,61 @@ useInfiniteLabelTypesQuery.getKey = (variables?: LabelTypesQueryVariables) => va
 
 
 useLabelTypesQuery.fetcher = (variables?: LabelTypesQueryVariables) => fetcher<LabelTypesQuery, LabelTypesQueryVariables>(LabelTypesDocument, variables);
+
+export const AddLabelsDocument = `
+    mutation addLabels($input: AddLabelsInput!) {
+  addLabels(input: $input) {
+    labels {
+      id
+    }
+    errors {
+      message
+    }
+  }
+}
+    `;
+
+export const useAddLabelsMutation = <
+      TError = unknown,
+      TContext = unknown
+    >(options?: UseMutationOptions<AddLabelsMutation, TError, AddLabelsMutationVariables, TContext>) => {
+    
+    return useMutation<AddLabelsMutation, TError, AddLabelsMutationVariables, TContext>(
+      {
+    mutationKey: ['addLabels'],
+    mutationFn: (variables?: AddLabelsMutationVariables) => fetcher<AddLabelsMutation, AddLabelsMutationVariables>(AddLabelsDocument, variables)(),
+    ...options
+  }
+    )};
+
+
+useAddLabelsMutation.fetcher = (variables: AddLabelsMutationVariables) => fetcher<AddLabelsMutation, AddLabelsMutationVariables>(AddLabelsDocument, variables);
+
+export const RemoveLabelsDocument = `
+    mutation removeLabels($input: RemoveLabelsInput!) {
+  removeLabels(input: $input) {
+    errors {
+      message
+    }
+  }
+}
+    `;
+
+export const useRemoveLabelsMutation = <
+      TError = unknown,
+      TContext = unknown
+    >(options?: UseMutationOptions<RemoveLabelsMutation, TError, RemoveLabelsMutationVariables, TContext>) => {
+    
+    return useMutation<RemoveLabelsMutation, TError, RemoveLabelsMutationVariables, TContext>(
+      {
+    mutationKey: ['removeLabels'],
+    mutationFn: (variables?: RemoveLabelsMutationVariables) => fetcher<RemoveLabelsMutation, RemoveLabelsMutationVariables>(RemoveLabelsDocument, variables)(),
+    ...options
+  }
+    )};
+
+
+useRemoveLabelsMutation.fetcher = (variables: RemoveLabelsMutationVariables) => fetcher<RemoveLabelsMutation, RemoveLabelsMutationVariables>(RemoveLabelsDocument, variables);
 
 export const TicketDocument = `
     query ticket($id: ID!) {

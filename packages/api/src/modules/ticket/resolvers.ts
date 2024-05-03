@@ -289,7 +289,10 @@ const resolvers: Resolvers = {
     },
     labels: async ({ id }, _, { container }) => {
       const labelService: LabelService = container.resolve('labelService');
-      const labels = await labelService.list({ ticketId: id });
+      const labels = await labelService.list({
+        ticketId: id,
+        isArchived: false,
+      });
       return labels.map((label) => mapLabel(label));
     },
     statusChangedBy: async ({ statusChangedBy }, _, { dataloaders }) => {

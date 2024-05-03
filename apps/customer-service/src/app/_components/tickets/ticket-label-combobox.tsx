@@ -18,11 +18,12 @@ import { Popover, PopoverContent, PopoverTrigger } from '@cs/ui/popover';
 
 import {
   TicketQuery,
+  useAddLabelsMutation,
   useInfiniteTicketTimelineQuery,
   useLabelTypesQuery,
+  useRemoveLabelsMutation,
   useTicketQuery,
 } from '~/graphql/generated/client';
-import { api } from '~/trpc/react';
 
 type TicketLabelComboboxProps = {
   labels?: NonNullable<TicketQuery['ticket']>['labels'];
@@ -49,37 +50,40 @@ export const TicketLabelCombobox: FC<TicketLabelComboboxProps> = ({
     }
   );
 
-  const { mutateAsync: addLabels } = api.label.addLabels.useMutation({
-    onMutate: async (newLabels) => {
+  const { mutateAsync: addLabels } = useAddLabelsMutation({
+    onMutate: async ({ input }) => {
       // Cancel any outgoing refetches
       // (so they don't overwrite our optimistic update)
       await queryClient.cancelQueries({
-        queryKey: useTicketQuery.getKey({ id: newLabels.ticketId }),
+        queryKey: useTicketQuery.getKey({ id: input.ticketId }),
       });
 
       // Snapshot the previous value
-      const previousTicket = queryClient.getQueryData<TicketQuery['ticket']>(
+      const previousTicket = queryClient.getQueryData<TicketQuery>(
         useTicketQuery.getKey({
-          id: newLabels.ticketId,
+          id: input.ticketId,
         })
       );
 
       // Optimistically update to the new value
-      queryClient.setQueryData<TicketQuery['ticket']>(
-        useTicketQuery.getKey({ id: newLabels.ticketId }),
+      queryClient.setQueryData<TicketQuery>(
+        useTicketQuery.getKey({ id: input.ticketId }),
         (oldQueryData) =>
-          oldQueryData
+          oldQueryData?.ticket
             ? {
                 ...oldQueryData,
-                labels: oldQueryData?.labels.concat(
-                  newLabels.labelTypeIds.map((labelTypeId) => ({
-                    id: `${newLabels.ticketId}-${labelTypeId}`,
-                    labelType: labelTypesData?.edges?.find(
-                      (labelType) => labelType.node.id === labelTypeId
-                    )?.node!,
-                    archivedAt: null,
-                  }))
-                ),
+                ticket: {
+                  ...oldQueryData.ticket,
+                  labels: oldQueryData.ticket.labels.concat(
+                    input.labelTypeIds.map((labelTypeId) => ({
+                      id: `${input.ticketId}-${labelTypeId}`,
+                      labelType: labelTypesData?.edges?.find(
+                        (labelType) => labelType.node.id === labelTypeId
+                      )?.node!,
+                      archivedAt: null,
+                    }))
+                  ),
+                },
               }
             : undefined
       );
@@ -87,48 +91,53 @@ export const TicketLabelCombobox: FC<TicketLabelComboboxProps> = ({
       // Return a context object with the snapshotted value
       return { previousTicket };
     },
-    onError: (err, { ticketId }, context) => {
+    onError: (err, { input }, context) => {
       // TODO: handle failed queries
-      queryClient.setQueryData<TicketQuery['ticket']>(
-        useTicketQuery.getKey({ id: ticketId }),
+      queryClient.setQueryData<TicketQuery>(
+        useTicketQuery.getKey({ id: input.ticketId }),
         context?.previousTicket
       );
     },
-    onSettled: (_, __, { ticketId }) => {
+    onSettled: (_, __, { input }) => {
       void queryClient.invalidateQueries({
-        queryKey: useTicketQuery.getKey({ id: ticketId }),
+        queryKey: useTicketQuery.getKey({ id: input.ticketId }),
       });
       void queryClient.invalidateQueries({
-        queryKey: useInfiniteTicketTimelineQuery.getKey({ ticketId: ticketId }),
+        queryKey: useInfiniteTicketTimelineQuery.getKey({
+          ticketId: input.ticketId,
+        }),
       });
     },
   });
 
-  const { mutateAsync: removeLabels } = api.label.removeLabels.useMutation({
-    onMutate: async (removeLabels) => {
+  const { mutateAsync: removeLabels } = useRemoveLabelsMutation({
+    onMutate: async ({ input }) => {
       // Cancel any outgoing refetches
       // (so they don't overwrite our optimistic update)
       await queryClient.cancelQueries({
-        queryKey: useTicketQuery.getKey({ id: removeLabels.ticketId }),
+        queryKey: useTicketQuery.getKey({ id: input.ticketId }),
       });
 
       // Snapshot the previous value
-      const previousTicket = queryClient.getQueryData<TicketQuery['ticket']>(
+      const previousTicket = queryClient.getQueryData<TicketQuery>(
         useTicketQuery.getKey({
-          id: removeLabels.ticketId,
+          id: input.ticketId,
         })
       );
 
       // Optimistically update to the new value
-      queryClient.setQueryData<TicketQuery['ticket']>(
-        useTicketQuery.getKey({ id: removeLabels.ticketId }),
+      queryClient.setQueryData<TicketQuery>(
+        useTicketQuery.getKey({ id: input.ticketId }),
         (oldQueryData) =>
-          oldQueryData
+          oldQueryData?.ticket
             ? {
                 ...oldQueryData,
-                labels: oldQueryData?.labels?.filter(
-                  (label) => !removeLabels.labelIds.includes(label.id)
-                ),
+                ticket: {
+                  ...oldQueryData.ticket,
+                  labels: oldQueryData.ticket.labels.filter(
+                    (label) => !input.labelIds.includes(label.id)
+                  ),
+                },
               }
             : undefined
       );
@@ -136,19 +145,21 @@ export const TicketLabelCombobox: FC<TicketLabelComboboxProps> = ({
       // Return a context object with the snapshotted value
       return { previousTicket };
     },
-    onError: (err, { ticketId }, context) => {
+    onError: (err, { input }, context) => {
       // TODO: handle failed queries
       queryClient.setQueryData(
-        useTicketQuery.getKey({ id: ticketId }),
+        useTicketQuery.getKey({ id: input.ticketId }),
         context?.previousTicket
       );
     },
-    onSettled: (_, __, { ticketId }) => {
+    onSettled: (_, __, { input }) => {
       void queryClient.invalidateQueries({
-        queryKey: useTicketQuery.getKey({ id: ticketId }),
+        queryKey: useTicketQuery.getKey({ id: input.ticketId }),
       });
       void queryClient.invalidateQueries({
-        queryKey: useInfiniteTicketTimelineQuery.getKey({ ticketId: ticketId }),
+        queryKey: useInfiniteTicketTimelineQuery.getKey({
+          ticketId: input.ticketId,
+        }),
       });
     },
   });
@@ -200,13 +211,17 @@ export const TicketLabelCombobox: FC<TicketLabelComboboxProps> = ({
                     );
                     if (labelWithLabelType) {
                       removeLabels({
-                        ticketId,
-                        labelIds: [labelWithLabelType.id],
+                        input: {
+                          ticketId,
+                          labelIds: [labelWithLabelType.id],
+                        },
                       });
                     } else {
                       addLabels({
-                        ticketId,
-                        labelTypeIds: [labelType.node.id],
+                        input: {
+                          ticketId,
+                          labelTypeIds: [labelType.node.id],
+                        },
                       });
                     }
                   }}

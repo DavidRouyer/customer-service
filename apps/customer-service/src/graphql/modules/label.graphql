@@ -6,3 +6,22 @@ fragment LabelParts on Label {
   }
   archivedAt
 }
+
+mutation addLabels($input: AddLabelsInput!) {
+  addLabels(input: $input) {
+    labels {
+      id
+    }
+    errors {
+      message
+    }
+  }
+}
+
+mutation removeLabels($input: RemoveLabelsInput!) {
+  removeLabels(input: $input) {
+    errors {
+      message
+    }
+  }
+}

@@ -61,6 +61,39 @@ const resolvers: Resolvers = {
         throw new GraphQLError((error as Error).message);
       }
     },
+    removeLabels: async (_, { input }, { container, session }) => {
+      if (!session) {
+        throw new GraphQLError('Unauthorized', {
+          extensions: {
+            code: 'UNAUTHORIZED',
+          },
+        });
+      }
+      const labelService = container.resolve<LabelService>('labelService');
+      try {
+        await labelService.removeLabels(
+          input.ticketId,
+          input.labelIds,
+          session.user.id
+        );
+
+        return {};
+      } catch (error) {
+        if (error instanceof KyakuError) {
+          return {
+            labels: [],
+            errors: [
+              {
+                code: error.type,
+                message: error.message,
+                fields: [],
+              },
+            ],
+          };
+        }
+        throw new GraphQLError((error as Error).message);
+      }
+    },
   },
 };
 
