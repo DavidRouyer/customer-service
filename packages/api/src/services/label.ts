@@ -174,30 +174,23 @@ export default class LabelService extends BaseService {
       where: eq(schema.tickets.id, ticketId),
     });
 
-    if (!ticket)
-      throw new KyakuError(
-        KyakuError.Types.NOT_FOUND,
-        `Ticket with id:${ticketId} not found`
-      );
+    if (!ticket) return;
 
     const fetchedLabels = await this.labelRepository.findMany({
       where: inArray(schema.labelTypes.id, labelIds),
     });
-    const fetchedLabelIds = fetchedLabels.map((label) => label.id);
+    const fetchedLabelIds = new Set(fetchedLabels.map((label) => label.id));
 
-    const missingLabelIds = labelIds.filter(
-      (labelId) => !fetchedLabelIds.includes(labelId)
+    const validLabelIds = labelIds.filter((labelId) =>
+      fetchedLabelIds.has(labelId)
     );
-    if (missingLabelIds.length > 0)
-      throw new KyakuError(
-        KyakuError.Types.NOT_FOUND,
-        `Labels with ids: ${missingLabelIds.join(',')} not found`
-      );
+
+    if (!validLabelIds.length) return;
 
     return await this.unitOfWork.transaction(async (tx) => {
       const archivedDate = new Date();
       const archivedLabels = await this.labelRepository.updateMany(
-        labelIds,
+        validLabelIds,
         {
           archivedAt: archivedDate,
         },
