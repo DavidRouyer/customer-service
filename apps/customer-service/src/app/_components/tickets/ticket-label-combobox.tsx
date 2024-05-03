@@ -3,7 +3,6 @@ import { useQueryClient } from '@tanstack/react-query';
 import { Check, Plus } from 'lucide-react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
-import { RouterOutputs } from '@cs/api';
 import { cn } from '@cs/ui';
 import { Badge } from '@cs/ui/badge';
 import { Button } from '@cs/ui/button';
@@ -26,7 +25,7 @@ import {
 import { api } from '~/trpc/react';
 
 type TicketLabelComboboxProps = {
-  labels?: NonNullable<RouterOutputs['ticket']['byId']>['labels'];
+  labels?: NonNullable<TicketQuery['ticket']>['labels'];
   ticketId: string;
 };
 

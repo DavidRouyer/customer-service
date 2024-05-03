@@ -27,7 +27,7 @@ export const TicketInfo: FC<{ ticketId: string }> = ({ ticketId }) => {
         <FormattedMessage id="info_panel.ticket_panel.status" />
       </dt>
       <dd className="truncate text-sm leading-5 text-muted-foreground">
-        <TicketStatusDropdowm status={ticketData?.status} ticketId={ticketId} />
+        <TicketStatusDropdowm status={ticketData.status} ticketId={ticketId} />
       </dd>
 
       <dt className="text-sm leading-8">
@@ -35,7 +35,7 @@ export const TicketInfo: FC<{ ticketId: string }> = ({ ticketId }) => {
       </dt>
       <dd className="truncate text-sm leading-5 text-muted-foreground">
         <TicketAssignmentCombobox
-          assignedTo={ticketData?.assignedTo}
+          assignedTo={ticketData.assignedTo}
           ticketId={ticketId}
         />
       </dd>
@@ -44,7 +44,7 @@ export const TicketInfo: FC<{ ticketId: string }> = ({ ticketId }) => {
         <FormattedMessage id="info_panel.ticket_panel.label" />
       </dt>
       <dd className="truncate text-sm leading-5 text-muted-foreground">
-        <TicketLabelCombobox labels={ticketData?.labels} ticketId={ticketId} />
+        <TicketLabelCombobox labels={ticketData.labels} ticketId={ticketId} />
       </dd>
 
       <dt className="text-sm leading-8">
@@ -52,7 +52,7 @@ export const TicketInfo: FC<{ ticketId: string }> = ({ ticketId }) => {
       </dt>
       <dd className="truncate text-sm leading-5 text-muted-foreground">
         <TicketPriorityDropdowm
-          priority={ticketData?.priority}
+          priority={ticketData.priority}
           ticketId={ticketId}
         />
       </dd>
