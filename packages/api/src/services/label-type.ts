@@ -152,12 +152,6 @@ export default class LabelTypeService extends BaseService {
   async archive(labelTypeId: string, userId: string) {
     const labelType = await this.retrieve(labelTypeId);
 
-    if (labelType.archivedAt)
-      throw new KyakuError(
-        KyakuError.Types.NOT_ALLOWED,
-        `Label type with id:${labelTypeId} already archived`
-      );
-
     const archiveDate = new Date();
 
     return await this.unitOfWork.transaction(async (tx) => {
@@ -175,12 +169,6 @@ export default class LabelTypeService extends BaseService {
 
   async unarchive(labelTypeId: string, userId: string) {
     const labelType = await this.retrieve(labelTypeId);
-
-    if (labelType.archivedAt)
-      throw new KyakuError(
-        KyakuError.Types.NOT_ALLOWED,
-        `Label type with id:${labelTypeId} is not archived`
-      );
 
     const unarchiveDate = new Date();
 
