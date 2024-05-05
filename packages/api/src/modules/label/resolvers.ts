@@ -32,6 +32,7 @@ const resolvers: Resolvers = {
           },
         });
       }
+
       const labelService = container.resolve<LabelService>('labelService');
       try {
         const addedLabels = await labelService.addLabels(
@@ -55,6 +56,7 @@ const resolvers: Resolvers = {
           },
         });
       }
+
       const labelService = container.resolve<LabelService>('labelService');
       try {
         await labelService.removeLabels(
