@@ -1,7 +1,5 @@
 import { GraphQLError } from 'graphql';
 
-import { KyakuError } from '@cs/kyaku/utils';
-
 import { LabelType, Resolvers } from '../../generated-types/graphql';
 import LabelService from '../../services/label';
 import { mapLabelType } from '../label-type/resolvers';
@@ -46,18 +44,6 @@ const resolvers: Resolvers = {
           labels: addedLabels?.map((label) => mapLabel(label)) ?? [],
         };
       } catch (error) {
-        if (error instanceof KyakuError) {
-          return {
-            labels: [],
-            errors: [
-              {
-                code: error.type,
-                message: error.message,
-                fields: [],
-              },
-            ],
-          };
-        }
         throw new GraphQLError((error as Error).message);
       }
     },
@@ -79,18 +65,6 @@ const resolvers: Resolvers = {
 
         return {};
       } catch (error) {
-        if (error instanceof KyakuError) {
-          return {
-            labels: [],
-            errors: [
-              {
-                code: error.type,
-                message: error.message,
-                fields: [],
-              },
-            ],
-          };
-        }
         throw new GraphQLError((error as Error).message);
       }
     },
