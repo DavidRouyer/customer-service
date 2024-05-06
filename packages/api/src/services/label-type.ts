@@ -36,36 +36,20 @@ export default class LabelTypeService extends BaseService {
     labelTypeId: string,
     config?: GetConfig<T>
   ) {
-    const labelType = await this.labelTypeRepository.find({
+    return await this.labelTypeRepository.find({
       where: eq(schema.labelTypes.id, labelTypeId),
       with: this.getWithClause(config?.relations),
     });
-
-    if (!labelType)
-      throw new KyakuError(
-        KyakuError.Types.NOT_FOUND,
-        `Label type with id:${labelTypeId} not found`
-      );
-
-    return labelType;
   }
 
   async retrieveByName<T extends LabelTypeWith<T>>(
     labelTypeName: string,
     config?: GetConfig<T>
   ) {
-    const labelType = await this.labelTypeRepository.find({
+    return await this.labelTypeRepository.find({
       where: eq(schema.labelTypes.name, labelTypeName),
       with: this.getWithClause(config?.relations),
     });
-
-    if (!labelType)
-      throw new KyakuError(
-        KyakuError.Types.NOT_FOUND,
-        `Label type with name:${labelTypeName} not found`
-      );
-
-    return labelType;
   }
 
   async list<T extends LabelTypeWith<T>>(
@@ -152,6 +136,10 @@ export default class LabelTypeService extends BaseService {
   async archive(labelTypeId: string, userId: string) {
     const labelType = await this.retrieve(labelTypeId);
 
+    if (!labelType) return;
+
+    if (labelType.archivedAt) return;
+
     const archiveDate = new Date();
 
     return await this.unitOfWork.transaction(async (tx) => {
@@ -170,6 +158,10 @@ export default class LabelTypeService extends BaseService {
   async unarchive(labelTypeId: string, userId: string) {
     const labelType = await this.retrieve(labelTypeId);
 
+    if (!labelType) return;
+
+    if (!labelType.archivedAt) return;
+
     const unarchiveDate = new Date();
 
     return await this.unitOfWork.transaction(async (tx) => {
@@ -186,12 +178,7 @@ export default class LabelTypeService extends BaseService {
   }
 
   private checkExistingLabelTypeWithName = async (name: string) => {
-    let existingLabelType = undefined;
-    try {
-      existingLabelType = await this.retrieveByName(name);
-    } catch {
-      // Label type not found, continue
-    }
+    const existingLabelType = await this.retrieveByName(name);
 
     if (existingLabelType) {
       throw new KyakuError(

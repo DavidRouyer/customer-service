@@ -1,6 +1,5 @@
 import { and, eq, schema } from '@cs/database';
 import { Direction, FindConfig, GetConfig } from '@cs/kyaku/types/query';
-import { KyakuError } from '@cs/kyaku/utils';
 
 import {
   CustomerFilters,
@@ -34,18 +33,10 @@ export default class CustomerService extends BaseService {
     customerId: string,
     config?: GetConfig<T>
   ) {
-    const customer = await this.customerRepository.find({
+    return await this.customerRepository.find({
       where: eq(schema.customers.id, customerId),
       with: this.getWithClause(config?.relations),
     });
-
-    if (!customer)
-      throw new KyakuError(
-        'NOT_FOUND',
-        `Customer with id:${customerId} not found`
-      );
-
-    return customer;
   }
 
   async list<T extends CustomerWith<T>>(

@@ -1,7 +1,6 @@
 import { and, eq, inArray, isNotNull, isNull, schema } from '@cs/database';
 import { TicketLabelsChanged, TimelineEntryType } from '@cs/kyaku/models';
 import { Direction, FindConfig, GetConfig } from '@cs/kyaku/types/query';
-import { KyakuError } from '@cs/kyaku/utils';
 
 import { LabelFilters, LabelSortField, LabelWith } from '../entities/label';
 import LabelRepository from '../repositories/label';
@@ -45,18 +44,10 @@ export default class LabelService extends BaseService {
     labelId: string,
     config?: GetConfig<T>
   ) {
-    const label = await this.labelRepository.find({
+    return await this.labelRepository.find({
       where: eq(schema.labels.id, labelId),
       with: this.getWithClause(config?.relations),
     });
-
-    if (!label)
-      throw new KyakuError(
-        KyakuError.Types.NOT_FOUND,
-        `Label with id:${labelId} not found`
-      );
-
-    return label;
   }
 
   async list<T extends LabelWith<T>>(

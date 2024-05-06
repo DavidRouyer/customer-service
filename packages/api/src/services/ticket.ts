@@ -12,7 +12,6 @@ import {
   TimelineEntryType,
 } from '@cs/kyaku/models';
 import { Direction, FindConfig, GetConfig } from '@cs/kyaku/types/query';
-import { KyakuError } from '@cs/kyaku/utils';
 
 import {
   Ticket,
@@ -57,18 +56,10 @@ export default class TicketService extends BaseService {
     ticketId: string,
     config?: GetConfig<T>
   ) {
-    const ticket = await this.ticketRepository.find({
+    return await this.ticketRepository.find({
       where: eq(schema.tickets.id, ticketId),
       with: this.getWithClause(config?.relations),
     });
-
-    if (!ticket)
-      throw new KyakuError(
-        KyakuError.Types.NOT_FOUND,
-        `Ticket with id:${ticketId} not found`
-      );
-
-    return ticket;
   }
 
   async list<T extends TicketWith<T>>(
@@ -133,6 +124,10 @@ export default class TicketService extends BaseService {
   async assign(ticketId: string, assignedToId: string, userId: string) {
     const ticket = await this.retrieve(ticketId);
 
+    if (!ticket) return;
+
+    if (ticket.assignedToId === assignedToId) return;
+
     return await this.unitOfWork.transaction(async (tx) => {
       const updatedTicket = await this.ticketRepository.update(
         {
@@ -169,11 +164,9 @@ export default class TicketService extends BaseService {
   async unassign(ticketId: string, userId: string) {
     const ticket = await this.retrieve(ticketId);
 
-    if (!ticket.assignedToId)
-      throw new KyakuError(
-        KyakuError.Types.NOT_ALLOWED,
-        `Ticket with id:${ticketId} is not assigned`
-      );
+    if (!ticket) return;
+
+    if (!ticket.assignedToId) return;
 
     return await this.unitOfWork.transaction(async (tx) => {
       const updatedTicket = await this.ticketRepository.update(
@@ -215,6 +208,10 @@ export default class TicketService extends BaseService {
   ) {
     const ticket = await this.retrieve(ticketId);
 
+    if (!ticket) return;
+
+    if (ticket.priority === priority) return;
+
     return await this.unitOfWork.transaction(async (tx) => {
       const updatedTicket = await this.ticketRepository.update(
         {
@@ -251,11 +248,9 @@ export default class TicketService extends BaseService {
   async markAsDone(ticketId: string, userId: string) {
     const ticket = await this.retrieve(ticketId);
 
-    if (ticket.status === TicketStatus.Done)
-      throw new KyakuError(
-        KyakuError.Types.NOT_ALLOWED,
-        `Ticket with id:${ticketId} is already marked as done`
-      );
+    if (!ticket) return;
+
+    if (ticket.status === TicketStatus.Done) return;
 
     return await this.unitOfWork.transaction(async (tx) => {
       const updatedTicket = await this.ticketRepository.update(
@@ -296,11 +291,9 @@ export default class TicketService extends BaseService {
   async markAsOpen(ticketId: string, userId: string) {
     const ticket = await this.retrieve(ticketId);
 
-    if (ticket.status === TicketStatus.Open)
-      throw new KyakuError(
-        KyakuError.Types.NOT_ALLOWED,
-        `Ticket with id:${ticketId} is already marked as open`
-      );
+    if (!ticket) return;
+
+    if (ticket.status === TicketStatus.Open) return;
 
     return await this.unitOfWork.transaction(async (tx) => {
       const updatedTicket = await this.ticketRepository.update(
@@ -340,6 +333,8 @@ export default class TicketService extends BaseService {
 
   async sendChat(ticketId: string, text: string, userId: string) {
     const ticket = await this.retrieve(ticketId);
+
+    if (!ticket) return;
 
     return await this.unitOfWork.transaction(async (tx) => {
       const creationDate = new Date();
@@ -388,6 +383,8 @@ export default class TicketService extends BaseService {
     userId: string
   ) {
     const ticket = await this.retrieve(ticketId);
+
+    if (!ticket) return;
 
     const mentionIds = await extractMentions(rawContent);
 

@@ -1,6 +1,5 @@
 import { and, eq, schema } from '@cs/database';
 import { Direction, FindConfig } from '@cs/kyaku/types/query';
-import { KyakuError } from '@cs/kyaku/utils';
 
 import {
   USER_COLUMNS,
@@ -29,18 +28,10 @@ export default class UserService extends BaseService {
   }
 
   async retrieve<T extends UserWith<T>>(userId: string) {
-    const user = await this.userRepository.find({
+    return await this.userRepository.find({
       columns: USER_COLUMNS,
       where: eq(schema.users.id, userId),
     });
-
-    if (!user)
-      throw new KyakuError(
-        KyakuError.Types.NOT_FOUND,
-        `User with id:${userId} not found`
-      );
-
-    return user;
   }
 
   async list<T extends UserWith<T>>(
