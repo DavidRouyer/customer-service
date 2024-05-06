@@ -1665,7 +1665,7 @@ __metadata:
     eslint: "npm:^8.57.0"
     lexical: "npm:^0.14.5"
     prettier: "npm:^3.2.5"
-    tsx: "npm:^4.9.1"
+    tsx: "npm:^4.9.3"
     typescript: "npm:^5.4.5"
   languageName: unknown
   linkType: soft
@@ -14095,9 +14095,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tsx@npm:^4.9.1":
-  version: 4.9.1
-  resolution: "tsx@npm:4.9.1"
+"tsx@npm:^4.9.3":
+  version: 4.9.3
+  resolution: "tsx@npm:4.9.3"
   dependencies:
     esbuild: "npm:~0.20.2"
     fsevents: "npm:~2.3.3"
@@ -14107,7 +14107,7 @@ __metadata:
       optional: true
   bin:
     tsx: dist/cli.mjs
-  checksum: 10c0/83723016e0681519280b04e8b9aeaa47b48cffdc60606f20097b815a13f851eaa83f2b51c23f939b882a3ab14010f18ab9f3d555a6e44e59968cf9acd370d38d
+  checksum: 10c0/abc0d461885ef227959274de5e2f80961e860cc1524d090fc9161bf6450b732f9c3e88ec770ea8cbe49880c9fed7c65aa7853d060b83d9c56f70d935e9162d18
   languageName: node
   linkType: hard
 
