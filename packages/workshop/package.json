@@ -17,7 +17,7 @@
     "react-intl": "^6.6.6"
   },
   "devDependencies": {
-    "@chromatic-com/storybook": "^1.3.3",
+    "@chromatic-com/storybook": "^1.3.4",
     "@cs/eslint-config": "*",
     "@cs/prettier-config": "*",
     "@storybook/addon-essentials": "^8.0.10",
