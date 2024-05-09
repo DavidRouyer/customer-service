@@ -18,7 +18,7 @@
   },
   "dependencies": {
     "@cs/kyaku": "*",
-    "@neondatabase/serverless": "^0.9.1",
+    "@neondatabase/serverless": "^0.9.3",
     "drizzle-orm": "^0.30.10"
   },
   "devDependencies": {
