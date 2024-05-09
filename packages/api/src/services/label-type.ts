@@ -1,6 +1,7 @@
+import { z } from 'zod';
+
 import { and, eq, isNotNull, isNull, schema } from '@cs/database';
 import { Direction, FindConfig, GetConfig } from '@cs/kyaku/types/query';
-import { KyakuError } from '@cs/kyaku/utils';
 
 import {
   CreateLabelType,
@@ -78,7 +79,23 @@ export default class LabelTypeService extends BaseService {
   }
 
   async create(data: CreateLabelType, userId: string) {
-    await this.checkExistingLabelTypeWithName(data.name);
+    const createLabelTypeSchema = z
+      .object({
+        name: z.string().min(1),
+        icon: z.string().optional(),
+      })
+      .refine(
+        async (data) => {
+          const labelTypeWithName = await this.retrieveByName(data.name);
+          return labelTypeWithName !== null;
+        },
+        {
+          message: `Label type with name ${data.name} already exists`,
+          path: ['name'],
+        }
+      );
+
+    createLabelTypeSchema.parseAsync(data);
 
     return await this.unitOfWork.transaction(async (tx) => {
       const creationDate = new Date();
@@ -176,17 +193,6 @@ export default class LabelTypeService extends BaseService {
       );
     });
   }
-
-  private checkExistingLabelTypeWithName = async (name: string) => {
-    const existingLabelType = await this.retrieveByName(name);
-
-    if (existingLabelType) {
-      throw new KyakuError(
-        KyakuError.Types.DUPLICATE_ERROR,
-        `Label type with name:${name} already exists`
-      );
-    }
-  };
 
   private getWithClause<T extends LabelTypeWith<T>>(
     relations: T | undefined
