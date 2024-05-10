@@ -1533,16 +1533,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@chromatic-com/storybook@npm:^1.3.4":
-  version: 1.3.4
-  resolution: "@chromatic-com/storybook@npm:1.3.4"
+"@chromatic-com/storybook@npm:^1.3.5":
+  version: 1.3.5
+  resolution: "@chromatic-com/storybook@npm:1.3.5"
   dependencies:
-    chromatic: "npm:^11.3.1"
+    chromatic: "npm:^11.3.2"
     filesize: "npm:^10.0.12"
     jsonfile: "npm:^6.1.0"
     react-confetti: "npm:^6.1.0"
     strip-ansi: "npm:^7.1.0"
-  checksum: 10c0/2255e8bc0fa723403e176ed962f1908bedf7312a461cb6ba28e6e357d5dfe39585b1ebe93e05133e495b6a230110bd27a7e13568ce6b63d3e3083a38dbc30bb7
+  checksum: 10c0/c8c16a0b71bb6e381efe0fa7c45ea0377fe0469777f9e71b494ebd4db925547a03439e38952cc68be5d5ad444a0dfb59e752e969e40023a3b2ca7be7adac0a70
   languageName: node
   linkType: hard
 
@@ -6779,9 +6779,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"chromatic@npm:^11.3.1":
-  version: 11.3.1
-  resolution: "chromatic@npm:11.3.1"
+"chromatic@npm:^11.3.2":
+  version: 11.3.2
+  resolution: "chromatic@npm:11.3.2"
   peerDependencies:
     "@chromatic-com/cypress": ^0.*.* || ^1.0.0
     "@chromatic-com/playwright": ^0.*.* || ^1.0.0
@@ -6794,7 +6794,7 @@ __metadata:
     chroma: dist/bin.js
     chromatic: dist/bin.js
     chromatic-cli: dist/bin.js
-  checksum: 10c0/aa1a05a883b8f0b6db4d4a0dbe1d519ec3fe41ec88661790c3da032d6397f11512c24cbb229f8a5b1d240632004c3ee255aeaa54863652bde41734f63290e36b
+  checksum: 10c0/76a6f52ae5f43393fe6e16ec591ebe3bc6b71579b5842f5dc0100f76e29ecfc40479479db5fbb813eb29247645902c249ca8b75de50581a5d205fefd0c7f2561
   languageName: node
   linkType: hard
 
@@ -14895,7 +14895,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "workshop@workspace:packages/workshop"
   dependencies:
-    "@chromatic-com/storybook": "npm:^1.3.4"
+    "@chromatic-com/storybook": "npm:^1.3.5"
     "@cs/eslint-config": "npm:*"
     "@cs/kyaku": "npm:*"
     "@cs/prettier-config": "npm:*"
