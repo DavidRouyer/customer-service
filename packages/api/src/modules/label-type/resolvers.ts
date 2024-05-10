@@ -11,6 +11,7 @@ import {
 import { LabelTypeSortField } from '../../entities/label-type';
 import { Resolvers, User } from '../../generated-types/graphql';
 import LabelTypeService from '../../services/label-type';
+import { handleErrors } from '../error';
 import typeDefs from './typeDefs.graphql';
 
 export const mapLabelType = (
@@ -116,38 +117,7 @@ const resolvers: Resolvers = {
             : null,
         };
       } catch (error) {
-        if (error instanceof KyakuError) {
-          return {
-            userErrors: [
-              {
-                code: error.type,
-                message: error.message,
-                path: ['id'],
-              },
-            ],
-          };
-        }
-        if (error instanceof ZodError) {
-          return {
-            userErrors: error.issues.map((issue) => ({
-              code: issue.code,
-              message: issue.message,
-              path: issue.path.map((path) => path.toString()),
-            })),
-          };
-        }
-        if (error instanceof DrizzleError) {
-          throw new GraphQLError(error.message, {
-            extensions: {
-              code: KyakuErrorTypes.DB_ERROR,
-            },
-          });
-        }
-        throw new GraphQLError((error as Error).message, {
-          extensions: {
-            code: KyakuErrorTypes.INTERNAL,
-          },
-        });
+        return handleErrors(error);
       }
     },
     createLabelType: async (_, { input }, { container, session }) => {
@@ -182,38 +152,7 @@ const resolvers: Resolvers = {
             : null,
         };
       } catch (error) {
-        if (error instanceof KyakuError) {
-          return {
-            userErrors: [
-              {
-                code: error.type,
-                message: error.message,
-                path: ['id'],
-              },
-            ],
-          };
-        }
-        if (error instanceof ZodError) {
-          return {
-            userErrors: error.issues.map((issue) => ({
-              code: issue.code,
-              message: issue.message,
-              path: issue.path.map((path) => path.toString()),
-            })),
-          };
-        }
-        if (error instanceof DrizzleError) {
-          throw new GraphQLError(error.message, {
-            extensions: {
-              code: KyakuErrorTypes.DB_ERROR,
-            },
-          });
-        }
-        throw new GraphQLError((error as Error).message, {
-          extensions: {
-            code: KyakuErrorTypes.INTERNAL,
-          },
-        });
+        return handleErrors(error);
       }
     },
     unarchiveLabelType: async (_, { input }, ctx) => {
@@ -245,38 +184,7 @@ const resolvers: Resolvers = {
             : null,
         };
       } catch (error) {
-        if (error instanceof KyakuError) {
-          return {
-            userErrors: [
-              {
-                code: error.type,
-                message: error.message,
-                path: ['id'],
-              },
-            ],
-          };
-        }
-        if (error instanceof ZodError) {
-          return {
-            userErrors: error.issues.map((issue) => ({
-              code: issue.code,
-              message: issue.message,
-              path: issue.path.map((path) => path.toString()),
-            })),
-          };
-        }
-        if (error instanceof DrizzleError) {
-          throw new GraphQLError(error.message, {
-            extensions: {
-              code: KyakuErrorTypes.DB_ERROR,
-            },
-          });
-        }
-        throw new GraphQLError((error as Error).message, {
-          extensions: {
-            code: KyakuErrorTypes.INTERNAL,
-          },
-        });
+        return handleErrors(error);
       }
     },
     updateLabelType: async (_, { input }, ctx) => {
@@ -311,38 +219,7 @@ const resolvers: Resolvers = {
             : null,
         };
       } catch (error) {
-        if (error instanceof KyakuError) {
-          return {
-            userErrors: [
-              {
-                code: error.type,
-                message: error.message,
-                path: ['id'],
-              },
-            ],
-          };
-        }
-        if (error instanceof ZodError) {
-          return {
-            userErrors: error.issues.map((issue) => ({
-              code: issue.code,
-              message: issue.message,
-              path: issue.path.map((path) => path.toString()),
-            })),
-          };
-        }
-        if (error instanceof DrizzleError) {
-          throw new GraphQLError(error.message, {
-            extensions: {
-              code: KyakuErrorTypes.DB_ERROR,
-            },
-          });
-        }
-        throw new GraphQLError((error as Error).message, {
-          extensions: {
-            code: KyakuErrorTypes.INTERNAL,
-          },
-        });
+        return handleErrors(error);
       }
     },
   },

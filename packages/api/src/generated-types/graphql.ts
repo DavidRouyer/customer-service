@@ -27,7 +27,7 @@ export type AddLabelsInput = {
 
 export type AddLabelsOutput = {
   __typename?: 'AddLabelsOutput';
-  labels: Array<Label>;
+  labels?: Maybe<Array<Label>>;
   userErrors?: Maybe<Array<MutationError>>;
 };
 
@@ -573,7 +573,7 @@ export type ResolversParentTypes = {
 };
 
 export type AddLabelsOutputResolvers<ContextType = Context, ParentType extends ResolversParentTypes['AddLabelsOutput'] = ResolversParentTypes['AddLabelsOutput']> = {
-  labels?: Resolver<Array<ResolversTypes['Label']>, ParentType, ContextType>;
+  labels?: Resolver<Maybe<Array<ResolversTypes['Label']>>, ParentType, ContextType>;
   userErrors?: Resolver<Maybe<Array<ResolversTypes['MutationError']>>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };

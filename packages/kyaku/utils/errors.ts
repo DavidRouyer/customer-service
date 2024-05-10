@@ -18,10 +18,12 @@ export const KyakuErrorTypes = {
  */
 export class KyakuError extends Error {
   type: string;
+  path: string[];
   public static Types = KyakuErrorTypes;
 
-  constructor(type: string, message: string) {
+  constructor(type: string, message: string, path?: string[]) {
     super(message);
     this.type = type;
+    this.path = path || [];
   }
 }

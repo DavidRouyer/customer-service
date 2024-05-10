@@ -4,6 +4,7 @@ import { KyakuErrorTypes } from '@cs/kyaku/utils/errors';
 
 import { LabelType, Resolvers } from '../../generated-types/graphql';
 import LabelService from '../../services/label';
+import { handleErrors } from '../error';
 import { mapLabelType } from '../label-type/resolvers';
 import typeDefs from './typeDefs.graphql';
 
@@ -47,7 +48,10 @@ const resolvers: Resolvers = {
           labels: addedLabels?.map((label) => mapLabel(label)) ?? [],
         };
       } catch (error) {
-        throw new GraphQLError((error as Error).message);
+        return {
+          labels: null,
+          ...handleErrors(error),
+        };
       }
     },
     removeLabels: async (_, { input }, { container, session }) => {
@@ -69,7 +73,7 @@ const resolvers: Resolvers = {
 
         return {};
       } catch (error) {
-        throw new GraphQLError((error as Error).message);
+        return handleErrors(error);
       }
     },
   },

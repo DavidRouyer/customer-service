@@ -127,7 +127,8 @@ export default class LabelTypeService extends BaseService {
     if (!labelType)
       throw new KyakuError(
         KyakuError.Types.NOT_FOUND,
-        `Label type with id:${data.id} not found`
+        `Label type with id:${data.id} not found`,
+        ['id']
       );
 
     const updateLabelTypeSchema = z
@@ -181,7 +182,8 @@ export default class LabelTypeService extends BaseService {
     if (!labelType)
       throw new KyakuError(
         KyakuError.Types.NOT_FOUND,
-        `Label type with id:${labelTypeId} not found`
+        `Label type with id:${labelTypeId} not found`,
+        ['id']
       );
 
     if (labelType.archivedAt) return;
@@ -207,7 +209,8 @@ export default class LabelTypeService extends BaseService {
     if (!labelType)
       throw new KyakuError(
         KyakuError.Types.NOT_FOUND,
-        `Label type with id:${labelTypeId} not found`
+        `Label type with id:${labelTypeId} not found`,
+        ['id']
       );
 
     if (!labelType.archivedAt) return;

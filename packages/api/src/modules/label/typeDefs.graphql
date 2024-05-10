@@ -10,7 +10,7 @@ input AddLabelsInput {
 }
 
 type AddLabelsOutput {
-  labels: [Label!]!
+  labels: [Label!]
   userErrors: [MutationError!]
 }
 

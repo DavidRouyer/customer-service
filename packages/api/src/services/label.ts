@@ -90,7 +90,8 @@ export default class LabelService extends BaseService {
     if (!ticket)
       throw new KyakuError(
         KyakuError.Types.NOT_FOUND,
-        `Ticket with id:${ticketId} not found`
+        `Ticket with id:${ticketId} not found`,
+        ['id']
       );
 
     const affectedLabelTypeIds = new Set(
@@ -173,7 +174,8 @@ export default class LabelService extends BaseService {
     if (!ticket)
       throw new KyakuError(
         KyakuError.Types.NOT_FOUND,
-        `Ticket with id:${ticketId} not found`
+        `Ticket with id:${ticketId} not found`,
+        ['id']
       );
 
     const fetchedLabels = await this.labelRepository.findMany({
