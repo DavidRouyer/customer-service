@@ -39,13 +39,28 @@ input ArchiveLabelTypeInput {
   id: ID!
 }
 
+type ArchiveLabelTypeOutput {
+  labelType: LabelType
+  userErrors: [MutationError!]
+}
+
 input CreateLabelTypeInput {
   name: String!
   icon: String
 }
 
+type CreateLabelTypeOutput {
+  labelType: LabelType
+  userErrors: [MutationError!]
+}
+
 input UnarchiveLabelTypeInput {
   id: ID!
+}
+
+type UnarchiveLabelTypeOutput {
+  labelType: LabelType
+  userErrors: [MutationError!]
 }
 
 input UpdateLabelTypeInput {
@@ -54,12 +69,17 @@ input UpdateLabelTypeInput {
   icon: String
 }
 
+type UpdateLabelTypeOutput {
+  labelType: LabelType
+  userErrors: [MutationError!]
+}
+
 type Mutation {
-  archiveLabelType(input: ArchiveLabelTypeInput!): LabelType
+  archiveLabelType(input: ArchiveLabelTypeInput!): ArchiveLabelTypeOutput
 
-  createLabelType(input: CreateLabelTypeInput!): LabelType
+  createLabelType(input: CreateLabelTypeInput!): CreateLabelTypeOutput
 
-  unarchiveLabelType(input: UnarchiveLabelTypeInput!): LabelType
+  unarchiveLabelType(input: UnarchiveLabelTypeInput!): UnarchiveLabelTypeOutput
 
-  updateLabelType(input: UpdateLabelTypeInput!): LabelType
+  updateLabelType(input: UpdateLabelTypeInput!): UpdateLabelTypeOutput
 }

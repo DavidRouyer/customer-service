@@ -3,7 +3,10 @@
  *
  */
 export const KyakuErrorTypes = {
+  DB_ERROR: 'database_error',
+  UNAUTHORIZED: 'unauthorized',
   DUPLICATE_ERROR: 'duplicate_error',
+  INTERNAL: 'internal',
   INVALID_ARGUMENT: 'invalid_argument',
   NOT_ALLOWED: 'not_allowed',
   NOT_FOUND: 'not_found',

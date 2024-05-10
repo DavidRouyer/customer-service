@@ -1,5 +1,8 @@
 import { GraphQLError } from 'graphql';
+import { ZodError } from 'zod';
 
+import { DrizzleError } from '@cs/database';
+import { KyakuError, KyakuErrorTypes } from '@cs/kyaku/utils/errors';
 import {
   connectionFromArray,
   validatePaginationArguments,
@@ -84,11 +87,11 @@ const resolvers: Resolvers = {
     },
   },
   Mutation: {
-    archiveLabelType: async (_, { input: { id } }, { container, session }) => {
+    archiveLabelType: async (_, { input }, { container, session }) => {
       if (!session) {
         throw new GraphQLError('Unauthorized', {
           extensions: {
-            code: 'UNAUTHORIZED',
+            code: KyakuErrorTypes.UNAUTHORIZED,
           },
         });
       }
@@ -96,27 +99,62 @@ const resolvers: Resolvers = {
       const labelTypeService: LabelTypeService =
         container.resolve('labelTypeService');
 
-      const archivedLabelType = await labelTypeService.archive(
-        id,
-        session.user.id
-      );
+      try {
+        const archivedLabelType = await labelTypeService.archive(
+          input.id,
+          session.user.id
+        );
 
-      if (!archivedLabelType) {
-        throw new Error(`Label type with id:${id} cannot be archived`);
+        return {
+          labelType: archivedLabelType
+            ? await labelTypeService.retrieve(archivedLabelType.id, {
+                relations: {
+                  createdBy: true,
+                  updatedBy: true,
+                },
+              })
+            : null,
+        };
+      } catch (error) {
+        if (error instanceof KyakuError) {
+          return {
+            userErrors: [
+              {
+                code: error.type,
+                message: error.message,
+                path: ['id'],
+              },
+            ],
+          };
+        }
+        if (error instanceof ZodError) {
+          return {
+            userErrors: error.issues.map((issue) => ({
+              code: issue.code,
+              message: issue.message,
+              path: issue.path.map((path) => path.toString()),
+            })),
+          };
+        }
+        if (error instanceof DrizzleError) {
+          throw new GraphQLError(error.message, {
+            extensions: {
+              code: KyakuErrorTypes.DB_ERROR,
+            },
+          });
+        }
+        throw new GraphQLError((error as Error).message, {
+          extensions: {
+            code: KyakuErrorTypes.INTERNAL,
+          },
+        });
       }
-
-      return await labelTypeService.retrieve(id, {
-        relations: {
-          createdBy: true,
-          updatedBy: true,
-        },
-      });
     },
     createLabelType: async (_, { input }, { container, session }) => {
       if (!session) {
         throw new GraphQLError('Unauthorized', {
           extensions: {
-            code: 'UNAUTHORIZED',
+            code: KyakuErrorTypes.UNAUTHORIZED,
           },
         });
       }
@@ -124,30 +162,65 @@ const resolvers: Resolvers = {
       const labelTypeService: LabelTypeService =
         container.resolve('labelTypeService');
 
-      const createdLabelType = await labelTypeService.create(
-        {
-          ...input,
-          icon: input.icon ?? null,
-        },
-        session.user.id
-      );
+      try {
+        const createdLabelType = await labelTypeService.create(
+          {
+            ...input,
+            icon: input.icon ?? null,
+          },
+          session.user.id
+        );
 
-      if (!createdLabelType) {
-        throw new Error(`Label type with name:${input.name} cannot be created`);
+        return {
+          labelType: createdLabelType
+            ? await labelTypeService.retrieve(createdLabelType.id, {
+                relations: {
+                  createdBy: true,
+                  updatedBy: true,
+                },
+              })
+            : null,
+        };
+      } catch (error) {
+        if (error instanceof KyakuError) {
+          return {
+            userErrors: [
+              {
+                code: error.type,
+                message: error.message,
+                path: ['id'],
+              },
+            ],
+          };
+        }
+        if (error instanceof ZodError) {
+          return {
+            userErrors: error.issues.map((issue) => ({
+              code: issue.code,
+              message: issue.message,
+              path: issue.path.map((path) => path.toString()),
+            })),
+          };
+        }
+        if (error instanceof DrizzleError) {
+          throw new GraphQLError(error.message, {
+            extensions: {
+              code: KyakuErrorTypes.DB_ERROR,
+            },
+          });
+        }
+        throw new GraphQLError((error as Error).message, {
+          extensions: {
+            code: KyakuErrorTypes.INTERNAL,
+          },
+        });
       }
-
-      return await labelTypeService.retrieve(createdLabelType.id, {
-        relations: {
-          createdBy: true,
-          updatedBy: true,
-        },
-      });
     },
-    unarchiveLabelType: async (_, { input: { id } }, ctx) => {
+    unarchiveLabelType: async (_, { input }, ctx) => {
       if (!ctx.session) {
         throw new GraphQLError('Unauthorized', {
           extensions: {
-            code: 'UNAUTHORIZED',
+            code: KyakuErrorTypes.UNAUTHORIZED,
           },
         });
       }
@@ -155,27 +228,62 @@ const resolvers: Resolvers = {
       const labelTypeService: LabelTypeService =
         ctx.container.resolve('labelTypeService');
 
-      const unarchivedLabelType = await labelTypeService.unarchive(
-        id,
-        ctx.session.user.id
-      );
+      try {
+        const unarchivedLabelType = await labelTypeService.unarchive(
+          input.id,
+          ctx.session.user.id
+        );
 
-      if (!unarchivedLabelType) {
-        throw new Error(`Label type with id:${id} cannot be unarchived`);
+        return {
+          labelType: unarchivedLabelType
+            ? await labelTypeService.retrieve(unarchivedLabelType.id, {
+                relations: {
+                  createdBy: true,
+                  updatedBy: true,
+                },
+              })
+            : null,
+        };
+      } catch (error) {
+        if (error instanceof KyakuError) {
+          return {
+            userErrors: [
+              {
+                code: error.type,
+                message: error.message,
+                path: ['id'],
+              },
+            ],
+          };
+        }
+        if (error instanceof ZodError) {
+          return {
+            userErrors: error.issues.map((issue) => ({
+              code: issue.code,
+              message: issue.message,
+              path: issue.path.map((path) => path.toString()),
+            })),
+          };
+        }
+        if (error instanceof DrizzleError) {
+          throw new GraphQLError(error.message, {
+            extensions: {
+              code: KyakuErrorTypes.DB_ERROR,
+            },
+          });
+        }
+        throw new GraphQLError((error as Error).message, {
+          extensions: {
+            code: KyakuErrorTypes.INTERNAL,
+          },
+        });
       }
-
-      return await labelTypeService.retrieve(id, {
-        relations: {
-          createdBy: true,
-          updatedBy: true,
-        },
-      });
     },
     updateLabelType: async (_, { input }, ctx) => {
       if (!ctx.session) {
         throw new GraphQLError('Unauthorized', {
           extensions: {
-            code: 'UNAUTHORIZED',
+            code: KyakuErrorTypes.UNAUTHORIZED,
           },
         });
       }
@@ -183,24 +291,59 @@ const resolvers: Resolvers = {
       const labelTypeService: LabelTypeService =
         ctx.container.resolve('labelTypeService');
 
-      const updatedLabelType = await labelTypeService.update(
-        {
-          ...input,
-          name: input.name ?? undefined,
-        },
-        ctx.session.user.id
-      );
+      try {
+        const updatedLabelType = await labelTypeService.update(
+          {
+            ...input,
+            name: input.name ?? undefined,
+          },
+          ctx.session.user.id
+        );
 
-      if (!updatedLabelType) {
-        throw new Error(`Label type with id:${input.id} cannot be updated`);
+        return {
+          labelType: updatedLabelType
+            ? await labelTypeService.retrieve(updatedLabelType?.id, {
+                relations: {
+                  createdBy: true,
+                  updatedBy: true,
+                },
+              })
+            : null,
+        };
+      } catch (error) {
+        if (error instanceof KyakuError) {
+          return {
+            userErrors: [
+              {
+                code: error.type,
+                message: error.message,
+                path: ['id'],
+              },
+            ],
+          };
+        }
+        if (error instanceof ZodError) {
+          return {
+            userErrors: error.issues.map((issue) => ({
+              code: issue.code,
+              message: issue.message,
+              path: issue.path.map((path) => path.toString()),
+            })),
+          };
+        }
+        if (error instanceof DrizzleError) {
+          throw new GraphQLError(error.message, {
+            extensions: {
+              code: KyakuErrorTypes.DB_ERROR,
+            },
+          });
+        }
+        throw new GraphQLError((error as Error).message, {
+          extensions: {
+            code: KyakuErrorTypes.INTERNAL,
+          },
+        });
       }
-
-      return await labelTypeService.retrieve(input.id, {
-        relations: {
-          createdBy: true,
-          updatedBy: true,
-        },
-      });
     },
   },
 };

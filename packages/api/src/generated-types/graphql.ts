@@ -27,12 +27,18 @@ export type AddLabelsInput = {
 
 export type AddLabelsOutput = {
   __typename?: 'AddLabelsOutput';
-  errors?: Maybe<Array<MutationError>>;
   labels: Array<Label>;
+  userErrors?: Maybe<Array<MutationError>>;
 };
 
 export type ArchiveLabelTypeInput = {
   id: Scalars['ID']['input'];
+};
+
+export type ArchiveLabelTypeOutput = {
+  __typename?: 'ArchiveLabelTypeOutput';
+  labelType?: Maybe<LabelType>;
+  userErrors?: Maybe<Array<MutationError>>;
 };
 
 export type AssignmentChangedEntry = {
@@ -49,6 +55,12 @@ export type ChatEntry = {
 export type CreateLabelTypeInput = {
   icon?: InputMaybe<Scalars['String']['input']>;
   name: Scalars['String']['input'];
+};
+
+export type CreateLabelTypeOutput = {
+  __typename?: 'CreateLabelTypeOutput';
+  labelType?: Maybe<LabelType>;
+  userErrors?: Maybe<Array<MutationError>>;
 };
 
 export type Customer = Node & {
@@ -112,11 +124,11 @@ export type LabelsChangedEntry = {
 export type Mutation = {
   __typename?: 'Mutation';
   addLabels?: Maybe<AddLabelsOutput>;
-  archiveLabelType?: Maybe<LabelType>;
-  createLabelType?: Maybe<LabelType>;
+  archiveLabelType?: Maybe<ArchiveLabelTypeOutput>;
+  createLabelType?: Maybe<CreateLabelTypeOutput>;
   removeLabels?: Maybe<RemoveLabelsOutput>;
-  unarchiveLabelType?: Maybe<LabelType>;
-  updateLabelType?: Maybe<LabelType>;
+  unarchiveLabelType?: Maybe<UnarchiveLabelTypeOutput>;
+  updateLabelType?: Maybe<UpdateLabelTypeOutput>;
 };
 
 
@@ -152,8 +164,8 @@ export type MutationUpdateLabelTypeArgs = {
 export type MutationError = {
   __typename?: 'MutationError';
   code: Scalars['String']['output'];
-  fields: Array<Scalars['String']['output']>;
   message: Scalars['String']['output'];
+  path: Array<Scalars['String']['output']>;
 };
 
 export type Node = {
@@ -244,7 +256,7 @@ export type RemoveLabelsInput = {
 
 export type RemoveLabelsOutput = {
   __typename?: 'RemoveLabelsOutput';
-  errors?: Maybe<Array<MutationError>>;
+  userErrors?: Maybe<Array<MutationError>>;
 };
 
 export type StatusChangedEntry = {
@@ -343,10 +355,22 @@ export type UnarchiveLabelTypeInput = {
   id: Scalars['ID']['input'];
 };
 
+export type UnarchiveLabelTypeOutput = {
+  __typename?: 'UnarchiveLabelTypeOutput';
+  labelType?: Maybe<LabelType>;
+  userErrors?: Maybe<Array<MutationError>>;
+};
+
 export type UpdateLabelTypeInput = {
   icon?: InputMaybe<Scalars['String']['input']>;
   id: Scalars['ID']['input'];
   name?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type UpdateLabelTypeOutput = {
+  __typename?: 'UpdateLabelTypeOutput';
+  labelType?: Maybe<LabelType>;
+  userErrors?: Maybe<Array<MutationError>>;
 };
 
 export type User = Node & {
@@ -452,10 +476,12 @@ export type ResolversTypes = {
   AddLabelsInput: AddLabelsInput;
   AddLabelsOutput: ResolverTypeWrapper<AddLabelsOutput>;
   ArchiveLabelTypeInput: ArchiveLabelTypeInput;
+  ArchiveLabelTypeOutput: ResolverTypeWrapper<ArchiveLabelTypeOutput>;
   AssignmentChangedEntry: ResolverTypeWrapper<AssignmentChangedEntry>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
   ChatEntry: ResolverTypeWrapper<ChatEntry>;
   CreateLabelTypeInput: CreateLabelTypeInput;
+  CreateLabelTypeOutput: ResolverTypeWrapper<CreateLabelTypeOutput>;
   Customer: ResolverTypeWrapper<Customer>;
   DateTime: ResolverTypeWrapper<Scalars['DateTime']['output']>;
   Entry: ResolverTypeWrapper<ResolversUnionTypes<ResolversTypes>['Entry']>;
@@ -489,7 +515,9 @@ export type ResolversTypes = {
   TimelineEntryConnection: ResolverTypeWrapper<TimelineEntryConnection>;
   TimelineEntryEdge: ResolverTypeWrapper<TimelineEntryEdge>;
   UnarchiveLabelTypeInput: UnarchiveLabelTypeInput;
+  UnarchiveLabelTypeOutput: ResolverTypeWrapper<UnarchiveLabelTypeOutput>;
   UpdateLabelTypeInput: UpdateLabelTypeInput;
+  UpdateLabelTypeOutput: ResolverTypeWrapper<UpdateLabelTypeOutput>;
   User: ResolverTypeWrapper<User>;
   UserConnection: ResolverTypeWrapper<UserConnection>;
   UserEdge: ResolverTypeWrapper<UserEdge>;
@@ -500,10 +528,12 @@ export type ResolversParentTypes = {
   AddLabelsInput: AddLabelsInput;
   AddLabelsOutput: AddLabelsOutput;
   ArchiveLabelTypeInput: ArchiveLabelTypeInput;
+  ArchiveLabelTypeOutput: ArchiveLabelTypeOutput;
   AssignmentChangedEntry: AssignmentChangedEntry;
   Boolean: Scalars['Boolean']['output'];
   ChatEntry: ChatEntry;
   CreateLabelTypeInput: CreateLabelTypeInput;
+  CreateLabelTypeOutput: CreateLabelTypeOutput;
   Customer: Customer;
   DateTime: Scalars['DateTime']['output'];
   Entry: ResolversUnionTypes<ResolversParentTypes>['Entry'];
@@ -534,15 +564,23 @@ export type ResolversParentTypes = {
   TimelineEntryConnection: TimelineEntryConnection;
   TimelineEntryEdge: TimelineEntryEdge;
   UnarchiveLabelTypeInput: UnarchiveLabelTypeInput;
+  UnarchiveLabelTypeOutput: UnarchiveLabelTypeOutput;
   UpdateLabelTypeInput: UpdateLabelTypeInput;
+  UpdateLabelTypeOutput: UpdateLabelTypeOutput;
   User: User;
   UserConnection: UserConnection;
   UserEdge: UserEdge;
 };
 
 export type AddLabelsOutputResolvers<ContextType = Context, ParentType extends ResolversParentTypes['AddLabelsOutput'] = ResolversParentTypes['AddLabelsOutput']> = {
-  errors?: Resolver<Maybe<Array<ResolversTypes['MutationError']>>, ParentType, ContextType>;
   labels?: Resolver<Array<ResolversTypes['Label']>, ParentType, ContextType>;
+  userErrors?: Resolver<Maybe<Array<ResolversTypes['MutationError']>>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type ArchiveLabelTypeOutputResolvers<ContextType = Context, ParentType extends ResolversParentTypes['ArchiveLabelTypeOutput'] = ResolversParentTypes['ArchiveLabelTypeOutput']> = {
+  labelType?: Resolver<Maybe<ResolversTypes['LabelType']>, ParentType, ContextType>;
+  userErrors?: Resolver<Maybe<Array<ResolversTypes['MutationError']>>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -554,6 +592,12 @@ export type AssignmentChangedEntryResolvers<ContextType = Context, ParentType ex
 
 export type ChatEntryResolvers<ContextType = Context, ParentType extends ResolversParentTypes['ChatEntry'] = ResolversParentTypes['ChatEntry']> = {
   text?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type CreateLabelTypeOutputResolvers<ContextType = Context, ParentType extends ResolversParentTypes['CreateLabelTypeOutput'] = ResolversParentTypes['CreateLabelTypeOutput']> = {
+  labelType?: Resolver<Maybe<ResolversTypes['LabelType']>, ParentType, ContextType>;
+  userErrors?: Resolver<Maybe<Array<ResolversTypes['MutationError']>>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -619,17 +663,17 @@ export type LabelsChangedEntryResolvers<ContextType = Context, ParentType extend
 
 export type MutationResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   addLabels?: Resolver<Maybe<ResolversTypes['AddLabelsOutput']>, ParentType, ContextType, RequireFields<MutationAddLabelsArgs, 'input'>>;
-  archiveLabelType?: Resolver<Maybe<ResolversTypes['LabelType']>, ParentType, ContextType, RequireFields<MutationArchiveLabelTypeArgs, 'input'>>;
-  createLabelType?: Resolver<Maybe<ResolversTypes['LabelType']>, ParentType, ContextType, RequireFields<MutationCreateLabelTypeArgs, 'input'>>;
+  archiveLabelType?: Resolver<Maybe<ResolversTypes['ArchiveLabelTypeOutput']>, ParentType, ContextType, RequireFields<MutationArchiveLabelTypeArgs, 'input'>>;
+  createLabelType?: Resolver<Maybe<ResolversTypes['CreateLabelTypeOutput']>, ParentType, ContextType, RequireFields<MutationCreateLabelTypeArgs, 'input'>>;
   removeLabels?: Resolver<Maybe<ResolversTypes['RemoveLabelsOutput']>, ParentType, ContextType, RequireFields<MutationRemoveLabelsArgs, 'input'>>;
-  unarchiveLabelType?: Resolver<Maybe<ResolversTypes['LabelType']>, ParentType, ContextType, RequireFields<MutationUnarchiveLabelTypeArgs, 'input'>>;
-  updateLabelType?: Resolver<Maybe<ResolversTypes['LabelType']>, ParentType, ContextType, RequireFields<MutationUpdateLabelTypeArgs, 'input'>>;
+  unarchiveLabelType?: Resolver<Maybe<ResolversTypes['UnarchiveLabelTypeOutput']>, ParentType, ContextType, RequireFields<MutationUnarchiveLabelTypeArgs, 'input'>>;
+  updateLabelType?: Resolver<Maybe<ResolversTypes['UpdateLabelTypeOutput']>, ParentType, ContextType, RequireFields<MutationUpdateLabelTypeArgs, 'input'>>;
 };
 
 export type MutationErrorResolvers<ContextType = Context, ParentType extends ResolversParentTypes['MutationError'] = ResolversParentTypes['MutationError']> = {
   code?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  fields?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
   message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  path?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -669,7 +713,7 @@ export type QueryResolvers<ContextType = Context, ParentType extends ResolversPa
 };
 
 export type RemoveLabelsOutputResolvers<ContextType = Context, ParentType extends ResolversParentTypes['RemoveLabelsOutput'] = ResolversParentTypes['RemoveLabelsOutput']> = {
-  errors?: Resolver<Maybe<Array<ResolversTypes['MutationError']>>, ParentType, ContextType>;
+  userErrors?: Resolver<Maybe<Array<ResolversTypes['MutationError']>>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -733,6 +777,18 @@ export type TimelineEntryEdgeResolvers<ContextType = Context, ParentType extends
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type UnarchiveLabelTypeOutputResolvers<ContextType = Context, ParentType extends ResolversParentTypes['UnarchiveLabelTypeOutput'] = ResolversParentTypes['UnarchiveLabelTypeOutput']> = {
+  labelType?: Resolver<Maybe<ResolversTypes['LabelType']>, ParentType, ContextType>;
+  userErrors?: Resolver<Maybe<Array<ResolversTypes['MutationError']>>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type UpdateLabelTypeOutputResolvers<ContextType = Context, ParentType extends ResolversParentTypes['UpdateLabelTypeOutput'] = ResolversParentTypes['UpdateLabelTypeOutput']> = {
+  labelType?: Resolver<Maybe<ResolversTypes['LabelType']>, ParentType, ContextType>;
+  userErrors?: Resolver<Maybe<Array<ResolversTypes['MutationError']>>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type UserResolvers<ContextType = Context, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = {
   email?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   emailVerified?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
@@ -756,8 +812,10 @@ export type UserEdgeResolvers<ContextType = Context, ParentType extends Resolver
 
 export type Resolvers<ContextType = Context> = {
   AddLabelsOutput?: AddLabelsOutputResolvers<ContextType>;
+  ArchiveLabelTypeOutput?: ArchiveLabelTypeOutputResolvers<ContextType>;
   AssignmentChangedEntry?: AssignmentChangedEntryResolvers<ContextType>;
   ChatEntry?: ChatEntryResolvers<ContextType>;
+  CreateLabelTypeOutput?: CreateLabelTypeOutputResolvers<ContextType>;
   Customer?: CustomerResolvers<ContextType>;
   DateTime?: GraphQLScalarType;
   Entry?: EntryResolvers<ContextType>;
@@ -781,6 +839,8 @@ export type Resolvers<ContextType = Context> = {
   TimelineEntry?: TimelineEntryResolvers<ContextType>;
   TimelineEntryConnection?: TimelineEntryConnectionResolvers<ContextType>;
   TimelineEntryEdge?: TimelineEntryEdgeResolvers<ContextType>;
+  UnarchiveLabelTypeOutput?: UnarchiveLabelTypeOutputResolvers<ContextType>;
+  UpdateLabelTypeOutput?: UpdateLabelTypeOutputResolvers<ContextType>;
   User?: UserResolvers<ContextType>;
   UserConnection?: UserConnectionResolvers<ContextType>;
   UserEdge?: UserEdgeResolvers<ContextType>;

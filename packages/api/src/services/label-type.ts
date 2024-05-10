@@ -2,6 +2,7 @@ import { z } from 'zod';
 
 import { and, eq, isNotNull, isNull, schema } from '@cs/database';
 import { Direction, FindConfig, GetConfig } from '@cs/kyaku/types/query';
+import { KyakuError } from '@cs/kyaku/utils/errors';
 
 import {
   CreateLabelType,
@@ -95,7 +96,7 @@ export default class LabelTypeService extends BaseService {
         }
       );
 
-    createLabelTypeSchema.parseAsync(data);
+    await createLabelTypeSchema.parseAsync(data);
 
     return await this.unitOfWork.transaction(async (tx) => {
       const creationDate = new Date();
@@ -121,11 +122,35 @@ export default class LabelTypeService extends BaseService {
   }
 
   async update(data: UpdateLabelType, userId: string) {
-    await this.retrieve(data.id);
+    const labelType = await this.retrieve(data.id);
 
-    if (data.name) {
-      await this.checkExistingLabelTypeWithName(data.name);
-    }
+    if (!labelType)
+      throw new KyakuError(
+        KyakuError.Types.NOT_FOUND,
+        `Label type with id:${data.id} not found`
+      );
+
+    const updateLabelTypeSchema = z
+      .object({
+        name: z.string().min(1).optional(),
+        icon: z.string().optional(),
+      })
+      .refine(
+        async (dataToRefine) => {
+          if (!dataToRefine.name) return true;
+
+          const labelTypeWithName = await this.retrieveByName(
+            dataToRefine.name
+          );
+          return !labelTypeWithName || labelTypeWithName?.id === data.id;
+        },
+        {
+          message: `Label type with name ${data.name} already exists`,
+          path: ['name'],
+        }
+      );
+
+    await updateLabelTypeSchema.parseAsync(data);
 
     return await this.unitOfWork.transaction(async (tx) => {
       const updateDate = new Date();
@@ -153,7 +178,11 @@ export default class LabelTypeService extends BaseService {
   async archive(labelTypeId: string, userId: string) {
     const labelType = await this.retrieve(labelTypeId);
 
-    if (!labelType) return;
+    if (!labelType)
+      throw new KyakuError(
+        KyakuError.Types.NOT_FOUND,
+        `Label type with id:${labelTypeId} not found`
+      );
 
     if (labelType.archivedAt) return;
 
@@ -175,7 +204,11 @@ export default class LabelTypeService extends BaseService {
   async unarchive(labelTypeId: string, userId: string) {
     const labelType = await this.retrieve(labelTypeId);
 
-    if (!labelType) return;
+    if (!labelType)
+      throw new KyakuError(
+        KyakuError.Types.NOT_FOUND,
+        `Label type with id:${labelTypeId} not found`
+      );
 
     if (!labelType.archivedAt) return;
 

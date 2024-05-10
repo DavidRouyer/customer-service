@@ -1,5 +1,7 @@
 import { GraphQLError } from 'graphql';
 
+import { KyakuErrorTypes } from '@cs/kyaku/utils/errors';
+
 import { LabelType, Resolvers } from '../../generated-types/graphql';
 import LabelService from '../../services/label';
 import { mapLabelType } from '../label-type/resolvers';
@@ -28,7 +30,7 @@ const resolvers: Resolvers = {
       if (!session) {
         throw new GraphQLError('Unauthorized', {
           extensions: {
-            code: 'UNAUTHORIZED',
+            code: KyakuErrorTypes.UNAUTHORIZED,
           },
         });
       }
@@ -52,7 +54,7 @@ const resolvers: Resolvers = {
       if (!session) {
         throw new GraphQLError('Unauthorized', {
           extensions: {
-            code: 'UNAUTHORIZED',
+            code: KyakuErrorTypes.UNAUTHORIZED,
           },
         });
       }

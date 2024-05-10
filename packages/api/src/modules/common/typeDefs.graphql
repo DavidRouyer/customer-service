@@ -14,5 +14,5 @@ type PageInfo {
 type MutationError {
   message: String!
   code: String!
-  fields: [String!]!
+  path: [String!]!
 }

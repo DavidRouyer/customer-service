@@ -1,6 +1,7 @@
 import { and, eq, inArray, isNotNull, isNull, schema } from '@cs/database';
 import { TicketLabelsChanged, TimelineEntryType } from '@cs/kyaku/models';
 import { Direction, FindConfig, GetConfig } from '@cs/kyaku/types/query';
+import { KyakuError } from '@cs/kyaku/utils/errors';
 
 import { LabelFilters, LabelSortField, LabelWith } from '../entities/label';
 import LabelRepository from '../repositories/label';
@@ -86,7 +87,11 @@ export default class LabelService extends BaseService {
       },
     });
 
-    if (!ticket) return [];
+    if (!ticket)
+      throw new KyakuError(
+        KyakuError.Types.NOT_FOUND,
+        `Ticket with id:${ticketId} not found`
+      );
 
     const affectedLabelTypeIds = new Set(
       ticket.labels.flatMap((label) => label.labelType.id)
@@ -165,7 +170,11 @@ export default class LabelService extends BaseService {
       where: eq(schema.tickets.id, ticketId),
     });
 
-    if (!ticket) return;
+    if (!ticket)
+      throw new KyakuError(
+        KyakuError.Types.NOT_FOUND,
+        `Ticket with id:${ticketId} not found`
+      );
 
     const fetchedLabels = await this.labelRepository.findMany({
       where: inArray(schema.labelTypes.id, labelIds),

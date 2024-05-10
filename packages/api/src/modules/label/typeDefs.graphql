@@ -11,7 +11,7 @@ input AddLabelsInput {
 
 type AddLabelsOutput {
   labels: [Label!]!
-  errors: [MutationError!]
+  userErrors: [MutationError!]
 }
 
 input RemoveLabelsInput {
@@ -20,7 +20,7 @@ input RemoveLabelsInput {
 }
 
 type RemoveLabelsOutput {
-  errors: [MutationError!]
+  userErrors: [MutationError!]
 }
 
 type Mutation {
