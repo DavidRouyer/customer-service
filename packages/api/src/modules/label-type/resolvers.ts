@@ -153,8 +153,8 @@ const resolvers: Resolvers = {
         return handleErrors(error);
       }
     },
-    unarchiveLabelType: async (_, { input }, ctx) => {
-      if (!ctx.session) {
+    unarchiveLabelType: async (_, { input }, { container, session }) => {
+      if (!session) {
         throw new GraphQLError('Unauthorized', {
           extensions: {
             code: KyakuErrorTypes.UNAUTHORIZED,
@@ -163,12 +163,12 @@ const resolvers: Resolvers = {
       }
 
       const labelTypeService: LabelTypeService =
-        ctx.container.resolve('labelTypeService');
+        container.resolve('labelTypeService');
 
       try {
         const unarchivedLabelType = await labelTypeService.unarchive(
           input.id,
-          ctx.session.user.id
+          session.user.id
         );
 
         return {
@@ -185,8 +185,8 @@ const resolvers: Resolvers = {
         return handleErrors(error);
       }
     },
-    updateLabelType: async (_, { input }, ctx) => {
-      if (!ctx.session) {
+    updateLabelType: async (_, { input }, { container, session }) => {
+      if (!session) {
         throw new GraphQLError('Unauthorized', {
           extensions: {
             code: KyakuErrorTypes.UNAUTHORIZED,
@@ -195,7 +195,7 @@ const resolvers: Resolvers = {
       }
 
       const labelTypeService: LabelTypeService =
-        ctx.container.resolve('labelTypeService');
+        container.resolve('labelTypeService');
 
       try {
         const updatedLabelType = await labelTypeService.update(
@@ -203,7 +203,7 @@ const resolvers: Resolvers = {
             ...input,
             name: input.name ?? undefined,
           },
-          ctx.session.user.id
+          session.user.id
         );
 
         return {
