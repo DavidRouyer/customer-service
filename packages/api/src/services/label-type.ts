@@ -86,8 +86,10 @@ export default class LabelTypeService extends BaseService {
         icon: z.string().optional(),
       })
       .refine(
-        async (data) => {
-          const labelTypeWithName = await this.retrieveByName(data.name);
+        async (dataToRefine) => {
+          const labelTypeWithName = await this.retrieveByName(
+            dataToRefine.name
+          );
           return !labelTypeWithName;
         },
         {

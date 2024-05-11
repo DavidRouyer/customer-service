@@ -161,9 +161,6 @@ describe('LabelTypeService', () => {
         find: vi.fn(() => ({
           id: 'one-piece',
         })),
-        create: vi.fn(() => ({
-          id: 'one-piece',
-        })),
       };
       const unitOfWork = {
         transaction: vi.fn((cb) => cb()),
@@ -258,9 +255,6 @@ describe('LabelTypeService', () => {
       const labelTypeRepo = {
         find: vi.fn(() => ({
           id: 'one-piece-1',
-        })),
-        update: vi.fn(() => ({
-          id: 'one-piece',
         })),
       };
       const unitOfWork = {
