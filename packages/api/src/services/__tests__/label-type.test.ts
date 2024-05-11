@@ -174,7 +174,7 @@ describe('LabelTypeService', () => {
       const date = new Date('2000-01-01T12:00:00.000Z');
       vi.setSystemTime(date);
 
-      expect(
+      await expect(
         async () =>
           await labelTypeService.create(
             {
@@ -269,7 +269,7 @@ describe('LabelTypeService', () => {
       const date = new Date('2000-01-01T12:00:00.000Z');
       vi.setSystemTime(date);
 
-      expect(
+      await expect(
         async () =>
           await labelTypeService.update(
             {
@@ -283,9 +283,16 @@ describe('LabelTypeService', () => {
 
       expect(unitOfWork.transaction).toHaveBeenCalledTimes(0);
 
-      expect(labelTypeRepo.find).toHaveBeenCalledTimes(1);
+      expect(labelTypeRepo.find).toHaveBeenCalledTimes(2);
       expect(labelTypeRepo.find).toHaveBeenCalledWith({
         where: eq(schema.labelTypes.id, 'one-piece'),
+        with: {
+          createdBy: undefined,
+          updatedBy: undefined,
+        },
+      });
+      expect(labelTypeRepo.find).toHaveBeenCalledWith({
+        where: eq(schema.labelTypes.name, 'One Piece'),
         with: {
           createdBy: undefined,
           updatedBy: undefined,
