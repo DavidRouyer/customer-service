@@ -186,7 +186,7 @@ describe('LabelTypeService', () => {
             },
             'user-id'
           )
-      ).rejects.toThrowError('Label type with name:One Piece already exists');
+      ).rejects.toThrowError(/Label type with name:One Piece already exists/);
 
       expect(unitOfWork.transaction).toHaveBeenCalledTimes(0);
 
@@ -257,7 +257,7 @@ describe('LabelTypeService', () => {
     it('should throw if a label type with the same name already exists', async () => {
       const labelTypeRepo = {
         find: vi.fn(() => ({
-          id: 'one-piece',
+          id: 'one-piece-1',
         })),
         update: vi.fn(() => ({
           id: 'one-piece',
@@ -285,7 +285,7 @@ describe('LabelTypeService', () => {
             },
             'user-id'
           )
-      ).rejects.toThrowError('Label type with name:One Piece already exists');
+      ).rejects.toThrowError(/Label type with name:One Piece already exists/);
 
       expect(unitOfWork.transaction).toHaveBeenCalledTimes(0);
 

@@ -91,7 +91,7 @@ export default class LabelTypeService extends BaseService {
           return !labelTypeWithName;
         },
         {
-          message: `Label type with name ${data.name} already exists`,
+          message: `Label type with name:${data.name} already exists`,
           path: ['name'],
         }
       );
@@ -146,7 +146,7 @@ export default class LabelTypeService extends BaseService {
           return !labelTypeWithName || labelTypeWithName?.id === data.id;
         },
         {
-          message: `Label type with name ${data.name} already exists`,
+          message: `Label type with name:${data.name} already exists`,
           path: ['name'],
         }
       );

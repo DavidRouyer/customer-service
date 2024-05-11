@@ -1,8 +1,6 @@
 import { GraphQLError } from 'graphql';
-import { ZodError } from 'zod';
 
-import { DrizzleError } from '@cs/database';
-import { KyakuError, KyakuErrorTypes } from '@cs/kyaku/utils/errors';
+import { KyakuErrorTypes } from '@cs/kyaku/utils/errors';
 import {
   connectionFromArray,
   validatePaginationArguments,
