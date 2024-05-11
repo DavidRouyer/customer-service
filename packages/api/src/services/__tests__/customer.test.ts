@@ -40,7 +40,7 @@ describe('CustomerService', () => {
         },
       });
 
-      expect(result.id).toEqual('john-doe');
+      expect(result?.id).toEqual('john-doe');
     });
   });
 

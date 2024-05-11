@@ -50,7 +50,7 @@ describe('LabelService', () => {
         },
       });
 
-      expect(result.id).toEqual('one-piece');
+      expect(result?.id).toEqual('one-piece');
     });
   });
 

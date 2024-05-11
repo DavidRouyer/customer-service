@@ -43,7 +43,7 @@ describe('UserService', () => {
         where: eq(schema.users.id, 'john-doe'),
       });
 
-      expect(result.id).toEqual('john-doe');
+      expect(result?.id).toEqual('john-doe');
     });
   });
 
