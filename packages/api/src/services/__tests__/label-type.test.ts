@@ -40,7 +40,7 @@ describe('LabelTypeService', () => {
         },
       });
 
-      expect(result.id).toEqual('one-piece');
+      expect(result?.id).toEqual('one-piece');
     });
   });
 
@@ -69,7 +69,7 @@ describe('LabelTypeService', () => {
         },
       });
 
-      expect(result.id).toEqual('one-piece');
+      expect(result?.id).toEqual('one-piece');
     });
   });
 
@@ -108,7 +108,7 @@ describe('LabelTypeService', () => {
   describe('create', () => {
     it('should successfully create a label type', async () => {
       const labelTypeRepo = {
-        find: vi.fn(() => null),
+        find: vi.fn(() => undefined),
         create: vi.fn(() => ({
           id: 'one-piece',
         })),

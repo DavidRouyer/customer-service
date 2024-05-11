@@ -88,7 +88,7 @@ export default class LabelTypeService extends BaseService {
       .refine(
         async (data) => {
           const labelTypeWithName = await this.retrieveByName(data.name);
-          return labelTypeWithName !== null;
+          return !labelTypeWithName;
         },
         {
           message: `Label type with name ${data.name} already exists`,
