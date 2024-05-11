@@ -43,12 +43,18 @@ export type AddLabelsInput = {
 
 export type AddLabelsOutput = {
   __typename?: 'AddLabelsOutput';
-  errors?: Maybe<Array<MutationError>>;
-  labels: Array<Label>;
+  labels?: Maybe<Array<Label>>;
+  userErrors?: Maybe<Array<MutationError>>;
 };
 
 export type ArchiveLabelTypeInput = {
   id: Scalars['ID']['input'];
+};
+
+export type ArchiveLabelTypeOutput = {
+  __typename?: 'ArchiveLabelTypeOutput';
+  labelType?: Maybe<LabelType>;
+  userErrors?: Maybe<Array<MutationError>>;
 };
 
 export type AssignmentChangedEntry = {
@@ -65,6 +71,12 @@ export type ChatEntry = {
 export type CreateLabelTypeInput = {
   icon?: InputMaybe<Scalars['String']['input']>;
   name: Scalars['String']['input'];
+};
+
+export type CreateLabelTypeOutput = {
+  __typename?: 'CreateLabelTypeOutput';
+  labelType?: Maybe<LabelType>;
+  userErrors?: Maybe<Array<MutationError>>;
 };
 
 export type Customer = Node & {
@@ -128,11 +140,11 @@ export type LabelsChangedEntry = {
 export type Mutation = {
   __typename?: 'Mutation';
   addLabels?: Maybe<AddLabelsOutput>;
-  archiveLabelType?: Maybe<LabelType>;
-  createLabelType?: Maybe<LabelType>;
+  archiveLabelType?: Maybe<ArchiveLabelTypeOutput>;
+  createLabelType?: Maybe<CreateLabelTypeOutput>;
   removeLabels?: Maybe<RemoveLabelsOutput>;
-  unarchiveLabelType?: Maybe<LabelType>;
-  updateLabelType?: Maybe<LabelType>;
+  unarchiveLabelType?: Maybe<UnarchiveLabelTypeOutput>;
+  updateLabelType?: Maybe<UpdateLabelTypeOutput>;
 };
 
 
@@ -168,8 +180,8 @@ export type MutationUpdateLabelTypeArgs = {
 export type MutationError = {
   __typename?: 'MutationError';
   code: Scalars['String']['output'];
-  fields: Array<Scalars['String']['output']>;
   message: Scalars['String']['output'];
+  path: Array<Scalars['String']['output']>;
 };
 
 export type Node = {
@@ -260,7 +272,7 @@ export type RemoveLabelsInput = {
 
 export type RemoveLabelsOutput = {
   __typename?: 'RemoveLabelsOutput';
-  errors?: Maybe<Array<MutationError>>;
+  userErrors?: Maybe<Array<MutationError>>;
 };
 
 export type StatusChangedEntry = {
@@ -359,10 +371,22 @@ export type UnarchiveLabelTypeInput = {
   id: Scalars['ID']['input'];
 };
 
+export type UnarchiveLabelTypeOutput = {
+  __typename?: 'UnarchiveLabelTypeOutput';
+  labelType?: Maybe<LabelType>;
+  userErrors?: Maybe<Array<MutationError>>;
+};
+
 export type UpdateLabelTypeInput = {
   icon?: InputMaybe<Scalars['String']['input']>;
   id: Scalars['ID']['input'];
   name?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type UpdateLabelTypeOutput = {
+  __typename?: 'UpdateLabelTypeOutput';
+  labelType?: Maybe<LabelType>;
+  userErrors?: Maybe<Array<MutationError>>;
 };
 
 export type User = Node & {
@@ -408,14 +432,14 @@ export type AddLabelsMutationVariables = Exact<{
 }>;
 
 
-export type AddLabelsMutation = { __typename?: 'Mutation', addLabels?: { __typename?: 'AddLabelsOutput', labels: Array<{ __typename?: 'Label', id: string }>, errors?: Array<{ __typename?: 'MutationError', message: string }> | null } | null };
+export type AddLabelsMutation = { __typename?: 'Mutation', addLabels?: { __typename?: 'AddLabelsOutput', labels?: Array<{ __typename?: 'Label', id: string }> | null, userErrors?: Array<{ __typename?: 'MutationError', message: string }> | null } | null };
 
 export type RemoveLabelsMutationVariables = Exact<{
   input: RemoveLabelsInput;
 }>;
 
 
-export type RemoveLabelsMutation = { __typename?: 'Mutation', removeLabels?: { __typename?: 'RemoveLabelsOutput', errors?: Array<{ __typename?: 'MutationError', message: string }> | null } | null };
+export type RemoveLabelsMutation = { __typename?: 'Mutation', removeLabels?: { __typename?: 'RemoveLabelsOutput', userErrors?: Array<{ __typename?: 'MutationError', message: string }> | null } | null };
 
 export type TicketQueryVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -556,7 +580,7 @@ export const AddLabelsDocument = `
     labels {
       id
     }
-    errors {
+    userErrors {
       message
     }
   }
@@ -582,7 +606,7 @@ useAddLabelsMutation.fetcher = (variables: AddLabelsMutationVariables) => fetche
 export const RemoveLabelsDocument = `
     mutation removeLabels($input: RemoveLabelsInput!) {
   removeLabels(input: $input) {
-    errors {
+    userErrors {
       message
     }
   }

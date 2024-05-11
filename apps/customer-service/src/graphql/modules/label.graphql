@@ -12,7 +12,7 @@ mutation addLabels($input: AddLabelsInput!) {
     labels {
       id
     }
-    errors {
+    userErrors {
       message
     }
   }
@@ -20,7 +20,7 @@ mutation addLabels($input: AddLabelsInput!) {
 
 mutation removeLabels($input: RemoveLabelsInput!) {
   removeLabels(input: $input) {
-    errors {
+    userErrors {
       message
     }
   }
