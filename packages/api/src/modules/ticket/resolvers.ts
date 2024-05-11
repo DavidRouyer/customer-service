@@ -82,10 +82,10 @@ const mapEntry = (entry: TicketTimelineUnion) => {
         ...entry,
         entry: {
           oldAssignedTo: entry.entry.oldAssignedToId
-            ? { id: entry.entry.oldAssignedToId }
+            ? ({ id: entry.entry.oldAssignedToId } as User)
             : null,
           newAssignedTo: entry.entry.newAssignedToId
-            ? { id: entry.entry.newAssignedToId }
+            ? ({ id: entry.entry.newAssignedToId } as User)
             : null,
         },
       };
@@ -99,9 +99,12 @@ const mapEntry = (entry: TicketTimelineUnion) => {
                 id: labelId,
               }) as Label
           ),
-          newLabels: entry.entry.newLabelIds.map((labelId) => ({
-            id: labelId,
-          })),
+          newLabels: entry.entry.newLabelIds.map(
+            (labelId) =>
+              ({
+                id: labelId,
+              }) as Label
+          ),
         },
       };
     case TimelineEntryType.Chat:
