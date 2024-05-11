@@ -12,6 +12,7 @@ import {
   TimelineEntryType,
 } from '@cs/kyaku/models';
 import { Direction, FindConfig, GetConfig } from '@cs/kyaku/types/query';
+import { KyakuError } from '@cs/kyaku/utils/errors';
 
 import {
   Ticket,
@@ -124,7 +125,12 @@ export default class TicketService extends BaseService {
   async assign(ticketId: string, assignedToId: string, userId: string) {
     const ticket = await this.retrieve(ticketId);
 
-    if (!ticket) return;
+    if (!ticket)
+      throw new KyakuError(
+        KyakuError.Types.NOT_FOUND,
+        `Ticket with id:${ticketId} not found`,
+        ['id']
+      );
 
     if (ticket.assignedToId === assignedToId) return;
 
@@ -164,7 +170,12 @@ export default class TicketService extends BaseService {
   async unassign(ticketId: string, userId: string) {
     const ticket = await this.retrieve(ticketId);
 
-    if (!ticket) return;
+    if (!ticket)
+      throw new KyakuError(
+        KyakuError.Types.NOT_FOUND,
+        `Ticket with id:${ticketId} not found`,
+        ['id']
+      );
 
     if (!ticket.assignedToId) return;
 
@@ -208,7 +219,12 @@ export default class TicketService extends BaseService {
   ) {
     const ticket = await this.retrieve(ticketId);
 
-    if (!ticket) return;
+    if (!ticket)
+      throw new KyakuError(
+        KyakuError.Types.NOT_FOUND,
+        `Ticket with id:${ticketId} not found`,
+        ['id']
+      );
 
     if (ticket.priority === priority) return;
 
@@ -248,7 +264,12 @@ export default class TicketService extends BaseService {
   async markAsDone(ticketId: string, userId: string) {
     const ticket = await this.retrieve(ticketId);
 
-    if (!ticket) return;
+    if (!ticket)
+      throw new KyakuError(
+        KyakuError.Types.NOT_FOUND,
+        `Ticket with id:${ticketId} not found`,
+        ['id']
+      );
 
     if (ticket.status === TicketStatus.Done) return;
 
@@ -291,7 +312,12 @@ export default class TicketService extends BaseService {
   async markAsOpen(ticketId: string, userId: string) {
     const ticket = await this.retrieve(ticketId);
 
-    if (!ticket) return;
+    if (!ticket)
+      throw new KyakuError(
+        KyakuError.Types.NOT_FOUND,
+        `Ticket with id:${ticketId} not found`,
+        ['id']
+      );
 
     if (ticket.status === TicketStatus.Open) return;
 
@@ -334,7 +360,12 @@ export default class TicketService extends BaseService {
   async sendChat(ticketId: string, text: string, userId: string) {
     const ticket = await this.retrieve(ticketId);
 
-    if (!ticket) return;
+    if (!ticket)
+      throw new KyakuError(
+        KyakuError.Types.NOT_FOUND,
+        `Ticket with id:${ticketId} not found`,
+        ['id']
+      );
 
     return await this.unitOfWork.transaction(async (tx) => {
       const creationDate = new Date();
@@ -384,7 +415,12 @@ export default class TicketService extends BaseService {
   ) {
     const ticket = await this.retrieve(ticketId);
 
-    if (!ticket) return;
+    if (!ticket)
+      throw new KyakuError(
+        KyakuError.Types.NOT_FOUND,
+        `Ticket with id:${ticketId} not found`,
+        ['id']
+      );
 
     const mentionIds = await extractMentions(rawContent);
 
