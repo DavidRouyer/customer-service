@@ -1,11 +1,9 @@
-import { GraphQLError } from 'graphql';
-
-import { KyakuErrorTypes } from '@cs/kyaku/utils/errors';
 import {
   connectionFromArray,
   validatePaginationArguments,
 } from '@cs/kyaku/utils/pagination';
 
+import { authorize } from '../../authorize';
 import { LabelTypeSortField } from '../../entities/label-type';
 import { Resolvers, User } from '../../generated-types/graphql';
 import LabelTypeService from '../../services/label-type';
@@ -86,14 +84,8 @@ const resolvers: Resolvers = {
     },
   },
   Mutation: {
-    archiveLabelType: async (_, { input }, { container, session }) => {
-      if (!session) {
-        throw new GraphQLError('Unauthorized', {
-          extensions: {
-            code: KyakuErrorTypes.UNAUTHORIZED,
-          },
-        });
-      }
+    archiveLabelType: async (_, { input }, { container, user }) => {
+      const authorizedUser = authorize(user);
 
       const labelTypeService: LabelTypeService =
         container.resolve('labelTypeService');
@@ -101,7 +93,7 @@ const resolvers: Resolvers = {
       try {
         const archivedLabelType = await labelTypeService.archive(
           input.id,
-          session.user.id
+          authorizedUser.id
         );
 
         return {
@@ -118,14 +110,8 @@ const resolvers: Resolvers = {
         return handleErrors(error);
       }
     },
-    createLabelType: async (_, { input }, { container, session }) => {
-      if (!session) {
-        throw new GraphQLError('Unauthorized', {
-          extensions: {
-            code: KyakuErrorTypes.UNAUTHORIZED,
-          },
-        });
-      }
+    createLabelType: async (_, { input }, { container, user }) => {
+      const authorizedUser = authorize(user);
 
       const labelTypeService: LabelTypeService =
         container.resolve('labelTypeService');
@@ -136,7 +122,7 @@ const resolvers: Resolvers = {
             ...input,
             icon: input.icon ?? null,
           },
-          session.user.id
+          authorizedUser.id
         );
 
         return {
@@ -153,14 +139,8 @@ const resolvers: Resolvers = {
         return handleErrors(error);
       }
     },
-    unarchiveLabelType: async (_, { input }, { container, session }) => {
-      if (!session) {
-        throw new GraphQLError('Unauthorized', {
-          extensions: {
-            code: KyakuErrorTypes.UNAUTHORIZED,
-          },
-        });
-      }
+    unarchiveLabelType: async (_, { input }, { container, user }) => {
+      const authorizedUser = authorize(user);
 
       const labelTypeService: LabelTypeService =
         container.resolve('labelTypeService');
@@ -168,7 +148,7 @@ const resolvers: Resolvers = {
       try {
         const unarchivedLabelType = await labelTypeService.unarchive(
           input.id,
-          session.user.id
+          authorizedUser.id
         );
 
         return {
@@ -185,14 +165,8 @@ const resolvers: Resolvers = {
         return handleErrors(error);
       }
     },
-    updateLabelType: async (_, { input }, { container, session }) => {
-      if (!session) {
-        throw new GraphQLError('Unauthorized', {
-          extensions: {
-            code: KyakuErrorTypes.UNAUTHORIZED,
-          },
-        });
-      }
+    updateLabelType: async (_, { input }, { container, user }) => {
+      const authorizedUser = authorize(user);
 
       const labelTypeService: LabelTypeService =
         container.resolve('labelTypeService');
@@ -203,7 +177,7 @@ const resolvers: Resolvers = {
             ...input,
             name: input.name ?? undefined,
           },
-          session.user.id
+          authorizedUser.id
         );
 
         return {

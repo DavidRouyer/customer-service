@@ -53,7 +53,6 @@ container.register({
 
 const getContext = async () => ({
   container,
-  session: await auth(),
   dataloaders: {
     customerLoader: new DataLoader<string, Customer, string>(async (ids) => {
       const customerService: CustomerService =
@@ -117,6 +116,10 @@ const getContext = async () => ({
           rows.find((row) => row.id === id) || new Error(`Row not found: ${id}`)
       );
     }),
+  },
+  user: async () => {
+    const session = await auth();
+    return session?.user;
   },
 });
 

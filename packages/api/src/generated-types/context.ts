@@ -18,5 +18,5 @@ export type Context = {
     ticketLoader: DataLoader<string, Ticket, string>;
     userLoader: DataLoader<string, User, string>;
   };
-  session: Session | null;
+  user: Session['user'] | null;
 };

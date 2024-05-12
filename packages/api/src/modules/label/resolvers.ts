@@ -1,7 +1,4 @@
-import { GraphQLError } from 'graphql';
-
-import { KyakuErrorTypes } from '@cs/kyaku/utils/errors';
-
+import { authorize } from '../../authorize';
 import { LabelType, Resolvers } from '../../generated-types/graphql';
 import LabelService from '../../services/label';
 import { handleErrors } from '../error';
@@ -27,21 +24,15 @@ const resolvers: Resolvers = {
     },
   },
   Mutation: {
-    addLabels: async (_, { input }, { container, session }) => {
-      if (!session) {
-        throw new GraphQLError('Unauthorized', {
-          extensions: {
-            code: KyakuErrorTypes.UNAUTHORIZED,
-          },
-        });
-      }
+    addLabels: async (_, { input }, { container, user }) => {
+      const authorizedUser = authorize(user);
 
       const labelService = container.resolve<LabelService>('labelService');
       try {
         const addedLabels = await labelService.addLabels(
           input.ticketId,
           input.labelTypeIds,
-          session.user.id
+          authorizedUser.id
         );
 
         return {
@@ -54,21 +45,15 @@ const resolvers: Resolvers = {
         };
       }
     },
-    removeLabels: async (_, { input }, { container, session }) => {
-      if (!session) {
-        throw new GraphQLError('Unauthorized', {
-          extensions: {
-            code: KyakuErrorTypes.UNAUTHORIZED,
-          },
-        });
-      }
+    removeLabels: async (_, { input }, { container, user }) => {
+      const authorizedUser = authorize(user);
 
       const labelService = container.resolve<LabelService>('labelService');
       try {
         await labelService.removeLabels(
           input.ticketId,
           input.labelIds,
-          session.user.id
+          authorizedUser.id
         );
 
         return {};
