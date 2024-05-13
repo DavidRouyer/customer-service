@@ -84,7 +84,11 @@ const resolvers: Resolvers = {
     },
   },
   Mutation: {
-    archiveLabelType: async (_, { input }, { container, user }) => {
+    archiveLabelType: async (
+      _,
+      { input },
+      { container, dataloaders, user }
+    ) => {
       const authorizedUser = authorize(user);
 
       const labelTypeService: LabelTypeService =
@@ -98,19 +102,16 @@ const resolvers: Resolvers = {
 
         return {
           labelType: archivedLabelType
-            ? await labelTypeService.retrieve(archivedLabelType.id, {
-                relations: {
-                  createdBy: true,
-                  updatedBy: true,
-                },
-              })
+            ? mapLabelType(
+                await dataloaders.labelTypeLoader.load(archivedLabelType.id)
+              )
             : null,
         };
       } catch (error) {
         return handleErrors(error);
       }
     },
-    createLabelType: async (_, { input }, { container, user }) => {
+    createLabelType: async (_, { input }, { container, dataloaders, user }) => {
       const authorizedUser = authorize(user);
 
       const labelTypeService: LabelTypeService =
@@ -127,19 +128,20 @@ const resolvers: Resolvers = {
 
         return {
           labelType: createdLabelType
-            ? await labelTypeService.retrieve(createdLabelType.id, {
-                relations: {
-                  createdBy: true,
-                  updatedBy: true,
-                },
-              })
+            ? mapLabelType(
+                await dataloaders.labelTypeLoader.load(createdLabelType.id)
+              )
             : null,
         };
       } catch (error) {
         return handleErrors(error);
       }
     },
-    unarchiveLabelType: async (_, { input }, { container, user }) => {
+    unarchiveLabelType: async (
+      _,
+      { input },
+      { container, dataloaders, user }
+    ) => {
       const authorizedUser = authorize(user);
 
       const labelTypeService: LabelTypeService =
@@ -153,19 +155,16 @@ const resolvers: Resolvers = {
 
         return {
           labelType: unarchivedLabelType
-            ? await labelTypeService.retrieve(unarchivedLabelType.id, {
-                relations: {
-                  createdBy: true,
-                  updatedBy: true,
-                },
-              })
+            ? mapLabelType(
+                await dataloaders.labelTypeLoader.load(unarchivedLabelType.id)
+              )
             : null,
         };
       } catch (error) {
         return handleErrors(error);
       }
     },
-    updateLabelType: async (_, { input }, { container, user }) => {
+    updateLabelType: async (_, { input }, { container, dataloaders, user }) => {
       const authorizedUser = authorize(user);
 
       const labelTypeService: LabelTypeService =
@@ -182,12 +181,9 @@ const resolvers: Resolvers = {
 
         return {
           labelType: updatedLabelType
-            ? await labelTypeService.retrieve(updatedLabelType?.id, {
-                relations: {
-                  createdBy: true,
-                  updatedBy: true,
-                },
-              })
+            ? mapLabelType(
+                await dataloaders.labelTypeLoader.load(updatedLabelType.id)
+              )
             : null,
         };
       } catch (error) {

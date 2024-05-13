@@ -57,6 +57,17 @@ export type ArchiveLabelTypeOutput = {
   userErrors?: Maybe<Array<MutationError>>;
 };
 
+export type AssignTicketInput = {
+  id: Scalars['ID']['input'];
+  userId: Scalars['ID']['input'];
+};
+
+export type AssignTicketOutput = {
+  __typename?: 'AssignTicketOutput';
+  ticket?: Maybe<Ticket>;
+  userErrors?: Maybe<Array<MutationError>>;
+};
+
 export type AssignmentChangedEntry = {
   __typename?: 'AssignmentChangedEntry';
   newAssignedTo?: Maybe<User>;
@@ -76,6 +87,19 @@ export type CreateLabelTypeInput = {
 export type CreateLabelTypeOutput = {
   __typename?: 'CreateLabelTypeOutput';
   labelType?: Maybe<LabelType>;
+  userErrors?: Maybe<Array<MutationError>>;
+};
+
+export type CreateTicketInput = {
+  customerId: Scalars['ID']['input'];
+  labelIds?: InputMaybe<Array<Scalars['ID']['input']>>;
+  priority?: InputMaybe<TicketPriority>;
+  title: Scalars['String']['input'];
+};
+
+export type CreateTicketOutput = {
+  __typename?: 'CreateTicketOutput';
+  ticket?: Maybe<Ticket>;
   userErrors?: Maybe<Array<MutationError>>;
 };
 
@@ -141,9 +165,12 @@ export type Mutation = {
   __typename?: 'Mutation';
   addLabels?: Maybe<AddLabelsOutput>;
   archiveLabelType?: Maybe<ArchiveLabelTypeOutput>;
+  assignTicket?: Maybe<AssignTicketOutput>;
   createLabelType?: Maybe<CreateLabelTypeOutput>;
+  createTicket?: Maybe<CreateTicketOutput>;
   removeLabels?: Maybe<RemoveLabelsOutput>;
   unarchiveLabelType?: Maybe<UnarchiveLabelTypeOutput>;
+  unassignTicket?: Maybe<UnassignTicketOutput>;
   updateLabelType?: Maybe<UpdateLabelTypeOutput>;
 };
 
@@ -158,8 +185,18 @@ export type MutationArchiveLabelTypeArgs = {
 };
 
 
+export type MutationAssignTicketArgs = {
+  input: AssignTicketInput;
+};
+
+
 export type MutationCreateLabelTypeArgs = {
   input: CreateLabelTypeInput;
+};
+
+
+export type MutationCreateTicketArgs = {
+  input: CreateTicketInput;
 };
 
 
@@ -170,6 +207,11 @@ export type MutationRemoveLabelsArgs = {
 
 export type MutationUnarchiveLabelTypeArgs = {
   input: UnarchiveLabelTypeInput;
+};
+
+
+export type MutationUnassignTicketArgs = {
+  input: UnassignTicketInput;
 };
 
 
@@ -374,6 +416,16 @@ export type UnarchiveLabelTypeInput = {
 export type UnarchiveLabelTypeOutput = {
   __typename?: 'UnarchiveLabelTypeOutput';
   labelType?: Maybe<LabelType>;
+  userErrors?: Maybe<Array<MutationError>>;
+};
+
+export type UnassignTicketInput = {
+  id: Scalars['ID']['input'];
+};
+
+export type UnassignTicketOutput = {
+  __typename?: 'UnassignTicketOutput';
+  ticket?: Maybe<Ticket>;
   userErrors?: Maybe<Array<MutationError>>;
 };
 

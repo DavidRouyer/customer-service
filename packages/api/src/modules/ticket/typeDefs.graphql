@@ -127,3 +127,40 @@ type Query {
     before: String
   ): TicketConnection!
 }
+
+input AssignTicketInput {
+  id: ID!
+  userId: ID!
+}
+
+type AssignTicketOutput {
+  ticket: Ticket
+  userErrors: [MutationError!]
+}
+
+input CreateTicketInput {
+  title: String!
+  customerId: ID!
+  labelIds: [ID!]
+  priority: TicketPriority
+}
+
+type CreateTicketOutput {
+  ticket: Ticket
+  userErrors: [MutationError!]
+}
+
+input UnassignTicketInput {
+  id: ID!
+}
+
+type UnassignTicketOutput {
+  ticket: Ticket
+  userErrors: [MutationError!]
+}
+
+type Mutation {
+  assignTicket(input: AssignTicketInput!): AssignTicketOutput
+  createTicket(input: CreateTicketInput!): CreateTicketOutput
+  unassignTicket(input: UnassignTicketInput!): UnassignTicketOutput
+}

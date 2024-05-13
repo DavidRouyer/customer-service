@@ -1,11 +1,12 @@
 import { GraphQLError } from 'graphql';
 
-import { TimelineEntryType } from '@cs/kyaku/models';
+import { TicketPriority, TimelineEntryType } from '@cs/kyaku/models';
 import {
   connectionFromArray,
   validatePaginationArguments,
 } from '@cs/kyaku/utils/pagination';
 
+import { authorize } from '../../authorize';
 import { Label } from '../../entities/label';
 import { TicketSortField } from '../../entities/ticket';
 import { TicketTimelineUnion } from '../../entities/ticket-timeline';
@@ -24,6 +25,7 @@ import LabelService from '../../services/label';
 import TicketService from '../../services/ticket';
 import TicketTimelineService from '../../services/ticket-timeline';
 import { mapCustomer } from '../customer/resolvers';
+import { handleErrors } from '../error';
 import { mapLabel } from '../label/resolvers';
 import typeDefs from './typeDefs.graphql';
 
@@ -346,6 +348,74 @@ const resolvers: Resolvers = {
         return null;
       }
       return dataloaders.userLoader.load(updatedBy.id);
+    },
+  },
+  Mutation: {
+    assignTicket: async (_, { input }, { container, dataloaders, user }) => {
+      const authorizedUser = authorize(user);
+
+      const ticketService: TicketService = container.resolve('ticketService');
+
+      try {
+        const ticket = await ticketService.assign(
+          {
+            ticketId: input.id,
+            assignedToId: input.userId,
+          },
+          authorizedUser.id
+        );
+
+        return {
+          ticket: ticket
+            ? mapTicket(await dataloaders.ticketLoader.load(ticket.id))
+            : null,
+        };
+      } catch (error) {
+        return handleErrors(error);
+      }
+    },
+    createTicket: async (_, { input }, { container, dataloaders, user }) => {
+      const authorizedUser = authorize(user);
+
+      const ticketService: TicketService = container.resolve('ticketService');
+
+      try {
+        const ticket = await ticketService.create(
+          {
+            ...input,
+            priority: input.priority ?? TicketPriority.Medium,
+          },
+          authorizedUser.id
+        );
+
+        return {
+          ticket: ticket
+            ? mapTicket(await dataloaders.ticketLoader.load(ticket.id))
+            : null,
+        };
+      } catch (error) {
+        return handleErrors(error);
+      }
+    },
+    unassignTicket: async (_, { input }, { container, dataloaders, user }) => {
+      const authorizedUser = authorize(user);
+
+      const ticketService: TicketService = container.resolve('ticketService');
+
+      try {
+        const ticket = await ticketService.unassign(
+          input.id,
+          authorizedUser.id
+        );
+
+        return {
+          ticket: ticket
+            ? mapTicket(await dataloaders.ticketLoader.load(ticket.id))
+            : null,
+        };
+      } catch (error) {
+        return handleErrors(error);
+      }
     },
   },
 };

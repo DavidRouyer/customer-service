@@ -2,6 +2,8 @@ import { mergeResolvers, mergeTypeDefs } from '@graphql-tools/merge';
 import { makeExecutableSchema } from '@graphql-tools/schema';
 import { asClass, asValue, createContainer } from 'awilix';
 import DataLoader from 'dataloader';
+import { YogaInitialContext } from 'graphql-yoga';
+import { JwtPayload, verify } from 'jsonwebtoken';
 
 import { auth } from '@cs/auth';
 import { drizzleConnection } from '@cs/database';
@@ -51,7 +53,30 @@ container.register({
   userService: asClass(UserService).scoped(),
 });
 
-const getContext = async () => ({
+const getUser = async (request: Request) => {
+  const session = await auth();
+  if (session?.user) {
+    return session.user;
+  }
+
+  const header = request.headers.get('authorization');
+  if (header !== null) {
+    const token = header.split(' ')[1];
+    const tokenPayload = verify(
+      token as string,
+      process.env.JWT_SECRET as string
+    ) as JwtPayload;
+
+    const userId = tokenPayload.userId;
+    const userService: UserService = container.resolve('userService');
+
+    return userService.retrieve(userId);
+  }
+
+  return null;
+};
+
+const getContext = async (initialContext: YogaInitialContext) => ({
   container,
   dataloaders: {
     customerLoader: new DataLoader<string, Customer, string>(async (ids) => {
@@ -117,10 +142,7 @@ const getContext = async () => ({
       );
     }),
   },
-  user: async () => {
-    const session = await auth();
-    return session?.user;
-  },
+  user: await getUser(initialContext.request),
 });
 
 const schema = makeExecutableSchema({
