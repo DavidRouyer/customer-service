@@ -101,12 +101,12 @@ export default class LabelTypeService extends BaseService {
     await createLabelTypeSchema.parseAsync(data);
 
     return await this.unitOfWork.transaction(async (tx) => {
-      const creationDate = new Date();
+      const createdAt = new Date();
 
       const newLabelType = await this.labelTypeRepository.create(
         {
           ...data,
-          createdAt: creationDate,
+          createdAt: createdAt,
           createdById: userId,
         },
         tx
@@ -156,12 +156,12 @@ export default class LabelTypeService extends BaseService {
     await updateLabelTypeSchema.parseAsync(data);
 
     return await this.unitOfWork.transaction(async (tx) => {
-      const updateDate = new Date();
+      const updatedAt = new Date();
 
       const updatedLabelType = await this.labelTypeRepository.update(
         {
           ...data,
-          updatedAt: updateDate,
+          updatedAt: updatedAt,
           updatedById: userId,
         },
         tx
@@ -190,15 +190,15 @@ export default class LabelTypeService extends BaseService {
 
     if (labelType.archivedAt) return;
 
-    const archiveDate = new Date();
-
     return await this.unitOfWork.transaction(async (tx) => {
+      const updatedAt = new Date();
+
       return await this.labelTypeRepository.update(
         {
           id: labelType.id,
-          updatedAt: archiveDate,
+          updatedAt: updatedAt,
           updatedById: userId,
-          archivedAt: archiveDate,
+          archivedAt: updatedAt,
         },
         tx
       );
@@ -217,13 +217,13 @@ export default class LabelTypeService extends BaseService {
 
     if (!labelType.archivedAt) return;
 
-    const unarchiveDate = new Date();
-
     return await this.unitOfWork.transaction(async (tx) => {
+      const updatedAt = new Date();
+
       return await this.labelTypeRepository.update(
         {
           id: labelType.id,
-          updatedAt: unarchiveDate,
+          updatedAt: updatedAt,
           updatedById: userId,
           archivedAt: null,
         },

@@ -116,6 +116,8 @@ export default class LabelService extends BaseService {
     if (!validLabelTypeIds.length) return [];
 
     return await this.unitOfWork.transaction(async (tx) => {
+      const updatedAt = new Date();
+
       const newLabels = await this.labelRepository.createMany(
         validLabelTypeIds.map((labelTypeId) => ({
           ticketId: ticket.id,
@@ -132,7 +134,7 @@ export default class LabelService extends BaseService {
       const updatedTicket = await this.ticketRepository.update(
         {
           id: ticket.id,
-          updatedAt: new Date(),
+          updatedAt: updatedAt,
           updatedById: userId,
         },
         tx
@@ -152,7 +154,7 @@ export default class LabelService extends BaseService {
             newLabelIds: newLabels.map((label) => label.id),
           } satisfies TicketLabelsChanged,
           customerId: ticket.customerId,
-          createdAt: updatedTicket.updatedAt ?? new Date(),
+          createdAt: updatedTicket.updatedAt ?? updatedAt,
           userCreatedById: userId,
         },
         tx
@@ -190,11 +192,12 @@ export default class LabelService extends BaseService {
     if (!validLabelIds.length) return;
 
     return await this.unitOfWork.transaction(async (tx) => {
-      const archivedDate = new Date();
+      const updatedAt = new Date();
+
       const archivedLabels = await this.labelRepository.updateMany(
         validLabelIds,
         {
-          archivedAt: archivedDate,
+          archivedAt: updatedAt,
         },
         tx
       );
@@ -202,7 +205,7 @@ export default class LabelService extends BaseService {
       const updatedTicket = await this.ticketRepository.update(
         {
           id: ticketId,
-          updatedAt: archivedDate,
+          updatedAt: updatedAt,
           updatedById: userId,
         },
         tx
@@ -222,7 +225,7 @@ export default class LabelService extends BaseService {
             newLabelIds: [],
           } satisfies TicketLabelsChanged,
           customerId: ticket.customerId,
-          createdAt: updatedTicket.updatedAt ?? new Date(),
+          createdAt: updatedTicket.updatedAt ?? updatedAt,
           userCreatedById: userId,
         },
         tx
