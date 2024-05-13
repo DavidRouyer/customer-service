@@ -23,7 +23,6 @@ import {
   useMyUserInfoQuery,
   useSendChatMutation,
 } from '~/graphql/generated/client';
-import { api } from '~/trpc/react';
 
 const TextEditor = dynamic(
   () => import('~/app/_components/text-editor/text-editor'),

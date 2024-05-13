@@ -8,7 +8,6 @@ import { Avatar, AvatarFallback, AvatarImage } from '@cs/ui/avatar';
 
 import { matchPath } from '~/app/lib/path';
 import { useMyUserInfoQuery, useUsersQuery } from '~/graphql/generated/client';
-import { api } from '~/trpc/react';
 
 export const TeamMemberList: FC = () => {
   const { data: myUserInfo } = useMyUserInfoQuery(undefined, {

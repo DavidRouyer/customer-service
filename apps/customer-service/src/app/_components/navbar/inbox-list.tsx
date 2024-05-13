@@ -10,7 +10,6 @@ import { Avatar, AvatarFallback, AvatarImage } from '@cs/ui/avatar';
 
 import { matchPath } from '~/app/lib/path';
 import { useMyUserInfoQuery } from '~/graphql/generated/client';
-import { api } from '~/trpc/react';
 
 export const InboxList: FC = () => {
   const { data: myUserInfo } = useMyUserInfoQuery(undefined, {

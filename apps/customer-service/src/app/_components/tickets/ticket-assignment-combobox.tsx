@@ -27,7 +27,6 @@ import {
   useUnassignTicketMutation,
   useUsersQuery,
 } from '~/graphql/generated/client';
-import { api } from '~/trpc/react';
 
 type TicketAssignmentComboboxProps = {
   assignedTo?: NonNullable<TicketQuery['ticket']>['assignedTo'];
