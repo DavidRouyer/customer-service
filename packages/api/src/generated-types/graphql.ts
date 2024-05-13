@@ -58,6 +58,17 @@ export type AssignmentChangedEntry = {
   oldAssignedTo?: Maybe<User>;
 };
 
+export type ChangeTicketPriorityInput = {
+  id: Scalars['ID']['input'];
+  priority: TicketPriority;
+};
+
+export type ChangeTicketPriorityOutput = {
+  __typename?: 'ChangeTicketPriorityOutput';
+  ticket?: Maybe<Ticket>;
+  userErrors?: Maybe<Array<MutationError>>;
+};
+
 export type ChatEntry = {
   __typename?: 'ChatEntry';
   text: Scalars['String']['output'];
@@ -71,6 +82,18 @@ export type CreateLabelTypeInput = {
 export type CreateLabelTypeOutput = {
   __typename?: 'CreateLabelTypeOutput';
   labelType?: Maybe<LabelType>;
+  userErrors?: Maybe<Array<MutationError>>;
+};
+
+export type CreateNoteInput = {
+  rawContent: Scalars['String']['input'];
+  text: Scalars['String']['input'];
+  ticketId: Scalars['ID']['input'];
+};
+
+export type CreateNoteOutput = {
+  __typename?: 'CreateNoteOutput';
+  ticket?: Maybe<Ticket>;
   userErrors?: Maybe<Array<MutationError>>;
 };
 
@@ -145,14 +168,39 @@ export type LabelsChangedEntry = {
   oldLabels: Array<Label>;
 };
 
+export type MarkTicketAsDoneInput = {
+  id: Scalars['ID']['input'];
+};
+
+export type MarkTicketAsDoneOutput = {
+  __typename?: 'MarkTicketAsDoneOutput';
+  ticket?: Maybe<Ticket>;
+  userErrors?: Maybe<Array<MutationError>>;
+};
+
+export type MarkTicketAsOpenInput = {
+  id: Scalars['ID']['input'];
+};
+
+export type MarkTicketAsOpenOutput = {
+  __typename?: 'MarkTicketAsOpenOutput';
+  ticket?: Maybe<Ticket>;
+  userErrors?: Maybe<Array<MutationError>>;
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   addLabels?: Maybe<AddLabelsOutput>;
   archiveLabelType?: Maybe<ArchiveLabelTypeOutput>;
   assignTicket?: Maybe<AssignTicketOutput>;
+  changeTicketPriority?: Maybe<ChangeTicketPriorityOutput>;
   createLabelType?: Maybe<CreateLabelTypeOutput>;
+  createNote?: Maybe<CreateNoteOutput>;
   createTicket?: Maybe<CreateTicketOutput>;
+  markTicketAsDone?: Maybe<MarkTicketAsDoneOutput>;
+  markTicketAsOpen?: Maybe<MarkTicketAsOpenOutput>;
   removeLabels?: Maybe<RemoveLabelsOutput>;
+  sendChat?: Maybe<SendChatOutput>;
   unarchiveLabelType?: Maybe<UnarchiveLabelTypeOutput>;
   unassignTicket?: Maybe<UnassignTicketOutput>;
   updateLabelType?: Maybe<UpdateLabelTypeOutput>;
@@ -174,8 +222,18 @@ export type MutationAssignTicketArgs = {
 };
 
 
+export type MutationChangeTicketPriorityArgs = {
+  input: ChangeTicketPriorityInput;
+};
+
+
 export type MutationCreateLabelTypeArgs = {
   input: CreateLabelTypeInput;
+};
+
+
+export type MutationCreateNoteArgs = {
+  input: CreateNoteInput;
 };
 
 
@@ -184,8 +242,23 @@ export type MutationCreateTicketArgs = {
 };
 
 
+export type MutationMarkTicketAsDoneArgs = {
+  input: MarkTicketAsDoneInput;
+};
+
+
+export type MutationMarkTicketAsOpenArgs = {
+  input: MarkTicketAsOpenInput;
+};
+
+
 export type MutationRemoveLabelsArgs = {
   input: RemoveLabelsInput;
+};
+
+
+export type MutationSendChatArgs = {
+  input: SendChatInput;
 };
 
 
@@ -298,6 +371,17 @@ export type RemoveLabelsInput = {
 
 export type RemoveLabelsOutput = {
   __typename?: 'RemoveLabelsOutput';
+  userErrors?: Maybe<Array<MutationError>>;
+};
+
+export type SendChatInput = {
+  text: Scalars['String']['input'];
+  ticketId: Scalars['ID']['input'];
+};
+
+export type SendChatOutput = {
+  __typename?: 'SendChatOutput';
+  ticket?: Maybe<Ticket>;
   userErrors?: Maybe<Array<MutationError>>;
 };
 
@@ -533,9 +617,13 @@ export type ResolversTypes = {
   AssignTicketOutput: ResolverTypeWrapper<AssignTicketOutput>;
   AssignmentChangedEntry: ResolverTypeWrapper<AssignmentChangedEntry>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
+  ChangeTicketPriorityInput: ChangeTicketPriorityInput;
+  ChangeTicketPriorityOutput: ResolverTypeWrapper<ChangeTicketPriorityOutput>;
   ChatEntry: ResolverTypeWrapper<ChatEntry>;
   CreateLabelTypeInput: CreateLabelTypeInput;
   CreateLabelTypeOutput: ResolverTypeWrapper<CreateLabelTypeOutput>;
+  CreateNoteInput: CreateNoteInput;
+  CreateNoteOutput: ResolverTypeWrapper<CreateNoteOutput>;
   CreateTicketInput: CreateTicketInput;
   CreateTicketOutput: ResolverTypeWrapper<CreateTicketOutput>;
   Customer: ResolverTypeWrapper<Customer>;
@@ -549,6 +637,10 @@ export type ResolversTypes = {
   LabelTypeEdge: ResolverTypeWrapper<LabelTypeEdge>;
   LabelTypesFilter: LabelTypesFilter;
   LabelsChangedEntry: ResolverTypeWrapper<LabelsChangedEntry>;
+  MarkTicketAsDoneInput: MarkTicketAsDoneInput;
+  MarkTicketAsDoneOutput: ResolverTypeWrapper<MarkTicketAsDoneOutput>;
+  MarkTicketAsOpenInput: MarkTicketAsOpenInput;
+  MarkTicketAsOpenOutput: ResolverTypeWrapper<MarkTicketAsOpenOutput>;
   Mutation: ResolverTypeWrapper<{}>;
   MutationError: ResolverTypeWrapper<MutationError>;
   Node: ResolverTypeWrapper<ResolversInterfaceTypes<ResolversTypes>['Node']>;
@@ -558,6 +650,8 @@ export type ResolversTypes = {
   Query: ResolverTypeWrapper<{}>;
   RemoveLabelsInput: RemoveLabelsInput;
   RemoveLabelsOutput: ResolverTypeWrapper<RemoveLabelsOutput>;
+  SendChatInput: SendChatInput;
+  SendChatOutput: ResolverTypeWrapper<SendChatOutput>;
   StatusChangedEntry: ResolverTypeWrapper<StatusChangedEntry>;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
   Ticket: ResolverTypeWrapper<Ticket>;
@@ -591,9 +685,13 @@ export type ResolversParentTypes = {
   AssignTicketOutput: AssignTicketOutput;
   AssignmentChangedEntry: AssignmentChangedEntry;
   Boolean: Scalars['Boolean']['output'];
+  ChangeTicketPriorityInput: ChangeTicketPriorityInput;
+  ChangeTicketPriorityOutput: ChangeTicketPriorityOutput;
   ChatEntry: ChatEntry;
   CreateLabelTypeInput: CreateLabelTypeInput;
   CreateLabelTypeOutput: CreateLabelTypeOutput;
+  CreateNoteInput: CreateNoteInput;
+  CreateNoteOutput: CreateNoteOutput;
   CreateTicketInput: CreateTicketInput;
   CreateTicketOutput: CreateTicketOutput;
   Customer: Customer;
@@ -607,6 +705,10 @@ export type ResolversParentTypes = {
   LabelTypeEdge: LabelTypeEdge;
   LabelTypesFilter: LabelTypesFilter;
   LabelsChangedEntry: LabelsChangedEntry;
+  MarkTicketAsDoneInput: MarkTicketAsDoneInput;
+  MarkTicketAsDoneOutput: MarkTicketAsDoneOutput;
+  MarkTicketAsOpenInput: MarkTicketAsOpenInput;
+  MarkTicketAsOpenOutput: MarkTicketAsOpenOutput;
   Mutation: {};
   MutationError: MutationError;
   Node: ResolversInterfaceTypes<ResolversParentTypes>['Node'];
@@ -616,6 +718,8 @@ export type ResolversParentTypes = {
   Query: {};
   RemoveLabelsInput: RemoveLabelsInput;
   RemoveLabelsOutput: RemoveLabelsOutput;
+  SendChatInput: SendChatInput;
+  SendChatOutput: SendChatOutput;
   StatusChangedEntry: StatusChangedEntry;
   String: Scalars['String']['output'];
   Ticket: Ticket;
@@ -660,6 +764,12 @@ export type AssignmentChangedEntryResolvers<ContextType = Context, ParentType ex
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type ChangeTicketPriorityOutputResolvers<ContextType = Context, ParentType extends ResolversParentTypes['ChangeTicketPriorityOutput'] = ResolversParentTypes['ChangeTicketPriorityOutput']> = {
+  ticket?: Resolver<Maybe<ResolversTypes['Ticket']>, ParentType, ContextType>;
+  userErrors?: Resolver<Maybe<Array<ResolversTypes['MutationError']>>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type ChatEntryResolvers<ContextType = Context, ParentType extends ResolversParentTypes['ChatEntry'] = ResolversParentTypes['ChatEntry']> = {
   text?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -667,6 +777,12 @@ export type ChatEntryResolvers<ContextType = Context, ParentType extends Resolve
 
 export type CreateLabelTypeOutputResolvers<ContextType = Context, ParentType extends ResolversParentTypes['CreateLabelTypeOutput'] = ResolversParentTypes['CreateLabelTypeOutput']> = {
   labelType?: Resolver<Maybe<ResolversTypes['LabelType']>, ParentType, ContextType>;
+  userErrors?: Resolver<Maybe<Array<ResolversTypes['MutationError']>>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type CreateNoteOutputResolvers<ContextType = Context, ParentType extends ResolversParentTypes['CreateNoteOutput'] = ResolversParentTypes['CreateNoteOutput']> = {
+  ticket?: Resolver<Maybe<ResolversTypes['Ticket']>, ParentType, ContextType>;
   userErrors?: Resolver<Maybe<Array<ResolversTypes['MutationError']>>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -737,13 +853,30 @@ export type LabelsChangedEntryResolvers<ContextType = Context, ParentType extend
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type MarkTicketAsDoneOutputResolvers<ContextType = Context, ParentType extends ResolversParentTypes['MarkTicketAsDoneOutput'] = ResolversParentTypes['MarkTicketAsDoneOutput']> = {
+  ticket?: Resolver<Maybe<ResolversTypes['Ticket']>, ParentType, ContextType>;
+  userErrors?: Resolver<Maybe<Array<ResolversTypes['MutationError']>>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type MarkTicketAsOpenOutputResolvers<ContextType = Context, ParentType extends ResolversParentTypes['MarkTicketAsOpenOutput'] = ResolversParentTypes['MarkTicketAsOpenOutput']> = {
+  ticket?: Resolver<Maybe<ResolversTypes['Ticket']>, ParentType, ContextType>;
+  userErrors?: Resolver<Maybe<Array<ResolversTypes['MutationError']>>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type MutationResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   addLabels?: Resolver<Maybe<ResolversTypes['AddLabelsOutput']>, ParentType, ContextType, RequireFields<MutationAddLabelsArgs, 'input'>>;
   archiveLabelType?: Resolver<Maybe<ResolversTypes['ArchiveLabelTypeOutput']>, ParentType, ContextType, RequireFields<MutationArchiveLabelTypeArgs, 'input'>>;
   assignTicket?: Resolver<Maybe<ResolversTypes['AssignTicketOutput']>, ParentType, ContextType, RequireFields<MutationAssignTicketArgs, 'input'>>;
+  changeTicketPriority?: Resolver<Maybe<ResolversTypes['ChangeTicketPriorityOutput']>, ParentType, ContextType, RequireFields<MutationChangeTicketPriorityArgs, 'input'>>;
   createLabelType?: Resolver<Maybe<ResolversTypes['CreateLabelTypeOutput']>, ParentType, ContextType, RequireFields<MutationCreateLabelTypeArgs, 'input'>>;
+  createNote?: Resolver<Maybe<ResolversTypes['CreateNoteOutput']>, ParentType, ContextType, RequireFields<MutationCreateNoteArgs, 'input'>>;
   createTicket?: Resolver<Maybe<ResolversTypes['CreateTicketOutput']>, ParentType, ContextType, RequireFields<MutationCreateTicketArgs, 'input'>>;
+  markTicketAsDone?: Resolver<Maybe<ResolversTypes['MarkTicketAsDoneOutput']>, ParentType, ContextType, RequireFields<MutationMarkTicketAsDoneArgs, 'input'>>;
+  markTicketAsOpen?: Resolver<Maybe<ResolversTypes['MarkTicketAsOpenOutput']>, ParentType, ContextType, RequireFields<MutationMarkTicketAsOpenArgs, 'input'>>;
   removeLabels?: Resolver<Maybe<ResolversTypes['RemoveLabelsOutput']>, ParentType, ContextType, RequireFields<MutationRemoveLabelsArgs, 'input'>>;
+  sendChat?: Resolver<Maybe<ResolversTypes['SendChatOutput']>, ParentType, ContextType, RequireFields<MutationSendChatArgs, 'input'>>;
   unarchiveLabelType?: Resolver<Maybe<ResolversTypes['UnarchiveLabelTypeOutput']>, ParentType, ContextType, RequireFields<MutationUnarchiveLabelTypeArgs, 'input'>>;
   unassignTicket?: Resolver<Maybe<ResolversTypes['UnassignTicketOutput']>, ParentType, ContextType, RequireFields<MutationUnassignTicketArgs, 'input'>>;
   updateLabelType?: Resolver<Maybe<ResolversTypes['UpdateLabelTypeOutput']>, ParentType, ContextType, RequireFields<MutationUpdateLabelTypeArgs, 'input'>>;
@@ -792,6 +925,12 @@ export type QueryResolvers<ContextType = Context, ParentType extends ResolversPa
 };
 
 export type RemoveLabelsOutputResolvers<ContextType = Context, ParentType extends ResolversParentTypes['RemoveLabelsOutput'] = ResolversParentTypes['RemoveLabelsOutput']> = {
+  userErrors?: Resolver<Maybe<Array<ResolversTypes['MutationError']>>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type SendChatOutputResolvers<ContextType = Context, ParentType extends ResolversParentTypes['SendChatOutput'] = ResolversParentTypes['SendChatOutput']> = {
+  ticket?: Resolver<Maybe<ResolversTypes['Ticket']>, ParentType, ContextType>;
   userErrors?: Resolver<Maybe<Array<ResolversTypes['MutationError']>>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -900,8 +1039,10 @@ export type Resolvers<ContextType = Context> = {
   ArchiveLabelTypeOutput?: ArchiveLabelTypeOutputResolvers<ContextType>;
   AssignTicketOutput?: AssignTicketOutputResolvers<ContextType>;
   AssignmentChangedEntry?: AssignmentChangedEntryResolvers<ContextType>;
+  ChangeTicketPriorityOutput?: ChangeTicketPriorityOutputResolvers<ContextType>;
   ChatEntry?: ChatEntryResolvers<ContextType>;
   CreateLabelTypeOutput?: CreateLabelTypeOutputResolvers<ContextType>;
+  CreateNoteOutput?: CreateNoteOutputResolvers<ContextType>;
   CreateTicketOutput?: CreateTicketOutputResolvers<ContextType>;
   Customer?: CustomerResolvers<ContextType>;
   DateTime?: GraphQLScalarType;
@@ -911,6 +1052,8 @@ export type Resolvers<ContextType = Context> = {
   LabelTypeConnection?: LabelTypeConnectionResolvers<ContextType>;
   LabelTypeEdge?: LabelTypeEdgeResolvers<ContextType>;
   LabelsChangedEntry?: LabelsChangedEntryResolvers<ContextType>;
+  MarkTicketAsDoneOutput?: MarkTicketAsDoneOutputResolvers<ContextType>;
+  MarkTicketAsOpenOutput?: MarkTicketAsOpenOutputResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   MutationError?: MutationErrorResolvers<ContextType>;
   Node?: NodeResolvers<ContextType>;
@@ -919,6 +1062,7 @@ export type Resolvers<ContextType = Context> = {
   PriorityChangedEntry?: PriorityChangedEntryResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   RemoveLabelsOutput?: RemoveLabelsOutputResolvers<ContextType>;
+  SendChatOutput?: SendChatOutputResolvers<ContextType>;
   StatusChangedEntry?: StatusChangedEntryResolvers<ContextType>;
   Ticket?: TicketResolvers<ContextType>;
   TicketConnection?: TicketConnectionResolvers<ContextType>;

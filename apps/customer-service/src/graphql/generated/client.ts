@@ -74,6 +74,17 @@ export type AssignmentChangedEntry = {
   oldAssignedTo?: Maybe<User>;
 };
 
+export type ChangeTicketPriorityInput = {
+  id: Scalars['ID']['input'];
+  priority: TicketPriority;
+};
+
+export type ChangeTicketPriorityOutput = {
+  __typename?: 'ChangeTicketPriorityOutput';
+  ticket?: Maybe<Ticket>;
+  userErrors?: Maybe<Array<MutationError>>;
+};
+
 export type ChatEntry = {
   __typename?: 'ChatEntry';
   text: Scalars['String']['output'];
@@ -87,6 +98,18 @@ export type CreateLabelTypeInput = {
 export type CreateLabelTypeOutput = {
   __typename?: 'CreateLabelTypeOutput';
   labelType?: Maybe<LabelType>;
+  userErrors?: Maybe<Array<MutationError>>;
+};
+
+export type CreateNoteInput = {
+  rawContent: Scalars['String']['input'];
+  text: Scalars['String']['input'];
+  ticketId: Scalars['ID']['input'];
+};
+
+export type CreateNoteOutput = {
+  __typename?: 'CreateNoteOutput';
+  ticket?: Maybe<Ticket>;
   userErrors?: Maybe<Array<MutationError>>;
 };
 
@@ -161,14 +184,39 @@ export type LabelsChangedEntry = {
   oldLabels: Array<Label>;
 };
 
+export type MarkTicketAsDoneInput = {
+  id: Scalars['ID']['input'];
+};
+
+export type MarkTicketAsDoneOutput = {
+  __typename?: 'MarkTicketAsDoneOutput';
+  ticket?: Maybe<Ticket>;
+  userErrors?: Maybe<Array<MutationError>>;
+};
+
+export type MarkTicketAsOpenInput = {
+  id: Scalars['ID']['input'];
+};
+
+export type MarkTicketAsOpenOutput = {
+  __typename?: 'MarkTicketAsOpenOutput';
+  ticket?: Maybe<Ticket>;
+  userErrors?: Maybe<Array<MutationError>>;
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   addLabels?: Maybe<AddLabelsOutput>;
   archiveLabelType?: Maybe<ArchiveLabelTypeOutput>;
   assignTicket?: Maybe<AssignTicketOutput>;
+  changeTicketPriority?: Maybe<ChangeTicketPriorityOutput>;
   createLabelType?: Maybe<CreateLabelTypeOutput>;
+  createNote?: Maybe<CreateNoteOutput>;
   createTicket?: Maybe<CreateTicketOutput>;
+  markTicketAsDone?: Maybe<MarkTicketAsDoneOutput>;
+  markTicketAsOpen?: Maybe<MarkTicketAsOpenOutput>;
   removeLabels?: Maybe<RemoveLabelsOutput>;
+  sendChat?: Maybe<SendChatOutput>;
   unarchiveLabelType?: Maybe<UnarchiveLabelTypeOutput>;
   unassignTicket?: Maybe<UnassignTicketOutput>;
   updateLabelType?: Maybe<UpdateLabelTypeOutput>;
@@ -190,8 +238,18 @@ export type MutationAssignTicketArgs = {
 };
 
 
+export type MutationChangeTicketPriorityArgs = {
+  input: ChangeTicketPriorityInput;
+};
+
+
 export type MutationCreateLabelTypeArgs = {
   input: CreateLabelTypeInput;
+};
+
+
+export type MutationCreateNoteArgs = {
+  input: CreateNoteInput;
 };
 
 
@@ -200,8 +258,23 @@ export type MutationCreateTicketArgs = {
 };
 
 
+export type MutationMarkTicketAsDoneArgs = {
+  input: MarkTicketAsDoneInput;
+};
+
+
+export type MutationMarkTicketAsOpenArgs = {
+  input: MarkTicketAsOpenInput;
+};
+
+
 export type MutationRemoveLabelsArgs = {
   input: RemoveLabelsInput;
+};
+
+
+export type MutationSendChatArgs = {
+  input: SendChatInput;
 };
 
 
@@ -314,6 +387,17 @@ export type RemoveLabelsInput = {
 
 export type RemoveLabelsOutput = {
   __typename?: 'RemoveLabelsOutput';
+  userErrors?: Maybe<Array<MutationError>>;
+};
+
+export type SendChatInput = {
+  text: Scalars['String']['input'];
+  ticketId: Scalars['ID']['input'];
+};
+
+export type SendChatOutput = {
+  __typename?: 'SendChatOutput';
+  ticket?: Maybe<Ticket>;
   userErrors?: Maybe<Array<MutationError>>;
 };
 
@@ -517,6 +601,55 @@ export type TicketsQueryVariables = Exact<{
 
 
 export type TicketsQuery = { __typename?: 'Query', tickets: { __typename?: 'TicketConnection', edges: Array<{ __typename?: 'TicketEdge', node: { __typename?: 'Ticket', id: string, title?: string | null, status: TicketStatus, statusChangedAt?: string | null, priority: TicketPriority, createdAt: string, assignedTo?: { __typename?: 'User', id: string, name?: string | null, email: string, image?: string | null } | null, customer: { __typename?: 'Customer', id: string, name?: string | null, email?: string | null, phone?: string | null, avatarUrl?: string | null }, labels: Array<{ __typename?: 'Label', id: string, archivedAt?: string | null, labelType: { __typename?: 'LabelType', archivedAt?: string | null, id: string, name: string, icon?: string | null } }> } }>, pageInfo: { __typename?: 'PageInfo', startCursor?: string | null, endCursor?: string | null, hasPreviousPage: boolean, hasNextPage: boolean } } };
+
+export type AssignTicketMutationVariables = Exact<{
+  input: AssignTicketInput;
+}>;
+
+
+export type AssignTicketMutation = { __typename?: 'Mutation', assignTicket?: { __typename?: 'AssignTicketOutput', ticket?: { __typename?: 'Ticket', id: string } | null, userErrors?: Array<{ __typename?: 'MutationError', message: string }> | null } | null };
+
+export type ChangeTicketPriorityMutationVariables = Exact<{
+  input: ChangeTicketPriorityInput;
+}>;
+
+
+export type ChangeTicketPriorityMutation = { __typename?: 'Mutation', changeTicketPriority?: { __typename?: 'ChangeTicketPriorityOutput', ticket?: { __typename?: 'Ticket', id: string } | null, userErrors?: Array<{ __typename?: 'MutationError', message: string }> | null } | null };
+
+export type CreateNoteMutationVariables = Exact<{
+  input: CreateNoteInput;
+}>;
+
+
+export type CreateNoteMutation = { __typename?: 'Mutation', createNote?: { __typename?: 'CreateNoteOutput', ticket?: { __typename?: 'Ticket', id: string } | null, userErrors?: Array<{ __typename?: 'MutationError', message: string }> | null } | null };
+
+export type MarkTicketAsDoneMutationVariables = Exact<{
+  input: MarkTicketAsDoneInput;
+}>;
+
+
+export type MarkTicketAsDoneMutation = { __typename?: 'Mutation', markTicketAsDone?: { __typename?: 'MarkTicketAsDoneOutput', ticket?: { __typename?: 'Ticket', id: string } | null, userErrors?: Array<{ __typename?: 'MutationError', message: string }> | null } | null };
+
+export type MarkTicketAsOpenMutationVariables = Exact<{
+  input: MarkTicketAsOpenInput;
+}>;
+
+
+export type MarkTicketAsOpenMutation = { __typename?: 'Mutation', markTicketAsOpen?: { __typename?: 'MarkTicketAsOpenOutput', ticket?: { __typename?: 'Ticket', id: string } | null, userErrors?: Array<{ __typename?: 'MutationError', message: string }> | null } | null };
+
+export type SendChatMutationVariables = Exact<{
+  input: SendChatInput;
+}>;
+
+
+export type SendChatMutation = { __typename?: 'Mutation', sendChat?: { __typename?: 'SendChatOutput', ticket?: { __typename?: 'Ticket', id: string } | null, userErrors?: Array<{ __typename?: 'MutationError', message: string }> | null } | null };
+
+export type UnassignTicketMutationVariables = Exact<{
+  input: UnassignTicketInput;
+}>;
+
+
+export type UnassignTicketMutation = { __typename?: 'Mutation', unassignTicket?: { __typename?: 'UnassignTicketOutput', ticket?: { __typename?: 'Ticket', id: string } | null, userErrors?: Array<{ __typename?: 'MutationError', message: string }> | null } | null };
 
 export type UserPartsFragment = { __typename?: 'User', id: string, name?: string | null, email: string, image?: string | null };
 
@@ -931,6 +1064,209 @@ useInfiniteTicketsQuery.getKey = (variables?: TicketsQueryVariables) => variable
 
 
 useTicketsQuery.fetcher = (variables?: TicketsQueryVariables) => fetcher<TicketsQuery, TicketsQueryVariables>(TicketsDocument, variables);
+
+export const AssignTicketDocument = `
+    mutation assignTicket($input: AssignTicketInput!) {
+  assignTicket(input: $input) {
+    ticket {
+      id
+    }
+    userErrors {
+      message
+    }
+  }
+}
+    `;
+
+export const useAssignTicketMutation = <
+      TError = unknown,
+      TContext = unknown
+    >(options?: UseMutationOptions<AssignTicketMutation, TError, AssignTicketMutationVariables, TContext>) => {
+    
+    return useMutation<AssignTicketMutation, TError, AssignTicketMutationVariables, TContext>(
+      {
+    mutationKey: ['assignTicket'],
+    mutationFn: (variables?: AssignTicketMutationVariables) => fetcher<AssignTicketMutation, AssignTicketMutationVariables>(AssignTicketDocument, variables)(),
+    ...options
+  }
+    )};
+
+
+useAssignTicketMutation.fetcher = (variables: AssignTicketMutationVariables) => fetcher<AssignTicketMutation, AssignTicketMutationVariables>(AssignTicketDocument, variables);
+
+export const ChangeTicketPriorityDocument = `
+    mutation changeTicketPriority($input: ChangeTicketPriorityInput!) {
+  changeTicketPriority(input: $input) {
+    ticket {
+      id
+    }
+    userErrors {
+      message
+    }
+  }
+}
+    `;
+
+export const useChangeTicketPriorityMutation = <
+      TError = unknown,
+      TContext = unknown
+    >(options?: UseMutationOptions<ChangeTicketPriorityMutation, TError, ChangeTicketPriorityMutationVariables, TContext>) => {
+    
+    return useMutation<ChangeTicketPriorityMutation, TError, ChangeTicketPriorityMutationVariables, TContext>(
+      {
+    mutationKey: ['changeTicketPriority'],
+    mutationFn: (variables?: ChangeTicketPriorityMutationVariables) => fetcher<ChangeTicketPriorityMutation, ChangeTicketPriorityMutationVariables>(ChangeTicketPriorityDocument, variables)(),
+    ...options
+  }
+    )};
+
+
+useChangeTicketPriorityMutation.fetcher = (variables: ChangeTicketPriorityMutationVariables) => fetcher<ChangeTicketPriorityMutation, ChangeTicketPriorityMutationVariables>(ChangeTicketPriorityDocument, variables);
+
+export const CreateNoteDocument = `
+    mutation createNote($input: CreateNoteInput!) {
+  createNote(input: $input) {
+    ticket {
+      id
+    }
+    userErrors {
+      message
+    }
+  }
+}
+    `;
+
+export const useCreateNoteMutation = <
+      TError = unknown,
+      TContext = unknown
+    >(options?: UseMutationOptions<CreateNoteMutation, TError, CreateNoteMutationVariables, TContext>) => {
+    
+    return useMutation<CreateNoteMutation, TError, CreateNoteMutationVariables, TContext>(
+      {
+    mutationKey: ['createNote'],
+    mutationFn: (variables?: CreateNoteMutationVariables) => fetcher<CreateNoteMutation, CreateNoteMutationVariables>(CreateNoteDocument, variables)(),
+    ...options
+  }
+    )};
+
+
+useCreateNoteMutation.fetcher = (variables: CreateNoteMutationVariables) => fetcher<CreateNoteMutation, CreateNoteMutationVariables>(CreateNoteDocument, variables);
+
+export const MarkTicketAsDoneDocument = `
+    mutation markTicketAsDone($input: MarkTicketAsDoneInput!) {
+  markTicketAsDone(input: $input) {
+    ticket {
+      id
+    }
+    userErrors {
+      message
+    }
+  }
+}
+    `;
+
+export const useMarkTicketAsDoneMutation = <
+      TError = unknown,
+      TContext = unknown
+    >(options?: UseMutationOptions<MarkTicketAsDoneMutation, TError, MarkTicketAsDoneMutationVariables, TContext>) => {
+    
+    return useMutation<MarkTicketAsDoneMutation, TError, MarkTicketAsDoneMutationVariables, TContext>(
+      {
+    mutationKey: ['markTicketAsDone'],
+    mutationFn: (variables?: MarkTicketAsDoneMutationVariables) => fetcher<MarkTicketAsDoneMutation, MarkTicketAsDoneMutationVariables>(MarkTicketAsDoneDocument, variables)(),
+    ...options
+  }
+    )};
+
+
+useMarkTicketAsDoneMutation.fetcher = (variables: MarkTicketAsDoneMutationVariables) => fetcher<MarkTicketAsDoneMutation, MarkTicketAsDoneMutationVariables>(MarkTicketAsDoneDocument, variables);
+
+export const MarkTicketAsOpenDocument = `
+    mutation markTicketAsOpen($input: MarkTicketAsOpenInput!) {
+  markTicketAsOpen(input: $input) {
+    ticket {
+      id
+    }
+    userErrors {
+      message
+    }
+  }
+}
+    `;
+
+export const useMarkTicketAsOpenMutation = <
+      TError = unknown,
+      TContext = unknown
+    >(options?: UseMutationOptions<MarkTicketAsOpenMutation, TError, MarkTicketAsOpenMutationVariables, TContext>) => {
+    
+    return useMutation<MarkTicketAsOpenMutation, TError, MarkTicketAsOpenMutationVariables, TContext>(
+      {
+    mutationKey: ['markTicketAsOpen'],
+    mutationFn: (variables?: MarkTicketAsOpenMutationVariables) => fetcher<MarkTicketAsOpenMutation, MarkTicketAsOpenMutationVariables>(MarkTicketAsOpenDocument, variables)(),
+    ...options
+  }
+    )};
+
+
+useMarkTicketAsOpenMutation.fetcher = (variables: MarkTicketAsOpenMutationVariables) => fetcher<MarkTicketAsOpenMutation, MarkTicketAsOpenMutationVariables>(MarkTicketAsOpenDocument, variables);
+
+export const SendChatDocument = `
+    mutation sendChat($input: SendChatInput!) {
+  sendChat(input: $input) {
+    ticket {
+      id
+    }
+    userErrors {
+      message
+    }
+  }
+}
+    `;
+
+export const useSendChatMutation = <
+      TError = unknown,
+      TContext = unknown
+    >(options?: UseMutationOptions<SendChatMutation, TError, SendChatMutationVariables, TContext>) => {
+    
+    return useMutation<SendChatMutation, TError, SendChatMutationVariables, TContext>(
+      {
+    mutationKey: ['sendChat'],
+    mutationFn: (variables?: SendChatMutationVariables) => fetcher<SendChatMutation, SendChatMutationVariables>(SendChatDocument, variables)(),
+    ...options
+  }
+    )};
+
+
+useSendChatMutation.fetcher = (variables: SendChatMutationVariables) => fetcher<SendChatMutation, SendChatMutationVariables>(SendChatDocument, variables);
+
+export const UnassignTicketDocument = `
+    mutation unassignTicket($input: UnassignTicketInput!) {
+  unassignTicket(input: $input) {
+    ticket {
+      id
+    }
+    userErrors {
+      message
+    }
+  }
+}
+    `;
+
+export const useUnassignTicketMutation = <
+      TError = unknown,
+      TContext = unknown
+    >(options?: UseMutationOptions<UnassignTicketMutation, TError, UnassignTicketMutationVariables, TContext>) => {
+    
+    return useMutation<UnassignTicketMutation, TError, UnassignTicketMutationVariables, TContext>(
+      {
+    mutationKey: ['unassignTicket'],
+    mutationFn: (variables?: UnassignTicketMutationVariables) => fetcher<UnassignTicketMutation, UnassignTicketMutationVariables>(UnassignTicketDocument, variables)(),
+    ...options
+  }
+    )};
+
+
+useUnassignTicketMutation.fetcher = (variables: UnassignTicketMutationVariables) => fetcher<UnassignTicketMutation, UnassignTicketMutationVariables>(UnassignTicketDocument, variables);
 
 export const UsersDocument = `
     query users($first: Int, $last: Int, $before: String, $after: String) {

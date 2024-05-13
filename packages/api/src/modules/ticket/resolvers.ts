@@ -374,6 +374,33 @@ const resolvers: Resolvers = {
         return handleErrors(error);
       }
     },
+    changeTicketPriority: async (
+      _,
+      { input },
+      { container, dataloaders, user }
+    ) => {
+      const authorizedUser = authorize(user);
+
+      const ticketService: TicketService = container.resolve('ticketService');
+
+      try {
+        const ticket = await ticketService.changePriority(
+          {
+            ticketId: input.id,
+            priority: input.priority,
+          },
+          authorizedUser.id
+        );
+
+        return {
+          ticket: ticket
+            ? mapTicket(await dataloaders.ticketLoader.load(ticket.id))
+            : null,
+        };
+      } catch (error) {
+        return handleErrors(error);
+      }
+    },
     createTicket: async (_, { input }, { container, dataloaders, user }) => {
       const authorizedUser = authorize(user);
 
@@ -387,6 +414,88 @@ const resolvers: Resolvers = {
           },
           authorizedUser.id
         );
+
+        return {
+          ticket: ticket
+            ? mapTicket(await dataloaders.ticketLoader.load(ticket.id))
+            : null,
+        };
+      } catch (error) {
+        return handleErrors(error);
+      }
+    },
+    createNote: async (_, { input }, { container, dataloaders, user }) => {
+      const authorizedUser = authorize(user);
+
+      const ticketService: TicketService = container.resolve('ticketService');
+
+      try {
+        const ticket = await ticketService.createNote(input, authorizedUser.id);
+
+        return {
+          ticket: ticket
+            ? mapTicket(await dataloaders.ticketLoader.load(ticket.id))
+            : null,
+        };
+      } catch (error) {
+        return handleErrors(error);
+      }
+    },
+    markTicketAsDone: async (
+      _,
+      { input },
+      { container, dataloaders, user }
+    ) => {
+      const authorizedUser = authorize(user);
+
+      const ticketService: TicketService = container.resolve('ticketService');
+
+      try {
+        const ticket = await ticketService.markAsDone(
+          input.id,
+          authorizedUser.id
+        );
+
+        return {
+          ticket: ticket
+            ? mapTicket(await dataloaders.ticketLoader.load(ticket.id))
+            : null,
+        };
+      } catch (error) {
+        return handleErrors(error);
+      }
+    },
+    markTicketAsOpen: async (
+      _,
+      { input },
+      { container, dataloaders, user }
+    ) => {
+      const authorizedUser = authorize(user);
+
+      const ticketService: TicketService = container.resolve('ticketService');
+
+      try {
+        const ticket = await ticketService.markAsOpen(
+          input.id,
+          authorizedUser.id
+        );
+
+        return {
+          ticket: ticket
+            ? mapTicket(await dataloaders.ticketLoader.load(ticket.id))
+            : null,
+        };
+      } catch (error) {
+        return handleErrors(error);
+      }
+    },
+    sendChat: async (_, { input }, { container, dataloaders, user }) => {
+      const authorizedUser = authorize(user);
+
+      const ticketService: TicketService = container.resolve('ticketService');
+
+      try {
+        const ticket = await ticketService.sendChat(input, authorizedUser.id);
 
         return {
           ticket: ticket

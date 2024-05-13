@@ -85,48 +85,6 @@ export default class TicketService extends BaseService {
       with: this.getWithClause(config.relations),
     });
   }
-
-  async create(
-    data: Omit<
-      Ticket,
-      | 'id'
-      | 'assignedToId'
-      | 'status'
-      | 'statusDetail'
-      | 'statusChangedAt'
-      | 'statusChangedById'
-      | 'createdAt'
-      | 'createdById'
-      | 'updatedById'
-      | 'updatedAt'
-    >,
-    userId: string
-  ) {
-    return await this.unitOfWork.transaction(async (tx) => {
-      const createdAt = new Date();
-
-      const newTicket = await this.ticketRepository.create(
-        {
-          ...data,
-          status: TicketStatus.Open,
-          statusDetail: TicketStatusDetail.Created,
-          statusChangedAt: createdAt,
-          statusChangedById: userId,
-          createdAt: createdAt,
-          createdById: userId,
-        },
-        tx
-      );
-
-      if (!newTicket) {
-        tx.rollback();
-        return;
-      }
-
-      return newTicket;
-    });
-  }
-
   async assign(
     {
       ticketId,
@@ -174,55 +132,6 @@ export default class TicketService extends BaseService {
           entry: {
             oldAssignedToId: ticket.assignedToId,
             newAssignedToId: assignedToId,
-          } satisfies TicketAssignmentChanged,
-          createdAt: updatedTicket.updatedAt ?? updatedAt,
-          userCreatedById: userId,
-        },
-        tx
-      );
-
-      return updatedTicket;
-    });
-  }
-
-  async unassign(ticketId: string, userId: string) {
-    const ticket = await this.retrieve(ticketId);
-
-    if (!ticket)
-      throw new KyakuError(
-        KyakuError.Types.NOT_FOUND,
-        `Ticket with id:${ticketId} not found`,
-        ['id']
-      );
-
-    if (!ticket.assignedToId) return;
-
-    return await this.unitOfWork.transaction(async (tx) => {
-      const updatedAt = new Date();
-
-      const updatedTicket = await this.ticketRepository.update(
-        {
-          id: ticketId,
-          assignedToId: null,
-          updatedAt: updatedAt,
-          updatedById: userId,
-        },
-        tx
-      );
-
-      if (!updatedTicket) {
-        tx.rollback();
-        return;
-      }
-
-      await this.ticketTimelineRepository.create(
-        {
-          ticketId: ticketId,
-          customerId: ticket.customerId,
-          type: TimelineEntryType.AssignmentChanged,
-          entry: {
-            oldAssignedToId: ticket.assignedToId,
-            newAssignedToId: null,
           } satisfies TicketAssignmentChanged,
           createdAt: updatedTicket.updatedAt ?? updatedAt,
           userCreatedById: userId,
@@ -287,169 +196,53 @@ export default class TicketService extends BaseService {
         },
         tx
       );
+
+      return updatedTicket;
     });
   }
 
-  async markAsDone(ticketId: string, userId: string) {
-    const ticket = await this.retrieve(ticketId);
-
-    if (!ticket)
-      throw new KyakuError(
-        KyakuError.Types.NOT_FOUND,
-        `Ticket with id:${ticketId} not found`,
-        ['id']
-      );
-
-    if (ticket.status === TicketStatus.Done) return;
-
-    return await this.unitOfWork.transaction(async (tx) => {
-      const updatedAt = new Date();
-
-      const updatedTicket = await this.ticketRepository.update(
-        {
-          id: ticketId,
-          status: TicketStatus.Done,
-          statusDetail: null,
-          statusChangedAt: updatedAt,
-          statusChangedById: userId,
-          updatedAt: updatedAt,
-          updatedById: userId,
-        },
-        tx
-      );
-
-      if (!updatedTicket) {
-        tx.rollback();
-        return;
-      }
-
-      await this.ticketTimelineRepository.create(
-        {
-          ticketId: ticketId,
-          customerId: ticket.customerId,
-          type: TimelineEntryType.StatusChanged,
-          entry: {
-            oldStatus: ticket.status,
-            newStatus: TicketStatus.Done,
-          } satisfies TicketStatusChanged,
-          createdAt: updatedTicket.updatedAt ?? updatedAt,
-          userCreatedById: userId,
-        },
-        tx
-      );
-    });
-  }
-
-  async markAsOpen(ticketId: string, userId: string) {
-    const ticket = await this.retrieve(ticketId);
-
-    if (!ticket)
-      throw new KyakuError(
-        KyakuError.Types.NOT_FOUND,
-        `Ticket with id:${ticketId} not found`,
-        ['id']
-      );
-
-    if (ticket.status === TicketStatus.Open) return;
-
-    return await this.unitOfWork.transaction(async (tx) => {
-      const updatedAt = new Date();
-
-      const updatedTicket = await this.ticketRepository.update(
-        {
-          id: ticketId,
-          status: TicketStatus.Open,
-          statusDetail: null,
-          statusChangedAt: updatedAt,
-          statusChangedById: userId,
-          updatedAt: updatedAt,
-          updatedById: userId,
-        },
-        tx
-      );
-
-      if (!updatedTicket) {
-        tx.rollback();
-        return;
-      }
-
-      await this.ticketTimelineRepository.create(
-        {
-          ticketId: ticketId,
-          customerId: ticket.customerId,
-          type: TimelineEntryType.StatusChanged,
-          entry: {
-            oldStatus: ticket.status,
-            newStatus: TicketStatus.Open,
-          } satisfies TicketStatusChanged,
-          createdAt: updatedTicket.updatedAt ?? updatedAt,
-          userCreatedById: userId,
-        },
-        tx
-      );
-    });
-  }
-
-  async sendChat(
-    {
-      ticketId,
-      text,
-    }: {
-      ticketId: string;
-      text: string;
-    },
+  async create(
+    data: Omit<
+      Ticket,
+      | 'id'
+      | 'assignedToId'
+      | 'status'
+      | 'statusDetail'
+      | 'statusChangedAt'
+      | 'statusChangedById'
+      | 'createdAt'
+      | 'createdById'
+      | 'updatedById'
+      | 'updatedAt'
+    >,
     userId: string
   ) {
-    const ticket = await this.retrieve(ticketId);
-
-    if (!ticket)
-      throw new KyakuError(
-        KyakuError.Types.NOT_FOUND,
-        `Ticket with id:${ticketId} not found`,
-        ['id']
-      );
-
     return await this.unitOfWork.transaction(async (tx) => {
       const createdAt = new Date();
 
-      const newChat = await this.ticketTimelineRepository.create(
+      const newTicket = await this.ticketRepository.create(
         {
-          ticketId: ticketId,
-          type: TimelineEntryType.Chat,
-          entry: {
-            text: text,
-          } satisfies TicketChat,
-          customerId: ticket.customerId,
+          ...data,
+          status: TicketStatus.Open,
+          statusDetail: TicketStatusDetail.Created,
+          statusChangedAt: createdAt,
+          statusChangedById: userId,
           createdAt: createdAt,
-          userCreatedById: userId,
+          createdById: userId,
         },
         tx
       );
 
-      if (!newChat) {
+      if (!newTicket) {
         tx.rollback();
         return;
       }
 
-      await this.ticketRepository.update(
-        {
-          id: ticketId,
-          statusDetail: TicketStatusDetail.Replied,
-          statusChangedAt: newChat.createdAt,
-          statusChangedById: userId,
-          updatedAt: newChat.createdAt,
-          updatedById: userId,
-        },
-        tx
-      );
-
-      return {
-        id: newChat.id,
-      };
+      return newTicket;
     });
   }
 
-  async sendNote(
+  async createNote(
     {
       ticketId,
       text,
@@ -516,6 +309,218 @@ export default class TicketService extends BaseService {
       );
 
       return newNote;
+    });
+  }
+
+  async markAsDone(ticketId: string, userId: string) {
+    const ticket = await this.retrieve(ticketId);
+
+    if (!ticket)
+      throw new KyakuError(
+        KyakuError.Types.NOT_FOUND,
+        `Ticket with id:${ticketId} not found`,
+        ['id']
+      );
+
+    if (ticket.status === TicketStatus.Done) return;
+
+    return await this.unitOfWork.transaction(async (tx) => {
+      const updatedAt = new Date();
+
+      const updatedTicket = await this.ticketRepository.update(
+        {
+          id: ticketId,
+          status: TicketStatus.Done,
+          statusDetail: null,
+          statusChangedAt: updatedAt,
+          statusChangedById: userId,
+          updatedAt: updatedAt,
+          updatedById: userId,
+        },
+        tx
+      );
+
+      if (!updatedTicket) {
+        tx.rollback();
+        return;
+      }
+
+      await this.ticketTimelineRepository.create(
+        {
+          ticketId: ticketId,
+          customerId: ticket.customerId,
+          type: TimelineEntryType.StatusChanged,
+          entry: {
+            oldStatus: ticket.status,
+            newStatus: TicketStatus.Done,
+          } satisfies TicketStatusChanged,
+          createdAt: updatedTicket.updatedAt ?? updatedAt,
+          userCreatedById: userId,
+        },
+        tx
+      );
+
+      return updatedTicket;
+    });
+  }
+
+  async markAsOpen(ticketId: string, userId: string) {
+    const ticket = await this.retrieve(ticketId);
+
+    if (!ticket)
+      throw new KyakuError(
+        KyakuError.Types.NOT_FOUND,
+        `Ticket with id:${ticketId} not found`,
+        ['id']
+      );
+
+    if (ticket.status === TicketStatus.Open) return;
+
+    return await this.unitOfWork.transaction(async (tx) => {
+      const updatedAt = new Date();
+
+      const updatedTicket = await this.ticketRepository.update(
+        {
+          id: ticketId,
+          status: TicketStatus.Open,
+          statusDetail: null,
+          statusChangedAt: updatedAt,
+          statusChangedById: userId,
+          updatedAt: updatedAt,
+          updatedById: userId,
+        },
+        tx
+      );
+
+      if (!updatedTicket) {
+        tx.rollback();
+        return;
+      }
+
+      await this.ticketTimelineRepository.create(
+        {
+          ticketId: ticketId,
+          customerId: ticket.customerId,
+          type: TimelineEntryType.StatusChanged,
+          entry: {
+            oldStatus: ticket.status,
+            newStatus: TicketStatus.Open,
+          } satisfies TicketStatusChanged,
+          createdAt: updatedTicket.updatedAt ?? updatedAt,
+          userCreatedById: userId,
+        },
+        tx
+      );
+
+      return updatedTicket;
+    });
+  }
+
+  async sendChat(
+    {
+      ticketId,
+      text,
+    }: {
+      ticketId: string;
+      text: string;
+    },
+    userId: string
+  ) {
+    const ticket = await this.retrieve(ticketId);
+
+    if (!ticket)
+      throw new KyakuError(
+        KyakuError.Types.NOT_FOUND,
+        `Ticket with id:${ticketId} not found`,
+        ['id']
+      );
+
+    return await this.unitOfWork.transaction(async (tx) => {
+      const createdAt = new Date();
+
+      const newChat = await this.ticketTimelineRepository.create(
+        {
+          ticketId: ticketId,
+          type: TimelineEntryType.Chat,
+          entry: {
+            text: text,
+          } satisfies TicketChat,
+          customerId: ticket.customerId,
+          createdAt: createdAt,
+          userCreatedById: userId,
+        },
+        tx
+      );
+
+      if (!newChat) {
+        tx.rollback();
+        return;
+      }
+
+      await this.ticketRepository.update(
+        {
+          id: ticketId,
+          statusDetail: TicketStatusDetail.Replied,
+          statusChangedAt: newChat.createdAt,
+          statusChangedById: userId,
+          updatedAt: newChat.createdAt,
+          updatedById: userId,
+        },
+        tx
+      );
+
+      return {
+        id: newChat.id,
+      };
+    });
+  }
+
+  async unassign(ticketId: string, userId: string) {
+    const ticket = await this.retrieve(ticketId);
+
+    if (!ticket)
+      throw new KyakuError(
+        KyakuError.Types.NOT_FOUND,
+        `Ticket with id:${ticketId} not found`,
+        ['id']
+      );
+
+    if (!ticket.assignedToId) return;
+
+    return await this.unitOfWork.transaction(async (tx) => {
+      const updatedAt = new Date();
+
+      const updatedTicket = await this.ticketRepository.update(
+        {
+          id: ticketId,
+          assignedToId: null,
+          updatedAt: updatedAt,
+          updatedById: userId,
+        },
+        tx
+      );
+
+      if (!updatedTicket) {
+        tx.rollback();
+        return;
+      }
+
+      await this.ticketTimelineRepository.create(
+        {
+          ticketId: ticketId,
+          customerId: ticket.customerId,
+          type: TimelineEntryType.AssignmentChanged,
+          entry: {
+            oldAssignedToId: ticket.assignedToId,
+            newAssignedToId: null,
+          } satisfies TicketAssignmentChanged,
+          createdAt: updatedTicket.updatedAt ?? updatedAt,
+          userCreatedById: userId,
+        },
+        tx
+      );
+
+      return updatedTicket;
     });
   }
 

@@ -138,6 +138,27 @@ type AssignTicketOutput {
   userErrors: [MutationError!]
 }
 
+input ChangeTicketPriorityInput {
+  id: ID!
+  priority: TicketPriority!
+}
+
+type ChangeTicketPriorityOutput {
+  ticket: Ticket
+  userErrors: [MutationError!]
+}
+
+input CreateNoteInput {
+  ticketId: ID!
+  text: String!
+  rawContent: String!
+}
+
+type CreateNoteOutput {
+  ticket: Ticket
+  userErrors: [MutationError!]
+}
+
 input CreateTicketInput {
   title: String!
   customerId: ID!
@@ -146,6 +167,34 @@ input CreateTicketInput {
 }
 
 type CreateTicketOutput {
+  ticket: Ticket
+  userErrors: [MutationError!]
+}
+
+input MarkTicketAsDoneInput {
+  id: ID!
+}
+
+type MarkTicketAsDoneOutput {
+  ticket: Ticket
+  userErrors: [MutationError!]
+}
+
+input MarkTicketAsOpenInput {
+  id: ID!
+}
+
+type MarkTicketAsOpenOutput {
+  ticket: Ticket
+  userErrors: [MutationError!]
+}
+
+input SendChatInput {
+  ticketId: ID!
+  text: String!
+}
+
+type SendChatOutput {
   ticket: Ticket
   userErrors: [MutationError!]
 }
@@ -161,6 +210,13 @@ type UnassignTicketOutput {
 
 type Mutation {
   assignTicket(input: AssignTicketInput!): AssignTicketOutput
+  changeTicketPriority(
+    input: ChangeTicketPriorityInput!
+  ): ChangeTicketPriorityOutput
+  createNote(input: CreateNoteInput!): CreateNoteOutput
   createTicket(input: CreateTicketInput!): CreateTicketOutput
+  markTicketAsDone(input: MarkTicketAsDoneInput!): MarkTicketAsDoneOutput
+  markTicketAsOpen(input: MarkTicketAsOpenInput!): MarkTicketAsOpenOutput
+  sendChat(input: SendChatInput!): SendChatOutput
   unassignTicket(input: UnassignTicketInput!): UnassignTicketOutput
 }

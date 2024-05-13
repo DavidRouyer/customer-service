@@ -3,8 +3,10 @@ import { useQueryClient } from '@tanstack/react-query';
 import { Shield, ShieldAlert } from 'lucide-react';
 import { FormattedMessage } from 'react-intl';
 
-import { RouterOutputs } from '@cs/api';
-import { TicketPriority as TicketPriorityType } from '@cs/kyaku/models';
+import {
+  TicketPriority,
+  TicketPriority as TicketPriorityType,
+} from '@cs/kyaku/models';
 import { Button } from '@cs/ui/button';
 import {
   DropdownMenu,
@@ -17,13 +19,13 @@ import { TicketPriorityBadge } from '@cs/ui/ticket-priority-badge';
 
 import {
   TicketQuery,
+  useChangeTicketPriorityMutation,
   useInfiniteTicketTimelineQuery,
   useTicketQuery,
 } from '~/graphql/generated/client';
-import { api } from '~/trpc/react';
 
 type TicketChangePriorityProps = {
-  priority: NonNullable<RouterOutputs['ticket']['byId']>['priority'];
+  priority: TicketPriority;
   ticketId: string;
 };
 
@@ -33,27 +35,27 @@ export const TicketPriorityDropdowm: FC<TicketChangePriorityProps> = ({
 }) => {
   const queryClient = useQueryClient();
 
-  const { mutateAsync } = api.ticket.changePriority.useMutation({
-    onMutate: async (newPriority) => {
+  const { mutateAsync } = useChangeTicketPriorityMutation({
+    onMutate: async ({ input }) => {
       // Cancel any outgoing refetches
       // (so they don't overwrite our optimistic update)
       await queryClient.cancelQueries({
-        queryKey: useTicketQuery.getKey({ id: newPriority.id }),
+        queryKey: useTicketQuery.getKey({ id: input.id }),
       });
 
       // Snapshot the previous value
       const previousTicket = queryClient.getQueryData<TicketQuery['ticket']>(
-        useTicketQuery.getKey({ id: newPriority.id })
+        useTicketQuery.getKey({ id: input.id })
       );
 
       // Optimistically update to the new value
       queryClient.setQueryData<TicketQuery['ticket']>(
-        useTicketQuery.getKey({ id: newPriority.id }),
+        useTicketQuery.getKey({ id: input.id }),
         (oldQueryData) =>
           oldQueryData
             ? {
                 ...oldQueryData,
-                priority: newPriority.priority,
+                priority: input.priority,
               }
             : undefined
       );
@@ -61,16 +63,16 @@ export const TicketPriorityDropdowm: FC<TicketChangePriorityProps> = ({
       // Return a context object with the snapshotted value
       return { previousTicket };
     },
-    onError: (err, { id }, context) => {
+    onError: (err, { input }, context) => {
       // TODO: handle failed queries
       queryClient.setQueryData<TicketQuery['ticket']>(
-        useTicketQuery.getKey({ id: ticketId }),
+        useTicketQuery.getKey({ id: input.id }),
         context?.previousTicket
       );
     },
-    onSettled: (_, __, { id }) => {
+    onSettled: (_, __, { input }) => {
       void queryClient.invalidateQueries({
-        queryKey: useTicketQuery.getKey({ id }),
+        queryKey: useTicketQuery.getKey({ id: input.id }),
       });
       void queryClient.invalidateQueries({
         queryKey: useInfiniteTicketTimelineQuery.getKey({ ticketId: ticketId }),
@@ -97,8 +99,7 @@ export const TicketPriorityDropdowm: FC<TicketChangePriorityProps> = ({
             key="critical"
             onClick={() =>
               mutateAsync({
-                id: ticketId,
-                priority: TicketPriorityType.Critical,
+                input: { id: ticketId, priority: TicketPriorityType.Critical },
               })
             }
             disabled={priority === TicketPriorityType.Critical}
@@ -113,7 +114,9 @@ export const TicketPriorityDropdowm: FC<TicketChangePriorityProps> = ({
           <DropdownMenuItem
             key="high"
             onClick={() =>
-              mutateAsync({ id: ticketId, priority: TicketPriorityType.High })
+              mutateAsync({
+                input: { id: ticketId, priority: TicketPriorityType.High },
+              })
             }
             disabled={priority === TicketPriorityType.High}
           >
@@ -127,7 +130,9 @@ export const TicketPriorityDropdowm: FC<TicketChangePriorityProps> = ({
           <DropdownMenuItem
             key="medium"
             onClick={() =>
-              mutateAsync({ id: ticketId, priority: TicketPriorityType.Medium })
+              mutateAsync({
+                input: { id: ticketId, priority: TicketPriorityType.Medium },
+              })
             }
             disabled={priority === TicketPriorityType.Medium}
           >
@@ -141,7 +146,9 @@ export const TicketPriorityDropdowm: FC<TicketChangePriorityProps> = ({
           <DropdownMenuItem
             key="low"
             onClick={() =>
-              mutateAsync({ id: ticketId, priority: TicketPriorityType.Low })
+              mutateAsync({
+                input: { id: ticketId, priority: TicketPriorityType.Low },
+              })
             }
             disabled={priority === TicketPriorityType.Low}
           >

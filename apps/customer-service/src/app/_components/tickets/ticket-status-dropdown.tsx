@@ -2,7 +2,6 @@ import { FC } from 'react';
 import { CheckCircle2, CircleDot } from 'lucide-react';
 import { FormattedMessage } from 'react-intl';
 
-import { RouterOutputs } from '@cs/api';
 import { TicketStatus } from '@cs/kyaku/models';
 import { Button } from '@cs/ui/button';
 import {
@@ -17,7 +16,7 @@ import { useMarkAsDoneTicket } from '~/app/_hooks/use-mark-as-done-ticket';
 import { useMarkAsOpenTicket } from '~/app/_hooks/use-mark-as-open-ticket';
 
 type TicketChangeAssignmentProps = {
-  status?: NonNullable<RouterOutputs['ticket']['byId']>['status'];
+  status?: TicketStatus;
   ticketId: string;
 };
 
@@ -59,7 +58,7 @@ export const TicketStatusDropdowm: FC<TicketChangeAssignmentProps> = ({
         <DropdownMenuGroup>
           <DropdownMenuItem
             key="open"
-            onClick={() => markAsOpenTicket({ id: ticketId })}
+            onClick={() => markAsOpenTicket({ input: { id: ticketId } })}
             disabled={status === TicketStatus.Open}
           >
             <div className="flex items-center gap-x-2">
@@ -71,7 +70,7 @@ export const TicketStatusDropdowm: FC<TicketChangeAssignmentProps> = ({
           </DropdownMenuItem>
           <DropdownMenuItem
             key="done"
-            onClick={() => markAsDoneTicket({ id: ticketId })}
+            onClick={() => markAsDoneTicket({ input: { id: ticketId } })}
             disabled={status === TicketStatus.Done}
           >
             <div className="flex items-center gap-x-2">

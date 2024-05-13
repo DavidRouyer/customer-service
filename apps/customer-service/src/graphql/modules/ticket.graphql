@@ -113,3 +113,80 @@ query tickets(
     }
   }
 }
+
+mutation assignTicket($input: AssignTicketInput!) {
+  assignTicket(input: $input) {
+    ticket {
+      id
+    }
+    userErrors {
+      message
+    }
+  }
+}
+
+mutation changeTicketPriority($input: ChangeTicketPriorityInput!) {
+  changeTicketPriority(input: $input) {
+    ticket {
+      id
+    }
+    userErrors {
+      message
+    }
+  }
+}
+
+mutation createNote($input: CreateNoteInput!) {
+  createNote(input: $input) {
+    ticket {
+      id
+    }
+    userErrors {
+      message
+    }
+  }
+}
+
+mutation markTicketAsDone($input: MarkTicketAsDoneInput!) {
+  markTicketAsDone(input: $input) {
+    ticket {
+      id
+    }
+    userErrors {
+      message
+    }
+  }
+}
+
+mutation markTicketAsOpen($input: MarkTicketAsOpenInput!) {
+  markTicketAsOpen(input: $input) {
+    ticket {
+      id
+    }
+    userErrors {
+      message
+    }
+  }
+}
+
+mutation sendChat($input: SendChatInput!) {
+  sendChat(input: $input) {
+    ticket {
+      id
+    }
+    userErrors {
+      message
+    }
+  }
+}
+
+mutation unassignTicket($input: UnassignTicketInput!) {
+  unassignTicket(input: $input) {
+    ticket {
+      id
+    }
+    userErrors {
+      message
+    }
+  }
+}
