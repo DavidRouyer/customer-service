@@ -91,7 +91,7 @@ function useMentionLookupService(mentionString: string | null) {
   const [results, setResults] = useState<
     UsersQuery['users']['edges'][number]['node'][]
   >([]);
-  const { data } = useUsersQuery(
+  const { data: users } = useUsersQuery(
     {},
     {
       select: (data) => data.users,
@@ -104,15 +104,15 @@ function useMentionLookupService(mentionString: string | null) {
       return;
     }
 
-    if (data) {
-      const searchResults = data?.edges
+    if (users) {
+      const searchResults = users?.edges
         ?.filter((user) =>
           user.node.name?.toLowerCase().includes(mentionString.toLowerCase())
         )
         .map((user) => user.node);
       setResults(searchResults);
     }
-  }, [data, mentionString]);
+  }, [users, mentionString]);
 
   return results;
 }

@@ -21,22 +21,28 @@ export const TicketList: FC<{
 }> = ({ filter, status, orderBy }) => {
   const { ref, inView } = useInView();
 
-  const { data, isFetching, fetchNextPage, hasNextPage } =
-    useInfiniteTicketsQuery(
-      {
-        filters: {
-          statuses: [status],
-        },
-        first: 10,
+  const {
+    data: tickets,
+    isFetching,
+    fetchNextPage,
+    hasNextPage,
+  } = useInfiniteTicketsQuery(
+    {
+      filters: {
+        statuses: [status],
       },
-      {
-        initialPageParam: 0,
-        getNextPageParam(lastPage) {
-          if (!lastPage.tickets.pageInfo.hasNextPage) return undefined;
-          return lastPage.tickets.pageInfo.endCursor;
-        },
-      }
-    );
+      first: 10,
+    },
+    {
+      initialPageParam: 0,
+      getNextPageParam(lastPage) {
+        if (!lastPage.tickets.pageInfo.hasNextPage) return undefined;
+        return lastPage.tickets.pageInfo.endCursor;
+      },
+      select: (data) =>
+        data?.pages?.flatMap((page) => page.tickets.edges) ?? [],
+    }
+  );
   const { data: myUserInfo } = useMyUserInfoQuery(undefined, {
     select: (data) => ({ user: data.myUserInfo }),
   });
@@ -47,11 +53,9 @@ export const TicketList: FC<{
     }
   }, [inView, hasNextPage, isFetching, fetchNextPage]);
 
-  const tickets = data?.pages?.flatMap((page) => page.tickets.edges) ?? [];
-
   return (
     <div className="no-scrollbar flex-auto overflow-y-auto">
-      {(tickets.length ?? 0) > 0 ? (
+      {tickets && (tickets?.length ?? 0) > 0 ? (
         <>
           <div>
             {tickets.map((ticket) => (
