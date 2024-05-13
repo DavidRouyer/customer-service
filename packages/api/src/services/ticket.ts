@@ -94,21 +94,26 @@ export default class TicketService extends BaseService {
       | 'status'
       | 'statusDetail'
       | 'statusChangedAt'
+      | 'statusChangedById'
       | 'createdAt'
+      | 'createdById'
       | 'updatedById'
       | 'updatedAt'
-    >
+    >,
+    userId: string
   ) {
     return await this.unitOfWork.transaction(async (tx) => {
-      const creationDate = new Date();
+      const createdAt = new Date();
 
       const newTicket = await this.ticketRepository.create(
         {
           ...data,
           status: TicketStatus.Open,
           statusDetail: TicketStatusDetail.Created,
-          statusChangedAt: creationDate,
-          createdAt: creationDate,
+          statusChangedAt: createdAt,
+          statusChangedById: userId,
+          createdAt: createdAt,
+          createdById: userId,
         },
         tx
       );
@@ -122,7 +127,16 @@ export default class TicketService extends BaseService {
     });
   }
 
-  async assign(ticketId: string, assignedToId: string, userId: string) {
+  async assign(
+    {
+      ticketId,
+      assignedToId,
+    }: {
+      ticketId: string;
+      assignedToId: string;
+    },
+    userId: string
+  ) {
     const ticket = await this.retrieve(ticketId);
 
     if (!ticket)
@@ -135,11 +149,13 @@ export default class TicketService extends BaseService {
     if (ticket.assignedToId === assignedToId) return;
 
     return await this.unitOfWork.transaction(async (tx) => {
+      const updatedAt = new Date();
+
       const updatedTicket = await this.ticketRepository.update(
         {
           id: ticketId,
           assignedToId: assignedToId,
-          updatedAt: new Date(),
+          updatedAt: updatedAt,
           updatedById: userId,
         },
         tx
@@ -159,11 +175,13 @@ export default class TicketService extends BaseService {
             oldAssignedToId: ticket.assignedToId,
             newAssignedToId: assignedToId,
           } satisfies TicketAssignmentChanged,
-          createdAt: updatedTicket.updatedAt ?? new Date(),
+          createdAt: updatedTicket.updatedAt ?? updatedAt,
           userCreatedById: userId,
         },
         tx
       );
+
+      return updatedTicket;
     });
   }
 
@@ -180,11 +198,13 @@ export default class TicketService extends BaseService {
     if (!ticket.assignedToId) return;
 
     return await this.unitOfWork.transaction(async (tx) => {
+      const updatedAt = new Date();
+
       const updatedTicket = await this.ticketRepository.update(
         {
           id: ticketId,
           assignedToId: null,
-          updatedAt: new Date(),
+          updatedAt: updatedAt,
           updatedById: userId,
         },
         tx
@@ -204,17 +224,24 @@ export default class TicketService extends BaseService {
             oldAssignedToId: ticket.assignedToId,
             newAssignedToId: null,
           } satisfies TicketAssignmentChanged,
-          createdAt: updatedTicket.updatedAt ?? new Date(),
+          createdAt: updatedTicket.updatedAt ?? updatedAt,
           userCreatedById: userId,
         },
         tx
       );
+
+      return updatedTicket;
     });
   }
 
   async changePriority(
-    ticketId: string,
-    priority: TicketPriority,
+    {
+      ticketId,
+      priority,
+    }: {
+      ticketId: string;
+      priority: TicketPriority;
+    },
     userId: string
   ) {
     const ticket = await this.retrieve(ticketId);
@@ -229,11 +256,13 @@ export default class TicketService extends BaseService {
     if (ticket.priority === priority) return;
 
     return await this.unitOfWork.transaction(async (tx) => {
+      const updatedAt = new Date();
+
       const updatedTicket = await this.ticketRepository.update(
         {
           id: ticketId,
           priority: priority,
-          updatedAt: new Date(),
+          updatedAt: updatedAt,
           updatedById: userId,
         },
         tx
@@ -253,7 +282,7 @@ export default class TicketService extends BaseService {
             oldPriority: ticket.priority,
             newPriority: priority,
           } satisfies TicketPriorityChanged,
-          createdAt: updatedTicket.updatedAt ?? new Date(),
+          createdAt: updatedTicket.updatedAt ?? updatedAt,
           userCreatedById: userId,
         },
         tx
@@ -274,14 +303,16 @@ export default class TicketService extends BaseService {
     if (ticket.status === TicketStatus.Done) return;
 
     return await this.unitOfWork.transaction(async (tx) => {
+      const updatedAt = new Date();
+
       const updatedTicket = await this.ticketRepository.update(
         {
           id: ticketId,
           status: TicketStatus.Done,
           statusDetail: null,
-          statusChangedAt: new Date(),
+          statusChangedAt: updatedAt,
           statusChangedById: userId,
-          updatedAt: new Date(),
+          updatedAt: updatedAt,
           updatedById: userId,
         },
         tx
@@ -301,7 +332,7 @@ export default class TicketService extends BaseService {
             oldStatus: ticket.status,
             newStatus: TicketStatus.Done,
           } satisfies TicketStatusChanged,
-          createdAt: updatedTicket.updatedAt ?? new Date(),
+          createdAt: updatedTicket.updatedAt ?? updatedAt,
           userCreatedById: userId,
         },
         tx
@@ -322,14 +353,16 @@ export default class TicketService extends BaseService {
     if (ticket.status === TicketStatus.Open) return;
 
     return await this.unitOfWork.transaction(async (tx) => {
+      const updatedAt = new Date();
+
       const updatedTicket = await this.ticketRepository.update(
         {
           id: ticketId,
           status: TicketStatus.Open,
           statusDetail: null,
-          statusChangedAt: new Date(),
+          statusChangedAt: updatedAt,
           statusChangedById: userId,
-          updatedAt: new Date(),
+          updatedAt: updatedAt,
           updatedById: userId,
         },
         tx
@@ -349,7 +382,7 @@ export default class TicketService extends BaseService {
             oldStatus: ticket.status,
             newStatus: TicketStatus.Open,
           } satisfies TicketStatusChanged,
-          createdAt: updatedTicket.updatedAt ?? new Date(),
+          createdAt: updatedTicket.updatedAt ?? updatedAt,
           userCreatedById: userId,
         },
         tx
@@ -357,7 +390,16 @@ export default class TicketService extends BaseService {
     });
   }
 
-  async sendChat(ticketId: string, text: string, userId: string) {
+  async sendChat(
+    {
+      ticketId,
+      text,
+    }: {
+      ticketId: string;
+      text: string;
+    },
+    userId: string
+  ) {
     const ticket = await this.retrieve(ticketId);
 
     if (!ticket)
@@ -368,7 +410,7 @@ export default class TicketService extends BaseService {
       );
 
     return await this.unitOfWork.transaction(async (tx) => {
-      const creationDate = new Date();
+      const createdAt = new Date();
 
       const newChat = await this.ticketTimelineRepository.create(
         {
@@ -378,7 +420,7 @@ export default class TicketService extends BaseService {
             text: text,
           } satisfies TicketChat,
           customerId: ticket.customerId,
-          createdAt: creationDate,
+          createdAt: createdAt,
           userCreatedById: userId,
         },
         tx
@@ -408,9 +450,15 @@ export default class TicketService extends BaseService {
   }
 
   async sendNote(
-    ticketId: string,
-    text: string,
-    rawContent: string,
+    {
+      ticketId,
+      text,
+      rawContent,
+    }: {
+      ticketId: string;
+      text: string;
+      rawContent: string;
+    },
     userId: string
   ) {
     const ticket = await this.retrieve(ticketId);
@@ -425,7 +473,7 @@ export default class TicketService extends BaseService {
     const mentionIds = await extractMentions(rawContent);
 
     return await this.unitOfWork.transaction(async (tx) => {
-      const creationDate = new Date();
+      const createdAt = new Date();
 
       const newNote = await this.ticketTimelineRepository.create(
         {
@@ -436,7 +484,7 @@ export default class TicketService extends BaseService {
             rawContent: rawContent,
           } satisfies TicketNote,
           customerId: ticket.customerId,
-          createdAt: creationDate,
+          createdAt: createdAt,
           userCreatedById: userId,
         },
         tx
