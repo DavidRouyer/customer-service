@@ -3,7 +3,7 @@ import { makeExecutableSchema } from '@graphql-tools/schema';
 import { asClass, asValue, createContainer } from 'awilix';
 import DataLoader from 'dataloader';
 import { YogaInitialContext } from 'graphql-yoga';
-import { JwtPayload, verify } from 'jsonwebtoken';
+import { JwtPayload, sign, verify } from 'jsonwebtoken';
 
 import { auth } from '@cs/auth';
 import { drizzleConnection } from '@cs/database';
@@ -69,7 +69,6 @@ const getUser = async (request: Request) => {
 
     const userId = tokenPayload.userId;
     const userService: UserService = container.resolve('userService');
-
     return userService.retrieve(userId);
   }
 

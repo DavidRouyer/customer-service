@@ -20,6 +20,8 @@ import {
   TimelineEntry,
   useCreateNoteMutation,
   useInfiniteTicketTimelineQuery,
+  useMyUserInfoQuery,
+  useSendChatMutation,
 } from '~/graphql/generated/client';
 import { api } from '~/trpc/react';
 
@@ -39,45 +41,47 @@ export const FormElementContext =
 
 export const MessageForm: FC<{ ticketId: string }> = ({ ticketId }) => {
   const formRef = useRef<HTMLFormElement>(null);
-  const { data: session } = api.auth.getSession.useQuery();
+  const { data: myUserInfo } = useMyUserInfoQuery(undefined, {
+    select: (data) => ({ user: data.myUserInfo }),
+  });
   const queryClient = useQueryClient();
 
   const [messageMode, setMessageMode] = useAtom(messageModeAtom);
 
-  const { mutateAsync: sendChat } = api.ticket.sendChat.useMutation({
-    onMutate: async (newMessage) => {
+  const { mutateAsync: sendChat } = useSendChatMutation({
+    onMutate: async ({ input }) => {
       // Cancel any outgoing refetches
       // (so they don't overwrite our optimistic update)
       await queryClient.cancelQueries({
         queryKey: useInfiniteTicketTimelineQuery.getKey({
-          ticketId: newMessage.ticketId,
+          ticketId: input.ticketId,
         }),
       });
 
       // Snapshot the previous value
       const previousMessages = queryClient.getQueryData(
         useInfiniteTicketTimelineQuery.getKey({
-          ticketId: newMessage.ticketId,
+          ticketId: input.ticketId,
         })
       );
 
       // Optimistically update to the new value
       queryClient.setQueryData(
         useInfiniteTicketTimelineQuery.getKey({
-          ticketId: newMessage.ticketId,
+          ticketId: input.ticketId,
         }),
         (oldQueryData: TimelineEntry[] | undefined) => [
           ...(oldQueryData ?? []),
           {
             id: self.crypto.randomUUID(),
             customer: oldQueryData?.[0]?.customer,
-            ticketId: newMessage.ticketId,
+            ticketId: input.ticketId,
             entry: {
-              text: newMessage.text,
+              text: input.text,
             } satisfies TicketChat,
             createdAt: new Date(),
-            userCreatedById: session?.user?.id ?? null,
-            userCreatedBy: session?.user ?? null,
+            userCreatedById: myUserInfo?.user?.id ?? null,
+            userCreatedBy: myUserInfo?.user ?? null,
             customerCreatedById: null,
             customerCreatedBy: null,
           },
@@ -87,18 +91,20 @@ export const MessageForm: FC<{ ticketId: string }> = ({ ticketId }) => {
       // Return a context object with the snapshotted value
       return { previousMessages };
     },
-    onError: (err, _newMessage, context) => {
+    onError: (err, { input }, context) => {
       // TODO: handle failed queries
       queryClient.setQueryData(
         useInfiniteTicketTimelineQuery.getKey({
-          ticketId: _newMessage.ticketId,
+          ticketId: input.ticketId,
         }),
         context?.previousMessages ?? []
       );
     },
-    onSettled: (_, __, { ticketId }) => {
+    onSettled: (_, __, { input }) => {
       void queryClient.invalidateQueries({
-        queryKey: useInfiniteTicketTimelineQuery.getKey({ ticketId: ticketId }),
+        queryKey: useInfiniteTicketTimelineQuery.getKey({
+          ticketId: input.ticketId,
+        }),
       });
     },
   });
@@ -133,8 +139,8 @@ export const MessageForm: FC<{ ticketId: string }> = ({ ticketId }) => {
               rawContent: input.rawContent,
             } satisfies TicketNote,
             createdAt: new Date(),
-            userCreatedById: session?.user?.id ?? null,
-            userCreatedBy: session?.user ?? null,
+            userCreatedById: myUserInfo?.user?.id ?? null,
+            userCreatedBy: myUserInfo?.user ?? null,
             customerCreatedById: null,
             customerCreatedBy: null,
           },
@@ -165,8 +171,10 @@ export const MessageForm: FC<{ ticketId: string }> = ({ ticketId }) => {
     if (messageMode === 'reply') {
       const text = await parseTextFromEditorState(data.content);
       sendChat({
-        ticketId: ticketId,
-        text: text,
+        input: {
+          ticketId: ticketId,
+          text: text,
+        },
       });
     } else {
       const text = await parseTextFromEditorState(data.content);

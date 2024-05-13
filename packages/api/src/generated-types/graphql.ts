@@ -312,6 +312,7 @@ export type Query = {
   customer?: Maybe<Customer>;
   labelType?: Maybe<LabelType>;
   labelTypes: LabelTypeConnection;
+  myUserInfo?: Maybe<User>;
   ticket?: Maybe<Ticket>;
   tickets: TicketConnection;
   user?: Maybe<User>;
@@ -918,6 +919,7 @@ export type QueryResolvers<ContextType = Context, ParentType extends ResolversPa
   customer?: Resolver<Maybe<ResolversTypes['Customer']>, ParentType, ContextType, RequireFields<QueryCustomerArgs, 'id'>>;
   labelType?: Resolver<Maybe<ResolversTypes['LabelType']>, ParentType, ContextType, RequireFields<QueryLabelTypeArgs, 'id'>>;
   labelTypes?: Resolver<ResolversTypes['LabelTypeConnection'], ParentType, ContextType, Partial<QueryLabelTypesArgs>>;
+  myUserInfo?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
   ticket?: Resolver<Maybe<ResolversTypes['Ticket']>, ParentType, ContextType, RequireFields<QueryTicketArgs, 'id'>>;
   tickets?: Resolver<ResolversTypes['TicketConnection'], ParentType, ContextType, Partial<QueryTicketsArgs>>;
   user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryUserArgs, 'id'>>;

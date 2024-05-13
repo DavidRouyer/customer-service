@@ -123,7 +123,7 @@ const mapEntry = (entry: TicketTimelineUnion) => {
 
 const resolvers: Resolvers = {
   Query: {
-    ticket: async (_, { id }, { dataloaders }) => {
+    ticket: async (_, { id }, { dataloaders, user }) => {
       try {
         const ticket = await dataloaders.ticketLoader.load(id);
         return mapTicket(ticket);

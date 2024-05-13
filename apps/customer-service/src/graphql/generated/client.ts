@@ -328,6 +328,7 @@ export type Query = {
   customer?: Maybe<Customer>;
   labelType?: Maybe<LabelType>;
   labelTypes: LabelTypeConnection;
+  myUserInfo?: Maybe<User>;
   ticket?: Maybe<Ticket>;
   tickets: TicketConnection;
   user?: Maybe<User>;
@@ -652,6 +653,11 @@ export type UnassignTicketMutationVariables = Exact<{
 export type UnassignTicketMutation = { __typename?: 'Mutation', unassignTicket?: { __typename?: 'UnassignTicketOutput', ticket?: { __typename?: 'Ticket', id: string } | null, userErrors?: Array<{ __typename?: 'MutationError', message: string }> | null } | null };
 
 export type UserPartsFragment = { __typename?: 'User', id: string, name?: string | null, email: string, image?: string | null };
+
+export type MyUserInfoQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type MyUserInfoQuery = { __typename?: 'Query', myUserInfo?: { __typename?: 'User', id: string, name?: string | null, email: string, image?: string | null } | null };
 
 export type UsersQueryVariables = Exact<{
   first?: InputMaybe<Scalars['Int']['input']>;
@@ -1267,6 +1273,56 @@ export const useUnassignTicketMutation = <
 
 
 useUnassignTicketMutation.fetcher = (variables: UnassignTicketMutationVariables) => fetcher<UnassignTicketMutation, UnassignTicketMutationVariables>(UnassignTicketDocument, variables);
+
+export const MyUserInfoDocument = `
+    query myUserInfo {
+  myUserInfo {
+    ...UserParts
+  }
+}
+    ${UserPartsFragmentDoc}`;
+
+export const useMyUserInfoQuery = <
+      TData = MyUserInfoQuery,
+      TError = unknown
+    >(
+      variables?: MyUserInfoQueryVariables,
+      options?: Omit<UseQueryOptions<MyUserInfoQuery, TError, TData>, 'queryKey'> & { queryKey?: UseQueryOptions<MyUserInfoQuery, TError, TData>['queryKey'] }
+    ) => {
+    
+    return useQuery<MyUserInfoQuery, TError, TData>(
+      {
+    queryKey: variables === undefined ? ['myUserInfo'] : ['myUserInfo', variables],
+    queryFn: fetcher<MyUserInfoQuery, MyUserInfoQueryVariables>(MyUserInfoDocument, variables),
+    ...options
+  }
+    )};
+
+useMyUserInfoQuery.getKey = (variables?: MyUserInfoQueryVariables) => variables === undefined ? ['myUserInfo'] : ['myUserInfo', variables];
+
+export const useInfiniteMyUserInfoQuery = <
+      TData = InfiniteData<MyUserInfoQuery>,
+      TError = unknown
+    >(
+      variables: MyUserInfoQueryVariables,
+      options: Omit<UseInfiniteQueryOptions<MyUserInfoQuery, TError, TData>, 'queryKey'> & { queryKey?: UseInfiniteQueryOptions<MyUserInfoQuery, TError, TData>['queryKey'] }
+    ) => {
+    
+    return useInfiniteQuery<MyUserInfoQuery, TError, TData>(
+      (() => {
+    const { queryKey: optionsQueryKey, ...restOptions } = options;
+    return {
+      queryKey: optionsQueryKey ?? variables === undefined ? ['myUserInfo.infinite'] : ['myUserInfo.infinite', variables],
+      queryFn: (metaData) => fetcher<MyUserInfoQuery, MyUserInfoQueryVariables>(MyUserInfoDocument, {...variables, ...(metaData.pageParam ?? {})})(),
+      ...restOptions
+    }
+  })()
+    )};
+
+useInfiniteMyUserInfoQuery.getKey = (variables?: MyUserInfoQueryVariables) => variables === undefined ? ['myUserInfo.infinite'] : ['myUserInfo.infinite', variables];
+
+
+useMyUserInfoQuery.fetcher = (variables?: MyUserInfoQueryVariables) => fetcher<MyUserInfoQuery, MyUserInfoQueryVariables>(MyUserInfoDocument, variables);
 
 export const UsersDocument = `
     query users($first: Int, $last: Int, $before: String, $after: String) {

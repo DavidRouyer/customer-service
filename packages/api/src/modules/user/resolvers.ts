@@ -3,6 +3,7 @@ import {
   validatePaginationArguments,
 } from '@cs/kyaku/utils/pagination';
 
+import { authorize } from '../../authorize';
 import { UserSortField } from '../../entities/user';
 import { Resolvers } from '../../generated-types/graphql';
 import UserService from '../../services/user';
@@ -10,6 +11,15 @@ import typeDefs from './typeDefs.graphql';
 
 const resolvers: Resolvers = {
   Query: {
+    myUserInfo: async (_, __, { dataloaders, user }) => {
+      const authorizedUser = authorize(user);
+
+      try {
+        return await dataloaders.userLoader.load(authorizedUser.id);
+      } catch (error) {
+        return null;
+      }
+    },
     user: async (_, { id }, { dataloaders }) => {
       try {
         return await dataloaders.userLoader.load(id);

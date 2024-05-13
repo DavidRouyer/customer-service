@@ -5,6 +5,12 @@ fragment UserParts on User {
   image
 }
 
+query myUserInfo {
+  myUserInfo {
+    ...UserParts
+  }
+}
+
 query users($first: Int, $last: Int, $before: String, $after: String) {
   users(first: $first, last: $last, before: $before, after: $after) {
     edges {

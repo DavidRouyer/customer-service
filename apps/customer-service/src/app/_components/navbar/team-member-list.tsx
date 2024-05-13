@@ -7,11 +7,13 @@ import { cn } from '@cs/ui';
 import { Avatar, AvatarFallback, AvatarImage } from '@cs/ui/avatar';
 
 import { matchPath } from '~/app/lib/path';
-import { useUsersQuery } from '~/graphql/generated/client';
+import { useMyUserInfoQuery, useUsersQuery } from '~/graphql/generated/client';
 import { api } from '~/trpc/react';
 
 export const TeamMemberList: FC = () => {
-  const { data: session } = api.auth.getSession.useQuery();
+  const { data: myUserInfo } = useMyUserInfoQuery(undefined, {
+    select: (data) => ({ user: data.myUserInfo }),
+  });
   const pathname = usePathname();
   const { data: usersData } = useUsersQuery(
     {
@@ -30,7 +32,7 @@ export const TeamMemberList: FC = () => {
   };
 
   return usersData?.edges
-    ?.filter((user) => user.node.id !== session?.user?.id)
+    ?.filter((user) => user.node.id !== myUserInfo?.user?.id)
     .map((user) => (
       <li key={user.node.id}>
         <Link

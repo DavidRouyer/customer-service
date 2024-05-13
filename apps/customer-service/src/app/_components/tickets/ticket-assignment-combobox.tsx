@@ -21,6 +21,7 @@ import {
   TicketQuery,
   useAssignTicketMutation,
   useInfiniteTicketTimelineQuery,
+  useMyUserInfoQuery,
   UsersQuery,
   useTicketQuery,
   useUnassignTicketMutation,
@@ -38,7 +39,9 @@ export const TicketAssignmentCombobox: FC<TicketAssignmentComboboxProps> = ({
   ticketId,
 }) => {
   const { formatMessage } = useIntl();
-  const { data: session } = api.auth.getSession.useQuery();
+  const { data: myUserInfo } = useMyUserInfoQuery(undefined, {
+    select: (data) => ({ user: data.myUserInfo }),
+  });
 
   const [open, setOpen] = useState(false);
 
@@ -52,9 +55,9 @@ export const TicketAssignmentCombobox: FC<TicketAssignmentComboboxProps> = ({
       select: useCallback(
         (data: UsersQuery) => {
           let newUsers = data.users.edges.map((user) => user.node);
-          if (session?.user.id) {
+          if (myUserInfo?.user?.id) {
             const loggedUser = newUsers.find(
-              (user) => user.id === session.user.id
+              (user) => user.id === myUserInfo.user?.id
             );
             if (loggedUser) {
               newUsers = [
@@ -77,7 +80,7 @@ export const TicketAssignmentCombobox: FC<TicketAssignmentComboboxProps> = ({
 
           return newUsers;
         },
-        [assignedTo, session?.user]
+        [assignedTo, myUserInfo?.user]
       ),
     }
   );

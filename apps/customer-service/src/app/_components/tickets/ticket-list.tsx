@@ -9,8 +9,10 @@ import { TicketFilter, TicketStatus } from '@cs/kyaku/models';
 
 import { TicketListItem } from '~/app/_components/tickets/ticket-list-item';
 import { TicketListItemSkeleton } from '~/app/_components/tickets/ticket-list-item-skeleton';
-import { useInfiniteTicketsQuery } from '~/graphql/generated/client';
-import { api } from '~/trpc/react';
+import {
+  useInfiniteTicketsQuery,
+  useMyUserInfoQuery,
+} from '~/graphql/generated/client';
 
 export const TicketList: FC<{
   filter: TicketFilter | string;
@@ -35,7 +37,9 @@ export const TicketList: FC<{
         },
       }
     );
-  const { data: session } = api.auth.getSession.useQuery();
+  const { data: myUserInfo } = useMyUserInfoQuery(undefined, {
+    select: (data) => ({ user: data.myUserInfo }),
+  });
 
   useEffect(() => {
     if (inView && hasNextPage && !isFetching) {
@@ -54,7 +58,7 @@ export const TicketList: FC<{
               <TicketListItem
                 key={ticket.node.id}
                 ticket={ticket.node}
-                currentUserId={session?.user.id}
+                currentUserId={myUserInfo?.user?.id}
               />
             ))}
           </div>
