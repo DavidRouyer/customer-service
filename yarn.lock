@@ -1903,8 +1903,6 @@ __metadata:
     "@graphql-tools/merge": "npm:^9.0.4"
     "@graphql-tools/schema": "npm:^10.0.3"
     "@parcel/watcher": "npm:^2.4.1"
-    "@trpc/client": "npm:next"
-    "@trpc/server": "npm:next"
     "@types/jsonwebtoken": "npm:9.0.6"
     awilix: "npm:^10.0.2"
     dataloader: "npm:^2.2.2"
@@ -1914,7 +1912,6 @@ __metadata:
     jsonwebtoken: "npm:9.0.2"
     lexical: "npm:^0.15.0"
     prettier: "npm:^3.3.1"
-    superjson: "npm:^2.2.1"
     typescript: "npm:^5.4.5"
     zod: "npm:^3.23.8"
   languageName: unknown
@@ -1966,10 +1963,6 @@ __metadata:
     "@tanstack/react-table": "npm:^8.17.3"
     "@testing-library/jest-dom": "npm:^6.4.5"
     "@testing-library/react": "npm:^16.0.0"
-    "@trpc/client": "npm:next"
-    "@trpc/next": "npm:next"
-    "@trpc/react-query": "npm:next"
-    "@trpc/server": "npm:next"
     "@types/google-libphonenumber": "npm:^7.4.30"
     "@types/negotiator": "npm:^0.6.3"
     "@types/node": "npm:^20.14.2"
@@ -6364,55 +6357,6 @@ __metadata:
   peerDependencies:
     "@testing-library/dom": ">=7.21.4"
   checksum: 10c0/68a0c2aa28a3c8e6eb05cafee29705438d7d8a9427423ce5064d44f19c29e89b5636de46dd2f28620fb10abba75c67130185bbc3aa23ac1163a227a5f36641e1
-  languageName: node
-  linkType: hard
-
-"@trpc/client@npm:next":
-  version: 11.0.0-rc.366
-  resolution: "@trpc/client@npm:11.0.0-rc.366"
-  peerDependencies:
-    "@trpc/server": 11.0.0-rc.366+237dbb3f9
-  checksum: 10c0/7e9cc2536ba55b2b0dac1ab8d4bc34dbab7febfbe4f10944779fb805757ee713800c07cc8f0ff9a64b3260d6038cb9c1c343c1de653ebb71fa5764910f0f83cc
-  languageName: node
-  linkType: hard
-
-"@trpc/next@npm:next":
-  version: 11.0.0-rc.366
-  resolution: "@trpc/next@npm:11.0.0-rc.366"
-  peerDependencies:
-    "@tanstack/react-query": ^5.25.0
-    "@trpc/client": 11.0.0-rc.366+237dbb3f9
-    "@trpc/react-query": 11.0.0-rc.366+237dbb3f9
-    "@trpc/server": 11.0.0-rc.366+237dbb3f9
-    next: "*"
-    react: ">=16.8.0"
-    react-dom: ">=16.8.0"
-  peerDependenciesMeta:
-    "@tanstack/react-query":
-      optional: true
-    "@trpc/react-query":
-      optional: true
-  checksum: 10c0/d94ec5e896c6622efe7a830e6d15f0f7f50e31ceda552d1a06668a054f1140f3cc59e5f45004b5f14802fadcc4a97689b433e5adbc8ed37a9a409cf1bbec52db
-  languageName: node
-  linkType: hard
-
-"@trpc/react-query@npm:next":
-  version: 11.0.0-rc.366
-  resolution: "@trpc/react-query@npm:11.0.0-rc.366"
-  peerDependencies:
-    "@tanstack/react-query": ^5.25.0
-    "@trpc/client": 11.0.0-rc.366+237dbb3f9
-    "@trpc/server": 11.0.0-rc.366+237dbb3f9
-    react: ">=18.2.0"
-    react-dom: ">=18.2.0"
-  checksum: 10c0/dfc1fcb54bb716ce05d6e2647ea6a6fab3de79e8881261a1a4c9a3d10121702272bc1f7dd90f448893322e9bf33b721ce9a904547d97befd6597457d37f1aefd
-  languageName: node
-  linkType: hard
-
-"@trpc/server@npm:next":
-  version: 11.0.0-rc.366
-  resolution: "@trpc/server@npm:11.0.0-rc.366"
-  checksum: 10c0/e547040f024bd5c759be2c0580ead4dd71c57c025d9aee0372543cbba32fc5d877bb40ad116cfd7b20fe6aeecaa7a32e61a0fc26410962e27a09cca5d43326a4
   languageName: node
   linkType: hard
 

@@ -30,9 +30,6 @@ updates:
       tanstack-query:
         patterns:
           - '@tanstack/react-query*'
-      trpc:
-        patterns:
-          - '@trpc*'
       turbo:
         patterns:
           - 'turbo'

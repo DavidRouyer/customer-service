@@ -23,15 +23,12 @@
     "@cs/kyaku": "*",
     "@graphql-tools/merge": "^9.0.4",
     "@graphql-tools/schema": "^10.0.3",
-    "@trpc/client": "next",
-    "@trpc/server": "next",
     "@types/jsonwebtoken": "9.0.6",
     "awilix": "^10.0.2",
     "dataloader": "^2.2.2",
     "graphql": "^16.8.1",
     "graphql-scalars": "^1.23.0",
     "jsonwebtoken": "9.0.2",
-    "superjson": "^2.2.1",
     "zod": "^3.23.8"
   },
   "devDependencies": {

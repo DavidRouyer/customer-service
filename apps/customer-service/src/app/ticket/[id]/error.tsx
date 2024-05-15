@@ -1,6 +1,5 @@
 'use client';
 
-import { TRPCClientError } from '@trpc/client';
 import { XIcon } from 'lucide-react';
 import { FormattedMessage } from 'react-intl';
 
@@ -14,10 +13,9 @@ export default function Error({
   reset: () => void;
 }) {
   const getError = (error: Error) => {
-    if (error instanceof TRPCClientError) {
-      if (error.message === 'ticket_not_found') {
-        return <FormattedMessage id="errors.ticket_not_found" />;
-      }
+    console.error(error);
+    if (error.message === 'ticket_not_found') {
+      return <FormattedMessage id="errors.ticket_not_found" />;
     }
 
     return <FormattedMessage id="errors.unhandled_error" />;
