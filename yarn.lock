@@ -1725,16 +1725,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@chromatic-com/storybook@npm:^1.3.5":
-  version: 1.3.5
-  resolution: "@chromatic-com/storybook@npm:1.3.5"
+"@chromatic-com/storybook@npm:^1.4.0":
+  version: 1.4.0
+  resolution: "@chromatic-com/storybook@npm:1.4.0"
   dependencies:
     chromatic: "npm:^11.3.2"
     filesize: "npm:^10.0.12"
     jsonfile: "npm:^6.1.0"
     react-confetti: "npm:^6.1.0"
     strip-ansi: "npm:^7.1.0"
-  checksum: 10c0/c8c16a0b71bb6e381efe0fa7c45ea0377fe0469777f9e71b494ebd4db925547a03439e38952cc68be5d5ad444a0dfb59e752e969e40023a3b2ca7be7adac0a70
+  checksum: 10c0/4b4ae546358b46d1a515fb5eb7110263eda9f59062702aea3deabd27a0f1554c778a2735d26824080ed9e833890808afbd603b89cc093bda83b7de96ad4102fd
   languageName: node
   linkType: hard
 
@@ -15158,7 +15158,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "workshop@workspace:packages/workshop"
   dependencies:
-    "@chromatic-com/storybook": "npm:^1.3.5"
+    "@chromatic-com/storybook": "npm:^1.4.0"
     "@cs/eslint-config": "npm:*"
     "@cs/kyaku": "npm:*"
     "@cs/prettier-config": "npm:*"
