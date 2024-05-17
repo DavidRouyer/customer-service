@@ -46,8 +46,7 @@ const resolvers: Resolvers = {
         { min: 1, max: 100 }
       );
 
-      const labelTypeService: LabelTypeService =
-        container.resolve('labelTypeService');
+      const labelTypeService = container.resolve('labelTypeService');
 
       const labelTypes = await labelTypeService.list(
         {
@@ -91,8 +90,7 @@ const resolvers: Resolvers = {
     ) => {
       const authorizedUser = authorize(user);
 
-      const labelTypeService: LabelTypeService =
-        container.resolve('labelTypeService');
+      const labelTypeService = container.resolve('labelTypeService');
 
       try {
         const archivedLabelType = await labelTypeService.archive(
@@ -114,8 +112,7 @@ const resolvers: Resolvers = {
     createLabelType: async (_, { input }, { container, dataloaders, user }) => {
       const authorizedUser = authorize(user);
 
-      const labelTypeService: LabelTypeService =
-        container.resolve('labelTypeService');
+      const labelTypeService = container.resolve('labelTypeService');
 
       try {
         const createdLabelType = await labelTypeService.create(
@@ -144,8 +141,7 @@ const resolvers: Resolvers = {
     ) => {
       const authorizedUser = authorize(user);
 
-      const labelTypeService: LabelTypeService =
-        container.resolve('labelTypeService');
+      const labelTypeService = container.resolve('labelTypeService');
 
       try {
         const unarchivedLabelType = await labelTypeService.unarchive(
@@ -167,8 +163,7 @@ const resolvers: Resolvers = {
     updateLabelType: async (_, { input }, { container, dataloaders, user }) => {
       const authorizedUser = authorize(user);
 
-      const labelTypeService: LabelTypeService =
-        container.resolve('labelTypeService');
+      const labelTypeService = container.resolve('labelTypeService');
 
       try {
         const updatedLabelType = await labelTypeService.update(

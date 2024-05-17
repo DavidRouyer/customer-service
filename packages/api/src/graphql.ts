@@ -3,7 +3,7 @@ import { makeExecutableSchema } from '@graphql-tools/schema';
 import { asClass, asValue, createContainer } from 'awilix';
 import DataLoader from 'dataloader';
 import { YogaInitialContext } from 'graphql-yoga';
-import { JwtPayload, sign, verify } from 'jsonwebtoken';
+import { JwtPayload, verify } from 'jsonwebtoken';
 
 import { auth } from '@cs/auth';
 import { drizzleConnection } from '@cs/database';
@@ -34,7 +34,25 @@ import TicketTimelineService from './services/ticket-timeline';
 import UserService from './services/user';
 import { UnitOfWork } from './unit-of-work';
 
-const container = createContainer();
+type Services = {
+  drizzleConnection: typeof drizzleConnection;
+  unitOfWork: UnitOfWork;
+  customerRepository: CustomerRepository;
+  labelRepository: LabelRepository;
+  labelTypeRepository: LabelTypeRepository;
+  ticketRepository: TicketRepository;
+  ticketMentionRepository: TicketMentionRepository;
+  ticketTimelineRepository: TicketTimelineRepository;
+  userRepository: UserRepository;
+  customerService: CustomerService;
+  labelService: LabelService;
+  labelTypeService: LabelTypeService;
+  ticketService: TicketService;
+  ticketTimelineService: TicketTimelineService;
+  userService: UserService;
+};
+
+const container = createContainer<Services>();
 container.register({
   drizzleConnection: asValue(drizzleConnection),
   unitOfWork: asClass(UnitOfWork).scoped(),
@@ -68,8 +86,11 @@ const getUser = async (request: Request) => {
     ) as JwtPayload;
 
     const userId = tokenPayload.userId;
-    const userService: UserService = container.resolve('userService');
-    return userService.retrieve(userId);
+    if (typeof userId !== 'string') {
+      return null;
+    }
+    const userService = container.resolve('userService');
+    return (await userService.retrieve(userId)) ?? null;
   }
 
   return null;
@@ -79,8 +100,7 @@ const getContext = async (initialContext: YogaInitialContext) => ({
   container,
   dataloaders: {
     customerLoader: new DataLoader<string, Customer, string>(async (ids) => {
-      const customerService: CustomerService =
-        container.resolve('customerService');
+      const customerService = container.resolve('customerService');
       const rows = await customerService.list({
         customerIds: {
           in: [...ids],
@@ -92,7 +112,7 @@ const getContext = async (initialContext: YogaInitialContext) => ({
       );
     }),
     labelLoader: new DataLoader<string, Label, string>(async (ids) => {
-      const labelService: LabelService = container.resolve('labelService');
+      const labelService = container.resolve('labelService');
       const rows = await labelService.list({
         labelIds: {
           in: [...ids],
@@ -104,8 +124,7 @@ const getContext = async (initialContext: YogaInitialContext) => ({
       );
     }),
     labelTypeLoader: new DataLoader<string, LabelType, string>(async (ids) => {
-      const labelTypeService: LabelTypeService =
-        container.resolve('labelTypeService');
+      const labelTypeService = container.resolve('labelTypeService');
       const rows = await labelTypeService.list({
         labelTypeIds: {
           in: [...ids],
@@ -117,7 +136,7 @@ const getContext = async (initialContext: YogaInitialContext) => ({
       );
     }),
     ticketLoader: new DataLoader<string, Ticket, string>(async (ids) => {
-      const ticketService: TicketService = container.resolve('ticketService');
+      const ticketService = container.resolve('ticketService');
       const rows = await ticketService.list({
         ticketIds: {
           in: [...ids],
@@ -129,7 +148,7 @@ const getContext = async (initialContext: YogaInitialContext) => ({
       );
     }),
     userLoader: new DataLoader<string, User, string>(async (ids) => {
-      const userService: UserService = container.resolve('userService');
+      const userService = container.resolve('userService');
       const rows = await userService.list({
         userIds: {
           in: [...ids],
@@ -143,6 +162,8 @@ const getContext = async (initialContext: YogaInitialContext) => ({
   },
   user: await getUser(initialContext.request),
 });
+
+export type Context = Awaited<ReturnType<typeof getContext>>;
 
 const schema = makeExecutableSchema({
   typeDefs: mergeTypeDefs([

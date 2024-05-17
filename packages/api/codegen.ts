@@ -16,7 +16,7 @@ const config: CodegenConfig = {
     },
   },
   config: {
-    contextType: './context#Context',
+    contextType: '../graphql#Context',
   },
 };
 

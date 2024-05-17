@@ -141,7 +141,7 @@ const resolvers: Resolvers = {
         { min: 1, max: 100 }
       );
 
-      const ticketService: TicketService = container.resolve('ticketService');
+      const ticketService = container.resolve('ticketService');
 
       const tickets = await ticketService.list(
         {
@@ -293,7 +293,7 @@ const resolvers: Resolvers = {
       return mapCustomer(c);
     },
     labels: async ({ id }, _, { container }) => {
-      const labelService: LabelService = container.resolve('labelService');
+      const labelService = container.resolve('labelService');
       const labels = await labelService.list({
         ticketId: id,
         isArchived: false,
@@ -316,9 +316,7 @@ const resolvers: Resolvers = {
         { min: 1, max: 100 }
       );
 
-      const ticketTimelineService: TicketTimelineService = container.resolve(
-        'ticketTimelineService'
-      );
+      const ticketTimelineService = container.resolve('ticketTimelineService');
 
       const timelineEntries = await ticketTimelineService.list(
         {
@@ -354,7 +352,7 @@ const resolvers: Resolvers = {
     assignTicket: async (_, { input }, { container, dataloaders, user }) => {
       const authorizedUser = authorize(user);
 
-      const ticketService: TicketService = container.resolve('ticketService');
+      const ticketService = container.resolve('ticketService');
 
       try {
         const ticket = await ticketService.assign(
@@ -381,7 +379,7 @@ const resolvers: Resolvers = {
     ) => {
       const authorizedUser = authorize(user);
 
-      const ticketService: TicketService = container.resolve('ticketService');
+      const ticketService = container.resolve('ticketService');
 
       try {
         const ticket = await ticketService.changePriority(
@@ -404,7 +402,7 @@ const resolvers: Resolvers = {
     createTicket: async (_, { input }, { container, dataloaders, user }) => {
       const authorizedUser = authorize(user);
 
-      const ticketService: TicketService = container.resolve('ticketService');
+      const ticketService = container.resolve('ticketService');
 
       try {
         const ticket = await ticketService.create(
@@ -427,7 +425,7 @@ const resolvers: Resolvers = {
     createNote: async (_, { input }, { container, dataloaders, user }) => {
       const authorizedUser = authorize(user);
 
-      const ticketService: TicketService = container.resolve('ticketService');
+      const ticketService = container.resolve('ticketService');
 
       try {
         const ticket = await ticketService.createNote(input, authorizedUser.id);
@@ -448,7 +446,7 @@ const resolvers: Resolvers = {
     ) => {
       const authorizedUser = authorize(user);
 
-      const ticketService: TicketService = container.resolve('ticketService');
+      const ticketService = container.resolve('ticketService');
 
       try {
         const ticket = await ticketService.markAsDone(
@@ -472,7 +470,7 @@ const resolvers: Resolvers = {
     ) => {
       const authorizedUser = authorize(user);
 
-      const ticketService: TicketService = container.resolve('ticketService');
+      const ticketService = container.resolve('ticketService');
 
       try {
         const ticket = await ticketService.markAsOpen(
@@ -492,7 +490,7 @@ const resolvers: Resolvers = {
     sendChat: async (_, { input }, { container, dataloaders, user }) => {
       const authorizedUser = authorize(user);
 
-      const ticketService: TicketService = container.resolve('ticketService');
+      const ticketService = container.resolve('ticketService');
 
       try {
         const ticket = await ticketService.sendChat(input, authorizedUser.id);
@@ -509,7 +507,7 @@ const resolvers: Resolvers = {
     unassignTicket: async (_, { input }, { container, dataloaders, user }) => {
       const authorizedUser = authorize(user);
 
-      const ticketService: TicketService = container.resolve('ticketService');
+      const ticketService = container.resolve('ticketService');
 
       try {
         const ticket = await ticketService.unassign(
