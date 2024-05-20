@@ -21,13 +21,12 @@ import {
   StatusChangedEntry,
   User,
 } from '../../generated-types/graphql';
-import LabelService from '../../services/label';
 import TicketService from '../../services/ticket';
 import TicketTimelineService from '../../services/ticket-timeline';
 import { mapCustomer } from '../customer/resolvers';
 import { handleErrors } from '../error';
 import { mapLabel } from '../label/resolvers';
-import typeDefs from './typeDefs.graphql';
+import typeDefs from './typeDefs';
 
 const mapTicket = (
   ticket: Awaited<ReturnType<TicketService['list']>>[number]

@@ -3,7 +3,7 @@ import { LabelType, Resolvers } from '../../generated-types/graphql';
 import LabelService from '../../services/label';
 import { handleErrors } from '../error';
 import { mapLabelType } from '../label-type/resolvers';
-import typeDefs from './typeDefs.graphql';
+import typeDefs from './typeDefs';
 
 export const mapLabel = (
   label: Awaited<ReturnType<LabelService['list']>>[number]

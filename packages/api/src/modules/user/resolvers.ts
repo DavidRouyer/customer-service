@@ -7,7 +7,7 @@ import { authorize } from '../../authorize';
 import { UserSortField } from '../../entities/user';
 import { Resolvers } from '../../generated-types/graphql';
 import UserService from '../../services/user';
-import typeDefs from './typeDefs.graphql';
+import typeDefs from './typeDefs';
 
 const resolvers: Resolvers = {
   Query: {

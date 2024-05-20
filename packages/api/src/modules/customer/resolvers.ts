@@ -1,6 +1,6 @@
 import { Resolvers, User } from '../../generated-types/graphql';
 import CustomerService from '../../services/customer';
-import typeDefs from './typeDefs.graphql';
+import typeDefs from './typeDefs';
 
 export const mapCustomer = (
   customer: Awaited<ReturnType<CustomerService['list']>>[number]

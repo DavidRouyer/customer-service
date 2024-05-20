@@ -1,3 +1,4 @@
+const typeDefs = /* GraphQL */ `
 type User implements Node {
   id: ID!
   name: String
@@ -21,3 +22,6 @@ type Query {
   user(id: ID!): User
   users(first: Int, after: String, last: Int, before: String): UserConnection!
 }
+`;
+
+export default typeDefs;

@@ -3,7 +3,7 @@ import { makeExecutableSchema } from '@graphql-tools/schema';
 import { asClass, asValue, createContainer } from 'awilix';
 import DataLoader from 'dataloader';
 import { YogaInitialContext } from 'graphql-yoga';
-import { JwtPayload, verify } from 'jsonwebtoken';
+import { default as jwt } from 'jsonwebtoken';
 
 import { auth } from '@cs/auth';
 import { drizzleConnection } from '@cs/database';
@@ -80,10 +80,10 @@ const getUser = async (request: Request) => {
   const header = request.headers.get('authorization');
   if (header !== null) {
     const token = header.split(' ')[1];
-    const tokenPayload = verify(
+    const tokenPayload = jwt.verify(
       token as string,
       process.env.JWT_SECRET as string
-    ) as JwtPayload;
+    ) as jwt.JwtPayload;
 
     const userId = tokenPayload.userId;
     if (typeof userId !== 'string') {

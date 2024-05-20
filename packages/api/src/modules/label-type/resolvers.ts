@@ -8,7 +8,7 @@ import { LabelTypeSortField } from '../../entities/label-type';
 import { Resolvers, User } from '../../generated-types/graphql';
 import LabelTypeService from '../../services/label-type';
 import { handleErrors } from '../error';
-import typeDefs from './typeDefs.graphql';
+import typeDefs from './typeDefs';
 
 export const mapLabelType = (
   labelType: Awaited<ReturnType<LabelTypeService['list']>>[number]
