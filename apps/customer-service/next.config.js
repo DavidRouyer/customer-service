@@ -25,6 +25,7 @@ const config = {
       exclude: /node_modules/,
       loader: 'graphql-tag/loader',
     });
+    config.resolve.alias['awilix'] = 'awilix/lib/awilix.browser.js';
 
     return config;
   },
