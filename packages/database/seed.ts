@@ -1,19 +1,16 @@
-import { neonConfig } from '@neondatabase/serverless';
-import ws from 'ws';
-
-import {
+import type {
   TicketAssignmentChanged,
   TicketChat,
+  TicketStatusChanged,
+} from '@cs/kyaku/models';
+import {
   TicketPriority,
   TicketStatus,
-  TicketStatusChanged,
   TimelineEntryType,
 } from '@cs/kyaku/models';
 import { generateEntityId } from '@cs/kyaku/utils';
 
 import { drizzleConnection, eq, schema } from '.';
-
-neonConfig.webSocketConstructor = ws;
 
 async function main() {
   let botUser = await drizzleConnection
