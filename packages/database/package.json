@@ -18,8 +18,8 @@
   },
   "dependencies": {
     "@cs/kyaku": "*",
-    "@neondatabase/serverless": "^0.9.3",
-    "drizzle-orm": "^0.31.1"
+    "drizzle-orm": "^0.31.1",
+    "pg": "^8.11.5"
   },
   "devDependencies": {
     "@cs/eslint-config": "*",
