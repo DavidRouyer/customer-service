@@ -1,0 +1,16 @@
+version: '3.3'
+
+volumes:
+  db-data:
+
+services:
+  kyaku-db:
+    image: postgres:16-alpine
+    restart: always
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=kyaku
+      - POSTGRES_PASSWORD=kyaku
+    ports:
+      - '5432:5432'
