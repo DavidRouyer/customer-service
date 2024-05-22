@@ -1823,7 +1823,7 @@ __metadata:
     dotenv-cli: "npm:^7.4.2"
     eslint: "npm:^8.57.0"
     google-libphonenumber: "npm:^3.2.34"
-    jotai: "npm:^2.8.0"
+    jotai: "npm:^2.8.1"
     jsdom: "npm:^24.0.0"
     lexical: "npm:^0.15.0"
     lucide-react: "npm:^0.379.0"
@@ -10473,9 +10473,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jotai@npm:^2.8.0":
-  version: 2.8.0
-  resolution: "jotai@npm:2.8.0"
+"jotai@npm:^2.8.1":
+  version: 2.8.1
+  resolution: "jotai@npm:2.8.1"
   peerDependencies:
     "@types/react": ">=17.0.0"
     react: ">=17.0.0"
@@ -10484,7 +10484,7 @@ __metadata:
       optional: true
     react:
       optional: true
-  checksum: 10c0/6b2f59749530478163e41b8b1260b99cdab533541a5b9b2dcd885f2ab440391c5ee7855d627cbe28e043b9bcd736d44837b4a8ab20a2761176bba92e623a284e
+  checksum: 10c0/a430ad06cf42a23e9cc1104c2eb21cfe043618ab7d943a27442763a4935c4cb96a286dff3a0a4c369e262d2d02d4221de2fb3ec03644ed7ebd1914a217eb7250
   languageName: node
   linkType: hard
 
