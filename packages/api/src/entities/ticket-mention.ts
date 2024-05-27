@@ -1,4 +1,4 @@
-import { InferInsertModel, InferSelectModel, schema } from '@cs/database';
+import type { InferInsertModel, InferSelectModel, schema } from '@cs/database';
 
 export type TicketMention = InferSelectModel<typeof schema.ticketMentions>;
 export type TicketMentionInsert = InferInsertModel<

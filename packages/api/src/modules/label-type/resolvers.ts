@@ -5,8 +5,8 @@ import {
 
 import { authorize } from '../../authorize';
 import { LabelTypeSortField } from '../../entities/label-type';
-import { Resolvers, User } from '../../generated-types/graphql';
-import LabelTypeService from '../../services/label-type';
+import type { Resolvers, User } from '../../generated-types/graphql';
+import type LabelTypeService from '../../services/label-type';
 import { handleErrors } from '../error';
 import typeDefs from './typeDefs';
 
@@ -32,7 +32,7 @@ const resolvers: Resolvers = {
       try {
         const labelType = await dataloaders.labelTypeLoader.load(id);
         return mapLabelType(labelType);
-      } catch (error) {
+      } catch {
         return null;
       }
     },

@@ -1,19 +1,21 @@
 import { z } from 'zod';
 
 import { and, eq, isNotNull, isNull, schema } from '@cs/database';
-import { Direction, FindConfig, GetConfig } from '@cs/kyaku/types/query';
+import type { FindConfig, GetConfig } from '@cs/kyaku/types/query';
+import { Direction } from '@cs/kyaku/types/query';
 import { KyakuError } from '@cs/kyaku/utils/errors';
 
-import {
+import type {
   CreateLabelType,
   LabelTypeFilters,
-  LabelTypeSortField,
   LabelTypeWith,
   UpdateLabelType,
 } from '../entities/label-type';
-import { User, USER_COLUMNS } from '../entities/user';
-import LabelTypeRepository from '../repositories/label-type';
-import { UnitOfWork } from '../unit-of-work';
+import { LabelTypeSortField } from '../entities/label-type';
+import type { User } from '../entities/user';
+import { USER_COLUMNS } from '../entities/user';
+import type LabelTypeRepository from '../repositories/label-type';
+import type { UnitOfWork } from '../unit-of-work';
 import { BaseService } from './base-service';
 import {
   filterByDirection,
@@ -145,7 +147,7 @@ export default class LabelTypeService extends BaseService {
           const labelTypeWithName = await this.retrieveByName(
             dataToRefine.name
           );
-          return !labelTypeWithName || labelTypeWithName?.id === data.id;
+          return !labelTypeWithName || labelTypeWithName.id === data.id;
         },
         {
           message: `Label type with name:${data.name} already exists`,
@@ -281,7 +283,7 @@ export default class LabelTypeService extends BaseService {
     if (
       !config.sortBy ||
       !config.cursor?.lastValue ||
-      config.cursor?.lastValue === config.cursor?.lastId
+      config.cursor.lastValue === config.cursor.lastId
     )
       return undefined;
 
@@ -291,6 +293,7 @@ export default class LabelTypeService extends BaseService {
         new Date(config.cursor.lastValue)
       );
     }
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     if (config.sortBy === LabelTypeSortField.name) {
       return filterByDirection(config.direction)(
         schema.labelTypes.name,
@@ -320,6 +323,7 @@ export default class LabelTypeService extends BaseService {
     if (config.sortBy === LabelTypeSortField.createdAt) {
       return [sortByDirection(config.direction)(schema.labelTypes.createdAt)];
     }
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     if (config.sortBy === LabelTypeSortField.name) {
       return [sortByDirection(config.direction)(schema.labelTypes.name)];
     }

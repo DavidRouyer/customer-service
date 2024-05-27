@@ -1,10 +1,10 @@
 import { notFound } from 'next/navigation';
 
-type DashboardContactPageProps = {
+interface DashboardContactPageProps {
   params: {
     id: string;
   };
-};
+}
 
 export default function DashboardContactPage({
   params: { id },

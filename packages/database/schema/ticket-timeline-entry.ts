@@ -1,15 +1,15 @@
 import { relations } from 'drizzle-orm';
 import { json, pgEnum, pgTable, timestamp, varchar } from 'drizzle-orm/pg-core';
 
-import {
+import type {
   TicketAssignmentChanged,
   TicketChat,
   TicketLabelsChanged,
   TicketNote,
   TicketPriorityChanged,
   TicketStatusChanged,
-  TimelineEntryType,
 } from '@cs/kyaku/models';
+import { TimelineEntryType } from '@cs/kyaku/models';
 import { generateEntityId } from '@cs/kyaku/utils/generate-entity-id';
 
 import { users } from './auth';

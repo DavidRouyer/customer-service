@@ -1,6 +1,6 @@
 'use client';
 
-import { ColumnDef } from '@tanstack/react-table';
+import type { ColumnDef } from '@tanstack/react-table';
 import { Plus } from 'lucide-react';
 
 import { getInitials } from '@cs/kyaku/utils';
@@ -8,10 +8,10 @@ import { Avatar, AvatarFallback, AvatarImage } from '@cs/ui/avatar';
 import { Badge } from '@cs/ui/badge';
 import { Checkbox } from '@cs/ui/checkbox';
 
-import { TicketsQuery } from '~/graphql/generated/client';
+import type { TicketsQuery } from '~/graphql/generated/client';
 import { priorities, statuses } from './data';
 
-export type TicketData = {
+export interface TicketData {
   id: string;
   title: string;
   status: string;
@@ -24,7 +24,7 @@ export type TicketData = {
   }[];
   priority: string;
   assignedTo: TicketsQuery['tickets']['edges'][number]['node']['assignedTo'];
-};
+}
 
 export const columns: ColumnDef<TicketData>[] = [
   {
@@ -70,9 +70,7 @@ export const columns: ColumnDef<TicketData>[] = [
       return (
         <div className="flex p-2 align-middle">
           <div className="flex items-center">
-            {priority.icon && (
-              <priority.icon className="size-4 text-muted-foreground" />
-            )}
+            <priority.icon className="size-4 text-muted-foreground" />
           </div>
         </div>
       );
@@ -106,9 +104,7 @@ export const columns: ColumnDef<TicketData>[] = [
       return (
         <div className="flex p-2 align-middle">
           <div className="flex items-center">
-            {status.icon && (
-              <status.icon className="size-4 text-muted-foreground" />
-            )}
+            <status.icon className="size-4 text-muted-foreground" />
           </div>
         </div>
       );
@@ -165,9 +161,9 @@ export const columns: ColumnDef<TicketData>[] = [
         {row.original.assignedTo ? (
           <div className="flex items-center gap-x-2">
             <Avatar className="size-4">
-              <AvatarImage src={row.original.assignedTo?.image ?? undefined} />
+              <AvatarImage src={row.original.assignedTo.image ?? undefined} />
               <AvatarFallback>
-                {getInitials(row.original.assignedTo?.name ?? '')}
+                {getInitials(row.original.assignedTo.name ?? '')}
               </AvatarFallback>
             </Avatar>
           </div>

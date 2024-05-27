@@ -1,6 +1,6 @@
 'use client';
 
-import { FC } from 'react';
+import type { FC } from 'react';
 
 import { Timeline } from '@cs/ui/timeline';
 
@@ -23,7 +23,7 @@ export const TicketTimeline: FC<{ ticketId: string }> = ({ ticketId }) => {
   return (
     <Timeline
       items={
-        timelineData?.edges?.map((timelineEntry) => timelineEntry.node.id) ?? []
+        timelineData?.edges.map((timelineEntry) => timelineEntry.node.id) ?? []
       }
       renderItem={renderItem}
       ticketId={ticketId}

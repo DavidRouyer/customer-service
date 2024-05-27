@@ -1,12 +1,10 @@
-import { FC } from 'react';
+import type { FC } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { Shield, ShieldAlert } from 'lucide-react';
 import { FormattedMessage } from 'react-intl';
 
-import {
-  TicketPriority,
-  TicketPriority as TicketPriorityType,
-} from '@cs/kyaku/models';
+import type { TicketPriority } from '@cs/kyaku/models';
+import { TicketPriority as TicketPriorityType } from '@cs/kyaku/models';
 import { Button } from '@cs/ui/button';
 import {
   DropdownMenu,
@@ -17,17 +15,17 @@ import {
 } from '@cs/ui/dropdown-menu';
 import { TicketPriorityBadge } from '@cs/ui/ticket-priority-badge';
 
+import type { TicketQuery } from '~/graphql/generated/client';
 import {
-  TicketQuery,
   useChangeTicketPriorityMutation,
   useInfiniteTicketTimelineQuery,
   useTicketQuery,
 } from '~/graphql/generated/client';
 
-type TicketChangePriorityProps = {
+interface TicketChangePriorityProps {
   priority: TicketPriority;
   ticketId: string;
-};
+}
 
 export const TicketPriorityDropdowm: FC<TicketChangePriorityProps> = ({
   priority,

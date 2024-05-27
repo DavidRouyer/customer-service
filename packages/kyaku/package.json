@@ -7,7 +7,7 @@
   "scripts": {
     "build": "tsc",
     "clean": "rm -rf .turbo node_modules",
-    "lint": "eslint .",
+    "lint": "eslint",
     "format": "prettier --check \"**/*.{mjs,ts,md,json}\"",
     "typecheck": "tsc --noEmit"
   },
@@ -19,16 +19,10 @@
     "@cs/prettier-config": "*",
     "@cs/tsconfig": "*",
     "@lexical/headless": "^0.15.0",
-    "eslint": "^8.57.0",
+    "eslint": "^9.3.0",
     "lexical": "^0.15.0",
     "prettier": "^3.3.1",
     "typescript": "^5.4.5"
-  },
-  "eslintConfig": {
-    "root": true,
-    "extends": [
-      "@cs/eslint-config/base"
-    ]
   },
   "prettier": "@cs/prettier-config"
 }

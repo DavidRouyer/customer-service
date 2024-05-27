@@ -1,6 +1,7 @@
 import { GraphQLError } from 'graphql';
 
-import { Cursor, Direction } from '@cs/kyaku/types/query';
+import type { Cursor } from '@cs/kyaku/types/query';
+import { Direction } from '@cs/kyaku/types/query';
 
 import { base64, unbase64 } from './base64';
 
@@ -20,7 +21,7 @@ interface ArrayMetaInfo<T> {
 export const parseCursor = (cursor: string) => {
   const cursorStringified = unbase64(cursor);
   try {
-    const parsedCursor: Cursor = JSON.parse(cursorStringified);
+    const parsedCursor = JSON.parse(cursorStringified) as Cursor;
     if (
       typeof parsedCursor.lastId !== 'string' ||
       typeof parsedCursor.lastValue !== 'string'
@@ -28,7 +29,7 @@ export const parseCursor = (cursor: string) => {
       throw new Error();
     }
     return parsedCursor;
-  } catch (e) {
+  } catch {
     throw new GraphQLError('Invalid cursor');
   }
 };
@@ -95,7 +96,7 @@ export const connectionFromArray = <T extends { id: string }>({
   args: { before, after, first, last },
   meta: { direction, getLastValue, limit },
 }: {
-  array: ReadonlyArray<T>;
+  array: readonly T[];
   args: ConnectionArguments;
   meta: ArrayMetaInfo<T>;
 }) => {

@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import type { FC } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { AtSign, BarChart3, BookmarkX, Users } from 'lucide-react';
@@ -42,7 +42,7 @@ export const InboxList: FC = () => {
             </span>
           </div>
 
-          {statsData?.total}
+          {statsData.total}
         </Link>
       </li>
       <li>
@@ -66,7 +66,7 @@ export const InboxList: FC = () => {
             </span>
           </div>
 
-          {statsData?.assignedToMe}
+          {statsData.assignedToMe}
         </Link>
       </li>
       <li>
@@ -85,7 +85,7 @@ export const InboxList: FC = () => {
             </span>
           </div>
 
-          {statsData?.unassigned}
+          {statsData.unassigned}
         </Link>
       </li>
       <li>
@@ -104,7 +104,7 @@ export const InboxList: FC = () => {
             </span>
           </div>
 
-          {statsData?.mentions}
+          {statsData.mentions}
         </Link>
       </li>
       <li>

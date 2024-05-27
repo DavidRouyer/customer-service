@@ -20,7 +20,7 @@ export function parseAndFormatPhoneNumber(
   let result: PhoneNumber;
   try {
     result = instance.parse(str, regionCode);
-  } catch (err) {
+  } catch {
     return undefined;
   }
 

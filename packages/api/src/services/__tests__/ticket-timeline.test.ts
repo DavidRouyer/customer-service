@@ -1,8 +1,8 @@
 import { asc, eq, schema } from '@cs/database';
 import { TimelineEntryType } from '@cs/kyaku/models';
 
-import TicketTimelineRepository from '../../repositories/ticket-timeline';
-import { UnitOfWork } from '../../unit-of-work';
+import type TicketTimelineRepository from '../../repositories/ticket-timeline';
+import type { UnitOfWork } from '../../unit-of-work';
 import TicketTimelineService from '../ticket-timeline';
 
 vi.mock('../../repositories/label');

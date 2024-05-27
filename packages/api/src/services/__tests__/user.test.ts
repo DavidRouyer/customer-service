@@ -1,7 +1,7 @@
 import { asc, eq, schema } from '@cs/database';
 
-import UserRepository from '../../repositories/user';
-import { UnitOfWork } from '../../unit-of-work';
+import type UserRepository from '../../repositories/user';
+import type { UnitOfWork } from '../../unit-of-work';
 import UserService from '../user';
 
 describe('UserService', () => {

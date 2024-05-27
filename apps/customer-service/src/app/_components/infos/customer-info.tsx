@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import type { FC } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
 import { Copy } from '@cs/ui/copy';

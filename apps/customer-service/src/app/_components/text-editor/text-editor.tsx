@@ -1,6 +1,6 @@
 'use client';
 
-import { FC } from 'react';
+import type { FC } from 'react';
 import { ClearEditorPlugin } from '@lexical/react/LexicalClearEditorPlugin';
 import { LexicalComposer } from '@lexical/react/LexicalComposer';
 import { ContentEditable } from '@lexical/react/LexicalContentEditable';
@@ -19,10 +19,10 @@ import MyCustomCommandHandlerPlugin from '~/app/_components/text-editor/plugins/
 import MyCustomOnChangePlugin from '~/app/_components/text-editor/plugins/my-custom-on-change-plugin';
 import MyCustomValuePlugin from '~/app/_components/text-editor/plugins/my-custom-value-plugin';
 
-type TextEditorProps = {
+interface TextEditorProps {
   value?: string;
   onChange: (value: string) => void;
-};
+}
 
 const TextEditor: FC<TextEditorProps> = ({ value, onChange }) => {
   return (

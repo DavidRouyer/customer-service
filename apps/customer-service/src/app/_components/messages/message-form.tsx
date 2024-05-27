@@ -1,6 +1,7 @@
 'use client';
 
-import { createContext, FC, RefObject, useRef } from 'react';
+import type { FC, RefObject } from 'react';
+import { createContext, useRef } from 'react';
 import dynamic from 'next/dynamic';
 import { useQueryClient } from '@tanstack/react-query';
 import { useAtom } from 'jotai';
@@ -9,15 +10,15 @@ import { Controller, FormProvider, useForm } from 'react-hook-form';
 import { FormattedMessage } from 'react-intl';
 
 import { parseTextFromEditorState } from '@cs/kyaku/editor';
-import { TicketChat, TicketNote } from '@cs/kyaku/models';
+import type { TicketChat, TicketNote } from '@cs/kyaku/models';
 import { cn } from '@cs/ui';
 import { Button } from '@cs/ui/button';
 import { Label } from '@cs/ui/label';
 import { Switch } from '@cs/ui/switch';
 
 import { messageModeAtom } from '~/app/_components/messages/message-mode-atom';
+import type { TimelineEntry } from '~/graphql/generated/client';
 import {
-  TimelineEntry,
   useCreateNoteMutation,
   useInfiniteTicketTimelineQuery,
   useMyUserInfoQuery,
@@ -31,9 +32,9 @@ const TextEditor = dynamic(
   }
 );
 
-type MessageFormSchema = {
+interface MessageFormSchema {
   content: string;
-};
+}
 
 export const FormElementContext =
   createContext<RefObject<HTMLFormElement> | null>(null);
@@ -47,7 +48,7 @@ export const MessageForm: FC<{ ticketId: string }> = ({ ticketId }) => {
 
   const [messageMode, setMessageMode] = useAtom(messageModeAtom);
 
-  const { mutateAsync: sendChat } = useSendChatMutation({
+  const { mutate: sendChat } = useSendChatMutation({
     onMutate: async ({ input }) => {
       // Cancel any outgoing refetches
       // (so they don't overwrite our optimistic update)
@@ -107,7 +108,7 @@ export const MessageForm: FC<{ ticketId: string }> = ({ ticketId }) => {
       });
     },
   });
-  const { mutateAsync: createNote } = useCreateNoteMutation({
+  const { mutate: createNote } = useCreateNoteMutation({
     onMutate: async ({ input }) => {
       // Cancel any outgoing refetches
       // (so they don't overwrite our optimistic update)

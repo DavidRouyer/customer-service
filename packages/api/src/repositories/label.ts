@@ -1,8 +1,9 @@
-import { eq, inArray, KnownKeysOnly, schema } from '@cs/database';
+import type { KnownKeysOnly } from '@cs/database';
+import { eq, inArray, schema } from '@cs/database';
 
-import { DrizzleTransactionScope } from '../drizzle-transaction';
-import { Label, LabelInsert } from '../entities/label';
-import { IncludeRelation } from '../services/build-query';
+import type { DrizzleTransactionScope } from '../drizzle-transaction';
+import type { Label, LabelInsert } from '../entities/label';
+import type { IncludeRelation } from '../services/build-query';
 import { BaseRepository } from './base-repository';
 
 export default class LabelRepository extends BaseRepository {

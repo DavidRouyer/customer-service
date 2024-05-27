@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import type { FC } from 'react';
 
 import { TimelineItem } from '@cs/ui/timeline-item';
 
@@ -23,8 +23,8 @@ export const SmartTimelineItem: FC<{ itemId: string; ticketId: string }> = ({
   return (
     <TimelineItem
       item={item.node}
-      nextItemId={nextItemId?.node?.id}
-      previousItemId={previousItemId?.node?.id}
+      nextItemId={nextItemId?.node.id}
+      previousItemId={previousItemId?.node.id}
     />
   );
 };

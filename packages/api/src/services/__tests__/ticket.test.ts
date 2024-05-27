@@ -1,10 +1,10 @@
 import { and, asc, eq, schema } from '@cs/database';
 import { TicketPriority, TicketStatus } from '@cs/kyaku/models';
 
-import TicketRepository from '../../repositories/ticket';
+import type TicketRepository from '../../repositories/ticket';
 import TicketMentionRepository from '../../repositories/ticket-mention';
 import TicketTimelineRepository from '../../repositories/ticket-timeline';
-import { UnitOfWork } from '../../unit-of-work';
+import type { UnitOfWork } from '../../unit-of-work';
 import TicketService from '../ticket';
 
 vi.mock('../../repositories/ticket-mention');
@@ -101,7 +101,7 @@ describe('TicketService', () => {
       })),
     };
     const unitOfWork = {
-      transaction: vi.fn((cb) => cb()),
+      transaction: vi.fn((cb: () => void) => cb()),
     };
 
     const ticketService = new TicketService({
@@ -142,7 +142,7 @@ describe('TicketService', () => {
         undefined
       );
 
-      expect(result!.id).toEqual('one-piece');
+      expect(result?.id).toEqual('one-piece');
     });
   });
 
@@ -163,7 +163,7 @@ describe('TicketService', () => {
       })),
     };
     const unitOfWork = {
-      transaction: vi.fn((cb) => cb()),
+      transaction: vi.fn((cb: () => void) => cb()),
     };
 
     const ticketService = new TicketService({
@@ -234,7 +234,7 @@ describe('TicketService', () => {
       })),
     };
     const unitOfWork = {
-      transaction: vi.fn((cb) => cb()),
+      transaction: vi.fn((cb: () => void) => cb()),
     };
 
     const ticketService = new TicketService({
@@ -299,7 +299,7 @@ describe('TicketService', () => {
       })),
     };
     const unitOfWork = {
-      transaction: vi.fn((cb) => cb()),
+      transaction: vi.fn((cb: () => void) => cb()),
     };
 
     const ticketService = new TicketService({
@@ -371,7 +371,7 @@ describe('TicketService', () => {
       })),
     };
     const unitOfWork = {
-      transaction: vi.fn((cb) => cb()),
+      transaction: vi.fn((cb: () => void) => cb()),
     };
 
     const ticketService = new TicketService({
@@ -444,7 +444,7 @@ describe('TicketService', () => {
       })),
     };
     const unitOfWork = {
-      transaction: vi.fn((cb) => cb()),
+      transaction: vi.fn((cb: () => void) => cb()),
     };
 
     const ticketService = new TicketService({
@@ -512,7 +512,7 @@ describe('TicketService', () => {
       })),
     };
     const unitOfWork = {
-      transaction: vi.fn((cb) => cb()),
+      transaction: vi.fn((cb: () => void) => cb()),
     };
 
     const ticketService = new TicketService({
@@ -581,7 +581,7 @@ describe('TicketService', () => {
       })),
     };
     const unitOfWork = {
-      transaction: vi.fn((cb) => cb()),
+      transaction: vi.fn((cb: () => void) => cb()),
     };
 
     const ticketService = new TicketService({

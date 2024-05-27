@@ -1,6 +1,6 @@
 import { authorize } from '../../authorize';
-import { LabelType, Resolvers } from '../../generated-types/graphql';
-import LabelService from '../../services/label';
+import type { LabelType, Resolvers } from '../../generated-types/graphql';
+import type LabelService from '../../services/label';
 import { handleErrors } from '../error';
 import { mapLabelType } from '../label-type/resolvers';
 import typeDefs from './typeDefs';

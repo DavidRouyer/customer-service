@@ -1,17 +1,12 @@
-import {
-  asc,
+import type {
   BuildQueryResult,
   Column,
   DBQueryConfig,
-  desc,
   ExtractTablesWithRelations,
   GetColumnData,
-  gt,
-  inArray,
-  lt,
-  notInArray,
   schema,
 } from '@cs/database';
+import { asc, desc, gt, inArray, lt, notInArray } from '@cs/database';
 import { SortDirection } from '@cs/kyaku/types';
 import { Direction } from '@cs/kyaku/types/query';
 

@@ -3,12 +3,11 @@ import { DrizzleAdapter } from '@auth/drizzle-adapter';
 import NextAuth from 'next-auth';
 
 import { drizzleConnection, schema } from '@cs/database';
-import { User } from '@cs/kyaku/models';
+import type { User } from '@cs/kyaku/models';
 
 export type { Session } from 'next-auth';
 
 declare module 'next-auth' {
-  // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
   interface Session {
     user: {
       emailVerified: Date | null;
@@ -38,7 +37,8 @@ export const {
   ],
   callbacks: {
     session: (opts) => {
-      if (!('user' in opts)) throw 'unreachable with session strategy';
+      if (!('user' in opts))
+        throw new Error('unreachable with session strategy');
 
       return {
         ...opts.session,

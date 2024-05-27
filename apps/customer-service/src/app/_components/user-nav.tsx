@@ -19,9 +19,9 @@ import {
 import { handleSignOut } from '~/app/_components/sign-out';
 import { useMyUserInfoQuery } from '~/graphql/generated/client';
 
-type UserNavProps = {
+interface UserNavProps {
   showLabel?: boolean;
-};
+}
 
 export function UserNav({ showLabel = false }: UserNavProps) {
   const { data: myUserInfo } = useMyUserInfoQuery(undefined, {

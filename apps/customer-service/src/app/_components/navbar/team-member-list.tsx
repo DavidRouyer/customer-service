@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import type { FC } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
@@ -23,15 +23,9 @@ export const TeamMemberList: FC = () => {
     }
   );
   //const [statsData] = api.ticket.stats.useSuspenseQuery();
-  const statsData = {
-    total: 0,
-    assignedToMe: 0,
-    unassigned: 0,
-    mentions: 0,
-  };
 
   return usersData?.edges
-    ?.filter((user) => user.node.id !== myUserInfo?.user?.id)
+    .filter((user) => user.node.id !== myUserInfo?.user?.id)
     .map((user) => (
       <li key={user.node.id}>
         <Link

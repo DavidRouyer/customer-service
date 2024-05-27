@@ -1,14 +1,15 @@
-import { FC } from 'react';
+import type { FC } from 'react';
 import { Tag } from 'lucide-react';
 import { FormattedMessage } from 'react-intl';
 
-import { Icon, IconType } from './icon';
+import type { IconType } from './icon';
+import { Icon } from './icon';
 import { RelativeTime } from './relative-time';
-import { LabelsChangedEntry, TimelineItemNarrowed } from './timeline-item';
+import type { LabelsChangedEntry, TimelineItemNarrowed } from './timeline-item';
 
-type TimelineLabelsChangedProps = {
+interface TimelineLabelsChangedProps {
   item: TimelineItemNarrowed<LabelsChangedEntry>;
-};
+}
 
 export const TimelineLabelsChanged: FC<TimelineLabelsChangedProps> = ({
   item,
@@ -23,10 +24,10 @@ export const TimelineLabelsChanged: FC<TimelineLabelsChangedProps> = ({
         <span className="font-medium text-foreground">
           {item.userCreatedBy?.name}
         </span>{' '}
-        {(item.entry?.oldLabels?.length ?? 0) > 0 ? (
+        {(item.entry.oldLabels?.length ?? 0) > 0 ? (
           <>
             <FormattedMessage id="ticket.activity.type.ticket_label.removed" />{' '}
-            {item.entry?.oldLabels?.map((label) => (
+            {item.entry.oldLabels?.map((label) => (
               <span key={label.id} className="space-x-1">
                 <Icon
                   fallback={<Tag className="inline-flex size-4" />}
@@ -38,10 +39,10 @@ export const TimelineLabelsChanged: FC<TimelineLabelsChangedProps> = ({
             ))}
           </>
         ) : null}
-        {(item.entry?.newLabels?.length ?? 0) > 0 ? (
+        {(item.entry.newLabels?.length ?? 0) > 0 ? (
           <>
             <FormattedMessage id="ticket.activity.type.ticket_label.added" />{' '}
-            {item.entry?.newLabels?.map((label) => (
+            {item.entry.newLabels?.map((label) => (
               <span key={label.id} className="space-x-1">
                 <Icon
                   fallback={<Tag className="inline-flex size-4" />}

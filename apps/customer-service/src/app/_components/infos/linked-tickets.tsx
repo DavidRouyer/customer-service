@@ -1,18 +1,17 @@
 'use client';
 
-import { FC } from 'react';
+import type { FC } from 'react';
 import Link from 'next/link';
 import { FormattedDate, FormattedMessage } from 'react-intl';
 
-import { TicketStatus } from '@cs/kyaku/models';
 import { Badge } from '@cs/ui/badge';
 
-import { useTicketsQuery } from '~/graphql/generated/client';
+import { TicketStatus, useTicketsQuery } from '~/graphql/generated/client';
 
-type LinkedTicketsProps = {
+interface LinkedTicketsProps {
   ticketId: string;
   customerId?: string;
-};
+}
 
 export const LinkedTickets: FC<LinkedTicketsProps> = ({
   ticketId,

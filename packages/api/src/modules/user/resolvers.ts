@@ -5,8 +5,8 @@ import {
 
 import { authorize } from '../../authorize';
 import { UserSortField } from '../../entities/user';
-import { Resolvers } from '../../generated-types/graphql';
-import UserService from '../../services/user';
+import type { Resolvers } from '../../generated-types/graphql';
+import type UserService from '../../services/user';
 import typeDefs from './typeDefs';
 
 const resolvers: Resolvers = {
@@ -16,14 +16,14 @@ const resolvers: Resolvers = {
 
       try {
         return await dataloaders.userLoader.load(authorizedUser.id);
-      } catch (error) {
+      } catch {
         return null;
       }
     },
     user: async (_, { id }, { dataloaders }) => {
       try {
         return await dataloaders.userLoader.load(id);
-      } catch (error) {
+      } catch {
         return null;
       }
     },

@@ -1,10 +1,10 @@
-import { and, asc, eq, isNull, schema } from '@cs/database';
+import { and, asc, eq, schema } from '@cs/database';
 
-import LabelRepository from '../../repositories/label';
+import type LabelRepository from '../../repositories/label';
 import LabelTypeRepository from '../../repositories/label-type';
 import TicketRepository from '../../repositories/ticket';
 import TicketTimelineRepository from '../../repositories/ticket-timeline';
-import { UnitOfWork } from '../../unit-of-work';
+import type { UnitOfWork } from '../../unit-of-work';
 import LabelService from '../label';
 
 vi.mock('../../repositories/label-type');
@@ -126,7 +126,7 @@ describe('LabelService', () => {
       })),
     };
     const unitOfWork = {
-      transaction: vi.fn((cb) => cb()),
+      transaction: vi.fn((cb: () => void) => cb()),
     };
 
     const labelService = new LabelService({
@@ -219,7 +219,7 @@ describe('LabelService', () => {
       })),
     };
     const unitOfWork = {
-      transaction: vi.fn((cb) => cb()),
+      transaction: vi.fn((cb: () => void) => cb()),
     };
 
     const labelService = new LabelService({

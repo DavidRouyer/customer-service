@@ -1,11 +1,12 @@
 'use client';
 
-import { FC, useEffect, useState } from 'react';
+import type { FC } from 'react';
+import { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 
-type CurrentTimeProps = {
+interface CurrentTimeProps {
   timezone: string;
-};
+}
 
 export const CurrentTime: FC<CurrentTimeProps> = ({ timezone }) => {
   const { locale } = useIntl();

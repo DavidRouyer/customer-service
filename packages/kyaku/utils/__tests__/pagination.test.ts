@@ -1,4 +1,4 @@
-import { Cursor } from '@cs/kyaku/types/query';
+import type { Cursor } from '@cs/kyaku/types/query';
 import { composeCursor, parseCursor } from '@cs/kyaku/utils/pagination';
 
 const encodedCursor = 'eyJsYXN0SWQiOiIxIiwibGFzdFZhbHVlIjoiMSJ9';

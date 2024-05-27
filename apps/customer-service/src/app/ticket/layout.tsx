@@ -4,9 +4,9 @@ import { auth } from '@cs/auth';
 
 import { TicketListContainer } from '~/app/_components/tickets/ticket-list-container';
 
-type TicketLayoutProps = {
+interface TicketLayoutProps {
   children: React.ReactNode;
-};
+}
 
 export default async function TicketLayout({ children }: TicketLayoutProps) {
   const session = await auth();

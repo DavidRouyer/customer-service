@@ -1,6 +1,6 @@
 'use client';
 
-import { FC } from 'react';
+import type { FC } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
@@ -8,18 +8,19 @@ import { getInitials } from '@cs/kyaku/utils';
 import { Avatar, AvatarFallback, AvatarImage } from '@cs/ui/avatar';
 import { RelativeTime } from '@cs/ui/relative-time';
 
-import { TicketsQuery } from '~/graphql/generated/client';
+import type { TicketsQuery } from '~/graphql/generated/client';
 
-export type TicketListItemProps = {
+export interface TicketListItemProps {
   ticket: NonNullable<TicketsQuery['tickets']['edges'][number]['node']>;
   currentUserId?: string;
-};
+}
 
 export const TicketListItem: FC<TicketListItemProps> = ({
   ticket,
   currentUserId,
 }) => {
   const pathname = usePathname();
+  console.log('currentUserId', currentUserId);
 
   return (
     <section className={pathname === `/ticket/${ticket.id}` ? 'bg-muted' : ''}>

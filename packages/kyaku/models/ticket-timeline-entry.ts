@@ -1,4 +1,4 @@
-import { TicketPriority, TicketStatus, User } from '../models';
+import type { TicketPriority, TicketStatus, User } from '../models';
 
 export enum TimelineEntryType {
   AssignmentChanged = 'ASSIGNMENT_CHANGED',
@@ -9,41 +9,41 @@ export enum TimelineEntryType {
   StatusChanged = 'STATUS_CHANGED',
 }
 
-export type TicketAssignmentChanged = {
+export interface TicketAssignmentChanged {
   oldAssignedToId: string | null;
   newAssignedToId: string | null;
-};
+}
 
-export type TicketChat = {
+export interface TicketChat {
   text: string;
-};
+}
 
-export type TicketLabelsChanged = {
+export interface TicketLabelsChanged {
   oldLabelIds: string[];
   newLabelIds: string[];
-};
+}
 
-export type TicketNote = {
+export interface TicketNote {
   text: string;
   rawContent: string;
-};
+}
 
-export type TicketPriorityChanged = {
+export interface TicketPriorityChanged {
   oldPriority: TicketPriority;
   newPriority: TicketPriority;
-};
+}
 
-export type TicketStatusChanged = {
+export interface TicketStatusChanged {
   oldStatus: TicketStatus;
   newStatus: TicketStatus;
-};
+}
 
 export type TicketAssignmentChangedWithData = {
   oldAssignedTo?: User | null;
   newAssignedTo?: User | null;
 } & TicketAssignmentChanged;
 
-type TicketLabelChanged = {
+interface TicketLabelChanged {
   id: string;
   ticketId: string;
   labelTypeId: string;
@@ -58,7 +58,7 @@ type TicketLabelChanged = {
     icon: string;
     archivedAt: Date | null;
   };
-};
+}
 
 export type TicketLabelsChangedWithData = {
   oldLabels?: TicketLabelChanged[];

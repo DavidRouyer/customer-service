@@ -1,11 +1,12 @@
 'use client';
 
-import { FC, useEffect } from 'react';
+import type { FC } from 'react';
+import { useEffect } from 'react';
 import { PartyPopper } from 'lucide-react';
 import { useInView } from 'react-intersection-observer';
 import { FormattedMessage } from 'react-intl';
 
-import { TicketFilter, TicketStatus } from '@cs/kyaku/models';
+import type { TicketFilter, TicketStatus } from '@cs/kyaku/models';
 
 import { TicketListItem } from '~/app/_components/tickets/ticket-list-item';
 import { TicketListItemSkeleton } from '~/app/_components/tickets/ticket-list-item-skeleton';
@@ -20,6 +21,7 @@ export const TicketList: FC<{
   orderBy: 'newest' | 'oldest';
 }> = ({ filter, status, orderBy }) => {
   const { ref, inView } = useInView();
+  console.log('filter', filter, 'status', status, 'orderBy', orderBy);
 
   const {
     data: tickets,
@@ -39,8 +41,7 @@ export const TicketList: FC<{
         if (!lastPage.tickets.pageInfo.hasNextPage) return undefined;
         return lastPage.tickets.pageInfo.endCursor;
       },
-      select: (data) =>
-        data?.pages?.flatMap((page) => page.tickets.edges) ?? [],
+      select: (data) => data.pages.flatMap((page) => page.tickets.edges),
     }
   );
   const { data: myUserInfo } = useMyUserInfoQuery(undefined, {
@@ -49,13 +50,14 @@ export const TicketList: FC<{
 
   useEffect(() => {
     if (inView && hasNextPage && !isFetching) {
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       fetchNextPage();
     }
   }, [inView, hasNextPage, isFetching, fetchNextPage]);
 
   return (
     <div className="no-scrollbar flex-auto overflow-y-auto">
-      {tickets && (tickets?.length ?? 0) > 0 ? (
+      {tickets && tickets.length > 0 ? (
         <>
           <div>
             {tickets.map((ticket) => (

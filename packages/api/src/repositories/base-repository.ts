@@ -1,4 +1,4 @@
-import { DrizzleConnection } from '@cs/database';
+import type { DrizzleConnection } from '@cs/database';
 
 export abstract class BaseRepository {
   protected readonly drizzleConnection: DrizzleConnection;

@@ -1,4 +1,5 @@
-import { FC, useState } from 'react';
+import type { FC } from 'react';
+import { useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { Check, Plus } from 'lucide-react';
 import { FormattedMessage, useIntl } from 'react-intl';
@@ -16,8 +17,8 @@ import {
 } from '@cs/ui/command';
 import { Popover, PopoverContent, PopoverTrigger } from '@cs/ui/popover';
 
+import type { TicketQuery } from '~/graphql/generated/client';
 import {
-  TicketQuery,
   useAddLabelsMutation,
   useInfiniteTicketTimelineQuery,
   useLabelTypesQuery,
@@ -25,10 +26,10 @@ import {
   useTicketQuery,
 } from '~/graphql/generated/client';
 
-type TicketLabelComboboxProps = {
+interface TicketLabelComboboxProps {
   labels?: NonNullable<TicketQuery['ticket']>['labels'];
   ticketId: string;
-};
+}
 
 export const TicketLabelCombobox: FC<TicketLabelComboboxProps> = ({
   labels,
@@ -50,7 +51,7 @@ export const TicketLabelCombobox: FC<TicketLabelComboboxProps> = ({
     }
   );
 
-  const { mutateAsync: addLabels } = useAddLabelsMutation({
+  const { mutate: addLabels } = useAddLabelsMutation({
     onMutate: async ({ input }) => {
       // Cancel any outgoing refetches
       // (so they don't overwrite our optimistic update)
@@ -77,9 +78,13 @@ export const TicketLabelCombobox: FC<TicketLabelComboboxProps> = ({
                   labels: oldQueryData.ticket.labels.concat(
                     input.labelTypeIds.map((labelTypeId) => ({
                       id: `${input.ticketId}-${labelTypeId}`,
-                      labelType: labelTypesData?.edges?.find(
+                      labelType: labelTypesData?.edges.find(
                         (labelType) => labelType.node.id === labelTypeId
-                      )?.node!,
+                      )?.node ?? {
+                        id: labelTypeId,
+                        name: 'Unknown',
+                        icon: null,
+                      },
                       archivedAt: null,
                     }))
                   ),
@@ -110,7 +115,7 @@ export const TicketLabelCombobox: FC<TicketLabelComboboxProps> = ({
     },
   });
 
-  const { mutateAsync: removeLabels } = useRemoveLabelsMutation({
+  const { mutate: removeLabels } = useRemoveLabelsMutation({
     onMutate: async ({ input }) => {
       // Cancel any outgoing refetches
       // (so they don't overwrite our optimistic update)
@@ -177,7 +182,7 @@ export const TicketLabelCombobox: FC<TicketLabelComboboxProps> = ({
           {(labels?.length ?? 0) > 0 ? (
             <div className="flex flex-wrap items-center gap-2">
               {labels?.map((label) => (
-                <Badge key={label?.id}> {label.labelType.name}</Badge>
+                <Badge key={label.id}> {label.labelType.name}</Badge>
               ))}
             </div>
           ) : (

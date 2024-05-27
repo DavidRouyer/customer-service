@@ -1,13 +1,14 @@
 'use client';
 
-import { ReactNode, useRef, useState } from 'react';
+import type { ReactNode } from 'react';
+import { useRef, useState } from 'react';
 
 import { cn } from '.';
 import { createScrollerLock, ScrollerLockContext } from './use-scroll-lock';
 
 import './timeline.css';
 
-export type TimelineProps = {
+export interface TimelineProps {
   items: readonly string[];
   renderItem: (props: {
     itemId: string;
@@ -16,7 +17,7 @@ export type TimelineProps = {
     ticketId: string;
   }) => ReactNode;
   ticketId: string;
-};
+}
 
 const AT_BOTTOM_THRESHOLD = 15;
 const AT_BOTTOM_DETECTOR_STYLE = { height: AT_BOTTOM_THRESHOLD };
@@ -50,7 +51,7 @@ export const Timeline = ({ items, renderItem, ticketId }: TimelineProps) => {
 
   const scrollerLock = createScrollerLock('Timeline', onScrollLockChange);
 
-  const itemNodes: Array<ReactNode> = [];
+  const itemNodes: ReactNode[] = [];
   for (let itemIndex = 0; itemIndex < items.length; itemIndex += 1) {
     const previousItemIndex = itemIndex - 1;
     const nextItemIndex = itemIndex + 1;

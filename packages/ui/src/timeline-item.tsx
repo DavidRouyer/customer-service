@@ -1,8 +1,8 @@
 'use client';
 
-import { ReactNode } from 'react';
+import type { ReactNode } from 'react';
 
-import {
+import type {
   TicketAssignmentChangedWithData,
   TicketChat,
   TicketLabelsChangedWithData,
@@ -43,7 +43,7 @@ export type StatusChangedEntry = {
   __typename: 'StatusChangedEntry';
 } & TicketStatusChanged;
 
-export type TimelineItem = {
+export interface TimelineItem {
   id: string;
   createdAt: string;
   customer?: {
@@ -71,7 +71,7 @@ export type TimelineItem = {
     name?: string | null;
     image?: string | null;
   } | null;
-};
+}
 
 export type TimelineItemNarrowed<T> = Omit<TimelineItem, 'entry'> & {
   entry: T;
@@ -86,9 +86,7 @@ export const TimelineItem = ({
   nextItemId: string | undefined;
   previousItemId: string | undefined;
 }) => {
-  if (!item) {
-    return null;
-  }
+  console.log(previousItemId);
 
   let activity: ReactNode = null;
   if (item.entry.__typename === 'ChatEntry') {

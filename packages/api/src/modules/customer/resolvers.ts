@@ -1,5 +1,5 @@
-import { Resolvers, User } from '../../generated-types/graphql';
-import CustomerService from '../../services/customer';
+import type { Resolvers, User } from '../../generated-types/graphql';
+import type CustomerService from '../../services/customer';
 import typeDefs from './typeDefs';
 
 export const mapCustomer = (
@@ -24,7 +24,7 @@ const resolvers: Resolvers = {
       try {
         const customer = await dataloaders.customerLoader.load(id);
         return mapCustomer(customer);
-      } catch (error) {
+      } catch {
         return null;
       }
     },

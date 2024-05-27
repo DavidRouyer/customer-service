@@ -1,14 +1,13 @@
 import { and, eq, schema } from '@cs/database';
-import { Direction, FindConfig, GetConfig } from '@cs/kyaku/types/query';
+import type { FindConfig, GetConfig } from '@cs/kyaku/types/query';
+import { Direction } from '@cs/kyaku/types/query';
 
-import {
-  CustomerFilters,
-  CustomerSortField,
-  CustomerWith,
-} from '../entities/customer';
-import { User, USER_COLUMNS } from '../entities/user';
-import CustomerRepository from '../repositories/customer';
-import { UnitOfWork } from '../unit-of-work';
+import type { CustomerFilters, CustomerWith } from '../entities/customer';
+import { CustomerSortField } from '../entities/customer';
+import type { User } from '../entities/user';
+import { USER_COLUMNS } from '../entities/user';
+import type CustomerRepository from '../repositories/customer';
+import type { UnitOfWork } from '../unit-of-work';
 import { BaseService } from './base-service';
 import {
   filterByDirection,
@@ -106,7 +105,7 @@ export default class CustomerService extends BaseService {
     if (
       !config.sortBy ||
       !config.cursor?.lastValue ||
-      config.cursor?.lastValue === config.cursor?.lastId
+      config.cursor.lastValue === config.cursor.lastId
     )
       return undefined;
 
@@ -116,6 +115,7 @@ export default class CustomerService extends BaseService {
         new Date(config.cursor.lastValue)
       );
     }
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     if (config.sortBy === CustomerSortField.name) {
       return filterByDirection(config.direction)(
         schema.customers.name,
@@ -145,6 +145,7 @@ export default class CustomerService extends BaseService {
     if (config.sortBy === CustomerSortField.createdAt) {
       return [sortByDirection(config.direction)(schema.customers.createdAt)];
     }
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     if (config.sortBy === CustomerSortField.name) {
       return [sortByDirection(config.direction)(schema.customers.name)];
     }

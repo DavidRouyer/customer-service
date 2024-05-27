@@ -7,10 +7,10 @@ import {
 } from '@cs/kyaku/utils/pagination';
 
 import { authorize } from '../../authorize';
-import { Label } from '../../entities/label';
+import type { Label } from '../../entities/label';
 import { TicketSortField } from '../../entities/ticket';
-import { TicketTimelineUnion } from '../../entities/ticket-timeline';
-import {
+import type { TicketTimelineUnion } from '../../entities/ticket-timeline';
+import type {
   AssignmentChangedEntry,
   ChatEntry,
   Customer,
@@ -21,8 +21,8 @@ import {
   StatusChangedEntry,
   User,
 } from '../../generated-types/graphql';
-import TicketService from '../../services/ticket';
-import TicketTimelineService from '../../services/ticket-timeline';
+import type TicketService from '../../services/ticket';
+import type TicketTimelineService from '../../services/ticket-timeline';
 import { mapCustomer } from '../customer/resolvers';
 import { handleErrors } from '../error';
 import { mapLabel } from '../label/resolvers';
@@ -122,11 +122,11 @@ const mapEntry = (entry: TicketTimelineUnion) => {
 
 const resolvers: Resolvers = {
   Query: {
-    ticket: async (_, { id }, { dataloaders, user }) => {
+    ticket: async (_, { id }, { dataloaders }) => {
       try {
         const ticket = await dataloaders.ticketLoader.load(id);
         return mapTicket(ticket);
-      } catch (error) {
+      } catch {
         return null;
       }
     },

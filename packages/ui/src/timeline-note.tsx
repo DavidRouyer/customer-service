@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import type { FC } from 'react';
 import { EyeOff } from 'lucide-react';
 import { FormattedMessage } from 'react-intl';
 
@@ -7,11 +7,11 @@ import { getInitials } from '@cs/kyaku/utils';
 import { Avatar, AvatarFallback, AvatarImage } from './avatar';
 import { NodeContent } from './node-content';
 import { RelativeTime } from './relative-time';
-import { NoteEntry, TimelineItemNarrowed } from './timeline-item';
+import type { NoteEntry, TimelineItemNarrowed } from './timeline-item';
 
-type TimelineNoteProps = {
+interface TimelineNoteProps {
   item: TimelineItemNarrowed<NoteEntry>;
-};
+}
 
 export const TimelineNote: FC<TimelineNoteProps> = ({ item }) => {
   return (
@@ -49,7 +49,7 @@ export const TimelineNote: FC<TimelineNoteProps> = ({ item }) => {
           <div></div>
           <div className="mt-3 border-t border-muted-foreground pt-3">
             <div className="whitespace-pre-line text-sm leading-6">
-              <NodeContent content={item.entry?.rawContent} />
+              <NodeContent content={item.entry.rawContent} />
             </div>
             <div className="mt-1 flex items-center gap-x-2 text-xs text-gray-500">
               <EyeOff className="size-3" />{' '}

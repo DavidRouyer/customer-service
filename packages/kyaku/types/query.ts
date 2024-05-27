@@ -1,20 +1,20 @@
-export type GetConfig<TRelations> = {
+export interface GetConfig<TRelations> {
   relations?: TRelations;
-};
+}
 export enum Direction {
   Forward = 'forward',
   Backward = 'backward',
 }
 
-export type Cursor = {
+export interface Cursor {
   lastId: string;
   lastValue: string;
-};
+}
 
-export type FindConfig<TRelations, TSortField> = {
+export interface FindConfig<TRelations, TSortField> {
   cursor?: Cursor;
   limit: number;
   direction: Direction;
   relations?: TRelations;
   sortBy?: TSortField;
-};
+}

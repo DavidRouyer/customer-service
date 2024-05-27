@@ -1,8 +1,8 @@
-import { FC } from 'react';
+import type { FC } from 'react';
 import { Shield, ShieldAlert } from 'lucide-react';
 import { FormattedMessage } from 'react-intl';
 
-import { TicketPriority } from '@cs/kyaku/models';
+import type { TicketPriority } from '@cs/kyaku/models';
 
 export const TicketPriorityBadge: FC<{
   priority: TicketPriority;

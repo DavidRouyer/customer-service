@@ -1,13 +1,12 @@
-import { FC } from 'react';
+import type { FC } from 'react';
 import { BookOpenCheck, HardDriveUpload } from 'lucide-react';
 import { FormattedMessage } from 'react-intl';
 
-import { TicketStatus } from '@cs/kyaku/models';
 import { Button } from '@cs/ui/button';
 
 import { useMarkAsDoneTicket } from '~/app/_hooks/use-mark-as-done-ticket';
 import { useMarkAsOpenTicket } from '~/app/_hooks/use-mark-as-open-ticket';
-import { useTicketQuery } from '~/graphql/generated/client';
+import { TicketStatus, useTicketQuery } from '~/graphql/generated/client';
 
 export const TicketHeader: FC<{ ticketId: string }> = ({ ticketId }) => {
   const { data: ticketData } = useTicketQuery(
@@ -17,21 +16,25 @@ export const TicketHeader: FC<{ ticketId: string }> = ({ ticketId }) => {
     }
   );
 
-  const { markAsDoneTicket } = useMarkAsDoneTicket();
-  const { markAsOpenTicket } = useMarkAsOpenTicket();
+  const { mutate: markAsDoneTicket } = useMarkAsDoneTicket();
+  const { mutate: markAsOpenTicket } = useMarkAsOpenTicket();
+
+  if (!ticketData) {
+    return null;
+  }
 
   return (
     <div className="flex items-center justify-between border-b pb-6">
       <h3 className="text-base font-semibold leading-6 text-foreground">
-        <span className="text-muted-foreground">#{ticketData?.id}</span>{' '}
-        {ticketData?.customer.name}
+        <span className="text-muted-foreground">#{ticketData.id}</span>{' '}
+        {ticketData.customer.name}
       </h3>
       <div className="flex items-center gap-x-2">
-        {ticketData?.status === TicketStatus.Done ? (
+        {ticketData.status === TicketStatus.Done ? (
           <Button
             type="button"
             onClick={() => {
-              markAsOpenTicket({ id: ticketId });
+              markAsOpenTicket({ input: { id: ticketId } });
             }}
             className="flex items-center gap-x-1"
           >
@@ -42,7 +45,7 @@ export const TicketHeader: FC<{ ticketId: string }> = ({ ticketId }) => {
           <Button
             type="button"
             onClick={() => {
-              markAsDoneTicket({ id: ticketId });
+              markAsDoneTicket({ input: { id: ticketId } });
             }}
             className="flex items-center gap-x-1"
           >

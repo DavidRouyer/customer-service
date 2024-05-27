@@ -1,14 +1,11 @@
 import { and, eq, schema } from '@cs/database';
-import { Direction, FindConfig } from '@cs/kyaku/types/query';
+import type { FindConfig } from '@cs/kyaku/types/query';
+import { Direction } from '@cs/kyaku/types/query';
 
-import {
-  USER_COLUMNS,
-  UserFilters,
-  UserSortField,
-  UserWith,
-} from '../entities/user';
-import UserRepository from '../repositories/user';
-import { UnitOfWork } from '../unit-of-work';
+import type { UserFilters } from '../entities/user';
+import { USER_COLUMNS, UserSortField } from '../entities/user';
+import type UserRepository from '../repositories/user';
+import type { UnitOfWork } from '../unit-of-work';
 import { BaseService } from './base-service';
 import {
   filterByDirection,
@@ -27,16 +24,16 @@ export default class UserService extends BaseService {
     this.userRepository = userRepository;
   }
 
-  async retrieve<T extends UserWith<T>>(userId: string) {
+  async retrieve(userId: string) {
     return await this.userRepository.find({
       columns: USER_COLUMNS,
       where: eq(schema.users.id, userId),
     });
   }
 
-  async list<T extends UserWith<T>>(
+  async list(
     filters: UserFilters = {},
-    config: FindConfig<T, UserSortField> = {
+    config: FindConfig<object, UserSortField> = {
       direction: Direction.Forward,
       limit: 50,
       sortBy: UserSortField.name,
@@ -67,16 +64,15 @@ export default class UserService extends BaseService {
     );
   }
 
-  private getSortWhereClause<T extends UserWith<T>>(
-    config: FindConfig<T, UserSortField>
-  ) {
+  private getSortWhereClause(config: FindConfig<object, UserSortField>) {
     if (
       !config.sortBy ||
       !config.cursor?.lastValue ||
-      config.cursor?.lastValue === config.cursor?.lastId
+      config.cursor.lastValue === config.cursor.lastId
     )
       return undefined;
 
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     if (config.sortBy === UserSortField.name) {
       return filterByDirection(config.direction)(
         schema.users.name,
@@ -87,9 +83,7 @@ export default class UserService extends BaseService {
     return undefined;
   }
 
-  private getIdWhereClause<T extends UserWith<T>>(
-    config: FindConfig<T, UserSortField>
-  ) {
+  private getIdWhereClause(config: FindConfig<object, UserSortField>) {
     if (!config.cursor?.lastId) return undefined;
 
     return filterByDirection(config.direction)(
@@ -98,11 +92,10 @@ export default class UserService extends BaseService {
     );
   }
 
-  private getOrderByClause<T extends UserWith<T>>(
-    config: FindConfig<T, UserSortField>
-  ) {
+  private getOrderByClause(config: FindConfig<object, UserSortField>) {
     if (!config.sortBy) return [];
 
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     if (config.sortBy === UserSortField.name) {
       return [sortByDirection(config.direction)(schema.users.name)];
     }

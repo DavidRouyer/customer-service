@@ -2,8 +2,8 @@
 
 import * as React from 'react';
 import { Fragment } from 'react';
+import type { ColumnDef } from '@tanstack/react-table';
 import {
-  ColumnDef,
   flexRender,
   getCoreRowModel,
   getPaginationRowModel,
@@ -20,10 +20,10 @@ import {
 } from '~/app/_components/ui/table';
 import { DataTablePagination } from './data-table-pagination';
 
-type DataTableProps<TData, TValue> = {
+interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
-};
+}
 
 export function DataTable<TData, TValue>({
   columns,
@@ -74,11 +74,11 @@ export function DataTable<TData, TValue>({
             ))}
           </TableHeader>
           <TableBody>
-            {table.getRowModel().rows?.length ? (
+            {table.getRowModel().rows.length ? (
               table.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}
-                  href={`/ticket/${row.getValue('id')}`}
+                  href={`/ticket/${row.getValue<string>('id')}`}
                   data-state={row.getIsSelected() && 'selected'}
                 >
                   {row.getVisibleCells().map((cell) => (

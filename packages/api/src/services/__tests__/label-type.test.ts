@@ -1,7 +1,7 @@
 import { and, asc, eq, isNull, schema } from '@cs/database';
 
-import LabelTypeRepository from '../../repositories/label-type';
-import { UnitOfWork } from '../../unit-of-work';
+import type LabelTypeRepository from '../../repositories/label-type';
+import type { UnitOfWork } from '../../unit-of-work';
 import LabelTypeService from '../label-type';
 
 describe('LabelTypeService', () => {
@@ -114,7 +114,7 @@ describe('LabelTypeService', () => {
         })),
       };
       const unitOfWork = {
-        transaction: vi.fn((cb) => cb()),
+        transaction: vi.fn((cb: () => void) => cb()),
       };
 
       const labelTypeService = new LabelTypeService({
@@ -163,7 +163,7 @@ describe('LabelTypeService', () => {
         })),
       };
       const unitOfWork = {
-        transaction: vi.fn((cb) => cb()),
+        transaction: vi.fn((cb: () => void) => cb()),
       };
 
       const labelTypeService = new LabelTypeService({
@@ -209,7 +209,7 @@ describe('LabelTypeService', () => {
         })),
       };
       const unitOfWork = {
-        transaction: vi.fn((cb) => cb()),
+        transaction: vi.fn((cb: () => void) => cb()),
       };
 
       const labelTypeService = new LabelTypeService({
@@ -258,7 +258,7 @@ describe('LabelTypeService', () => {
         })),
       };
       const unitOfWork = {
-        transaction: vi.fn((cb) => cb()),
+        transaction: vi.fn((cb: () => void) => cb()),
       };
 
       const labelTypeService = new LabelTypeService({
@@ -311,7 +311,7 @@ describe('LabelTypeService', () => {
       })),
     };
     const unitOfWork = {
-      transaction: vi.fn((cb) => cb()),
+      transaction: vi.fn((cb: () => void) => cb()),
     };
 
     const labelTypeService = new LabelTypeService({
@@ -360,7 +360,7 @@ describe('LabelTypeService', () => {
       })),
     };
     const unitOfWork = {
-      transaction: vi.fn((cb) => cb()),
+      transaction: vi.fn((cb: () => void) => cb()),
     };
 
     const labelTypeService = new LabelTypeService({

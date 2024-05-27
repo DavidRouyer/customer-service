@@ -41,9 +41,9 @@ export const extractMentions = (content: string) => {
 
       const textNodes = root
         .getAllTextNodes()
-        ?.filter((node) => node.getType() === 'mention') as MentionNode[];
+        .filter((node) => node.getType() === 'mention') as MentionNode[];
 
-      resolve(textNodes?.map((node) => node.__mentionId) ?? []);
+      resolve(textNodes.map((node) => node.__mentionId));
     });
   });
 };

@@ -1,14 +1,14 @@
-import { FC } from 'react';
+import type { FC } from 'react';
 
 import { getInitials } from '@cs/kyaku/utils';
 
 import { Avatar, AvatarFallback, AvatarImage } from './avatar';
 import { RelativeTime } from './relative-time';
-import { ChatEntry, TimelineItemNarrowed } from './timeline-item';
+import type { ChatEntry, TimelineItemNarrowed } from './timeline-item';
 
-type TimelineChatProps = {
+interface TimelineChatProps {
   item: TimelineItemNarrowed<ChatEntry>;
-};
+}
 
 export const TimelineChat: FC<TimelineChatProps> = ({ item }) => {
   return (
@@ -47,7 +47,7 @@ export const TimelineChat: FC<TimelineChatProps> = ({ item }) => {
           <div></div>
           <div className="mt-3 border-t border-muted-foreground pt-3">
             <div className="whitespace-pre-line text-sm leading-6 ">
-              {item.entry?.text}
+              {item.entry.text}
             </div>
           </div>
         </div>

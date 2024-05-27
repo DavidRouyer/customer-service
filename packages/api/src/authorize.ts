@@ -1,6 +1,6 @@
 import { GraphQLError } from 'graphql';
 
-import { User } from '@cs/kyaku/models';
+import type { User } from '@cs/kyaku/models';
 import { KyakuErrorTypes } from '@cs/kyaku/utils/errors';
 
 export const authorize = (user: User | null) => {

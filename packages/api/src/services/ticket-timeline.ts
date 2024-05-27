@@ -1,26 +1,26 @@
 import { eq, schema } from '@cs/database';
-import {
+import type {
   TicketAssignmentChanged,
   TicketChat,
   TicketLabelsChanged,
   TicketNote,
   TicketPriorityChanged,
   TicketStatusChanged,
-  TimelineEntryType,
   User,
 } from '@cs/kyaku/models';
-import { FindConfig } from '@cs/kyaku/types';
+import { TimelineEntryType } from '@cs/kyaku/models';
+import type { FindConfig } from '@cs/kyaku/types';
 import { Direction } from '@cs/kyaku/types/query';
 
-import {
+import type {
   TicketTimeline,
-  TicketTimelineSortField,
   TicketTimelineUnion,
   TicketTimelineWith,
 } from '../entities/ticket-timeline';
+import { TicketTimelineSortField } from '../entities/ticket-timeline';
 import { USER_COLUMNS } from '../entities/user';
-import TicketTimelineRepository from '../repositories/ticket-timeline';
-import { UnitOfWork } from '../unit-of-work';
+import type TicketTimelineRepository from '../repositories/ticket-timeline';
+import type { UnitOfWork } from '../unit-of-work';
 import { BaseService } from './base-service';
 import { sortByDirection } from './build-query';
 
@@ -52,7 +52,7 @@ export default class TicketTimelineService extends BaseService {
         sortByDirection(config.direction)(schema.ticketTimelineEntries.id),
       ],
       where: eq(schema.ticketTimelineEntries.ticketId, filters.ticketId),
-      with: this.getWithClause(config?.relations),
+      with: this.getWithClause(config.relations),
     });
 
     return ticketTimelineEntries.map((entry) => this.mapEntry(entry));
@@ -142,6 +142,7 @@ export default class TicketTimelineService extends BaseService {
   ) {
     if (!config.sortBy) return [];
 
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     if (config.sortBy === TicketTimelineSortField.createdAt) {
       return [
         sortByDirection(config.direction)(

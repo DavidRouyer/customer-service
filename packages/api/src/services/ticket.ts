@@ -1,30 +1,30 @@
 import { and, eq, isNull, schema } from '@cs/database';
 import { extractMentions } from '@cs/kyaku/editor';
-import {
+import type {
   TicketAssignmentChanged,
   TicketChat,
   TicketNote,
   TicketPriority,
   TicketPriorityChanged,
-  TicketStatus,
   TicketStatusChanged,
+} from '@cs/kyaku/models';
+import {
+  TicketStatus,
   TicketStatusDetail,
   TimelineEntryType,
 } from '@cs/kyaku/models';
-import { Direction, FindConfig, GetConfig } from '@cs/kyaku/types/query';
+import type { FindConfig, GetConfig } from '@cs/kyaku/types/query';
+import { Direction } from '@cs/kyaku/types/query';
 import { KyakuError } from '@cs/kyaku/utils/errors';
 
-import {
-  Ticket,
-  TicketFilters,
-  TicketSortField,
-  TicketWith,
-} from '../entities/ticket';
-import { User, USER_COLUMNS } from '../entities/user';
-import TicketRepository from '../repositories/ticket';
-import TicketMentionRepository from '../repositories/ticket-mention';
-import TicketTimelineRepository from '../repositories/ticket-timeline';
-import { UnitOfWork } from '../unit-of-work';
+import type { Ticket, TicketFilters, TicketWith } from '../entities/ticket';
+import { TicketSortField } from '../entities/ticket';
+import type { User } from '../entities/user';
+import { USER_COLUMNS } from '../entities/user';
+import type TicketRepository from '../repositories/ticket';
+import type TicketMentionRepository from '../repositories/ticket-mention';
+import type TicketTimelineRepository from '../repositories/ticket-timeline';
+import type { UnitOfWork } from '../unit-of-work';
 import { BaseService } from './base-service';
 import {
   filterByDirection,
@@ -618,7 +618,7 @@ export default class TicketService extends BaseService {
     if (
       !config.sortBy ||
       !config.cursor?.lastValue ||
-      config.cursor?.lastValue === config.cursor?.lastId
+      config.cursor.lastValue === config.cursor.lastId
     )
       return undefined;
 
@@ -628,6 +628,7 @@ export default class TicketService extends BaseService {
         new Date(config.cursor.lastValue)
       );
     }
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     if (config.sortBy === TicketSortField.statusChangedAt) {
       return filterByDirection(config.direction)(
         schema.tickets.statusChangedAt,
@@ -657,6 +658,7 @@ export default class TicketService extends BaseService {
     if (config.sortBy === TicketSortField.createdAt) {
       return [sortByDirection(config.direction)(schema.tickets.createdAt)];
     }
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     if (config.sortBy === TicketSortField.statusChangedAt) {
       return [
         sortByDirection(config.direction)(schema.tickets.statusChangedAt),

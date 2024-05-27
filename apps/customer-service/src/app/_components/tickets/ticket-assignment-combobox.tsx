@@ -1,4 +1,5 @@
-import { FC, useCallback, useState } from 'react';
+import type { FC } from 'react';
+import { useCallback, useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { Check, Plus } from 'lucide-react';
 import { FormattedMessage, useIntl } from 'react-intl';
@@ -17,21 +18,20 @@ import {
 } from '@cs/ui/command';
 import { Popover, PopoverContent, PopoverTrigger } from '@cs/ui/popover';
 
+import type { TicketQuery, UsersQuery } from '~/graphql/generated/client';
 import {
-  TicketQuery,
   useAssignTicketMutation,
   useInfiniteTicketTimelineQuery,
   useMyUserInfoQuery,
-  UsersQuery,
   useTicketQuery,
   useUnassignTicketMutation,
   useUsersQuery,
 } from '~/graphql/generated/client';
 
-type TicketAssignmentComboboxProps = {
+interface TicketAssignmentComboboxProps {
   assignedTo?: NonNullable<TicketQuery['ticket']>['assignedTo'];
   ticketId: string;
-};
+}
 
 export const TicketAssignmentCombobox: FC<TicketAssignmentComboboxProps> = ({
   assignedTo,
@@ -84,7 +84,7 @@ export const TicketAssignmentCombobox: FC<TicketAssignmentComboboxProps> = ({
     }
   );
 
-  const { mutateAsync: assign } = useAssignTicketMutation({
+  const { mutate: assign } = useAssignTicketMutation({
     onMutate: async ({ input }) => {
       // Cancel any outgoing refetches
       // (so they don't overwrite our optimistic update)
@@ -129,7 +129,7 @@ export const TicketAssignmentCombobox: FC<TicketAssignmentComboboxProps> = ({
     },
   });
 
-  const { mutateAsync: unassign } = useUnassignTicketMutation({
+  const { mutate: unassign } = useUnassignTicketMutation({
     onMutate: async ({ input }) => {
       // Cancel any outgoing refetches
       // (so they don't overwrite our optimistic update)
@@ -187,14 +187,12 @@ export const TicketAssignmentCombobox: FC<TicketAssignmentComboboxProps> = ({
           {assignedTo ? (
             <div className="flex items-center gap-x-2">
               <Avatar className="size-4">
-                <AvatarImage src={assignedTo?.image ?? undefined} />
+                <AvatarImage src={assignedTo.image ?? undefined} />
                 <AvatarFallback>
-                  {getInitials(assignedTo?.name ?? '')}
+                  {getInitials(assignedTo.name ?? '')}
                 </AvatarFallback>
               </Avatar>
-              <p className="text-xs text-muted-foreground">
-                {assignedTo?.name}
-              </p>
+              <p className="text-xs text-muted-foreground">{assignedTo.name}</p>
             </div>
           ) : (
             <div className="flex items-center gap-x-2 text-xs">
@@ -238,13 +236,13 @@ export const TicketAssignmentCombobox: FC<TicketAssignmentComboboxProps> = ({
                   />
                   <div className="flex items-center gap-x-2 truncate">
                     <Avatar className="size-5">
-                      <AvatarImage src={user?.image ?? undefined} />
+                      <AvatarImage src={user.image ?? undefined} />
                       <AvatarFallback>
-                        {getInitials(user?.name ?? '')}
+                        {getInitials(user.name ?? '')}
                       </AvatarFallback>
                     </Avatar>
                     <p className="truncate text-xs text-muted-foreground">
-                      {user?.name}
+                      {user.name}
                     </p>
                   </div>
                 </CommandItem>

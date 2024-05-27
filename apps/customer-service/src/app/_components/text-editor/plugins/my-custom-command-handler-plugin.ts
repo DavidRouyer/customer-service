@@ -19,7 +19,7 @@ export default function MyCustomCommandHandlerPlugin() {
         KEY_ENTER_COMMAND,
         (event: KeyboardEvent) => {
           // skipping if shift is pressed (defaulting to line-break)
-          if (event !== null && !event.ctrlKey) {
+          if (!event.ctrlKey) {
             event.preventDefault();
             form?.current?.requestSubmit();
             return true;

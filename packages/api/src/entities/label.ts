@@ -1,21 +1,21 @@
-import { InferInsertModel, InferSelectModel, schema } from '@cs/database';
+import type { InferInsertModel, InferSelectModel, schema } from '@cs/database';
 
-import { InclusionFilterOperator } from '../services/build-query';
+import type { InclusionFilterOperator } from '../services/build-query';
 
 export type Label = InferSelectModel<typeof schema.labels>;
 
 export type LabelInsert = InferInsertModel<typeof schema.labels>;
 
-export type LabelWith<T> = {
+export interface LabelWith<T> {
   ticket?: [T] extends [{ assignedTo: true }] ? true : undefined;
   labelType?: [T] extends [{ labelType: true }] ? true : undefined;
-};
+}
 
-export type LabelFilters = {
+export interface LabelFilters {
   ticketId?: string;
   labelIds?: InclusionFilterOperator<Label['id']>;
   isArchived?: boolean;
-};
+}
 
 export enum LabelSortField {
   id = 'id',

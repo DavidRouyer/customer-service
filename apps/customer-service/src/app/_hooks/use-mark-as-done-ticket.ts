@@ -2,8 +2,8 @@ import { useQueryClient } from '@tanstack/react-query';
 
 import { TicketStatus } from '@cs/kyaku/models';
 
+import type { TicketQuery } from '~/graphql/generated/client';
 import {
-  TicketQuery,
   useInfiniteTicketTimelineQuery,
   useMarkTicketAsDoneMutation,
   useTicketQuery,
@@ -12,7 +12,7 @@ import {
 export const useMarkAsDoneTicket = () => {
   const queryClient = useQueryClient();
 
-  const { mutateAsync } = useMarkTicketAsDoneMutation({
+  const mutationResult = useMarkTicketAsDoneMutation({
     onMutate: async ({ input }) => {
       // Cancel any outgoing refetches
       // (so they don't overwrite our optimistic update)
@@ -57,7 +57,5 @@ export const useMarkAsDoneTicket = () => {
     },
   });
 
-  return {
-    markAsDoneTicket: mutateAsync,
-  };
+  return mutationResult;
 };

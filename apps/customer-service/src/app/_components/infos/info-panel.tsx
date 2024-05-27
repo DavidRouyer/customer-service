@@ -1,6 +1,6 @@
 'use client';
 
-import { FC } from 'react';
+import type { FC } from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import {
@@ -60,7 +60,7 @@ export const InfoPanel: FC<{
             <AccordionContent>
               <LinkedTickets
                 ticketId={ticketId}
-                customerId={ticketData?.customer?.id}
+                customerId={ticketData.customer.id}
               />
             </AccordionContent>
           </AccordionItem>

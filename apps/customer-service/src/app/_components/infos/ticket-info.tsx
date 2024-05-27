@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import type { FC } from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import { TicketAssignmentCombobox } from '~/app/_components/tickets/ticket-assignment-combobox';

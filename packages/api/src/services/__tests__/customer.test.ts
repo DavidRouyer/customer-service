@@ -1,7 +1,7 @@
 import { asc, eq, schema } from '@cs/database';
 
-import CustomerRepository from '../../repositories/customer';
-import { UnitOfWork } from '../../unit-of-work';
+import type CustomerRepository from '../../repositories/customer';
+import type { UnitOfWork } from '../../unit-of-work';
 import CustomerService from '../customer';
 
 describe('CustomerService', () => {

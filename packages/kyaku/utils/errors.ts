@@ -24,6 +24,6 @@ export class KyakuError extends Error {
   constructor(type: string, message: string, path?: string[]) {
     super(message);
     this.type = type;
-    this.path = path || [];
+    this.path = path ?? [];
   }
 }

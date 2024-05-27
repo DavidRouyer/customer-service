@@ -1,6 +1,6 @@
 'use client';
 
-import { FC } from 'react';
+import type { FC } from 'react';
 
 import { MessageForm } from '~/app/_components/messages/message-form';
 import { TicketHeader } from '~/app/_components/tickets/ticket-header';

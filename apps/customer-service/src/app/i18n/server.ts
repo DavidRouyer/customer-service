@@ -5,7 +5,11 @@ import { createIntl } from '@formatjs/intl';
 import currentLocale from '~/app/i18n/currentLocale';
 
 const getMessages = async (lang: string) => {
-  return (await import(`../locales/${lang}.json`)).default;
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+  return (await import(`../locales/${lang}.json`)).default as Record<
+    string,
+    string
+  >;
 };
 
 export default async function getIntl() {

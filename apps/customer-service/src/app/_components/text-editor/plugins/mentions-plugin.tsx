@@ -9,20 +9,22 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import * as React from 'react';
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
+import type { MenuTextMatch } from '@lexical/react/LexicalTypeaheadMenuPlugin';
 import {
   LexicalTypeaheadMenuPlugin,
   MenuOption,
-  MenuTextMatch,
   useBasicTypeaheadTriggerMatch,
 } from '@lexical/react/LexicalTypeaheadMenuPlugin';
-import { COMMAND_PRIORITY_NORMAL, TextNode } from 'lexical';
+import type { TextNode } from 'lexical';
+import { COMMAND_PRIORITY_NORMAL } from 'lexical';
 import * as ReactDOM from 'react-dom';
 
 import { $createMentionNode } from '@cs/kyaku/editor';
 import { getInitials } from '@cs/kyaku/utils';
 import { Avatar, AvatarFallback, AvatarImage } from '@cs/ui/avatar';
 
-import { UsersQuery, useUsersQuery } from '~/graphql/generated/client';
+import type { UsersQuery } from '~/graphql/generated/client';
+import { useUsersQuery } from '~/graphql/generated/client';
 
 const PUNCTUATION =
   '\\.,\\+\\*\\?\\$\\@\\|#{}\\(\\)\\^\\-\\[\\]\\\\/!%\'"~=<>_:;';
@@ -105,8 +107,8 @@ function useMentionLookupService(mentionString: string | null) {
     }
 
     if (users) {
-      const searchResults = users?.edges
-        ?.filter((user) =>
+      const searchResults = users.edges
+        .filter((user) =>
           user.node.name?.toLowerCase().includes(mentionString.toLowerCase())
         )
         .map((user) => user.node);

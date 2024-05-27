@@ -2,17 +2,17 @@ import { mergeResolvers, mergeTypeDefs } from '@graphql-tools/merge';
 import { makeExecutableSchema } from '@graphql-tools/schema';
 import { asClass, asValue, createContainer } from 'awilix';
 import DataLoader from 'dataloader';
-import { YogaInitialContext } from 'graphql-yoga';
+import type { YogaInitialContext } from 'graphql-yoga';
 import { default as jwt } from 'jsonwebtoken';
 
 import { auth } from '@cs/auth';
 import { drizzleConnection } from '@cs/database';
-import { User } from '@cs/kyaku/models';
+import type { User } from '@cs/kyaku/models';
 
-import { Customer } from './entities/customer';
-import { Label } from './entities/label';
-import { LabelType } from './entities/label-type';
-import { Ticket } from './entities/ticket';
+import type { Customer } from './entities/customer';
+import type { Label } from './entities/label';
+import type { LabelType } from './entities/label-type';
+import type { Ticket } from './entities/ticket';
 import { commonModule } from './modules/common/resolvers';
 import { customerModule } from './modules/customer/resolvers';
 import { labelTypeModule } from './modules/label-type/resolvers';
@@ -34,7 +34,7 @@ import TicketTimelineService from './services/ticket-timeline';
 import UserService from './services/user';
 import { UnitOfWork } from './unit-of-work';
 
-type Services = {
+interface Services {
   drizzleConnection: typeof drizzleConnection;
   unitOfWork: UnitOfWork;
   customerRepository: CustomerRepository;
@@ -50,7 +50,7 @@ type Services = {
   ticketService: TicketService;
   ticketTimelineService: TicketTimelineService;
   userService: UserService;
-};
+}
 
 const container = createContainer<Services>();
 container.register({
@@ -80,12 +80,15 @@ const getUser = async (request: Request) => {
   const header = request.headers.get('authorization');
   if (header !== null) {
     const token = header.split(' ')[1];
+    if (token === undefined || process.env.JWT_SECRET === undefined) {
+      return null;
+    }
     const tokenPayload = jwt.verify(
-      token as string,
-      process.env.JWT_SECRET as string
+      token,
+      process.env.JWT_SECRET
     ) as jwt.JwtPayload;
 
-    const userId = tokenPayload.userId;
+    const userId = tokenPayload.userId as string | undefined;
     if (typeof userId !== 'string') {
       return null;
     }
@@ -108,7 +111,7 @@ const getContext = async (initialContext: YogaInitialContext) => ({
       });
       return ids.map(
         (id) =>
-          rows.find((row) => row.id === id) || new Error(`Row not found: ${id}`)
+          rows.find((row) => row.id === id) ?? new Error(`Row not found: ${id}`)
       );
     }),
     labelLoader: new DataLoader<string, Label, string>(async (ids) => {
@@ -120,7 +123,7 @@ const getContext = async (initialContext: YogaInitialContext) => ({
       });
       return ids.map(
         (id) =>
-          rows.find((row) => row.id === id) || new Error(`Row not found: ${id}`)
+          rows.find((row) => row.id === id) ?? new Error(`Row not found: ${id}`)
       );
     }),
     labelTypeLoader: new DataLoader<string, LabelType, string>(async (ids) => {
@@ -132,7 +135,7 @@ const getContext = async (initialContext: YogaInitialContext) => ({
       });
       return ids.map(
         (id) =>
-          rows.find((row) => row.id === id) || new Error(`Row not found: ${id}`)
+          rows.find((row) => row.id === id) ?? new Error(`Row not found: ${id}`)
       );
     }),
     ticketLoader: new DataLoader<string, Ticket, string>(async (ids) => {
@@ -144,7 +147,7 @@ const getContext = async (initialContext: YogaInitialContext) => ({
       });
       return ids.map(
         (id) =>
-          rows.find((row) => row.id === id) || new Error(`Row not found: ${id}`)
+          rows.find((row) => row.id === id) ?? new Error(`Row not found: ${id}`)
       );
     }),
     userLoader: new DataLoader<string, User, string>(async (ids) => {
@@ -156,7 +159,7 @@ const getContext = async (initialContext: YogaInitialContext) => ({
       });
       return ids.map(
         (id) =>
-          rows.find((row) => row.id === id) || new Error(`Row not found: ${id}`)
+          rows.find((row) => row.id === id) ?? new Error(`Row not found: ${id}`)
       );
     }),
   },

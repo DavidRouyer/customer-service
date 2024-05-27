@@ -54,10 +54,10 @@ TableFooter.displayName = 'TableFooter';
 
 const TableRow = React.forwardRef<
   HTMLAnchorElement,
-  React.HTMLAttributes<HTMLAnchorElement>
+  React.AnchorHTMLAttributes<HTMLAnchorElement>
 >(({ className, ...props }, ref) => (
   <Link
-    href={props.href || '#'}
+    href={props.href ?? '#'}
     ref={ref}
     className={cn(
       'flex items-center border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted',

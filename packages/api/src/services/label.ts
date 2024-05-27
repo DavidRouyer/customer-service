@@ -1,14 +1,17 @@
 import { and, eq, inArray, isNotNull, isNull, schema } from '@cs/database';
-import { TicketLabelsChanged, TimelineEntryType } from '@cs/kyaku/models';
-import { Direction, FindConfig, GetConfig } from '@cs/kyaku/types/query';
+import type { TicketLabelsChanged } from '@cs/kyaku/models';
+import { TimelineEntryType } from '@cs/kyaku/models';
+import type { FindConfig, GetConfig } from '@cs/kyaku/types/query';
+import { Direction } from '@cs/kyaku/types/query';
 import { KyakuError } from '@cs/kyaku/utils/errors';
 
-import { LabelFilters, LabelSortField, LabelWith } from '../entities/label';
-import LabelRepository from '../repositories/label';
-import LabelTypeRepository from '../repositories/label-type';
-import TicketRepository from '../repositories/ticket';
-import TicketTimelineRepository from '../repositories/ticket-timeline';
-import { UnitOfWork } from '../unit-of-work';
+import type { LabelFilters, LabelWith } from '../entities/label';
+import { LabelSortField } from '../entities/label';
+import type LabelRepository from '../repositories/label';
+import type LabelTypeRepository from '../repositories/label-type';
+import type TicketRepository from '../repositories/ticket';
+import type TicketTimelineRepository from '../repositories/ticket-timeline';
+import type { UnitOfWork } from '../unit-of-work';
 import { BaseService } from './base-service';
 import {
   filterByDirection,
@@ -126,7 +129,7 @@ export default class LabelService extends BaseService {
         tx
       );
 
-      if (!newLabels) {
+      if (!newLabels.length) {
         tx.rollback();
         return;
       }

@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
-import { LexicalEditor, TextNode } from 'lexical';
+import type { LexicalEditor } from 'lexical';
+import { TextNode } from 'lexical';
 
 import { $createEmojiNode } from '@cs/kyaku/editor/nodes/emoji-node';
 

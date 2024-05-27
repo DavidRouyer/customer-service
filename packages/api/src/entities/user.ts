@@ -1,6 +1,6 @@
-import { InferInsertModel, InferSelectModel, schema } from '@cs/database';
+import type { InferInsertModel, InferSelectModel, schema } from '@cs/database';
 
-import { InclusionFilterOperator } from '../services/build-query';
+import type { InclusionFilterOperator } from '../services/build-query';
 
 export type User = Omit<InferSelectModel<typeof schema.users>, 'password'>;
 
@@ -8,8 +8,6 @@ export type UserInsert = Omit<
   InferInsertModel<typeof schema.users>,
   'password'
 >;
-
-export type UserWith<T> = {};
 
 export const USER_COLUMNS = {
   id: true,
@@ -19,9 +17,9 @@ export const USER_COLUMNS = {
   image: true,
 } as const;
 
-export type UserFilters = {
+export interface UserFilters {
   userIds?: InclusionFilterOperator<User['id']>;
-};
+}
 
 export enum UserSortField {
   name = 'name',

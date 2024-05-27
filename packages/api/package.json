@@ -13,7 +13,7 @@
     "clean": "rm -rf .turbo node_modules",
     "codegen:graphql": "graphql-codegen",
     "codegen:graphql:watch": "graphql-codegen --watch",
-    "lint": "eslint .",
+    "lint": "eslint",
     "format": "prettier --check \"**/*.{mjs,ts,md,json}\"",
     "typecheck": "tsc --noEmit"
   },
@@ -39,16 +39,10 @@
     "@graphql-codegen/typescript": "^4.0.7",
     "@graphql-codegen/typescript-resolvers": "^4.1.0",
     "@parcel/watcher": "^2.4.1",
-    "eslint": "^8.57.0",
+    "eslint": "^9.3.0",
     "lexical": "^0.15.0",
     "prettier": "^3.3.1",
     "typescript": "^5.4.5"
-  },
-  "eslintConfig": {
-    "root": true,
-    "extends": [
-      "@cs/eslint-config/base"
-    ]
   },
   "prettier": "@cs/prettier-config"
 }

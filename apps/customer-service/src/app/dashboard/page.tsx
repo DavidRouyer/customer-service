@@ -4,19 +4,25 @@ import { FormattedMessage } from 'react-intl';
 
 import { TicketStatus } from '@cs/kyaku/models';
 
-import { columns, TicketData } from '~/app/_components/data-table/columns';
+import type { TicketData } from '~/app/_components/data-table/columns';
+import { columns } from '~/app/_components/data-table/columns';
 import { DataTable } from '~/app/_components/data-table/data-table';
 import { useTicketsQuery } from '~/graphql/generated/client';
 
+interface DashboardPageProps {
+  searchParams: Record<string, string | string[] | undefined>;
+}
+
 export default function DashboardPage({
   searchParams,
-}: {
-  searchParams: Record<string, string | string[] | undefined>;
-}) {
+}: Readonly<DashboardPageProps>) {
   const { data: tickets } = useTicketsQuery(
     {
       filters: {
-        statuses: [(searchParams.status as TicketStatus) ?? TicketStatus.Open],
+        statuses: [
+          (searchParams.status as TicketStatus | undefined) ??
+            TicketStatus.Open,
+        ],
       },
     },
     {

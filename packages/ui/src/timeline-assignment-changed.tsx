@@ -1,14 +1,17 @@
-import { FC } from 'react';
+import type { FC } from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { TicketAssignmentChangedWithData } from '@cs/kyaku/models';
+import type { TicketAssignmentChangedWithData } from '@cs/kyaku/models';
 
 import { RelativeTime } from './relative-time';
-import { AssignmentChangedEntry, TimelineItemNarrowed } from './timeline-item';
+import type {
+  AssignmentChangedEntry,
+  TimelineItemNarrowed,
+} from './timeline-item';
 
-type TimelineAssigmentChangedProps = {
+interface TimelineAssigmentChangedProps {
   item: TimelineItemNarrowed<AssignmentChangedEntry>;
-};
+}
 
 export const TimelineAssigmentChanged: FC<TimelineAssigmentChangedProps> = ({
   item,
@@ -24,36 +27,36 @@ export const TimelineAssigmentChanged: FC<TimelineAssigmentChangedProps> = ({
           {item.userCreatedBy?.name}
         </span>{' '}
         <>
-          {item.entry?.oldAssignedToId === null &&
-          item.entry?.newAssignedToId !== null ? (
-            item.entry?.newAssignedToId === item.userCreatedBy?.id ? (
+          {item.entry.oldAssignedToId === null &&
+          item.entry.newAssignedToId !== null ? (
+            item.entry.newAssignedToId === item.userCreatedBy?.id ? (
               <FormattedMessage id="ticket.activity.type.ticket_assignment.self_assigned" />
             ) : (
               <>
                 <FormattedMessage id="ticket.activity.type.ticket_assignment.assigned" />{' '}
                 <span className="font-medium text-foreground">
-                  {item.entry?.newAssignedTo?.name}
+                  {item.entry.newAssignedTo?.name}
                 </span>
               </>
             )
           ) : null}
-          {item.entry?.oldAssignedToId !== null &&
-          item.entry?.newAssignedToId !== null ? (
+          {item.entry.oldAssignedToId !== null &&
+          item.entry.newAssignedToId !== null ? (
             <>
               <FormattedMessage id="ticket.activity.type.ticket_assignment.assigned" />{' '}
               <span className="font-medium text-foreground">
-                {item.entry?.newAssignedTo?.name}
+                {item.entry.newAssignedTo?.name}
               </span>{' '}
               <FormattedMessage id="ticket.activity.type.ticket_assignment.and_unassigned" />{' '}
               <span className="font-medium text-foreground">
-                {item.entry?.oldAssignedTo?.name}
+                {item.entry.oldAssignedTo?.name}
               </span>
             </>
           ) : null}
-          {item.entry?.oldAssignedToId !== null &&
-          item.entry?.newAssignedToId === null ? (
+          {item.entry.oldAssignedToId !== null &&
+          item.entry.newAssignedToId === null ? (
             <>
-              {item.entry?.oldAssignedToId === item.userCreatedBy?.id ? (
+              {item.entry.oldAssignedToId === item.userCreatedBy?.id ? (
                 <FormattedMessage id="ticket.activity.type.ticket_assignment.self_unassigned" />
               ) : (
                 <>
@@ -61,7 +64,7 @@ export const TimelineAssigmentChanged: FC<TimelineAssigmentChangedProps> = ({
                   <span className="font-medium text-foreground">
                     {
                       (item.entry as TicketAssignmentChangedWithData)
-                        ?.oldAssignedTo?.name
+                        .oldAssignedTo?.name
                     }
                   </span>
                 </>

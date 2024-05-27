@@ -1,8 +1,9 @@
-import { eq, KnownKeysOnly, schema } from '@cs/database';
+import type { KnownKeysOnly } from '@cs/database';
+import { eq, schema } from '@cs/database';
 
-import { DrizzleTransactionScope } from '../drizzle-transaction';
-import { Ticket, TicketInsert } from '../entities/ticket';
-import { IncludeRelation } from '../services/build-query';
+import type { DrizzleTransactionScope } from '../drizzle-transaction';
+import type { Ticket, TicketInsert } from '../entities/ticket';
+import type { IncludeRelation } from '../services/build-query';
 import { BaseRepository } from './base-repository';
 
 export default class TicketRepository extends BaseRepository {

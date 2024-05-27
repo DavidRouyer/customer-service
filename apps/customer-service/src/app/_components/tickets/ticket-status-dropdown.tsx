@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import type { FC } from 'react';
 import { CheckCircle2, CircleDot } from 'lucide-react';
 import { FormattedMessage } from 'react-intl';
 
@@ -15,17 +15,17 @@ import {
 import { useMarkAsDoneTicket } from '~/app/_hooks/use-mark-as-done-ticket';
 import { useMarkAsOpenTicket } from '~/app/_hooks/use-mark-as-open-ticket';
 
-type TicketChangeAssignmentProps = {
+interface TicketChangeAssignmentProps {
   status?: TicketStatus;
   ticketId: string;
-};
+}
 
 export const TicketStatusDropdowm: FC<TicketChangeAssignmentProps> = ({
   status,
   ticketId,
 }) => {
-  const { markAsDoneTicket } = useMarkAsDoneTicket();
-  const { markAsOpenTicket } = useMarkAsOpenTicket();
+  const { mutate: markAsDoneTicket } = useMarkAsDoneTicket();
+  const { mutate: markAsOpenTicket } = useMarkAsOpenTicket();
 
   return (
     <DropdownMenu>
