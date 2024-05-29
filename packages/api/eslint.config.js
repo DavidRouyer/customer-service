@@ -1,4 +1,4 @@
 import baseConfig from '@cs/eslint-config/base';
+import graphqlConfig from '@cs/eslint-config/graphql';
 
-/** @type {import('@typescript-eslint/utils').TSESLint.FlatConfig.ConfigArray} */
-export default [...baseConfig];
+export default [...baseConfig, ...graphqlConfig];
