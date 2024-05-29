@@ -10329,15 +10329,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-react-refresh@npm:^0.4.7":
-  version: 0.4.7
-  resolution: "eslint-plugin-react-refresh@npm:0.4.7"
-  peerDependencies:
-    eslint: ">=7"
-  checksum: 10c0/78600fe6b10905e7a068a377a381f315c962e3cb7c0575ffcb2136a1fe3dd6936bdfabb56c8f053a581b322a8fbffd7b7ec4b6fa7e227e5470f38fbe9bb170ee
-  languageName: node
-  linkType: hard
-
 "eslint-plugin-react@npm:^7.34.2":
   version: 7.34.2
   resolution: "eslint-plugin-react@npm:7.34.2"
@@ -17886,13 +17877,9 @@ __metadata:
     "@storybook/test": "npm:^8.1.5"
     "@types/react": "npm:^18.3.3"
     "@types/react-dom": "npm:^18.3.0"
-    "@typescript-eslint/eslint-plugin": "npm:rc-v8"
-    "@typescript-eslint/parser": "npm:rc-v8"
     "@vitejs/plugin-react": "npm:^4.3.0"
     autoprefixer: "npm:^10.4.19"
     eslint: "npm:^9.3.0"
-    eslint-plugin-react-hooks: "npm:beta"
-    eslint-plugin-react-refresh: "npm:^0.4.7"
     eslint-plugin-storybook: "npm:^0.9.0--canary.156.26b630a.0"
     postcss: "npm:^8.4.38"
     react: "npm:^18.3.1"
