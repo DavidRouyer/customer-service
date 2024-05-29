@@ -1,3 +1,5 @@
+/// <reference types="./types.d.ts" />
+
 import eslint from '@eslint/js';
 import importPlugin from 'eslint-plugin-import';
 import tseslint from 'typescript-eslint';
