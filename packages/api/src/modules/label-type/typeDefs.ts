@@ -10,13 +10,31 @@ const typeDefs = /* GraphQL */ `
     updatedBy: User
   }
 
+  """
+  A list of label types.
+  """
   type LabelTypeConnection {
+    """
+    A list of edges.
+    """
     edges: [LabelTypeEdge!]!
+    """
+    Information to aid in pagination.
+    """
     pageInfo: PageInfo!
   }
 
+  """
+  Represents a label type.
+  """
   type LabelTypeEdge {
+    """
+    A cursor for use in pagination.
+    """
     cursor: String!
+    """
+    The item at the end of the edge.
+    """
     node: LabelType!
   }
 

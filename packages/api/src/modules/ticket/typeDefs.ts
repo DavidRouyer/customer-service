@@ -40,14 +40,32 @@ const typeDefs = /* GraphQL */ `
     updatedBy: User
   }
 
-  type TicketEdge {
-    cursor: String!
-    node: Ticket!
+  """
+  A list of tickets.
+  """
+  type TicketConnection {
+    """
+    A list of edges.
+    """
+    edges: [TicketEdge!]!
+    """
+    Information to aid in pagination.
+    """
+    pageInfo: PageInfo!
   }
 
-  type TicketConnection {
-    edges: [TicketEdge!]!
-    pageInfo: PageInfo!
+  """
+  Represents a ticket.
+  """
+  type TicketEdge {
+    """
+    A cursor for use in pagination.
+    """
+    cursor: String!
+    """
+    The item at the end of the edge.
+    """
+    node: Ticket!
   }
 
   type AssignmentChangedEntry {
@@ -102,13 +120,31 @@ const typeDefs = /* GraphQL */ `
     userCreatedBy: User
   }
 
+  """
+  A list of timeline entries.
+  """
   type TimelineEntryConnection {
+    """
+    A list of edges.
+    """
     edges: [TimelineEntryEdge!]!
+    """
+    Information to aid in pagination.
+    """
     pageInfo: PageInfo!
   }
 
+  """
+  Represents a timeline entry.
+  """
   type TimelineEntryEdge {
+    """
+    A cursor for use in pagination.
+    """
     cursor: String!
+    """
+    The item at the end of the edge.
+    """
     node: TimelineEntry!
   }
 
