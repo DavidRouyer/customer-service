@@ -40,9 +40,9 @@ const bugLabelType = {
   archivedAt: null
 }
 
-const items: Record<string, TimelineItem> = 
+const items: Record<number, TimelineItem> = 
  {
-  '1': {
+  1: {
     id: '1',
     createdAt: "2023-05-06T11:23:45.389Z",
     customer: customer,
@@ -53,7 +53,7 @@ const items: Record<string, TimelineItem> =
     customerCreatedBy: customer,
     userCreatedBy: null,
   },
-  '2': {
+  2: {
     id: '2',
     createdAt: "2023-05-07T22:40:00.000Z",
     customer: customer,
@@ -64,7 +64,7 @@ const items: Record<string, TimelineItem> =
     customerCreatedBy: null,
     userCreatedBy: user,
   },
-  '3': {
+  3: {
     id: '3',
     createdAt: "2023-05-08T22:40:00.000Z",
     customer: customer,
@@ -75,7 +75,7 @@ const items: Record<string, TimelineItem> =
     customerCreatedBy: customer,
     userCreatedBy: null,
   },
-  '4': {
+  4: {
     id: '4',
     createdAt: "2023-05-20T20:54:41.389Z",
     customer: customer,
@@ -94,19 +94,19 @@ const items: Record<string, TimelineItem> =
     customerCreatedBy: null,
     userCreatedBy: user,
   },
-  '5': {
+  5: {
     id: '5',
     createdAt: "2023-05-21T20:54:41.389Z",
     customer: customer,
     entry: {
       __typename: 'NoteEntry',
       text: '',
-      rawContent: '{\"root\":{\"children\":[{\"children\":[{\"detail\":0,\"format\":0,\"mode\":\"normal\",\"style\":\"\",\"text\":\"test\",\"type\":\"text\",\"version\":1}],\"direction\":\"ltr\",\"format\":\"\",\"indent\":0,\"type\":\"paragraph\",\"version\":1}],\"direction\":\"ltr\",\"format\":\"\",\"indent\":0,\"type\":\"root\",\"version\":1}}'
+      rawContent: '{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"test","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}'
     },
     customerCreatedBy: null,
     userCreatedBy: user,
   },
-  '6': {
+  6: {
     id: '6',
     createdAt: "2023-05-22T20:54:51.389Z",
     customer: customer,
@@ -118,7 +118,7 @@ const items: Record<string, TimelineItem> =
     customerCreatedBy: null,
     userCreatedBy: user,
   },
-  '7': {
+  7: {
     id: '7',
     createdAt: "2023-05-22T20:55:41.389Z",
     customer: customer,
@@ -138,7 +138,7 @@ const items: Record<string, TimelineItem> =
     customerCreatedBy: null,
     userCreatedBy: user,
   },
-  '8': {
+  8: {
     id: '8',
     createdAt: "2023-05-23T20:55:41.389Z",
     customer: customer,
@@ -160,9 +160,11 @@ export const OldestToNewest = () => {
       items={Object.keys(items)}
       renderItem={({itemId}) =>
         <TimelineItem
-          item={items[itemId]}
-          nextItemId={items[(Number(itemId) + 1).toString()] !== undefined ? (Number(itemId) + 1).toString() : undefined}
-          previousItemId={items[(Number(itemId) - 1).toString()] !== undefined ? (Number(itemId) - 1).toString() : undefined}
+          item={items[Number(itemId)]}
+          // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+          nextItemId={items[Number(itemId) + 1] !== undefined ? (Number(itemId) + 1).toString() : undefined}
+          // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+          previousItemId={items[Number(itemId) - 1] !== undefined ? (Number(itemId) - 1).toString() : undefined}
         />}
       ticketId="ticket-id"
     />
