@@ -162,15 +162,21 @@ export type LabelType = Node & {
   updatedBy?: Maybe<User>;
 };
 
+/** A list of label types. */
 export type LabelTypeConnection = {
   __typename?: 'LabelTypeConnection';
+  /** A list of edges. */
   edges: Array<LabelTypeEdge>;
+  /** Information to aid in pagination. */
   pageInfo: PageInfo;
 };
 
+/** Represents a label type. */
 export type LabelTypeEdge = {
   __typename?: 'LabelTypeEdge';
+  /** A cursor for use in pagination. */
   cursor: Scalars['String']['output'];
+  /** The item at the end of the edge. */
   node: LabelType;
 };
 
@@ -435,15 +441,21 @@ export type TicketTimelineEntriesArgs = {
   last?: InputMaybe<Scalars['Int']['input']>;
 };
 
+/** A list of tickets. */
 export type TicketConnection = {
   __typename?: 'TicketConnection';
+  /** A list of edges. */
   edges: Array<TicketEdge>;
+  /** Information to aid in pagination. */
   pageInfo: PageInfo;
 };
 
+/** Represents a ticket. */
 export type TicketEdge = {
   __typename?: 'TicketEdge';
+  /** A cursor for use in pagination. */
   cursor: Scalars['String']['output'];
+  /** The item at the end of the edge. */
   node: Ticket;
 };
 
@@ -482,15 +494,21 @@ export type TimelineEntry = Node & {
   userCreatedBy?: Maybe<User>;
 };
 
+/** A list of timeline entries. */
 export type TimelineEntryConnection = {
   __typename?: 'TimelineEntryConnection';
+  /** A list of edges. */
   edges: Array<TimelineEntryEdge>;
+  /** Information to aid in pagination. */
   pageInfo: PageInfo;
 };
 
+/** Represents a timeline entry. */
 export type TimelineEntryEdge = {
   __typename?: 'TimelineEntryEdge';
+  /** A cursor for use in pagination. */
   cursor: Scalars['String']['output'];
+  /** The item at the end of the edge. */
   node: TimelineEntry;
 };
 
@@ -526,24 +544,33 @@ export type UpdateLabelTypeOutput = {
   userErrors?: Maybe<Array<MutationError>>;
 };
 
+/** The Kyaku user corresponding to the email field. Null if no such user exists */
 export type User = Node & {
   __typename?: 'User';
   email: Scalars['String']['output'];
   emailVerified?: Maybe<Scalars['DateTime']['output']>;
+  /** The Node ID of the User object */
   id: Scalars['ID']['output'];
   image?: Maybe<Scalars['String']['output']>;
+  /** The user's profile name */
   name?: Maybe<Scalars['String']['output']>;
 };
 
+/** A list of users. */
 export type UserConnection = {
   __typename?: 'UserConnection';
+  /** A list of edges. */
   edges: Array<UserEdge>;
+  /** Information to aid in pagination. */
   pageInfo: PageInfo;
 };
 
+/** Represents a user. */
 export type UserEdge = {
   __typename?: 'UserEdge';
+  /** A cursor for use in pagination. */
   cursor: Scalars['String']['output'];
+  /** The item at the end of the edge. */
   node: User;
 };
 
