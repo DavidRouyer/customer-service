@@ -94,7 +94,7 @@ const resolvers: Resolvers = {
 
       try {
         const archivedLabelType = await labelTypeService.archive(
-          input.id,
+          input.labelTypeId,
           authorizedUser.id
         );
 
@@ -145,7 +145,7 @@ const resolvers: Resolvers = {
 
       try {
         const unarchivedLabelType = await labelTypeService.unarchive(
-          input.id,
+          input.labelTypeId,
           authorizedUser.id
         );
 

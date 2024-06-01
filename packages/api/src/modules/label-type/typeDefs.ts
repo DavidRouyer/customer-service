@@ -55,7 +55,7 @@ const typeDefs = /* GraphQL */ `
   }
 
   input ArchiveLabelTypeInput {
-    id: ID!
+    labelTypeId: ID!
   }
 
   type ArchiveLabelTypeOutput {
@@ -74,7 +74,7 @@ const typeDefs = /* GraphQL */ `
   }
 
   input UnarchiveLabelTypeInput {
-    id: ID!
+    labelTypeId: ID!
   }
 
   type UnarchiveLabelTypeOutput {

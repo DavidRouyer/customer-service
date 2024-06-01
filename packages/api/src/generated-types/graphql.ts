@@ -33,7 +33,7 @@ export type AddLabelsOutput = {
 };
 
 export type ArchiveLabelTypeInput = {
-  id: Scalars['ID']['input'];
+  labelTypeId: Scalars['ID']['input'];
 };
 
 export type ArchiveLabelTypeOutput = {
@@ -511,7 +511,7 @@ export type TimelineEntryEdge = {
 };
 
 export type UnarchiveLabelTypeInput = {
-  id: Scalars['ID']['input'];
+  labelTypeId: Scalars['ID']['input'];
 };
 
 export type UnarchiveLabelTypeOutput = {
