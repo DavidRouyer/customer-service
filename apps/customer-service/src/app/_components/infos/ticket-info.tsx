@@ -10,7 +10,7 @@ import { useTicketQuery } from '~/graphql/generated/client';
 export const TicketInfo: FC<{ ticketId: string }> = ({ ticketId }) => {
   const { data: ticketData } = useTicketQuery(
     {
-      id: ticketId,
+      ticketId: ticketId,
     },
     {
       select: (data) => data.ticket,

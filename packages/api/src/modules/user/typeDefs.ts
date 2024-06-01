@@ -62,7 +62,7 @@ const typeDefs = /* GraphQL */ `
     """
     Fetches a user given its ID.
     """
-    user(id: ID!): User
+    user(userId: ID!): User
 
     """
     Fetches a list of users.

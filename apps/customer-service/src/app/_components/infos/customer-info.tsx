@@ -17,7 +17,7 @@ export const CustomerInfo: FC<{ ticketId: string }> = ({ ticketId }) => {
   const { formatMessage } = useIntl();
   const { data: ticketData } = useTicketQuery(
     {
-      id: ticketId,
+      ticketId: ticketId,
     },
     {
       select: (data) => data.ticket,

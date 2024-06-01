@@ -347,24 +347,32 @@ export type PriorityChangedEntry = {
 
 export type Query = {
   __typename?: 'Query';
+  /** Fetches a customer given its ID. */
   customer?: Maybe<Customer>;
+  /** Fetches a label type given its ID. */
   labelType?: Maybe<LabelType>;
+  /** Fetches a list of label types. */
   labelTypes: LabelTypeConnection;
+  /** Fetches information of the current user. */
   myUserInfo?: Maybe<User>;
+  /** Fetches a ticket given its ID. */
   ticket?: Maybe<Ticket>;
+  /** Fetches a list of tickets. */
   tickets: TicketConnection;
+  /** Fetches a user given its ID. */
   user?: Maybe<User>;
+  /** Fetches a list of users. */
   users: UserConnection;
 };
 
 
 export type QueryCustomerArgs = {
-  id: Scalars['ID']['input'];
+  customerId: Scalars['ID']['input'];
 };
 
 
 export type QueryLabelTypeArgs = {
-  id: Scalars['ID']['input'];
+  labelTypeId: Scalars['ID']['input'];
 };
 
 
@@ -378,7 +386,7 @@ export type QueryLabelTypesArgs = {
 
 
 export type QueryTicketArgs = {
-  id: Scalars['ID']['input'];
+  ticketId: Scalars['ID']['input'];
 };
 
 
@@ -392,7 +400,7 @@ export type QueryTicketsArgs = {
 
 
 export type QueryUserArgs = {
-  id: Scalars['ID']['input'];
+  userId: Scalars['ID']['input'];
 };
 
 
@@ -627,7 +635,7 @@ export type RemoveLabelsMutationVariables = Exact<{
 export type RemoveLabelsMutation = { __typename?: 'Mutation', removeLabels?: { __typename?: 'RemoveLabelsPayload', userErrors?: Array<{ __typename?: 'MutationError', message: string }> | null } | null };
 
 export type TicketQueryVariables = Exact<{
-  id: Scalars['ID']['input'];
+  ticketId: Scalars['ID']['input'];
 }>;
 
 
@@ -869,8 +877,8 @@ export const useRemoveLabelsMutation = <
 useRemoveLabelsMutation.fetcher = (variables: RemoveLabelsMutationVariables) => fetcher<RemoveLabelsMutation, RemoveLabelsMutationVariables>(RemoveLabelsDocument, variables);
 
 export const TicketDocument = `
-    query ticket($id: ID!) {
-  ticket(id: $id) {
+    query ticket($ticketId: ID!) {
+  ticket(ticketId: $ticketId) {
     id
     assignedTo {
       ...UserParts
@@ -934,7 +942,7 @@ useTicketQuery.fetcher = (variables: TicketQueryVariables) => fetcher<TicketQuer
 
 export const TicketTimelineDocument = `
     query ticketTimeline($ticketId: ID!) {
-  ticket(id: $ticketId) {
+  ticket(ticketId: $ticketId) {
     timelineEntries {
       edges {
         cursor

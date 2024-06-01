@@ -11,7 +11,7 @@ export const Ticket: FC<{
   ticketId: string;
 }> = ({ ticketId }) => {
   const { data: ticketData } = useTicketQuery(
-    { id: ticketId },
+    { ticketId: ticketId },
     {
       select: (data) => data.ticket,
     }

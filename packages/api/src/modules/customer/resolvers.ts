@@ -20,9 +20,9 @@ export const mapCustomer = (
 
 const resolvers: Resolvers = {
   Query: {
-    customer: async (_, { id }, { dataloaders }) => {
+    customer: async (_, { customerId }, { dataloaders }) => {
       try {
-        const customer = await dataloaders.customerLoader.load(id);
+        const customer = await dataloaders.customerLoader.load(customerId);
         return mapCustomer(customer);
       } catch {
         return null;

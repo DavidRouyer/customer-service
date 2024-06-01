@@ -20,7 +20,7 @@ export const InfoPanel: FC<{
 }> = ({ ticketId }) => {
   const { data: ticketData } = useTicketQuery(
     {
-      id: ticketId,
+      ticketId: ticketId,
     },
     {
       select: (data) => data.ticket,

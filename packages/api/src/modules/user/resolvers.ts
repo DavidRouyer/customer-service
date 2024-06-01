@@ -20,9 +20,9 @@ const resolvers: Resolvers = {
         return null;
       }
     },
-    user: async (_, { id }, { dataloaders }) => {
+    user: async (_, { userId }, { dataloaders }) => {
       try {
-        return await dataloaders.userLoader.load(id);
+        return await dataloaders.userLoader.load(userId);
       } catch {
         return null;
       }

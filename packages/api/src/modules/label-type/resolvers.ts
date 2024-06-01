@@ -28,9 +28,9 @@ export const mapLabelType = (
 
 const resolvers: Resolvers = {
   Query: {
-    labelType: async (_, { id }, { dataloaders }) => {
+    labelType: async (_, { labelTypeId }, { dataloaders }) => {
       try {
-        const labelType = await dataloaders.labelTypeLoader.load(id);
+        const labelType = await dataloaders.labelTypeLoader.load(labelTypeId);
         return mapLabelType(labelType);
       } catch {
         return null;

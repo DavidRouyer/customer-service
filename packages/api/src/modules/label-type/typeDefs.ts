@@ -46,7 +46,7 @@ const typeDefs = /* GraphQL */ `
     """
     Fetches a label type given its ID.
     """
-    labelType(id: ID!): LabelType
+    labelType(labelTypeId: ID!): LabelType
 
     """
     Fetches a list of label types.

@@ -331,24 +331,32 @@ export type PriorityChangedEntry = {
 
 export type Query = {
   __typename?: 'Query';
+  /** Fetches a customer given its ID. */
   customer?: Maybe<Customer>;
+  /** Fetches a label type given its ID. */
   labelType?: Maybe<LabelType>;
+  /** Fetches a list of label types. */
   labelTypes: LabelTypeConnection;
+  /** Fetches information of the current user. */
   myUserInfo?: Maybe<User>;
+  /** Fetches a ticket given its ID. */
   ticket?: Maybe<Ticket>;
+  /** Fetches a list of tickets. */
   tickets: TicketConnection;
+  /** Fetches a user given its ID. */
   user?: Maybe<User>;
+  /** Fetches a list of users. */
   users: UserConnection;
 };
 
 
 export type QueryCustomerArgs = {
-  id: Scalars['ID']['input'];
+  customerId: Scalars['ID']['input'];
 };
 
 
 export type QueryLabelTypeArgs = {
-  id: Scalars['ID']['input'];
+  labelTypeId: Scalars['ID']['input'];
 };
 
 
@@ -362,7 +370,7 @@ export type QueryLabelTypesArgs = {
 
 
 export type QueryTicketArgs = {
-  id: Scalars['ID']['input'];
+  ticketId: Scalars['ID']['input'];
 };
 
 
@@ -376,7 +384,7 @@ export type QueryTicketsArgs = {
 
 
 export type QueryUserArgs = {
-  id: Scalars['ID']['input'];
+  userId: Scalars['ID']['input'];
 };
 
 
@@ -964,13 +972,13 @@ export type PriorityChangedEntryResolvers<ContextType = Context, ParentType exte
 };
 
 export type QueryResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
-  customer?: Resolver<Maybe<ResolversTypes['Customer']>, ParentType, ContextType, RequireFields<QueryCustomerArgs, 'id'>>;
-  labelType?: Resolver<Maybe<ResolversTypes['LabelType']>, ParentType, ContextType, RequireFields<QueryLabelTypeArgs, 'id'>>;
+  customer?: Resolver<Maybe<ResolversTypes['Customer']>, ParentType, ContextType, RequireFields<QueryCustomerArgs, 'customerId'>>;
+  labelType?: Resolver<Maybe<ResolversTypes['LabelType']>, ParentType, ContextType, RequireFields<QueryLabelTypeArgs, 'labelTypeId'>>;
   labelTypes?: Resolver<ResolversTypes['LabelTypeConnection'], ParentType, ContextType, Partial<QueryLabelTypesArgs>>;
   myUserInfo?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
-  ticket?: Resolver<Maybe<ResolversTypes['Ticket']>, ParentType, ContextType, RequireFields<QueryTicketArgs, 'id'>>;
+  ticket?: Resolver<Maybe<ResolversTypes['Ticket']>, ParentType, ContextType, RequireFields<QueryTicketArgs, 'ticketId'>>;
   tickets?: Resolver<ResolversTypes['TicketConnection'], ParentType, ContextType, Partial<QueryTicketsArgs>>;
-  user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryUserArgs, 'id'>>;
+  user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryUserArgs, 'userId'>>;
   users?: Resolver<ResolversTypes['UserConnection'], ParentType, ContextType, Partial<QueryUsersArgs>>;
 };
 

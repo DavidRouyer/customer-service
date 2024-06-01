@@ -38,17 +38,17 @@ export const TicketPriorityDropdowm: FC<TicketChangePriorityProps> = ({
       // Cancel any outgoing refetches
       // (so they don't overwrite our optimistic update)
       await queryClient.cancelQueries({
-        queryKey: useTicketQuery.getKey({ id: input.ticketId }),
+        queryKey: useTicketQuery.getKey({ ticketId: input.ticketId }),
       });
 
       // Snapshot the previous value
       const previousTicket = queryClient.getQueryData<TicketQuery['ticket']>(
-        useTicketQuery.getKey({ id: input.ticketId })
+        useTicketQuery.getKey({ ticketId: input.ticketId })
       );
 
       // Optimistically update to the new value
       queryClient.setQueryData<TicketQuery['ticket']>(
-        useTicketQuery.getKey({ id: input.ticketId }),
+        useTicketQuery.getKey({ ticketId: input.ticketId }),
         (oldQueryData) =>
           oldQueryData
             ? {
@@ -64,13 +64,13 @@ export const TicketPriorityDropdowm: FC<TicketChangePriorityProps> = ({
     onError: (err, { input }, context) => {
       // TODO: handle failed queries
       queryClient.setQueryData<TicketQuery['ticket']>(
-        useTicketQuery.getKey({ id: input.ticketId }),
+        useTicketQuery.getKey({ ticketId: input.ticketId }),
         context?.previousTicket
       );
     },
     onSettled: (_, __, { input }) => {
       void queryClient.invalidateQueries({
-        queryKey: useTicketQuery.getKey({ id: input.ticketId }),
+        queryKey: useTicketQuery.getKey({ ticketId: input.ticketId }),
       });
       void queryClient.invalidateQueries({
         queryKey: useInfiniteTicketTimelineQuery.getKey({ ticketId: ticketId }),

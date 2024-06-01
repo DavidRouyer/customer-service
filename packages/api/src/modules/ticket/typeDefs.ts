@@ -153,7 +153,7 @@ const typeDefs = /* GraphQL */ `
     """
     Fetches a ticket given its ID.
     """
-    ticket(id: ID!): Ticket
+    ticket(ticketId: ID!): Ticket
 
     """
     Fetches a list of tickets.

@@ -17,7 +17,7 @@ const typeDefs = /* GraphQL */ `
     """
     Fetches a customer given its ID.
     """
-    customer(id: ID!): Customer
+    customer(customerId: ID!): Customer
   }
 `;
 
