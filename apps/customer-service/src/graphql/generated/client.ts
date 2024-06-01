@@ -33,6 +33,7 @@ export type Scalars = {
   Boolean: { input: boolean; output: boolean; }
   Int: { input: number; output: number; }
   Float: { input: number; output: number; }
+  /** An ISO-8601 encoded UTC date string. */
   DateTime: { input: string; output: string; }
 };
 
@@ -58,7 +59,8 @@ export type ArchiveLabelTypeOutput = {
 };
 
 export type AssignTicketInput = {
-  id: Scalars['ID']['input'];
+  /** The Node ID of the ticket to assign. */
+  ticketId: Scalars['ID']['input'];
   userId: Scalars['ID']['input'];
 };
 
@@ -75,8 +77,9 @@ export type AssignmentChangedEntry = {
 };
 
 export type ChangeTicketPriorityInput = {
-  id: Scalars['ID']['input'];
   priority: TicketPriority;
+  /** The Node ID of the ticket to change the priority of. */
+  ticketId: Scalars['ID']['input'];
 };
 
 export type ChangeTicketPriorityOutput = {
@@ -104,6 +107,7 @@ export type CreateLabelTypeOutput = {
 export type CreateNoteInput = {
   rawContent: Scalars['String']['input'];
   text: Scalars['String']['input'];
+  /** The Node ID of the ticket to which the note belongs. */
   ticketId: Scalars['ID']['input'];
 };
 
@@ -191,7 +195,8 @@ export type LabelsChangedEntry = {
 };
 
 export type MarkTicketAsDoneInput = {
-  id: Scalars['ID']['input'];
+  /** The Node ID of the ticket to mark as done. */
+  ticketId: Scalars['ID']['input'];
 };
 
 export type MarkTicketAsDoneOutput = {
@@ -201,7 +206,8 @@ export type MarkTicketAsDoneOutput = {
 };
 
 export type MarkTicketAsOpenInput = {
-  id: Scalars['ID']['input'];
+  /** The Node ID of the ticket to mark as open. */
+  ticketId: Scalars['ID']['input'];
 };
 
 export type MarkTicketAsOpenOutput = {
@@ -305,7 +311,9 @@ export type MutationError = {
   path: Array<Scalars['String']['output']>;
 };
 
+/** An object with an ID. */
 export type Node = {
+  /** ID of the object. */
   id: Scalars['ID']['output'];
 };
 
@@ -315,11 +323,16 @@ export type NoteEntry = {
   text: Scalars['String']['output'];
 };
 
+/** Information about pagination in a connection. */
 export type PageInfo = {
   __typename?: 'PageInfo';
+  /** When paginating forwards, the cursor to continue. */
   endCursor?: Maybe<Scalars['String']['output']>;
+  /** When paginating forwards, are there more items? */
   hasNextPage: Scalars['Boolean']['output'];
+  /** When paginating backwards, are there more items? */
   hasPreviousPage: Scalars['Boolean']['output'];
+  /** When paginating backwards, the cursor to continue. */
   startCursor?: Maybe<Scalars['String']['output']>;
 };
 
@@ -399,6 +412,7 @@ export type RemoveLabelsOutput = {
 
 export type SendChatInput = {
   text: Scalars['String']['input'];
+  /** The Node ID of the ticket to which the chat belongs. */
   ticketId: Scalars['ID']['input'];
 };
 
@@ -523,7 +537,8 @@ export type UnarchiveLabelTypeOutput = {
 };
 
 export type UnassignTicketInput = {
-  id: Scalars['ID']['input'];
+  /** The Node ID of the ticket to unassign. */
+  ticketId: Scalars['ID']['input'];
 };
 
 export type UnassignTicketOutput = {
@@ -547,10 +562,13 @@ export type UpdateLabelTypeOutput = {
 /** The Kyaku user corresponding to the email field. Null if no such user exists */
 export type User = Node & {
   __typename?: 'User';
+  /** The user's profile email */
   email: Scalars['String']['output'];
+  /** Identifies the date and time when the user's email was confirmed. */
   emailVerified?: Maybe<Scalars['DateTime']['output']>;
   /** The Node ID of the User object */
   id: Scalars['ID']['output'];
+  /** A URL pointing to the user's profile avatar */
   image?: Maybe<Scalars['String']['output']>;
   /** The user's profile name */
   name?: Maybe<Scalars['String']['output']>;

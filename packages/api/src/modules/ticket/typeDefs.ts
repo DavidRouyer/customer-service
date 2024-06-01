@@ -105,11 +105,6 @@ const typeDefs = /* GraphQL */ `
     | PriorityChangedEntry
     | StatusChangedEntry
 
-  type TicketEdge {
-    cursor: String!
-    node: Ticket!
-  }
-
   type TimelineEntry implements Node {
     id: ID!
     customer: Customer!
@@ -166,7 +161,10 @@ const typeDefs = /* GraphQL */ `
   }
 
   input AssignTicketInput {
-    id: ID!
+    """
+    The Node ID of the ticket to assign.
+    """
+    ticketId: ID!
     userId: ID!
   }
 
@@ -176,7 +174,10 @@ const typeDefs = /* GraphQL */ `
   }
 
   input ChangeTicketPriorityInput {
-    id: ID!
+    """
+    The Node ID of the ticket to change the priority of.
+    """
+    ticketId: ID!
     priority: TicketPriority!
   }
 
@@ -186,6 +187,9 @@ const typeDefs = /* GraphQL */ `
   }
 
   input CreateNoteInput {
+    """
+    The Node ID of the ticket to which the note belongs.
+    """
     ticketId: ID!
     text: String!
     rawContent: String!
@@ -209,7 +213,10 @@ const typeDefs = /* GraphQL */ `
   }
 
   input MarkTicketAsDoneInput {
-    id: ID!
+    """
+    The Node ID of the ticket to mark as done.
+    """
+    ticketId: ID!
   }
 
   type MarkTicketAsDoneOutput {
@@ -218,7 +225,10 @@ const typeDefs = /* GraphQL */ `
   }
 
   input MarkTicketAsOpenInput {
-    id: ID!
+    """
+    The Node ID of the ticket to mark as open.
+    """
+    ticketId: ID!
   }
 
   type MarkTicketAsOpenOutput {
@@ -227,6 +237,9 @@ const typeDefs = /* GraphQL */ `
   }
 
   input SendChatInput {
+    """
+    The Node ID of the ticket to which the chat belongs.
+    """
     ticketId: ID!
     text: String!
   }
@@ -237,7 +250,10 @@ const typeDefs = /* GraphQL */ `
   }
 
   input UnassignTicketInput {
-    id: ID!
+    """
+    The Node ID of the ticket to unassign.
+    """
+    ticketId: ID!
   }
 
   type UnassignTicketOutput {

@@ -58,7 +58,7 @@ export const TicketStatusDropdowm: FC<TicketChangeAssignmentProps> = ({
         <DropdownMenuGroup>
           <DropdownMenuItem
             key="open"
-            onClick={() => markAsOpenTicket({ input: { id: ticketId } })}
+            onClick={() => markAsOpenTicket({ input: { ticketId: ticketId } })}
             disabled={status === TicketStatus.Open}
           >
             <div className="flex items-center gap-x-2">
@@ -70,7 +70,7 @@ export const TicketStatusDropdowm: FC<TicketChangeAssignmentProps> = ({
           </DropdownMenuItem>
           <DropdownMenuItem
             key="done"
-            onClick={() => markAsDoneTicket({ input: { id: ticketId } })}
+            onClick={() => markAsDoneTicket({ input: { ticketId: ticketId } })}
             disabled={status === TicketStatus.Done}
           >
             <div className="flex items-center gap-x-2">

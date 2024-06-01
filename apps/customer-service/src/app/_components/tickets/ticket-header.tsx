@@ -34,7 +34,7 @@ export const TicketHeader: FC<{ ticketId: string }> = ({ ticketId }) => {
           <Button
             type="button"
             onClick={() => {
-              markAsOpenTicket({ input: { id: ticketId } });
+              markAsOpenTicket({ input: { ticketId: ticketId } });
             }}
             className="flex items-center gap-x-1"
           >
@@ -45,7 +45,7 @@ export const TicketHeader: FC<{ ticketId: string }> = ({ ticketId }) => {
           <Button
             type="button"
             onClick={() => {
-              markAsDoneTicket({ input: { id: ticketId } });
+              markAsDoneTicket({ input: { ticketId: ticketId } });
             }}
             className="flex items-center gap-x-1"
           >

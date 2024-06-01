@@ -356,7 +356,7 @@ const resolvers: Resolvers = {
       try {
         const ticket = await ticketService.assign(
           {
-            ticketId: input.id,
+            ticketId: input.ticketId,
             assignedToId: input.userId,
           },
           authorizedUser.id
@@ -383,7 +383,7 @@ const resolvers: Resolvers = {
       try {
         const ticket = await ticketService.changePriority(
           {
-            ticketId: input.id,
+            ticketId: input.ticketId,
             priority: input.priority,
           },
           authorizedUser.id
@@ -449,7 +449,7 @@ const resolvers: Resolvers = {
 
       try {
         const ticket = await ticketService.markAsDone(
-          input.id,
+          input.ticketId,
           authorizedUser.id
         );
 
@@ -473,7 +473,7 @@ const resolvers: Resolvers = {
 
       try {
         const ticket = await ticketService.markAsOpen(
-          input.id,
+          input.ticketId,
           authorizedUser.id
         );
 
@@ -510,7 +510,7 @@ const resolvers: Resolvers = {
 
       try {
         const ticket = await ticketService.unassign(
-          input.id,
+          input.ticketId,
           authorizedUser.id
         );
 

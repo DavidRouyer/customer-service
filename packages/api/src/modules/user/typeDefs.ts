@@ -11,8 +11,17 @@ const typeDefs = /* GraphQL */ `
     The user's profile name
     """
     name: String
+    """
+    The user's profile email
+    """
     email: String!
+    """
+    Identifies the date and time when the user's email was confirmed.
+    """
     emailVerified: DateTime
+    """
+    A URL pointing to the user's profile avatar
+    """
     image: String
   }
 

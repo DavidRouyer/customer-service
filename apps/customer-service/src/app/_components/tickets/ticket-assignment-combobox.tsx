@@ -89,17 +89,17 @@ export const TicketAssignmentCombobox: FC<TicketAssignmentComboboxProps> = ({
       // Cancel any outgoing refetches
       // (so they don't overwrite our optimistic update)
       await queryClient.cancelQueries({
-        queryKey: useTicketQuery.getKey({ id: input.id }),
+        queryKey: useTicketQuery.getKey({ id: input.ticketId }),
       });
 
       // Snapshot the previous value
       const previousTicket = queryClient.getQueryData<TicketQuery['ticket']>(
-        useTicketQuery.getKey({ id: input.id })
+        useTicketQuery.getKey({ id: input.ticketId })
       );
 
       // Optimistically update to the new value
       queryClient.setQueryData<TicketQuery['ticket']>(
-        useTicketQuery.getKey({ id: input.id }),
+        useTicketQuery.getKey({ id: input.ticketId }),
         (oldQueryData) =>
           oldQueryData
             ? {
@@ -115,13 +115,13 @@ export const TicketAssignmentCombobox: FC<TicketAssignmentComboboxProps> = ({
     onError: (err, { input }, context) => {
       // TODO: handle failed queries
       queryClient.setQueryData<TicketQuery['ticket']>(
-        useTicketQuery.getKey({ id: input.id }),
+        useTicketQuery.getKey({ id: input.ticketId }),
         context?.previousTicket
       );
     },
     onSettled: (_, __, { input }) => {
       void queryClient.invalidateQueries({
-        queryKey: useTicketQuery.getKey({ id: input.id }),
+        queryKey: useTicketQuery.getKey({ id: input.ticketId }),
       });
       void queryClient.invalidateQueries({
         queryKey: useInfiniteTicketTimelineQuery.getKey({ ticketId: ticketId }),
@@ -134,17 +134,17 @@ export const TicketAssignmentCombobox: FC<TicketAssignmentComboboxProps> = ({
       // Cancel any outgoing refetches
       // (so they don't overwrite our optimistic update)
       await queryClient.cancelQueries({
-        queryKey: useTicketQuery.getKey({ id: input.id }),
+        queryKey: useTicketQuery.getKey({ id: input.ticketId }),
       });
 
       // Snapshot the previous value
       const previousTicket = queryClient.getQueryData<TicketQuery['ticket']>(
-        useTicketQuery.getKey({ id: input.id })
+        useTicketQuery.getKey({ id: input.ticketId })
       );
 
       // Optimistically update to the new value
       queryClient.setQueryData<TicketQuery['ticket']>(
-        useTicketQuery.getKey({ id: input.id }),
+        useTicketQuery.getKey({ id: input.ticketId }),
         (oldQueryData) =>
           oldQueryData
             ? {
@@ -160,13 +160,13 @@ export const TicketAssignmentCombobox: FC<TicketAssignmentComboboxProps> = ({
     onError: (err, { input }, context) => {
       // TODO: handle failed queries
       queryClient.setQueryData<TicketQuery['ticket']>(
-        useTicketQuery.getKey({ id: input.id }),
+        useTicketQuery.getKey({ id: input.ticketId }),
         context?.previousTicket
       );
     },
     onSettled: (_, __, { input }) => {
       void queryClient.invalidateQueries({
-        queryKey: useTicketQuery.getKey({ id: input.id }),
+        queryKey: useTicketQuery.getKey({ id: input.ticketId }),
       });
       void queryClient.invalidateQueries({
         queryKey: useInfiniteTicketTimelineQuery.getKey({ ticketId: ticketId }),
@@ -221,9 +221,11 @@ export const TicketAssignmentCombobox: FC<TicketAssignmentComboboxProps> = ({
                   key={user.id}
                   onSelect={() => {
                     if (assignedTo && user.id === assignedTo.id) {
-                      unassign({ input: { id: ticketId } });
+                      unassign({ input: { ticketId: ticketId } });
                     } else {
-                      assign({ input: { id: ticketId, userId: user.id } });
+                      assign({
+                        input: { ticketId: ticketId, userId: user.id },
+                      });
                     }
                     setOpen(false);
                   }}

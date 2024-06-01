@@ -24,5 +24,16 @@ export default [
   {
     files: ['**/*.graphql'],
     ...graphqlESLint.flatConfigs['schema-recommended'],
+    rules: {
+      ...graphqlESLint.flatConfigs['schema-recommended'].rules,
+      '@graphql-eslint/strict-id-in-types': [
+        'error',
+        {
+          exceptions: {
+            suffixes: ['Connection', 'Edge', 'Output', 'PageInfo'],
+          },
+        },
+      ],
+    },
   },
 ];
