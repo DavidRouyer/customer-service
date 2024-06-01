@@ -47,6 +47,15 @@ declare module 'eslint-plugin-react-hooks' {
   export const rules: Record<string, Rule.RuleModule>;
 }
 
+declare module 'eslint-plugin-tailwindcss' {
+  import type { Linter, Rule } from 'eslint';
+
+  export const configs: {
+    'flat/recommended': [{ rules: Linter.RulesRecord }];
+  };
+  export const rules: Record<string, Rule.RuleModule>;
+}
+
 declare module '@next/eslint-plugin-next' {
   import type { Linter, Rule } from 'eslint';
 
