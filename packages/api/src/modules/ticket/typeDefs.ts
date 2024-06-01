@@ -154,6 +154,10 @@ const typeDefs = /* GraphQL */ `
     Fetches a ticket given its ID.
     """
     ticket(id: ID!): Ticket
+
+    """
+    Fetches a list of tickets.
+    """
     tickets(
       filters: TicketsFilter
       first: Int

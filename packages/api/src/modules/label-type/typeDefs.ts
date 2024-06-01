@@ -48,6 +48,9 @@ const typeDefs = /* GraphQL */ `
     """
     labelType(id: ID!): LabelType
 
+    """
+    Fetches a list of label types.
+    """
     labelTypes(
       filters: LabelTypesFilter
       first: Int
