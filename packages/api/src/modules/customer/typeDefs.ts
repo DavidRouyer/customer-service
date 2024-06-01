@@ -13,7 +13,7 @@ const typeDefs = /* GraphQL */ `
     updatedBy: User
   }
 
-  type Query {
+  extend type Query {
     customer(id: ID!): Customer
   }
 `;

@@ -4,6 +4,10 @@ const typeDefs = /* GraphQL */ `
   """
   scalar DateTime
 
+  type Query
+
+  type Mutation
+
   """
   An object with an ID.
   """

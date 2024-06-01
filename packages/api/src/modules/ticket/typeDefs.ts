@@ -149,7 +149,7 @@ const typeDefs = /* GraphQL */ `
     isAssigned: Boolean
   }
 
-  type Query {
+  extend type Query {
     ticket(id: ID!): Ticket
     tickets(
       filters: TicketsFilter
@@ -270,7 +270,7 @@ const typeDefs = /* GraphQL */ `
     userErrors: [MutationError!]
   }
 
-  type Mutation {
+  extend type Mutation {
     assignTicket(input: AssignTicketInput!): AssignTicketPayload
     changeTicketPriority(
       input: ChangeTicketPriorityInput!

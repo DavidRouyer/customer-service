@@ -24,7 +24,7 @@ const typeDefs = /* GraphQL */ `
     userErrors: [MutationError!]
   }
 
-  type Mutation {
+  extend type Mutation {
     addLabels(input: AddLabelsInput!): AddLabelsPayload
 
     removeLabels(input: RemoveLabelsInput!): RemoveLabelsPayload

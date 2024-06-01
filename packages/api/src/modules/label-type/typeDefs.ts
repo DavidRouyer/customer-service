@@ -42,7 +42,7 @@ const typeDefs = /* GraphQL */ `
     isArchived: Boolean
   }
 
-  type Query {
+  extend type Query {
     labelType(id: ID!): LabelType
 
     labelTypes(
@@ -93,7 +93,7 @@ const typeDefs = /* GraphQL */ `
     userErrors: [MutationError!]
   }
 
-  type Mutation {
+  extend type Mutation {
     archiveLabelType(input: ArchiveLabelTypeInput!): ArchiveLabelTypePayload
 
     createLabelType(input: CreateLabelTypeInput!): CreateLabelTypePayload

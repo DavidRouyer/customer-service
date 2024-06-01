@@ -53,7 +53,7 @@ const typeDefs = /* GraphQL */ `
     node: User!
   }
 
-  type Query {
+  extend type Query {
     myUserInfo: User
     user(id: ID!): User
     users(first: Int, after: String, last: Int, before: String): UserConnection!
