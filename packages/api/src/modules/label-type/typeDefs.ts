@@ -58,7 +58,7 @@ const typeDefs = /* GraphQL */ `
     labelTypeId: ID!
   }
 
-  type ArchiveLabelTypeOutput {
+  type ArchiveLabelTypePayload {
     labelType: LabelType
     userErrors: [MutationError!]
   }
@@ -68,7 +68,7 @@ const typeDefs = /* GraphQL */ `
     icon: String
   }
 
-  type CreateLabelTypeOutput {
+  type CreateLabelTypePayload {
     labelType: LabelType
     userErrors: [MutationError!]
   }
@@ -77,7 +77,7 @@ const typeDefs = /* GraphQL */ `
     labelTypeId: ID!
   }
 
-  type UnarchiveLabelTypeOutput {
+  type UnarchiveLabelTypePayload {
     labelType: LabelType
     userErrors: [MutationError!]
   }
@@ -88,21 +88,21 @@ const typeDefs = /* GraphQL */ `
     icon: String
   }
 
-  type UpdateLabelTypeOutput {
+  type UpdateLabelTypePayload {
     labelType: LabelType
     userErrors: [MutationError!]
   }
 
   type Mutation {
-    archiveLabelType(input: ArchiveLabelTypeInput!): ArchiveLabelTypeOutput
+    archiveLabelType(input: ArchiveLabelTypeInput!): ArchiveLabelTypePayload
 
-    createLabelType(input: CreateLabelTypeInput!): CreateLabelTypeOutput
+    createLabelType(input: CreateLabelTypeInput!): CreateLabelTypePayload
 
     unarchiveLabelType(
       input: UnarchiveLabelTypeInput!
-    ): UnarchiveLabelTypeOutput
+    ): UnarchiveLabelTypePayload
 
-    updateLabelType(input: UpdateLabelTypeInput!): UpdateLabelTypeOutput
+    updateLabelType(input: UpdateLabelTypeInput!): UpdateLabelTypePayload
   }
 `;
 

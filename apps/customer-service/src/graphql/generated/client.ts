@@ -42,8 +42,8 @@ export type AddLabelsInput = {
   ticketId: Scalars['ID']['input'];
 };
 
-export type AddLabelsOutput = {
-  __typename?: 'AddLabelsOutput';
+export type AddLabelsPayload = {
+  __typename?: 'AddLabelsPayload';
   labels?: Maybe<Array<Label>>;
   userErrors?: Maybe<Array<MutationError>>;
 };
@@ -52,20 +52,22 @@ export type ArchiveLabelTypeInput = {
   labelTypeId: Scalars['ID']['input'];
 };
 
-export type ArchiveLabelTypeOutput = {
-  __typename?: 'ArchiveLabelTypeOutput';
+export type ArchiveLabelTypePayload = {
+  __typename?: 'ArchiveLabelTypePayload';
   labelType?: Maybe<LabelType>;
   userErrors?: Maybe<Array<MutationError>>;
 };
 
+/** Assign a ticket to a user. */
 export type AssignTicketInput = {
   /** The Node ID of the ticket to assign. */
   ticketId: Scalars['ID']['input'];
+  /** The Node ID of the user to assign the ticket to. */
   userId: Scalars['ID']['input'];
 };
 
-export type AssignTicketOutput = {
-  __typename?: 'AssignTicketOutput';
+export type AssignTicketPayload = {
+  __typename?: 'AssignTicketPayload';
   ticket?: Maybe<Ticket>;
   userErrors?: Maybe<Array<MutationError>>;
 };
@@ -77,13 +79,14 @@ export type AssignmentChangedEntry = {
 };
 
 export type ChangeTicketPriorityInput = {
+  /** The new priority of the ticket. */
   priority: TicketPriority;
   /** The Node ID of the ticket to change the priority of. */
   ticketId: Scalars['ID']['input'];
 };
 
-export type ChangeTicketPriorityOutput = {
-  __typename?: 'ChangeTicketPriorityOutput';
+export type ChangeTicketPriorityPayload = {
+  __typename?: 'ChangeTicketPriorityPayload';
   ticket?: Maybe<Ticket>;
   userErrors?: Maybe<Array<MutationError>>;
 };
@@ -98,8 +101,8 @@ export type CreateLabelTypeInput = {
   name: Scalars['String']['input'];
 };
 
-export type CreateLabelTypeOutput = {
-  __typename?: 'CreateLabelTypeOutput';
+export type CreateLabelTypePayload = {
+  __typename?: 'CreateLabelTypePayload';
   labelType?: Maybe<LabelType>;
   userErrors?: Maybe<Array<MutationError>>;
 };
@@ -111,8 +114,8 @@ export type CreateNoteInput = {
   ticketId: Scalars['ID']['input'];
 };
 
-export type CreateNoteOutput = {
-  __typename?: 'CreateNoteOutput';
+export type CreateNotePayload = {
+  __typename?: 'CreateNotePayload';
   ticket?: Maybe<Ticket>;
   userErrors?: Maybe<Array<MutationError>>;
 };
@@ -124,8 +127,8 @@ export type CreateTicketInput = {
   title: Scalars['String']['input'];
 };
 
-export type CreateTicketOutput = {
-  __typename?: 'CreateTicketOutput';
+export type CreateTicketPayload = {
+  __typename?: 'CreateTicketPayload';
   ticket?: Maybe<Ticket>;
   userErrors?: Maybe<Array<MutationError>>;
 };
@@ -199,8 +202,8 @@ export type MarkTicketAsDoneInput = {
   ticketId: Scalars['ID']['input'];
 };
 
-export type MarkTicketAsDoneOutput = {
-  __typename?: 'MarkTicketAsDoneOutput';
+export type MarkTicketAsDonePayload = {
+  __typename?: 'MarkTicketAsDonePayload';
   ticket?: Maybe<Ticket>;
   userErrors?: Maybe<Array<MutationError>>;
 };
@@ -210,28 +213,28 @@ export type MarkTicketAsOpenInput = {
   ticketId: Scalars['ID']['input'];
 };
 
-export type MarkTicketAsOpenOutput = {
-  __typename?: 'MarkTicketAsOpenOutput';
+export type MarkTicketAsOpenPayload = {
+  __typename?: 'MarkTicketAsOpenPayload';
   ticket?: Maybe<Ticket>;
   userErrors?: Maybe<Array<MutationError>>;
 };
 
 export type Mutation = {
   __typename?: 'Mutation';
-  addLabels?: Maybe<AddLabelsOutput>;
-  archiveLabelType?: Maybe<ArchiveLabelTypeOutput>;
-  assignTicket?: Maybe<AssignTicketOutput>;
-  changeTicketPriority?: Maybe<ChangeTicketPriorityOutput>;
-  createLabelType?: Maybe<CreateLabelTypeOutput>;
-  createNote?: Maybe<CreateNoteOutput>;
-  createTicket?: Maybe<CreateTicketOutput>;
-  markTicketAsDone?: Maybe<MarkTicketAsDoneOutput>;
-  markTicketAsOpen?: Maybe<MarkTicketAsOpenOutput>;
-  removeLabels?: Maybe<RemoveLabelsOutput>;
-  sendChat?: Maybe<SendChatOutput>;
-  unarchiveLabelType?: Maybe<UnarchiveLabelTypeOutput>;
-  unassignTicket?: Maybe<UnassignTicketOutput>;
-  updateLabelType?: Maybe<UpdateLabelTypeOutput>;
+  addLabels?: Maybe<AddLabelsPayload>;
+  archiveLabelType?: Maybe<ArchiveLabelTypePayload>;
+  assignTicket?: Maybe<AssignTicketPayload>;
+  changeTicketPriority?: Maybe<ChangeTicketPriorityPayload>;
+  createLabelType?: Maybe<CreateLabelTypePayload>;
+  createNote?: Maybe<CreateNotePayload>;
+  createTicket?: Maybe<CreateTicketPayload>;
+  markTicketAsDone?: Maybe<MarkTicketAsDonePayload>;
+  markTicketAsOpen?: Maybe<MarkTicketAsOpenPayload>;
+  removeLabels?: Maybe<RemoveLabelsPayload>;
+  sendChat?: Maybe<SendChatPayload>;
+  unarchiveLabelType?: Maybe<UnarchiveLabelTypePayload>;
+  unassignTicket?: Maybe<UnassignTicketPayload>;
+  updateLabelType?: Maybe<UpdateLabelTypePayload>;
 };
 
 
@@ -405,8 +408,8 @@ export type RemoveLabelsInput = {
   ticketId: Scalars['ID']['input'];
 };
 
-export type RemoveLabelsOutput = {
-  __typename?: 'RemoveLabelsOutput';
+export type RemoveLabelsPayload = {
+  __typename?: 'RemoveLabelsPayload';
   userErrors?: Maybe<Array<MutationError>>;
 };
 
@@ -416,8 +419,8 @@ export type SendChatInput = {
   ticketId: Scalars['ID']['input'];
 };
 
-export type SendChatOutput = {
-  __typename?: 'SendChatOutput';
+export type SendChatPayload = {
+  __typename?: 'SendChatPayload';
   ticket?: Maybe<Ticket>;
   userErrors?: Maybe<Array<MutationError>>;
 };
@@ -530,8 +533,8 @@ export type UnarchiveLabelTypeInput = {
   labelTypeId: Scalars['ID']['input'];
 };
 
-export type UnarchiveLabelTypeOutput = {
-  __typename?: 'UnarchiveLabelTypeOutput';
+export type UnarchiveLabelTypePayload = {
+  __typename?: 'UnarchiveLabelTypePayload';
   labelType?: Maybe<LabelType>;
   userErrors?: Maybe<Array<MutationError>>;
 };
@@ -541,8 +544,8 @@ export type UnassignTicketInput = {
   ticketId: Scalars['ID']['input'];
 };
 
-export type UnassignTicketOutput = {
-  __typename?: 'UnassignTicketOutput';
+export type UnassignTicketPayload = {
+  __typename?: 'UnassignTicketPayload';
   ticket?: Maybe<Ticket>;
   userErrors?: Maybe<Array<MutationError>>;
 };
@@ -553,8 +556,8 @@ export type UpdateLabelTypeInput = {
   name?: InputMaybe<Scalars['String']['input']>;
 };
 
-export type UpdateLabelTypeOutput = {
-  __typename?: 'UpdateLabelTypeOutput';
+export type UpdateLabelTypePayload = {
+  __typename?: 'UpdateLabelTypePayload';
   labelType?: Maybe<LabelType>;
   userErrors?: Maybe<Array<MutationError>>;
 };
@@ -614,14 +617,14 @@ export type AddLabelsMutationVariables = Exact<{
 }>;
 
 
-export type AddLabelsMutation = { __typename?: 'Mutation', addLabels?: { __typename?: 'AddLabelsOutput', labels?: Array<{ __typename?: 'Label', id: string }> | null, userErrors?: Array<{ __typename?: 'MutationError', message: string }> | null } | null };
+export type AddLabelsMutation = { __typename?: 'Mutation', addLabels?: { __typename?: 'AddLabelsPayload', labels?: Array<{ __typename?: 'Label', id: string }> | null, userErrors?: Array<{ __typename?: 'MutationError', message: string }> | null } | null };
 
 export type RemoveLabelsMutationVariables = Exact<{
   input: RemoveLabelsInput;
 }>;
 
 
-export type RemoveLabelsMutation = { __typename?: 'Mutation', removeLabels?: { __typename?: 'RemoveLabelsOutput', userErrors?: Array<{ __typename?: 'MutationError', message: string }> | null } | null };
+export type RemoveLabelsMutation = { __typename?: 'Mutation', removeLabels?: { __typename?: 'RemoveLabelsPayload', userErrors?: Array<{ __typename?: 'MutationError', message: string }> | null } | null };
 
 export type TicketQueryVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -653,49 +656,49 @@ export type AssignTicketMutationVariables = Exact<{
 }>;
 
 
-export type AssignTicketMutation = { __typename?: 'Mutation', assignTicket?: { __typename?: 'AssignTicketOutput', ticket?: { __typename?: 'Ticket', id: string } | null, userErrors?: Array<{ __typename?: 'MutationError', message: string }> | null } | null };
+export type AssignTicketMutation = { __typename?: 'Mutation', assignTicket?: { __typename?: 'AssignTicketPayload', ticket?: { __typename?: 'Ticket', id: string } | null, userErrors?: Array<{ __typename?: 'MutationError', message: string }> | null } | null };
 
 export type ChangeTicketPriorityMutationVariables = Exact<{
   input: ChangeTicketPriorityInput;
 }>;
 
 
-export type ChangeTicketPriorityMutation = { __typename?: 'Mutation', changeTicketPriority?: { __typename?: 'ChangeTicketPriorityOutput', ticket?: { __typename?: 'Ticket', id: string } | null, userErrors?: Array<{ __typename?: 'MutationError', message: string }> | null } | null };
+export type ChangeTicketPriorityMutation = { __typename?: 'Mutation', changeTicketPriority?: { __typename?: 'ChangeTicketPriorityPayload', ticket?: { __typename?: 'Ticket', id: string } | null, userErrors?: Array<{ __typename?: 'MutationError', message: string }> | null } | null };
 
 export type CreateNoteMutationVariables = Exact<{
   input: CreateNoteInput;
 }>;
 
 
-export type CreateNoteMutation = { __typename?: 'Mutation', createNote?: { __typename?: 'CreateNoteOutput', ticket?: { __typename?: 'Ticket', id: string } | null, userErrors?: Array<{ __typename?: 'MutationError', message: string }> | null } | null };
+export type CreateNoteMutation = { __typename?: 'Mutation', createNote?: { __typename?: 'CreateNotePayload', ticket?: { __typename?: 'Ticket', id: string } | null, userErrors?: Array<{ __typename?: 'MutationError', message: string }> | null } | null };
 
 export type MarkTicketAsDoneMutationVariables = Exact<{
   input: MarkTicketAsDoneInput;
 }>;
 
 
-export type MarkTicketAsDoneMutation = { __typename?: 'Mutation', markTicketAsDone?: { __typename?: 'MarkTicketAsDoneOutput', ticket?: { __typename?: 'Ticket', id: string } | null, userErrors?: Array<{ __typename?: 'MutationError', message: string }> | null } | null };
+export type MarkTicketAsDoneMutation = { __typename?: 'Mutation', markTicketAsDone?: { __typename?: 'MarkTicketAsDonePayload', ticket?: { __typename?: 'Ticket', id: string } | null, userErrors?: Array<{ __typename?: 'MutationError', message: string }> | null } | null };
 
 export type MarkTicketAsOpenMutationVariables = Exact<{
   input: MarkTicketAsOpenInput;
 }>;
 
 
-export type MarkTicketAsOpenMutation = { __typename?: 'Mutation', markTicketAsOpen?: { __typename?: 'MarkTicketAsOpenOutput', ticket?: { __typename?: 'Ticket', id: string } | null, userErrors?: Array<{ __typename?: 'MutationError', message: string }> | null } | null };
+export type MarkTicketAsOpenMutation = { __typename?: 'Mutation', markTicketAsOpen?: { __typename?: 'MarkTicketAsOpenPayload', ticket?: { __typename?: 'Ticket', id: string } | null, userErrors?: Array<{ __typename?: 'MutationError', message: string }> | null } | null };
 
 export type SendChatMutationVariables = Exact<{
   input: SendChatInput;
 }>;
 
 
-export type SendChatMutation = { __typename?: 'Mutation', sendChat?: { __typename?: 'SendChatOutput', ticket?: { __typename?: 'Ticket', id: string } | null, userErrors?: Array<{ __typename?: 'MutationError', message: string }> | null } | null };
+export type SendChatMutation = { __typename?: 'Mutation', sendChat?: { __typename?: 'SendChatPayload', ticket?: { __typename?: 'Ticket', id: string } | null, userErrors?: Array<{ __typename?: 'MutationError', message: string }> | null } | null };
 
 export type UnassignTicketMutationVariables = Exact<{
   input: UnassignTicketInput;
 }>;
 
 
-export type UnassignTicketMutation = { __typename?: 'Mutation', unassignTicket?: { __typename?: 'UnassignTicketOutput', ticket?: { __typename?: 'Ticket', id: string } | null, userErrors?: Array<{ __typename?: 'MutationError', message: string }> | null } | null };
+export type UnassignTicketMutation = { __typename?: 'Mutation', unassignTicket?: { __typename?: 'UnassignTicketPayload', ticket?: { __typename?: 'Ticket', id: string } | null, userErrors?: Array<{ __typename?: 'MutationError', message: string }> | null } | null };
 
 export type UserPartsFragment = { __typename?: 'User', id: string, name?: string | null, email: string, image?: string | null };
 

@@ -160,15 +160,21 @@ const typeDefs = /* GraphQL */ `
     ): TicketConnection!
   }
 
+  """
+  Assign a ticket to a user.
+  """
   input AssignTicketInput {
     """
     The Node ID of the ticket to assign.
     """
     ticketId: ID!
+    """
+    The Node ID of the user to assign the ticket to.
+    """
     userId: ID!
   }
 
-  type AssignTicketOutput {
+  type AssignTicketPayload {
     ticket: Ticket
     userErrors: [MutationError!]
   }
@@ -178,10 +184,13 @@ const typeDefs = /* GraphQL */ `
     The Node ID of the ticket to change the priority of.
     """
     ticketId: ID!
+    """
+    The new priority of the ticket.
+    """
     priority: TicketPriority!
   }
 
-  type ChangeTicketPriorityOutput {
+  type ChangeTicketPriorityPayload {
     ticket: Ticket
     userErrors: [MutationError!]
   }
@@ -195,7 +204,7 @@ const typeDefs = /* GraphQL */ `
     rawContent: String!
   }
 
-  type CreateNoteOutput {
+  type CreateNotePayload {
     ticket: Ticket
     userErrors: [MutationError!]
   }
@@ -207,7 +216,7 @@ const typeDefs = /* GraphQL */ `
     priority: TicketPriority
   }
 
-  type CreateTicketOutput {
+  type CreateTicketPayload {
     ticket: Ticket
     userErrors: [MutationError!]
   }
@@ -219,7 +228,7 @@ const typeDefs = /* GraphQL */ `
     ticketId: ID!
   }
 
-  type MarkTicketAsDoneOutput {
+  type MarkTicketAsDonePayload {
     ticket: Ticket
     userErrors: [MutationError!]
   }
@@ -231,7 +240,7 @@ const typeDefs = /* GraphQL */ `
     ticketId: ID!
   }
 
-  type MarkTicketAsOpenOutput {
+  type MarkTicketAsOpenPayload {
     ticket: Ticket
     userErrors: [MutationError!]
   }
@@ -244,7 +253,7 @@ const typeDefs = /* GraphQL */ `
     text: String!
   }
 
-  type SendChatOutput {
+  type SendChatPayload {
     ticket: Ticket
     userErrors: [MutationError!]
   }
@@ -256,22 +265,22 @@ const typeDefs = /* GraphQL */ `
     ticketId: ID!
   }
 
-  type UnassignTicketOutput {
+  type UnassignTicketPayload {
     ticket: Ticket
     userErrors: [MutationError!]
   }
 
   type Mutation {
-    assignTicket(input: AssignTicketInput!): AssignTicketOutput
+    assignTicket(input: AssignTicketInput!): AssignTicketPayload
     changeTicketPriority(
       input: ChangeTicketPriorityInput!
-    ): ChangeTicketPriorityOutput
-    createNote(input: CreateNoteInput!): CreateNoteOutput
-    createTicket(input: CreateTicketInput!): CreateTicketOutput
-    markTicketAsDone(input: MarkTicketAsDoneInput!): MarkTicketAsDoneOutput
-    markTicketAsOpen(input: MarkTicketAsOpenInput!): MarkTicketAsOpenOutput
-    sendChat(input: SendChatInput!): SendChatOutput
-    unassignTicket(input: UnassignTicketInput!): UnassignTicketOutput
+    ): ChangeTicketPriorityPayload
+    createNote(input: CreateNoteInput!): CreateNotePayload
+    createTicket(input: CreateTicketInput!): CreateTicketPayload
+    markTicketAsDone(input: MarkTicketAsDoneInput!): MarkTicketAsDonePayload
+    markTicketAsOpen(input: MarkTicketAsOpenInput!): MarkTicketAsOpenPayload
+    sendChat(input: SendChatInput!): SendChatPayload
+    unassignTicket(input: UnassignTicketInput!): UnassignTicketPayload
   }
 `;
 

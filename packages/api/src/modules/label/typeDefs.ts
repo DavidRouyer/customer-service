@@ -10,7 +10,7 @@ const typeDefs = /* GraphQL */ `
     ticketId: ID!
   }
 
-  type AddLabelsOutput {
+  type AddLabelsPayload {
     labels: [Label!]
     userErrors: [MutationError!]
   }
@@ -20,14 +20,14 @@ const typeDefs = /* GraphQL */ `
     ticketId: ID!
   }
 
-  type RemoveLabelsOutput {
+  type RemoveLabelsPayload {
     userErrors: [MutationError!]
   }
 
   type Mutation {
-    addLabels(input: AddLabelsInput!): AddLabelsOutput
+    addLabels(input: AddLabelsInput!): AddLabelsPayload
 
-    removeLabels(input: RemoveLabelsInput!): RemoveLabelsOutput
+    removeLabels(input: RemoveLabelsInput!): RemoveLabelsPayload
   }
 `;
 
