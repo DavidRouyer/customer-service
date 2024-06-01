@@ -55,6 +55,9 @@ const typeDefs = /* GraphQL */ `
 
   extend type Query {
     myUserInfo: User
+    """
+    Fetches a user given its ID.
+    """
     user(id: ID!): User
     users(first: Int, after: String, last: Int, before: String): UserConnection!
   }

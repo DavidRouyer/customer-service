@@ -43,6 +43,9 @@ const typeDefs = /* GraphQL */ `
   }
 
   extend type Query {
+    """
+    Fetches a label type given its ID.
+    """
     labelType(id: ID!): LabelType
 
     labelTypes(

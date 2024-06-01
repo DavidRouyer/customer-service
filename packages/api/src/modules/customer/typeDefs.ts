@@ -14,6 +14,9 @@ const typeDefs = /* GraphQL */ `
   }
 
   extend type Query {
+    """
+    Fetches a customer given its ID.
+    """
     customer(id: ID!): Customer
   }
 `;

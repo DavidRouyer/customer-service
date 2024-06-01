@@ -150,6 +150,9 @@ const typeDefs = /* GraphQL */ `
   }
 
   extend type Query {
+    """
+    Fetches a ticket given its ID.
+    """
     ticket(id: ID!): Ticket
     tickets(
       filters: TicketsFilter
