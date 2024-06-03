@@ -21,28 +21,38 @@ export type Scalars = {
   DateTime: { input: any; output: any; }
 };
 
+/** Input type of AddLabels. */
 export type AddLabelsInput = {
+  /** The IDs of the label types to add. */
   labelTypeIds: Array<Scalars['ID']['input']>;
+  /** The Node ID of the ticket to adds labels to. */
   ticketId: Scalars['ID']['input'];
 };
 
+/** Return type of AddLabels. */
 export type AddLabelsPayload = {
   __typename?: 'AddLabelsPayload';
   labels?: Maybe<Array<Label>>;
+  /** Errors when adding labels to the ticket. */
   userErrors?: Maybe<Array<MutationError>>;
 };
 
+/** Input type of ArchiveLabelType. */
 export type ArchiveLabelTypeInput = {
+  /** The Node ID of the label type to archive. */
   labelTypeId: Scalars['ID']['input'];
 };
 
+/** Return type of ArchiveLabelType. */
 export type ArchiveLabelTypePayload = {
   __typename?: 'ArchiveLabelTypePayload';
+  /** The archived label type. */
   labelType?: Maybe<LabelType>;
+  /** Errors when archiving the label type. */
   userErrors?: Maybe<Array<MutationError>>;
 };
 
-/** Assign a ticket to a user. */
+/** Input type of AssignTicket. */
 export type AssignTicketInput = {
   /** The Node ID of the ticket to assign. */
   ticketId: Scalars['ID']['input'];
@@ -50,9 +60,12 @@ export type AssignTicketInput = {
   userId: Scalars['ID']['input'];
 };
 
+/** Return type of AssignTicket. */
 export type AssignTicketPayload = {
   __typename?: 'AssignTicketPayload';
+  /** The assigned ticket. */
   ticket?: Maybe<Ticket>;
+  /** Errors when assigning the ticket. */
   userErrors?: Maybe<Array<MutationError>>;
 };
 
@@ -62,6 +75,7 @@ export type AssignmentChangedEntry = {
   oldAssignedTo?: Maybe<User>;
 };
 
+/** Input type of ChangeTicketPriority. */
 export type ChangeTicketPriorityInput = {
   /** The new priority of the ticket. */
   priority: TicketPriority;
@@ -69,9 +83,12 @@ export type ChangeTicketPriorityInput = {
   ticketId: Scalars['ID']['input'];
 };
 
+/** Input type of ChangeTicketPriority. */
 export type ChangeTicketPriorityPayload = {
   __typename?: 'ChangeTicketPriorityPayload';
+  /** The ticket with the new priority. */
   ticket?: Maybe<Ticket>;
+  /** Errors when changing the priority of the ticket. */
   userErrors?: Maybe<Array<MutationError>>;
 };
 
@@ -80,40 +97,57 @@ export type ChatEntry = {
   text: Scalars['String']['output'];
 };
 
+/** Input type of CreateLabelType. */
 export type CreateLabelTypeInput = {
   icon?: InputMaybe<Scalars['String']['input']>;
   name: Scalars['String']['input'];
 };
 
+/** Return type of CreateLabelType. */
 export type CreateLabelTypePayload = {
   __typename?: 'CreateLabelTypePayload';
+  /** The new label type. */
   labelType?: Maybe<LabelType>;
+  /** Errors when creating the label type. */
   userErrors?: Maybe<Array<MutationError>>;
 };
 
+/** Input type of CreateNote. */
 export type CreateNoteInput = {
   rawContent: Scalars['String']['input'];
+  /** The content of the note. */
   text: Scalars['String']['input'];
   /** The Node ID of the ticket to which the note belongs. */
   ticketId: Scalars['ID']['input'];
 };
 
+/** Return type of CreateNote. */
 export type CreateNotePayload = {
   __typename?: 'CreateNotePayload';
+  /** The ticket with the new note. */
   ticket?: Maybe<Ticket>;
+  /** Errors when creating the note. */
   userErrors?: Maybe<Array<MutationError>>;
 };
 
+/** Input type of CreateTicket. */
 export type CreateTicketInput = {
+  /** The Node ID of the customer who is affected to the ticket. */
   customerId: Scalars['ID']['input'];
+  /** The IDs of the labels to add to the ticket. */
   labelIds?: InputMaybe<Array<Scalars['ID']['input']>>;
+  /** The priority of the ticket. */
   priority?: InputMaybe<TicketPriority>;
+  /** The title of the ticket. */
   title: Scalars['String']['input'];
 };
 
+/** Return type of CreateTicket. */
 export type CreateTicketPayload = {
   __typename?: 'CreateTicketPayload';
+  /** The new ticket. */
   ticket?: Maybe<Ticket>;
+  /** Errors when creating the ticket. */
   userErrors?: Maybe<Array<MutationError>>;
 };
 
@@ -166,9 +200,11 @@ export type LabelType = Node & {
   createdAt: Scalars['DateTime']['output'];
   /** The user who created the label type. */
   createdBy: User;
+  /** The icon of the label type. */
   icon?: Maybe<Scalars['String']['output']>;
   /** The Node ID of the LabelType object. */
   id: Scalars['ID']['output'];
+  /** The name of the label type. */
   name: Scalars['String']['output'];
   /** Identifies the date and time when the label type was last updated. */
   updatedAt?: Maybe<Scalars['DateTime']['output']>;
@@ -194,6 +230,7 @@ export type LabelTypeEdge = {
   node: LabelType;
 };
 
+/** Ways in which to filter lists of label types. */
 export type LabelTypeFilters = {
   isArchived?: InputMaybe<Scalars['Boolean']['input']>;
 };
@@ -204,43 +241,65 @@ export type LabelsChangedEntry = {
   oldLabels: Array<Label>;
 };
 
+/** Input type of MarkTicketAsDone. */
 export type MarkTicketAsDoneInput = {
   /** The Node ID of the ticket to mark as done. */
   ticketId: Scalars['ID']['input'];
 };
 
+/** Return type of MarkTicketAsDone. */
 export type MarkTicketAsDonePayload = {
   __typename?: 'MarkTicketAsDonePayload';
+  /** The ticket with the new status. */
   ticket?: Maybe<Ticket>;
+  /** Errors when marking the ticket as done. */
   userErrors?: Maybe<Array<MutationError>>;
 };
 
+/** Input type of MarkTicketAsOpen. */
 export type MarkTicketAsOpenInput = {
   /** The Node ID of the ticket to mark as open. */
   ticketId: Scalars['ID']['input'];
 };
 
+/** Return type of MarkTicketAsOpen. */
 export type MarkTicketAsOpenPayload = {
   __typename?: 'MarkTicketAsOpenPayload';
+  /** The ticket with the new status. */
   ticket?: Maybe<Ticket>;
+  /** Errors when marking the ticket as open. */
   userErrors?: Maybe<Array<MutationError>>;
 };
 
 export type Mutation = {
   __typename?: 'Mutation';
+  /** Add labels to a ticket. */
   addLabels?: Maybe<AddLabelsPayload>;
+  /** Archive a label type. */
   archiveLabelType?: Maybe<ArchiveLabelTypePayload>;
+  /** Assign a ticket to a user. */
   assignTicket?: Maybe<AssignTicketPayload>;
+  /** Change the priority of a ticket. */
   changeTicketPriority?: Maybe<ChangeTicketPriorityPayload>;
+  /** Create a label type. */
   createLabelType?: Maybe<CreateLabelTypePayload>;
+  /** Create a note for a ticket. */
   createNote?: Maybe<CreateNotePayload>;
+  /** Create a ticket. */
   createTicket?: Maybe<CreateTicketPayload>;
+  /** Mark a ticket as done. */
   markTicketAsDone?: Maybe<MarkTicketAsDonePayload>;
+  /** Mark a ticket as open. */
   markTicketAsOpen?: Maybe<MarkTicketAsOpenPayload>;
+  /** Remove labels to a ticket. */
   removeLabels?: Maybe<RemoveLabelsPayload>;
+  /** Create a chat for a ticket. */
   sendChat?: Maybe<SendChatPayload>;
+  /** Unarchive a label type. */
   unarchiveLabelType?: Maybe<UnarchiveLabelTypePayload>;
+  /** Unassign a ticket. */
   unassignTicket?: Maybe<UnassignTicketPayload>;
+  /** Update a label type. */
   updateLabelType?: Maybe<UpdateLabelTypePayload>;
 };
 
@@ -314,10 +373,14 @@ export type MutationUpdateLabelTypeArgs = {
   input: UpdateLabelTypeInput;
 };
 
+/** Represents an error in a mutation. */
 export type MutationError = {
   __typename?: 'MutationError';
+  /** The error code. */
   code: Scalars['String']['output'];
+  /** The error message. */
   message: Scalars['String']['output'];
+  /** The path to the input field that caused the error. */
   path: Array<Scalars['String']['output']>;
 };
 
@@ -418,25 +481,35 @@ export type QueryUsersArgs = {
   last?: InputMaybe<Scalars['Int']['input']>;
 };
 
+/** Input type of RemoveLabels. */
 export type RemoveLabelsInput = {
+  /** The IDs of the labels to remove. */
   labelIds: Array<Scalars['ID']['input']>;
+  /** The Node ID of the ticket to remove labels to. */
   ticketId: Scalars['ID']['input'];
 };
 
+/** Return type of RemoveLabels. */
 export type RemoveLabelsPayload = {
   __typename?: 'RemoveLabelsPayload';
+  /** Errors when removing labels to the ticket. */
   userErrors?: Maybe<Array<MutationError>>;
 };
 
+/** Input type of SendChat. */
 export type SendChatInput = {
+  /** The content of the chat. */
   text: Scalars['String']['input'];
   /** The Node ID of the ticket to which the chat belongs. */
   ticketId: Scalars['ID']['input'];
 };
 
+/** Return type of SendChat. */
 export type SendChatPayload = {
   __typename?: 'SendChatPayload';
+  /** The ticket with the new chat. */
   ticket?: Maybe<Ticket>;
+  /** Errors when creating the chat. */
   userErrors?: Maybe<Array<MutationError>>;
 };
 
@@ -449,21 +522,31 @@ export type StatusChangedEntry = {
 /** A ticket is a place to discuss ideas, enhancements, tasks and bugs. */
 export type Ticket = Node & {
   __typename?: 'Ticket';
+  /** The user to whom the ticket is assigned. */
   assignedTo?: Maybe<User>;
   /** Identifies the date and time when the ticket was created. */
   createdAt: Scalars['DateTime']['output'];
   /** The user who created the ticket. */
   createdBy: User;
+  /** The customer who is affected to the ticket. */
   customer: Customer;
   /** The Node ID of the Ticket object. */
   id: Scalars['ID']['output'];
+  /** The labels of the ticket. */
   labels: Array<Label>;
+  /** The priority of the ticket. */
   priority: TicketPriority;
+  /** The status of the ticket. */
   status: TicketStatus;
+  /** The date and time when the ticket status was last changed. */
   statusChangedAt?: Maybe<Scalars['DateTime']['output']>;
+  /** The user who last changed the ticket status. */
   statusChangedBy?: Maybe<User>;
+  /** The status detail of the ticket. */
   statusDetail?: Maybe<TicketStatusDetail>;
+  /** The timeline entries of the ticket. */
   timelineEntries: TimelineEntryConnection;
+  /** The title of the ticket. */
   title?: Maybe<Scalars['String']['output']>;
   /** Identifies the date and time when the ticket was last updated. */
   updatedAt?: Maybe<Scalars['DateTime']['output']>;
@@ -498,12 +581,14 @@ export type TicketEdge = {
   node: Ticket;
 };
 
+/** Ways in which to filter lists of tickets. */
 export type TicketFilters = {
   customerIds?: InputMaybe<Array<Scalars['ID']['input']>>;
   isAssigned?: InputMaybe<Scalars['Boolean']['input']>;
   statuses?: InputMaybe<Array<TicketStatus>>;
 };
 
+/** Possible priorities a ticket may have. */
 export enum TicketPriority {
   Critical = 'CRITICAL',
   High = 'HIGH',
@@ -511,11 +596,13 @@ export enum TicketPriority {
   Medium = 'MEDIUM'
 }
 
+/** Possible statuses a ticket may have. */
 export enum TicketStatus {
   Done = 'DONE',
   Open = 'OPEN'
 }
 
+/** Possible status details a ticket may have. */
 export enum TicketStatusDetail {
   Created = 'CREATED',
   NewReply = 'NEW_REPLY',
@@ -525,13 +612,19 @@ export enum TicketStatusDetail {
 /** An entry of the timeline. */
 export type TimelineEntry = Node & {
   __typename?: 'TimelineEntry';
+  /** Identifies the date and time when the timeline entry was created. */
   createdAt: Scalars['DateTime']['output'];
+  /** The customer who is affected to the timeline entry. */
   customer: Customer;
+  /** The customer who created the timeline entry. */
   customerCreatedBy?: Maybe<Customer>;
+  /** The entry content. */
   entry: Entry;
   /** The Node ID of the TimelineEntry object. */
   id: Scalars['ID']['output'];
+  /** The Node ID of the ticket to which the timeline entry belongs. */
   ticketId: Scalars['ID']['output'];
+  /** The user who created the timeline entry. */
   userCreatedBy?: Maybe<User>;
 };
 
@@ -553,36 +646,49 @@ export type TimelineEntryEdge = {
   node: TimelineEntry;
 };
 
+/** Input type of UnarchiveLabelType. */
 export type UnarchiveLabelTypeInput = {
+  /** The Node ID of the label type to unarchive. */
   labelTypeId: Scalars['ID']['input'];
 };
 
+/** Return type of UnarchiveLabelType. */
 export type UnarchiveLabelTypePayload = {
   __typename?: 'UnarchiveLabelTypePayload';
+  /** The unarchived label type. */
   labelType?: Maybe<LabelType>;
+  /** Errors when unarchiving the label type. */
   userErrors?: Maybe<Array<MutationError>>;
 };
 
+/** Input type of UnassignTicket. */
 export type UnassignTicketInput = {
   /** The Node ID of the ticket to unassign. */
   ticketId: Scalars['ID']['input'];
 };
 
+/** Return type of UnassignTicket. */
 export type UnassignTicketPayload = {
   __typename?: 'UnassignTicketPayload';
+  /** The unassigned ticket. */
   ticket?: Maybe<Ticket>;
+  /** Errors when unassigning the ticket. */
   userErrors?: Maybe<Array<MutationError>>;
 };
 
+/** Input type of UpdateLabelType. */
 export type UpdateLabelTypeInput = {
   icon?: InputMaybe<Scalars['String']['input']>;
   id: Scalars['ID']['input'];
   name?: InputMaybe<Scalars['String']['input']>;
 };
 
+/** Return type of UpdateLabelType. */
 export type UpdateLabelTypePayload = {
   __typename?: 'UpdateLabelTypePayload';
+  /** The updated label type. */
   labelType?: Maybe<LabelType>;
+  /** Errors when updating the label type. */
   userErrors?: Maybe<Array<MutationError>>;
 };
 

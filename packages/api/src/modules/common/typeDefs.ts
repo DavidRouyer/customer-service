@@ -40,10 +40,22 @@ const typeDefs = /* GraphQL */ `
     startCursor: String
   }
 
+  """
+  Represents an error in a mutation.
+  """
   type MutationError {
-    message: String!
+    """
+    The error code.
+    """
     code: String!
+    """
+    The path to the input field that caused the error.
+    """
     path: [String!]!
+    """
+    The error message.
+    """
+    message: String!
   }
 `;
 

@@ -1,15 +1,24 @@
 const typeDefs = /* GraphQL */ `
+  """
+  Possible statuses a ticket may have.
+  """
   enum TicketStatus {
     OPEN
     DONE
   }
 
+  """
+  Possible status details a ticket may have.
+  """
   enum TicketStatusDetail {
     CREATED
     NEW_REPLY
     REPLIED
   }
 
+  """
+  Possible priorities a ticket may have.
+  """
   enum TicketPriority {
     CRITICAL
     HIGH
@@ -25,20 +34,50 @@ const typeDefs = /* GraphQL */ `
     The Node ID of the Ticket object.
     """
     id: ID!
+    """
+    The title of the ticket.
+    """
     title: String
+    """
+    The status of the ticket.
+    """
     status: TicketStatus!
+    """
+    The status detail of the ticket.
+    """
     statusDetail: TicketStatusDetail
+    """
+    The date and time when the ticket status was last changed.
+    """
     statusChangedAt: DateTime
+    """
+    The user who last changed the ticket status.
+    """
     statusChangedBy: User
+    """
+    The labels of the ticket.
+    """
     labels: [Label!]!
+    """
+    The priority of the ticket.
+    """
     priority: TicketPriority!
+    """
+    The timeline entries of the ticket.
+    """
     timelineEntries(
       first: Int
       after: String
       last: Int
       before: String
     ): TimelineEntryConnection!
+    """
+    The user to whom the ticket is assigned.
+    """
     assignedTo: User
+    """
+    The customer who is affected to the ticket.
+    """
     customer: Customer!
     """
     Identifies the date and time when the ticket was created.
@@ -131,11 +170,29 @@ const typeDefs = /* GraphQL */ `
     The Node ID of the TimelineEntry object.
     """
     id: ID!
+    """
+    The customer who is affected to the timeline entry.
+    """
     customer: Customer!
+    """
+    The entry content.
+    """
     entry: Entry!
+    """
+    The Node ID of the ticket to which the timeline entry belongs.
+    """
     ticketId: ID!
+    """
+    Identifies the date and time when the timeline entry was created.
+    """
     createdAt: DateTime!
+    """
+    The customer who created the timeline entry.
+    """
     customerCreatedBy: Customer
+    """
+    The user who created the timeline entry.
+    """
     userCreatedBy: User
   }
 
@@ -167,6 +224,9 @@ const typeDefs = /* GraphQL */ `
     node: TimelineEntry!
   }
 
+  """
+  Ways in which to filter lists of tickets.
+  """
   input TicketFilters {
     statuses: [TicketStatus!]
     customerIds: [ID!]
@@ -192,7 +252,7 @@ const typeDefs = /* GraphQL */ `
   }
 
   """
-  Assign a ticket to a user.
+  Input type of AssignTicket.
   """
   input AssignTicketInput {
     """
@@ -205,11 +265,23 @@ const typeDefs = /* GraphQL */ `
     userId: ID!
   }
 
+  """
+  Return type of AssignTicket.
+  """
   type AssignTicketPayload {
+    """
+    The assigned ticket.
+    """
     ticket: Ticket
+    """
+    Errors when assigning the ticket.
+    """
     userErrors: [MutationError!]
   }
 
+  """
+  Input type of ChangeTicketPriority.
+  """
   input ChangeTicketPriorityInput {
     """
     The Node ID of the ticket to change the priority of.
@@ -221,37 +293,88 @@ const typeDefs = /* GraphQL */ `
     priority: TicketPriority!
   }
 
+  """
+  Input type of ChangeTicketPriority.
+  """
   type ChangeTicketPriorityPayload {
+    """
+    The ticket with the new priority.
+    """
     ticket: Ticket
+    """
+    Errors when changing the priority of the ticket.
+    """
     userErrors: [MutationError!]
   }
 
+  """
+  Input type of CreateNote.
+  """
   input CreateNoteInput {
     """
     The Node ID of the ticket to which the note belongs.
     """
     ticketId: ID!
+    """
+    The content of the note.
+    """
     text: String!
     rawContent: String!
   }
 
+  """
+  Return type of CreateNote.
+  """
   type CreateNotePayload {
+    """
+    The ticket with the new note.
+    """
     ticket: Ticket
+    """
+    Errors when creating the note.
+    """
     userErrors: [MutationError!]
   }
 
+  """
+  Input type of CreateTicket.
+  """
   input CreateTicketInput {
+    """
+    The title of the ticket.
+    """
     title: String!
+    """
+    The Node ID of the customer who is affected to the ticket.
+    """
     customerId: ID!
+    """
+    The IDs of the labels to add to the ticket.
+    """
     labelIds: [ID!]
+    """
+    The priority of the ticket.
+    """
     priority: TicketPriority
   }
 
+  """
+  Return type of CreateTicket.
+  """
   type CreateTicketPayload {
+    """
+    The new ticket.
+    """
     ticket: Ticket
+    """
+    Errors when creating the ticket.
+    """
     userErrors: [MutationError!]
   }
 
+  """
+  Input type of MarkTicketAsDone.
+  """
   input MarkTicketAsDoneInput {
     """
     The Node ID of the ticket to mark as done.
@@ -259,11 +382,23 @@ const typeDefs = /* GraphQL */ `
     ticketId: ID!
   }
 
+  """
+  Return type of MarkTicketAsDone.
+  """
   type MarkTicketAsDonePayload {
+    """
+    The ticket with the new status.
+    """
     ticket: Ticket
+    """
+    Errors when marking the ticket as done.
+    """
     userErrors: [MutationError!]
   }
 
+  """
+  Input type of MarkTicketAsOpen.
+  """
   input MarkTicketAsOpenInput {
     """
     The Node ID of the ticket to mark as open.
@@ -271,24 +406,51 @@ const typeDefs = /* GraphQL */ `
     ticketId: ID!
   }
 
+  """
+  Return type of MarkTicketAsOpen.
+  """
   type MarkTicketAsOpenPayload {
+    """
+    The ticket with the new status.
+    """
     ticket: Ticket
+    """
+    Errors when marking the ticket as open.
+    """
     userErrors: [MutationError!]
   }
 
+  """
+  Input type of SendChat.
+  """
   input SendChatInput {
     """
     The Node ID of the ticket to which the chat belongs.
     """
     ticketId: ID!
+    """
+    The content of the chat.
+    """
     text: String!
   }
 
+  """
+  Return type of SendChat.
+  """
   type SendChatPayload {
+    """
+    The ticket with the new chat.
+    """
     ticket: Ticket
+    """
+    Errors when creating the chat.
+    """
     userErrors: [MutationError!]
   }
 
+  """
+  Input type of UnassignTicket.
+  """
   input UnassignTicketInput {
     """
     The Node ID of the ticket to unassign.
@@ -296,22 +458,100 @@ const typeDefs = /* GraphQL */ `
     ticketId: ID!
   }
 
+  """
+  Return type of UnassignTicket.
+  """
   type UnassignTicketPayload {
+    """
+    The unassigned ticket.
+    """
     ticket: Ticket
+    """
+    Errors when unassigning the ticket.
+    """
     userErrors: [MutationError!]
   }
 
   extend type Mutation {
-    assignTicket(input: AssignTicketInput!): AssignTicketPayload
+    """
+    Assign a ticket to a user.
+    """
+    assignTicket(
+      """
+      Parameters for AssignTicket.
+      """
+      input: AssignTicketInput!
+    ): AssignTicketPayload
+
+    """
+    Change the priority of a ticket.
+    """
     changeTicketPriority(
+      """
+      Parameters for ChangeTicketPriority.
+      """
       input: ChangeTicketPriorityInput!
     ): ChangeTicketPriorityPayload
-    createNote(input: CreateNoteInput!): CreateNotePayload
-    createTicket(input: CreateTicketInput!): CreateTicketPayload
-    markTicketAsDone(input: MarkTicketAsDoneInput!): MarkTicketAsDonePayload
-    markTicketAsOpen(input: MarkTicketAsOpenInput!): MarkTicketAsOpenPayload
-    sendChat(input: SendChatInput!): SendChatPayload
-    unassignTicket(input: UnassignTicketInput!): UnassignTicketPayload
+
+    """
+    Create a note for a ticket.
+    """
+    createNote(
+      """
+      Parameters for CreateNote.
+      """
+      input: CreateNoteInput!
+    ): CreateNotePayload
+
+    """
+    Create a ticket.
+    """
+    createTicket(
+      """
+      Parameters for CreateTicket.
+      """
+      input: CreateTicketInput!
+    ): CreateTicketPayload
+
+    """
+    Mark a ticket as done.
+    """
+    markTicketAsDone(
+      """
+      Parameters for MarkTicketAsDone.
+      """
+      input: MarkTicketAsDoneInput!
+    ): MarkTicketAsDonePayload
+
+    """
+    Mark a ticket as open.
+    """
+    markTicketAsOpen(
+      """
+      Parameters for MarkTicketAsOpen.
+      """
+      input: MarkTicketAsOpenInput!
+    ): MarkTicketAsOpenPayload
+
+    """
+    Create a chat for a ticket.
+    """
+    sendChat(
+      """
+      Parameters for SendChat.
+      """
+      input: SendChatInput!
+    ): SendChatPayload
+
+    """
+    Unassign a ticket.
+    """
+    unassignTicket(
+      """
+      Parameters for UnassignTicket.
+      """
+      input: UnassignTicketInput!
+    ): UnassignTicketPayload
   }
 `;
 
