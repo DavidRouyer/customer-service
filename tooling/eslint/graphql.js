@@ -30,7 +30,7 @@ export default [
         'error',
         {
           exceptions: {
-            suffixes: ['Connection', 'Edge', 'PageInfo', 'Payload'],
+            suffixes: ['Connection', 'Edge', 'PageInfo', 'Payload', 'Error'],
           },
         },
       ],
