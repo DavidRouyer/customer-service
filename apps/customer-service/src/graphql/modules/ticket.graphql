@@ -73,7 +73,7 @@ query ticketTimeline($ticketId: ID!) {
 }
 
 query tickets(
-  $filters: TicketsFilter
+  $filters: TicketFilters
   $first: Int
   $after: String
   $last: Int

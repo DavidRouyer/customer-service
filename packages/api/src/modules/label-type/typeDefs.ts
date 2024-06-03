@@ -1,12 +1,33 @@
 const typeDefs = /* GraphQL */ `
+  """
+  A label type for categorizing labels.
+  """
   type LabelType implements Node {
+    """
+    The Node ID of the LabelType object.
+    """
     id: ID!
     name: String!
     icon: String
+    """
+    Identifies the date and time when the label type was archived.
+    """
     archivedAt: DateTime
+    """
+    Identifies the date and time when the label type was archived.
+    """
     createdAt: DateTime!
+    """
+    The user who created the label type.
+    """
     createdBy: User!
+    """
+    Identifies the date and time when the label type was last updated.
+    """
     updatedAt: DateTime
+    """
+    The user who last updated the label type.
+    """
     updatedBy: User
   }
 
@@ -38,7 +59,7 @@ const typeDefs = /* GraphQL */ `
     node: LabelType!
   }
 
-  input LabelTypesFilter {
+  input LabelTypeFilters {
     isArchived: Boolean
   }
 
@@ -52,7 +73,7 @@ const typeDefs = /* GraphQL */ `
     Fetches a list of label types.
     """
     labelTypes(
-      filters: LabelTypesFilter
+      filters: LabelTypeFilters
       first: Int
       after: String
       last: Int

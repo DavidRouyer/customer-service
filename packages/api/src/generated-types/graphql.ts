@@ -117,39 +117,62 @@ export type CreateTicketPayload = {
   userErrors?: Maybe<Array<MutationError>>;
 };
 
+/** A customer is a person that creates tickets. */
 export type Customer = Node & {
   __typename?: 'Customer';
+  /** A URL pointing to the customer's avatar. */
   avatarUrl?: Maybe<Scalars['String']['output']>;
+  /** Identifies the date and time when the customer was created. */
   createdAt: Scalars['DateTime']['output'];
+  /** The user who created the customer. */
   createdBy: User;
+  /** The email of the customer. */
   email?: Maybe<Scalars['String']['output']>;
+  /** The Node ID of the Customer object. */
   id: Scalars['ID']['output'];
+  /** The customer's preferred language. */
   language?: Maybe<Scalars['String']['output']>;
+  /** The full name of the customer. */
   name?: Maybe<Scalars['String']['output']>;
+  /** The phone number of the customer. */
   phone?: Maybe<Scalars['String']['output']>;
+  /** The customer's timezone. */
   timezone?: Maybe<Scalars['String']['output']>;
+  /** Identifies the date and time when the customer was last updated. */
   updatedAt?: Maybe<Scalars['DateTime']['output']>;
+  /** The user who last updated the customer. */
   updatedBy?: Maybe<User>;
 };
 
 export type Entry = AssignmentChangedEntry | ChatEntry | LabelsChangedEntry | NoteEntry | PriorityChangedEntry | StatusChangedEntry;
 
+/** A label for categorizing tickets. */
 export type Label = Node & {
   __typename?: 'Label';
+  /** Identifies the date and time when the label was archived. */
   archivedAt?: Maybe<Scalars['DateTime']['output']>;
+  /** The Node ID of the Label object. */
   id: Scalars['ID']['output'];
+  /** The label type of the label. */
   labelType: LabelType;
 };
 
+/** A label type for categorizing labels. */
 export type LabelType = Node & {
   __typename?: 'LabelType';
+  /** Identifies the date and time when the label type was archived. */
   archivedAt?: Maybe<Scalars['DateTime']['output']>;
+  /** Identifies the date and time when the label type was archived. */
   createdAt: Scalars['DateTime']['output'];
+  /** The user who created the label type. */
   createdBy: User;
   icon?: Maybe<Scalars['String']['output']>;
+  /** The Node ID of the LabelType object. */
   id: Scalars['ID']['output'];
   name: Scalars['String']['output'];
+  /** Identifies the date and time when the label type was last updated. */
   updatedAt?: Maybe<Scalars['DateTime']['output']>;
+  /** The user who last updated the label type. */
   updatedBy?: Maybe<User>;
 };
 
@@ -171,7 +194,7 @@ export type LabelTypeEdge = {
   node: LabelType;
 };
 
-export type LabelTypesFilter = {
+export type LabelTypeFilters = {
   isArchived?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
@@ -363,7 +386,7 @@ export type QueryLabelTypeArgs = {
 export type QueryLabelTypesArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
-  filters?: InputMaybe<LabelTypesFilter>;
+  filters?: InputMaybe<LabelTypeFilters>;
   first?: InputMaybe<Scalars['Int']['input']>;
   last?: InputMaybe<Scalars['Int']['input']>;
 };
@@ -377,7 +400,7 @@ export type QueryTicketArgs = {
 export type QueryTicketsArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
-  filters?: InputMaybe<TicketsFilter>;
+  filters?: InputMaybe<TicketFilters>;
   first?: InputMaybe<Scalars['Int']['input']>;
   last?: InputMaybe<Scalars['Int']['input']>;
 };
@@ -423,12 +446,16 @@ export type StatusChangedEntry = {
   oldStatus?: Maybe<TicketStatus>;
 };
 
+/** A ticket is a place to discuss ideas, enhancements, tasks and bugs. */
 export type Ticket = Node & {
   __typename?: 'Ticket';
   assignedTo?: Maybe<User>;
+  /** Identifies the date and time when the ticket was created. */
   createdAt: Scalars['DateTime']['output'];
+  /** The user who created the ticket. */
   createdBy: User;
   customer: Customer;
+  /** The Node ID of the Ticket object. */
   id: Scalars['ID']['output'];
   labels: Array<Label>;
   priority: TicketPriority;
@@ -438,11 +465,14 @@ export type Ticket = Node & {
   statusDetail?: Maybe<TicketStatusDetail>;
   timelineEntries: TimelineEntryConnection;
   title?: Maybe<Scalars['String']['output']>;
+  /** Identifies the date and time when the ticket was last updated. */
   updatedAt?: Maybe<Scalars['DateTime']['output']>;
+  /** The user who last updated the ticket. */
   updatedBy?: Maybe<User>;
 };
 
 
+/** A ticket is a place to discuss ideas, enhancements, tasks and bugs. */
 export type TicketTimelineEntriesArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
@@ -468,6 +498,12 @@ export type TicketEdge = {
   node: Ticket;
 };
 
+export type TicketFilters = {
+  customerIds?: InputMaybe<Array<Scalars['ID']['input']>>;
+  isAssigned?: InputMaybe<Scalars['Boolean']['input']>;
+  statuses?: InputMaybe<Array<TicketStatus>>;
+};
+
 export enum TicketPriority {
   Critical = 'CRITICAL',
   High = 'HIGH',
@@ -486,18 +522,14 @@ export enum TicketStatusDetail {
   Replied = 'REPLIED'
 }
 
-export type TicketsFilter = {
-  customerIds?: InputMaybe<Array<Scalars['ID']['input']>>;
-  isAssigned?: InputMaybe<Scalars['Boolean']['input']>;
-  statuses?: InputMaybe<Array<TicketStatus>>;
-};
-
+/** An entry of the timeline. */
 export type TimelineEntry = Node & {
   __typename?: 'TimelineEntry';
   createdAt: Scalars['DateTime']['output'];
   customer: Customer;
   customerCreatedBy?: Maybe<Customer>;
   entry: Entry;
+  /** The Node ID of the TimelineEntry object. */
   id: Scalars['ID']['output'];
   ticketId: Scalars['ID']['output'];
   userCreatedBy?: Maybe<User>;
@@ -692,7 +724,7 @@ export type ResolversTypes = {
   LabelType: ResolverTypeWrapper<LabelType>;
   LabelTypeConnection: ResolverTypeWrapper<LabelTypeConnection>;
   LabelTypeEdge: ResolverTypeWrapper<LabelTypeEdge>;
-  LabelTypesFilter: LabelTypesFilter;
+  LabelTypeFilters: LabelTypeFilters;
   LabelsChangedEntry: ResolverTypeWrapper<LabelsChangedEntry>;
   MarkTicketAsDoneInput: MarkTicketAsDoneInput;
   MarkTicketAsDonePayload: ResolverTypeWrapper<MarkTicketAsDonePayload>;
@@ -714,10 +746,10 @@ export type ResolversTypes = {
   Ticket: ResolverTypeWrapper<Ticket>;
   TicketConnection: ResolverTypeWrapper<TicketConnection>;
   TicketEdge: ResolverTypeWrapper<TicketEdge>;
+  TicketFilters: TicketFilters;
   TicketPriority: TicketPriority;
   TicketStatus: TicketStatus;
   TicketStatusDetail: TicketStatusDetail;
-  TicketsFilter: TicketsFilter;
   TimelineEntry: ResolverTypeWrapper<Omit<TimelineEntry, 'entry'> & { entry: ResolversTypes['Entry'] }>;
   TimelineEntryConnection: ResolverTypeWrapper<TimelineEntryConnection>;
   TimelineEntryEdge: ResolverTypeWrapper<TimelineEntryEdge>;
@@ -760,7 +792,7 @@ export type ResolversParentTypes = {
   LabelType: LabelType;
   LabelTypeConnection: LabelTypeConnection;
   LabelTypeEdge: LabelTypeEdge;
-  LabelTypesFilter: LabelTypesFilter;
+  LabelTypeFilters: LabelTypeFilters;
   LabelsChangedEntry: LabelsChangedEntry;
   MarkTicketAsDoneInput: MarkTicketAsDoneInput;
   MarkTicketAsDonePayload: MarkTicketAsDonePayload;
@@ -782,7 +814,7 @@ export type ResolversParentTypes = {
   Ticket: Ticket;
   TicketConnection: TicketConnection;
   TicketEdge: TicketEdge;
-  TicketsFilter: TicketsFilter;
+  TicketFilters: TicketFilters;
   TimelineEntry: Omit<TimelineEntry, 'entry'> & { entry: ResolversParentTypes['Entry'] };
   TimelineEntryConnection: TimelineEntryConnection;
   TimelineEntryEdge: TimelineEntryEdge;

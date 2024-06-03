@@ -17,7 +17,13 @@ const typeDefs = /* GraphQL */ `
     LOW
   }
 
+  """
+  A ticket is a place to discuss ideas, enhancements, tasks and bugs.
+  """
   type Ticket implements Node {
+    """
+    The Node ID of the Ticket object.
+    """
     id: ID!
     title: String
     status: TicketStatus!
@@ -34,9 +40,21 @@ const typeDefs = /* GraphQL */ `
     ): TimelineEntryConnection!
     assignedTo: User
     customer: Customer!
+    """
+    Identifies the date and time when the ticket was created.
+    """
     createdAt: DateTime!
+    """
+    The user who created the ticket.
+    """
     createdBy: User!
+    """
+    Identifies the date and time when the ticket was last updated.
+    """
     updatedAt: DateTime
+    """
+    The user who last updated the ticket.
+    """
     updatedBy: User
   }
 
@@ -105,7 +123,13 @@ const typeDefs = /* GraphQL */ `
     | PriorityChangedEntry
     | StatusChangedEntry
 
+  """
+  An entry of the timeline.
+  """
   type TimelineEntry implements Node {
+    """
+    The Node ID of the TimelineEntry object.
+    """
     id: ID!
     customer: Customer!
     entry: Entry!
@@ -143,7 +167,7 @@ const typeDefs = /* GraphQL */ `
     node: TimelineEntry!
   }
 
-  input TicketsFilter {
+  input TicketFilters {
     statuses: [TicketStatus!]
     customerIds: [ID!]
     isAssigned: Boolean
@@ -159,7 +183,7 @@ const typeDefs = /* GraphQL */ `
     Fetches a list of tickets.
     """
     tickets(
-      filters: TicketsFilter
+      filters: TicketFilters
       first: Int
       after: String
       last: Int

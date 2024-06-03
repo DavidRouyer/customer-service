@@ -5,7 +5,7 @@ fragment LabelTypeParts on LabelType {
 }
 
 query labelTypes(
-  $filters: LabelTypesFilter
+  $filters: LabelTypeFilters
   $first: Int
   $last: Int
   $before: String

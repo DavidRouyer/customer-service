@@ -1,7 +1,19 @@
 const typeDefs = /* GraphQL */ `
+  """
+  A label for categorizing tickets.
+  """
   type Label implements Node {
+    """
+    The Node ID of the Label object.
+    """
     id: ID!
+    """
+    The label type of the label.
+    """
     labelType: LabelType!
+    """
+    Identifies the date and time when the label was archived.
+    """
     archivedAt: DateTime
   }
 
