@@ -4,8 +4,14 @@ const typeDefs = /* GraphQL */ `
   """
   scalar DateTime
 
+  """
+  The query root of Kyaku's GraphQL interface.
+  """
   type Query
 
+  """
+  The mutation root of Kyaku's GraphQL interface.
+  """
   type Mutation
 
   """
