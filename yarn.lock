@@ -1852,8 +1852,8 @@ __metadata:
     "@neondatabase/serverless": "npm:^0.9.3"
     "@types/ws": "npm:^8.5.10"
     dotenv-cli: "npm:^7.4.2"
-    drizzle-kit: "npm:^0.22.1"
-    drizzle-orm: "npm:^0.31.0"
+    drizzle-kit: "npm:^0.22.2"
+    drizzle-orm: "npm:^0.31.1"
     eslint: "npm:^8.57.0"
     lexical: "npm:^0.15.0"
     prettier: "npm:^3.3.0"
@@ -7714,22 +7714,22 @@ __metadata:
   languageName: node
   linkType: hard
 
-"drizzle-kit@npm:^0.22.1":
-  version: 0.22.1
-  resolution: "drizzle-kit@npm:0.22.1"
+"drizzle-kit@npm:^0.22.2":
+  version: 0.22.2
+  resolution: "drizzle-kit@npm:0.22.2"
   dependencies:
     "@esbuild-kit/esm-loader": "npm:^2.5.5"
     esbuild: "npm:^0.19.7"
     esbuild-register: "npm:^3.5.0"
   bin:
     drizzle-kit: bin.cjs
-  checksum: 10c0/f5cc69366e2c07d3928546938affce19831646b62b1414f150458bba6634c7e083877ffe5b700ecd7997de8ee54761bca520559925905e2311a78686c698fcad
+  checksum: 10c0/0d77a4a8c681feac014c3c81f16c2bfffbb2493c7eb7082802d17cb3a0105af1762675d23cf586df62476d89dcfc949f327f6a272a2677432b46945ab9a16dcd
   languageName: node
   linkType: hard
 
-"drizzle-orm@npm:^0.31.0":
-  version: 0.31.0
-  resolution: "drizzle-orm@npm:0.31.0"
+"drizzle-orm@npm:^0.31.1":
+  version: 0.31.1
+  resolution: "drizzle-orm@npm:0.31.1"
   peerDependencies:
     "@aws-sdk/client-rds-data": ">=3"
     "@cloudflare/workers-types": ">=3"
@@ -7807,7 +7807,7 @@ __metadata:
       optional: true
     sqlite3:
       optional: true
-  checksum: 10c0/92cdb9edfb802af4852b31e44209e3045b23bec8f6f5c1cceb87ee3fabbc6fd4a0f26f4f221e5d33c6e5f6910e5a22eef2ae272112f49b97416f91bcdf610de6
+  checksum: 10c0/91d460669cef212ec77088e8c8891e11d5d0319ad2be261379fe0eea9b36d88b126450c58df383201f231fe216fa2d7e5c7502a53b0b4a98913d5f95840e74ee
   languageName: node
   linkType: hard
 
