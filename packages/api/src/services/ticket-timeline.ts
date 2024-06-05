@@ -1,211 +1,104 @@
-import { and, desc, eq, inArray, schema } from '@cs/database';
-import {
+import { eq, schema } from '@cs/database';
+import type {
   TicketAssignmentChanged,
-  TicketAssignmentChangedWithData,
   TicketChat,
   TicketLabelsChanged,
-  TicketLabelsChangedWithData,
   TicketNote,
   TicketPriorityChanged,
   TicketStatusChanged,
-  TicketTimelineEntryType,
   User,
 } from '@cs/kyaku/models';
-import { FindConfig } from '@cs/kyaku/types';
+import { TimelineEntryType } from '@cs/kyaku/models';
+import type { FindConfig } from '@cs/kyaku/types';
+import { Direction } from '@cs/kyaku/types/query';
 
-import {
-  TicketTimelineSort,
+import type {
+  TicketTimeline,
+  TicketTimelineUnion,
   TicketTimelineWith,
 } from '../entities/ticket-timeline';
+import { TicketTimelineSortField } from '../entities/ticket-timeline';
 import { USER_COLUMNS } from '../entities/user';
-import LabelRepository from '../repositories/label';
-import TicketTimelineRepository from '../repositories/ticket-timeline';
-import UserRepository from '../repositories/user';
-import { UnitOfWork } from '../unit-of-work';
+import type TicketTimelineRepository from '../repositories/ticket-timeline';
+import type { UnitOfWork } from '../unit-of-work';
 import { BaseService } from './base-service';
-import { sortBySortDirection } from './build-query';
+import { sortByDirection } from './build-query';
 
 export default class TicketTimelineService extends BaseService {
   private readonly ticketTimelineRepository: TicketTimelineRepository;
-  private readonly labelRepository: LabelRepository;
-  private readonly userRepository: UserRepository;
 
   constructor({
-    labelRepository,
     ticketTimelineRepository,
-    userRepository,
   }: {
-    labelRepository: LabelRepository;
     ticketTimelineRepository: TicketTimelineRepository;
-    userRepository: UserRepository;
   } & { unitOfWork: UnitOfWork }) {
     // eslint-disable-next-line prefer-rest-params, @typescript-eslint/no-unsafe-argument
     super(arguments[0]);
     this.ticketTimelineRepository = ticketTimelineRepository;
-    this.labelRepository = labelRepository;
-    this.userRepository = userRepository;
   }
 
   async list<T extends TicketTimelineWith<T>>(
     filters: { ticketId: string },
-    config?: FindConfig<T, TicketTimelineSort>
+    config: FindConfig<T, TicketTimelineSortField> = {
+      direction: Direction.Forward,
+      limit: 50,
+      sortBy: TicketTimelineSortField.createdAt,
+    }
   ) {
     const ticketTimelineEntries = await this.ticketTimelineRepository.findMany({
+      limit: config.limit,
+      orderBy: [
+        ...this.getOrderByClause(config),
+        sortByDirection(config.direction)(schema.ticketTimelineEntries.id),
+      ],
       where: eq(schema.ticketTimelineEntries.ticketId, filters.ticketId),
-      with: this.getWithClause(config?.relations),
-      limit: config?.limit,
-      orderBy: and(
-        config?.sortBy
-          ? 'createdAt' in config.sortBy
-            ? sortBySortDirection(
-                config.sortBy.createdAt,
-                config.direction
-              )(schema.ticketTimelineEntries.createdAt)
-            : undefined
-          : undefined,
-        config?.cursor ? desc(schema.tickets.id) : undefined
-      ),
+      with: this.getWithClause(config.relations),
     });
 
-    const ticketAssigmentChangedEntries = ticketTimelineEntries
-      .filter(
-        (ticketTimelineEntry) =>
-          ticketTimelineEntry.type === TicketTimelineEntryType.AssignmentChanged
-      )
-      .map(
-        (ticketTimelineEntry) =>
-          ticketTimelineEntry.entry as TicketAssignmentChanged
-      );
-
-    const ticketLabelsChangedEntries = ticketTimelineEntries
-      .filter(
-        (ticketTimelineEntry) =>
-          ticketTimelineEntry.type === TicketTimelineEntryType.LabelsChanged
-      )
-      .map(
-        (ticketTimelineEntry) =>
-          ticketTimelineEntry.entry as TicketLabelsChanged
-      );
-
-    const [fetchedUsers, fetchedLabels] = await Promise.all([
-      this.retrieveUsers(ticketAssigmentChangedEntries),
-      this.retrieveLabels(ticketLabelsChangedEntries),
-    ]);
-
-    const augmentedTicketTimelineEntries: (Omit<
-      (typeof ticketTimelineEntries)[0],
-      'entry'
-    > & {
-      entry:
-        | TicketAssignmentChangedWithData
-        | TicketLabelsChangedWithData
-        | TicketChat
-        | TicketNote
-        | TicketPriorityChanged
-        | TicketStatusChanged
-        | null;
-    })[] = [];
-
-    ticketTimelineEntries.forEach((ticketTimelineEntry) => {
-      switch (ticketTimelineEntry.type) {
-        case TicketTimelineEntryType.AssignmentChanged:
-          augmentedTicketTimelineEntries.push({
-            ...ticketTimelineEntry,
-            entry: {
-              ...(ticketTimelineEntry.entry as TicketAssignmentChanged),
-              oldAssignedTo:
-                fetchedUsers.find(
-                  (user) =>
-                    user.id ===
-                    (ticketTimelineEntry.entry as TicketAssignmentChanged)
-                      .oldAssignedToId
-                ) ?? null,
-              newAssignedTo:
-                fetchedUsers.find(
-                  (user) =>
-                    user.id ===
-                    (ticketTimelineEntry.entry as TicketAssignmentChanged)
-                      .newAssignedToId
-                ) ?? null,
-            },
-          });
-          break;
-        case TicketTimelineEntryType.Note:
-          augmentedTicketTimelineEntries.push({
-            ...ticketTimelineEntry,
-            entry: ticketTimelineEntry.entry as TicketNote,
-          });
-          break;
-        case TicketTimelineEntryType.LabelsChanged:
-          augmentedTicketTimelineEntries.push({
-            ...ticketTimelineEntry,
-            entry: {
-              ...(ticketTimelineEntry.entry as TicketLabelsChanged),
-              oldLabels: fetchedLabels.filter((label) =>
-                (
-                  ticketTimelineEntry.entry as TicketLabelsChanged
-                ).oldLabelIds.includes(label.id)
-              ),
-              newLabels: fetchedLabels.filter((label) =>
-                (
-                  ticketTimelineEntry.entry as TicketLabelsChanged
-                ).newLabelIds.includes(label.id)
-              ),
-            },
-          });
-          break;
-        case TicketTimelineEntryType.PriorityChanged:
-          augmentedTicketTimelineEntries.push({
-            ...ticketTimelineEntry,
-            entry: ticketTimelineEntry.entry as TicketPriorityChanged,
-          });
-          break;
-        case TicketTimelineEntryType.StatusChanged:
-          augmentedTicketTimelineEntries.push({
-            ...ticketTimelineEntry,
-            entry: ticketTimelineEntry.entry as TicketStatusChanged,
-          });
-          break;
-        default:
-          augmentedTicketTimelineEntries.push({ ...ticketTimelineEntry });
-      }
-    });
-
-    return augmentedTicketTimelineEntries;
+    return ticketTimelineEntries.map((entry) => this.mapEntry(entry));
   }
 
-  private async retrieveUsers(entries: TicketAssignmentChanged[]) {
-    const usersToFetch = new Set<string>([
-      ...entries
-        .map((entry) => entry.oldAssignedToId)
-        .flatMap((e) => (e ? [e] : [])),
-      ...entries
-        .map((entry) => entry.newAssignedToId)
-        .flatMap((e) => (e ? [e] : [])),
-    ]);
-
-    return usersToFetch.size > 0
-      ? await this.userRepository.findMany({
-          columns: USER_COLUMNS,
-          where: inArray(schema.users.id, Array.from(usersToFetch)),
-        })
-      : [];
-  }
-
-  private async retrieveLabels(entries: TicketLabelsChanged[]) {
-    const labelsToFetch = new Set<string>([
-      ...entries.flatMap((entry) => entry.oldLabelIds),
-      ...entries.flatMap((entry) => entry.newLabelIds),
-    ]);
-
-    return labelsToFetch.size > 0
-      ? await this.labelRepository.findMany({
-          where: inArray(schema.labelTypes.id, Array.from(labelsToFetch)),
-          with: {
-            labelType: true,
-          },
-        })
-      : [];
+  private mapEntry(entry: TicketTimeline): TicketTimelineUnion {
+    switch (entry.type) {
+      case TimelineEntryType.AssignmentChanged:
+        return {
+          ...entry,
+          type: TimelineEntryType.AssignmentChanged,
+          entry: entry.entry as TicketAssignmentChanged,
+        };
+      case TimelineEntryType.Chat:
+        return {
+          ...entry,
+          type: TimelineEntryType.Chat,
+          entry: entry.entry as TicketChat,
+        };
+      case TimelineEntryType.LabelsChanged:
+        return {
+          ...entry,
+          type: TimelineEntryType.LabelsChanged,
+          entry: entry.entry as TicketLabelsChanged,
+        };
+      case TimelineEntryType.Note:
+        return {
+          ...entry,
+          type: TimelineEntryType.Note,
+          entry: entry.entry as TicketNote,
+        };
+      case TimelineEntryType.PriorityChanged:
+        return {
+          ...entry,
+          type: TimelineEntryType.PriorityChanged,
+          entry: entry.entry as TicketPriorityChanged,
+        };
+      case TimelineEntryType.StatusChanged:
+        return {
+          ...entry,
+          type: TimelineEntryType.StatusChanged,
+          entry: entry.entry as TicketStatusChanged,
+        };
+      default:
+        throw new Error('Invalid timeline entry type');
+    }
   }
 
   private getWithClause<T extends TicketTimelineWith<T>>(
@@ -242,5 +135,22 @@ export default class TicketTimelineService extends BaseService {
         ? { columns: { [K in keyof User]: true } }
         : undefined,
     };
+  }
+
+  private getOrderByClause<T extends TicketTimelineWith<T>>(
+    config: FindConfig<T, TicketTimelineSortField>
+  ) {
+    if (!config.sortBy) return [];
+
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+    if (config.sortBy === TicketTimelineSortField.createdAt) {
+      return [
+        sortByDirection(config.direction)(
+          schema.ticketTimelineEntries.createdAt
+        ),
+      ];
+    }
+
+    return [];
   }
 }

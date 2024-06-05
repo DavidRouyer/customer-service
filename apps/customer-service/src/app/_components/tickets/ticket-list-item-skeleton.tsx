@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import type { FC } from 'react';
 
 export const TicketListItemSkeleton: FC<{ pulse?: boolean }> = ({
   pulse = true,
@@ -6,7 +6,7 @@ export const TicketListItemSkeleton: FC<{ pulse?: boolean }> = ({
   return (
     <div className="mx-4 flex gap-x-4 border-b py-5 last:border-0 sm:mx-6">
       <span
-        className={`relative flex h-12 w-12 shrink-0 overflow-hidden rounded-full bg-muted ${
+        className={`relative flex size-12 shrink-0 overflow-hidden rounded-full bg-muted ${
           pulse && 'animate-pulse'
         }`}
       ></span>

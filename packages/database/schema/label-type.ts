@@ -11,7 +11,7 @@ export const labelTypes = pgTable('labelType', {
     .notNull()
     .$defaultFn(() => generateEntityId('', 'lt')),
   name: varchar('name', { length: 256 }).notNull(),
-  icon: varchar('icon', { length: 256 }).notNull(),
+  icon: varchar('icon', { length: 256 }),
   archivedAt: timestamp('archivedAt', { precision: 3, mode: 'date' }),
   createdAt: timestamp('createdAt', { precision: 3, mode: 'date' })
     .defaultNow()

@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { cva, type VariantProps } from 'cva';
+import { cva } from 'cva';
+import type { VariantProps } from 'cva';
 
 import { cn } from '.';
 

@@ -1,19 +1,19 @@
 export enum TicketPriority {
-  Critical = 'Critical',
-  High = 'High',
-  Medium = 'Medium',
-  Low = 'Low',
+  Critical = 'CRITICAL',
+  High = 'HIGH',
+  Medium = 'MEDIUM',
+  Low = 'LOW',
 }
 
 export enum TicketStatus {
-  Open = 'Open',
-  Done = 'Done',
+  Open = 'OPEN',
+  Done = 'DONE',
 }
 
 export enum TicketStatusDetail {
-  Created = 'Created',
-  NewReply = 'NewReply',
-  Replied = 'Replied',
+  Created = 'CREATED',
+  NewReply = 'NEW_REPLY',
+  Replied = 'REPLIED',
 }
 
 export enum TicketFilter {

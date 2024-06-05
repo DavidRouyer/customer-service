@@ -49,6 +49,9 @@ jobs:
       - name: Build backend
         run: yarn build
         env:
+          AUTH_GITHUB_ID: '${{ secrets.AUTH_GITHUB_ID }}'
+          AUTH_GITHUB_SECRET: '${{ secrets.AUTH_GITHUB_SECRET }}'
+          AUTH_SECRET: '${{ secrets.AUTH_SECRET }}'
           DATABASE_URL: '${{ steps.create_branch.outputs.db_url_with_pooler }}/neondb?pgbouncer=true&connect_timeout=10&sslmode=require'
 
       - name: Run Drizzle migrate

@@ -1,18 +1,21 @@
-import { and, eq, inArray, isNull, notInArray, schema } from '@cs/database';
-import { TicketLabelsChanged, TicketTimelineEntryType } from '@cs/kyaku/models';
-import { FindConfig, GetConfig } from '@cs/kyaku/types/query';
-import { KyakuError } from '@cs/kyaku/utils';
+import { and, eq, inArray, isNotNull, isNull, schema } from '@cs/database';
+import type { TicketLabelsChanged } from '@cs/kyaku/models';
+import { TimelineEntryType } from '@cs/kyaku/models';
+import type { FindConfig, GetConfig } from '@cs/kyaku/types/query';
+import { Direction } from '@cs/kyaku/types/query';
+import { KyakuError } from '@cs/kyaku/utils/errors';
 
-import { LabelSort, LabelWith } from '../entities/label';
-import LabelRepository from '../repositories/label';
-import LabelTypeRepository from '../repositories/label-type';
-import TicketRepository from '../repositories/ticket';
-import TicketTimelineRepository from '../repositories/ticket-timeline';
-import { UnitOfWork } from '../unit-of-work';
+import type { LabelFilters, LabelWith } from '../entities/label';
+import { LabelSortField } from '../entities/label';
+import type LabelRepository from '../repositories/label';
+import type LabelTypeRepository from '../repositories/label-type';
+import type TicketRepository from '../repositories/ticket';
+import type TicketTimelineRepository from '../repositories/ticket-timeline';
+import type { UnitOfWork } from '../unit-of-work';
 import { BaseService } from './base-service';
 import {
   filterByDirection,
-  InclusionFilterOperator,
+  inclusionFilterOperator,
   sortByDirection,
 } from './build-query';
 
@@ -45,55 +48,28 @@ export default class LabelService extends BaseService {
     labelId: string,
     config?: GetConfig<T>
   ) {
-    const label = await this.labelRepository.find({
+    return await this.labelRepository.find({
       where: eq(schema.labels.id, labelId),
       with: this.getWithClause(config?.relations),
     });
-
-    if (!label)
-      throw new KyakuError(
-        KyakuError.Types.NOT_FOUND,
-        `Label with id:${labelId} not found`
-      );
-
-    return label;
   }
 
   async list<T extends LabelWith<T>>(
-    filters: {
-      id?: InclusionFilterOperator<string>;
-      ticketId?: string;
-      labelTypeId?: string;
-    },
-    config?: FindConfig<T, LabelSort>
+    filters: LabelFilters = {},
+    config: FindConfig<T, LabelSortField> = {
+      direction: Direction.Forward,
+      limit: 50,
+      sortBy: LabelSortField.id,
+    }
   ) {
-    const whereClause = and(
-      filters.id
-        ? 'in' in filters.id
-          ? inArray(schema.labels.id, filters.id.in)
-          : 'notIn' in filters.id
-            ? notInArray(schema.labels.id, filters.id.notIn)
-            : undefined
-        : undefined,
-      filters.ticketId
-        ? eq(schema.labels.ticketId, filters.ticketId)
-        : undefined,
-      filters.labelTypeId
-        ? eq(schema.labels.labelTypeId, filters.labelTypeId)
-        : undefined,
-      config?.cursor
-        ? filterByDirection(config.direction)(schema.labels.id, config.cursor)
-        : undefined
-    );
     return await this.labelRepository.findMany({
-      where: whereClause,
-      with: this.getWithClause(config?.relations),
-      limit: config?.limit,
-      orderBy: and(
-        config?.cursor
-          ? sortByDirection(config.direction)(schema.tickets.id)
-          : undefined
+      limit: config.limit,
+      orderBy: [sortByDirection(config.direction)(schema.labelTypes.id)],
+      where: and(
+        this.getFilterWhereClause(filters),
+        this.getIdWhereClause(config)
       ),
+      with: this.getWithClause(config.relations),
     });
   }
 
@@ -117,50 +93,43 @@ export default class LabelService extends BaseService {
     if (!ticket)
       throw new KyakuError(
         KyakuError.Types.NOT_FOUND,
-        `Ticket with id:${ticketId} not found`
+        `Ticket with id:${ticketId} not found`,
+        ['id']
       );
 
-    const ticketLabelTypes = ticket.labels.flatMap(
-      (label) => label.labelType.id
+    const affectedLabelTypeIds = new Set(
+      ticket.labels.flatMap((label) => label.labelType.id)
     );
 
-    const duplicatedLabelTypeIds = labelTypeIds.filter((labelTypeId) =>
-      ticketLabelTypes.includes(labelTypeId)
+    const nonAffectedLabelTypeIds = labelTypeIds.filter(
+      (labelTypeId) => !affectedLabelTypeIds.has(labelTypeId)
     );
-
-    if (duplicatedLabelTypeIds.length > 0)
-      throw new KyakuError(
-        KyakuError.Types.DUPLICATE_ERROR,
-        `Label types with ids: ${duplicatedLabelTypeIds.join(',')} already added to ticket`
-      );
 
     const fetchedLabelTypes = await this.labelTypeRepository.findMany({
       where: inArray(schema.labelTypes.id, labelTypeIds),
     });
-    const fetchedLabelTypeIds = fetchedLabelTypes.map(
-      (labelType) => labelType.id
+    const fetchedLabelTypeIds = new Set(
+      fetchedLabelTypes.map((labelType) => labelType.id)
     );
 
-    const missingLabelTypeIds = labelTypeIds.filter(
-      (labelTypeId) => !fetchedLabelTypeIds.includes(labelTypeId)
+    const validLabelTypeIds = nonAffectedLabelTypeIds.filter((labelTypeId) =>
+      fetchedLabelTypeIds.has(labelTypeId)
     );
 
-    if (missingLabelTypeIds.length > 0)
-      throw new KyakuError(
-        KyakuError.Types.NOT_FOUND,
-        `Label types with ids: ${missingLabelTypeIds.join(',')} not found`
-      );
+    if (!validLabelTypeIds.length) return [];
 
     return await this.unitOfWork.transaction(async (tx) => {
+      const updatedAt = new Date();
+
       const newLabels = await this.labelRepository.createMany(
-        labelTypeIds.map((labelTypeId) => ({
+        validLabelTypeIds.map((labelTypeId) => ({
           ticketId: ticket.id,
           labelTypeId: labelTypeId,
         })),
         tx
       );
 
-      if (!newLabels) {
+      if (!newLabels.length) {
         tx.rollback();
         return;
       }
@@ -168,7 +137,7 @@ export default class LabelService extends BaseService {
       const updatedTicket = await this.ticketRepository.update(
         {
           id: ticket.id,
-          updatedAt: new Date(),
+          updatedAt: updatedAt,
           updatedById: userId,
         },
         tx
@@ -182,13 +151,13 @@ export default class LabelService extends BaseService {
       await this.ticketTimelineRepository.create(
         {
           ticketId: ticket.id,
-          type: TicketTimelineEntryType.LabelsChanged,
+          type: TimelineEntryType.LabelsChanged,
           entry: {
             oldLabelIds: [],
             newLabelIds: newLabels.map((label) => label.id),
           } satisfies TicketLabelsChanged,
           customerId: ticket.customerId,
-          createdAt: updatedTicket.updatedAt ?? new Date(),
+          createdAt: updatedTicket.updatedAt ?? updatedAt,
           userCreatedById: userId,
         },
         tx
@@ -210,29 +179,28 @@ export default class LabelService extends BaseService {
     if (!ticket)
       throw new KyakuError(
         KyakuError.Types.NOT_FOUND,
-        `Ticket with id:${ticketId} not found`
+        `Ticket with id:${ticketId} not found`,
+        ['id']
       );
 
     const fetchedLabels = await this.labelRepository.findMany({
       where: inArray(schema.labelTypes.id, labelIds),
     });
-    const fetchedLabelIds = fetchedLabels.map((label) => label.id);
+    const fetchedLabelIds = new Set(fetchedLabels.map((label) => label.id));
 
-    const missingLabelIds = labelIds.filter(
-      (labelId) => !fetchedLabelIds.includes(labelId)
+    const validLabelIds = labelIds.filter((labelId) =>
+      fetchedLabelIds.has(labelId)
     );
-    if (missingLabelIds.length > 0)
-      throw new KyakuError(
-        KyakuError.Types.NOT_FOUND,
-        `Labels with ids: ${missingLabelIds.join(',')} not found`
-      );
+
+    if (!validLabelIds.length) return;
 
     return await this.unitOfWork.transaction(async (tx) => {
-      const archivedDate = new Date();
+      const updatedAt = new Date();
+
       const archivedLabels = await this.labelRepository.updateMany(
-        labelIds,
+        validLabelIds,
         {
-          archivedAt: archivedDate,
+          archivedAt: updatedAt,
         },
         tx
       );
@@ -240,7 +208,7 @@ export default class LabelService extends BaseService {
       const updatedTicket = await this.ticketRepository.update(
         {
           id: ticketId,
-          updatedAt: archivedDate,
+          updatedAt: updatedAt,
           updatedById: userId,
         },
         tx
@@ -254,13 +222,13 @@ export default class LabelService extends BaseService {
       await this.ticketTimelineRepository.create(
         {
           ticketId: ticketId,
-          type: TicketTimelineEntryType.LabelsChanged,
+          type: TimelineEntryType.LabelsChanged,
           entry: {
             oldLabelIds: archivedLabels.map((label) => label.id),
             newLabelIds: [],
           } satisfies TicketLabelsChanged,
           customerId: ticket.customerId,
-          createdAt: updatedTicket.updatedAt ?? new Date(),
+          createdAt: updatedTicket.updatedAt ?? updatedAt,
           userCreatedById: userId,
         },
         tx
@@ -286,5 +254,34 @@ export default class LabelService extends BaseService {
         ? true
         : undefined,
     };
+  }
+
+  private getFilterWhereClause(filters: LabelFilters) {
+    if (!Object.keys(filters).length) return undefined;
+
+    return and(
+      filters.ticketId
+        ? eq(schema.labels.ticketId, filters.ticketId)
+        : undefined,
+      filters.labelIds
+        ? inclusionFilterOperator(schema.labels.id, filters.labelIds)
+        : undefined,
+      filters.isArchived !== undefined
+        ? filters.isArchived
+          ? isNotNull(schema.labels.archivedAt)
+          : isNull(schema.labels.archivedAt)
+        : undefined
+    );
+  }
+
+  private getIdWhereClause<T extends LabelWith<T>>(
+    config: FindConfig<T, LabelSortField>
+  ) {
+    if (!config.cursor?.lastId) return undefined;
+
+    return filterByDirection(config.direction)(
+      schema.labelTypes.id,
+      config.cursor.lastId
+    );
   }
 }

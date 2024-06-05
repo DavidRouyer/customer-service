@@ -1,8 +1,9 @@
-import { FC, useCallback, useState } from 'react';
+import type { FC } from 'react';
+import { useCallback, useState } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
 import { Check, Plus } from 'lucide-react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
-import { RouterOutputs } from '@cs/api';
 import { getInitials } from '@cs/kyaku/utils';
 import { cn } from '@cs/ui';
 import { Avatar, AvatarFallback, AvatarImage } from '@cs/ui/avatar';
@@ -17,124 +18,159 @@ import {
 } from '@cs/ui/command';
 import { Popover, PopoverContent, PopoverTrigger } from '@cs/ui/popover';
 
-import { api } from '~/trpc/react';
+import type { TicketQuery, UsersQuery } from '~/graphql/generated/client';
+import {
+  useAssignTicketMutation,
+  useInfiniteTicketTimelineQuery,
+  useMyUserInfoQuery,
+  useTicketQuery,
+  useUnassignTicketMutation,
+  useUsersQuery,
+} from '~/graphql/generated/client';
 
-type TicketAssignmentComboboxProps = {
-  assignedTo?: NonNullable<RouterOutputs['ticket']['byId']>['assignedTo'];
+interface TicketAssignmentComboboxProps {
+  assignedTo?: NonNullable<TicketQuery['ticket']>['assignedTo'];
   ticketId: string;
-};
+}
 
 export const TicketAssignmentCombobox: FC<TicketAssignmentComboboxProps> = ({
   assignedTo,
   ticketId,
 }) => {
   const { formatMessage } = useIntl();
-  const { data: session } = api.auth.getSession.useQuery();
+  const { data: myUserInfo } = useMyUserInfoQuery(undefined, {
+    select: (data) => ({ user: data.myUserInfo }),
+  });
 
   const [open, setOpen] = useState(false);
 
-  const utils = api.useUtils();
+  const queryClient = useQueryClient();
 
-  const { data: usersData } = api.user.all.useQuery(undefined, {
-    select: useCallback(
-      (data: RouterOutputs['user']['all']) => {
-        let newUsers = data.map((user) => user);
-        if (session?.user.id) {
-          const loggedUser = newUsers.find(
-            (user) => user.id === session.user.id
-          );
-          if (loggedUser) {
-            newUsers = [
-              loggedUser,
-              ...newUsers.filter((user) => user.id !== loggedUser.id),
-            ];
+  const { data: usersData } = useUsersQuery(
+    {
+      first: 100,
+    },
+    {
+      select: useCallback(
+        (data: UsersQuery) => {
+          let newUsers = data.users.edges.map((user) => user.node);
+          if (myUserInfo?.user?.id) {
+            const loggedUser = newUsers.find(
+              (user) => user.id === myUserInfo.user?.id
+            );
+            if (loggedUser) {
+              newUsers = [
+                loggedUser,
+                ...newUsers.filter((user) => user.id !== loggedUser.id),
+              ];
+            }
           }
-        }
-        if (assignedTo) {
-          const assignedToUser = newUsers.find(
-            (user) => user.id === assignedTo.id
-          );
-          if (assignedToUser) {
-            newUsers = [
-              assignedToUser,
-              ...newUsers.filter((user) => user.id !== assignedToUser.id),
-            ];
+          if (assignedTo) {
+            const assignedToUser = newUsers.find(
+              (user) => user.id === assignedTo.id
+            );
+            if (assignedToUser) {
+              newUsers = [
+                assignedToUser,
+                ...newUsers.filter((user) => user.id !== assignedToUser.id),
+              ];
+            }
           }
-        }
 
-        return newUsers;
-      },
-      [assignedTo, session?.user]
-    ),
-  });
+          return newUsers;
+        },
+        [assignedTo, myUserInfo?.user]
+      ),
+    }
+  );
 
-  const { mutateAsync: assign } = api.ticket.assign.useMutation({
-    onMutate: async (newAssignment) => {
+  const { mutate: assign } = useAssignTicketMutation({
+    onMutate: async ({ input }) => {
       // Cancel any outgoing refetches
       // (so they don't overwrite our optimistic update)
-      await utils.ticket.byId.cancel({ id: newAssignment.id });
-
-      // Snapshot the previous value
-      const previousTicket = utils.ticket.byId.getData({
-        id: newAssignment.id,
+      await queryClient.cancelQueries({
+        queryKey: useTicketQuery.getKey({ ticketId: input.ticketId }),
       });
 
+      // Snapshot the previous value
+      const previousTicket = queryClient.getQueryData<TicketQuery['ticket']>(
+        useTicketQuery.getKey({ ticketId: input.ticketId })
+      );
+
       // Optimistically update to the new value
-      utils.ticket.byId.setData(
-        { id: newAssignment.id },
+      queryClient.setQueryData<TicketQuery['ticket']>(
+        useTicketQuery.getKey({ ticketId: input.ticketId }),
         (oldQueryData) =>
-          ({
-            ...oldQueryData,
-            assignedToId: newAssignment.userId,
-            assignedTo: usersData?.find(
-              (user) => user.id === newAssignment.userId
-            ),
-          }) as NonNullable<RouterOutputs['ticket']['byId']>
+          oldQueryData
+            ? {
+                ...oldQueryData,
+                assignedTo: usersData?.find((user) => user.id === input.userId),
+              }
+            : undefined
       );
 
       // Return a context object with the snapshotted value
-      return { previousTicket: previousTicket };
+      return { previousTicket };
     },
-    onError: (err, { id }, context) => {
+    onError: (err, { input }, context) => {
       // TODO: handle failed queries
-      utils.ticket.byId.setData({ id }, context?.previousTicket);
+      queryClient.setQueryData<TicketQuery['ticket']>(
+        useTicketQuery.getKey({ ticketId: input.ticketId }),
+        context?.previousTicket
+      );
     },
-    onSettled: (_, __, { id }) => {
-      void utils.ticket.byId.invalidate({ id });
-      void utils.ticketTimeline.byTicketId.invalidate({ ticketId: id });
+    onSettled: (_, __, { input }) => {
+      void queryClient.invalidateQueries({
+        queryKey: useTicketQuery.getKey({ ticketId: input.ticketId }),
+      });
+      void queryClient.invalidateQueries({
+        queryKey: useInfiniteTicketTimelineQuery.getKey({ ticketId: ticketId }),
+      });
     },
   });
 
-  const { mutateAsync: unassign } = api.ticket.unassign.useMutation({
-    onMutate: async ({ id }) => {
+  const { mutate: unassign } = useUnassignTicketMutation({
+    onMutate: async ({ input }) => {
       // Cancel any outgoing refetches
       // (so they don't overwrite our optimistic update)
-      await utils.ticket.byId.cancel({ id });
+      await queryClient.cancelQueries({
+        queryKey: useTicketQuery.getKey({ ticketId: input.ticketId }),
+      });
 
       // Snapshot the previous value
-      const previousTicket = utils.ticket.byId.getData({ id });
+      const previousTicket = queryClient.getQueryData<TicketQuery['ticket']>(
+        useTicketQuery.getKey({ ticketId: input.ticketId })
+      );
 
       // Optimistically update to the new value
-      utils.ticket.byId.setData(
-        { id },
+      queryClient.setQueryData<TicketQuery['ticket']>(
+        useTicketQuery.getKey({ ticketId: input.ticketId }),
         (oldQueryData) =>
-          ({
-            ...oldQueryData,
-            assignedToId: null,
-            assignedTo: null,
-          }) as NonNullable<RouterOutputs['ticket']['byId']>
+          oldQueryData
+            ? {
+                ...oldQueryData,
+                assignedTo: null,
+              }
+            : undefined
       );
 
       // Return a context object with the snapshotted value
-      return { previousTicket: previousTicket };
+      return { previousTicket };
     },
-    onError: (err, { id }, context) => {
+    onError: (err, { input }, context) => {
       // TODO: handle failed queries
-      utils.ticket.byId.setData({ id }, context?.previousTicket);
+      queryClient.setQueryData<TicketQuery['ticket']>(
+        useTicketQuery.getKey({ ticketId: input.ticketId }),
+        context?.previousTicket
+      );
     },
-    onSettled: (_, __, { id }) => {
-      void utils.ticket.byId.invalidate({ id });
-      void utils.ticketTimeline.byTicketId.invalidate({ ticketId: id });
+    onSettled: (_, __, { input }) => {
+      void queryClient.invalidateQueries({
+        queryKey: useTicketQuery.getKey({ ticketId: input.ticketId }),
+      });
+      void queryClient.invalidateQueries({
+        queryKey: useInfiniteTicketTimelineQuery.getKey({ ticketId: ticketId }),
+      });
     },
   });
 
@@ -151,14 +187,12 @@ export const TicketAssignmentCombobox: FC<TicketAssignmentComboboxProps> = ({
           {assignedTo ? (
             <div className="flex items-center gap-x-2">
               <Avatar className="size-4">
-                <AvatarImage src={assignedTo?.image ?? undefined} />
+                <AvatarImage src={assignedTo.image ?? undefined} />
                 <AvatarFallback>
-                  {getInitials(assignedTo?.name ?? '')}
+                  {getInitials(assignedTo.name ?? '')}
                 </AvatarFallback>
               </Avatar>
-              <p className="text-xs text-muted-foreground">
-                {assignedTo?.name}
-              </p>
+              <p className="text-xs text-muted-foreground">{assignedTo.name}</p>
             </div>
           ) : (
             <div className="flex items-center gap-x-2 text-xs">
@@ -187,11 +221,10 @@ export const TicketAssignmentCombobox: FC<TicketAssignmentComboboxProps> = ({
                   key={user.id}
                   onSelect={() => {
                     if (assignedTo && user.id === assignedTo.id) {
-                      unassign({ id: ticketId });
+                      unassign({ input: { ticketId: ticketId } });
                     } else {
                       assign({
-                        id: ticketId,
-                        userId: user.id,
+                        input: { ticketId: ticketId, userId: user.id },
                       });
                     }
                     setOpen(false);
@@ -205,13 +238,13 @@ export const TicketAssignmentCombobox: FC<TicketAssignmentComboboxProps> = ({
                   />
                   <div className="flex items-center gap-x-2 truncate">
                     <Avatar className="size-5">
-                      <AvatarImage src={user?.image ?? undefined} />
+                      <AvatarImage src={user.image ?? undefined} />
                       <AvatarFallback>
-                        {getInitials(user?.name ?? '')}
+                        {getInitials(user.name ?? '')}
                       </AvatarFallback>
                     </Avatar>
                     <p className="truncate text-xs text-muted-foreground">
-                      {user?.name}
+                      {user.name}
                     </p>
                   </div>
                 </CommandItem>

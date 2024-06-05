@@ -1,9 +1,14 @@
-import { api } from '~/trpc/react';
+import { useTicketTimelineQuery } from '~/graphql/generated/client';
 
 export const useTimeline = (ticketId: string) => {
-  const timeline = api.ticketTimeline.byTicketId.useQuery({
-    ticketId: ticketId,
-  });
+  const timeline = useTicketTimelineQuery(
+    {
+      ticketId: ticketId,
+    },
+    {
+      select: (data) => data.ticket?.timelineEntries,
+    }
+  );
 
   return timeline;
 };

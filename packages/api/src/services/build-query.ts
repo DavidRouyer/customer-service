@@ -1,17 +1,12 @@
-import {
-  asc,
+import type {
   BuildQueryResult,
   Column,
   DBQueryConfig,
-  desc,
   ExtractTablesWithRelations,
   GetColumnData,
-  gt,
-  inArray,
-  lt,
-  notInArray,
   schema,
 } from '@cs/database';
+import { asc, desc, gt, inArray, lt, notInArray } from '@cs/database';
 import { SortDirection } from '@cs/kyaku/types';
 import { Direction } from '@cs/kyaku/types/query';
 
@@ -52,16 +47,6 @@ export const inclusionFilterOperator = <TCol extends Column>(
 
 export const sortByDirection = (direction: Direction) => {
   return direction === Direction.Forward ? asc : desc;
-};
-
-export const sortBySortDirection = (
-  sortBy: SortDirection,
-  direction: Direction
-) => {
-  return (sortBy === SortDirection.ASC && direction === Direction.Forward) ||
-    (sortBy === SortDirection.DESC && direction === Direction.Backward)
-    ? asc
-    : desc;
 };
 
 export const filterByDirection = (direction: Direction) => {

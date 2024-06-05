@@ -1,23 +1,20 @@
 'use client';
 
-import { TRPCClientError } from '@trpc/client';
 import { XIcon } from 'lucide-react';
 import { FormattedMessage } from 'react-intl';
 
 import { Button } from '@cs/ui/button';
 
-export default function Error({
-  error,
-  reset,
-}: {
+interface ErrorProps {
   error: Error;
   reset: () => void;
-}) {
+}
+
+export default function Error({ error, reset }: Readonly<ErrorProps>) {
   const getError = (error: Error) => {
-    if (error instanceof TRPCClientError) {
-      if (error.message === 'ticket_not_found') {
-        return <FormattedMessage id="errors.ticket_not_found" />;
-      }
+    console.error(error);
+    if (error.message === 'ticket_not_found') {
+      return <FormattedMessage id="errors.ticket_not_found" />;
     }
 
     return <FormattedMessage id="errors.unhandled_error" />;
@@ -25,7 +22,7 @@ export default function Error({
 
   return (
     <main className="lg:pl-60">
-      <div className="flex items-center justify-center xl:mr-96 xl:h-[100dvh] xl:overflow-y-auto xl:pl-96">
+      <div className="flex items-center justify-center xl:mr-96 xl:h-dvh xl:overflow-y-auto xl:pl-96">
         <div className="sm:w-full sm:max-w-sm">
           <div>
             <div className="mx-auto flex size-12 items-center justify-center rounded-full bg-destructive-foreground">

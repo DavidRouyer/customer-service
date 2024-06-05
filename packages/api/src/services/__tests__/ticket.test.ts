@@ -1,10 +1,10 @@
 import { and, asc, eq, schema } from '@cs/database';
 import { TicketPriority, TicketStatus } from '@cs/kyaku/models';
 
-import TicketRepository from '../../repositories/ticket';
+import type TicketRepository from '../../repositories/ticket';
 import TicketMentionRepository from '../../repositories/ticket-mention';
 import TicketTimelineRepository from '../../repositories/ticket-timeline';
-import { UnitOfWork } from '../../unit-of-work';
+import type { UnitOfWork } from '../../unit-of-work';
 import TicketService from '../ticket';
 
 vi.mock('../../repositories/ticket-mention');
@@ -52,7 +52,7 @@ describe('TicketService', () => {
         },
       });
 
-      expect(result.id).toEqual('one-piece');
+      expect(result?.id).toEqual('one-piece');
     });
   });
 
@@ -73,12 +73,12 @@ describe('TicketService', () => {
     });
 
     it('successfully retrieves a list of tickets', async () => {
-      const result = await ticketService.list({});
+      const result = await ticketService.list();
 
       expect(ticketRepo.findMany).toHaveBeenCalledTimes(1);
       expect(ticketRepo.findMany).toHaveBeenCalledWith({
-        limit: 51,
-        orderBy: [asc(schema.tickets.id)],
+        limit: 50,
+        orderBy: [asc(schema.tickets.createdAt), asc(schema.tickets.id)],
         where: and(undefined),
         with: {
           assignedTo: undefined,
@@ -89,11 +89,7 @@ describe('TicketService', () => {
         },
       });
 
-      expect(result).toStrictEqual({
-        hasNextPage: false,
-        items: [{ id: 'one-piece' }],
-        nextCursor: undefined,
-      });
+      expect(result).toStrictEqual([{ id: 'one-piece' }]);
     });
   });
 
@@ -105,7 +101,7 @@ describe('TicketService', () => {
       })),
     };
     const unitOfWork = {
-      transaction: vi.fn((cb) => cb()),
+      transaction: vi.fn((cb: () => void) => cb()),
     };
 
     const ticketService = new TicketService({
@@ -119,13 +115,14 @@ describe('TicketService', () => {
       const date = new Date('2000-01-01T12:00:00.000Z');
       vi.setSystemTime(date);
 
-      const result = await ticketService.create({
-        title: 'One Piece',
-        createdById: 'user-id',
-        customerId: 'customer-id',
-        priority: TicketPriority.Low,
-        statusChangedById: 'user-id',
-      });
+      const result = await ticketService.create(
+        {
+          title: 'One Piece',
+          customerId: 'customer-id',
+          priority: TicketPriority.Low,
+        },
+        'user-id'
+      );
 
       expect(unitOfWork.transaction).toHaveBeenCalledTimes(1);
 
@@ -135,17 +132,17 @@ describe('TicketService', () => {
           title: 'One Piece',
           createdById: 'user-id',
           customerId: 'customer-id',
-          priority: 'Low',
+          priority: 'LOW',
           statusChangedById: 'user-id',
-          status: 'Open',
-          statusDetail: 'Created',
+          status: 'OPEN',
+          statusDetail: 'CREATED',
           createdAt: new Date('2000-01-01T12:00:00.000Z'),
           statusChangedAt: new Date('2000-01-01T12:00:00.000Z'),
         },
         undefined
       );
 
-      expect(result!.id).toEqual('one-piece');
+      expect(result?.id).toEqual('one-piece');
     });
   });
 
@@ -166,7 +163,7 @@ describe('TicketService', () => {
       })),
     };
     const unitOfWork = {
-      transaction: vi.fn((cb) => cb()),
+      transaction: vi.fn((cb: () => void) => cb()),
     };
 
     const ticketService = new TicketService({
@@ -181,7 +178,13 @@ describe('TicketService', () => {
       const date = new Date('2000-01-01T12:00:00.000Z');
       vi.setSystemTime(date);
 
-      await ticketService.assign('one-piece', 'luffy', 'user-id');
+      await ticketService.assign(
+        {
+          ticketId: 'one-piece',
+          assignedToId: 'luffy',
+        },
+        'user-id'
+      );
 
       expect(unitOfWork.transaction).toHaveBeenCalledTimes(1);
 
@@ -201,7 +204,7 @@ describe('TicketService', () => {
         {
           ticketId: 'one-piece',
           customerId: undefined,
-          type: 'AssignmentChanged',
+          type: 'ASSIGNMENT_CHANGED',
           entry: {
             newAssignedToId: 'luffy',
             oldAssignedToId: null,
@@ -231,7 +234,7 @@ describe('TicketService', () => {
       })),
     };
     const unitOfWork = {
-      transaction: vi.fn((cb) => cb()),
+      transaction: vi.fn((cb: () => void) => cb()),
     };
 
     const ticketService = new TicketService({
@@ -266,7 +269,7 @@ describe('TicketService', () => {
         {
           ticketId: 'one-piece',
           customerId: undefined,
-          type: 'AssignmentChanged',
+          type: 'ASSIGNMENT_CHANGED',
           entry: {
             newAssignedToId: null,
             oldAssignedToId: 'luffy',
@@ -296,7 +299,7 @@ describe('TicketService', () => {
       })),
     };
     const unitOfWork = {
-      transaction: vi.fn((cb) => cb()),
+      transaction: vi.fn((cb: () => void) => cb()),
     };
 
     const ticketService = new TicketService({
@@ -312,8 +315,10 @@ describe('TicketService', () => {
       vi.setSystemTime(date);
 
       await ticketService.changePriority(
-        'one-piece',
-        TicketPriority.Critical,
+        {
+          ticketId: 'one-piece',
+          priority: TicketPriority.Critical,
+        },
         'user-id'
       );
 
@@ -323,7 +328,7 @@ describe('TicketService', () => {
       expect(ticketRepo.update).toHaveBeenCalledWith(
         {
           id: 'one-piece',
-          priority: 'Critical',
+          priority: 'CRITICAL',
           updatedAt: new Date('2000-01-01T12:00:00.000Z'),
           updatedById: 'user-id',
         },
@@ -335,13 +340,87 @@ describe('TicketService', () => {
         {
           ticketId: 'one-piece',
           customerId: undefined,
-          type: 'PriorityChanged',
+          type: 'PRIORITY_CHANGED',
           entry: {
-            newPriority: 'Critical',
+            newPriority: 'CRITICAL',
             oldPriority: null,
           },
           userCreatedById: 'user-id',
           createdAt: new Date('2000-01-01T12:00:00.000Z'),
+        },
+        undefined
+      );
+    });
+  });
+
+  describe('createNote', () => {
+    const ticketRepo = {
+      find: vi.fn(() => ({
+        id: 'one-piece',
+        status: TicketStatus.Done,
+      })),
+      update: vi.fn(() => ({
+        id: 'one-piece',
+        title: 'One Piece',
+      })),
+    };
+    const ticketTimelineRepo = {
+      create: vi.fn(() => ({
+        id: 'one-piece-timeline',
+        createdAt: new Date('2000-01-01T12:00:00.000Z'),
+      })),
+    };
+    const unitOfWork = {
+      transaction: vi.fn((cb: () => void) => cb()),
+    };
+
+    const ticketService = new TicketService({
+      unitOfWork: unitOfWork as unknown as UnitOfWork,
+      ticketRepository: ticketRepo as unknown as TicketRepository,
+      ticketMentionRepository: new TicketMentionRepository(),
+      ticketTimelineRepository:
+        ticketTimelineRepo as unknown as TicketTimelineRepository,
+    });
+
+    it('should successfully send note on a ticket', async () => {
+      const date = new Date('2000-01-01T12:00:00.000Z');
+      vi.setSystemTime(date);
+
+      await ticketService.createNote(
+        {
+          ticketId: 'one-piece',
+          text: 'test chat',
+          rawContent:
+            '{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"blabla","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}',
+        },
+        'user-id'
+      );
+
+      expect(unitOfWork.transaction).toHaveBeenCalledTimes(1);
+
+      expect(ticketTimelineRepo.create).toHaveBeenCalledTimes(1);
+      expect(ticketTimelineRepo.create).toHaveBeenCalledWith(
+        {
+          ticketId: 'one-piece',
+          customerId: undefined,
+          type: 'NOTE',
+          entry: {
+            rawContent:
+              '{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"blabla","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}',
+            text: 'test chat',
+          },
+          userCreatedById: 'user-id',
+          createdAt: new Date('2000-01-01T12:00:00.000Z'),
+        },
+        undefined
+      );
+
+      expect(ticketRepo.update).toHaveBeenCalledTimes(1);
+      expect(ticketRepo.update).toHaveBeenCalledWith(
+        {
+          id: 'one-piece',
+          updatedAt: new Date('2000-01-01T12:00:00.000Z'),
+          updatedById: 'user-id',
         },
         undefined
       );
@@ -365,7 +444,7 @@ describe('TicketService', () => {
       })),
     };
     const unitOfWork = {
-      transaction: vi.fn((cb) => cb()),
+      transaction: vi.fn((cb: () => void) => cb()),
     };
 
     const ticketService = new TicketService({
@@ -388,7 +467,7 @@ describe('TicketService', () => {
       expect(ticketRepo.update).toHaveBeenCalledWith(
         {
           id: 'one-piece',
-          status: 'Done',
+          status: 'DONE',
           statusChangedAt: new Date('2000-01-01T12:00:00.000Z'),
           statusChangedById: 'user-id',
           statusDetail: null,
@@ -403,10 +482,10 @@ describe('TicketService', () => {
         {
           ticketId: 'one-piece',
           customerId: undefined,
-          type: 'StatusChanged',
+          type: 'STATUS_CHANGED',
           entry: {
-            newStatus: 'Done',
-            oldStatus: 'Open',
+            newStatus: 'DONE',
+            oldStatus: 'OPEN',
           },
           userCreatedById: 'user-id',
           createdAt: new Date('2000-01-01T12:00:00.000Z'),
@@ -433,7 +512,7 @@ describe('TicketService', () => {
       })),
     };
     const unitOfWork = {
-      transaction: vi.fn((cb) => cb()),
+      transaction: vi.fn((cb: () => void) => cb()),
     };
 
     const ticketService = new TicketService({
@@ -456,7 +535,7 @@ describe('TicketService', () => {
       expect(ticketRepo.update).toHaveBeenCalledWith(
         {
           id: 'one-piece',
-          status: 'Open',
+          status: 'OPEN',
           statusChangedAt: new Date('2000-01-01T12:00:00.000Z'),
           statusChangedById: 'user-id',
           statusDetail: null,
@@ -471,10 +550,10 @@ describe('TicketService', () => {
         {
           ticketId: 'one-piece',
           customerId: undefined,
-          type: 'StatusChanged',
+          type: 'STATUS_CHANGED',
           entry: {
-            newStatus: 'Open',
-            oldStatus: 'Done',
+            newStatus: 'OPEN',
+            oldStatus: 'DONE',
           },
           userCreatedById: 'user-id',
           createdAt: new Date('2000-01-01T12:00:00.000Z'),
@@ -502,7 +581,7 @@ describe('TicketService', () => {
       })),
     };
     const unitOfWork = {
-      transaction: vi.fn((cb) => cb()),
+      transaction: vi.fn((cb: () => void) => cb()),
     };
 
     const ticketService = new TicketService({
@@ -517,7 +596,13 @@ describe('TicketService', () => {
       const date = new Date('2000-01-01T12:00:00.000Z');
       vi.setSystemTime(date);
 
-      await ticketService.sendChat('one-piece', 'test chat', 'user-id');
+      await ticketService.sendChat(
+        {
+          ticketId: 'one-piece',
+          text: 'test chat',
+        },
+        'user-id'
+      );
 
       expect(unitOfWork.transaction).toHaveBeenCalledTimes(1);
 
@@ -526,7 +611,7 @@ describe('TicketService', () => {
         {
           ticketId: 'one-piece',
           customerId: undefined,
-          type: 'Chat',
+          type: 'CHAT',
           entry: {
             text: 'test chat',
           },
@@ -542,78 +627,7 @@ describe('TicketService', () => {
           id: 'one-piece',
           statusChangedAt: new Date('2000-01-01T12:00:00.000Z'),
           statusChangedById: 'user-id',
-          statusDetail: 'Replied',
-          updatedAt: new Date('2000-01-01T12:00:00.000Z'),
-          updatedById: 'user-id',
-        },
-        undefined
-      );
-    });
-  });
-
-  describe('sendNote', () => {
-    const ticketRepo = {
-      find: vi.fn(() => ({
-        id: 'one-piece',
-        status: TicketStatus.Done,
-      })),
-      update: vi.fn(() => ({
-        id: 'one-piece',
-        title: 'One Piece',
-      })),
-    };
-    const ticketTimelineRepo = {
-      create: vi.fn(() => ({
-        id: 'one-piece-timeline',
-        createdAt: new Date('2000-01-01T12:00:00.000Z'),
-      })),
-    };
-    const unitOfWork = {
-      transaction: vi.fn((cb) => cb()),
-    };
-
-    const ticketService = new TicketService({
-      unitOfWork: unitOfWork as unknown as UnitOfWork,
-      ticketRepository: ticketRepo as unknown as TicketRepository,
-      ticketMentionRepository: new TicketMentionRepository(),
-      ticketTimelineRepository:
-        ticketTimelineRepo as unknown as TicketTimelineRepository,
-    });
-
-    it('should successfully send note on a ticket', async () => {
-      const date = new Date('2000-01-01T12:00:00.000Z');
-      vi.setSystemTime(date);
-
-      await ticketService.sendNote(
-        'one-piece',
-        'test chat',
-        '{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"blabla","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}',
-        'user-id'
-      );
-
-      expect(unitOfWork.transaction).toHaveBeenCalledTimes(1);
-
-      expect(ticketTimelineRepo.create).toHaveBeenCalledTimes(1);
-      expect(ticketTimelineRepo.create).toHaveBeenCalledWith(
-        {
-          ticketId: 'one-piece',
-          customerId: undefined,
-          type: 'Note',
-          entry: {
-            rawContent:
-              '{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"blabla","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}',
-            text: 'test chat',
-          },
-          userCreatedById: 'user-id',
-          createdAt: new Date('2000-01-01T12:00:00.000Z'),
-        },
-        undefined
-      );
-
-      expect(ticketRepo.update).toHaveBeenCalledTimes(1);
-      expect(ticketRepo.update).toHaveBeenCalledWith(
-        {
-          id: 'one-piece',
+          statusDetail: 'REPLIED',
           updatedAt: new Date('2000-01-01T12:00:00.000Z'),
           updatedById: 'user-id',
         },

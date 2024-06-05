@@ -1,10 +1,10 @@
-import { eq, schema } from '@cs/database';
+import { and, asc, eq, schema } from '@cs/database';
 
-import LabelRepository from '../../repositories/label';
+import type LabelRepository from '../../repositories/label';
 import LabelTypeRepository from '../../repositories/label-type';
 import TicketRepository from '../../repositories/ticket';
 import TicketTimelineRepository from '../../repositories/ticket-timeline';
-import { UnitOfWork } from '../../unit-of-work';
+import type { UnitOfWork } from '../../unit-of-work';
 import LabelService from '../label';
 
 vi.mock('../../repositories/label-type');
@@ -50,7 +50,7 @@ describe('LabelService', () => {
         },
       });
 
-      expect(result.id).toEqual('one-piece');
+      expect(result?.id).toEqual('one-piece');
     });
   });
 
@@ -72,14 +72,16 @@ describe('LabelService', () => {
     });
 
     it('successfully retrieves a list of labels', async () => {
-      const result = await labelService.list({});
+      const result = await labelService.list();
 
       expect(labelRepo.findMany).toHaveBeenCalledTimes(1);
       expect(labelRepo.findMany).toHaveBeenCalledWith({
-        where: undefined,
+        limit: 50,
+        orderBy: [asc(schema.labelTypes.id)],
+        where: and(undefined),
         with: {
-          ticket: undefined,
-          labelType: undefined,
+          createdBy: undefined,
+          updatedBy: undefined,
         },
       });
 
@@ -124,7 +126,7 @@ describe('LabelService', () => {
       })),
     };
     const unitOfWork = {
-      transaction: vi.fn((cb) => cb()),
+      transaction: vi.fn((cb: () => void) => cb()),
     };
 
     const labelService = new LabelService({
@@ -159,7 +161,7 @@ describe('LabelService', () => {
         {
           ticketId: 'one-piece',
           customerId: undefined,
-          type: 'LabelsChanged',
+          type: 'LABELS_CHANGED',
           entry: {
             newLabelIds: ['label-1'],
             oldLabelIds: [],
@@ -217,7 +219,7 @@ describe('LabelService', () => {
       })),
     };
     const unitOfWork = {
-      transaction: vi.fn((cb) => cb()),
+      transaction: vi.fn((cb: () => void) => cb()),
     };
 
     const labelService = new LabelService({
@@ -261,7 +263,7 @@ describe('LabelService', () => {
         {
           ticketId: 'one-piece',
           customerId: undefined,
-          type: 'LabelsChanged',
+          type: 'LABELS_CHANGED',
           entry: {
             newLabelIds: [],
             oldLabelIds: ['label-1'],

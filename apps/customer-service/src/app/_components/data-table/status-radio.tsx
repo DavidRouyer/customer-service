@@ -37,13 +37,13 @@ export const StatusRadio = () => {
       }
     >
       <StatusRadioGroupItem value={TicketStatus.Open} className="gap-2">
-        <CircleDot className="h-4 w-4 text-warning" />
+        <CircleDot className="size-4 text-warning" />
         <span>
           <FormattedMessage id="ticket.statuses.open" />
         </span>
       </StatusRadioGroupItem>
       <StatusRadioGroupItem value={TicketStatus.Done} className="gap-2">
-        <CheckCircle2 className="h-4 w-4 text-valid" />
+        <CheckCircle2 className="size-4 text-valid" />
         <span>
           <FormattedMessage id="ticket.statuses.done" />
         </span>

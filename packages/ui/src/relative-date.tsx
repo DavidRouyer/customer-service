@@ -1,13 +1,14 @@
 'use client';
 
-import { FC, useEffect, useMemo, useState } from 'react';
+import type { FC } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useIntl } from 'react-intl';
 
 import { useMounted } from './use-mounted';
 
-type RelativeDateProps = {
+interface RelativeDateProps {
   dateTime: Date;
-};
+}
 
 const second = 1000;
 const minute = second * 60;

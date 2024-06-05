@@ -34,7 +34,7 @@
   "scripts": {
     "build": "tsc",
     "clean": "rm -rf .turbo node_modules",
-    "lint": "eslint .",
+    "lint": "eslint",
     "format": "prettier --check \"**/*.{mjs,ts,md,json}\"",
     "typecheck": "tsc --noEmit"
   },
@@ -68,13 +68,7 @@
     "@testing-library/react": "^16.0.0",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
-    "eslint": "^8.57.0"
-  },
-  "eslintConfig": {
-    "root": true,
-    "extends": [
-      "@cs/eslint-config/base"
-    ]
+    "eslint": "^9.4.0"
   },
   "prettier": "@cs/prettier-config"
 }

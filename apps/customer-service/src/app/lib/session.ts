@@ -7,5 +7,5 @@ export async function getCurrentUser() {
     return null;
   }
 
-  return session?.user;
+  return session.user;
 }

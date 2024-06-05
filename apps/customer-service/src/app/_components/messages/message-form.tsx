@@ -1,28 +1,29 @@
 'use client';
 
-import { createContext, FC, RefObject, useRef } from 'react';
+import type { FC, RefObject } from 'react';
+import { createContext, useRef } from 'react';
 import dynamic from 'next/dynamic';
+import { useQueryClient } from '@tanstack/react-query';
 import { useAtom } from 'jotai';
 import { PaperclipIcon, SmilePlusIcon } from 'lucide-react';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
 import { FormattedMessage } from 'react-intl';
 
-import { RouterOutputs } from '@cs/api';
 import { parseTextFromEditorState } from '@cs/kyaku/editor';
-import {
-  TicketChat,
-  TicketNote,
-  TicketTimelineEntryType,
-} from '@cs/kyaku/models';
+import type { TicketChat, TicketNote } from '@cs/kyaku/models';
 import { cn } from '@cs/ui';
 import { Button } from '@cs/ui/button';
 import { Label } from '@cs/ui/label';
 import { Switch } from '@cs/ui/switch';
 
 import { messageModeAtom } from '~/app/_components/messages/message-mode-atom';
-import { api } from '~/trpc/react';
-
-type TimelineItem = RouterOutputs['ticketTimeline']['byTicketId'][0];
+import type { TimelineEntry } from '~/graphql/generated/client';
+import {
+  useCreateNoteMutation,
+  useInfiniteTicketTimelineQuery,
+  useMyUserInfoQuery,
+  useSendChatMutation,
+} from '~/graphql/generated/client';
 
 const TextEditor = dynamic(
   () => import('~/app/_components/text-editor/text-editor'),
@@ -31,49 +32,56 @@ const TextEditor = dynamic(
   }
 );
 
-type MessageFormSchema = {
+interface MessageFormSchema {
   content: string;
-};
+}
 
 export const FormElementContext =
   createContext<RefObject<HTMLFormElement> | null>(null);
 
 export const MessageForm: FC<{ ticketId: string }> = ({ ticketId }) => {
   const formRef = useRef<HTMLFormElement>(null);
-  const { data: session } = api.auth.getSession.useQuery();
-  const utils = api.useUtils();
+  const { data: myUserInfo } = useMyUserInfoQuery(undefined, {
+    select: (data) => ({ user: data.myUserInfo }),
+  });
+  const queryClient = useQueryClient();
 
   const [messageMode, setMessageMode] = useAtom(messageModeAtom);
 
-  const { mutateAsync: sendChat } = api.ticket.sendChat.useMutation({
-    onMutate: async (newMessage) => {
+  const { mutate: sendChat } = useSendChatMutation({
+    onMutate: async ({ input }) => {
       // Cancel any outgoing refetches
       // (so they don't overwrite our optimistic update)
-      await utils.ticketTimeline.byTicketId.cancel({
-        ticketId: newMessage.ticketId,
+      await queryClient.cancelQueries({
+        queryKey: useInfiniteTicketTimelineQuery.getKey({
+          ticketId: input.ticketId,
+        }),
       });
 
       // Snapshot the previous value
-      const previousMessages = utils.ticketTimeline.byTicketId.getData({
-        ticketId: newMessage.ticketId,
-      });
+      const previousMessages = queryClient.getQueryData(
+        useInfiniteTicketTimelineQuery.getKey({
+          ticketId: input.ticketId,
+        })
+      );
 
       // Optimistically update to the new value
-      utils.ticketTimeline.byTicketId.setData(
-        { ticketId: newMessage.ticketId },
-        (oldQueryData: TimelineItem[] | undefined) => [
+      queryClient.setQueryData(
+        useInfiniteTicketTimelineQuery.getKey({
+          ticketId: input.ticketId,
+        }),
+        (oldQueryData: TimelineEntry[] | undefined) => [
           ...(oldQueryData ?? []),
           {
             id: self.crypto.randomUUID(),
-            customerId: oldQueryData?.[0]?.customerId ?? '',
-            type: TicketTimelineEntryType.Chat,
-            ticketId: newMessage.ticketId,
+            customer: oldQueryData?.[0]?.customer,
+            ticketId: input.ticketId,
             entry: {
-              text: newMessage.text,
+              text: input.text,
             } satisfies TicketChat,
             createdAt: new Date(),
-            userCreatedById: session?.user?.id ?? null,
-            userCreatedBy: session?.user ?? null,
+            userCreatedById: myUserInfo?.user?.id ?? null,
+            userCreatedBy: myUserInfo?.user ?? null,
             customerCreatedById: null,
             customerCreatedBy: null,
           },
@@ -83,47 +91,56 @@ export const MessageForm: FC<{ ticketId: string }> = ({ ticketId }) => {
       // Return a context object with the snapshotted value
       return { previousMessages };
     },
-    onError: (err, _newMessage, context) => {
+    onError: (err, { input }, context) => {
       // TODO: handle failed queries
-      utils.ticketTimeline.byTicketId.setData(
-        { ticketId: _newMessage.ticketId },
+      queryClient.setQueryData(
+        useInfiniteTicketTimelineQuery.getKey({
+          ticketId: input.ticketId,
+        }),
         context?.previousMessages ?? []
       );
     },
-    onSettled: (_, __, { ticketId }) => {
-      void utils.ticketTimeline.byTicketId.invalidate({ ticketId: ticketId });
+    onSettled: (_, __, { input }) => {
+      void queryClient.invalidateQueries({
+        queryKey: useInfiniteTicketTimelineQuery.getKey({
+          ticketId: input.ticketId,
+        }),
+      });
     },
   });
-  const { mutateAsync: sendNote } = api.ticket.sendNote.useMutation({
-    onMutate: async (newTicket) => {
+  const { mutate: createNote } = useCreateNoteMutation({
+    onMutate: async ({ input }) => {
       // Cancel any outgoing refetches
       // (so they don't overwrite our optimistic update)
-      await utils.ticketTimeline.byTicketId.cancel({
-        ticketId: newTicket.ticketId,
+      await queryClient.cancelQueries({
+        queryKey: useInfiniteTicketTimelineQuery.getKey({
+          ticketId: input.ticketId,
+        }),
       });
 
       // Snapshot the previous value
-      const previousTimelineItem = utils.ticketTimeline.byTicketId.getData({
-        ticketId: newTicket.ticketId,
-      });
+      const previousTimelineItem = queryClient.getQueryData(
+        useInfiniteTicketTimelineQuery.getKey({
+          ticketId: input.ticketId,
+        })
+      );
 
       // Optimistically update to the new value
-      utils.ticketTimeline.byTicketId.setData(
-        { ticketId: newTicket.ticketId },
-        (oldQueryData: TimelineItem[] | undefined) => [
+      queryClient.setQueryData(
+        useInfiniteTicketTimelineQuery.getKey({ ticketId: input.ticketId }),
+        (oldQueryData: TimelineEntry[] | undefined) => [
           ...(oldQueryData ?? []),
           {
             id: self.crypto.randomUUID(),
-            customerId: oldQueryData?.[0]?.customerId ?? '',
-            type: TicketTimelineEntryType.Note,
-            ticketId: newTicket.ticketId,
+            customer: oldQueryData?.[0]?.customer,
+            ticketId: input.ticketId,
             entry: {
-              text: newTicket.text,
-              rawContent: newTicket.rawContent,
+              text: input.text,
+              rawContent: input.rawContent,
             } satisfies TicketNote,
             createdAt: new Date(),
-            userCreatedById: session?.user?.id ?? null,
-            userCreatedBy: session?.user ?? null,
+            userCreatedById: myUserInfo?.user?.id ?? null,
+            userCreatedBy: myUserInfo?.user ?? null,
             customerCreatedById: null,
             customerCreatedBy: null,
           },
@@ -133,15 +150,19 @@ export const MessageForm: FC<{ ticketId: string }> = ({ ticketId }) => {
       // Return a context object with the snapshotted value
       return { previousNotes: previousTimelineItem };
     },
-    onError: (err, _newTicket, context) => {
+    onError: (err, { input }, context) => {
       // TODO: handle failed queries
-      utils.ticketTimeline.byTicketId.setData(
-        { ticketId: _newTicket.ticketId },
+      queryClient.setQueryData(
+        useInfiniteTicketTimelineQuery.getKey({ ticketId: input.ticketId }),
         context?.previousNotes ?? []
       );
     },
-    onSettled: (_, __, { ticketId }) => {
-      void utils.ticketTimeline.byTicketId.invalidate({ ticketId: ticketId });
+    onSettled: (_, __, { input }) => {
+      void queryClient.invalidateQueries({
+        queryKey: useInfiniteTicketTimelineQuery.getKey({
+          ticketId: input.ticketId,
+        }),
+      });
     },
   });
   const form = useForm<MessageFormSchema>();
@@ -150,15 +171,19 @@ export const MessageForm: FC<{ ticketId: string }> = ({ ticketId }) => {
     if (messageMode === 'reply') {
       const text = await parseTextFromEditorState(data.content);
       sendChat({
-        ticketId: ticketId,
-        text: text,
+        input: {
+          ticketId: ticketId,
+          text: text,
+        },
       });
     } else {
       const text = await parseTextFromEditorState(data.content);
-      sendNote({
-        ticketId: ticketId,
-        text: text,
-        rawContent: data.content,
+      createNote({
+        input: {
+          ticketId: ticketId,
+          text: text,
+          rawContent: data.content,
+        },
       });
     }
 

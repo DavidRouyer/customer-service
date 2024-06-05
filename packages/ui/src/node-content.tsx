@@ -1,14 +1,15 @@
 'use client';
 
-import { FC, Fragment, ReactNode } from 'react';
-import {
+import type { FC, ReactNode } from 'react';
+import { Fragment } from 'react';
+import type {
   SerializedEditorState,
   SerializedLexicalNode,
   SerializedParagraphNode,
   SerializedTextNode,
 } from 'lexical';
 
-import { SerializedEmojiNode } from '@cs/kyaku/editor';
+import type { SerializedEmojiNode } from '@cs/kyaku/editor';
 
 const deserializeChildren = (children: SerializedLexicalNode[]) => {
   const content: ReactNode[] = [];

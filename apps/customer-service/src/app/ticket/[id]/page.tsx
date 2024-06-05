@@ -6,11 +6,11 @@ import { InfoPanel } from '~/app/_components/infos/info-panel';
 import { Ticket } from '~/app/_components/tickets/ticket';
 import { TicketNavbar } from '~/app/_components/tickets/ticket-navbar';
 
-type TicketPageProps = {
+interface TicketPageProps {
   params: {
     id: string;
   };
-};
+}
 
 export default function TicketPage({ params: { id } }: TicketPageProps) {
   if (!id) return notFound();
@@ -21,8 +21,8 @@ export default function TicketPage({ params: { id } }: TicketPageProps) {
       <Suspense
         fallback={
           <aside className="fixed inset-y-0 right-0 hidden w-96 overflow-y-auto border-l px-4 py-6 sm:px-6 xl:block">
-            <div className="flex h-full w-full items-center justify-center">
-              <Loader2 className="h-8 w-8 animate-spin" />
+            <div className="flex size-full items-center justify-center">
+              <Loader2 className="size-8 animate-spin" />
             </div>
           </aside>
         }
@@ -31,12 +31,12 @@ export default function TicketPage({ params: { id } }: TicketPageProps) {
       </Suspense>
 
       <main className="lg:pl-14">
-        <div className="xl:mr-96 xl:h-[100dvh] xl:overflow-y-auto xl:pl-96">
-          <div className="flex h-[100dvh] flex-col px-4 py-6 sm:px-6">
+        <div className="xl:mr-96 xl:h-dvh xl:overflow-y-auto xl:pl-96">
+          <div className="flex h-dvh flex-col px-4 py-6 sm:px-6">
             <Suspense
               fallback={
-                <div className="flex h-full w-full items-center justify-center">
-                  <Loader2 className="h-8 w-8 animate-spin" />
+                <div className="flex size-full items-center justify-center">
+                  <Loader2 className="size-8 animate-spin" />
                 </div>
               }
             >

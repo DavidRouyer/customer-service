@@ -1,0 +1,7 @@
+fragment CustomerParts on Customer {
+  id
+  name
+  email
+  phone
+  avatarUrl
+}

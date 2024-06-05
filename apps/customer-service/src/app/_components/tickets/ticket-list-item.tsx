@@ -1,26 +1,26 @@
 'use client';
 
-import { FC } from 'react';
+import type { FC } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { FormattedMessage } from 'react-intl';
 
-import { RouterOutputs } from '@cs/api';
-import { TicketChat, TicketNote } from '@cs/kyaku/models';
 import { getInitials } from '@cs/kyaku/utils';
 import { Avatar, AvatarFallback, AvatarImage } from '@cs/ui/avatar';
 import { RelativeTime } from '@cs/ui/relative-time';
 
-export type TicketListItemProps = {
-  ticket: NonNullable<RouterOutputs['ticket']['all']['data'][0]>;
+import type { TicketsQuery } from '~/graphql/generated/client';
+
+export interface TicketListItemProps {
+  ticket: NonNullable<TicketsQuery['tickets']['edges'][number]['node']>;
   currentUserId?: string;
-};
+}
 
 export const TicketListItem: FC<TicketListItemProps> = ({
   ticket,
   currentUserId,
 }) => {
   const pathname = usePathname();
+  console.log('currentUserId', currentUserId);
 
   return (
     <section className={pathname === `/ticket/${ticket.id}` ? 'bg-muted' : ''}>
@@ -43,12 +43,12 @@ export const TicketListItem: FC<TicketListItemProps> = ({
               {ticket.customer.name}
             </p>
             <p className="flex-none text-xs text-muted-foreground">
-              <time dateTime={ticket.createdAt.toUTCString()}>
-                <RelativeTime dateTime={ticket.createdAt} />
+              <time dateTime={ticket.createdAt}>
+                <RelativeTime dateTime={new Date(ticket.createdAt)} />
               </time>
             </p>
           </div>
-          <div className="mt-1 line-clamp-2 text-sm leading-6 text-muted-foreground">
+          {/*<div className="mt-1 line-clamp-2 text-sm leading-6 text-muted-foreground">
             {currentUserId === ticket.timeline?.[0]?.userCreatedById ? (
               <>
                 <FormattedMessage id="you" />{' '}
@@ -57,7 +57,7 @@ export const TicketListItem: FC<TicketListItemProps> = ({
             {ticket.timeline?.[0]
               ? (ticket.timeline?.[0]?.entry as TicketChat | TicketNote).text
               : null}
-          </div>
+            </div>*/}
         </div>
       </Link>
     </section>

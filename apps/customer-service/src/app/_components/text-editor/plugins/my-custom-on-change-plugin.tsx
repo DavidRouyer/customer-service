@@ -1,9 +1,10 @@
 import { OnChangePlugin } from '@lexical/react/LexicalOnChangePlugin';
-import { $getRoot, $getSelection, EditorState } from 'lexical';
+import type { EditorState } from 'lexical';
+import { $getRoot, $getSelection } from 'lexical';
 
-type MyCustomOnChangePluginProps = {
+interface MyCustomOnChangePluginProps {
   onChange: (value: string) => void;
-};
+}
 
 const MyCustomOnChangePlugin: React.FC<MyCustomOnChangePluginProps> = ({
   onChange,

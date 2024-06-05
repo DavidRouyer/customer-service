@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import type { FC } from 'react';
 
 import { TimelineItem } from '@cs/ui/timeline-item';
 
@@ -8,23 +8,23 @@ export const SmartTimelineItem: FC<{ itemId: string; ticketId: string }> = ({
   itemId,
   ticketId,
 }) => {
-  const timeline = useTimeline(ticketId);
-  const item = timeline.data?.find((entry) => entry.id === itemId);
+  const { data: timelineData } = useTimeline(ticketId);
+  const timeline = timelineData?.edges;
+  const item = timeline?.find((entry) => entry.node.id === itemId);
+
+  if (!timeline) return null;
+  if (!item) return null;
 
   const previousItemId =
-    timeline.data?.[
-      timeline.data?.findIndex((entry) => entry.id === itemId) - 1
-    ];
+    timeline[timeline.findIndex((entry) => entry.node.id === itemId) - 1];
   const nextItemId =
-    timeline.data?.[
-      timeline.data?.findIndex((entry) => entry.id === itemId) + 1
-    ];
+    timeline[timeline.findIndex((entry) => entry.node.id === itemId) + 1];
 
   return (
     <TimelineItem
-      item={item}
-      nextItemId={nextItemId?.id}
-      previousItemId={previousItemId?.id}
+      item={item.node}
+      nextItemId={nextItemId?.node.id}
+      previousItemId={previousItemId?.node.id}
     />
   );
 };

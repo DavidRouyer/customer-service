@@ -1,6 +1,6 @@
-import { DrizzleConnection } from '@cs/database';
+import type { DrizzleConnection } from '@cs/database';
 
-import { DrizzleTransactionScope } from './drizzle-transaction';
+import type { DrizzleTransactionScope } from './drizzle-transaction';
 
 export class UnitOfWork {
   private readonly _drizzleConnection: DrizzleConnection;

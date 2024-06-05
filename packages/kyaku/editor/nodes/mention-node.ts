@@ -1,14 +1,13 @@
-import {
-  $applyNodeReplacement,
+import { $applyNodeReplacement, TextNode } from 'lexical';
+import type {
+  DOMConversionMap,
+  DOMConversionOutput,
+  DOMExportOutput,
+  EditorConfig,
+  LexicalNode,
+  NodeKey,
   SerializedTextNode,
   Spread,
-  TextNode,
-  type DOMConversionMap,
-  type DOMConversionOutput,
-  type DOMExportOutput,
-  type EditorConfig,
-  type LexicalNode,
-  type NodeKey,
 } from 'lexical';
 
 export type SerializedMentionNode = Spread<
@@ -23,7 +22,7 @@ function convertMentionElement(
   domNode: HTMLElement
 ): DOMConversionOutput | null {
   const textContent = domNode.textContent;
-  const mentionId = domNode.getAttribute('data-lexical-mention-id') ?? '';
+  const mentionId = domNode.getAttribute('data-lexical-mention-id');
   if (textContent !== null && mentionId !== null) {
     const node = $createMentionNode(mentionId, textContent);
     return {

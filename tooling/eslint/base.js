@@ -1,29 +1,51 @@
-/** @type {import("eslint").Linter.Config} */
-module.exports = {
-  extends: [
-    'turbo',
-    'eslint:recommended',
-    'plugin:@typescript-eslint/recommended-type-checked',
-    'plugin:@typescript-eslint/stylistic-type-checked',
-    'prettier',
-  ],
-  env: {
-    es2022: true,
-    node: true,
+/// <reference types="./types.d.ts" />
+
+import eslint from '@eslint/js';
+import importPlugin from 'eslint-plugin-import';
+import tseslint from 'typescript-eslint';
+
+export default tseslint.config(
+  {
+    // Globally ignored files
+    ignores: ['**/*.config.*'],
   },
-  parser: '@typescript-eslint/parser',
-  parserOptions: {
-    project: true,
-  },
-  plugins: ['prettier', '@typescript-eslint'],
-  rules: {
-    '@typescript-eslint/consistent-type-definitions': ['error', 'type'],
-    '@typescript-eslint/no-floating-promises': 'off',
-    '@typescript-eslint/no-misused-promises': [
-      2,
-      { checksVoidReturn: { attributes: false } },
+  {
+    files: ['**/*.js', '**/*.ts', '**/*.tsx'],
+    plugins: {
+      import: importPlugin,
+    },
+    extends: [
+      eslint.configs.recommended,
+      ...tseslint.configs.recommended,
+      ...tseslint.configs.recommendedTypeChecked,
+      ...tseslint.configs.stylisticTypeChecked,
     ],
+    rules: {
+      '@typescript-eslint/unbound-method': 'off',
+      '@typescript-eslint/no-unused-vars': [
+        'error',
+        { argsIgnorePattern: '^_', varsIgnorePattern: '^_' },
+      ],
+      '@typescript-eslint/consistent-type-imports': [
+        'warn',
+        { prefer: 'type-imports', fixStyle: 'separate-type-imports' },
+      ],
+      '@typescript-eslint/no-misused-promises': [
+        2,
+        { checksVoidReturn: { attributes: false } },
+      ],
+      '@typescript-eslint/no-unnecessary-condition': [
+        'error',
+        {
+          allowConstantLoopConditions: true,
+        },
+      ],
+      '@typescript-eslint/no-non-null-assertion': 'error',
+      'import/consistent-type-specifier-style': ['error', 'prefer-top-level'],
+    },
   },
-  ignorePatterns: ['dist'],
-  reportUnusedDisableDirectives: true,
-};
+  {
+    linterOptions: { reportUnusedDisableDirectives: true },
+    languageOptions: { parserOptions: { project: true } },
+  }
+);

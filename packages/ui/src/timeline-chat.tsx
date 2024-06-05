@@ -1,19 +1,14 @@
-import { FC } from 'react';
+import type { FC } from 'react';
 
-import { TicketChat } from '@cs/kyaku/models';
 import { getInitials } from '@cs/kyaku/utils';
 
 import { Avatar, AvatarFallback, AvatarImage } from './avatar';
 import { RelativeTime } from './relative-time';
-import { TimelineItemType } from './timeline-item';
+import type { ChatEntry, TimelineItemNarrowed } from './timeline-item';
 
-type TimelineChatType = {
-  entry: TicketChat;
-} & Omit<TimelineItemType, 'entry'>;
-
-type TimelineChatProps = {
-  item: TimelineChatType;
-};
+interface TimelineChatProps {
+  item: TimelineItemNarrowed<ChatEntry>;
+}
 
 export const TimelineChat: FC<TimelineChatProps> = ({ item }) => {
   return (
@@ -40,7 +35,7 @@ export const TimelineChat: FC<TimelineChatProps> = ({ item }) => {
             </span>
             <span className="mx-1.5 size-[3px] rounded-full bg-gray-500"></span>
             <time
-              dateTime={item.createdAt.toISOString()}
+              dateTime={item.createdAt}
               className="text-xs text-muted-foreground"
             >
               <RelativeTime dateTime={new Date(item.createdAt)} />
@@ -52,7 +47,7 @@ export const TimelineChat: FC<TimelineChatProps> = ({ item }) => {
           <div></div>
           <div className="mt-3 border-t border-muted-foreground pt-3">
             <div className="whitespace-pre-line text-sm leading-6 ">
-              {item.entry?.text}
+              {item.entry.text}
             </div>
           </div>
         </div>

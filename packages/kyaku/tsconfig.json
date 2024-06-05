@@ -1,6 +1,7 @@
 {
   "extends": "@cs/tsconfig/base.json",
   "compilerOptions": {
+    "lib": ["es2022", "ES2023.Array", "dom", "dom.iterable"],
     "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json",
     "types": ["vitest/globals"]
   },

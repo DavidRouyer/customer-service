@@ -4,7 +4,7 @@ import {
   TicketStatus,
   TicketStatusDetail,
 } from './ticket';
-import {
+import type {
   TicketAssignmentChanged,
   TicketAssignmentChangedWithData,
   TicketChat,
@@ -13,9 +13,9 @@ import {
   TicketNote,
   TicketPriorityChanged,
   TicketStatusChanged,
-  TicketTimelineEntryType,
 } from './ticket-timeline-entry';
-import { User } from './user';
+import { TimelineEntryType } from './ticket-timeline-entry';
+import type { User } from './user';
 
 export {
   type TicketAssignmentChanged,
@@ -31,5 +31,5 @@ export {
   TicketPriority,
   TicketStatus,
   TicketStatusDetail,
-  TicketTimelineEntryType,
+  TimelineEntryType,
 };

@@ -12,7 +12,7 @@ export default function NotFound() {
             <div
               data-orientation="horizontal"
               role="none"
-              className="h-[1px] w-full shrink-0 bg-border"
+              className="h-px w-full shrink-0 bg-border"
             ></div>
           </div>
           <div className="flex grow flex-col items-center justify-center">

@@ -1,6 +1,7 @@
 'use client';
 
-import { FC, Suspense, useState } from 'react';
+import type { FC } from 'react';
+import { Suspense, useState } from 'react';
 import { AlignJustify } from 'lucide-react';
 import { FormattedMessage } from 'react-intl';
 

@@ -1,19 +1,15 @@
-import { FC } from 'react';
+import type { FC } from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { TicketPriorityChanged } from '@cs/kyaku/models';
+import type { TicketPriorityChanged } from '@cs/kyaku/models';
 
 import { RelativeTime } from './relative-time';
 import { TicketPriorityBadge } from './ticket-priority-badge';
-import { TimelineItemType } from './timeline-item';
+import type { TimelineItemNarrowed } from './timeline-item';
 
-type TimelinePriorityChangedType = {
-  entry: TicketPriorityChanged;
-} & Omit<TimelineItemType, 'entry'>;
-
-type TimelinePriorityChangedProps = {
-  item: TimelinePriorityChangedType;
-};
+interface TimelinePriorityChangedProps {
+  item: TimelineItemNarrowed<TicketPriorityChanged>;
+}
 
 export const TimelinePriorityChanged: FC<TimelinePriorityChangedProps> = ({
   item,
@@ -30,14 +26,14 @@ export const TimelinePriorityChanged: FC<TimelinePriorityChangedProps> = ({
         </span>{' '}
         <FormattedMessage id="ticket.activity.type.ticket_priority.changed" />{' '}
         <span className="space-x-1">
-          <TicketPriorityBadge priority={item.entry?.oldPriority} />
+          <TicketPriorityBadge priority={item.entry.oldPriority} />
         </span>{' '}
         <FormattedMessage id="ticket.activity.type.ticket_priority.to" />{' '}
         <span className="space-x-1">
-          <TicketPriorityBadge priority={item.entry?.newPriority} />
+          <TicketPriorityBadge priority={item.entry.newPriority} />
         </span>
         <span className="px-1.5">•</span>
-        <time dateTime={item.createdAt.toISOString()}>
+        <time dateTime={item.createdAt}>
           <RelativeTime dateTime={new Date(item.createdAt)} />
         </time>
       </div>

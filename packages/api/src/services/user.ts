@@ -1,16 +1,16 @@
-import { and, eq, inArray, notInArray, schema } from '@cs/database';
-import { FindConfig, GetConfig } from '@cs/kyaku/types/query';
-import { KyakuError } from '@cs/kyaku/utils';
+import { and, eq, schema } from '@cs/database';
+import type { FindConfig } from '@cs/kyaku/types/query';
+import { Direction } from '@cs/kyaku/types/query';
 
-import { USER_COLUMNS, UserSort, UserWith } from '../entities/user';
-import UserRepository from '../repositories/user';
-import { UnitOfWork } from '../unit-of-work';
+import type { UserFilters } from '../entities/user';
+import { USER_COLUMNS, UserSortField } from '../entities/user';
+import type UserRepository from '../repositories/user';
+import type { UnitOfWork } from '../unit-of-work';
 import { BaseService } from './base-service';
 import {
   filterByDirection,
-  InclusionFilterOperator,
+  inclusionFilterOperator,
   sortByDirection,
-  sortBySortDirection,
 } from './build-query';
 
 export default class UserService extends BaseService {
@@ -24,61 +24,82 @@ export default class UserService extends BaseService {
     this.userRepository = userRepository;
   }
 
-  async retrieve<T extends UserWith<T>>(userId: string, config?: GetConfig<T>) {
-    const user = await this.userRepository.find({
+  async retrieve(userId: string) {
+    return await this.userRepository.find({
       columns: USER_COLUMNS,
       where: eq(schema.users.id, userId),
     });
-
-    if (!user)
-      throw new KyakuError(
-        KyakuError.Types.NOT_FOUND,
-        `User with id:${userId} not found`
-      );
-
-    return user;
   }
 
-  async list<T extends UserWith<T>>(
-    filters: {
-      id?: InclusionFilterOperator<string>;
-    },
-    config?: FindConfig<T, UserSort>
+  async list(
+    filters: UserFilters = {},
+    config: FindConfig<object, UserSortField> = {
+      direction: Direction.Forward,
+      limit: 50,
+      sortBy: UserSortField.name,
+    }
   ) {
-    const whereClause = and(
-      filters.id
-        ? 'in' in filters.id
-          ? inArray(schema.labels.id, filters.id.in)
-          : 'notIn' in filters.id
-            ? notInArray(schema.labels.id, filters.id.notIn)
-            : undefined
-        : undefined,
-      config?.cursor
-        ? filterByDirection(config.direction)(schema.users.id, config.cursor)
-        : undefined
-    );
     return await this.userRepository.findMany({
       columns: USER_COLUMNS,
-      where: whereClause,
-      limit: config?.limit,
-      orderBy: and(
-        config?.sortBy
-          ? 'name' in config.sortBy
-            ? sortBySortDirection(
-                config.sortBy.name,
-                config.direction
-              )(schema.users.name)
-            : 'createdAt' in config.sortBy
-              ? sortBySortDirection(
-                  config.sortBy.createdAt,
-                  config.direction
-                )(schema.tickets.createdAt)
-              : undefined
-          : undefined,
-        config?.limit
-          ? sortByDirection(config.direction)(schema.tickets.id)
-          : undefined
+      limit: config.limit,
+      orderBy: [
+        ...this.getOrderByClause(config),
+        sortByDirection(config.direction)(schema.users.id),
+      ],
+      where: and(
+        this.getFilterWhereClause(filters),
+        this.getSortWhereClause(config),
+        this.getIdWhereClause(config)
       ),
     });
+  }
+
+  private getFilterWhereClause(filters: UserFilters) {
+    if (!Object.keys(filters).length) return undefined;
+
+    return and(
+      filters.userIds
+        ? inclusionFilterOperator(schema.users.id, filters.userIds)
+        : undefined
+    );
+  }
+
+  private getSortWhereClause(config: FindConfig<object, UserSortField>) {
+    if (
+      !config.sortBy ||
+      !config.cursor?.lastValue ||
+      config.cursor.lastValue === config.cursor.lastId
+    )
+      return undefined;
+
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+    if (config.sortBy === UserSortField.name) {
+      return filterByDirection(config.direction)(
+        schema.users.name,
+        config.cursor.lastValue
+      );
+    }
+
+    return undefined;
+  }
+
+  private getIdWhereClause(config: FindConfig<object, UserSortField>) {
+    if (!config.cursor?.lastId) return undefined;
+
+    return filterByDirection(config.direction)(
+      schema.users.id,
+      config.cursor.lastId
+    );
+  }
+
+  private getOrderByClause(config: FindConfig<object, UserSortField>) {
+    if (!config.sortBy) return [];
+
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+    if (config.sortBy === UserSortField.name) {
+      return [sortByDirection(config.direction)(schema.users.name)];
+    }
+
+    return [];
   }
 }

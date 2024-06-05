@@ -1,16 +1,19 @@
 'use client';
 
-import { FC, Fragment, useEffect } from 'react';
+import type { FC } from 'react';
+import { useEffect } from 'react';
 import { PartyPopper } from 'lucide-react';
 import { useInView } from 'react-intersection-observer';
 import { FormattedMessage } from 'react-intl';
 
-import { TicketFilter, TicketStatus } from '@cs/kyaku/models';
-import { SortDirection } from '@cs/kyaku/types';
+import type { TicketFilter, TicketStatus } from '@cs/kyaku/models';
 
 import { TicketListItem } from '~/app/_components/tickets/ticket-list-item';
 import { TicketListItemSkeleton } from '~/app/_components/tickets/ticket-list-item-skeleton';
-import { api } from '~/trpc/react';
+import {
+  useInfiniteTicketsQuery,
+  useMyUserInfoQuery,
+} from '~/graphql/generated/client';
 
 export const TicketList: FC<{
   filter: TicketFilter | string;
@@ -18,47 +21,50 @@ export const TicketList: FC<{
   orderBy: 'newest' | 'oldest';
 }> = ({ filter, status, orderBy }) => {
   const { ref, inView } = useInView();
+  console.log('filter', filter, 'status', status, 'orderBy', orderBy);
 
-  const { data, isFetching, fetchNextPage, hasNextPage } =
-    api.ticket.all.useInfiniteQuery(
-      {
-        filters: {
-          status: {
-            in: [status],
-          },
-        },
-        sortBy: {
-          createdAt:
-            orderBy === 'newest' ? SortDirection.DESC : SortDirection.ASC,
-        },
-        limit: 2,
+  const {
+    data: tickets,
+    isFetching,
+    fetchNextPage,
+    hasNextPage,
+  } = useInfiniteTicketsQuery(
+    {
+      filters: {
+        statuses: [status],
       },
-      {
-        getNextPageParam(lastPage) {
-          return lastPage.nextCursor;
-        },
-      }
-    );
-  const { data: session } = api.auth.getSession.useQuery();
+      first: 10,
+    },
+    {
+      initialPageParam: 0,
+      getNextPageParam(lastPage) {
+        if (!lastPage.tickets.pageInfo.hasNextPage) return undefined;
+        return lastPage.tickets.pageInfo.endCursor;
+      },
+      select: (data) => data.pages.flatMap((page) => page.tickets.edges),
+    }
+  );
+  const { data: myUserInfo } = useMyUserInfoQuery(undefined, {
+    select: (data) => ({ user: data.myUserInfo }),
+  });
 
   useEffect(() => {
     if (inView && hasNextPage && !isFetching) {
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       fetchNextPage();
     }
   }, [inView, hasNextPage, isFetching, fetchNextPage]);
 
-  const tickets = data?.pages?.flatMap((page) => page.data) ?? [];
-
   return (
     <div className="no-scrollbar flex-auto overflow-y-auto">
-      {(tickets.length ?? 0) > 0 ? (
+      {tickets && tickets.length > 0 ? (
         <>
           <div>
             {tickets.map((ticket) => (
               <TicketListItem
-                key={ticket.id}
-                ticket={ticket}
-                currentUserId={session?.user.id}
+                key={ticket.node.id}
+                ticket={ticket.node}
+                currentUserId={myUserInfo?.user?.id}
               />
             ))}
           </div>

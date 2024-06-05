@@ -12,14 +12,14 @@ import {
   TooltipTrigger,
 } from './tooltip';
 
-type CopyProps = {
+interface CopyProps {
   content: string;
   asChild?: boolean;
   translations: {
     copy: string;
     copied: string;
   };
-};
+}
 
 const Copy = React.forwardRef<
   HTMLButtonElement,

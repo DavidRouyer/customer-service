@@ -1,22 +1,17 @@
-import { FC } from 'react';
+import type { FC } from 'react';
 import { EyeOff } from 'lucide-react';
 import { FormattedMessage } from 'react-intl';
 
-import { TicketNote } from '@cs/kyaku/models';
 import { getInitials } from '@cs/kyaku/utils';
 
 import { Avatar, AvatarFallback, AvatarImage } from './avatar';
 import { NodeContent } from './node-content';
 import { RelativeTime } from './relative-time';
-import { TimelineItemType } from './timeline-item';
+import type { NoteEntry, TimelineItemNarrowed } from './timeline-item';
 
-type TimelineNoteType = {
-  entry: TicketNote;
-} & Omit<TimelineItemType, 'entry'>;
-
-type TimelineNoteProps = {
-  item: TimelineNoteType;
-};
+interface TimelineNoteProps {
+  item: TimelineItemNarrowed<NoteEntry>;
+}
 
 export const TimelineNote: FC<TimelineNoteProps> = ({ item }) => {
   return (
@@ -43,7 +38,7 @@ export const TimelineNote: FC<TimelineNoteProps> = ({ item }) => {
             </span>
             <span className="mx-1.5 size-[3px] rounded-full bg-gray-500"></span>
             <time
-              dateTime={item.createdAt.toISOString()}
+              dateTime={item.createdAt}
               className="text-xs text-muted-foreground"
             >
               <RelativeTime dateTime={new Date(item.createdAt)} />
@@ -54,7 +49,7 @@ export const TimelineNote: FC<TimelineNoteProps> = ({ item }) => {
           <div></div>
           <div className="mt-3 border-t border-muted-foreground pt-3">
             <div className="whitespace-pre-line text-sm leading-6">
-              <NodeContent content={item.entry?.rawContent} />
+              <NodeContent content={item.entry.rawContent} />
             </div>
             <div className="mt-1 flex items-center gap-x-2 text-xs text-gray-500">
               <EyeOff className="size-3" />{' '}

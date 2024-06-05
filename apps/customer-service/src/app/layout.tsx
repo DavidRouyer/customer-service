@@ -1,10 +1,9 @@
 import type { Metadata, Viewport } from 'next';
 
-import { TRPCReactProvider } from '~/trpc/react';
-
 import '~/app/globals.css';
 
 import { ThemeProvider } from '~/app/_components/theme-provider';
+import { QueryProvider } from '~/app/api/providers';
 import getIntl from '~/app/i18n/server';
 import ServerIntlProvider from '~/app/i18n/ServerIntlProvider';
 
@@ -42,7 +41,7 @@ export default async function RootLayout({
           <ServerIntlProvider
             intl={{ messages: intl.messages, locale: intl.locale }}
           >
-            <TRPCReactProvider>{children}</TRPCReactProvider>
+            <QueryProvider>{children}</QueryProvider>
           </ServerIntlProvider>
         </ThemeProvider>
       </body>

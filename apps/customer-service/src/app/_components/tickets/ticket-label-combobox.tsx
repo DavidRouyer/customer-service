@@ -1,8 +1,9 @@
-import { FC, useState } from 'react';
+import type { FC } from 'react';
+import { useState } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
 import { Check, Plus } from 'lucide-react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
-import { RouterOutputs } from '@cs/api';
 import { cn } from '@cs/ui';
 import { Badge } from '@cs/ui/badge';
 import { Button } from '@cs/ui/button';
@@ -16,12 +17,19 @@ import {
 } from '@cs/ui/command';
 import { Popover, PopoverContent, PopoverTrigger } from '@cs/ui/popover';
 
-import { api } from '~/trpc/react';
+import type { TicketQuery } from '~/graphql/generated/client';
+import {
+  useAddLabelsMutation,
+  useInfiniteTicketTimelineQuery,
+  useLabelTypesQuery,
+  useRemoveLabelsMutation,
+  useTicketQuery,
+} from '~/graphql/generated/client';
 
-type TicketLabelComboboxProps = {
-  labels?: NonNullable<RouterOutputs['ticket']['byId']>['labels'];
+interface TicketLabelComboboxProps {
+  labels?: NonNullable<TicketQuery['ticket']>['labels'];
   ticketId: string;
-};
+}
 
 export const TicketLabelCombobox: FC<TicketLabelComboboxProps> = ({
   labels,
@@ -30,89 +38,134 @@ export const TicketLabelCombobox: FC<TicketLabelComboboxProps> = ({
   const { formatMessage } = useIntl();
   const [open, setOpen] = useState(false);
 
-  const utils = api.useUtils();
+  const queryClient = useQueryClient();
 
-  const { data: labelTypesData } = api.labelType.all.useQuery({
-    isArchived: false,
-  });
+  const { data: labelTypesData } = useLabelTypesQuery(
+    {
+      filters: {
+        isArchived: false,
+      },
+    },
+    {
+      select: (data) => data.labelTypes,
+    }
+  );
 
-  const { mutateAsync: addLabels } = api.label.addLabels.useMutation({
-    onMutate: async (newLabels) => {
+  const { mutate: addLabels } = useAddLabelsMutation({
+    onMutate: async ({ input }) => {
       // Cancel any outgoing refetches
       // (so they don't overwrite our optimistic update)
-      await utils.ticket.byId.cancel({ id: newLabels.ticketId });
-
-      // Snapshot the previous value
-      const previousTicket = utils.ticket.byId.getData({
-        id: newLabels.ticketId,
+      await queryClient.cancelQueries({
+        queryKey: useTicketQuery.getKey({ ticketId: input.ticketId }),
       });
 
+      // Snapshot the previous value
+      const previousTicket = queryClient.getQueryData<TicketQuery>(
+        useTicketQuery.getKey({
+          ticketId: input.ticketId,
+        })
+      );
+
       // Optimistically update to the new value
-      utils.ticket.byId.setData(
-        { id: newLabels.ticketId },
+      queryClient.setQueryData<TicketQuery>(
+        useTicketQuery.getKey({ ticketId: input.ticketId }),
         (oldQueryData) =>
-          ({
-            ...oldQueryData,
-            labels: previousTicket?.labels?.concat(
-              newLabels.labelTypeIds.map((labelTypeId) => ({
-                id: `${newLabels.ticketId}-${labelTypeId}`,
-                labelTypeId,
-                labelType: labelTypesData?.find(
-                  (labelType) => labelType.id === labelTypeId
-                )!,
-                ticketId: newLabels.ticketId,
-                archivedAt: null,
-              }))
-            ),
-          }) as NonNullable<RouterOutputs['ticket']['byId']>
+          oldQueryData?.ticket
+            ? {
+                ...oldQueryData,
+                ticket: {
+                  ...oldQueryData.ticket,
+                  labels: oldQueryData.ticket.labels.concat(
+                    input.labelTypeIds.map((labelTypeId) => ({
+                      id: `${input.ticketId}-${labelTypeId}`,
+                      labelType: labelTypesData?.edges.find(
+                        (labelType) => labelType.node.id === labelTypeId
+                      )?.node ?? {
+                        id: labelTypeId,
+                        name: 'Unknown',
+                        icon: null,
+                      },
+                      archivedAt: null,
+                    }))
+                  ),
+                },
+              }
+            : undefined
       );
 
       // Return a context object with the snapshotted value
-      return { previousTicket: previousTicket };
+      return { previousTicket };
     },
-    onError: (err, { ticketId }, context) => {
+    onError: (err, { input }, context) => {
       // TODO: handle failed queries
-      utils.ticket.byId.setData({ id: ticketId }, context?.previousTicket);
+      queryClient.setQueryData<TicketQuery>(
+        useTicketQuery.getKey({ ticketId: input.ticketId }),
+        context?.previousTicket
+      );
     },
-    onSettled: (_, __, { ticketId }) => {
-      void utils.ticket.byId.invalidate({ id: ticketId });
-      void utils.ticketTimeline.byTicketId.invalidate({ ticketId });
+    onSettled: (_, __, { input }) => {
+      void queryClient.invalidateQueries({
+        queryKey: useTicketQuery.getKey({ ticketId: input.ticketId }),
+      });
+      void queryClient.invalidateQueries({
+        queryKey: useInfiniteTicketTimelineQuery.getKey({
+          ticketId: input.ticketId,
+        }),
+      });
     },
   });
 
-  const { mutateAsync: removeLabels } = api.label.removeLabels.useMutation({
-    onMutate: async (removeLabels) => {
+  const { mutate: removeLabels } = useRemoveLabelsMutation({
+    onMutate: async ({ input }) => {
       // Cancel any outgoing refetches
       // (so they don't overwrite our optimistic update)
-      await utils.ticket.byId.cancel({ id: removeLabels.ticketId });
-
-      // Snapshot the previous value
-      const previousTicket = utils.ticket.byId.getData({
-        id: removeLabels.ticketId,
+      await queryClient.cancelQueries({
+        queryKey: useTicketQuery.getKey({ ticketId: input.ticketId }),
       });
 
+      // Snapshot the previous value
+      const previousTicket = queryClient.getQueryData<TicketQuery>(
+        useTicketQuery.getKey({
+          ticketId: input.ticketId,
+        })
+      );
+
       // Optimistically update to the new value
-      utils.ticket.byId.setData(
-        { id: removeLabels.ticketId },
+      queryClient.setQueryData<TicketQuery>(
+        useTicketQuery.getKey({ ticketId: input.ticketId }),
         (oldQueryData) =>
-          ({
-            ...oldQueryData,
-            labels: previousTicket?.labels?.filter(
-              (label) => !removeLabels.labelIds.includes(label.id)
-            ),
-          }) as NonNullable<RouterOutputs['ticket']['byId']>
+          oldQueryData?.ticket
+            ? {
+                ...oldQueryData,
+                ticket: {
+                  ...oldQueryData.ticket,
+                  labels: oldQueryData.ticket.labels.filter(
+                    (label) => !input.labelIds.includes(label.id)
+                  ),
+                },
+              }
+            : undefined
       );
 
       // Return a context object with the snapshotted value
-      return { previousTicket: previousTicket };
+      return { previousTicket };
     },
-    onError: (err, { ticketId }, context) => {
+    onError: (err, { input }, context) => {
       // TODO: handle failed queries
-      utils.ticket.byId.setData({ id: ticketId }, context?.previousTicket);
+      queryClient.setQueryData(
+        useTicketQuery.getKey({ ticketId: input.ticketId }),
+        context?.previousTicket
+      );
     },
-    onSettled: (_, __, { ticketId }) => {
-      void utils.ticket.byId.invalidate({ id: ticketId });
-      void utils.ticketTimeline.byTicketId.invalidate({ ticketId });
+    onSettled: (_, __, { input }) => {
+      void queryClient.invalidateQueries({
+        queryKey: useTicketQuery.getKey({ ticketId: input.ticketId }),
+      });
+      void queryClient.invalidateQueries({
+        queryKey: useInfiniteTicketTimelineQuery.getKey({
+          ticketId: input.ticketId,
+        }),
+      });
     },
   });
 
@@ -129,7 +182,7 @@ export const TicketLabelCombobox: FC<TicketLabelComboboxProps> = ({
           {(labels?.length ?? 0) > 0 ? (
             <div className="flex flex-wrap items-center gap-2">
               {labels?.map((label) => (
-                <Badge key={label?.id}> {label.labelType.name}</Badge>
+                <Badge key={label.id}> {label.labelType.name}</Badge>
               ))}
             </div>
           ) : (
@@ -154,20 +207,27 @@ export const TicketLabelCombobox: FC<TicketLabelComboboxProps> = ({
               <FormattedMessage id="ticket.labeling.no_results" />
             </CommandEmpty>
             <CommandGroup>
-              {(labelTypesData ?? []).map((labelType) => (
+              {(labelTypesData?.edges ?? []).map((labelType) => (
                 <CommandItem
-                  key={labelType.id}
+                  key={labelType.node.id}
                   onSelect={() => {
                     const labelWithLabelType = labels?.find(
-                      (label) => label.labelType.id === labelType.id
+                      (label) => label.labelType.id === labelType.node.id
                     );
                     if (labelWithLabelType) {
                       removeLabels({
-                        ticketId,
-                        labelIds: [labelWithLabelType.id],
+                        input: {
+                          ticketId,
+                          labelIds: [labelWithLabelType.id],
+                        },
                       });
                     } else {
-                      addLabels({ ticketId, labelTypeIds: [labelType.id] });
+                      addLabels({
+                        input: {
+                          ticketId,
+                          labelTypeIds: [labelType.node.id],
+                        },
+                      });
                     }
                   }}
                 >
@@ -176,14 +236,14 @@ export const TicketLabelCombobox: FC<TicketLabelComboboxProps> = ({
                       'mr-2 h-4 w-4 shrink-0',
                       labels
                         ?.map((label) => label.labelType.id)
-                        .includes(labelType.id)
+                        .includes(labelType.node.id)
                         ? 'opacity-100'
                         : 'opacity-0'
                     )}
                   />
                   <div className="flex items-center gap-x-2 truncate">
                     <p className="truncate text-xs text-muted-foreground">
-                      {labelType?.name}
+                      {labelType.node.name}
                     </p>
                   </div>
                 </CommandItem>

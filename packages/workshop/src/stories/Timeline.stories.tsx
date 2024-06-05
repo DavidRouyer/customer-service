@@ -1,7 +1,7 @@
 import { Timeline } from "@cs/ui/timeline";
-import { TimelineItem, TimelineItemType } from "@cs/ui/timeline-item";
+import { TimelineItem } from "@cs/ui/timeline-item";
 import type { Meta } from '@storybook/react';
-import { TicketPriority, TicketStatus, TicketTimelineEntryType } from '@cs/kyaku/models';
+import { TicketPriority, TicketStatus } from '@cs/kyaku/models';
 import { IntlProvider } from "react-intl";
 
 const meta = {
@@ -40,47 +40,47 @@ const bugLabelType = {
   archivedAt: null
 }
 
-const items: Record<string, TimelineItemType> = 
+const items: Record<number, TimelineItem> = 
  {
-  '1': {
+  1: {
     id: '1',
-    type: TicketTimelineEntryType.Chat,
-    createdAt: new Date("2023-05-06T11:23:45.389Z"),
+    createdAt: "2023-05-06T11:23:45.389Z",
     customer: customer,
     entry: {
+      __typename: 'ChatEntry',
       text: 'can ya help me change a product of purchase?'
     },
     customerCreatedBy: customer,
     userCreatedBy: null,
   },
-  '2': {
+  2: {
     id: '2',
-    type: TicketTimelineEntryType.Chat,
-    createdAt: new Date("2023-05-07T22:40:00.000Z"),
+    createdAt: "2023-05-07T22:40:00.000Z",
     customer: customer,
     entry: {
+      __typename: 'ChatEntry',
       text: 'Can you tell me which product you would like to change?'
     },
     customerCreatedBy: null,
     userCreatedBy: user,
   },
-  '3': {
+  3: {
     id: '3',
-    type: TicketTimelineEntryType.Chat,
-    createdAt: new Date("2023-05-08T22:40:00.000Z"),
+    createdAt: "2023-05-08T22:40:00.000Z",
     customer: customer,
     entry: {
+      __typename: 'ChatEntry',
       text: 'Can you tell me which product you would like to change?'
     },
     customerCreatedBy: customer,
     userCreatedBy: null,
   },
-  '4': {
+  4: {
     id: '4',
-    type: TicketTimelineEntryType.AssignmentChanged,
-    createdAt: new Date("2023-05-20T20:54:41.389Z"),
+    createdAt: "2023-05-20T20:54:41.389Z",
     customer: customer,
     entry: {
+      __typename: 'AssignmentChangedEntry',
       oldAssignedToId: null,
       newAssignedToId: "3cd0ab05-252f-4294-85f4-190e071db486",
       oldAssignedTo: null,
@@ -94,36 +94,36 @@ const items: Record<string, TimelineItemType> =
     customerCreatedBy: null,
     userCreatedBy: user,
   },
-  '5': {
+  5: {
     id: '5',
-    type: TicketTimelineEntryType.Note,
-    createdAt: new Date("2023-05-21T20:54:41.389Z"),
+    createdAt: "2023-05-21T20:54:41.389Z",
     customer: customer,
     entry: {
+      __typename: 'NoteEntry',
       text: '',
-      rawContent: '{\"root\":{\"children\":[{\"children\":[{\"detail\":0,\"format\":0,\"mode\":\"normal\",\"style\":\"\",\"text\":\"test\",\"type\":\"text\",\"version\":1}],\"direction\":\"ltr\",\"format\":\"\",\"indent\":0,\"type\":\"paragraph\",\"version\":1}],\"direction\":\"ltr\",\"format\":\"\",\"indent\":0,\"type\":\"root\",\"version\":1}}'
+      rawContent: '{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"test","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}'
     },
     customerCreatedBy: null,
     userCreatedBy: user,
   },
-  '6': {
+  6: {
     id: '6',
-    type: TicketTimelineEntryType.PriorityChanged,
-    createdAt: new Date("2023-05-22T20:54:51.389Z"),
+    createdAt: "2023-05-22T20:54:51.389Z",
     customer: customer,
     entry: {
+      __typename: 'PriorityChangedEntry',
       oldPriority: TicketPriority.Low,
       newPriority: TicketPriority.High
     },
     customerCreatedBy: null,
     userCreatedBy: user,
   },
-  '7': {
+  7: {
     id: '7',
-    type: TicketTimelineEntryType.LabelsChanged,
-    createdAt: new Date("2023-05-22T20:55:41.389Z"),
+    createdAt: "2023-05-22T20:55:41.389Z",
     customer: customer,
     entry: {
+      __typename: 'LabelsChangedEntry',
       oldLabelIds: [],
       oldLabels: [],
       newLabelIds: ['1'],
@@ -138,12 +138,12 @@ const items: Record<string, TimelineItemType> =
     customerCreatedBy: null,
     userCreatedBy: user,
   },
-  '8': {
+  8: {
     id: '8',
-    type: TicketTimelineEntryType.StatusChanged,
-    createdAt: new Date("2023-05-23T20:55:41.389Z"),
+    createdAt: "2023-05-23T20:55:41.389Z",
     customer: customer,
     entry: {
+      __typename: 'StatusChangedEntry',
       oldStatus: TicketStatus.Open,
       newStatus: TicketStatus.Done
     },
@@ -160,9 +160,11 @@ export const OldestToNewest = () => {
       items={Object.keys(items)}
       renderItem={({itemId}) =>
         <TimelineItem
-          item={items[itemId]}
-          nextItemId={items[(Number(itemId) + 1).toString()] !== undefined ? (Number(itemId) + 1).toString() : undefined}
-          previousItemId={items[(Number(itemId) - 1).toString()] !== undefined ? (Number(itemId) - 1).toString() : undefined}
+          item={items[Number(itemId)]}
+          // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+          nextItemId={items[Number(itemId) + 1] !== undefined ? (Number(itemId) + 1).toString() : undefined}
+          // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+          previousItemId={items[Number(itemId) - 1] !== undefined ? (Number(itemId) - 1).toString() : undefined}
         />}
       ticketId="ticket-id"
     />

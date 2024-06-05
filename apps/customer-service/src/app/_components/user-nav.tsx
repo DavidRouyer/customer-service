@@ -17,17 +17,19 @@ import {
 } from '@cs/ui/dropdown-menu';
 
 import { handleSignOut } from '~/app/_components/sign-out';
-import { api } from '~/trpc/react';
+import { useMyUserInfoQuery } from '~/graphql/generated/client';
 
-type UserNavProps = {
+interface UserNavProps {
   showLabel?: boolean;
-};
+}
 
 export function UserNav({ showLabel = false }: UserNavProps) {
-  const { data: session } = api.auth.getSession.useQuery();
+  const { data: myUserInfo } = useMyUserInfoQuery(undefined, {
+    select: (data) => ({ user: data.myUserInfo }),
+  });
   const formRef = useRef<HTMLFormElement>(null);
 
-  if (!session?.user) return null;
+  if (!myUserInfo?.user) return null;
 
   return (
     <>
@@ -40,15 +42,15 @@ export function UserNav({ showLabel = false }: UserNavProps) {
               className="flex w-full items-center gap-x-4 px-6 py-3 text-sm font-semibold leading-6 text-foreground hover:bg-gray-50 dark:hover:bg-gray-900"
             >
               <Avatar className="size-8">
-                <AvatarImage src={session.user.image ?? undefined} />
+                <AvatarImage src={myUserInfo.user.image ?? undefined} />
                 <AvatarFallback>
-                  {getInitials(session.user.name ?? '')}
+                  {getInitials(myUserInfo.user.name ?? '')}
                 </AvatarFallback>
               </Avatar>
               <span className="sr-only">
                 <FormattedMessage id="layout.your_profile" />
               </span>
-              <span aria-hidden="true">{session?.user.name}</span>
+              <span aria-hidden="true">{myUserInfo.user.name}</span>
             </button>
           ) : (
             <Button
@@ -58,11 +60,11 @@ export function UserNav({ showLabel = false }: UserNavProps) {
             >
               <Avatar className="size-9">
                 <AvatarImage
-                  src={session.user.image ?? undefined}
-                  alt={session.user.name ?? ''}
+                  src={myUserInfo.user.image ?? undefined}
+                  alt={myUserInfo.user.name ?? ''}
                 />
                 <AvatarFallback>
-                  {getInitials(session.user.name ?? '')}
+                  {getInitials(myUserInfo.user.name ?? '')}
                 </AvatarFallback>
               </Avatar>
             </Button>
@@ -72,10 +74,10 @@ export function UserNav({ showLabel = false }: UserNavProps) {
           <DropdownMenuLabel className="font-normal">
             <div className="flex flex-col space-y-1">
               <p className="text-sm font-medium leading-none">
-                {session.user.name ?? ''}
+                {myUserInfo.user.name ?? ''}
               </p>
               <p className="text-xs leading-none text-muted-foreground">
-                {session.user.email}
+                {myUserInfo.user.email}
               </p>
             </div>
           </DropdownMenuLabel>

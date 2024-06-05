@@ -1,7 +1,4 @@
-/** @type {import('eslint').Linter.Config} */
-module.exports = {
-  extends: [
-    'plugin:tailwindcss/recommended',
-  ],
-  plugins: ['tailwindcss']
-};
+import eslintPluginTailwindCSS from 'eslint-plugin-tailwindcss';
+
+/** @type {import('eslint').Linter.FlatConfig[]} */
+export default [...eslintPluginTailwindCSS.configs['flat/recommended']];

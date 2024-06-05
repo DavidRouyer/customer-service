@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import type { FC } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { AtSign, BarChart3, BookmarkX, Users } from 'lucide-react';
@@ -9,10 +9,12 @@ import { cn } from '@cs/ui';
 import { Avatar, AvatarFallback, AvatarImage } from '@cs/ui/avatar';
 
 import { matchPath } from '~/app/lib/path';
-import { api } from '~/trpc/react';
+import { useMyUserInfoQuery } from '~/graphql/generated/client';
 
 export const InboxList: FC = () => {
-  const { data: session } = api.auth.getSession.useQuery();
+  const { data: myUserInfo } = useMyUserInfoQuery(undefined, {
+    select: (data) => ({ user: data.myUserInfo }),
+  });
   const pathname = usePathname();
 
   //const [statsData] = api.ticket.stats.useSuspenseQuery();
@@ -40,7 +42,7 @@ export const InboxList: FC = () => {
             </span>
           </div>
 
-          {statsData?.total}
+          {statsData.total}
         </Link>
       </li>
       <li>
@@ -54,9 +56,9 @@ export const InboxList: FC = () => {
         >
           <div className="flex items-center gap-x-3 truncate">
             <Avatar className="size-4 shrink-0">
-              <AvatarImage src={session?.user.image ?? undefined} />
+              <AvatarImage src={myUserInfo?.user?.image ?? undefined} />
               <AvatarFallback>
-                {getInitials(session?.user.name ?? '')}
+                {getInitials(myUserInfo?.user?.name ?? '')}
               </AvatarFallback>
             </Avatar>
             <span className="truncate">
@@ -64,7 +66,7 @@ export const InboxList: FC = () => {
             </span>
           </div>
 
-          {statsData?.assignedToMe}
+          {statsData.assignedToMe}
         </Link>
       </li>
       <li>
@@ -83,7 +85,7 @@ export const InboxList: FC = () => {
             </span>
           </div>
 
-          {statsData?.unassigned}
+          {statsData.unassigned}
         </Link>
       </li>
       <li>
@@ -102,7 +104,7 @@ export const InboxList: FC = () => {
             </span>
           </div>
 
-          {statsData?.mentions}
+          {statsData.mentions}
         </Link>
       </li>
       <li>
