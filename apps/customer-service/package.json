@@ -48,7 +48,7 @@
     "@cs/tailwind-config": "*",
     "@cs/tsconfig": "*",
     "@testing-library/jest-dom": "^6.4.5",
-    "@testing-library/react": "^15.0.7",
+    "@testing-library/react": "^16.0.0",
     "@types/google-libphonenumber": "^7.4.30",
     "@types/negotiator": "^0.6.3",
     "@types/node": "^20.14.2",
