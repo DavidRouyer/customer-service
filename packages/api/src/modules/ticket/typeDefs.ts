@@ -125,35 +125,56 @@ const typeDefs = /* GraphQL */ `
     node: Ticket!
   }
 
+  """
+  Represents a ticket assignment change in the timeline.
+  """
   type AssignmentChangedEntry {
     oldAssignedTo: User
     newAssignedTo: User
   }
 
+  """
+  Represents a chat in the timeline.
+  """
   type ChatEntry {
     text: String!
   }
 
+  """
+  Represents a label change in the timeline.
+  """
   type LabelsChangedEntry {
     oldLabels: [Label!]!
     newLabels: [Label!]!
   }
 
+  """
+  Represents a note in the timeline.
+  """
   type NoteEntry {
     text: String!
     rawContent: String!
   }
 
+  """
+  Represents a priority change in the timeline.
+  """
   type PriorityChangedEntry {
     oldPriority: TicketPriority
     newPriority: TicketPriority
   }
 
+  """
+  Represents a status change in the timeline.
+  """
   type StatusChangedEntry {
     oldStatus: TicketStatus
     newStatus: TicketStatus
   }
 
+  """
+  A union of all possible entries that can appear in a timeline.
+  """
   union Entry =
     | AssignmentChangedEntry
     | ChatEntry
