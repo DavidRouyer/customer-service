@@ -27,7 +27,7 @@
     "eslint-plugin-jsx-a11y": "^6.8.0",
     "eslint-plugin-react": "^7.34.2",
     "eslint-plugin-react-hooks": "beta",
-    "eslint-plugin-tailwindcss": "^3.17.1",
+    "eslint-plugin-tailwindcss": "^3.17.3",
     "typescript-eslint": "rc-v8"
   },
   "devDependencies": {
