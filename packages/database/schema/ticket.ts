@@ -9,6 +9,7 @@ import {
 import { generateEntityId } from '@cs/kyaku/utils/generate-entity-id';
 
 import { users } from './auth';
+import { lifecycleFields } from './common';
 import { customers } from './customer';
 import { labels } from './label';
 import { ticketMentions } from './ticket-mentions';
@@ -56,20 +57,7 @@ export const tickets = pgTable('ticket', {
       onDelete: 'restrict',
       onUpdate: 'cascade',
     }),
-  createdAt: timestamp('createdAt', { precision: 3, mode: 'date' })
-    .defaultNow()
-    .notNull(),
-  createdById: varchar('createdById')
-    .notNull()
-    .references(() => users.id, {
-      onDelete: 'restrict',
-      onUpdate: 'cascade',
-    }),
-  updatedAt: timestamp('updatedAt', { precision: 3, mode: 'date' }),
-  updatedById: varchar('updatedById').references(() => users.id, {
-    onDelete: 'restrict',
-    onUpdate: 'cascade',
-  }),
+  ...lifecycleFields,
 });
 
 export const ticketsRelations = relations(tickets, ({ one, many }) => ({

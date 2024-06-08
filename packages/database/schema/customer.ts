@@ -1,9 +1,10 @@
 import { relations } from 'drizzle-orm';
-import { pgTable, text, timestamp, varchar } from 'drizzle-orm/pg-core';
+import { pgTable, text, varchar } from 'drizzle-orm/pg-core';
 
 import { generateEntityId } from '@cs/kyaku/utils/generate-entity-id';
 
 import { users } from './auth';
+import { lifecycleFields } from './common';
 import { tickets } from './ticket';
 
 export const customers = pgTable('customer', {
@@ -17,20 +18,7 @@ export const customers = pgTable('customer', {
   avatarUrl: text('avatarUrl'),
   language: text('language'),
   timezone: text('timezone'),
-  createdAt: timestamp('createdAt', { precision: 3, mode: 'date' })
-    .defaultNow()
-    .notNull(),
-  createdById: varchar('createdById')
-    .notNull()
-    .references(() => users.id, {
-      onDelete: 'restrict',
-      onUpdate: 'cascade',
-    }),
-  updatedAt: timestamp('updatedAt', { precision: 3, mode: 'date' }),
-  updatedById: varchar('updatedById').references(() => users.id, {
-    onDelete: 'restrict',
-    onUpdate: 'cascade',
-  }),
+  ...lifecycleFields,
 });
 
 export const customersRelations = relations(customers, ({ one, many }) => ({
