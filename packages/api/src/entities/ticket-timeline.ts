@@ -7,7 +7,7 @@ import type {
   TicketPriorityChanged,
   TicketStatusChanged,
   TimelineEntryType,
-} from '@cs/kyaku/models/ticket-timeline-entry';
+} from '@cs/kyaku/models';
 
 export type TicketTimeline = InferSelectModel<
   typeof schema.ticketTimelineEntries

@@ -4,7 +4,7 @@ import { TicketPriority, TimelineEntryType } from '@cs/kyaku/models';
 import {
   connectionFromArray,
   validatePaginationArguments,
-} from '@cs/kyaku/utils/pagination';
+} from '@cs/kyaku/utils';
 
 import { authorize } from '../../authorize';
 import type { Label } from '../../entities/label';

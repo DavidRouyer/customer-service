@@ -1,7 +1,7 @@
 import {
   connectionFromArray,
   validatePaginationArguments,
-} from '@cs/kyaku/utils/pagination';
+} from '@cs/kyaku/utils';
 
 import { authorize } from '../../authorize';
 import { LabelTypeSortField } from '../../entities/label-type';

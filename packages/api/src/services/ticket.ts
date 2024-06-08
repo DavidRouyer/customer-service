@@ -13,9 +13,9 @@ import {
   TicketStatusDetail,
   TimelineEntryType,
 } from '@cs/kyaku/models';
-import type { FindConfig, GetConfig } from '@cs/kyaku/types/query';
-import { Direction } from '@cs/kyaku/types/query';
-import { KyakuError } from '@cs/kyaku/utils/errors';
+import type { FindConfig, GetConfig } from '@cs/kyaku/types';
+import { Direction } from '@cs/kyaku/types';
+import { KyakuError } from '@cs/kyaku/utils';
 
 import type { Ticket, TicketFilters, TicketWith } from '../entities/ticket';
 import { TicketSortField } from '../entities/ticket';
@@ -628,7 +628,7 @@ export default class TicketService extends BaseService {
         new Date(config.cursor.lastValue)
       );
     }
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+
     if (config.sortBy === TicketSortField.statusChangedAt) {
       return filterByDirection(config.direction)(
         schema.tickets.statusChangedAt,
@@ -658,7 +658,7 @@ export default class TicketService extends BaseService {
     if (config.sortBy === TicketSortField.createdAt) {
       return [sortByDirection(config.direction)(schema.tickets.createdAt)];
     }
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+
     if (config.sortBy === TicketSortField.statusChangedAt) {
       return [
         sortByDirection(config.direction)(schema.tickets.statusChangedAt),

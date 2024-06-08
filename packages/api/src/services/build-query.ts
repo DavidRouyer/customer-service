@@ -7,8 +7,7 @@ import type {
   schema,
 } from '@cs/database';
 import { asc, desc, gt, inArray, lt, notInArray } from '@cs/database';
-import { SortDirection } from '@cs/kyaku/types';
-import { Direction } from '@cs/kyaku/types/query';
+import { Direction, SortDirection } from '@cs/kyaku/types';
 
 type Schema = typeof schema;
 type TSchema = ExtractTablesWithRelations<Schema>;

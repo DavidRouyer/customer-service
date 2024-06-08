@@ -6,7 +6,7 @@ import {
   TicketStatus,
   TicketStatusDetail,
 } from '@cs/kyaku/models';
-import { generateEntityId } from '@cs/kyaku/utils/generate-entity-id';
+import { generateEntityId } from '@cs/kyaku/utils';
 
 import { users } from './auth';
 import { lifecycleFields } from './common';

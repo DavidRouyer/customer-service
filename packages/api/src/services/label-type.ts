@@ -1,9 +1,9 @@
 import { z } from 'zod';
 
 import { and, eq, isNotNull, isNull, schema } from '@cs/database';
-import type { FindConfig, GetConfig } from '@cs/kyaku/types/query';
-import { Direction } from '@cs/kyaku/types/query';
-import { KyakuError } from '@cs/kyaku/utils/errors';
+import { Direction } from '@cs/kyaku/types';
+import type { FindConfig, GetConfig } from '@cs/kyaku/types';
+import { KyakuError } from '@cs/kyaku/utils';
 
 import type {
   CreateLabelType,
@@ -293,7 +293,7 @@ export default class LabelTypeService extends BaseService {
         new Date(config.cursor.lastValue)
       );
     }
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+
     if (config.sortBy === LabelTypeSortField.name) {
       return filterByDirection(config.direction)(
         schema.labelTypes.name,
@@ -323,7 +323,7 @@ export default class LabelTypeService extends BaseService {
     if (config.sortBy === LabelTypeSortField.createdAt) {
       return [sortByDirection(config.direction)(schema.labelTypes.createdAt)];
     }
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+
     if (config.sortBy === LabelTypeSortField.name) {
       return [sortByDirection(config.direction)(schema.labelTypes.name)];
     }

@@ -3,6 +3,12 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
+  "exports": {
+    "./editor": "./editor/index.ts",
+    "./models": "./models/index.ts",
+    "./types": "./types/index.ts",
+    "./utils": "./utils/index.ts"
+  },
   "license": "MIT",
   "scripts": {
     "build": "tsc",

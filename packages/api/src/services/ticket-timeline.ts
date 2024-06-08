@@ -10,7 +10,7 @@ import type {
 } from '@cs/kyaku/models';
 import { TimelineEntryType } from '@cs/kyaku/models';
 import type { FindConfig } from '@cs/kyaku/types';
-import { Direction } from '@cs/kyaku/types/query';
+import { Direction } from '@cs/kyaku/types';
 
 import type {
   TicketTimeline,

@@ -1,6 +1,6 @@
 import { and, eq, schema } from '@cs/database';
-import type { FindConfig } from '@cs/kyaku/types/query';
-import { Direction } from '@cs/kyaku/types/query';
+import type { FindConfig } from '@cs/kyaku/types';
+import { Direction } from '@cs/kyaku/types';
 
 import type { UserFilters } from '../entities/user';
 import { USER_COLUMNS, UserSortField } from '../entities/user';
