@@ -8,14 +8,14 @@
     "tooling/*"
   ],
   "scripts": {
-    "build": "turbo build",
-    "clean:workspaces": "turbo clean",
-    "db:push": "yarn workspace @cs/database db:push",
-    "db:seed": "yarn workspace @cs/database db:seed",
-    "dev": "yarn turbo dev --parallel",
+    "build": "turbo run build",
+    "clean:workspaces": "turbo run clean",
+    "db:push": "turbo -F @cs/database db:push",
+    "db:seed": "turbo -F @cs/database db:seed",
+    "dev": "turbo watch dev",
     "test": "LC_ALL=en_US.UTF-8 vitest",
     "test:ui": "LC_ALL=en_US.UTF-8 vitest --ui",
-    "typecheck": "turbo typecheck"
+    "typecheck": "turbo run typecheck"
   },
   "license": "MIT",
   "dependencies": {

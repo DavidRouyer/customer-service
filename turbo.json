@@ -42,6 +42,13 @@
     },
     "codegen:graphql:watch": {
       "cache": false
+    },
+    "db:seed": {
+      "cache": false
+    },
+    "db:push": {
+      "cache": false,
+      "interactive": true
     }
   },
   "globalEnv": [
