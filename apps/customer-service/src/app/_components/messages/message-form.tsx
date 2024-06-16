@@ -6,13 +6,14 @@ import dynamic from 'next/dynamic';
 import { useQueryClient } from '@tanstack/react-query';
 import { useAtom } from 'jotai';
 import { PaperclipIcon, SmilePlusIcon } from 'lucide-react';
-import { Controller, FormProvider, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { FormattedMessage } from 'react-intl';
 
 import { parseTextFromEditorState } from '@cs/kyaku/editor';
 import type { TicketChat, TicketNote } from '@cs/kyaku/models';
 import { cn } from '@cs/ui';
 import { Button } from '@cs/ui/button';
+import { Form, FormField } from '@cs/ui/form';
 import { Label } from '@cs/ui/label';
 import { Switch } from '@cs/ui/switch';
 
@@ -194,7 +195,7 @@ export const MessageForm: FC<{ ticketId: string }> = ({ ticketId }) => {
 
   return (
     <FormElementContext.Provider value={formRef}>
-      <FormProvider {...form}>
+      <Form {...form}>
         <form
           ref={formRef}
           onSubmit={form.handleSubmit(onSubmit)}
@@ -210,11 +211,11 @@ export const MessageForm: FC<{ ticketId: string }> = ({ ticketId }) => {
               }
             )}
           >
-            <Controller
-              name="content"
+            <FormField
               control={form.control}
-              render={({ field: { value, onChange } }) => (
-                <TextEditor value={value} onChange={onChange} />
+              name="content"
+              render={({ field }) => (
+                <TextEditor value={field.value} onChange={field.onChange} />
               )}
             />
             {/* Spacer element to match the height of the toolbar */}
@@ -271,7 +272,7 @@ export const MessageForm: FC<{ ticketId: string }> = ({ ticketId }) => {
             </div>
           </div>
         </form>
-      </FormProvider>
+      </Form>
     </FormElementContext.Provider>
   );
 };
