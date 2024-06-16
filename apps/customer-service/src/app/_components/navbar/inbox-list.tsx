@@ -17,14 +17,6 @@ export const InboxList: FC = () => {
   });
   const pathname = usePathname();
 
-  //const [statsData] = api.ticket.stats.useSuspenseQuery();
-  const statsData = {
-    total: 0,
-    assignedToMe: 0,
-    unassigned: 0,
-    mentions: 0,
-  };
-
   return (
     <>
       <li>
@@ -41,8 +33,6 @@ export const InboxList: FC = () => {
               <FormattedMessage id="layout.tickets.all_tickets" />
             </span>
           </div>
-
-          {statsData.total}
         </Link>
       </li>
       <li>
@@ -65,8 +55,6 @@ export const InboxList: FC = () => {
               <FormattedMessage id="layout.tickets.my_tickets" />
             </span>
           </div>
-
-          {statsData.assignedToMe}
         </Link>
       </li>
       <li>
@@ -84,8 +72,6 @@ export const InboxList: FC = () => {
               <FormattedMessage id="layout.tickets.unassigned_tickets" />
             </span>
           </div>
-
-          {statsData.unassigned}
         </Link>
       </li>
       <li>
@@ -103,8 +89,6 @@ export const InboxList: FC = () => {
               <FormattedMessage id="layout.tickets.mentions" />
             </span>
           </div>
-
-          {statsData.mentions}
         </Link>
       </li>
       <li>

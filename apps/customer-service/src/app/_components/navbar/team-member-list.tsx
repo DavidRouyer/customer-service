@@ -22,7 +22,6 @@ export const TeamMemberList: FC = () => {
       select: (data) => data.users,
     }
   );
-  //const [statsData] = api.ticket.stats.useSuspenseQuery();
 
   return usersData?.edges
     .filter((user) => user.node.id !== myUserInfo?.user?.id)
