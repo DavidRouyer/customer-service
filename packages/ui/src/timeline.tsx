@@ -3,7 +3,8 @@
 import type { ReactNode } from 'react';
 import { useRef, useState } from 'react';
 
-import { cn } from '.';
+import { cn } from '@cs/ui';
+
 import { createScrollerLock, ScrollerLockContext } from './use-scroll-lock';
 
 import './timeline.css';

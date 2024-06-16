@@ -4,7 +4,8 @@ import React, { useState } from 'react';
 import { Slot } from '@radix-ui/react-slot';
 import copy from 'copy-to-clipboard';
 
-import { cn } from '.';
+import { cn } from '@cs/ui';
+
 import {
   Tooltip,
   TooltipContent,

@@ -15,6 +15,7 @@
     "./current-time": "./src/current-time.tsx",
     "./dialog": "./src/dialog.tsx",
     "./dropdown-menu": "./src/dropdown-menu.tsx",
+    "./form": "./src/form.tsx",
     "./input": "./src/input.tsx",
     "./item": "./src/item.tsx",
     "./label": "./src/label.tsx",
