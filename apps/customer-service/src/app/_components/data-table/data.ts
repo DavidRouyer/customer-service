@@ -1,13 +1,12 @@
-import {
-  ArrowDown,
-  ArrowRight,
-  ArrowUp,
-  CheckCircle2,
-  Circle,
-  ShieldAlert,
-} from 'lucide-react';
+import { CheckCircle2, Circle } from 'lucide-react';
 
 import { TicketPriority, TicketStatus } from '@cs/kyaku/models';
+import {
+  PriorityCritical,
+  PriorityHigh,
+  PriorityLow,
+  PriorityMedium,
+} from '@cs/ui/icons';
 
 export const labels = [
   {
@@ -41,21 +40,21 @@ export const priorities = [
   {
     label: 'Low',
     value: TicketPriority.Low,
-    icon: ArrowDown,
+    icon: PriorityLow,
   },
   {
     label: 'Medium',
     value: TicketPriority.Medium,
-    icon: ArrowRight,
+    icon: PriorityMedium,
   },
   {
     label: 'High',
     value: TicketPriority.High,
-    icon: ArrowUp,
+    icon: PriorityHigh,
   },
   {
     label: 'Critical',
     value: TicketPriority.Critical,
-    icon: ShieldAlert,
+    icon: PriorityCritical,
   },
 ];

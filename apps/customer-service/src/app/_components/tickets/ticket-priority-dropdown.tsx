@@ -1,6 +1,5 @@
 import type { FC } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
-import { Shield, ShieldAlert } from 'lucide-react';
 import { FormattedMessage } from 'react-intl';
 
 import type { TicketPriority } from '@cs/kyaku/models';
@@ -13,6 +12,12 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@cs/ui/dropdown-menu';
+import {
+  PriorityCritical,
+  PriorityHigh,
+  PriorityLow,
+  PriorityMedium,
+} from '@cs/ui/icons';
 import { TicketPriorityBadge } from '@cs/ui/ticket-priority-badge';
 
 import type { TicketQuery } from '~/graphql/generated/client';
@@ -106,7 +111,7 @@ export const TicketPriorityDropdowm: FC<TicketChangePriorityProps> = ({
             disabled={priority === TicketPriorityType.Critical}
           >
             <div className="flex items-center gap-x-2">
-              <ShieldAlert className="size-5 text-destructive" />
+              <PriorityCritical className="size-4" />
               <p className="text-xs text-muted-foreground">
                 <FormattedMessage id="ticket.priorities.critical" />
               </p>
@@ -125,7 +130,7 @@ export const TicketPriorityDropdowm: FC<TicketChangePriorityProps> = ({
             disabled={priority === TicketPriorityType.High}
           >
             <div className="flex items-center gap-x-2">
-              <Shield className="size-5 text-destructive" />
+              <PriorityHigh className="size-4" />
               <p className="text-xs text-muted-foreground">
                 <FormattedMessage id="ticket.priorities.high" />
               </p>
@@ -144,7 +149,7 @@ export const TicketPriorityDropdowm: FC<TicketChangePriorityProps> = ({
             disabled={priority === TicketPriorityType.Medium}
           >
             <div className="flex items-center gap-x-2">
-              <Shield className="size-5 text-warning" />
+              <PriorityMedium className="size-4" />
               <p className="text-xs text-muted-foreground">
                 <FormattedMessage id="ticket.priorities.medium" />
               </p>
@@ -160,7 +165,7 @@ export const TicketPriorityDropdowm: FC<TicketChangePriorityProps> = ({
             disabled={priority === TicketPriorityType.Low}
           >
             <div className="flex items-center gap-x-2">
-              <Shield className="size-5 text-muted-foreground" />
+              <PriorityLow className="size-4" />
               <p className="text-xs text-muted-foreground">
                 <FormattedMessage id="ticket.priorities.low" />
               </p>

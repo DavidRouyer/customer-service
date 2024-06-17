@@ -16,6 +16,7 @@
     "./dialog": "./src/dialog.tsx",
     "./dropdown-menu": "./src/dropdown-menu.tsx",
     "./form": "./src/form.tsx",
+    "./icons": "./src/icons/index.ts",
     "./input": "./src/input.tsx",
     "./item": "./src/item.tsx",
     "./label": "./src/label.tsx",

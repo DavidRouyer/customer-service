@@ -66,7 +66,7 @@
   "ticket.labeling.search.placeholder": "Search label...",
   "ticket.labeling.no_results": "No labels found",
   "ticket.opened_on": "Opened on",
-  "ticket.priorities.critical": "Critical",
+  "ticket.priorities.critical": "Urgent",
   "ticket.priorities.high": "High",
   "ticket.priorities.low": "Low",
   "ticket.priorities.medium": "Normal",

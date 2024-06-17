@@ -1,8 +1,13 @@
 import type { FC } from 'react';
-import { Shield, ShieldAlert } from 'lucide-react';
 import { FormattedMessage } from 'react-intl';
 
 import type { TicketPriority } from '@cs/kyaku/models';
+import {
+  PriorityCritical,
+  PriorityHigh,
+  PriorityLow,
+  PriorityMedium,
+} from '@cs/ui/icons';
 
 export const TicketPriorityBadge: FC<{
   priority: TicketPriority;
@@ -10,7 +15,7 @@ export const TicketPriorityBadge: FC<{
   return {
     CRITICAL: (
       <>
-        <ShieldAlert className="inline-flex size-4 text-destructive" />
+        <PriorityCritical className="inline-flex size-4" />
         <span className="text-xs text-muted-foreground">
           <FormattedMessage id="ticket.priorities.critical" />
         </span>
@@ -18,7 +23,7 @@ export const TicketPriorityBadge: FC<{
     ),
     HIGH: (
       <>
-        <Shield className="inline-flex size-4 text-destructive" />
+        <PriorityHigh className="inline-flex size-4" />
         <span className="text-xs text-muted-foreground">
           <FormattedMessage id="ticket.priorities.high" />
         </span>
@@ -26,7 +31,7 @@ export const TicketPriorityBadge: FC<{
     ),
     MEDIUM: (
       <>
-        <Shield className="inline-flex size-4 text-warning" />
+        <PriorityMedium className="inline-flex size-4" />
         <span className="text-xs text-muted-foreground">
           <FormattedMessage id="ticket.priorities.medium" />
         </span>
@@ -34,7 +39,7 @@ export const TicketPriorityBadge: FC<{
     ),
     LOW: (
       <>
-        <Shield className="inline-flex size-4 text-muted-foreground" />
+        <PriorityLow className="inline-flex size-4" />
         <span className="text-xs text-muted-foreground">
           <FormattedMessage id="ticket.priorities.low" />
         </span>
