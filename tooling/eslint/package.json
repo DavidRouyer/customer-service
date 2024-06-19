@@ -24,7 +24,7 @@
     "@typescript-eslint/parser": "rc-v8",
     "eslint-plugin-import": "^2.29.1",
     "eslint-plugin-jsx-a11y": "^6.8.0",
-    "eslint-plugin-react": "^7.34.2",
+    "eslint-plugin-react": "^7.34.3",
     "eslint-plugin-react-hooks": "beta",
     "eslint-plugin-tailwindcss": "^3.17.3",
     "eslint-plugin-turbo": "^2.0.4",
