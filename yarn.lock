@@ -2010,7 +2010,7 @@ __metadata:
     jotai: "npm:^2.8.3"
     jsdom: "npm:^24.1.0"
     lexical: "npm:^0.16.0"
-    lucide-react: "npm:^0.395.0"
+    lucide-react: "npm:^0.396.0"
     negotiator: "npm:^0.6.3"
     next: "npm:^14.2.4"
     next-themes: "npm:^0.3.0"
@@ -2148,7 +2148,7 @@ __metadata:
     copy-to-clipboard: "npm:^3.3.3"
     cva: "npm:1.0.0-beta.1"
     eslint: "npm:^9.5.0"
-    lucide-react: "npm:^0.395.0"
+    lucide-react: "npm:^0.396.0"
     react: "npm:^18.3.1"
     react-dom: "npm:^18.3.1"
     tailwind-merge: "npm:^2.3.0"
@@ -13574,12 +13574,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lucide-react@npm:^0.395.0":
-  version: 0.395.0
-  resolution: "lucide-react@npm:0.395.0"
+"lucide-react@npm:^0.396.0":
+  version: 0.396.0
+  resolution: "lucide-react@npm:0.396.0"
   peerDependencies:
     react: ^16.5.1 || ^17.0.0 || ^18.0.0
-  checksum: 10c0/e3ae8865da0e20514e6058f908c9b0686b9117e63c53ea42bdcdbc45e87a09054be35b4698c8f185dbd57fd110e6730c9c308b50e99f7170f498372b5fbac772
+  checksum: 10c0/3c48ed3d12016e670781698af7a08067ea49b5132d6bef2b6e6e794d76f93de46d6f308af50263a8ae0c2e23bf21b0b33b97aded9aed5a68c6b81e6117cf4828
   languageName: node
   linkType: hard
 
