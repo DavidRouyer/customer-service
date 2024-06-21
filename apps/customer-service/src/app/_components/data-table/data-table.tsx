@@ -6,18 +6,22 @@ import type { ColumnDef } from '@tanstack/react-table';
 import {
   flexRender,
   getCoreRowModel,
-  getPaginationRowModel,
+  getExpandedRowModel,
+  getGroupedRowModel,
+  getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table';
+
+import { TicketPriorityBadge } from '@cs/ui/ticket-priority-badge';
 
 import { StatusRadio } from '~/app/_components/data-table/status-radio';
 import {
   Table,
   TableBody,
   TableCell,
-  TableHeader,
   TableRow,
-} from '~/app/_components/ui/table';
+} from '~/app/_components/data-table/table';
+import { TableRowGroup } from '~/app/_components/data-table/table-row-group';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -29,17 +33,33 @@ export function DataTable<TData, TValue>({
   data,
 }: DataTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = React.useState({});
+  const [grouping] = React.useState(['priority']);
+  const [sorting] = React.useState([
+    {
+      id: 'priority',
+      desc: false,
+    },
+  ]);
 
   const table = useReactTable({
     data,
     columns,
     state: {
+      grouping,
       rowSelection,
+      expanded: true,
+      sorting: sorting,
     },
+    autoResetExpanded: false,
+    enableExpanding: true,
+    enableGrouping: true,
     enableRowSelection: true,
+    enableSorting: true,
     onRowSelectionChange: setRowSelection,
     getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
+    getExpandedRowModel: getExpandedRowModel(),
+    getGroupedRowModel: getGroupedRowModel(),
+    getSortedRowModel: getSortedRowModel(),
   });
 
   return (
@@ -47,49 +67,30 @@ export function DataTable<TData, TValue>({
       <StatusRadio />
       <div className="rounded-md border">
         <Table>
-          <TableHeader>
-            {table.getHeaderGroups().map((headerGroup) => (
-              <div
-                key={headerGroup.id}
-                className="flex w-full items-center border-b transition-colors hover:bg-muted/50"
-              >
-                {headerGroup.headers.map((header) =>
-                  header.column.columnDef.meta?.hideHeader ? null : (
-                    <div
-                      key={header.id}
-                      className="flex p-2 align-middle font-medium"
-                    >
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
-                    </div>
-                  )
-                )}
-                <div>Todo</div>
-              </div>
-            ))}
-          </TableHeader>
           <TableBody>
-            {table.getRowModel().rows.length ? (
-              table.getRowModel().rows.map((row) => (
-                <TableRow
-                  key={row.id}
-                  href={`/ticket/${row.getValue<string>('id')}`}
-                  data-state={row.getIsSelected() && 'selected'}
-                >
-                  {row.getVisibleCells().map((cell) => (
-                    <Fragment key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </Fragment>
-                  ))}
-                </TableRow>
-              ))
+            {table.getExpandedRowModel().rows.length ? (
+              table.getExpandedRowModel().rows.map((row) =>
+                row.getIsGrouped() ? (
+                  <TableRowGroup key={row.id} className="flex space-x-2">
+                    <TicketPriorityBadge priority={row.original.priority} />
+                  </TableRowGroup>
+                ) : (
+                  <TableRow
+                    key={row.id}
+                    href={`/ticket/${row.getValue<string>('id')}`}
+                    data-state={row.getIsSelected() && 'selected'}
+                  >
+                    {row.getVisibleCells().map((cell) => (
+                      <Fragment key={cell.id}>
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
+                      </Fragment>
+                    ))}
+                  </TableRow>
+                )
+              )
             ) : (
               <TableRow>
                 <TableCell

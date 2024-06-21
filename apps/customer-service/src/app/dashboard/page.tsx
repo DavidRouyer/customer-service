@@ -34,14 +34,9 @@ export default function DashboardPage({
               title: ticket.node.title ?? '',
               status: ticket.node.status,
               priority: ticket.node.priority,
-              labels: ticket.node.labels.map((label) => ({
-                id: label.id,
-                labelType: {
-                  id: label.labelType.id,
-                  name: label.labelType.name,
-                },
-              })),
+              labels: ticket.node.labels,
               assignedTo: ticket.node.assignedTo,
+              customer: ticket.node.customer.name,
             }) satisfies TicketData
         );
       },

@@ -1,29 +1,27 @@
 'use client';
 
 import type { ColumnDef } from '@tanstack/react-table';
-import { Plus } from 'lucide-react';
+import { CircleDashed, Plus } from 'lucide-react';
 
 import { getInitials } from '@cs/kyaku/utils';
 import { Avatar, AvatarFallback, AvatarImage } from '@cs/ui/avatar';
 import { Badge } from '@cs/ui/badge';
 import { Checkbox } from '@cs/ui/checkbox';
 
+import { TicketPriority } from '~/graphql/generated/client';
 import type { TicketsQuery } from '~/graphql/generated/client';
+import type { IconType } from '../../../../../../packages/ui/src/icon';
+import { Icon } from '../../../../../../packages/ui/src/icon';
 import { priorities, statuses } from './data';
 
 export interface TicketData {
-  id: string;
-  title: string;
-  status: string;
-  labels: {
-    id: string;
-    labelType: {
-      id: string;
-      name: string;
-    };
-  }[];
-  priority: string;
   assignedTo: TicketsQuery['tickets']['edges'][number]['node']['assignedTo'];
+  customer: TicketsQuery['tickets']['edges'][number]['node']['customer']['name'];
+  id: string;
+  labels: TicketsQuery['tickets']['edges'][number]['node']['labels'];
+  priority: TicketsQuery['tickets']['edges'][number]['node']['priority'];
+  status: string;
+  title: string;
 }
 
 export const columns: ColumnDef<TicketData>[] = [
@@ -70,7 +68,7 @@ export const columns: ColumnDef<TicketData>[] = [
       return (
         <div className="flex p-2 align-middle">
           <div className="flex items-center">
-            <priority.icon className="size-4 text-muted-foreground" />
+            <priority.icon className="size-4" />
           </div>
         </div>
       );
@@ -78,12 +76,27 @@ export const columns: ColumnDef<TicketData>[] = [
     meta: {
       hideHeader: true,
     },
+    sortingFn: (a, b) => {
+      const prioritiesToBeSorted = [
+        TicketPriority.Critical,
+        TicketPriority.High,
+        TicketPriority.Medium,
+        TicketPriority.Low,
+      ];
+      const priorityA = a.original.priority;
+      const priorityB = b.original.priority;
+
+      return (
+        prioritiesToBeSorted.indexOf(priorityA) -
+        prioritiesToBeSorted.indexOf(priorityB)
+      );
+    },
   },
   {
-    accessorKey: 'id',
+    accessorKey: 'customer',
     cell: ({ row }) => (
       <div className="flex p-2 align-middle">
-        <div className="w-[120px]">{row.getValue('id')}</div>
+        <div className="w-[120px]">{row.getValue('customer')}</div>
       </div>
     ),
     meta: {
@@ -143,8 +156,16 @@ export const columns: ColumnDef<TicketData>[] = [
       return (
         <div className="flex gap-2">
           {row.original.labels.map((label) => (
-            <Badge key={label.id} variant="outline" className="shrink-0">
-              {label.labelType.name}
+            <Badge
+              key={label.id}
+              variant="outline"
+              className="shrink-0 space-x-1"
+            >
+              <Icon
+                name={(label.labelType.icon as IconType) ?? 'tag'}
+                className="size-4"
+              />
+              <span>{label.labelType.name}</span>
             </Badge>
           ))}
         </div>
@@ -169,7 +190,7 @@ export const columns: ColumnDef<TicketData>[] = [
           </div>
         ) : (
           <div className="flex items-center gap-x-2 text-xs">
-            <Plus className="size-4" />
+            <CircleDashed className="size-4" />
           </div>
         )}
       </div>
