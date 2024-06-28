@@ -48,7 +48,7 @@
     "@cs/tailwind-config": "*",
     "@cs/tsconfig": "*",
     "@graphql-codegen/cli": "^5.0.2",
-    "@graphql-codegen/typescript": "^4.0.7",
+    "@graphql-codegen/typescript": "^4.0.8",
     "@graphql-codegen/typescript-react-query": "^6.1.0",
     "@testing-library/jest-dom": "^6.4.6",
     "@testing-library/react": "^16.0.0",
