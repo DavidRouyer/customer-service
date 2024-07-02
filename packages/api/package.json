@@ -36,7 +36,7 @@
     "@cs/prettier-config": "*",
     "@cs/tsconfig": "*",
     "@graphql-codegen/cli": "^5.0.2",
-    "@graphql-codegen/typescript": "^4.0.8",
+    "@graphql-codegen/typescript": "^4.0.9",
     "@graphql-codegen/typescript-resolvers": "^4.2.0",
     "@parcel/watcher": "^2.4.1",
     "eslint": "^9.6.0",
