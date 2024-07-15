@@ -27,7 +27,7 @@
     "@lexical/headless": "^0.16.1",
     "eslint": "^9.6.0",
     "lexical": "^0.16.1",
-    "prettier": "^3.3.2",
+    "prettier": "^3.3.3",
     "typescript": "^5.5.3"
   },
   "prettier": "@cs/prettier-config"
