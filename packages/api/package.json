@@ -22,7 +22,7 @@
     "@cs/database": "*",
     "@cs/kyaku": "*",
     "@graphql-tools/merge": "^9.0.4",
-    "@graphql-tools/schema": "^10.0.3",
+    "@graphql-tools/schema": "^10.0.4",
     "@types/jsonwebtoken": "9.0.6",
     "awilix": "^10.0.2",
     "dataloader": "^2.2.2",

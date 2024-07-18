@@ -1684,7 +1684,7 @@ __metadata:
     "@graphql-codegen/typescript": "npm:^4.0.9"
     "@graphql-codegen/typescript-resolvers": "npm:^4.2.1"
     "@graphql-tools/merge": "npm:^9.0.4"
-    "@graphql-tools/schema": "npm:^10.0.3"
+    "@graphql-tools/schema": "npm:^10.0.4"
     "@parcel/watcher": "npm:^2.4.1"
     "@types/jsonwebtoken": "npm:9.0.6"
     awilix: "npm:^10.0.2"
@@ -3514,6 +3514,20 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@graphql-tools/schema@npm:^10.0.4":
+  version: 10.0.4
+  resolution: "@graphql-tools/schema@npm:10.0.4"
+  dependencies:
+    "@graphql-tools/merge": "npm:^9.0.3"
+    "@graphql-tools/utils": "npm:^10.2.1"
+    tslib: "npm:^2.4.0"
+    value-or-promise: "npm:^1.0.12"
+  peerDependencies:
+    graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
+  checksum: 10c0/991c54513df6d81962c0c6a283085c42446854dac59715e28d26a47dc4676ecd6c634f018dc5d9f60fdd5c922f6f28bf6f8a522e236ed1e3725c56bc5f7ec608
+  languageName: node
+  linkType: hard
+
 "@graphql-tools/schema@npm:^9.0.18, @graphql-tools/schema@npm:^9.0.19":
   version: 9.0.19
   resolution: "@graphql-tools/schema@npm:9.0.19"
@@ -3585,6 +3599,20 @@ __metadata:
   peerDependencies:
     graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
   checksum: 10c0/ae78ef4f6c8e58e0ca4023b66229ddd1263caee58ca8353cc4dca8ded5c751f4f2711ff9fbe830dbd84f05ae850db96c6098012644d47142b34ad2d4e96731ae
+  languageName: node
+  linkType: hard
+
+"@graphql-tools/utils@npm:^10.2.1":
+  version: 10.3.2
+  resolution: "@graphql-tools/utils@npm:10.3.2"
+  dependencies:
+    "@graphql-typed-document-node/core": "npm:^3.1.1"
+    cross-inspect: "npm:1.0.0"
+    dset: "npm:^3.1.2"
+    tslib: "npm:^2.4.0"
+  peerDependencies:
+    graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
+  checksum: 10c0/b154aa0cfac7fa56a5ffe09d4c56dd4651f50a8139d4010bebca48b62ffdce3a07727010a2d0c1a2263bdf35a6a937f402db0dcc5a8f06b7009b34a66d84c012
   languageName: node
   linkType: hard
 
