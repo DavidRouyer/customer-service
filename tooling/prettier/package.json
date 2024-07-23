@@ -19,7 +19,7 @@
   },
   "devDependencies": {
     "@cs/tsconfig": "*",
-    "typescript": "^5.5.3"
+    "typescript": "^5.5.4"
   },
   "prettier": "@cs/prettier-config"
 }
