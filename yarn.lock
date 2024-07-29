@@ -1728,7 +1728,7 @@ __metadata:
     autoprefixer: "npm:^10.4.19"
     dotenv-cli: "npm:^7.4.2"
     eslint: "npm:^9.7.0"
-    google-libphonenumber: "npm:^3.2.37"
+    google-libphonenumber: "npm:^3.2.38"
     graphql: "npm:^16.9.0"
     graphql-yoga: "npm:^5.6.2"
     jotai: "npm:^2.9.1"
@@ -10672,10 +10672,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"google-libphonenumber@npm:^3.2.37":
-  version: 3.2.37
-  resolution: "google-libphonenumber@npm:3.2.37"
-  checksum: 10c0/0279e5521904add462944f168ff68560038090622a96c9039cf7737405530ca48aa8fb3d7bc77570101eb950a3e9d250c03fa5f1c16efc4f0c165cc2217891e0
+"google-libphonenumber@npm:^3.2.38":
+  version: 3.2.38
+  resolution: "google-libphonenumber@npm:3.2.38"
+  checksum: 10c0/c5a8ec4ff6ed17d8336a48299e565ed3e79ace44b4dea3b3e3664bd633ff1a9fbc9cf7eda65eb410d7430feea88693e5dca4bc313b81cf5bbd1e1ed7a97d0908
   languageName: node
   linkType: hard
 
