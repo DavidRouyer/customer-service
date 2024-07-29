@@ -1,0 +1,32 @@
+'use client';
+
+import type { FC } from 'react';
+import { useTicketQuery } from 'graphql/generated/client';
+
+import { MessageForm } from '~/app/_components/messages/message-form';
+import { TicketHeader } from '~/app/_components/tickets/ticket-header';
+import { TicketTimeline } from '~/app/_components/tickets/ticket-timeline';
+
+export const Ticket: FC<{
+  ticketId: string;
+}> = ({ ticketId }) => {
+  const { data: ticketData } = useTicketQuery(
+    { ticketId: ticketId },
+    {
+      select: (data) => data.ticket,
+    }
+  );
+
+  if (!ticketData) return null;
+
+  return (
+    <>
+      <TicketHeader ticketId={ticketId} />
+
+      <TicketTimeline ticketId={ticketId} />
+      <MessageForm ticketId={ticketId} />
+    </>
+  );
+};
+
+Ticket.displayName = 'Ticket';

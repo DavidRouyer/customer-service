@@ -1,0 +1,47 @@
+import type { Metadata, Viewport } from 'next';
+
+import '~/app/globals.css';
+
+import { QueryProvider } from '~/app/api/providers';
+import getIntl from '~/app/i18n/server';
+import ServerIntlProvider from '~/app/i18n/ServerIntlProvider';
+
+export const dynamic = 'force-dynamic';
+
+export const metadata: Metadata = {
+  title: 'Kyaku',
+  description: 'Customer Service Software',
+  openGraph: {
+    title: 'Kyaku',
+    description: 'Customer Service Software',
+    url: 'https://github.com/DavidRouyer/customer-service',
+    siteName: 'Kyaku',
+  },
+};
+
+export const viewport: Viewport = {
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: 'white' },
+    { media: '(prefers-color-scheme: dark)', color: 'black' },
+  ],
+};
+
+export default async function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  const intl = await getIntl();
+
+  return (
+    <html lang={intl.locale} className="h-full" suppressHydrationWarning>
+      <body className={['font-sans', 'h-full'].join(' ')}>
+        <ServerIntlProvider
+          intl={{ messages: intl.messages, locale: intl.locale }}
+        >
+          <QueryProvider>{children}</QueryProvider>
+        </ServerIntlProvider>
+      </body>
+    </html>
+  );
+}

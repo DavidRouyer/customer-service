@@ -14,7 +14,11 @@
     "@lexical/react": "^0.16.1",
     "@tanstack/react-query": "^5.51.15",
     "@tanstack/react-query-devtools": "^5.51.15",
+    "@tanstack/react-router": "^1.45.11",
+    "@tanstack/react-router-with-query": "^1.45.12",
     "@tanstack/react-table": "^8.19.3",
+    "@tanstack/router-devtools": "^1.45.11",
+    "@tanstack/start": "^1.45.11",
     "google-libphonenumber": "^3.2.37",
     "graphql": "^16.9.0",
     "graphql-yoga": "^5.6.2",
@@ -22,23 +26,22 @@
     "lexical": "^0.16.1",
     "lucide-react": "^0.416.0",
     "negotiator": "^0.6.3",
-    "next": "^14.2.5",
-    "next-themes": "^0.3.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-hook-form": "^7.52.1",
     "react-intersection-observer": "^9.13.0",
     "react-intl": "^6.6.8",
     "superjson": "^2.2.1",
+    "vinxi": "0.3.12",
     "zod": "^3.23.8"
   },
   "scripts": {
-    "build": "next build",
+    "build": "vinxi build",
     "clean": "git clean -xdf .next .turbo node_modules",
     "codegen:graphql": "graphql-codegen",
     "codegen:graphql:watch": "graphql-codegen --watch",
     "format": "prettier --check \"**/*.{js,cjs,mjs,ts,tsx,md,json}\"",
-    "dev": "next dev",
+    "dev": "vinxi dev",
     "lint": "eslint",
     "typecheck": "tsc --noEmit"
   },
@@ -50,6 +53,7 @@
     "@graphql-codegen/cli": "^5.0.2",
     "@graphql-codegen/typescript": "^4.0.9",
     "@graphql-codegen/typescript-react-query": "^6.1.0",
+    "@tanstack/router-plugin": "^1.45.8",
     "@testing-library/jest-dom": "^6.4.8",
     "@testing-library/react": "^16.0.0",
     "@types/google-libphonenumber": "^7.4.30",
@@ -61,7 +65,9 @@
     "dotenv-cli": "^7.4.2",
     "eslint": "^9.7.0",
     "jsdom": "^24.1.1",
-    "tailwindcss": "^3.4.7"
+    "tailwindcss": "^3.4.7",
+    "vite": "^5.3.5",
+    "vite-tsconfig-paths": "^4.3.2"
   },
   "prettier": "@cs/prettier-config"
 }
