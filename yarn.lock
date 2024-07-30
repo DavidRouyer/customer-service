@@ -1777,7 +1777,7 @@ __metadata:
   dependencies:
     "@cs/prettier-config": "npm:*"
     "@cs/tsconfig": "npm:*"
-    "@graphql-eslint/eslint-plugin": "npm:^4.0.0-alpha.0"
+    "@graphql-eslint/eslint-plugin": "npm:^4.0.0-alpha.1"
     "@next/eslint-plugin-next": "npm:^14.2.5"
     "@types/eslint": "npm:9.6.0"
     "@typescript-eslint/eslint-plugin": "npm:rc-v8"
@@ -2927,7 +2927,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-eslint/eslint-plugin@npm:^4.0.0-alpha.0":
+"@graphql-eslint/eslint-plugin@npm:^4.0.0-alpha.1":
   version: 4.0.0-alpha-20230810160036-304c2c0
   resolution: "@graphql-eslint/eslint-plugin@npm:4.0.0-alpha-20230810160036-304c2c0"
   dependencies:
