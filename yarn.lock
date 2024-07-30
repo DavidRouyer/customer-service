@@ -1760,7 +1760,7 @@ __metadata:
     "@types/pg": "npm:^8.11.6"
     "@types/ws": "npm:^8.5.12"
     dotenv-cli: "npm:^7.4.2"
-    drizzle-kit: "npm:^0.23.0"
+    drizzle-kit: "npm:^0.23.1"
     drizzle-orm: "npm:^0.32.1"
     eslint: "npm:^9.7.0"
     lexical: "npm:^0.16.1"
@@ -1878,6 +1878,13 @@ __metadata:
     tailwind-merge: "npm:^2.4.0"
   languageName: unknown
   linkType: soft
+
+"@drizzle-team/brocli@npm:^0.8.2":
+  version: 0.8.2
+  resolution: "@drizzle-team/brocli@npm:0.8.2"
+  checksum: 10c0/2c7da275f79b0bf0e8f26579c9db76748fe57ccff1e6f057c3beaecd2b9ffbe71345a5f2fc6d5b709f26ecf814a7652e7ae851a408f66f45fb7466f7c8ff9ae9
+  languageName: node
+  linkType: hard
 
 "@envelop/core@npm:^5.0.1":
   version: 5.0.1
@@ -8972,16 +8979,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"drizzle-kit@npm:^0.23.0":
-  version: 0.23.0
-  resolution: "drizzle-kit@npm:0.23.0"
+"drizzle-kit@npm:^0.23.1":
+  version: 0.23.1
+  resolution: "drizzle-kit@npm:0.23.1"
   dependencies:
+    "@drizzle-team/brocli": "npm:^0.8.2"
     "@esbuild-kit/esm-loader": "npm:^2.5.5"
     esbuild: "npm:^0.19.7"
     esbuild-register: "npm:^3.5.0"
   bin:
     drizzle-kit: bin.cjs
-  checksum: 10c0/9939eeb29f2aa93b73560a9a7df4ebe487c30bddf7e6f0e6ab0550989f0c6afc150f587bf65a9c8c263dea41737b8ce8dcee09f830d6992fe78909f4d3469b12
+  checksum: 10c0/ff7d9bef2ea6ba7c4d2e532487747f2ff73498d9560c9b1cffdc6fd7da3966da062a18fe270765499df8504f6a7301a7d567e08fd0c7d388128780637530ea07
   languageName: node
   linkType: hard
 
