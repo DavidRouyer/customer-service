@@ -1663,7 +1663,7 @@ __metadata:
     "@types/jsonwebtoken": "npm:9.0.6"
     awilix: "npm:^10.0.2"
     dataloader: "npm:^2.2.2"
-    eslint: "npm:^9.7.0"
+    eslint: "npm:^9.8.0"
     graphql: "npm:^16.9.0"
     graphql-scalars: "npm:^1.23.0"
     jsonwebtoken: "npm:9.0.2"
@@ -1687,7 +1687,7 @@ __metadata:
     "@cs/tsconfig": "npm:*"
     "@types/bcrypt": "npm:^5.0.2"
     bcrypt: "npm:^5.1.1"
-    eslint: "npm:^9.7.0"
+    eslint: "npm:^9.8.0"
     next: "npm:^14.2.5"
     next-auth: "npm:^5.0.0-beta.20"
     prettier: "npm:^3.3.3"
@@ -1727,7 +1727,7 @@ __metadata:
     "@types/react-dom": "npm:^18.3.0"
     autoprefixer: "npm:^10.4.19"
     dotenv-cli: "npm:^7.4.2"
-    eslint: "npm:^9.7.0"
+    eslint: "npm:^9.8.0"
     google-libphonenumber: "npm:^3.2.38"
     graphql: "npm:^16.9.0"
     graphql-yoga: "npm:^5.6.2"
@@ -1762,7 +1762,7 @@ __metadata:
     dotenv-cli: "npm:^7.4.2"
     drizzle-kit: "npm:^0.23.1"
     drizzle-orm: "npm:^0.32.1"
-    eslint: "npm:^9.7.0"
+    eslint: "npm:^9.8.0"
     lexical: "npm:^0.16.1"
     pg: "npm:^8.12.0"
     prettier: "npm:^3.3.3"
@@ -1782,7 +1782,7 @@ __metadata:
     "@types/eslint": "npm:9.6.0"
     "@typescript-eslint/eslint-plugin": "npm:rc-v8"
     "@typescript-eslint/parser": "npm:rc-v8"
-    eslint: "npm:^9.7.0"
+    eslint: "npm:^9.8.0"
     eslint-plugin-import: "npm:^2.29.1"
     eslint-plugin-jsx-a11y: "npm:^6.9.0"
     eslint-plugin-react: "npm:^7.35.0"
@@ -1802,7 +1802,7 @@ __metadata:
     "@cs/prettier-config": "npm:*"
     "@cs/tsconfig": "npm:*"
     "@lexical/headless": "npm:^0.16.1"
-    eslint: "npm:^9.7.0"
+    eslint: "npm:^9.8.0"
     lexical: "npm:^0.16.1"
     prettier: "npm:^3.3.3"
     typescript: "npm:^5.5.4"
@@ -1829,7 +1829,7 @@ __metadata:
     "@cs/eslint-config": "npm:*"
     "@cs/prettier-config": "npm:*"
     "@cs/tsconfig": "npm:*"
-    eslint: "npm:^9.7.0"
+    eslint: "npm:^9.8.0"
     postcss: "npm:^8.4.40"
     prettier: "npm:^3.3.3"
     tailwindcss: "npm:^3.4.7"
@@ -1871,7 +1871,7 @@ __metadata:
     cmdk: "npm:^1.0.0"
     copy-to-clipboard: "npm:^3.3.3"
     cva: "npm:1.0.0-beta.1"
-    eslint: "npm:^9.7.0"
+    eslint: "npm:^9.8.0"
     lucide-react: "npm:^0.417.0"
     react: "npm:^18.3.1"
     react-dom: "npm:^18.3.1"
@@ -2426,14 +2426,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@eslint/config-array@npm:^0.17.0":
-  version: 0.17.0
-  resolution: "@eslint/config-array@npm:0.17.0"
+"@eslint/config-array@npm:^0.17.1":
+  version: 0.17.1
+  resolution: "@eslint/config-array@npm:0.17.1"
   dependencies:
     "@eslint/object-schema": "npm:^2.1.4"
     debug: "npm:^4.3.1"
     minimatch: "npm:^3.1.2"
-  checksum: 10c0/97eb23ef0948dbc5f24884a3b75c537ca37ee2b1f27a864cd0d9189c089bc1a724dc6e1a4d9b7dd304d9f732ca02aa7916243a7715d6f1f17159d8a8c83f0c9e
+  checksum: 10c0/b986a0a96f2b42467578968ce3d4ae3b9284e587f8490f2dcdc44ff1b8d30580c62b221da6e58d07b09e156c3050e2dc38267f9370521d9cafc099c4e30154ef
   languageName: node
   linkType: hard
 
@@ -2454,10 +2454,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@eslint/js@npm:9.7.0":
-  version: 9.7.0
-  resolution: "@eslint/js@npm:9.7.0"
-  checksum: 10c0/73fc10666f6f4aed6f58e407e09f42ceb0d42fa60c52701c64ea9f59a81a6a8ad5caecdfd423d03088481515fe7ec17eb461acb4ef1ad70b649b6eae465b3164
+"@eslint/js@npm:9.8.0":
+  version: 9.8.0
+  resolution: "@eslint/js@npm:9.8.0"
+  checksum: 10c0/42edaae6b020436410454579509dcb6a8cd5b260e9f18e037fd803ae28d35eb13663d4019f0ab8ba686a19d3c4a43b0e11394c148e23345377ab694da0e83262
   languageName: node
   linkType: hard
 
@@ -9814,15 +9814,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint@npm:^9.7.0":
-  version: 9.7.0
-  resolution: "eslint@npm:9.7.0"
+"eslint@npm:^9.8.0":
+  version: 9.8.0
+  resolution: "eslint@npm:9.8.0"
   dependencies:
     "@eslint-community/eslint-utils": "npm:^4.2.0"
     "@eslint-community/regexpp": "npm:^4.11.0"
-    "@eslint/config-array": "npm:^0.17.0"
+    "@eslint/config-array": "npm:^0.17.1"
     "@eslint/eslintrc": "npm:^3.1.0"
-    "@eslint/js": "npm:9.7.0"
+    "@eslint/js": "npm:9.8.0"
     "@humanwhocodes/module-importer": "npm:^1.0.1"
     "@humanwhocodes/retry": "npm:^0.3.0"
     "@nodelib/fs.walk": "npm:^1.2.8"
@@ -9854,7 +9854,7 @@ __metadata:
     text-table: "npm:^0.2.0"
   bin:
     eslint: bin/eslint.js
-  checksum: 10c0/e2369a9534404f62f37ee5560e56fb84e0776a9c8f084550170017992772e7034d73571bdf4060e2fe9b836f136d45b07d50407d4b9361de720ee77794259274
+  checksum: 10c0/a2ee0cce1147565d011fe185733af482f34d5466f5df5f390d0ea2ecf78097883cf568ed6c771d687138609c63cd55cd1e3ff12de7393c03f54fcffcdd0f225d
   languageName: node
   linkType: hard
 
@@ -16874,7 +16874,7 @@ __metadata:
     "@types/react-dom": "npm:^18.3.0"
     "@vitejs/plugin-react": "npm:^4.3.1"
     autoprefixer: "npm:^10.4.19"
-    eslint: "npm:^9.7.0"
+    eslint: "npm:^9.8.0"
     eslint-plugin-storybook: "npm:^0.9.0--canary.156.26b630a.0"
     postcss: "npm:^8.4.40"
     react: "npm:^18.3.1"
