@@ -21,12 +21,12 @@
   "dependencies": {
     "@cs/prettier-config": "*",
     "@vitejs/plugin-react": "^4.3.1",
-    "@vitest/coverage-v8": "^2.0.4",
-    "@vitest/ui": "^2.0.4",
+    "@vitest/coverage-v8": "^2.0.5",
+    "@vitest/ui": "^2.0.5",
     "prettier": "^3.3.3",
     "turbo": "^2.0.9",
     "typescript": "^5.5.4",
-    "vitest": "^2.0.4"
+    "vitest": "^2.0.5"
   },
   "prettier": "@cs/prettier-config",
   "packageManager": "yarn@4.3.1"
