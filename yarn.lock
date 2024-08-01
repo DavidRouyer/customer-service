@@ -1788,7 +1788,7 @@ __metadata:
     eslint-plugin-react: "npm:^7.35.0"
     eslint-plugin-react-hooks: "npm:beta"
     eslint-plugin-tailwindcss: "npm:^3.17.4"
-    eslint-plugin-turbo: "npm:^2.0.10"
+    eslint-plugin-turbo: "npm:^2.0.11"
     typescript: "npm:^5.5.4"
     typescript-eslint: "npm:rc-v8"
   languageName: unknown
@@ -9779,14 +9779,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-turbo@npm:^2.0.10":
-  version: 2.0.10
-  resolution: "eslint-plugin-turbo@npm:2.0.10"
+"eslint-plugin-turbo@npm:^2.0.11":
+  version: 2.0.11
+  resolution: "eslint-plugin-turbo@npm:2.0.11"
   dependencies:
     dotenv: "npm:16.0.3"
   peerDependencies:
     eslint: ">6.6.0"
-  checksum: 10c0/4f7caa997380f5455e9b28c1e488aa41964e80693be17d2aca7e993e934e719fae10717b78535ae27f5297d4eae4a2f7d7af1de46c93e479f5ba10b8485083f8
+  checksum: 10c0/ad60f823db493655110fd76d877f8e78001eb1d5589589150f0f51e227de207043153175a7f6f96ce5fada646880e6b74d7ce2a6515cb65aeb5e40c7d33928bd
   languageName: node
   linkType: hard
 
@@ -14807,7 +14807,7 @@ __metadata:
     "@vitest/coverage-v8": "npm:^2.0.5"
     "@vitest/ui": "npm:^2.0.5"
     prettier: "npm:^3.3.3"
-    turbo: "npm:^2.0.10"
+    turbo: "npm:^2.0.11"
     typescript: "npm:^5.5.4"
     vitest: "npm:^2.0.5"
   languageName: unknown
@@ -15981,58 +15981,58 @@ __metadata:
   languageName: node
   linkType: hard
 
-"turbo-darwin-64@npm:2.0.10":
-  version: 2.0.10
-  resolution: "turbo-darwin-64@npm:2.0.10"
+"turbo-darwin-64@npm:2.0.11":
+  version: 2.0.11
+  resolution: "turbo-darwin-64@npm:2.0.11"
   conditions: os=darwin & cpu=x64
   languageName: node
   linkType: hard
 
-"turbo-darwin-arm64@npm:2.0.10":
-  version: 2.0.10
-  resolution: "turbo-darwin-arm64@npm:2.0.10"
+"turbo-darwin-arm64@npm:2.0.11":
+  version: 2.0.11
+  resolution: "turbo-darwin-arm64@npm:2.0.11"
   conditions: os=darwin & cpu=arm64
   languageName: node
   linkType: hard
 
-"turbo-linux-64@npm:2.0.10":
-  version: 2.0.10
-  resolution: "turbo-linux-64@npm:2.0.10"
+"turbo-linux-64@npm:2.0.11":
+  version: 2.0.11
+  resolution: "turbo-linux-64@npm:2.0.11"
   conditions: os=linux & cpu=x64
   languageName: node
   linkType: hard
 
-"turbo-linux-arm64@npm:2.0.10":
-  version: 2.0.10
-  resolution: "turbo-linux-arm64@npm:2.0.10"
+"turbo-linux-arm64@npm:2.0.11":
+  version: 2.0.11
+  resolution: "turbo-linux-arm64@npm:2.0.11"
   conditions: os=linux & cpu=arm64
   languageName: node
   linkType: hard
 
-"turbo-windows-64@npm:2.0.10":
-  version: 2.0.10
-  resolution: "turbo-windows-64@npm:2.0.10"
+"turbo-windows-64@npm:2.0.11":
+  version: 2.0.11
+  resolution: "turbo-windows-64@npm:2.0.11"
   conditions: os=win32 & cpu=x64
   languageName: node
   linkType: hard
 
-"turbo-windows-arm64@npm:2.0.10":
-  version: 2.0.10
-  resolution: "turbo-windows-arm64@npm:2.0.10"
+"turbo-windows-arm64@npm:2.0.11":
+  version: 2.0.11
+  resolution: "turbo-windows-arm64@npm:2.0.11"
   conditions: os=win32 & cpu=arm64
   languageName: node
   linkType: hard
 
-"turbo@npm:^2.0.10":
-  version: 2.0.10
-  resolution: "turbo@npm:2.0.10"
+"turbo@npm:^2.0.11":
+  version: 2.0.11
+  resolution: "turbo@npm:2.0.11"
   dependencies:
-    turbo-darwin-64: "npm:2.0.10"
-    turbo-darwin-arm64: "npm:2.0.10"
-    turbo-linux-64: "npm:2.0.10"
-    turbo-linux-arm64: "npm:2.0.10"
-    turbo-windows-64: "npm:2.0.10"
-    turbo-windows-arm64: "npm:2.0.10"
+    turbo-darwin-64: "npm:2.0.11"
+    turbo-darwin-arm64: "npm:2.0.11"
+    turbo-linux-64: "npm:2.0.11"
+    turbo-linux-arm64: "npm:2.0.11"
+    turbo-windows-64: "npm:2.0.11"
+    turbo-windows-arm64: "npm:2.0.11"
   dependenciesMeta:
     turbo-darwin-64:
       optional: true
@@ -16048,7 +16048,7 @@ __metadata:
       optional: true
   bin:
     turbo: bin/turbo
-  checksum: 10c0/f3a3cd213b819d07ccc1b2413a0de32ed133544189448c6217c57c36987adc5bc719e6c80fc0d5fbc83c211f5fb3b04a5ab6756fa75dd50c54939bc362e962c0
+  checksum: 10c0/f9f2ced5803b07074a19c14877fd08c1c12b823caebb590a58a3c08a82ba3b51a084abe313679f33929118d93644f517b0fef6823d2f1123899015480eee5f33
   languageName: node
   linkType: hard
 
