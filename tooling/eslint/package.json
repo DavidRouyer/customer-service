@@ -34,7 +34,7 @@
     "@cs/prettier-config": "*",
     "@cs/tsconfig": "*",
     "@types/eslint": "9.6.0",
-    "eslint": "^9.8.0",
+    "eslint": "^9.9.0",
     "typescript": "^5.5.4"
   },
   "prettier": "@cs/prettier-config"
