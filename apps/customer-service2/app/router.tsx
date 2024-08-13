@@ -1,7 +1,7 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { createRouter as createTanStackRouter } from '@tanstack/react-router';
+import { Provider } from 'jotai';
 
-import { QueryProvider } from '~/api/providers';
 // Import the generated route tree
 import { routeTree } from './routeTree.gen';
 
@@ -15,11 +15,9 @@ export function createRouter() {
     defaultPendingComponent: () => <div className={`p-2 text-2xl`}>Spin</div>,
     Wrap: function WrapComponent({ children }) {
       return (
-        <QueryProvider>
-          <QueryClientProvider client={queryClient}>
-            {children}
-          </QueryClientProvider>
-        </QueryProvider>
+        <QueryClientProvider client={queryClient}>
+          <Provider>{children}</Provider>
+        </QueryClientProvider>
       );
     },
   });
