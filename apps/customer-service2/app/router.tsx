@@ -1,7 +1,7 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { createRouter as createTanStackRouter } from '@tanstack/react-router';
 
-import { QueryProvider } from '~/app/api/providers';
+import { QueryProvider } from '~/api/providers';
 // Import the generated route tree
 import { routeTree } from './routeTree.gen';
 

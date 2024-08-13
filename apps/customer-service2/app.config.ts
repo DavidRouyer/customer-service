@@ -1,6 +1,7 @@
 import { TanStackRouterVite } from '@tanstack/router-plugin/vite';
 import reactRefresh from '@vitejs/plugin-react';
 import { createApp } from 'vinxi';
+import viteTsconfigPaths from 'vite-tsconfig-paths';
 
 export default createApp({
   server: {
@@ -19,8 +20,9 @@ export default createApp({
       type: 'http',
       name: 'graphql',
       base: '/graphql',
-      handler: './src/api-server.handler.ts',
+      handler: './api-server.handler.ts',
       target: 'server',
+      plugins: () => [reactRefresh()],
     },
     {
       type: 'spa',
@@ -28,6 +30,7 @@ export default createApp({
       handler: './index.html',
       target: 'browser',
       plugins: () => [
+        viteTsconfigPaths(),
         TanStackRouterVite({
           routesDirectory: './app/routes',
           generatedRouteTree: './app/routeTree.gen.ts',
