@@ -16,7 +16,7 @@ export default createApp({
     },
     // Fixes https://github.com/nuxt/nuxt/issues/27784
     externals: {
-      traceInclude: ['node_modules/lexical/Lexical.prod.mjs'],
+      traceInclude: ['node_modules/@lexical/headless/LexicalHeadless.node.mjs'],
     },
   },
   routers: [
