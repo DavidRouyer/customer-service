@@ -14,6 +14,10 @@ export default createApp({
     experimental: {
       asyncContext: true,
     },
+    // Fixes https://github.com/nuxt/nuxt/issues/27784
+    externals: {
+      traceInclude: ['node_modules/lexical/Lexical.node.mjs'],
+    },
   },
   routers: [
     {
