@@ -21,7 +21,7 @@
     "@cs/auth": "*",
     "@cs/database": "*",
     "@cs/kyaku": "*",
-    "@graphql-tools/merge": "^9.0.4",
+    "@graphql-tools/merge": "^9.0.5",
     "@graphql-tools/schema": "^10.0.5",
     "@types/jsonwebtoken": "9.0.6",
     "awilix": "^10.0.2",
