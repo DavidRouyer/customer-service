@@ -3,9 +3,9 @@ import type { CodegenConfig } from '@graphql-codegen/cli';
 const config: CodegenConfig = {
   overwrite: true,
   schema: '../../packages/api/src/modules/**/typeDefs.ts',
-  documents: 'app/graphql/**/*.graphql',
+  documents: 'src/graphql/**/*.graphql',
   generates: {
-    'app/graphql/generated/client.ts': {
+    'src/graphql/generated/client.ts': {
       plugins: [
         'typescript',
         'typescript-operations',
@@ -22,7 +22,7 @@ const config: CodegenConfig = {
         withHooks: true,
         dedupeFragments: true,
         fetcher: {
-          endpoint: `process.env.VITE_API_ENDPOINT`,
+          endpoint: `http://localhost:${process.env.PORT ?? 3000}/api/graphql`,
           fetchParams: {
             headers: {
               'content-type': 'application/json',

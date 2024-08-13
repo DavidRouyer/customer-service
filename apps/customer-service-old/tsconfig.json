@@ -5,12 +5,17 @@
     "jsx": "preserve",
     "baseUrl": ".",
     "paths": {
-      "~/*": ["./app/*"]
+      "~/*": ["./src/*"]
     },
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
     "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json",
     "types": ["vitest/globals", "@testing-library/jest-dom/vitest"],
     "module": "esnext"
   },
-  "include": [".", ".vitest/setup.ts"],
+  "include": [".", ".next/types/**/*.ts", ".vitest/setup.ts"],
   "exclude": ["node_modules"]
 }

@@ -57,7 +57,8 @@
     "DATABASE_URL",
     "NODE_ENV",
     "JWT_SECRET",
-    "PORT"
+    "PORT",
+    "VITE_API_ENDPOINT"
   ],
   "globalPassThroughEnv": [
     "NODE_ENV",
