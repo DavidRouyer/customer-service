@@ -3564,19 +3564,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-tools/merge@npm:^9.0.0, @graphql-tools/merge@npm:^9.0.3":
-  version: 9.0.4
-  resolution: "@graphql-tools/merge@npm:9.0.4"
-  dependencies:
-    "@graphql-tools/utils": "npm:^10.0.13"
-    tslib: "npm:^2.4.0"
-  peerDependencies:
-    graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
-  checksum: 10c0/baf8558955d2f5cefdad298be295e48564bd6d2e691eed1b6d4c62f58cea898c8269443181fe847ca2747ec179c5b2b620be9215323281b2d65afc29591ce52d
-  languageName: node
-  linkType: hard
-
-"@graphql-tools/merge@npm:^9.0.5":
+"@graphql-tools/merge@npm:^9.0.0, @graphql-tools/merge@npm:^9.0.5":
   version: 9.0.5
   resolution: "@graphql-tools/merge@npm:9.0.5"
   dependencies:
@@ -3662,21 +3650,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-tools/schema@npm:^10.0.0, @graphql-tools/schema@npm:^10.0.3, @graphql-tools/schema@npm:^10.0.4":
-  version: 10.0.4
-  resolution: "@graphql-tools/schema@npm:10.0.4"
-  dependencies:
-    "@graphql-tools/merge": "npm:^9.0.3"
-    "@graphql-tools/utils": "npm:^10.2.1"
-    tslib: "npm:^2.4.0"
-    value-or-promise: "npm:^1.0.12"
-  peerDependencies:
-    graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
-  checksum: 10c0/991c54513df6d81962c0c6a283085c42446854dac59715e28d26a47dc4676ecd6c634f018dc5d9f60fdd5c922f6f28bf6f8a522e236ed1e3725c56bc5f7ec608
-  languageName: node
-  linkType: hard
-
-"@graphql-tools/schema@npm:^10.0.5":
+"@graphql-tools/schema@npm:^10.0.0, @graphql-tools/schema@npm:^10.0.3, @graphql-tools/schema@npm:^10.0.4, @graphql-tools/schema@npm:^10.0.5":
   version: 10.0.5
   resolution: "@graphql-tools/schema@npm:10.0.5"
   dependencies:
@@ -3750,7 +3724,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-tools/utils@npm:^10.0.0, @graphql-tools/utils@npm:^10.0.13, @graphql-tools/utils@npm:^10.1.1, @graphql-tools/utils@npm:^10.2.1, @graphql-tools/utils@npm:^10.2.3, @graphql-tools/utils@npm:^10.3.0, @graphql-tools/utils@npm:^10.3.2":
+"@graphql-tools/utils@npm:^10.0.0, @graphql-tools/utils@npm:^10.0.13, @graphql-tools/utils@npm:^10.1.1, @graphql-tools/utils@npm:^10.2.3, @graphql-tools/utils@npm:^10.3.0, @graphql-tools/utils@npm:^10.3.2":
   version: 10.3.2
   resolution: "@graphql-tools/utils@npm:10.3.2"
   dependencies:
