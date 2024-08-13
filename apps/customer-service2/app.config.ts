@@ -1,7 +1,12 @@
 import { TanStackRouterVite } from '@tanstack/router-plugin/vite';
 import reactRefresh from '@vitejs/plugin-react';
+import * as dotenv from 'dotenv';
 import { createApp } from 'vinxi';
 import viteTsconfigPaths from 'vite-tsconfig-paths';
+
+dotenv.config({
+  path: '../../.env',
+});
 
 export default createApp({
   server: {

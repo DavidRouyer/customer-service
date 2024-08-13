@@ -1,0 +1,27 @@
+fragment LabelParts on Label {
+  id
+  labelType {
+    ...LabelTypeParts
+    archivedAt
+  }
+  archivedAt
+}
+
+mutation addLabels($input: AddLabelsInput!) {
+  addLabels(input: $input) {
+    labels {
+      id
+    }
+    userErrors {
+      message
+    }
+  }
+}
+
+mutation removeLabels($input: RemoveLabelsInput!) {
+  removeLabels(input: $input) {
+    userErrors {
+      message
+    }
+  }
+}
