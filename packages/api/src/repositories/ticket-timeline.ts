@@ -1,7 +1,7 @@
 import type { KnownKeysOnly } from '@cs/database';
 import { eq, schema } from '@cs/database';
 
-import type { DrizzleTransactionScope } from '../drizzle-transaction';
+import type { DbTransactionScope } from '../db-transaction';
 import type {
   TicketTimeline,
   TicketTimelineInsert,
@@ -21,19 +21,16 @@ export default class TicketTimelineRepository extends BaseRepository {
       Omit<IncludeRelation<'ticketTimelineEntries'>, 'limit'>
     >
   ) {
-    return this.drizzleConnection.query.ticketTimelineEntries.findFirst(config);
+    return this.dbConnection.query.ticketTimelineEntries.findFirst(config);
   }
 
   findMany<T extends IncludeRelation<'ticketTimelineEntries'>>(
     config: KnownKeysOnly<T, IncludeRelation<'ticketTimelineEntries'>>
   ) {
-    return this.drizzleConnection.query.ticketTimelineEntries.findMany(config);
+    return this.dbConnection.query.ticketTimelineEntries.findMany(config);
   }
 
-  create(
-    entity: TicketTimelineInsert,
-    transactionScope: DrizzleTransactionScope
-  ) {
+  create(entity: TicketTimelineInsert, transactionScope: DbTransactionScope) {
     return transactionScope
       .insert(schema.ticketTimelineEntries)
       .values(entity)
@@ -44,7 +41,7 @@ export default class TicketTimelineRepository extends BaseRepository {
   update(
     entity: Partial<TicketTimelineInsert> &
       NonNullable<Pick<TicketTimeline, 'id'>>,
-    transactionScope: DrizzleTransactionScope
+    transactionScope: DbTransactionScope
   ) {
     return transactionScope
       .update(schema.ticketTimelineEntries)

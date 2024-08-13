@@ -6,7 +6,7 @@ import type { YogaInitialContext } from 'graphql-yoga';
 import { default as jwt } from 'jsonwebtoken';
 
 import { auth } from '@cs/auth';
-import { drizzleConnection } from '@cs/database';
+import { dbConnection } from '@cs/database';
 import type { User } from '@cs/kyaku/models';
 
 import type { Customer } from './entities/customer';
@@ -35,7 +35,7 @@ import UserService from './services/user';
 import { UnitOfWork } from './unit-of-work';
 
 interface Services {
-  drizzleConnection: typeof drizzleConnection;
+  dbConnection: typeof dbConnection;
   unitOfWork: UnitOfWork;
   customerRepository: CustomerRepository;
   labelRepository: LabelRepository;
@@ -54,7 +54,7 @@ interface Services {
 
 const container = createContainer<Services>();
 container.register({
-  drizzleConnection: asValue(drizzleConnection),
+  dbConnection: asValue(dbConnection),
   unitOfWork: asClass(UnitOfWork).scoped(),
   customerRepository: asClass(CustomerRepository).scoped(),
   labelRepository: asClass(LabelRepository).scoped(),

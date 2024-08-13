@@ -27,6 +27,6 @@ const databaseClient = new Pool({
   connectionString: process.env.DATABASE_URL,
 });
 
-export const drizzleConnection = drizzle(databaseClient, { schema });
+export const dbConnection = drizzle(databaseClient, { schema });
 
-export type DrizzleConnection = typeof drizzleConnection;
+export type DbConnection = typeof dbConnection;

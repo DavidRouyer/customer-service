@@ -1,7 +1,7 @@
 import type { KnownKeysOnly } from '@cs/database';
 import { eq, inArray, schema } from '@cs/database';
 
-import type { DrizzleTransactionScope } from '../drizzle-transaction';
+import type { DbTransactionScope } from '../db-transaction';
 import type { Label, LabelInsert } from '../entities/label';
 import type { IncludeRelation } from '../services/build-query';
 import { BaseRepository } from './base-repository';
@@ -15,16 +15,16 @@ export default class LabelRepository extends BaseRepository {
   find<T extends Omit<IncludeRelation<'labels'>, 'limit'>>(
     config: KnownKeysOnly<T, Omit<IncludeRelation<'labels'>, 'limit'>>
   ) {
-    return this.drizzleConnection.query.labels.findFirst(config);
+    return this.dbConnection.query.labels.findFirst(config);
   }
 
   findMany<T extends IncludeRelation<'labels'>>(
     config: KnownKeysOnly<T, IncludeRelation<'labels'>>
   ) {
-    return this.drizzleConnection.query.labels.findMany(config);
+    return this.dbConnection.query.labels.findMany(config);
   }
 
-  create(entity: LabelInsert, transactionScope: DrizzleTransactionScope) {
+  create(entity: LabelInsert, transactionScope: DbTransactionScope) {
     return transactionScope
       .insert(schema.labels)
       .values(entity)
@@ -32,10 +32,7 @@ export default class LabelRepository extends BaseRepository {
       .then((res) => res[0]);
   }
 
-  createMany(
-    entities: LabelInsert[],
-    transactionScope: DrizzleTransactionScope
-  ) {
+  createMany(entities: LabelInsert[], transactionScope: DbTransactionScope) {
     return transactionScope
       .insert(schema.labels)
       .values(entities)
@@ -45,7 +42,7 @@ export default class LabelRepository extends BaseRepository {
 
   update(
     entity: Partial<LabelInsert> & NonNullable<Pick<Label, 'id'>>,
-    transactionScope: DrizzleTransactionScope
+    transactionScope: DbTransactionScope
   ) {
     return transactionScope
       .update(schema.labels)
@@ -58,7 +55,7 @@ export default class LabelRepository extends BaseRepository {
   updateMany(
     entityIds: Label['id'][],
     entity: Omit<Partial<LabelInsert>, 'id'>,
-    transactionScope: DrizzleTransactionScope
+    transactionScope: DbTransactionScope
   ) {
     return transactionScope
       .update(schema.labels)

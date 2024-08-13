@@ -1,7 +1,7 @@
 import type { KnownKeysOnly } from '@cs/database';
 import { eq, schema } from '@cs/database';
 
-import type { DrizzleTransactionScope } from '../drizzle-transaction';
+import type { DbTransactionScope } from '../db-transaction';
 import type { Customer, CustomerInsert } from '../entities/customer';
 import type { IncludeRelation } from '../services/build-query';
 import { BaseRepository } from './base-repository';
@@ -15,16 +15,16 @@ export default class CustomerRepository extends BaseRepository {
   find<T extends Omit<IncludeRelation<'customers'>, 'limit'>>(
     config: KnownKeysOnly<T, Omit<IncludeRelation<'customers'>, 'limit'>>
   ) {
-    return this.drizzleConnection.query.customers.findFirst(config);
+    return this.dbConnection.query.customers.findFirst(config);
   }
 
   findMany<T extends IncludeRelation<'customers'>>(
     config: KnownKeysOnly<T, IncludeRelation<'customers'>>
   ) {
-    return this.drizzleConnection.query.customers.findMany(config);
+    return this.dbConnection.query.customers.findMany(config);
   }
 
-  create(entity: CustomerInsert, transactionScope: DrizzleTransactionScope) {
+  create(entity: CustomerInsert, transactionScope: DbTransactionScope) {
     return transactionScope
       .insert(schema.customers)
       .values(entity)
@@ -34,7 +34,7 @@ export default class CustomerRepository extends BaseRepository {
 
   update(
     entity: Partial<CustomerInsert> & NonNullable<Pick<Customer, 'id'>>,
-    transactionScope: DrizzleTransactionScope
+    transactionScope: DbTransactionScope
   ) {
     return transactionScope
       .update(schema.customers)

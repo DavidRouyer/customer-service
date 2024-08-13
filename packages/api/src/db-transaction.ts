@@ -4,7 +4,7 @@ import type { PgTransaction } from 'drizzle-orm/pg-core';
 
 import type { schema } from '@cs/database';
 
-export type DrizzleTransactionScope = PgTransaction<
+export type DbTransactionScope = PgTransaction<
   NeonQueryResultHKT,
   typeof schema,
   ExtractTablesWithRelations<typeof schema>

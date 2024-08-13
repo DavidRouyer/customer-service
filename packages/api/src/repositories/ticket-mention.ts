@@ -1,7 +1,7 @@
 import type { KnownKeysOnly } from '@cs/database';
 import { schema } from '@cs/database';
 
-import type { DrizzleTransactionScope } from '../drizzle-transaction';
+import type { DbTransactionScope } from '../db-transaction';
 import type { TicketMentionInsert } from '../entities/ticket-mention';
 import type { IncludeRelation } from '../services/build-query';
 import { BaseRepository } from './base-repository';
@@ -15,19 +15,16 @@ export default class TicketMentionRepository extends BaseRepository {
   find<T extends Omit<IncludeRelation<'ticketMentions'>, 'limit'>>(
     config: KnownKeysOnly<T, Omit<IncludeRelation<'ticketMentions'>, 'limit'>>
   ) {
-    return this.drizzleConnection.query.ticketMentions.findFirst(config);
+    return this.dbConnection.query.ticketMentions.findFirst(config);
   }
 
   findMany<T extends IncludeRelation<'ticketMentions'>>(
     config: KnownKeysOnly<T, IncludeRelation<'ticketMentions'>>
   ) {
-    return this.drizzleConnection.query.ticketMentions.findMany(config);
+    return this.dbConnection.query.ticketMentions.findMany(config);
   }
 
-  create(
-    entity: TicketMentionInsert,
-    transactionScope: DrizzleTransactionScope
-  ) {
+  create(entity: TicketMentionInsert, transactionScope: DbTransactionScope) {
     return transactionScope
       .insert(schema.ticketMentions)
       .values(entity)
@@ -37,7 +34,7 @@ export default class TicketMentionRepository extends BaseRepository {
 
   createMany(
     entities: TicketMentionInsert[],
-    transactionScope: DrizzleTransactionScope
+    transactionScope: DbTransactionScope
   ) {
     return transactionScope
       .insert(schema.ticketMentions)
@@ -48,7 +45,7 @@ export default class TicketMentionRepository extends BaseRepository {
 
   update(
     entity: Partial<TicketMentionInsert>,
-    transactionScope: DrizzleTransactionScope
+    transactionScope: DbTransactionScope
   ) {
     return transactionScope
       .update(schema.ticketMentions)

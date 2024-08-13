@@ -1,7 +1,7 @@
 import type { KnownKeysOnly } from '@cs/database';
 import { eq, inArray, schema } from '@cs/database';
 
-import type { DrizzleTransactionScope } from '../drizzle-transaction';
+import type { DbTransactionScope } from '../db-transaction';
 import type { User, UserInsert } from '../entities/user';
 import type { IncludeRelation } from '../services/build-query';
 import { BaseRepository } from './base-repository';
@@ -15,16 +15,16 @@ export default class UserRepository extends BaseRepository {
   find<T extends Omit<IncludeRelation<'users'>, 'limit'>>(
     config: KnownKeysOnly<T, Omit<IncludeRelation<'users'>, 'limit'>>
   ) {
-    return this.drizzleConnection.query.users.findFirst(config);
+    return this.dbConnection.query.users.findFirst(config);
   }
 
   findMany<T extends IncludeRelation<'users'>>(
     config: KnownKeysOnly<T, IncludeRelation<'users'>>
   ) {
-    return this.drizzleConnection.query.users.findMany(config);
+    return this.dbConnection.query.users.findMany(config);
   }
 
-  create(entity: UserInsert, transactionScope: DrizzleTransactionScope) {
+  create(entity: UserInsert, transactionScope: DbTransactionScope) {
     return transactionScope
       .insert(schema.users)
       .values(entity)
@@ -34,7 +34,7 @@ export default class UserRepository extends BaseRepository {
 
   update(
     entity: Partial<UserInsert> & NonNullable<Pick<User, 'id'>>,
-    transactionScope: DrizzleTransactionScope
+    transactionScope: DbTransactionScope
   ) {
     return transactionScope
       .update(schema.users)
@@ -47,7 +47,7 @@ export default class UserRepository extends BaseRepository {
   updateMany(
     entityIds: User['id'][],
     entity: Omit<Partial<UserInsert>, 'id'>,
-    transactionScope: DrizzleTransactionScope
+    transactionScope: DbTransactionScope
   ) {
     return transactionScope
       .update(schema.users)

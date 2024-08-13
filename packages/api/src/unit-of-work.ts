@@ -1,18 +1,18 @@
-import type { DrizzleConnection } from '@cs/database';
+import type { DbConnection } from '@cs/database';
 
-import type { DrizzleTransactionScope } from './drizzle-transaction';
+import type { DbTransactionScope } from './db-transaction';
 
 export class UnitOfWork {
-  private readonly _drizzleConnection: DrizzleConnection;
+  private readonly _dbConnection: DbConnection;
 
-  constructor({ drizzleConnection }: { drizzleConnection: DrizzleConnection }) {
-    this._drizzleConnection = drizzleConnection;
+  constructor({ dbConnection }: { dbConnection: DbConnection }) {
+    this._dbConnection = dbConnection;
   }
 
   transaction<T>(
-    transaction: (tx: DrizzleTransactionScope) => Promise<T>,
-    config?: Parameters<(typeof this._drizzleConnection)['transaction']>[1]
+    transaction: (tx: DbTransactionScope) => Promise<T>,
+    config?: Parameters<(typeof this._dbConnection)['transaction']>[1]
   ): Promise<T> {
-    return this._drizzleConnection.transaction(transaction, config);
+    return this._dbConnection.transaction(transaction, config);
   }
 }
