@@ -24,6 +24,10 @@ export default createApp({
               src: '../../node_modules/@lexical/headless/LexicalHeadless.node.mjs',
               dest: '.vercel/output/functions/__nitro.func/node_modules/@lexical/headless',
             },
+            {
+              src: '../../node_modules/lexical/Lexical.node.mjs',
+              dest: '.vercel/output/functions/__nitro.func/node_modules/lexical',
+            },
           ],
           verbose: true,
         }),
