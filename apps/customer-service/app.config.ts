@@ -1,6 +1,7 @@
 import { TanStackRouterVite } from '@tanstack/router-plugin/vite';
 import reactRefresh from '@vitejs/plugin-react';
 import * as dotenv from 'dotenv';
+import copy from 'rollup-plugin-copy';
 import { createApp } from 'vinxi';
 import viteTsconfigPaths from 'vite-tsconfig-paths';
 
@@ -15,8 +16,18 @@ export default createApp({
       asyncContext: true,
     },
     // Fixes https://github.com/nuxt/nuxt/issues/27784
-    externals: {
-      traceInclude: ['node_modules/@lexical/headless/LexicalHeadless.node.mjs'],
+    rollupConfig: {
+      plugins: [
+        copy({
+          targets: [
+            {
+              src: '../../node_modules/@lexical/headless/LexicalHeadless.node.mjs',
+              dest: '.vercel/output/functions/__nitro.func/node_modules/@lexical/headless',
+            },
+          ],
+          verbose: true,
+        }),
+      ],
     },
   },
   routers: [
