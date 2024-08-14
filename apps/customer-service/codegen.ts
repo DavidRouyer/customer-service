@@ -22,7 +22,7 @@ const config: CodegenConfig = {
         withHooks: true,
         dedupeFragments: true,
         fetcher: {
-          endpoint: `process.env.VITE_API_ENDPOINT`,
+          endpoint: `import.meta.env.VITE_API_ENDPOINT`,
           fetchParams: {
             headers: {
               'content-type': 'application/json',

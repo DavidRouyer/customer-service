@@ -9,7 +9,7 @@ export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' |
 
 function fetcher<TData, TVariables>(query: string, variables?: TVariables) {
   return async (): Promise<TData> => {
-    const res = await fetch(process.env.VITE_API_ENDPOINT as string, {
+    const res = await fetch(import.meta.env.VITE_API_ENDPOINT as string, {
     method: "POST",
     ...({"headers":{"content-type":"application/json"}}),
       body: JSON.stringify({ query, variables }),

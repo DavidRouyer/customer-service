@@ -69,6 +69,7 @@ export type AssignTicketPayload = {
   userErrors?: Maybe<Array<MutationError>>;
 };
 
+/** Represents a ticket assignment change in the timeline. */
 export type AssignmentChangedEntry = {
   __typename?: 'AssignmentChangedEntry';
   newAssignedTo?: Maybe<User>;
@@ -92,6 +93,7 @@ export type ChangeTicketPriorityPayload = {
   userErrors?: Maybe<Array<MutationError>>;
 };
 
+/** Represents a chat in the timeline. */
 export type ChatEntry = {
   __typename?: 'ChatEntry';
   text: Scalars['String']['output'];
@@ -178,6 +180,7 @@ export type Customer = Node & {
   updatedBy?: Maybe<User>;
 };
 
+/** A union of all possible entries that can appear in a timeline. */
 export type Entry = AssignmentChangedEntry | ChatEntry | LabelsChangedEntry | NoteEntry | PriorityChangedEntry | StatusChangedEntry;
 
 /** A label for categorizing tickets. */
@@ -235,6 +238,7 @@ export type LabelTypeFilters = {
   isArchived?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
+/** Represents a label change in the timeline. */
 export type LabelsChangedEntry = {
   __typename?: 'LabelsChangedEntry';
   newLabels: Array<Label>;
@@ -271,6 +275,7 @@ export type MarkTicketAsOpenPayload = {
   userErrors?: Maybe<Array<MutationError>>;
 };
 
+/** The mutation root of Kyaku's GraphQL interface. */
 export type Mutation = {
   __typename?: 'Mutation';
   /** Add labels to a ticket. */
@@ -304,71 +309,85 @@ export type Mutation = {
 };
 
 
+/** The mutation root of Kyaku's GraphQL interface. */
 export type MutationAddLabelsArgs = {
   input: AddLabelsInput;
 };
 
 
+/** The mutation root of Kyaku's GraphQL interface. */
 export type MutationArchiveLabelTypeArgs = {
   input: ArchiveLabelTypeInput;
 };
 
 
+/** The mutation root of Kyaku's GraphQL interface. */
 export type MutationAssignTicketArgs = {
   input: AssignTicketInput;
 };
 
 
+/** The mutation root of Kyaku's GraphQL interface. */
 export type MutationChangeTicketPriorityArgs = {
   input: ChangeTicketPriorityInput;
 };
 
 
+/** The mutation root of Kyaku's GraphQL interface. */
 export type MutationCreateLabelTypeArgs = {
   input: CreateLabelTypeInput;
 };
 
 
+/** The mutation root of Kyaku's GraphQL interface. */
 export type MutationCreateNoteArgs = {
   input: CreateNoteInput;
 };
 
 
+/** The mutation root of Kyaku's GraphQL interface. */
 export type MutationCreateTicketArgs = {
   input: CreateTicketInput;
 };
 
 
+/** The mutation root of Kyaku's GraphQL interface. */
 export type MutationMarkTicketAsDoneArgs = {
   input: MarkTicketAsDoneInput;
 };
 
 
+/** The mutation root of Kyaku's GraphQL interface. */
 export type MutationMarkTicketAsOpenArgs = {
   input: MarkTicketAsOpenInput;
 };
 
 
+/** The mutation root of Kyaku's GraphQL interface. */
 export type MutationRemoveLabelsArgs = {
   input: RemoveLabelsInput;
 };
 
 
+/** The mutation root of Kyaku's GraphQL interface. */
 export type MutationSendChatArgs = {
   input: SendChatInput;
 };
 
 
+/** The mutation root of Kyaku's GraphQL interface. */
 export type MutationUnarchiveLabelTypeArgs = {
   input: UnarchiveLabelTypeInput;
 };
 
 
+/** The mutation root of Kyaku's GraphQL interface. */
 export type MutationUnassignTicketArgs = {
   input: UnassignTicketInput;
 };
 
 
+/** The mutation root of Kyaku's GraphQL interface. */
 export type MutationUpdateLabelTypeArgs = {
   input: UpdateLabelTypeInput;
 };
@@ -390,6 +409,7 @@ export type Node = {
   id: Scalars['ID']['output'];
 };
 
+/** Represents a note in the timeline. */
 export type NoteEntry = {
   __typename?: 'NoteEntry';
   rawContent: Scalars['String']['output'];
@@ -409,12 +429,14 @@ export type PageInfo = {
   startCursor?: Maybe<Scalars['String']['output']>;
 };
 
+/** Represents a priority change in the timeline. */
 export type PriorityChangedEntry = {
   __typename?: 'PriorityChangedEntry';
   newPriority?: Maybe<TicketPriority>;
   oldPriority?: Maybe<TicketPriority>;
 };
 
+/** The query root of Kyaku's GraphQL interface. */
 export type Query = {
   __typename?: 'Query';
   /** Fetches a customer given its ID. */
@@ -436,16 +458,19 @@ export type Query = {
 };
 
 
+/** The query root of Kyaku's GraphQL interface. */
 export type QueryCustomerArgs = {
   customerId: Scalars['ID']['input'];
 };
 
 
+/** The query root of Kyaku's GraphQL interface. */
 export type QueryLabelTypeArgs = {
   labelTypeId: Scalars['ID']['input'];
 };
 
 
+/** The query root of Kyaku's GraphQL interface. */
 export type QueryLabelTypesArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
@@ -455,11 +480,13 @@ export type QueryLabelTypesArgs = {
 };
 
 
+/** The query root of Kyaku's GraphQL interface. */
 export type QueryTicketArgs = {
   ticketId: Scalars['ID']['input'];
 };
 
 
+/** The query root of Kyaku's GraphQL interface. */
 export type QueryTicketsArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
@@ -469,11 +496,13 @@ export type QueryTicketsArgs = {
 };
 
 
+/** The query root of Kyaku's GraphQL interface. */
 export type QueryUserArgs = {
   userId: Scalars['ID']['input'];
 };
 
 
+/** The query root of Kyaku's GraphQL interface. */
 export type QueryUsersArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
@@ -513,6 +542,7 @@ export type SendChatPayload = {
   userErrors?: Maybe<Array<MutationError>>;
 };
 
+/** Represents a status change in the timeline. */
 export type StatusChangedEntry = {
   __typename?: 'StatusChangedEntry';
   newStatus?: Maybe<TicketStatus>;
@@ -799,7 +829,7 @@ export type ResolversUnionTypes<_RefType extends Record<string, unknown>> = {
 
 /** Mapping of interface types */
 export type ResolversInterfaceTypes<_RefType extends Record<string, unknown>> = {
-  Node: ( Customer ) | ( Label ) | ( LabelType ) | ( Ticket ) | ( Omit<TimelineEntry, 'entry'> & { entry: _RefType['Entry'] } ) | ( User );
+  Node: ( Customer ) | ( Label ) | ( LabelType ) | ( Omit<Ticket, 'customer' | 'timelineEntries'> & { customer: _RefType['Customer'], timelineEntries: _RefType['TimelineEntryConnection'] } ) | ( Omit<TimelineEntry, 'customer' | 'customerCreatedBy' | 'entry'> & { customer: _RefType['Customer'], customerCreatedBy?: Maybe<_RefType['Customer']>, entry: _RefType['Entry'] } ) | ( User );
 };
 
 /** Mapping between all available schema types and the resolvers types */
@@ -809,18 +839,18 @@ export type ResolversTypes = {
   ArchiveLabelTypeInput: ArchiveLabelTypeInput;
   ArchiveLabelTypePayload: ResolverTypeWrapper<ArchiveLabelTypePayload>;
   AssignTicketInput: AssignTicketInput;
-  AssignTicketPayload: ResolverTypeWrapper<AssignTicketPayload>;
+  AssignTicketPayload: ResolverTypeWrapper<Omit<AssignTicketPayload, 'ticket'> & { ticket?: Maybe<ResolversTypes['Ticket']> }>;
   AssignmentChangedEntry: ResolverTypeWrapper<AssignmentChangedEntry>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
   ChangeTicketPriorityInput: ChangeTicketPriorityInput;
-  ChangeTicketPriorityPayload: ResolverTypeWrapper<ChangeTicketPriorityPayload>;
+  ChangeTicketPriorityPayload: ResolverTypeWrapper<Omit<ChangeTicketPriorityPayload, 'ticket'> & { ticket?: Maybe<ResolversTypes['Ticket']> }>;
   ChatEntry: ResolverTypeWrapper<ChatEntry>;
   CreateLabelTypeInput: CreateLabelTypeInput;
   CreateLabelTypePayload: ResolverTypeWrapper<CreateLabelTypePayload>;
   CreateNoteInput: CreateNoteInput;
-  CreateNotePayload: ResolverTypeWrapper<CreateNotePayload>;
+  CreateNotePayload: ResolverTypeWrapper<Omit<CreateNotePayload, 'ticket'> & { ticket?: Maybe<ResolversTypes['Ticket']> }>;
   CreateTicketInput: CreateTicketInput;
-  CreateTicketPayload: ResolverTypeWrapper<CreateTicketPayload>;
+  CreateTicketPayload: ResolverTypeWrapper<Omit<CreateTicketPayload, 'ticket'> & { ticket?: Maybe<ResolversTypes['Ticket']> }>;
   Customer: ResolverTypeWrapper<Customer>;
   DateTime: ResolverTypeWrapper<Scalars['DateTime']['output']>;
   Entry: ResolverTypeWrapper<ResolversUnionTypes<ResolversTypes>['Entry']>;
@@ -833,9 +863,9 @@ export type ResolversTypes = {
   LabelTypeFilters: LabelTypeFilters;
   LabelsChangedEntry: ResolverTypeWrapper<LabelsChangedEntry>;
   MarkTicketAsDoneInput: MarkTicketAsDoneInput;
-  MarkTicketAsDonePayload: ResolverTypeWrapper<MarkTicketAsDonePayload>;
+  MarkTicketAsDonePayload: ResolverTypeWrapper<Omit<MarkTicketAsDonePayload, 'ticket'> & { ticket?: Maybe<ResolversTypes['Ticket']> }>;
   MarkTicketAsOpenInput: MarkTicketAsOpenInput;
-  MarkTicketAsOpenPayload: ResolverTypeWrapper<MarkTicketAsOpenPayload>;
+  MarkTicketAsOpenPayload: ResolverTypeWrapper<Omit<MarkTicketAsOpenPayload, 'ticket'> & { ticket?: Maybe<ResolversTypes['Ticket']> }>;
   Mutation: ResolverTypeWrapper<{}>;
   MutationError: ResolverTypeWrapper<MutationError>;
   Node: ResolverTypeWrapper<ResolversInterfaceTypes<ResolversTypes>['Node']>;
@@ -846,23 +876,23 @@ export type ResolversTypes = {
   RemoveLabelsInput: RemoveLabelsInput;
   RemoveLabelsPayload: ResolverTypeWrapper<RemoveLabelsPayload>;
   SendChatInput: SendChatInput;
-  SendChatPayload: ResolverTypeWrapper<SendChatPayload>;
+  SendChatPayload: ResolverTypeWrapper<Omit<SendChatPayload, 'ticket'> & { ticket?: Maybe<ResolversTypes['Ticket']> }>;
   StatusChangedEntry: ResolverTypeWrapper<StatusChangedEntry>;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
-  Ticket: ResolverTypeWrapper<Ticket>;
-  TicketConnection: ResolverTypeWrapper<TicketConnection>;
-  TicketEdge: ResolverTypeWrapper<TicketEdge>;
+  Ticket: ResolverTypeWrapper<Omit<Ticket, 'customer' | 'timelineEntries'> & { customer: ResolversTypes['Customer'], timelineEntries: ResolversTypes['TimelineEntryConnection'] }>;
+  TicketConnection: ResolverTypeWrapper<Omit<TicketConnection, 'edges'> & { edges: Array<ResolversTypes['TicketEdge']> }>;
+  TicketEdge: ResolverTypeWrapper<Omit<TicketEdge, 'node'> & { node: ResolversTypes['Ticket'] }>;
   TicketFilters: TicketFilters;
   TicketPriority: TicketPriority;
   TicketStatus: TicketStatus;
   TicketStatusDetail: TicketStatusDetail;
-  TimelineEntry: ResolverTypeWrapper<Omit<TimelineEntry, 'entry'> & { entry: ResolversTypes['Entry'] }>;
-  TimelineEntryConnection: ResolverTypeWrapper<TimelineEntryConnection>;
-  TimelineEntryEdge: ResolverTypeWrapper<TimelineEntryEdge>;
+  TimelineEntry: ResolverTypeWrapper<Omit<TimelineEntry, 'customer' | 'customerCreatedBy' | 'entry'> & { customer: ResolversTypes['Customer'], customerCreatedBy?: Maybe<ResolversTypes['Customer']>, entry: ResolversTypes['Entry'] }>;
+  TimelineEntryConnection: ResolverTypeWrapper<Omit<TimelineEntryConnection, 'edges'> & { edges: Array<ResolversTypes['TimelineEntryEdge']> }>;
+  TimelineEntryEdge: ResolverTypeWrapper<Omit<TimelineEntryEdge, 'node'> & { node: ResolversTypes['TimelineEntry'] }>;
   UnarchiveLabelTypeInput: UnarchiveLabelTypeInput;
   UnarchiveLabelTypePayload: ResolverTypeWrapper<UnarchiveLabelTypePayload>;
   UnassignTicketInput: UnassignTicketInput;
-  UnassignTicketPayload: ResolverTypeWrapper<UnassignTicketPayload>;
+  UnassignTicketPayload: ResolverTypeWrapper<Omit<UnassignTicketPayload, 'ticket'> & { ticket?: Maybe<ResolversTypes['Ticket']> }>;
   UpdateLabelTypeInput: UpdateLabelTypeInput;
   UpdateLabelTypePayload: ResolverTypeWrapper<UpdateLabelTypePayload>;
   User: ResolverTypeWrapper<User>;
@@ -877,18 +907,18 @@ export type ResolversParentTypes = {
   ArchiveLabelTypeInput: ArchiveLabelTypeInput;
   ArchiveLabelTypePayload: ArchiveLabelTypePayload;
   AssignTicketInput: AssignTicketInput;
-  AssignTicketPayload: AssignTicketPayload;
+  AssignTicketPayload: Omit<AssignTicketPayload, 'ticket'> & { ticket?: Maybe<ResolversParentTypes['Ticket']> };
   AssignmentChangedEntry: AssignmentChangedEntry;
   Boolean: Scalars['Boolean']['output'];
   ChangeTicketPriorityInput: ChangeTicketPriorityInput;
-  ChangeTicketPriorityPayload: ChangeTicketPriorityPayload;
+  ChangeTicketPriorityPayload: Omit<ChangeTicketPriorityPayload, 'ticket'> & { ticket?: Maybe<ResolversParentTypes['Ticket']> };
   ChatEntry: ChatEntry;
   CreateLabelTypeInput: CreateLabelTypeInput;
   CreateLabelTypePayload: CreateLabelTypePayload;
   CreateNoteInput: CreateNoteInput;
-  CreateNotePayload: CreateNotePayload;
+  CreateNotePayload: Omit<CreateNotePayload, 'ticket'> & { ticket?: Maybe<ResolversParentTypes['Ticket']> };
   CreateTicketInput: CreateTicketInput;
-  CreateTicketPayload: CreateTicketPayload;
+  CreateTicketPayload: Omit<CreateTicketPayload, 'ticket'> & { ticket?: Maybe<ResolversParentTypes['Ticket']> };
   Customer: Customer;
   DateTime: Scalars['DateTime']['output'];
   Entry: ResolversUnionTypes<ResolversParentTypes>['Entry'];
@@ -901,9 +931,9 @@ export type ResolversParentTypes = {
   LabelTypeFilters: LabelTypeFilters;
   LabelsChangedEntry: LabelsChangedEntry;
   MarkTicketAsDoneInput: MarkTicketAsDoneInput;
-  MarkTicketAsDonePayload: MarkTicketAsDonePayload;
+  MarkTicketAsDonePayload: Omit<MarkTicketAsDonePayload, 'ticket'> & { ticket?: Maybe<ResolversParentTypes['Ticket']> };
   MarkTicketAsOpenInput: MarkTicketAsOpenInput;
-  MarkTicketAsOpenPayload: MarkTicketAsOpenPayload;
+  MarkTicketAsOpenPayload: Omit<MarkTicketAsOpenPayload, 'ticket'> & { ticket?: Maybe<ResolversParentTypes['Ticket']> };
   Mutation: {};
   MutationError: MutationError;
   Node: ResolversInterfaceTypes<ResolversParentTypes>['Node'];
@@ -914,20 +944,20 @@ export type ResolversParentTypes = {
   RemoveLabelsInput: RemoveLabelsInput;
   RemoveLabelsPayload: RemoveLabelsPayload;
   SendChatInput: SendChatInput;
-  SendChatPayload: SendChatPayload;
+  SendChatPayload: Omit<SendChatPayload, 'ticket'> & { ticket?: Maybe<ResolversParentTypes['Ticket']> };
   StatusChangedEntry: StatusChangedEntry;
   String: Scalars['String']['output'];
-  Ticket: Ticket;
-  TicketConnection: TicketConnection;
-  TicketEdge: TicketEdge;
+  Ticket: Omit<Ticket, 'customer' | 'timelineEntries'> & { customer: ResolversParentTypes['Customer'], timelineEntries: ResolversParentTypes['TimelineEntryConnection'] };
+  TicketConnection: Omit<TicketConnection, 'edges'> & { edges: Array<ResolversParentTypes['TicketEdge']> };
+  TicketEdge: Omit<TicketEdge, 'node'> & { node: ResolversParentTypes['Ticket'] };
   TicketFilters: TicketFilters;
-  TimelineEntry: Omit<TimelineEntry, 'entry'> & { entry: ResolversParentTypes['Entry'] };
-  TimelineEntryConnection: TimelineEntryConnection;
-  TimelineEntryEdge: TimelineEntryEdge;
+  TimelineEntry: Omit<TimelineEntry, 'customer' | 'customerCreatedBy' | 'entry'> & { customer: ResolversParentTypes['Customer'], customerCreatedBy?: Maybe<ResolversParentTypes['Customer']>, entry: ResolversParentTypes['Entry'] };
+  TimelineEntryConnection: Omit<TimelineEntryConnection, 'edges'> & { edges: Array<ResolversParentTypes['TimelineEntryEdge']> };
+  TimelineEntryEdge: Omit<TimelineEntryEdge, 'node'> & { node: ResolversParentTypes['TimelineEntry'] };
   UnarchiveLabelTypeInput: UnarchiveLabelTypeInput;
   UnarchiveLabelTypePayload: UnarchiveLabelTypePayload;
   UnassignTicketInput: UnassignTicketInput;
-  UnassignTicketPayload: UnassignTicketPayload;
+  UnassignTicketPayload: Omit<UnassignTicketPayload, 'ticket'> & { ticket?: Maybe<ResolversParentTypes['Ticket']> };
   UpdateLabelTypeInput: UpdateLabelTypeInput;
   UpdateLabelTypePayload: UpdateLabelTypePayload;
   User: User;
