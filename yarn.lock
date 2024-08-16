@@ -7270,27 +7270,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@whatwg-node/fetch@npm:^0.9.0":
-  version: 0.9.17
-  resolution: "@whatwg-node/fetch@npm:0.9.17"
-  dependencies:
-    "@whatwg-node/node-fetch": "npm:^0.5.7"
-    urlpattern-polyfill: "npm:^10.0.0"
-  checksum: 10c0/6638f1d456d17c9eab55f6278aa8045157ceb43a27acc65def1b7a2a3b80ef1b79f4c203e523865c9bcf1236ef64e1378ab0627e91932c97e9f1f3a129b17195
-  languageName: node
-  linkType: hard
-
-"@whatwg-node/fetch@npm:^0.9.18":
-  version: 0.9.19
-  resolution: "@whatwg-node/fetch@npm:0.9.19"
-  dependencies:
-    "@whatwg-node/node-fetch": "npm:^0.5.16"
-    urlpattern-polyfill: "npm:^10.0.0"
-  checksum: 10c0/df446e2348c1ac795f6dd241f5c4c89dc303bfcc44ab27fa85c959d40b542deb6335d19bf5ad8271a40c1d2be66987932bfe83a7fce11831a33dbd97c7d5711e
-  languageName: node
-  linkType: hard
-
-"@whatwg-node/fetch@npm:^0.9.20":
+"@whatwg-node/fetch@npm:^0.9.0, @whatwg-node/fetch@npm:^0.9.18, @whatwg-node/fetch@npm:^0.9.20":
   version: 0.9.20
   resolution: "@whatwg-node/fetch@npm:0.9.20"
   dependencies:
@@ -7313,19 +7293,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@whatwg-node/node-fetch@npm:^0.5.16":
-  version: 0.5.18
-  resolution: "@whatwg-node/node-fetch@npm:0.5.18"
-  dependencies:
-    "@kamilkisiela/fast-url-parser": "npm:^1.1.4"
-    "@whatwg-node/events": "npm:^0.1.0"
-    busboy: "npm:^1.6.0"
-    fast-querystring: "npm:^1.1.1"
-    tslib: "npm:^2.6.3"
-  checksum: 10c0/9b8d2d2b1ba2f6bccded7ae14fffdaadd9c0dc0c20370fd59dbe7e7d1dfd068328ea45cb240703d560acf2c936a0ed8927caa01bc96e311290d7ad4a90075c96
-  languageName: node
-  linkType: hard
-
 "@whatwg-node/node-fetch@npm:^0.5.22":
   version: 0.5.22
   resolution: "@whatwg-node/node-fetch@npm:0.5.22"
@@ -7335,19 +7302,6 @@ __metadata:
     fast-querystring: "npm:^1.1.1"
     tslib: "npm:^2.6.3"
   checksum: 10c0/690365ebbfff726fc2f06ebe5410b5113d1f1a8360a5d6b34f1213f48e8eb3a5d39564e956e2cf787a71f2f9e7f30b40fb6ad3fc2ceae175e1de458e6b3eafc4
-  languageName: node
-  linkType: hard
-
-"@whatwg-node/node-fetch@npm:^0.5.7":
-  version: 0.5.10
-  resolution: "@whatwg-node/node-fetch@npm:0.5.10"
-  dependencies:
-    "@kamilkisiela/fast-url-parser": "npm:^1.1.4"
-    "@whatwg-node/events": "npm:^0.1.0"
-    busboy: "npm:^1.6.0"
-    fast-querystring: "npm:^1.1.1"
-    tslib: "npm:^2.3.1"
-  checksum: 10c0/7b11e8848433bda4f9f9c5030df04f7a830555b36cd8b21fbdc33492d4f0f394f83e4a981d33d35d7dee54becae7cd71e8153d5a19512f2cd2d91868bf6c97a0
   languageName: node
   linkType: hard
 
