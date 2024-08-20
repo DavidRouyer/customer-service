@@ -5,6 +5,7 @@ import DataLoader from 'dataloader';
 import type { YogaInitialContext } from 'graphql-yoga';
 import { default as jwt } from 'jsonwebtoken';
 
+import { getSession } from '@cs/auth';
 //import { auth } from '@cs/auth';
 import { dbConnection } from '@cs/database';
 import type { User } from '@cs/kyaku/models';
@@ -72,10 +73,10 @@ container.register({
 });
 
 const getUser = async (request: Request) => {
-  //const session = await auth();
-  //if (session?.user) {
-  //  return session.user;
-  //}
+  const session = await getSession(request);
+  if (session?.user) {
+    return session.user;
+  }
 
   const header = request.headers.get('authorization');
   if (header !== null) {

@@ -42,6 +42,14 @@ export default createApp({
     },
     {
       type: 'http',
+      name: 'auth',
+      base: '/api/auth',
+      handler: './auth-server.handler.ts',
+      target: 'server',
+      plugins: () => [reactRefresh()],
+    },
+    {
+      type: 'http',
       name: 'graphql',
       base: '/graphql',
       handler: './api-server.handler.ts',
