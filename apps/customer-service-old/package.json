@@ -38,7 +38,6 @@
     "codegen:graphql": "graphql-codegen",
     "codegen:graphql:watch": "graphql-codegen --watch",
     "format": "prettier --check \"**/*.{js,cjs,mjs,ts,tsx,md,json}\"",
-    "dev": "next dev",
     "lint": "eslint",
     "typecheck": "tsc --noEmit"
   },
