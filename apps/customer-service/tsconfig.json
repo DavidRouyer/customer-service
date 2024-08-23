@@ -2,13 +2,17 @@
   "extends": "@cs/tsconfig/base.json",
   "compilerOptions": {
     "lib": ["es2022", "ES2023.Array", "dom", "dom.iterable"],
-    "jsx": "preserve",
+    "jsx": "react-jsx",
     "baseUrl": ".",
     "paths": {
       "~/*": ["./app/*"]
     },
     "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json",
-    "types": ["vitest/globals", "@testing-library/jest-dom/vitest"],
+    "types": [
+      "vinxi/client",
+      "vitest/globals",
+      "@testing-library/jest-dom/vitest"
+    ],
     "module": "esnext"
   },
   "include": [".", ".vitest/setup.ts"],
