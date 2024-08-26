@@ -1760,7 +1760,7 @@ __metadata:
     "@types/pg": "npm:^8.11.6"
     "@types/ws": "npm:^8.5.12"
     dotenv-cli: "npm:^7.4.2"
-    drizzle-kit: "npm:^0.24.1"
+    drizzle-kit: "npm:^0.24.2"
     drizzle-orm: "npm:^0.33.0"
     eslint: "npm:^9.9.0"
     lexical: "npm:^0.17.0"
@@ -9174,9 +9174,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"drizzle-kit@npm:^0.24.1":
-  version: 0.24.1
-  resolution: "drizzle-kit@npm:0.24.1"
+"drizzle-kit@npm:^0.24.2":
+  version: 0.24.2
+  resolution: "drizzle-kit@npm:0.24.2"
   dependencies:
     "@drizzle-team/brocli": "npm:^0.10.1"
     "@esbuild-kit/esm-loader": "npm:^2.5.5"
@@ -9184,7 +9184,7 @@ __metadata:
     esbuild-register: "npm:^3.5.0"
   bin:
     drizzle-kit: bin.cjs
-  checksum: 10c0/dab092bc9f7a8791b9406f040c94e8e0601152224669e16c522409d75d35692f04dbcbc3e2ecbe030071fdfacb74659f8c3070c22f1bfc3e647dcf3275a2d8f5
+  checksum: 10c0/c5416749deaf3c3fc0ce2981dbca6fd100b1f1fcb7c4f0a2c170ab24b5431c792f59d46eed45fc82097de95fb6fdb58adb5fb0dafe0c76ccf879c25362a45635
   languageName: node
   linkType: hard
 
