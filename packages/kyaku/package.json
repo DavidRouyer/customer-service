@@ -24,9 +24,9 @@
     "@cs/eslint-config": "*",
     "@cs/prettier-config": "*",
     "@cs/tsconfig": "*",
-    "@lexical/headless": "^0.17.0",
+    "@lexical/headless": "^0.17.1",
     "eslint": "^9.9.0",
-    "lexical": "^0.17.0",
+    "lexical": "^0.17.1",
     "prettier": "^3.3.3",
     "typescript": "^5.5.4"
   },
