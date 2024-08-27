@@ -20,15 +20,15 @@
   "dependencies": {
     "@graphql-eslint/eslint-plugin": "^4.0.0-alpha.3",
     "@next/eslint-plugin-next": "^14.2.5",
-    "@typescript-eslint/eslint-plugin": "^8.2.0",
-    "@typescript-eslint/parser": "^8.2.0",
+    "@typescript-eslint/eslint-plugin": "^8.3.0",
+    "@typescript-eslint/parser": "^8.3.0",
     "eslint-plugin-import": "^2.29.1",
     "eslint-plugin-jsx-a11y": "^6.9.0",
     "eslint-plugin-react": "^7.35.0",
     "eslint-plugin-react-hooks": "beta",
     "eslint-plugin-tailwindcss": "^3.17.4",
     "eslint-plugin-turbo": "^2.0.14",
-    "typescript-eslint": "^8.2.0"
+    "typescript-eslint": "^8.3.0"
   },
   "devDependencies": {
     "@cs/prettier-config": "*",
