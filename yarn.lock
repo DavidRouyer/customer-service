@@ -1788,7 +1788,7 @@ __metadata:
     eslint-plugin-react: "npm:^7.35.0"
     eslint-plugin-react-hooks: "npm:beta"
     eslint-plugin-tailwindcss: "npm:^3.17.4"
-    eslint-plugin-turbo: "npm:^2.0.14"
+    eslint-plugin-turbo: "npm:^2.1.0"
     typescript: "npm:^5.5.4"
     typescript-eslint: "npm:^8.3.0"
   languageName: unknown
@@ -10063,14 +10063,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-turbo@npm:^2.0.14":
-  version: 2.0.14
-  resolution: "eslint-plugin-turbo@npm:2.0.14"
+"eslint-plugin-turbo@npm:^2.1.0":
+  version: 2.1.0
+  resolution: "eslint-plugin-turbo@npm:2.1.0"
   dependencies:
     dotenv: "npm:16.0.3"
   peerDependencies:
     eslint: ">6.6.0"
-  checksum: 10c0/abb42c3f57ab4ceb7c92dcf272440aa44dac24bffa5a821aaeebe1a467d106f8bd832fc51a0d05683980cfbfcfc36c2b81b9f285cbeaedf39948f2eff60f66ad
+  checksum: 10c0/2935c554714ad8564efbd188d5577d2d793b4c378aa741b8fdc96de406f879bf3129a3842f94be9467f409878a11f89464aff5a2af1de45bc7998eabc76751b2
   languageName: node
   linkType: hard
 
@@ -15098,7 +15098,7 @@ __metadata:
     "@vitest/coverage-v8": "npm:^2.0.5"
     "@vitest/ui": "npm:^2.0.5"
     prettier: "npm:^3.3.3"
-    turbo: "npm:2.0.12"
+    turbo: "npm:2.1.0"
     typescript: "npm:^5.5.4"
     vitest: "npm:^2.0.5"
   languageName: unknown
@@ -16272,58 +16272,58 @@ __metadata:
   languageName: node
   linkType: hard
 
-"turbo-darwin-64@npm:2.0.12":
-  version: 2.0.12
-  resolution: "turbo-darwin-64@npm:2.0.12"
+"turbo-darwin-64@npm:2.1.0":
+  version: 2.1.0
+  resolution: "turbo-darwin-64@npm:2.1.0"
   conditions: os=darwin & cpu=x64
   languageName: node
   linkType: hard
 
-"turbo-darwin-arm64@npm:2.0.12":
-  version: 2.0.12
-  resolution: "turbo-darwin-arm64@npm:2.0.12"
+"turbo-darwin-arm64@npm:2.1.0":
+  version: 2.1.0
+  resolution: "turbo-darwin-arm64@npm:2.1.0"
   conditions: os=darwin & cpu=arm64
   languageName: node
   linkType: hard
 
-"turbo-linux-64@npm:2.0.12":
-  version: 2.0.12
-  resolution: "turbo-linux-64@npm:2.0.12"
+"turbo-linux-64@npm:2.1.0":
+  version: 2.1.0
+  resolution: "turbo-linux-64@npm:2.1.0"
   conditions: os=linux & cpu=x64
   languageName: node
   linkType: hard
 
-"turbo-linux-arm64@npm:2.0.12":
-  version: 2.0.12
-  resolution: "turbo-linux-arm64@npm:2.0.12"
+"turbo-linux-arm64@npm:2.1.0":
+  version: 2.1.0
+  resolution: "turbo-linux-arm64@npm:2.1.0"
   conditions: os=linux & cpu=arm64
   languageName: node
   linkType: hard
 
-"turbo-windows-64@npm:2.0.12":
-  version: 2.0.12
-  resolution: "turbo-windows-64@npm:2.0.12"
+"turbo-windows-64@npm:2.1.0":
+  version: 2.1.0
+  resolution: "turbo-windows-64@npm:2.1.0"
   conditions: os=win32 & cpu=x64
   languageName: node
   linkType: hard
 
-"turbo-windows-arm64@npm:2.0.12":
-  version: 2.0.12
-  resolution: "turbo-windows-arm64@npm:2.0.12"
+"turbo-windows-arm64@npm:2.1.0":
+  version: 2.1.0
+  resolution: "turbo-windows-arm64@npm:2.1.0"
   conditions: os=win32 & cpu=arm64
   languageName: node
   linkType: hard
 
-"turbo@npm:2.0.12":
-  version: 2.0.12
-  resolution: "turbo@npm:2.0.12"
+"turbo@npm:2.1.0":
+  version: 2.1.0
+  resolution: "turbo@npm:2.1.0"
   dependencies:
-    turbo-darwin-64: "npm:2.0.12"
-    turbo-darwin-arm64: "npm:2.0.12"
-    turbo-linux-64: "npm:2.0.12"
-    turbo-linux-arm64: "npm:2.0.12"
-    turbo-windows-64: "npm:2.0.12"
-    turbo-windows-arm64: "npm:2.0.12"
+    turbo-darwin-64: "npm:2.1.0"
+    turbo-darwin-arm64: "npm:2.1.0"
+    turbo-linux-64: "npm:2.1.0"
+    turbo-linux-arm64: "npm:2.1.0"
+    turbo-windows-64: "npm:2.1.0"
+    turbo-windows-arm64: "npm:2.1.0"
   dependenciesMeta:
     turbo-darwin-64:
       optional: true
@@ -16339,7 +16339,7 @@ __metadata:
       optional: true
   bin:
     turbo: bin/turbo
-  checksum: 10c0/2a6d90897cc2f49e745e389d044278d56a3579cfafaacb9a1ec41a5c4ed41d5f2560254d732a146c3e39ff18c3a79a46ae3153fab4ad85d9fbf59eb0fa0c0719
+  checksum: 10c0/e57c58f07424f2f49d8d3a603a7338474f124299fbdfdaf034ca82fe2f08c686de5e050d33b175cf2b5a6b8a38117778a7e9bc6a78ec588ea3f708c3ab864acb
   languageName: node
   linkType: hard
 

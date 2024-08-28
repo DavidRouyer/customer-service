@@ -27,7 +27,7 @@
     "eslint-plugin-react": "^7.35.0",
     "eslint-plugin-react-hooks": "beta",
     "eslint-plugin-tailwindcss": "^3.17.4",
-    "eslint-plugin-turbo": "^2.0.14",
+    "eslint-plugin-turbo": "^2.1.0",
     "typescript-eslint": "^8.3.0"
   },
   "devDependencies": {
