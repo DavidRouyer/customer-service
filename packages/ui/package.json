@@ -67,7 +67,7 @@
     "@cs/prettier-config": "*",
     "@cs/tsconfig": "*",
     "@testing-library/jest-dom": "^6.5.0",
-    "@testing-library/react": "^16.0.0",
+    "@testing-library/react": "^16.0.1",
     "@types/react": "^18.3.4",
     "@types/react-dom": "^18.3.0",
     "eslint": "^9.9.1"
