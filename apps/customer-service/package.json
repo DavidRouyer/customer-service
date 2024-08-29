@@ -51,7 +51,7 @@
     "@graphql-codegen/typescript": "^4.0.9",
     "@graphql-codegen/typescript-react-query": "^6.1.0",
     "@testing-library/jest-dom": "^6.5.0",
-    "@testing-library/react": "^16.0.0",
+    "@testing-library/react": "^16.0.1",
     "@types/google-libphonenumber": "^7.4.30",
     "@types/negotiator": "^0.6.3",
     "@types/node": "^22.5.1",
