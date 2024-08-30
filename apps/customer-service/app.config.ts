@@ -1,7 +1,5 @@
 import { defineConfig } from '@tanstack/start/config';
-import reactRefresh from '@vitejs/plugin-react';
 import * as dotenv from 'dotenv';
-import copy from 'rollup-plugin-copy';
 import tsConfigPaths from 'vite-tsconfig-paths';
 
 dotenv.config({
@@ -23,21 +21,13 @@ const app = defineConfig({
 
 app.addRouter({
   type: 'http',
-  name: 'auth',
-  base: '/api/auth',
-  handler: './auth-server.handler.ts',
+  name: 'graphql',
+  base: '/api/graphql',
+  handler: './app/api.graphql.ts',
   target: 'server',
-  plugins: () => [reactRefresh()],
 });
 
-app.addRouter({
-  type: 'http',
-  name: 'graphql',
-  base: '/graphql',
-  handler: './api-server.handler.ts',
-  target: 'server',
-  plugins: () => [reactRefresh()],
-});
+export default app;
 
 // Fixes https://github.com/nuxt/nuxt/issues/27784
 /*config.server.rollupConfig.plugins.push(
@@ -55,5 +45,3 @@ app.addRouter({
     verbose: true,
   })
 );*/
-
-export default app;
