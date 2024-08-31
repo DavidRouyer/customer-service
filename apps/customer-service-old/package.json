@@ -33,7 +33,6 @@
     "zod": "^3.23.8"
   },
   "scripts": {
-    "build": "next build",
     "clean": "git clean -xdf .next .turbo node_modules",
     "codegen:graphql": "graphql-codegen",
     "codegen:graphql:watch": "graphql-codegen --watch",
