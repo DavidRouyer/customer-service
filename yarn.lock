@@ -1941,6 +1941,7 @@ __metadata:
     "@tanstack/react-query": "npm:^5.55.0"
     "@tanstack/react-query-devtools": "npm:^5.55.0"
     "@tanstack/react-router": "npm:^1.51.9"
+    "@tanstack/react-router-with-query": "npm:^1.51.9"
     "@tanstack/react-table": "npm:^8.20.5"
     "@tanstack/router-devtools": "npm:^1.51.9"
     "@tanstack/router-plugin": "npm:^1.51.6"
@@ -7517,6 +7518,18 @@ __metadata:
   peerDependencies:
     react: ^18 || ^19
   checksum: 10c0/77097962dcf0bd2c9e73dbf6459c95b956e949233feeb7bf53e6e0ef7238be8eee67b2b328660a1302daef646c6090928dca5bfbc10386a4e70ab4649b1eb3e2
+  languageName: node
+  linkType: hard
+
+"@tanstack/react-router-with-query@npm:^1.51.9":
+  version: 1.51.9
+  resolution: "@tanstack/react-router-with-query@npm:1.51.9"
+  peerDependencies:
+    "@tanstack/react-query": ">=5.49.2"
+    "@tanstack/react-router": ">=1.43.2"
+    react: ">=18"
+    react-dom: ">=18"
+  checksum: 10c0/bf055df301efdebde022e27b6fb610bc0ed3e2c1c6c483d8fc3bb96546b5f7892690d6ab1ae03dd06bab1dc2075a3321e479bb98fa48dc19f239e2e491d731bb
   languageName: node
   linkType: hard
 

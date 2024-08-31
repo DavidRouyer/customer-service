@@ -1,32 +1,30 @@
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { QueryClient } from '@tanstack/react-query';
 import { createRouter as createTanStackRouter } from '@tanstack/react-router';
+import { routerWithQueryClient } from '@tanstack/react-router-with-query';
 import { Provider } from 'jotai';
 
 import NotFound from '~/components/not-found';
 // Import the generated route tree
 import { routeTree } from './routeTree.gen';
 
-export const queryClient = new QueryClient();
-
 export function createRouter() {
-  const router = createTanStackRouter({
-    routeTree,
-    defaultPreload: 'intent',
-    context: {
-      queryClient,
-    },
-    defaultPendingComponent: () => <div className={`p-2 text-2xl`}>Spin</div>,
-    defaultNotFoundComponent: NotFound,
-    Wrap: function WrapComponent({ children }) {
-      return (
-        <QueryClientProvider client={queryClient}>
-          <Provider>{children}</Provider>
-        </QueryClientProvider>
-      );
-    },
-  });
+  const queryClient = new QueryClient();
 
-  return router;
+  return routerWithQueryClient(
+    createTanStackRouter({
+      routeTree,
+      defaultPreload: 'intent',
+      context: {
+        queryClient,
+      },
+      defaultPendingComponent: () => <div className={`p-2 text-2xl`}>Spin</div>,
+      defaultNotFoundComponent: NotFound,
+      Wrap: function WrapComponent({ children }) {
+        return <Provider>{children}</Provider>;
+      },
+    }),
+    queryClient
+  );
 }
 
 // Register the router instance for type safety
