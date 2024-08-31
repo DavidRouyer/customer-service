@@ -4,9 +4,14 @@ import {
   defaultStreamHandler,
 } from '@tanstack/start/server';
 
+import { createAuthjsHandler } from '~/middlewareHandler';
 import { createRouter } from './router';
 
-export default createStartHandler({
+const handler = createStartHandler({
   createRouter,
   getRouterManifest,
-})(defaultStreamHandler);
+});
+
+const authjsHandler = createAuthjsHandler(handler);
+
+export default authjsHandler(defaultStreamHandler);
