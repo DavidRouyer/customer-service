@@ -13,7 +13,7 @@
     "@cs/ui": "*",
     "@lexical/react": "^0.17.1",
     "@tanstack/react-query": "^5.53.3",
-    "@tanstack/react-query-devtools": "^5.53.3",
+    "@tanstack/react-query-devtools": "^5.54.0",
     "@tanstack/react-table": "^8.20.5",
     "google-libphonenumber": "^3.2.38",
     "graphql": "^16.9.0",
