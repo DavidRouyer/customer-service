@@ -1,3 +1,4 @@
+import type { Session } from '@auth/core/types';
 import type { QueryClient } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import {
@@ -6,12 +7,31 @@ import {
   ScrollRestoration,
 } from '@tanstack/react-router';
 import { TanStackRouterDevtools } from '@tanstack/router-devtools';
-import { Body, Head, Html, Meta, Scripts } from '@tanstack/start';
+import {
+  Body,
+  createServerFn,
+  Head,
+  Html,
+  Meta,
+  Scripts,
+} from '@tanstack/start';
+import { getWebRequest } from 'vinxi/http';
 
 import appCss from '~/styles/app.css?url';
+import { getAuth } from '~/utils/getAuth';
+
+const fetchSession = createServerFn('GET', async (_) => {
+  const request = getWebRequest();
+  const session = await getAuth(request);
+
+  return {
+    session,
+  };
+});
 
 export const Route = createRootRouteWithContext<{
   queryClient: QueryClient;
+  session: Session | null;
 }>()({
   meta: () => [
     {
@@ -44,6 +64,13 @@ export const Route = createRootRouteWithContext<{
     { rel: 'manifest', href: '/site.webmanifest', color: '#fffff' },
     { rel: 'icon', href: '/favicon.ico' },
   ],
+  beforeLoad: async () => {
+    const { session } = await fetchSession();
+
+    return {
+      session,
+    };
+  },
   component: RootComponent,
 });
 

@@ -25,7 +25,8 @@ export function createAuthjsHandler<TRouter extends AnyRouter>(
         // Updating the TanStack router context with the Auth.js context and loading the router
         router.update({
           context: {
-            requestState,
+            ...router.options.context,
+            session: requestState,
           },
         });
 

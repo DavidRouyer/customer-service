@@ -6,7 +6,6 @@ export async function authenticateRequest(
   request: Request,
   authOptions: AuthConfig
 ): Promise<Session | null> {
-  console.log('url', request.url);
   const url = new URL('/api/auth/session', request.url);
 
   const response = await Auth(

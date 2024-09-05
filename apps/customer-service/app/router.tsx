@@ -16,6 +16,7 @@ export function createRouter() {
       defaultPreload: 'intent',
       context: {
         queryClient,
+        session: null,
       },
       defaultPendingComponent: () => <div className={`p-2 text-2xl`}>Spin</div>,
       defaultNotFoundComponent: NotFound,
