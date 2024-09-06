@@ -20,7 +20,7 @@
     "graphql-yoga": "^5.7.0",
     "jotai": "^2.9.3",
     "lexical": "^0.17.1",
-    "lucide-react": "^0.438.0",
+    "lucide-react": "^0.439.0",
     "negotiator": "^0.6.3",
     "next": "^14.2.5",
     "next-themes": "^0.3.0",
