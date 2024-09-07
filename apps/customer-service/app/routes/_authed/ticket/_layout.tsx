@@ -21,31 +21,33 @@ export const Route = createFileRoute('/_authed/ticket/_layout')({
       })
       .parse(search),
 
-  component: () => {
-    const searchParams = Route.useSearch();
-    return (
-      <div>
-        <Outlet />
-
-        <aside className="fixed inset-y-0 left-14 hidden w-96 flex-col border-r xl:flex">
-          <TicketListHeader />
-          <Suspense
-            fallback={
-              <div className="flex w-full flex-col gap-4">
-                <TicketListItemSkeleton />
-                <TicketListItemSkeleton />
-                <TicketListItemSkeleton />
-              </div>
-            }
-          >
-            <TicketList
-              filter={searchParams.filter}
-              status={searchParams.status}
-              orderBy={searchParams.orderBy}
-            />
-          </Suspense>
-        </aside>
-      </div>
-    );
-  },
+  component: Layout,
 });
+
+function Layout() {
+  const searchParams = Route.useSearch();
+  return (
+    <div>
+      <Outlet />
+
+      <aside className="fixed inset-y-0 left-14 hidden w-96 flex-col border-r xl:flex">
+        <TicketListHeader />
+        <Suspense
+          fallback={
+            <div className="flex w-full flex-col gap-4">
+              <TicketListItemSkeleton />
+              <TicketListItemSkeleton />
+              <TicketListItemSkeleton />
+            </div>
+          }
+        >
+          <TicketList
+            filter={searchParams.filter}
+            status={searchParams.status}
+            orderBy={searchParams.orderBy}
+          />
+        </Suspense>
+      </aside>
+    </div>
+  );
+}

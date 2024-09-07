@@ -6,6 +6,7 @@ import { z } from 'zod';
 import { InfoPanel } from '~/components/infos/info-panel';
 import { Ticket } from '~/components/tickets/ticket';
 import { TicketNavbar } from '~/components/tickets/ticket-navbar';
+import { ticketQueryOptions } from '~/utils/query-options';
 
 export const Route = createFileRoute('/_authed/ticket/_layout/$ticketId')({
   params: {
@@ -14,6 +15,10 @@ export const Route = createFileRoute('/_authed/ticket/_layout/$ticketId')({
     }),
     stringify: ({ ticketId }) => ({ ticketId: `${ticketId}` }),
   },
+  loader: (opts) =>
+    opts.context.queryClient.ensureQueryData(
+      ticketQueryOptions(opts.params.ticketId)
+    ),
   component: TicketRoute,
 });
 
