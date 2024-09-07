@@ -44,7 +44,7 @@ export const TicketDropdownSort: FC<{
             <DropdownMenuItem
               onClick={() =>
                 navigate({
-                  search: { orderBy: 'newest' },
+                  search: (old) => ({ ...old, orderBy: 'newest' }),
                 })
               }
             >
@@ -53,7 +53,7 @@ export const TicketDropdownSort: FC<{
             <DropdownMenuItem
               onClick={() =>
                 navigate({
-                  search: { orderBy: 'oldest' },
+                  search: (old) => ({ ...old, orderBy: 'oldest' }),
                 })
               }
             >

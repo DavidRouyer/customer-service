@@ -18,7 +18,9 @@ export const StatusRadio = () => {
   return (
     <StatusRadioGroup
       defaultValue={TicketStatus.Open}
-      onValueChange={(value) => navigate({ search: { statuses: value } })}
+      onValueChange={(value) =>
+        navigate({ search: (old) => ({ ...old, statuses: value }) })
+      }
     >
       <StatusRadioGroupItem value={TicketStatus.Open} className="gap-2">
         <CircleDot className="size-4 text-warning" />
