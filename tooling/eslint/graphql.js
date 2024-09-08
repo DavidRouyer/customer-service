@@ -23,9 +23,9 @@ export default [
   },
   {
     files: ['**/*.graphql'],
-    ...graphqlESLint.flatConfigs['schema-recommended'],
+    ...graphqlESLint.configs['flat/schema-recommended'],
     rules: {
-      ...graphqlESLint.flatConfigs['schema-recommended'].rules,
+      ...graphqlESLint.configs['flat/schema-recommended'].rules,
       '@graphql-eslint/naming-convention': [
         'error',
         {
