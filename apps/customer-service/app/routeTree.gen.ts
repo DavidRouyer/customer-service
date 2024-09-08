@@ -200,25 +200,169 @@ declare module '@tanstack/react-router' {
 
 // Create and export the route tree
 
-export const routeTree = rootRoute.addChildren({
-  AuthedRoute: AuthedRoute.addChildren({
-    AuthedLayoutRoute: AuthedLayoutRoute.addChildren({
-      AuthedLayoutMentionsRoute,
-      AuthedLayoutMyInboxRoute,
-      AuthedLayoutReportsRoute,
-      AuthedLayoutSettingsRoute,
-      AuthedLayoutUnassignedRoute,
-      AuthedLayoutIndexRoute,
-    }),
-    AuthedTicketRoute: AuthedTicketRoute.addChildren({
-      AuthedTicketLayoutRoute: AuthedTicketLayoutRoute.addChildren({
-        AuthedTicketLayoutTicketIdRoute,
-      }),
-    }),
-    AuthedContactLayoutContactIdRoute,
-  }),
-  SignInRoute,
-})
+interface AuthedLayoutRouteChildren {
+  AuthedLayoutMentionsRoute: typeof AuthedLayoutMentionsRoute
+  AuthedLayoutMyInboxRoute: typeof AuthedLayoutMyInboxRoute
+  AuthedLayoutReportsRoute: typeof AuthedLayoutReportsRoute
+  AuthedLayoutSettingsRoute: typeof AuthedLayoutSettingsRoute
+  AuthedLayoutUnassignedRoute: typeof AuthedLayoutUnassignedRoute
+  AuthedLayoutIndexRoute: typeof AuthedLayoutIndexRoute
+}
+
+const AuthedLayoutRouteChildren: AuthedLayoutRouteChildren = {
+  AuthedLayoutMentionsRoute: AuthedLayoutMentionsRoute,
+  AuthedLayoutMyInboxRoute: AuthedLayoutMyInboxRoute,
+  AuthedLayoutReportsRoute: AuthedLayoutReportsRoute,
+  AuthedLayoutSettingsRoute: AuthedLayoutSettingsRoute,
+  AuthedLayoutUnassignedRoute: AuthedLayoutUnassignedRoute,
+  AuthedLayoutIndexRoute: AuthedLayoutIndexRoute,
+}
+
+const AuthedLayoutRouteWithChildren = AuthedLayoutRoute._addFileChildren(
+  AuthedLayoutRouteChildren,
+)
+
+interface AuthedTicketLayoutRouteChildren {
+  AuthedTicketLayoutTicketIdRoute: typeof AuthedTicketLayoutTicketIdRoute
+}
+
+const AuthedTicketLayoutRouteChildren: AuthedTicketLayoutRouteChildren = {
+  AuthedTicketLayoutTicketIdRoute: AuthedTicketLayoutTicketIdRoute,
+}
+
+const AuthedTicketLayoutRouteWithChildren =
+  AuthedTicketLayoutRoute._addFileChildren(AuthedTicketLayoutRouteChildren)
+
+interface AuthedTicketRouteChildren {
+  AuthedTicketLayoutRoute: typeof AuthedTicketLayoutRouteWithChildren
+}
+
+const AuthedTicketRouteChildren: AuthedTicketRouteChildren = {
+  AuthedTicketLayoutRoute: AuthedTicketLayoutRouteWithChildren,
+}
+
+const AuthedTicketRouteWithChildren = AuthedTicketRoute._addFileChildren(
+  AuthedTicketRouteChildren,
+)
+
+interface AuthedRouteChildren {
+  AuthedLayoutRoute: typeof AuthedLayoutRouteWithChildren
+  AuthedTicketRoute: typeof AuthedTicketRouteWithChildren
+  AuthedContactLayoutContactIdRoute: typeof AuthedContactLayoutContactIdRoute
+}
+
+const AuthedRouteChildren: AuthedRouteChildren = {
+  AuthedLayoutRoute: AuthedLayoutRouteWithChildren,
+  AuthedTicketRoute: AuthedTicketRouteWithChildren,
+  AuthedContactLayoutContactIdRoute: AuthedContactLayoutContactIdRoute,
+}
+
+const AuthedRouteWithChildren =
+  AuthedRoute._addFileChildren(AuthedRouteChildren)
+
+export interface FileRoutesByFullPath {
+  '': typeof AuthedLayoutRouteWithChildren
+  '/sign-in': typeof SignInRoute
+  '/mentions': typeof AuthedLayoutMentionsRoute
+  '/my-inbox': typeof AuthedLayoutMyInboxRoute
+  '/reports': typeof AuthedLayoutReportsRoute
+  '/settings': typeof AuthedLayoutSettingsRoute
+  '/unassigned': typeof AuthedLayoutUnassignedRoute
+  '/ticket': typeof AuthedTicketLayoutRouteWithChildren
+  '/': typeof AuthedLayoutIndexRoute
+  '/contact/$contactId': typeof AuthedContactLayoutContactIdRoute
+  '/ticket/$ticketId': typeof AuthedTicketLayoutTicketIdRoute
+}
+
+export interface FileRoutesByTo {
+  '': typeof AuthedRouteWithChildren
+  '/sign-in': typeof SignInRoute
+  '/mentions': typeof AuthedLayoutMentionsRoute
+  '/my-inbox': typeof AuthedLayoutMyInboxRoute
+  '/reports': typeof AuthedLayoutReportsRoute
+  '/settings': typeof AuthedLayoutSettingsRoute
+  '/unassigned': typeof AuthedLayoutUnassignedRoute
+  '/ticket': typeof AuthedTicketLayoutRouteWithChildren
+  '/': typeof AuthedLayoutIndexRoute
+  '/contact/$contactId': typeof AuthedContactLayoutContactIdRoute
+  '/ticket/$ticketId': typeof AuthedTicketLayoutTicketIdRoute
+}
+
+export interface FileRoutesById {
+  __root__: typeof rootRoute
+  '/_authed': typeof AuthedRouteWithChildren
+  '/sign-in': typeof SignInRoute
+  '/_authed/_layout': typeof AuthedLayoutRouteWithChildren
+  '/_authed/_layout/mentions': typeof AuthedLayoutMentionsRoute
+  '/_authed/_layout/my-inbox': typeof AuthedLayoutMyInboxRoute
+  '/_authed/_layout/reports': typeof AuthedLayoutReportsRoute
+  '/_authed/_layout/settings': typeof AuthedLayoutSettingsRoute
+  '/_authed/_layout/unassigned': typeof AuthedLayoutUnassignedRoute
+  '/_authed/ticket': typeof AuthedTicketRouteWithChildren
+  '/_authed/ticket/_layout': typeof AuthedTicketLayoutRouteWithChildren
+  '/_authed/_layout/': typeof AuthedLayoutIndexRoute
+  '/_authed/contact/_layout/$contactId': typeof AuthedContactLayoutContactIdRoute
+  '/_authed/ticket/_layout/$ticketId': typeof AuthedTicketLayoutTicketIdRoute
+}
+
+export interface FileRouteTypes {
+  fileRoutesByFullPath: FileRoutesByFullPath
+  fullPaths:
+    | ''
+    | '/sign-in'
+    | '/mentions'
+    | '/my-inbox'
+    | '/reports'
+    | '/settings'
+    | '/unassigned'
+    | '/ticket'
+    | '/'
+    | '/contact/$contactId'
+    | '/ticket/$ticketId'
+  fileRoutesByTo: FileRoutesByTo
+  to:
+    | ''
+    | '/sign-in'
+    | '/mentions'
+    | '/my-inbox'
+    | '/reports'
+    | '/settings'
+    | '/unassigned'
+    | '/ticket'
+    | '/'
+    | '/contact/$contactId'
+    | '/ticket/$ticketId'
+  id:
+    | '__root__'
+    | '/_authed'
+    | '/sign-in'
+    | '/_authed/_layout'
+    | '/_authed/_layout/mentions'
+    | '/_authed/_layout/my-inbox'
+    | '/_authed/_layout/reports'
+    | '/_authed/_layout/settings'
+    | '/_authed/_layout/unassigned'
+    | '/_authed/ticket'
+    | '/_authed/ticket/_layout'
+    | '/_authed/_layout/'
+    | '/_authed/contact/_layout/$contactId'
+    | '/_authed/ticket/_layout/$ticketId'
+  fileRoutesById: FileRoutesById
+}
+
+export interface RootRouteChildren {
+  AuthedRoute: typeof AuthedRouteWithChildren
+  SignInRoute: typeof SignInRoute
+}
+
+const rootRouteChildren: RootRouteChildren = {
+  AuthedRoute: AuthedRouteWithChildren,
+  SignInRoute: SignInRoute,
+}
+
+export const routeTree = rootRoute
+  ._addFileChildren(rootRouteChildren)
+  ._addFileTypes<FileRouteTypes>()
 
 /* prettier-ignore-end */
 
