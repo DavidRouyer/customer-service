@@ -1,4 +1,4 @@
-import { useQuery, useInfiniteQuery, useMutation, UseQueryOptions, UseInfiniteQueryOptions, InfiniteData, UseMutationOptions } from '@tanstack/react-query';
+import { useQuery, useSuspenseQuery, useInfiniteQuery, useSuspenseInfiniteQuery, useMutation, UseQueryOptions, UseSuspenseQueryOptions, UseInfiniteQueryOptions, InfiniteData, UseSuspenseInfiniteQueryOptions, UseMutationOptions } from '@tanstack/react-query';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
@@ -965,6 +965,24 @@ export const useLabelTypesQuery = <
 
 useLabelTypesQuery.getKey = (variables?: LabelTypesQueryVariables) => variables === undefined ? ['labelTypes'] : ['labelTypes', variables];
 
+export const useSuspenseLabelTypesQuery = <
+      TData = LabelTypesQuery,
+      TError = unknown
+    >(
+      variables?: LabelTypesQueryVariables,
+      options?: Omit<UseSuspenseQueryOptions<LabelTypesQuery, TError, TData>, 'queryKey'> & { queryKey?: UseSuspenseQueryOptions<LabelTypesQuery, TError, TData>['queryKey'] }
+    ) => {
+    
+    return useSuspenseQuery<LabelTypesQuery, TError, TData>(
+      {
+    queryKey: variables === undefined ? ['labelTypesSuspense'] : ['labelTypesSuspense', variables],
+    queryFn: fetcher<LabelTypesQuery, LabelTypesQueryVariables>(LabelTypesDocument, variables),
+    ...options
+  }
+    )};
+
+useSuspenseLabelTypesQuery.getKey = (variables?: LabelTypesQueryVariables) => variables === undefined ? ['labelTypesSuspense'] : ['labelTypesSuspense', variables];
+
 export const useInfiniteLabelTypesQuery = <
       TData = InfiniteData<LabelTypesQuery>,
       TError = unknown
@@ -985,6 +1003,27 @@ export const useInfiniteLabelTypesQuery = <
     )};
 
 useInfiniteLabelTypesQuery.getKey = (variables?: LabelTypesQueryVariables) => variables === undefined ? ['labelTypes.infinite'] : ['labelTypes.infinite', variables];
+
+export const useSuspenseInfiniteLabelTypesQuery = <
+      TData = InfiniteData<LabelTypesQuery>,
+      TError = unknown
+    >(
+      variables: LabelTypesQueryVariables,
+      options: Omit<UseSuspenseInfiniteQueryOptions<LabelTypesQuery, TError, TData>, 'queryKey'> & { queryKey?: UseSuspenseInfiniteQueryOptions<LabelTypesQuery, TError, TData>['queryKey'] }
+    ) => {
+    
+    return useSuspenseInfiniteQuery<LabelTypesQuery, TError, TData>(
+      (() => {
+    const { queryKey: optionsQueryKey, ...restOptions } = options;
+    return {
+      queryKey: optionsQueryKey ?? variables === undefined ? ['labelTypes.infiniteSuspense'] : ['labelTypes.infiniteSuspense', variables],
+      queryFn: (metaData) => fetcher<LabelTypesQuery, LabelTypesQueryVariables>(LabelTypesDocument, {...variables, ...(metaData.pageParam ?? {})})(),
+      ...restOptions
+    }
+  })()
+    )};
+
+useSuspenseInfiniteLabelTypesQuery.getKey = (variables?: LabelTypesQueryVariables) => variables === undefined ? ['labelTypes.infiniteSuspense'] : ['labelTypes.infiniteSuspense', variables];
 
 
 useLabelTypesQuery.fetcher = (variables?: LabelTypesQueryVariables) => fetcher<LabelTypesQuery, LabelTypesQueryVariables>(LabelTypesDocument, variables);
@@ -1084,6 +1123,24 @@ export const useTicketQuery = <
 
 useTicketQuery.getKey = (variables: TicketQueryVariables) => ['ticket', variables];
 
+export const useSuspenseTicketQuery = <
+      TData = TicketQuery,
+      TError = unknown
+    >(
+      variables: TicketQueryVariables,
+      options?: Omit<UseSuspenseQueryOptions<TicketQuery, TError, TData>, 'queryKey'> & { queryKey?: UseSuspenseQueryOptions<TicketQuery, TError, TData>['queryKey'] }
+    ) => {
+    
+    return useSuspenseQuery<TicketQuery, TError, TData>(
+      {
+    queryKey: ['ticketSuspense', variables],
+    queryFn: fetcher<TicketQuery, TicketQueryVariables>(TicketDocument, variables),
+    ...options
+  }
+    )};
+
+useSuspenseTicketQuery.getKey = (variables: TicketQueryVariables) => ['ticketSuspense', variables];
+
 export const useInfiniteTicketQuery = <
       TData = InfiniteData<TicketQuery>,
       TError = unknown
@@ -1104,6 +1161,27 @@ export const useInfiniteTicketQuery = <
     )};
 
 useInfiniteTicketQuery.getKey = (variables: TicketQueryVariables) => ['ticket.infinite', variables];
+
+export const useSuspenseInfiniteTicketQuery = <
+      TData = InfiniteData<TicketQuery>,
+      TError = unknown
+    >(
+      variables: TicketQueryVariables,
+      options: Omit<UseSuspenseInfiniteQueryOptions<TicketQuery, TError, TData>, 'queryKey'> & { queryKey?: UseSuspenseInfiniteQueryOptions<TicketQuery, TError, TData>['queryKey'] }
+    ) => {
+    
+    return useSuspenseInfiniteQuery<TicketQuery, TError, TData>(
+      (() => {
+    const { queryKey: optionsQueryKey, ...restOptions } = options;
+    return {
+      queryKey: optionsQueryKey ?? ['ticket.infiniteSuspense', variables],
+      queryFn: (metaData) => fetcher<TicketQuery, TicketQueryVariables>(TicketDocument, {...variables, ...(metaData.pageParam ?? {})})(),
+      ...restOptions
+    }
+  })()
+    )};
+
+useSuspenseInfiniteTicketQuery.getKey = (variables: TicketQueryVariables) => ['ticket.infiniteSuspense', variables];
 
 
 useTicketQuery.fetcher = (variables: TicketQueryVariables) => fetcher<TicketQuery, TicketQueryVariables>(TicketDocument, variables);
@@ -1188,6 +1266,24 @@ export const useTicketTimelineQuery = <
 
 useTicketTimelineQuery.getKey = (variables: TicketTimelineQueryVariables) => ['ticketTimeline', variables];
 
+export const useSuspenseTicketTimelineQuery = <
+      TData = TicketTimelineQuery,
+      TError = unknown
+    >(
+      variables: TicketTimelineQueryVariables,
+      options?: Omit<UseSuspenseQueryOptions<TicketTimelineQuery, TError, TData>, 'queryKey'> & { queryKey?: UseSuspenseQueryOptions<TicketTimelineQuery, TError, TData>['queryKey'] }
+    ) => {
+    
+    return useSuspenseQuery<TicketTimelineQuery, TError, TData>(
+      {
+    queryKey: ['ticketTimelineSuspense', variables],
+    queryFn: fetcher<TicketTimelineQuery, TicketTimelineQueryVariables>(TicketTimelineDocument, variables),
+    ...options
+  }
+    )};
+
+useSuspenseTicketTimelineQuery.getKey = (variables: TicketTimelineQueryVariables) => ['ticketTimelineSuspense', variables];
+
 export const useInfiniteTicketTimelineQuery = <
       TData = InfiniteData<TicketTimelineQuery>,
       TError = unknown
@@ -1208,6 +1304,27 @@ export const useInfiniteTicketTimelineQuery = <
     )};
 
 useInfiniteTicketTimelineQuery.getKey = (variables: TicketTimelineQueryVariables) => ['ticketTimeline.infinite', variables];
+
+export const useSuspenseInfiniteTicketTimelineQuery = <
+      TData = InfiniteData<TicketTimelineQuery>,
+      TError = unknown
+    >(
+      variables: TicketTimelineQueryVariables,
+      options: Omit<UseSuspenseInfiniteQueryOptions<TicketTimelineQuery, TError, TData>, 'queryKey'> & { queryKey?: UseSuspenseInfiniteQueryOptions<TicketTimelineQuery, TError, TData>['queryKey'] }
+    ) => {
+    
+    return useSuspenseInfiniteQuery<TicketTimelineQuery, TError, TData>(
+      (() => {
+    const { queryKey: optionsQueryKey, ...restOptions } = options;
+    return {
+      queryKey: optionsQueryKey ?? ['ticketTimeline.infiniteSuspense', variables],
+      queryFn: (metaData) => fetcher<TicketTimelineQuery, TicketTimelineQueryVariables>(TicketTimelineDocument, {...variables, ...(metaData.pageParam ?? {})})(),
+      ...restOptions
+    }
+  })()
+    )};
+
+useSuspenseInfiniteTicketTimelineQuery.getKey = (variables: TicketTimelineQueryVariables) => ['ticketTimeline.infiniteSuspense', variables];
 
 
 useTicketTimelineQuery.fetcher = (variables: TicketTimelineQueryVariables) => fetcher<TicketTimelineQuery, TicketTimelineQueryVariables>(TicketTimelineDocument, variables);
@@ -1271,6 +1388,24 @@ export const useTicketsQuery = <
 
 useTicketsQuery.getKey = (variables?: TicketsQueryVariables) => variables === undefined ? ['tickets'] : ['tickets', variables];
 
+export const useSuspenseTicketsQuery = <
+      TData = TicketsQuery,
+      TError = unknown
+    >(
+      variables?: TicketsQueryVariables,
+      options?: Omit<UseSuspenseQueryOptions<TicketsQuery, TError, TData>, 'queryKey'> & { queryKey?: UseSuspenseQueryOptions<TicketsQuery, TError, TData>['queryKey'] }
+    ) => {
+    
+    return useSuspenseQuery<TicketsQuery, TError, TData>(
+      {
+    queryKey: variables === undefined ? ['ticketsSuspense'] : ['ticketsSuspense', variables],
+    queryFn: fetcher<TicketsQuery, TicketsQueryVariables>(TicketsDocument, variables),
+    ...options
+  }
+    )};
+
+useSuspenseTicketsQuery.getKey = (variables?: TicketsQueryVariables) => variables === undefined ? ['ticketsSuspense'] : ['ticketsSuspense', variables];
+
 export const useInfiniteTicketsQuery = <
       TData = InfiniteData<TicketsQuery>,
       TError = unknown
@@ -1291,6 +1426,27 @@ export const useInfiniteTicketsQuery = <
     )};
 
 useInfiniteTicketsQuery.getKey = (variables?: TicketsQueryVariables) => variables === undefined ? ['tickets.infinite'] : ['tickets.infinite', variables];
+
+export const useSuspenseInfiniteTicketsQuery = <
+      TData = InfiniteData<TicketsQuery>,
+      TError = unknown
+    >(
+      variables: TicketsQueryVariables,
+      options: Omit<UseSuspenseInfiniteQueryOptions<TicketsQuery, TError, TData>, 'queryKey'> & { queryKey?: UseSuspenseInfiniteQueryOptions<TicketsQuery, TError, TData>['queryKey'] }
+    ) => {
+    
+    return useSuspenseInfiniteQuery<TicketsQuery, TError, TData>(
+      (() => {
+    const { queryKey: optionsQueryKey, ...restOptions } = options;
+    return {
+      queryKey: optionsQueryKey ?? variables === undefined ? ['tickets.infiniteSuspense'] : ['tickets.infiniteSuspense', variables],
+      queryFn: (metaData) => fetcher<TicketsQuery, TicketsQueryVariables>(TicketsDocument, {...variables, ...(metaData.pageParam ?? {})})(),
+      ...restOptions
+    }
+  })()
+    )};
+
+useSuspenseInfiniteTicketsQuery.getKey = (variables?: TicketsQueryVariables) => variables === undefined ? ['tickets.infiniteSuspense'] : ['tickets.infiniteSuspense', variables];
 
 
 useTicketsQuery.fetcher = (variables?: TicketsQueryVariables) => fetcher<TicketsQuery, TicketsQueryVariables>(TicketsDocument, variables);
@@ -1524,6 +1680,24 @@ export const useMyUserInfoQuery = <
 
 useMyUserInfoQuery.getKey = (variables?: MyUserInfoQueryVariables) => variables === undefined ? ['myUserInfo'] : ['myUserInfo', variables];
 
+export const useSuspenseMyUserInfoQuery = <
+      TData = MyUserInfoQuery,
+      TError = unknown
+    >(
+      variables?: MyUserInfoQueryVariables,
+      options?: Omit<UseSuspenseQueryOptions<MyUserInfoQuery, TError, TData>, 'queryKey'> & { queryKey?: UseSuspenseQueryOptions<MyUserInfoQuery, TError, TData>['queryKey'] }
+    ) => {
+    
+    return useSuspenseQuery<MyUserInfoQuery, TError, TData>(
+      {
+    queryKey: variables === undefined ? ['myUserInfoSuspense'] : ['myUserInfoSuspense', variables],
+    queryFn: fetcher<MyUserInfoQuery, MyUserInfoQueryVariables>(MyUserInfoDocument, variables),
+    ...options
+  }
+    )};
+
+useSuspenseMyUserInfoQuery.getKey = (variables?: MyUserInfoQueryVariables) => variables === undefined ? ['myUserInfoSuspense'] : ['myUserInfoSuspense', variables];
+
 export const useInfiniteMyUserInfoQuery = <
       TData = InfiniteData<MyUserInfoQuery>,
       TError = unknown
@@ -1544,6 +1718,27 @@ export const useInfiniteMyUserInfoQuery = <
     )};
 
 useInfiniteMyUserInfoQuery.getKey = (variables?: MyUserInfoQueryVariables) => variables === undefined ? ['myUserInfo.infinite'] : ['myUserInfo.infinite', variables];
+
+export const useSuspenseInfiniteMyUserInfoQuery = <
+      TData = InfiniteData<MyUserInfoQuery>,
+      TError = unknown
+    >(
+      variables: MyUserInfoQueryVariables,
+      options: Omit<UseSuspenseInfiniteQueryOptions<MyUserInfoQuery, TError, TData>, 'queryKey'> & { queryKey?: UseSuspenseInfiniteQueryOptions<MyUserInfoQuery, TError, TData>['queryKey'] }
+    ) => {
+    
+    return useSuspenseInfiniteQuery<MyUserInfoQuery, TError, TData>(
+      (() => {
+    const { queryKey: optionsQueryKey, ...restOptions } = options;
+    return {
+      queryKey: optionsQueryKey ?? variables === undefined ? ['myUserInfo.infiniteSuspense'] : ['myUserInfo.infiniteSuspense', variables],
+      queryFn: (metaData) => fetcher<MyUserInfoQuery, MyUserInfoQueryVariables>(MyUserInfoDocument, {...variables, ...(metaData.pageParam ?? {})})(),
+      ...restOptions
+    }
+  })()
+    )};
+
+useSuspenseInfiniteMyUserInfoQuery.getKey = (variables?: MyUserInfoQueryVariables) => variables === undefined ? ['myUserInfo.infiniteSuspense'] : ['myUserInfo.infiniteSuspense', variables];
 
 
 useMyUserInfoQuery.fetcher = (variables?: MyUserInfoQueryVariables) => fetcher<MyUserInfoQuery, MyUserInfoQueryVariables>(MyUserInfoDocument, variables);
@@ -1579,6 +1774,24 @@ export const useUsersQuery = <
 
 useUsersQuery.getKey = (variables?: UsersQueryVariables) => variables === undefined ? ['users'] : ['users', variables];
 
+export const useSuspenseUsersQuery = <
+      TData = UsersQuery,
+      TError = unknown
+    >(
+      variables?: UsersQueryVariables,
+      options?: Omit<UseSuspenseQueryOptions<UsersQuery, TError, TData>, 'queryKey'> & { queryKey?: UseSuspenseQueryOptions<UsersQuery, TError, TData>['queryKey'] }
+    ) => {
+    
+    return useSuspenseQuery<UsersQuery, TError, TData>(
+      {
+    queryKey: variables === undefined ? ['usersSuspense'] : ['usersSuspense', variables],
+    queryFn: fetcher<UsersQuery, UsersQueryVariables>(UsersDocument, variables),
+    ...options
+  }
+    )};
+
+useSuspenseUsersQuery.getKey = (variables?: UsersQueryVariables) => variables === undefined ? ['usersSuspense'] : ['usersSuspense', variables];
+
 export const useInfiniteUsersQuery = <
       TData = InfiniteData<UsersQuery>,
       TError = unknown
@@ -1599,6 +1812,27 @@ export const useInfiniteUsersQuery = <
     )};
 
 useInfiniteUsersQuery.getKey = (variables?: UsersQueryVariables) => variables === undefined ? ['users.infinite'] : ['users.infinite', variables];
+
+export const useSuspenseInfiniteUsersQuery = <
+      TData = InfiniteData<UsersQuery>,
+      TError = unknown
+    >(
+      variables: UsersQueryVariables,
+      options: Omit<UseSuspenseInfiniteQueryOptions<UsersQuery, TError, TData>, 'queryKey'> & { queryKey?: UseSuspenseInfiniteQueryOptions<UsersQuery, TError, TData>['queryKey'] }
+    ) => {
+    
+    return useSuspenseInfiniteQuery<UsersQuery, TError, TData>(
+      (() => {
+    const { queryKey: optionsQueryKey, ...restOptions } = options;
+    return {
+      queryKey: optionsQueryKey ?? variables === undefined ? ['users.infiniteSuspense'] : ['users.infiniteSuspense', variables],
+      queryFn: (metaData) => fetcher<UsersQuery, UsersQueryVariables>(UsersDocument, {...variables, ...(metaData.pageParam ?? {})})(),
+      ...restOptions
+    }
+  })()
+    )};
+
+useSuspenseInfiniteUsersQuery.getKey = (variables?: UsersQueryVariables) => variables === undefined ? ['users.infiniteSuspense'] : ['users.infiniteSuspense', variables];
 
 
 useUsersQuery.fetcher = (variables?: UsersQueryVariables) => fetcher<UsersQuery, UsersQueryVariables>(UsersDocument, variables);

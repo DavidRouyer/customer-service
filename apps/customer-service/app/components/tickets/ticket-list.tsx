@@ -9,10 +9,9 @@ import { FormattedMessage } from 'react-intl';
 import type { TicketFilter, TicketStatus } from '@cs/kyaku/models';
 
 import { TicketListItem } from '~/components/tickets/ticket-list-item';
-import { TicketListItemSkeleton } from '~/components/tickets/ticket-list-item-skeleton';
 import {
-  useInfiniteTicketsQuery,
   useMyUserInfoQuery,
+  useSuspenseInfiniteTicketsQuery,
 } from '~/graphql/generated/client';
 
 export const TicketList: FC<{
@@ -28,7 +27,7 @@ export const TicketList: FC<{
     isFetching,
     fetchNextPage,
     hasNextPage,
-  } = useInfiniteTicketsQuery(
+  } = useSuspenseInfiniteTicketsQuery(
     {
       filters: {
         statuses: [status],
@@ -55,29 +54,9 @@ export const TicketList: FC<{
     }
   }, [inView, hasNextPage, isFetching, fetchNextPage]);
 
-  return (
-    <div className="no-scrollbar flex-auto overflow-y-auto">
-      {tickets && tickets.length > 0 ? (
-        <>
-          <div>
-            {tickets.map((ticket) => (
-              <TicketListItem
-                key={ticket.node.id}
-                ticket={ticket.node}
-                currentUserId={myUserInfo?.user?.id}
-              />
-            ))}
-          </div>
-          {isFetching && (
-            <div className="flex w-full flex-col gap-4">
-              <TicketListItemSkeleton />
-              <TicketListItemSkeleton />
-              <TicketListItemSkeleton />
-            </div>
-          )}
-          <div ref={ref} className="h-px w-full" />
-        </>
-      ) : (
+  if (tickets.length === 0) {
+    return (
+      <div className="no-scrollbar flex-auto overflow-y-auto">
         <div className="py-10">
           <div className="text-center">
             <PartyPopper
@@ -92,7 +71,22 @@ export const TicketList: FC<{
             </p>
           </div>
         </div>
-      )}
+      </div>
+    );
+  }
+
+  return (
+    <div className="no-scrollbar flex-auto overflow-y-auto">
+      <div>
+        {tickets.map((ticket) => (
+          <TicketListItem
+            key={ticket.node.id}
+            ticket={ticket.node}
+            currentUserId={myUserInfo?.user?.id}
+          />
+        ))}
+      </div>
+      <div ref={ref} className="h-px w-full" />
     </div>
   );
 };

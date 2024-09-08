@@ -17,6 +17,7 @@ const config: CodegenConfig = {
         },
         reactQueryVersion: 5,
         addInfiniteQuery: true,
+        addSuspenseQuery: true,
         exposeQueryKeys: true,
         exposeFetcher: true,
         withHooks: true,
