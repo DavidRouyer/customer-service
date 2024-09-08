@@ -37,7 +37,7 @@
   },
   "scripts": {
     "build": "vinxi build",
-    "clean": "git clean -xdf .next .turbo node_modules",
+    "clean": "git clean -xdf .vinxi .turbo node_modules",
     "codegen:graphql": "graphql-codegen",
     "codegen:graphql:watch": "graphql-codegen --watch",
     "format": "prettier --check \"**/*.{js,cjs,mjs,ts,tsx,md,json}\"",

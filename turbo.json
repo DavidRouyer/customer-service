@@ -12,12 +12,7 @@
     },
     "build": {
       "dependsOn": ["^build"],
-      "outputs": [
-        ".next/**",
-        "!.next/cache/**",
-        "dist/**",
-        "storybook-static/**"
-      ]
+      "outputs": [".vinxi", "dist/**", "storybook-static/**"]
     },
     "format": {
       "outputs": ["node_modules/.cache/.prettiercache"],

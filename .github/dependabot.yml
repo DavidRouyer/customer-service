@@ -19,10 +19,6 @@ updates:
         patterns:
           - 'lexical'
           - '@lexical/*'
-      next:
-        patterns:
-          - 'next'
-          - '@next*'
       storybook:
         patterns:
           - '@storybook*'
