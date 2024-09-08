@@ -2,20 +2,19 @@
   "extends": "@cs/tsconfig/base.json",
   "compilerOptions": {
     "lib": ["es2022", "ES2023.Array", "dom", "dom.iterable"],
-    "jsx": "preserve",
+    "jsx": "react-jsx",
     "baseUrl": ".",
     "paths": {
-      "~/*": ["./src/*"]
+      "~/*": ["./app/*"]
     },
-    "plugins": [
-      {
-        "name": "next"
-      }
-    ],
     "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json",
-    "types": ["vitest/globals", "@testing-library/jest-dom/vitest"],
+    "types": [
+      "vinxi/client",
+      "vitest/globals",
+      "@testing-library/jest-dom/vitest"
+    ],
     "module": "esnext"
   },
-  "include": [".", ".next/types/**/*.ts", ".vitest/setup.ts"],
+  "include": [".", ".vinxi/types/**/*.ts", ".vitest/setup.ts"],
   "exclude": ["node_modules"]
 }

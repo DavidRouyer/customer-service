@@ -10,9 +10,9 @@ export default {
       '../..',
       '**/*.{js,ts,jsx,tsx}'
     ),
-    './src/app/**/*.{ts,tsx}',
-    './src/components/**/*.{ts,tsx}',
-    './src/styles/**/*.css',
+    './app/**/*.{ts,tsx}',
+    './components/**/*.{ts,tsx}',
+    './styles/**/*.css',
   ],
   presets: [baseConfig],
 } satisfies Config;

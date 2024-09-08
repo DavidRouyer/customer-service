@@ -53,6 +53,7 @@ jobs:
           AUTH_GITHUB_SECRET: '${{ secrets.AUTH_GITHUB_SECRET }}'
           AUTH_SECRET: '${{ secrets.AUTH_SECRET }}'
           DATABASE_URL: '${{ steps.create_branch.outputs.db_url_with_pooler }}/neondb?pgbouncer=true&connect_timeout=10&sslmode=require'
+          VITE_API_ENDPOINT: '/api/graphql'
 
       - name: Run Drizzle migrate
         if: github.actor != 'dependabot[bot]'

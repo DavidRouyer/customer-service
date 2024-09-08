@@ -38,10 +38,11 @@ yarn-error.log*
 # turbo
 .turbo
 
-# next.js
-.next/
-out/
-next-env.d.ts
+# tanstack
+.vinxi/
 
 # vercel
 .vercel
+
+# storybook
+storybook-static/
