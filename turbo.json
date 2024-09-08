@@ -12,7 +12,7 @@
     },
     "build": {
       "dependsOn": ["^build"],
-      "outputs": [".vinxi", "dist/**", "storybook-static/**"]
+      "outputs": [".vinxi/**", "dist/**", "storybook-static/**"]
     },
     "format": {
       "outputs": ["node_modules/.cache/.prettiercache"],
