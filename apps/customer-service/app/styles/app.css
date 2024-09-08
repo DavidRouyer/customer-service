@@ -92,6 +92,12 @@
   }
 }
 
+html,
+body,
+#root {
+  @apply h-full;
+}
+
 .no-scrollbar::-webkit-scrollbar {
   @apply w-0;
 }
