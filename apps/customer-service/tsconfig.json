@@ -15,6 +15,6 @@
     ],
     "module": "esnext"
   },
-  "include": [".", ".vitest/setup.ts"],
+  "include": [".", ".vinxi/types/**/*.ts", ".vitest/setup.ts"],
   "exclude": ["node_modules"]
 }
