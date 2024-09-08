@@ -77,7 +77,7 @@ export function DataTable<TData, TValue>({
                 ) : (
                   <TableRow
                     key={row.id}
-                    to={`/ticket/$ticketId`}
+                    to="/ticket/$ticketId"
                     params={{ ticketId: row.original.id }}
                     data-state={row.getIsSelected() && 'selected'}
                   >

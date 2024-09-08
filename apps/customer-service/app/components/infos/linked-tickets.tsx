@@ -36,7 +36,8 @@ export const LinkedTickets: FC<LinkedTicketsProps> = ({
         .map((ticket) => (
           <li key={ticket.node.id}>
             <Link
-              to={`/ticket/${ticket.node.id}`}
+              to="/ticket/$ticketId"
+              params={{ ticketId: ticket.node.id }}
               className="block flex-auto rounded-md p-3 ring-1 ring-inset ring-border"
             >
               <div className="flex items-start gap-x-3">

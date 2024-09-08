@@ -26,7 +26,8 @@ export const TeamMemberList: FC = () => {
     .map((user) => (
       <li key={user.node.id}>
         <Link
-          to={`/contact/${user.node.id}`}
+          to="/contact/$contactId"
+          params={{ contactId: user.node.id }}
           className={cn(
             'flex items-center justify-between gap-x-3 rounded-md px-2 py-1.5 text-sm font-semibold leading-5 text-muted-foreground hover:bg-muted hover:text-foreground aria-[current="page"]:bg-muted aria-[current="page"]:text-foreground'
           )}
