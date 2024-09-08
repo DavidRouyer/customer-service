@@ -30,7 +30,7 @@
     "@cs/prettier-config": "*",
     "@cs/tsconfig": "*",
     "@types/bcrypt": "^5.0.2",
-    "eslint": "^9.9.1",
+    "eslint": "^9.10.0",
     "prettier": "^3.3.3",
     "typescript": "^5.5.4"
   },
