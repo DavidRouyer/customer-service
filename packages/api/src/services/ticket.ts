@@ -470,7 +470,7 @@ export default class TicketService extends BaseService {
       );
 
       return {
-        id: newChat.id,
+        id: ticket.id,
       };
     });
   }
