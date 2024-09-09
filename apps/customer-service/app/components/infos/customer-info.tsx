@@ -1,4 +1,3 @@
-import type { FC } from 'react';
 import { useParams } from '@tanstack/react-router';
 import { FormattedMessage, useIntl } from 'react-intl';
 

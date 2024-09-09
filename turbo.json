@@ -49,6 +49,7 @@
     "AUTH_SECRET",
     "AUTH_GITHUB_ID",
     "AUTH_GITHUB_SECRET",
+    "AUTH_TRUST_HOST",
     "DATABASE_URL",
     "NODE_ENV",
     "JWT_SECRET",
