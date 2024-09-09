@@ -3,6 +3,7 @@
 import type { FC, RefObject } from 'react';
 import { createContext, useRef } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
+import { useRouteContext } from '@tanstack/react-router';
 import { useAtom } from 'jotai';
 import { PaperclipIcon, SmilePlusIcon } from 'lucide-react';
 import { useForm } from 'react-hook-form';
@@ -22,7 +23,6 @@ import type { TimelineEntry } from '~/graphql/generated/client';
 import {
   useCreateNoteMutation,
   useInfiniteTicketTimelineQuery,
-  useMyUserInfoQuery,
   useSendChatMutation,
 } from '~/graphql/generated/client';
 
@@ -35,9 +35,7 @@ export const FormElementContext =
 
 export const MessageForm: FC<{ ticketId: string }> = ({ ticketId }) => {
   const formRef = useRef<HTMLFormElement>(null);
-  const { data: myUserInfo } = useMyUserInfoQuery(undefined, {
-    select: (data) => ({ user: data.myUserInfo }),
-  });
+  const { session } = useRouteContext({ from: '__root__' });
   const queryClient = useQueryClient();
 
   const [messageMode, setMessageMode] = useAtom(messageModeAtom);
@@ -74,8 +72,8 @@ export const MessageForm: FC<{ ticketId: string }> = ({ ticketId }) => {
               text: input.text,
             } satisfies TicketChat,
             createdAt: new Date(),
-            userCreatedById: myUserInfo?.user?.id ?? null,
-            userCreatedBy: myUserInfo?.user ?? null,
+            userCreatedById: session?.user?.id ?? null,
+            userCreatedBy: session?.user ?? null,
             customerCreatedById: null,
             customerCreatedBy: null,
           },
@@ -133,8 +131,8 @@ export const MessageForm: FC<{ ticketId: string }> = ({ ticketId }) => {
               rawContent: input.rawContent,
             } satisfies TicketNote,
             createdAt: new Date(),
-            userCreatedById: myUserInfo?.user?.id ?? null,
-            userCreatedBy: myUserInfo?.user ?? null,
+            userCreatedById: session?.user?.id ?? null,
+            userCreatedBy: session?.user ?? null,
             customerCreatedById: null,
             customerCreatedBy: null,
           },

@@ -13,12 +13,12 @@ import {
 import { CustomerInfo } from '~/components/infos/customer-info';
 import { LinkedTickets } from '~/components/infos/linked-tickets';
 import { TicketInfo } from '~/components/infos/ticket-info';
-import { useTicketQuery } from '~/graphql/generated/client';
+import { useSuspenseTicketQuery } from '~/graphql/generated/client';
 
 export const InfoPanel: FC<{
   ticketId: string;
 }> = ({ ticketId }) => {
-  const { data: ticketData } = useTicketQuery(
+  const { data: ticketData } = useSuspenseTicketQuery(
     {
       ticketId: ticketId,
     },

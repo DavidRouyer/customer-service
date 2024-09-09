@@ -2,6 +2,7 @@
 
 import type { FC } from 'react';
 import { useEffect } from 'react';
+import { useRouteContext } from '@tanstack/react-router';
 import { PartyPopper } from 'lucide-react';
 import { useInView } from 'react-intersection-observer';
 import { FormattedMessage } from 'react-intl';
@@ -9,10 +10,7 @@ import { FormattedMessage } from 'react-intl';
 import type { TicketFilter, TicketStatus } from '@cs/kyaku/models';
 
 import { TicketListItem } from '~/components/tickets/ticket-list-item';
-import {
-  useMyUserInfoQuery,
-  useSuspenseInfiniteTicketsQuery,
-} from '~/graphql/generated/client';
+import { useSuspenseInfiniteTicketsQuery } from '~/graphql/generated/client';
 
 export const TicketList: FC<{
   filter: TicketFilter | string;
@@ -21,6 +19,7 @@ export const TicketList: FC<{
 }> = ({ filter, status, orderBy }) => {
   const { ref, inView } = useInView();
   console.log('filter', filter, 'status', status, 'orderBy', orderBy);
+  const { session } = useRouteContext({ from: '__root__' });
 
   const {
     data: tickets,
@@ -43,9 +42,6 @@ export const TicketList: FC<{
       select: (data) => data.pages.flatMap((page) => page.tickets.edges),
     }
   );
-  const { data: myUserInfo } = useMyUserInfoQuery(undefined, {
-    select: (data) => ({ user: data.myUserInfo }),
-  });
 
   useEffect(() => {
     if (inView && hasNextPage && !isFetching) {
@@ -82,7 +78,7 @@ export const TicketList: FC<{
           <TicketListItem
             key={ticket.node.id}
             ticket={ticket.node}
-            currentUserId={myUserInfo?.user?.id}
+            currentUserId={session?.user?.id}
           />
         ))}
       </div>

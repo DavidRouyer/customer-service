@@ -1,17 +1,13 @@
 import type { FC } from 'react';
-import { Link } from '@tanstack/react-router';
+import { Link, useRouteContext } from '@tanstack/react-router';
 import { AtSign, BarChart3, BookmarkX, Users } from 'lucide-react';
 import { FormattedMessage } from 'react-intl';
 
 import { getInitials } from '@cs/kyaku/utils';
 import { Avatar, AvatarFallback, AvatarImage } from '@cs/ui/avatar';
 
-import { useMyUserInfoQuery } from '~/graphql/generated/client';
-
 export const InboxList: FC = () => {
-  const { data: myUserInfo } = useMyUserInfoQuery(undefined, {
-    select: (data) => ({ user: data.myUserInfo }),
-  });
+  const { session } = useRouteContext({ from: '__root__' });
 
   return (
     <>
@@ -35,9 +31,9 @@ export const InboxList: FC = () => {
         >
           <div className="flex items-center gap-x-3 truncate">
             <Avatar className="size-4 shrink-0">
-              <AvatarImage src={myUserInfo?.user?.image ?? undefined} />
+              <AvatarImage src={session?.user?.image ?? undefined} />
               <AvatarFallback>
-                {getInitials(myUserInfo?.user?.name ?? '')}
+                {getInitials(session?.user?.name ?? '')}
               </AvatarFallback>
             </Avatar>
             <span className="truncate">

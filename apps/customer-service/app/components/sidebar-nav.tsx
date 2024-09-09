@@ -19,9 +19,7 @@ export const SidebarNav: FC = () => {
       name: 'Default',
       content: (
         <ul className="-mx-2 flex flex-col gap-y-1">
-          <Suspense fallback={null}>
-            <InboxList />
-          </Suspense>
+          <InboxList />
         </ul>
       ),
     },
@@ -70,9 +68,7 @@ export const SidebarNav: FC = () => {
                 <li key={item.name}>{item.content}</li>
               ))}
               <li className="-mx-6 mt-auto">
-                <Suspense>
-                  <UserNav showLabel />
-                </Suspense>
+                <UserNav showLabel />
               </li>
             </ul>
           </nav>
@@ -92,9 +88,8 @@ export const SidebarNav: FC = () => {
         <div className="flex-1 text-sm font-semibold leading-6 text-foreground">
           Help Desk
         </div>
-        <Suspense>
-          <UserNav />
-        </Suspense>
+
+        <UserNav />
       </div>
     </>
   );

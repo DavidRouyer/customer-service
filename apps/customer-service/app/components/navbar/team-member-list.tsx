@@ -1,18 +1,16 @@
 import type { FC } from 'react';
-import { Link } from '@tanstack/react-router';
+import { Link, useRouteContext } from '@tanstack/react-router';
 
 import { getInitials } from '@cs/kyaku/utils';
 import { cn } from '@cs/ui';
 import { Avatar, AvatarFallback, AvatarImage } from '@cs/ui/avatar';
 
-import { useMyUserInfoQuery, useUsersQuery } from '~/graphql/generated/client';
+import { useSuspenseUsersQuery } from '~/graphql/generated/client';
 
 export const TeamMemberList: FC = () => {
-  const { data: myUserInfo } = useMyUserInfoQuery(undefined, {
-    select: (data) => ({ user: data.myUserInfo }),
-  });
+  const { session } = useRouteContext({ from: '__root__' });
 
-  const { data: usersData } = useUsersQuery(
+  const { data: usersData } = useSuspenseUsersQuery(
     {
       first: 10,
     },
@@ -21,8 +19,8 @@ export const TeamMemberList: FC = () => {
     }
   );
 
-  return usersData?.edges
-    .filter((user) => user.node.id !== myUserInfo?.user?.id)
+  return usersData.edges
+    .filter((user) => user.node.id !== session?.user?.id)
     .map((user) => (
       <li key={user.node.id}>
         <Link

@@ -1,6 +1,7 @@
 import type { FC } from 'react';
 import { useCallback, useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
+import { useRouteContext } from '@tanstack/react-router';
 import { Check, Plus } from 'lucide-react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
@@ -22,7 +23,6 @@ import type { TicketQuery, UsersQuery } from '~/graphql/generated/client';
 import {
   useAssignTicketMutation,
   useInfiniteTicketTimelineQuery,
-  useMyUserInfoQuery,
   useTicketQuery,
   useUnassignTicketMutation,
   useUsersQuery,
@@ -38,9 +38,7 @@ export const TicketAssignmentCombobox: FC<TicketAssignmentComboboxProps> = ({
   ticketId,
 }) => {
   const { formatMessage } = useIntl();
-  const { data: myUserInfo } = useMyUserInfoQuery(undefined, {
-    select: (data) => ({ user: data.myUserInfo }),
-  });
+  const { session } = useRouteContext({ from: '__root__' });
 
   const [open, setOpen] = useState(false);
 
@@ -54,9 +52,9 @@ export const TicketAssignmentCombobox: FC<TicketAssignmentComboboxProps> = ({
       select: useCallback(
         (data: UsersQuery) => {
           let newUsers = data.users.edges.map((user) => user.node);
-          if (myUserInfo?.user?.id) {
+          if (session?.user?.id) {
             const loggedUser = newUsers.find(
-              (user) => user.id === myUserInfo.user?.id
+              (user) => user.id === session.user?.id
             );
             if (loggedUser) {
               newUsers = [
@@ -79,7 +77,7 @@ export const TicketAssignmentCombobox: FC<TicketAssignmentComboboxProps> = ({
 
           return newUsers;
         },
-        [assignedTo, myUserInfo?.user]
+        [assignedTo, session?.user]
       ),
     }
   );
