@@ -14,18 +14,17 @@ export default [
   {
     // Setup GraphQL Parser
     files: ['**/*.{graphql,gql}'],
-    plugins: {
-      '@graphql-eslint': graphqlESLint,
-    },
     languageOptions: {
-      parser: graphqlESLint,
+      parser: graphqlESLint.parser,
+    },
+    plugins: {
+      '@graphql-eslint': { rules: graphqlESLint.rules },
     },
   },
   {
     files: ['**/*.graphql'],
-    ...graphqlESLint.configs['flat/schema-recommended'],
     rules: {
-      ...graphqlESLint.configs['flat/schema-recommended'].rules,
+      ...graphqlESLint.configs['flat/schema-recommended'],
       '@graphql-eslint/naming-convention': [
         'error',
         {
