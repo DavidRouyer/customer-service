@@ -1,10 +1,11 @@
 import type { FC } from 'react';
+import { useParams } from '@tanstack/react-router';
 import { FormattedMessage, useIntl } from 'react-intl';
 
 import { Copy } from '@cs/ui/copy';
 
 import { PhoneNumber } from '~/components/infos/phone-number';
-import { useTicketQuery } from '~/graphql/generated/client';
+import { useSuspenseTicketQuery } from '~/graphql/generated/client';
 
 const user = {
   app: {
@@ -13,9 +14,10 @@ const user = {
   },
 };
 
-export const CustomerInfo: FC<{ ticketId: string }> = ({ ticketId }) => {
+export const CustomerInfo = () => {
   const { formatMessage } = useIntl();
-  const { data: ticketData } = useTicketQuery(
+  const { ticketId } = useParams({ from: '/_authed/ticket/_layout/$ticketId' });
+  const { data: ticketData } = useSuspenseTicketQuery(
     {
       ticketId: ticketId,
     },

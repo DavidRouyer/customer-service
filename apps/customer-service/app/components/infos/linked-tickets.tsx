@@ -1,30 +1,34 @@
 'use client';
 
-import type { FC } from 'react';
-import { Link } from '@tanstack/react-router';
+import { Link, useParams } from '@tanstack/react-router';
 import { FormattedDate, FormattedMessage } from 'react-intl';
 
 import { Badge } from '@cs/ui/badge';
 
-import { TicketStatus, useTicketsQuery } from '~/graphql/generated/client';
+import {
+  TicketStatus,
+  useSuspenseTicketQuery,
+  useTicketsQuery,
+} from '~/graphql/generated/client';
 
-interface LinkedTicketsProps {
-  ticketId: string;
-  customerId?: string;
-}
-
-export const LinkedTickets: FC<LinkedTicketsProps> = ({
-  ticketId,
-  customerId,
-}) => {
+export const LinkedTickets = () => {
+  const { ticketId } = useParams({ from: '/_authed/ticket/_layout/$ticketId' });
+  const { data: ticketData } = useSuspenseTicketQuery(
+    {
+      ticketId,
+    },
+    {
+      select: (data) => data.ticket,
+    }
+  );
   const { data: ticketsData } = useTicketsQuery(
     {
       filters: {
-        customerIds: [customerId ?? ''],
+        customerIds: [ticketData?.customer.id ?? ''],
       },
     },
     {
-      enabled: !!customerId,
+      enabled: !!ticketData?.customer.id,
       select: (data) => data.tickets,
     }
   );

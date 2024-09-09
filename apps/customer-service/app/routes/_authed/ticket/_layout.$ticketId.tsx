@@ -23,21 +23,11 @@ export const Route = createFileRoute('/_authed/ticket/_layout/$ticketId')({
 });
 
 function TicketRoute() {
-  const params = Route.useParams();
   return (
     <>
       <TicketNavbar />
-      <Suspense
-        fallback={
-          <aside className="fixed inset-y-0 right-0 hidden w-96 overflow-y-auto border-l px-4 py-6 sm:px-6 xl:block">
-            <div className="flex size-full items-center justify-center">
-              <Loader2 className="size-8 animate-spin" />
-            </div>
-          </aside>
-        }
-      >
-        <InfoPanel ticketId={params.ticketId} />
-      </Suspense>
+
+      <InfoPanel />
 
       <main className="lg:pl-14">
         <div className="xl:mr-96 xl:h-dvh xl:overflow-y-auto xl:pl-96">
@@ -49,7 +39,7 @@ function TicketRoute() {
                 </div>
               }
             >
-              <Ticket ticketId={params.ticketId} />
+              <Ticket />
             </Suspense>
           </div>
         </div>

@@ -1,6 +1,7 @@
 'use client';
 
-import type { FC } from 'react';
+import { Suspense } from 'react';
+import { Loader2 } from 'lucide-react';
 import { FormattedMessage } from 'react-intl';
 
 import {
@@ -13,24 +14,8 @@ import {
 import { CustomerInfo } from '~/components/infos/customer-info';
 import { LinkedTickets } from '~/components/infos/linked-tickets';
 import { TicketInfo } from '~/components/infos/ticket-info';
-import { useSuspenseTicketQuery } from '~/graphql/generated/client';
 
-export const InfoPanel: FC<{
-  ticketId: string;
-}> = ({ ticketId }) => {
-  const { data: ticketData } = useSuspenseTicketQuery(
-    {
-      ticketId: ticketId,
-    },
-    {
-      select: (data) => data.ticket,
-    }
-  );
-
-  if (!ticketData) {
-    return null;
-  }
-
+export const InfoPanel = () => {
   return (
     <aside className="fixed inset-y-0 right-0 hidden w-96 overflow-y-auto border-l px-4 py-6 sm:px-6 xl:block">
       <header className="flex items-center justify-between border-b pb-6">
@@ -39,7 +24,9 @@ export const InfoPanel: FC<{
         </h1>
       </header>
       <div className="flex flex-1 flex-col">
-        <TicketInfo ticketId={ticketId} />
+        <Suspense fallback={<Loader2 className="size-8 animate-spin" />}>
+          <TicketInfo />
+        </Suspense>
         <Accordion
           type="multiple"
           className="w-full"
@@ -50,7 +37,9 @@ export const InfoPanel: FC<{
               <FormattedMessage id="info_panel.contact_information" />
             </AccordionTrigger>
             <AccordionContent>
-              <CustomerInfo ticketId={ticketId} />
+              <Suspense fallback={<Loader2 className="size-8 animate-spin" />}>
+                <CustomerInfo />
+              </Suspense>
             </AccordionContent>
           </AccordionItem>
           <AccordionItem value="item-1">
@@ -58,10 +47,9 @@ export const InfoPanel: FC<{
               <FormattedMessage id="info_panel.recent_conversations" />
             </AccordionTrigger>
             <AccordionContent>
-              <LinkedTickets
-                ticketId={ticketId}
-                customerId={ticketData.customer.id}
-              />
+              <Suspense fallback={<Loader2 className="size-8 animate-spin" />}>
+                <LinkedTickets />
+              </Suspense>
             </AccordionContent>
           </AccordionItem>
         </Accordion>

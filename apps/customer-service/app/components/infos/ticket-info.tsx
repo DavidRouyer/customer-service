@@ -1,14 +1,15 @@
-import type { FC } from 'react';
+import { useParams } from '@tanstack/react-router';
 import { FormattedMessage } from 'react-intl';
 
 import { TicketAssignmentCombobox } from '~/components/tickets/ticket-assignment-combobox';
 import { TicketLabelCombobox } from '~/components/tickets/ticket-label-combobox';
 import { TicketPriorityDropdowm } from '~/components/tickets/ticket-priority-dropdown';
 import { TicketStatusDropdowm } from '~/components/tickets/ticket-status-dropdown';
-import { useTicketQuery } from '~/graphql/generated/client';
+import { useSuspenseTicketQuery } from '~/graphql/generated/client';
 
-export const TicketInfo: FC<{ ticketId: string }> = ({ ticketId }) => {
-  const { data: ticketData } = useTicketQuery(
+export const TicketInfo = () => {
+  const { ticketId } = useParams({ from: '/_authed/ticket/_layout/$ticketId' });
+  const { data: ticketData } = useSuspenseTicketQuery(
     {
       ticketId: ticketId,
     },
