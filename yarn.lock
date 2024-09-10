@@ -1712,7 +1712,7 @@ __metadata:
     "@tanstack/react-router": "npm:^1.56.5"
     "@tanstack/react-router-with-query": "npm:^1.56.5"
     "@tanstack/react-table": "npm:^8.20.5"
-    "@tanstack/router-devtools": "npm:^1.56.5"
+    "@tanstack/router-devtools": "npm:^1.57.9"
     "@tanstack/router-plugin": "npm:^1.56.4"
     "@tanstack/start": "npm:^1.57.8"
     "@testing-library/jest-dom": "npm:^6.5.0"
@@ -6734,17 +6734,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tanstack/router-devtools@npm:^1.56.5":
-  version: 1.56.5
-  resolution: "@tanstack/router-devtools@npm:1.56.5"
+"@tanstack/router-devtools@npm:^1.57.9":
+  version: 1.57.9
+  resolution: "@tanstack/router-devtools@npm:1.57.9"
   dependencies:
     clsx: "npm:^2.1.1"
     goober: "npm:^2.1.14"
   peerDependencies:
-    "@tanstack/react-router": ^1.56.5
+    "@tanstack/react-router": ^1.57.9
     react: ">=18"
     react-dom: ">=18"
-  checksum: 10c0/fca75f36f5beb5b66ce135f0a04cf9ac777572ded800ec8725fa5b301f4ac5741dcaef84ca32d0d3e3b83ec041eec58a53f899a51e9c0ca690b6a572a64dfbde
+  checksum: 10c0/9277bdc5f363e0c8949e718228f0e042f3c571ef2937f667d86f0fe8630f9cb9328f53d9dd6c3197ecb477fec13fbaa9672c6f76891f3feabd7ab86c9afd1526
   languageName: node
   linkType: hard
 
