@@ -26,6 +26,10 @@ updates:
       tanstack-query:
         patterns:
           - '@tanstack/react-query*'
+      tanstack-router:
+        patterns:
+          - '@tanstack/react-router*'
+          - '@tanstack/router*'
       turbo:
         patterns:
           - 'turbo'
