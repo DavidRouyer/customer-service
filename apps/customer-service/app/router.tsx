@@ -2,6 +2,7 @@ import { QueryClient } from '@tanstack/react-query';
 import { createRouter as createTanStackRouter } from '@tanstack/react-router';
 import { routerWithQueryClient } from '@tanstack/react-router-with-query';
 import { Provider } from 'jotai';
+import { Loader2 } from 'lucide-react';
 
 import NotFound from '~/components/not-found';
 // Import the generated route tree
@@ -18,7 +19,11 @@ export function createRouter() {
         queryClient,
         session: null,
       },
-      defaultPendingComponent: () => <div className={`p-2 text-2xl`}>Spin</div>,
+      defaultPendingComponent: () => (
+        <div className="p-2 text-2xl">
+          <Loader2 className="size-8 animate-spin" />
+        </div>
+      ),
       defaultNotFoundComponent: NotFound,
       Wrap: function WrapComponent({ children }) {
         return <Provider>{children}</Provider>;
