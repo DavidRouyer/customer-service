@@ -1,5 +1,4 @@
-import type { Preview } from '@storybook/react'
-import { Renderer } from 'react-dom';
+import type { Preview, ReactRenderer } from '@storybook/react'
 import { withThemeByClassName } from '@storybook/addon-themes';
 
 import '../src/tailwind.css';
@@ -13,8 +12,9 @@ const preview: Preview = {
       },
     },
   },
+  tags: ["autodocs"],
   decorators: [
-    withThemeByClassName<Renderer>({
+    withThemeByClassName<ReactRenderer>({
       themes: {
         light: '',
         dark: 'dark',

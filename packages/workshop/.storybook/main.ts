@@ -27,9 +27,6 @@ const config: StorybookConfig = {
     "name": getAbsolutePath('@storybook/react-vite'),
     "options": {}
   },
-  "docs": {
-    "autodocs": "tag"
-  },
   async viteFinal(config, { configType }) {
     // Be sure to return the customized config
     return mergeConfig(config, {
