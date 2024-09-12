@@ -5,9 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  *
  */
-
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import * as React from 'react';
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
 import type { MenuTextMatch } from '@lexical/react/LexicalTypeaheadMenuPlugin';
 import {
