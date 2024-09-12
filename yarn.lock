@@ -848,8 +848,8 @@ __metadata:
     "@tanstack/react-router-with-query": "npm:^1.57.10"
     "@tanstack/react-table": "npm:^8.20.5"
     "@tanstack/router-devtools": "npm:^1.57.10"
-    "@tanstack/router-plugin": "npm:^1.57.9"
-    "@tanstack/start": "npm:^1.57.10"
+    "@tanstack/router-plugin": "npm:^1.57.11"
+    "@tanstack/start": "npm:^1.57.11"
     "@testing-library/jest-dom": "npm:^6.5.0"
     "@testing-library/react": "npm:^16.0.1"
     "@types/google-libphonenumber": "npm:^7.4.30"
@@ -5898,9 +5898,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tanstack/router-plugin@npm:^1.57.9":
-  version: 1.57.9
-  resolution: "@tanstack/router-plugin@npm:1.57.9"
+"@tanstack/router-plugin@npm:^1.57.11":
+  version: 1.57.11
+  resolution: "@tanstack/router-plugin@npm:1.57.11"
   dependencies:
     "@babel/core": "npm:^7.25.2"
     "@babel/generator": "npm:^7.25.0"
@@ -5921,7 +5921,7 @@ __metadata:
     unplugin: "npm:^1.12.2"
     zod: "npm:^3.23.8"
   peerDependencies:
-    "@rsbuild/core": ">=1.0.1-rc.5"
+    "@rsbuild/core": ">=1.0.2"
     vite: ">=5.0.0"
     webpack: ">=5.92.0"
   peerDependenciesMeta:
@@ -5931,7 +5931,7 @@ __metadata:
       optional: true
     webpack:
       optional: true
-  checksum: 10c0/f606918837bd2f7821c2033b0037dfe23e9865efaddeedb0758127ec2d4f1d8b96b2a351c63b93681937b9563f84ecfb43b4aacd021a76da984731e92c31f138
+  checksum: 10c0/e92431e0ca84639aa2f158521ada5a0b60ab7869400f753610d07ebd50d50adf2d48e69b21660cb40c72404df79025361451bc2490e414616f9df073504a1434
   languageName: node
   linkType: hard
 
@@ -5955,14 +5955,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tanstack/start@npm:^1.57.10":
-  version: 1.57.10
-  resolution: "@tanstack/start@npm:1.57.10"
+"@tanstack/start@npm:^1.57.11":
+  version: 1.57.11
+  resolution: "@tanstack/start@npm:1.57.11"
   dependencies:
     "@tanstack/react-cross-context": "npm:^1.57.6"
     "@tanstack/react-router": "npm:^1.57.10"
     "@tanstack/router-generator": "npm:^1.57.9"
-    "@tanstack/router-plugin": "npm:^1.57.9"
+    "@tanstack/router-plugin": "npm:^1.57.11"
     "@tanstack/start-vite-plugin": "npm:^1.57.6"
     "@types/jsesc": "npm:^3.0.3"
     "@vinxi/react": "npm:0.2.4"
@@ -5979,7 +5979,7 @@ __metadata:
   peerDependencies:
     react: ">=18.0.0 || >=19.0.0"
     react-dom: ">=18.0.0 || >=19.0.0"
-  checksum: 10c0/af54df6039c1e4482701229aa04dfbce2e4603bcbef99fde3d52336b2eab7983d51b392b3c31fa743c560b2ebaf7732a4e4a835b60cca52c55ad94268b053ea6
+  checksum: 10c0/67cbb47f081167c8b7fb5376068dc3e60da9e5f7ac6ebab833c0c71d95e21be624823119be9ecace3f8861f3e4f1fc18dcfbcef386a87f16d50eeb16debb7dfe
   languageName: node
   linkType: hard
 
