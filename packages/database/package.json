@@ -19,7 +19,7 @@
   "dependencies": {
     "@cs/kyaku": "*",
     "drizzle-orm": "^0.33.0",
-    "pg": "^8.12.0"
+    "pg": "^8.13.0"
   },
   "devDependencies": {
     "@cs/eslint-config": "*",
