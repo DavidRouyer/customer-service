@@ -24,7 +24,6 @@ import { Route as AuthedLayoutReportsImport } from './routes/_authed/_layout.rep
 import { Route as AuthedLayoutMyInboxImport } from './routes/_authed/_layout.my-inbox'
 import { Route as AuthedLayoutMentionsImport } from './routes/_authed/_layout.mentions'
 import { Route as AuthedTicketLayoutTicketIdImport } from './routes/_authed/ticket/_layout.$ticketId'
-import { Route as AuthedContactLayoutContactIdImport } from './routes/_authed/contact/_layout.$contactId'
 
 // Create Virtual Routes
 
@@ -93,12 +92,6 @@ const AuthedTicketLayoutTicketIdRoute = AuthedTicketLayoutTicketIdImport.update(
     getParentRoute: () => AuthedTicketLayoutRoute,
   } as any,
 )
-
-const AuthedContactLayoutContactIdRoute =
-  AuthedContactLayoutContactIdImport.update({
-    path: '/contact/$contactId',
-    getParentRoute: () => AuthedRoute,
-  } as any)
 
 // Populate the FileRoutesByPath interface
 
@@ -181,13 +174,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthedLayoutIndexImport
       parentRoute: typeof AuthedLayoutImport
     }
-    '/_authed/contact/_layout/$contactId': {
-      id: '/_authed/contact/_layout/$contactId'
-      path: '/contact/$contactId'
-      fullPath: '/contact/$contactId'
-      preLoaderRoute: typeof AuthedContactLayoutContactIdImport
-      parentRoute: typeof AuthedImport
-    }
     '/_authed/ticket/_layout/$ticketId': {
       id: '/_authed/ticket/_layout/$ticketId'
       path: '/$ticketId'
@@ -248,13 +234,11 @@ const AuthedTicketRouteWithChildren = AuthedTicketRoute._addFileChildren(
 interface AuthedRouteChildren {
   AuthedLayoutRoute: typeof AuthedLayoutRouteWithChildren
   AuthedTicketRoute: typeof AuthedTicketRouteWithChildren
-  AuthedContactLayoutContactIdRoute: typeof AuthedContactLayoutContactIdRoute
 }
 
 const AuthedRouteChildren: AuthedRouteChildren = {
   AuthedLayoutRoute: AuthedLayoutRouteWithChildren,
   AuthedTicketRoute: AuthedTicketRouteWithChildren,
-  AuthedContactLayoutContactIdRoute: AuthedContactLayoutContactIdRoute,
 }
 
 const AuthedRouteWithChildren =
@@ -270,7 +254,6 @@ export interface FileRoutesByFullPath {
   '/unassigned': typeof AuthedLayoutUnassignedRoute
   '/ticket': typeof AuthedTicketLayoutRouteWithChildren
   '/': typeof AuthedLayoutIndexRoute
-  '/contact/$contactId': typeof AuthedContactLayoutContactIdRoute
   '/ticket/$ticketId': typeof AuthedTicketLayoutTicketIdRoute
 }
 
@@ -284,7 +267,6 @@ export interface FileRoutesByTo {
   '/unassigned': typeof AuthedLayoutUnassignedRoute
   '/ticket': typeof AuthedTicketLayoutRouteWithChildren
   '/': typeof AuthedLayoutIndexRoute
-  '/contact/$contactId': typeof AuthedContactLayoutContactIdRoute
   '/ticket/$ticketId': typeof AuthedTicketLayoutTicketIdRoute
 }
 
@@ -301,7 +283,6 @@ export interface FileRoutesById {
   '/_authed/ticket': typeof AuthedTicketRouteWithChildren
   '/_authed/ticket/_layout': typeof AuthedTicketLayoutRouteWithChildren
   '/_authed/_layout/': typeof AuthedLayoutIndexRoute
-  '/_authed/contact/_layout/$contactId': typeof AuthedContactLayoutContactIdRoute
   '/_authed/ticket/_layout/$ticketId': typeof AuthedTicketLayoutTicketIdRoute
 }
 
@@ -317,7 +298,6 @@ export interface FileRouteTypes {
     | '/unassigned'
     | '/ticket'
     | '/'
-    | '/contact/$contactId'
     | '/ticket/$ticketId'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -330,7 +310,6 @@ export interface FileRouteTypes {
     | '/unassigned'
     | '/ticket'
     | '/'
-    | '/contact/$contactId'
     | '/ticket/$ticketId'
   id:
     | '__root__'
@@ -345,7 +324,6 @@ export interface FileRouteTypes {
     | '/_authed/ticket'
     | '/_authed/ticket/_layout'
     | '/_authed/_layout/'
-    | '/_authed/contact/_layout/$contactId'
     | '/_authed/ticket/_layout/$ticketId'
   fileRoutesById: FileRoutesById
 }
@@ -380,8 +358,7 @@ export const routeTree = rootRoute
       "filePath": "_authed.tsx",
       "children": [
         "/_authed/_layout",
-        "/_authed/ticket",
-        "/_authed/contact/_layout/$contactId"
+        "/_authed/ticket"
       ]
     },
     "/sign-in": {
@@ -436,10 +413,6 @@ export const routeTree = rootRoute
     "/_authed/_layout/": {
       "filePath": "_authed/_layout.index.tsx",
       "parent": "/_authed/_layout"
-    },
-    "/_authed/contact/_layout/$contactId": {
-      "filePath": "_authed/contact/_layout.$contactId.tsx",
-      "parent": "/_authed"
     },
     "/_authed/ticket/_layout/$ticketId": {
       "filePath": "_authed/ticket/_layout.$ticketId.tsx",
