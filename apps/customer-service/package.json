@@ -23,7 +23,7 @@
     "google-libphonenumber": "^3.2.38",
     "graphql": "^16.9.0",
     "graphql-yoga": "^5.7.0",
-    "jotai": "^2.9.3",
+    "jotai": "^2.10.0",
     "lexical": "^0.17.1",
     "lucide-react": "^0.441.0",
     "react": "^18.3.1",
