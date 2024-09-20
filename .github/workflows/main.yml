@@ -31,20 +31,11 @@ jobs:
         env:
           DATABASE_URL: '${{ secrets.DATABASE_URL }}'
 
-      - name: Install Vercel CLI
-        run: npm install --global vercel@latest
-
-      - name: Pull Vercel Environment Information
-        run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
-
-      - name: Build Project Artifacts
-        run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
+      - name: Build project
+        run: yarn build
         env:
           AUTH_GITHUB_ID: '${{ secrets.AUTH_GITHUB_ID }}'
           AUTH_GITHUB_SECRET: '${{ secrets.AUTH_GITHUB_SECRET }}'
           AUTH_SECRET: '${{ secrets.AUTH_SECRET }}'
           DATABASE_URL: '${{ secrets.DATABASE_URL }}'
           VITE_API_ENDPOINT: '/api/graphql'
-
-      - name: Deploy Project Artifacts to Vercel
-        run: vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}

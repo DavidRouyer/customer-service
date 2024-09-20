@@ -46,7 +46,7 @@ jobs:
           api_key: ${{ secrets.NEON_API_KEY }}
           username: ${{ secrets.PG_USERNAME }}
 
-      - name: Build backend
+      - name: Build project
         run: yarn build
         env:
           AUTH_GITHUB_ID: '${{ secrets.AUTH_GITHUB_ID }}'
