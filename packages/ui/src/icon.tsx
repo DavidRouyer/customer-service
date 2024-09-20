@@ -1,5 +1,5 @@
 import type { FC } from 'react';
-import { lazy, Suspense } from 'react';
+import { lazy, Suspense, useMemo } from 'react';
 import type { LucideProps } from 'lucide-react';
 import dynamicIconImports from 'lucide-react/dynamicIconImports';
 
@@ -11,7 +11,7 @@ interface IconProps extends Omit<LucideProps, 'ref'> {
 }
 
 const Icon: FC<IconProps> = ({ name, fallback, ...props }: IconProps) => {
-  const LucideIcon = lazy(dynamicIconImports[name]);
+  const LucideIcon = useMemo(() => lazy(dynamicIconImports[name]), [name]);
 
   return (
     <Suspense fallback={fallback}>
