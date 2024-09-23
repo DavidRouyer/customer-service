@@ -1,5 +1,5 @@
 import type { FC } from 'react';
-import { Suspense, useState } from 'react';
+import { useState } from 'react';
 import { AlignJustify } from 'lucide-react';
 import { FormattedMessage } from 'react-intl';
 
@@ -8,7 +8,6 @@ import { Sheet, SheetContent } from '@cs/ui/sheet';
 import { DashboardCommandMenu } from '~/components/dashboard-command-menu';
 import { Logo } from '~/components/logo';
 import { InboxList } from '~/components/navbar/inbox-list';
-import { TeamMemberList } from '~/components/navbar/team-member-list';
 import { UserNav } from '~/components/user-nav';
 
 export const SidebarNav: FC = () => {
