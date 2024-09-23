@@ -875,7 +875,7 @@ __metadata:
     react-intl: "npm:^6.6.8"
     rollup-plugin-copy: "npm:^3.5.0"
     superjson: "npm:^2.2.1"
-    tailwindcss: "npm:^3.4.12"
+    tailwindcss: "npm:^3.4.13"
     vinxi: "npm:^0.4.3"
     vite-tsconfig-paths: "npm:^5.0.1"
     zod: "npm:^3.23.8"
@@ -964,7 +964,7 @@ __metadata:
     eslint: "npm:^9.11.0"
     postcss: "npm:^8.4.47"
     prettier: "npm:^3.3.3"
-    tailwindcss: "npm:^3.4.12"
+    tailwindcss: "npm:^3.4.13"
     tailwindcss-animate: "npm:^1.0.7"
     typescript: "npm:^5.6.2"
   languageName: unknown
@@ -16641,9 +16641,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tailwindcss@npm:^3.4.12":
-  version: 3.4.12
-  resolution: "tailwindcss@npm:3.4.12"
+"tailwindcss@npm:^3.4.13":
+  version: 3.4.13
+  resolution: "tailwindcss@npm:3.4.13"
   dependencies:
     "@alloc/quick-lru": "npm:^5.2.0"
     arg: "npm:^5.0.2"
@@ -16670,7 +16670,7 @@ __metadata:
   bin:
     tailwind: lib/cli.js
     tailwindcss: lib/cli.js
-  checksum: 10c0/9ed1449d3b98ce54c6c3a6c3354121a14b39d8dba28815ea1b0fc5a0b32422a744545ba357690468912a1a781593bc7da3d4e56367abed284a300ae1fb0ab42b
+  checksum: 10c0/c6525be3dd26febc4ec5e45e80596bff8b48ade7de258c1ec8704297bf47c1ec7b2b186b13662ebaa6ab4795ad8879fb64064f796756bfc8b46558b542b01a6c
   languageName: node
   linkType: hard
 
@@ -18151,7 +18151,7 @@ __metadata:
     react-dom: "npm:^18.3.1"
     react-intl: "npm:^6.6.8"
     storybook: "npm:^8.3.2"
-    tailwindcss: "npm:^3.4.12"
+    tailwindcss: "npm:^3.4.13"
     typescript: "npm:^5.6.2"
     vite: "npm:^5.4.7"
   languageName: unknown
