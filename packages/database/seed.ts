@@ -136,7 +136,7 @@ async function main() {
     .values({
       id: generateEntityId('', 'ti'),
       title: "Order hasn't arrived",
-      status: TicketStatus.Open,
+      status: TicketStatus.Todo,
       priority: TicketPriority.Critical,
       customerId: leslie.id,
       createdAt: new Date('2023-05-04T20:54:41.389Z'),
@@ -195,7 +195,7 @@ async function main() {
     .values({
       id: generateEntityId('', 'ti'),
       title: 'Change product of purchase',
-      status: TicketStatus.Open,
+      status: TicketStatus.Todo,
       priority: TicketPriority.Medium,
       customerId: leslie.id,
       createdAt: new Date('2023-05-06T11:23:45.389Z'),
@@ -278,7 +278,7 @@ async function main() {
     id: generateEntityId('', 'te'),
     type: TimelineEntryType.StatusChanged,
     entry: {
-      oldStatus: TicketStatus.Open,
+      oldStatus: TicketStatus.Todo,
       newStatus: TicketStatus.Done,
     } satisfies TicketStatusChanged,
     customerId: leslie.id,
@@ -319,7 +319,7 @@ async function main() {
     .values({
       id: generateEntityId('', 'ti'),
       title: 'Damaged product received',
-      status: TicketStatus.Open,
+      status: TicketStatus.Todo,
       priority: TicketPriority.Medium,
       customerId: michael.id,
       createdAt: new Date('2023-03-03T14:02Z'),
@@ -380,7 +380,7 @@ async function main() {
     .values({
       id: generateEntityId('', 'ti'),
       title: 'Need to return an item',
-      status: TicketStatus.Open,
+      status: TicketStatus.Todo,
       priority: TicketPriority.Medium,
       customerId: dries.id,
       createdAt: new Date('2023-03-03T13:23Z'),
@@ -438,7 +438,7 @@ async function main() {
     .values({
       id: generateEntityId('', 'ti'),
       title: 'Change shipping address',
-      status: TicketStatus.Open,
+      status: TicketStatus.Todo,
       priority: TicketPriority.Medium,
       customerId: lindsay.id,
       createdAt: new Date('2023-03-02T21:13Z'),

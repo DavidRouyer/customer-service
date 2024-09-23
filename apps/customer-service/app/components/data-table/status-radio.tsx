@@ -17,15 +17,17 @@ export const StatusRadio = () => {
 
   return (
     <StatusRadioGroup
-      defaultValue={TicketStatus.Open}
+      defaultValue={TicketStatus.Todo}
       onValueChange={(value) =>
-        navigate({ search: (old) => ({ ...old, statuses: value }) })
+        navigate({
+          search: (old) => ({ ...old, statuses: value as TicketStatus }),
+        })
       }
     >
-      <StatusRadioGroupItem value={TicketStatus.Open} className="gap-2">
+      <StatusRadioGroupItem value={TicketStatus.Todo} className="gap-2">
         <CircleDot className="size-4 text-warning" />
         <span>
-          <FormattedMessage id="ticket.statuses.open" />
+          <FormattedMessage id="ticket.statuses.todo" />
         </span>
       </StatusRadioGroupItem>
       <StatusRadioGroupItem value={TicketStatus.Done} className="gap-2">

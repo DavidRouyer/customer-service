@@ -158,8 +158,8 @@ mutation markTicketAsDone($input: MarkTicketAsDoneInput!) {
   }
 }
 
-mutation markTicketAsOpen($input: MarkTicketAsOpenInput!) {
-  markTicketAsOpen(input: $input) {
+mutation markTicketAsTodo($input: MarkTicketAsTodoInput!) {
+  markTicketAsTodo(input: $input) {
     ticket {
       id
     }

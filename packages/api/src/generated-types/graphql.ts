@@ -1,6 +1,7 @@
 /* eslint-disable */
-import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
-import { Context } from '../graphql';
+import type { TicketStatusDetail } from '@cs/kyaku/models';
+import type { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
+import type { Context } from '../graphql';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
@@ -10,6 +11,7 @@ export type MakeEmpty<T extends { [key: string]: unknown }, K extends keyof T> =
 export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
 export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 export type RequireFields<T, K extends keyof T> = Omit<T, K> & { [P in K]-?: NonNullable<T[P]> };
+export type EnumResolverSignature<T, AllowedValues = any> = { [key in keyof T]?: AllowedValues };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: { input: string; output: string; }
@@ -180,6 +182,12 @@ export type Customer = Node & {
   updatedBy?: Maybe<User>;
 };
 
+export enum DoneTicketStatusDetail {
+  DoneAutomaticallySet = 'DONE_AUTOMATICALLY_SET',
+  DoneManuallySet = 'DONE_MANUALLY_SET',
+  Ignored = 'IGNORED'
+}
+
 /** A union of all possible entries that can appear in a timeline. */
 export type Entry = AssignmentChangedEntry | ChatEntry | LabelsChangedEntry | NoteEntry | PriorityChangedEntry | StatusChangedEntry;
 
@@ -247,6 +255,7 @@ export type LabelsChangedEntry = {
 
 /** Input type of MarkTicketAsDone. */
 export type MarkTicketAsDoneInput = {
+  statusDetail?: InputMaybe<DoneTicketStatusDetail>;
   /** The Node ID of the ticket to mark as done. */
   ticketId: Scalars['ID']['input'];
 };
@@ -260,18 +269,19 @@ export type MarkTicketAsDonePayload = {
   userErrors?: Maybe<Array<MutationError>>;
 };
 
-/** Input type of MarkTicketAsOpen. */
-export type MarkTicketAsOpenInput = {
-  /** The Node ID of the ticket to mark as open. */
+/** Input type of MarkTicketAsTodo. */
+export type MarkTicketAsTodoInput = {
+  statusDetail?: InputMaybe<TodoTicketStatusDetail>;
+  /** The Node ID of the ticket to mark as todo. */
   ticketId: Scalars['ID']['input'];
 };
 
-/** Return type of MarkTicketAsOpen. */
-export type MarkTicketAsOpenPayload = {
-  __typename?: 'MarkTicketAsOpenPayload';
+/** Return type of MarkTicketAsTodo. */
+export type MarkTicketAsTodoPayload = {
+  __typename?: 'MarkTicketAsTodoPayload';
   /** The ticket with the new status. */
   ticket?: Maybe<Ticket>;
-  /** Errors when marking the ticket as open. */
+  /** Errors when marking the ticket as todo. */
   userErrors?: Maybe<Array<MutationError>>;
 };
 
@@ -294,8 +304,8 @@ export type Mutation = {
   createTicket?: Maybe<CreateTicketPayload>;
   /** Mark a ticket as done. */
   markTicketAsDone?: Maybe<MarkTicketAsDonePayload>;
-  /** Mark a ticket as open. */
-  markTicketAsOpen?: Maybe<MarkTicketAsOpenPayload>;
+  /** Mark a ticket as todo. */
+  markTicketAsTodo?: Maybe<MarkTicketAsTodoPayload>;
   /** Remove labels to a ticket. */
   removeLabels?: Maybe<RemoveLabelsPayload>;
   /** Create a chat for a ticket. */
@@ -358,8 +368,8 @@ export type MutationMarkTicketAsDoneArgs = {
 
 
 /** The mutation root of Kyaku's GraphQL interface. */
-export type MutationMarkTicketAsOpenArgs = {
-  input: MarkTicketAsOpenInput;
+export type MutationMarkTicketAsTodoArgs = {
+  input: MarkTicketAsTodoInput;
 };
 
 
@@ -542,6 +552,11 @@ export type SendChatPayload = {
   userErrors?: Maybe<Array<MutationError>>;
 };
 
+export enum SnoozeTicketStatusDetail {
+  WaitingForCustomer = 'WAITING_FOR_CUSTOMER',
+  WaitingForDuration = 'WAITING_FOR_DURATION'
+}
+
 /** Represents a status change in the timeline. */
 export type StatusChangedEntry = {
   __typename?: 'StatusChangedEntry';
@@ -629,15 +644,11 @@ export enum TicketPriority {
 /** Possible statuses a ticket may have. */
 export enum TicketStatus {
   Done = 'DONE',
-  Open = 'OPEN'
+  Snoozed = 'SNOOZED',
+  Todo = 'TODO'
 }
 
-/** Possible status details a ticket may have. */
-export enum TicketStatusDetail {
-  Created = 'CREATED',
-  NewReply = 'NEW_REPLY',
-  Replied = 'REPLIED'
-}
+export { TicketStatusDetail };
 
 /** An entry of the timeline. */
 export type TimelineEntry = Node & {
@@ -675,6 +686,13 @@ export type TimelineEntryEdge = {
   /** The item at the end of the edge. */
   node: TimelineEntry;
 };
+
+export enum TodoTicketStatusDetail {
+  CloseTheLoop = 'CLOSE_THE_LOOP',
+  Created = 'CREATED',
+  InProgress = 'IN_PROGRESS',
+  NewReply = 'NEW_REPLY'
+}
 
 /** Input type of UnarchiveLabelType. */
 export type UnarchiveLabelTypeInput = {
@@ -853,6 +871,7 @@ export type ResolversTypes = {
   CreateTicketPayload: ResolverTypeWrapper<Omit<CreateTicketPayload, 'ticket'> & { ticket?: Maybe<ResolversTypes['Ticket']> }>;
   Customer: ResolverTypeWrapper<Customer>;
   DateTime: ResolverTypeWrapper<Scalars['DateTime']['output']>;
+  DoneTicketStatusDetail: DoneTicketStatusDetail;
   Entry: ResolverTypeWrapper<ResolversUnionTypes<ResolversTypes>['Entry']>;
   ID: ResolverTypeWrapper<Scalars['ID']['output']>;
   Int: ResolverTypeWrapper<Scalars['Int']['output']>;
@@ -864,8 +883,8 @@ export type ResolversTypes = {
   LabelsChangedEntry: ResolverTypeWrapper<LabelsChangedEntry>;
   MarkTicketAsDoneInput: MarkTicketAsDoneInput;
   MarkTicketAsDonePayload: ResolverTypeWrapper<Omit<MarkTicketAsDonePayload, 'ticket'> & { ticket?: Maybe<ResolversTypes['Ticket']> }>;
-  MarkTicketAsOpenInput: MarkTicketAsOpenInput;
-  MarkTicketAsOpenPayload: ResolverTypeWrapper<Omit<MarkTicketAsOpenPayload, 'ticket'> & { ticket?: Maybe<ResolversTypes['Ticket']> }>;
+  MarkTicketAsTodoInput: MarkTicketAsTodoInput;
+  MarkTicketAsTodoPayload: ResolverTypeWrapper<Omit<MarkTicketAsTodoPayload, 'ticket'> & { ticket?: Maybe<ResolversTypes['Ticket']> }>;
   Mutation: ResolverTypeWrapper<{}>;
   MutationError: ResolverTypeWrapper<MutationError>;
   Node: ResolverTypeWrapper<ResolversInterfaceTypes<ResolversTypes>['Node']>;
@@ -877,6 +896,7 @@ export type ResolversTypes = {
   RemoveLabelsPayload: ResolverTypeWrapper<RemoveLabelsPayload>;
   SendChatInput: SendChatInput;
   SendChatPayload: ResolverTypeWrapper<Omit<SendChatPayload, 'ticket'> & { ticket?: Maybe<ResolversTypes['Ticket']> }>;
+  SnoozeTicketStatusDetail: SnoozeTicketStatusDetail;
   StatusChangedEntry: ResolverTypeWrapper<StatusChangedEntry>;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
   Ticket: ResolverTypeWrapper<Omit<Ticket, 'customer' | 'timelineEntries'> & { customer: ResolversTypes['Customer'], timelineEntries: ResolversTypes['TimelineEntryConnection'] }>;
@@ -889,6 +909,7 @@ export type ResolversTypes = {
   TimelineEntry: ResolverTypeWrapper<Omit<TimelineEntry, 'customer' | 'customerCreatedBy' | 'entry'> & { customer: ResolversTypes['Customer'], customerCreatedBy?: Maybe<ResolversTypes['Customer']>, entry: ResolversTypes['Entry'] }>;
   TimelineEntryConnection: ResolverTypeWrapper<Omit<TimelineEntryConnection, 'edges'> & { edges: Array<ResolversTypes['TimelineEntryEdge']> }>;
   TimelineEntryEdge: ResolverTypeWrapper<Omit<TimelineEntryEdge, 'node'> & { node: ResolversTypes['TimelineEntry'] }>;
+  TodoTicketStatusDetail: TodoTicketStatusDetail;
   UnarchiveLabelTypeInput: UnarchiveLabelTypeInput;
   UnarchiveLabelTypePayload: ResolverTypeWrapper<UnarchiveLabelTypePayload>;
   UnassignTicketInput: UnassignTicketInput;
@@ -932,8 +953,8 @@ export type ResolversParentTypes = {
   LabelsChangedEntry: LabelsChangedEntry;
   MarkTicketAsDoneInput: MarkTicketAsDoneInput;
   MarkTicketAsDonePayload: Omit<MarkTicketAsDonePayload, 'ticket'> & { ticket?: Maybe<ResolversParentTypes['Ticket']> };
-  MarkTicketAsOpenInput: MarkTicketAsOpenInput;
-  MarkTicketAsOpenPayload: Omit<MarkTicketAsOpenPayload, 'ticket'> & { ticket?: Maybe<ResolversParentTypes['Ticket']> };
+  MarkTicketAsTodoInput: MarkTicketAsTodoInput;
+  MarkTicketAsTodoPayload: Omit<MarkTicketAsTodoPayload, 'ticket'> & { ticket?: Maybe<ResolversParentTypes['Ticket']> };
   Mutation: {};
   MutationError: MutationError;
   Node: ResolversInterfaceTypes<ResolversParentTypes>['Node'];
@@ -1084,7 +1105,7 @@ export type MarkTicketAsDonePayloadResolvers<ContextType = Context, ParentType e
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type MarkTicketAsOpenPayloadResolvers<ContextType = Context, ParentType extends ResolversParentTypes['MarkTicketAsOpenPayload'] = ResolversParentTypes['MarkTicketAsOpenPayload']> = {
+export type MarkTicketAsTodoPayloadResolvers<ContextType = Context, ParentType extends ResolversParentTypes['MarkTicketAsTodoPayload'] = ResolversParentTypes['MarkTicketAsTodoPayload']> = {
   ticket?: Resolver<Maybe<ResolversTypes['Ticket']>, ParentType, ContextType>;
   userErrors?: Resolver<Maybe<Array<ResolversTypes['MutationError']>>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -1099,7 +1120,7 @@ export type MutationResolvers<ContextType = Context, ParentType extends Resolver
   createNote?: Resolver<Maybe<ResolversTypes['CreateNotePayload']>, ParentType, ContextType, RequireFields<MutationCreateNoteArgs, 'input'>>;
   createTicket?: Resolver<Maybe<ResolversTypes['CreateTicketPayload']>, ParentType, ContextType, RequireFields<MutationCreateTicketArgs, 'input'>>;
   markTicketAsDone?: Resolver<Maybe<ResolversTypes['MarkTicketAsDonePayload']>, ParentType, ContextType, RequireFields<MutationMarkTicketAsDoneArgs, 'input'>>;
-  markTicketAsOpen?: Resolver<Maybe<ResolversTypes['MarkTicketAsOpenPayload']>, ParentType, ContextType, RequireFields<MutationMarkTicketAsOpenArgs, 'input'>>;
+  markTicketAsTodo?: Resolver<Maybe<ResolversTypes['MarkTicketAsTodoPayload']>, ParentType, ContextType, RequireFields<MutationMarkTicketAsTodoArgs, 'input'>>;
   removeLabels?: Resolver<Maybe<ResolversTypes['RemoveLabelsPayload']>, ParentType, ContextType, RequireFields<MutationRemoveLabelsArgs, 'input'>>;
   sendChat?: Resolver<Maybe<ResolversTypes['SendChatPayload']>, ParentType, ContextType, RequireFields<MutationSendChatArgs, 'input'>>;
   unarchiveLabelType?: Resolver<Maybe<ResolversTypes['UnarchiveLabelTypePayload']>, ParentType, ContextType, RequireFields<MutationUnarchiveLabelTypeArgs, 'input'>>;
@@ -1198,6 +1219,8 @@ export type TicketEdgeResolvers<ContextType = Context, ParentType extends Resolv
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type TicketStatusDetailResolvers = EnumResolverSignature<{ CLOSE_THE_LOOP?: any, CREATED?: any, DONE_AUTOMATICALLY_SET?: any, DONE_MANUALLY_SET?: any, IGNORED?: any, IN_PROGRESS?: any, NEW_REPLY?: any, WAITING_FOR_CUSTOMER?: any, WAITING_FOR_DURATION?: any }, ResolversTypes['TicketStatusDetail']>;
+
 export type TimelineEntryResolvers<ContextType = Context, ParentType extends ResolversParentTypes['TimelineEntry'] = ResolversParentTypes['TimelineEntry']> = {
   createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   customer?: Resolver<ResolversTypes['Customer'], ParentType, ContextType>;
@@ -1279,7 +1302,7 @@ export type Resolvers<ContextType = Context> = {
   LabelTypeEdge?: LabelTypeEdgeResolvers<ContextType>;
   LabelsChangedEntry?: LabelsChangedEntryResolvers<ContextType>;
   MarkTicketAsDonePayload?: MarkTicketAsDonePayloadResolvers<ContextType>;
-  MarkTicketAsOpenPayload?: MarkTicketAsOpenPayloadResolvers<ContextType>;
+  MarkTicketAsTodoPayload?: MarkTicketAsTodoPayloadResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   MutationError?: MutationErrorResolvers<ContextType>;
   Node?: NodeResolvers<ContextType>;
@@ -1293,6 +1316,7 @@ export type Resolvers<ContextType = Context> = {
   Ticket?: TicketResolvers<ContextType>;
   TicketConnection?: TicketConnectionResolvers<ContextType>;
   TicketEdge?: TicketEdgeResolvers<ContextType>;
+  TicketStatusDetail?: TicketStatusDetailResolvers;
   TimelineEntry?: TimelineEntryResolvers<ContextType>;
   TimelineEntryConnection?: TimelineEntryConnectionResolvers<ContextType>;
   TimelineEntryEdge?: TimelineEntryEdgeResolvers<ContextType>;

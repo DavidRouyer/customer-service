@@ -3,8 +3,9 @@ const typeDefs = /* GraphQL */ `
   Possible statuses a ticket may have.
   """
   enum TicketStatus {
-    OPEN
     DONE
+    SNOOZED
+    TODO
   }
 
   """
@@ -12,8 +13,32 @@ const typeDefs = /* GraphQL */ `
   """
   enum TicketStatusDetail {
     CREATED
+    CLOSE_THE_LOOP
+    DONE_AUTOMATICALLY_SET
+    DONE_MANUALLY_SET
+    IGNORED
+    IN_PROGRESS
     NEW_REPLY
-    REPLIED
+    WAITING_FOR_CUSTOMER
+    WAITING_FOR_DURATION
+  }
+
+  enum DoneTicketStatusDetail {
+    DONE_AUTOMATICALLY_SET
+    DONE_MANUALLY_SET
+    IGNORED
+  }
+
+  enum SnoozeTicketStatusDetail {
+    WAITING_FOR_CUSTOMER
+    WAITING_FOR_DURATION
+  }
+
+  enum TodoTicketStatusDetail {
+    CLOSE_THE_LOOP
+    CREATED
+    IN_PROGRESS
+    NEW_REPLY
   }
 
   """
@@ -401,6 +426,7 @@ const typeDefs = /* GraphQL */ `
     The Node ID of the ticket to mark as done.
     """
     ticketId: ID!
+    statusDetail: DoneTicketStatusDetail
   }
 
   """
@@ -418,25 +444,26 @@ const typeDefs = /* GraphQL */ `
   }
 
   """
-  Input type of MarkTicketAsOpen.
+  Input type of MarkTicketAsTodo.
   """
-  input MarkTicketAsOpenInput {
+  input MarkTicketAsTodoInput {
     """
-    The Node ID of the ticket to mark as open.
+    The Node ID of the ticket to mark as todo.
     """
     ticketId: ID!
+    statusDetail: TodoTicketStatusDetail
   }
 
   """
-  Return type of MarkTicketAsOpen.
+  Return type of MarkTicketAsTodo.
   """
-  type MarkTicketAsOpenPayload {
+  type MarkTicketAsTodoPayload {
     """
     The ticket with the new status.
     """
     ticket: Ticket
     """
-    Errors when marking the ticket as open.
+    Errors when marking the ticket as todo.
     """
     userErrors: [MutationError!]
   }
@@ -465,6 +492,31 @@ const typeDefs = /* GraphQL */ `
     ticket: Ticket
     """
     Errors when creating the chat.
+    """
+    userErrors: [MutationError!]
+  }
+
+  """
+  Input type of SendChat.
+  """
+  input SnoozeTicketInput {
+    """
+    The Node ID of the ticket to snooze.
+    """
+    ticketId: ID!
+    statusDetail: SnoozeTicketStatusDetail
+  }
+
+  """
+  Return type of SnoozeTicket.
+  """
+  type SnoozeTicketPayload {
+    """
+    The ticket with the new status.
+    """
+    ticket: Ticket
+    """
+    Errors when snoozing the ticket.
     """
     userErrors: [MutationError!]
   }
@@ -545,14 +597,14 @@ const typeDefs = /* GraphQL */ `
     ): MarkTicketAsDonePayload
 
     """
-    Mark a ticket as open.
+    Mark a ticket as todo.
     """
-    markTicketAsOpen(
+    markTicketAsTodo(
       """
-      Parameters for MarkTicketAsOpen.
+      Parameters for MarkTicketAsTodo.
       """
-      input: MarkTicketAsOpenInput!
-    ): MarkTicketAsOpenPayload
+      input: MarkTicketAsTodoInput!
+    ): MarkTicketAsTodoPayload
 
     """
     Create a chat for a ticket.
@@ -563,6 +615,13 @@ const typeDefs = /* GraphQL */ `
       """
       input: SendChatInput!
     ): SendChatPayload
+
+    snoozeTicket(
+      """
+      Parameters for SnoozeTicket.
+      """
+      input: SnoozeTicketInput!
+    ): SnoozeTicketPayload
 
     """
     Unassign a ticket.

@@ -30,7 +30,7 @@ export const TimelineStatusChanged: FC<TimelineStatusChangedProps> = ({
           {item.userCreatedBy?.name}
         </span>{' '}
         {item.entry.oldStatus === TicketStatus.Done &&
-        item.entry.newStatus === TicketStatus.Open ? (
+        item.entry.newStatus === TicketStatus.Todo ? (
           <FormattedMessage id="ticket.activity.type.ticket_marked_as_open" />
         ) : (
           <FormattedMessage id="ticket.activity.type.ticket_marked_as_done" />

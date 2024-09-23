@@ -53,7 +53,8 @@ export const LinkedTickets = () => {
                     (
                       {
                         DONE: 'success',
-                        OPEN: 'neutral',
+                        SNOOZED: 'warning',
+                        TODO: 'neutral',
                       } as const
                     )[ticket.node.status]
                   }
@@ -62,14 +63,17 @@ export const LinkedTickets = () => {
                   {
                     {
                       DONE: <FormattedMessage id="ticket.statuses.done" />,
-                      OPEN: <FormattedMessage id="ticket.statuses.open" />,
+                      SNOOZED: (
+                        <FormattedMessage id="ticket.statuses.snoozed" />
+                      ),
+                      TODO: <FormattedMessage id="ticket.statuses.todo" />,
                     }[ticket.node.status]
                   }
                 </Badge>
               </div>
               <div className="mt-1 flex items-center gap-x-2 text-xs leading-5 text-muted-foreground">
                 <p className="whitespace-nowrap">
-                  {ticket.node.status === TicketStatus.Open ? (
+                  {ticket.node.status === TicketStatus.Todo ? (
                     <>
                       <FormattedMessage id="ticket.opened_on" />{' '}
                       <time dateTime={ticket.node.createdAt}>

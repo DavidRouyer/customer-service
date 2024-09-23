@@ -16,7 +16,7 @@ export const Route = createFileRoute('/_authed/_layout/')({
         statuses: z
           .nativeEnum(TicketStatus)
           .optional()
-          .default(TicketStatus.Open),
+          .default(TicketStatus.Todo),
       })
       .parse(search),
   component: Layout,

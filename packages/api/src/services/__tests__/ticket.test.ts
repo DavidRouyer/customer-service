@@ -1,6 +1,7 @@
 import { and, asc, eq, schema } from '@cs/database';
 import { TicketPriority, TicketStatus } from '@cs/kyaku/models';
 
+import { DoneTicketStatusDetail } from '../../../../kyaku/models/ticket';
 import type TicketRepository from '../../repositories/ticket';
 import TicketMentionRepository from '../../repositories/ticket-mention';
 import TicketTimelineRepository from '../../repositories/ticket-timeline';
@@ -134,7 +135,7 @@ describe('TicketService', () => {
           customerId: 'customer-id',
           priority: 'LOW',
           statusChangedById: 'user-id',
-          status: 'OPEN',
+          status: 'TODO',
           statusDetail: 'CREATED',
           createdAt: new Date('2000-01-01T12:00:00.000Z'),
           statusChangedAt: new Date('2000-01-01T12:00:00.000Z'),
@@ -431,7 +432,7 @@ describe('TicketService', () => {
     const ticketRepo = {
       find: vi.fn(() => ({
         id: 'one-piece',
-        status: TicketStatus.Open,
+        status: TicketStatus.Todo,
       })),
       update: vi.fn(() => ({
         id: 'one-piece',
@@ -459,7 +460,12 @@ describe('TicketService', () => {
       const date = new Date('2000-01-01T12:00:00.000Z');
       vi.setSystemTime(date);
 
-      await ticketService.markAsDone('one-piece', 'user-id');
+      await ticketService.markAsDone(
+        {
+          ticketId: 'one-piece',
+        },
+        'user-id'
+      );
 
       expect(unitOfWork.transaction).toHaveBeenCalledTimes(1);
 
@@ -470,7 +476,7 @@ describe('TicketService', () => {
           status: 'DONE',
           statusChangedAt: new Date('2000-01-01T12:00:00.000Z'),
           statusChangedById: 'user-id',
-          statusDetail: null,
+          statusDetail: DoneTicketStatusDetail.DoneManuallySet,
           updatedAt: new Date('2000-01-01T12:00:00.000Z'),
           updatedById: 'user-id',
         },
@@ -485,7 +491,7 @@ describe('TicketService', () => {
           type: 'STATUS_CHANGED',
           entry: {
             newStatus: 'DONE',
-            oldStatus: 'OPEN',
+            oldStatus: 'TODO',
           },
           userCreatedById: 'user-id',
           createdAt: new Date('2000-01-01T12:00:00.000Z'),
@@ -495,7 +501,7 @@ describe('TicketService', () => {
     });
   });
 
-  describe('markAsOpen', () => {
+  describe('markAsTodo', () => {
     const ticketRepo = {
       find: vi.fn(() => ({
         id: 'one-piece',
@@ -523,11 +529,16 @@ describe('TicketService', () => {
         ticketTimelineRepo as unknown as TicketTimelineRepository,
     });
 
-    it('should successfully mark as open a ticket', async () => {
+    it('should successfully mark as todo a ticket', async () => {
       const date = new Date('2000-01-01T12:00:00.000Z');
       vi.setSystemTime(date);
 
-      await ticketService.markAsOpen('one-piece', 'user-id');
+      await ticketService.markAsTodo(
+        {
+          ticketId: 'one-piece',
+        },
+        'user-id'
+      );
 
       expect(unitOfWork.transaction).toHaveBeenCalledTimes(1);
 
@@ -535,10 +546,10 @@ describe('TicketService', () => {
       expect(ticketRepo.update).toHaveBeenCalledWith(
         {
           id: 'one-piece',
-          status: 'OPEN',
+          status: 'TODO',
           statusChangedAt: new Date('2000-01-01T12:00:00.000Z'),
           statusChangedById: 'user-id',
-          statusDetail: null,
+          statusDetail: 'IN_PROGRESS',
           updatedAt: new Date('2000-01-01T12:00:00.000Z'),
           updatedById: 'user-id',
         },
@@ -552,7 +563,7 @@ describe('TicketService', () => {
           customerId: undefined,
           type: 'STATUS_CHANGED',
           entry: {
-            newStatus: 'OPEN',
+            newStatus: 'TODO',
             oldStatus: 'DONE',
           },
           userCreatedById: 'user-id',
@@ -625,11 +636,81 @@ describe('TicketService', () => {
       expect(ticketRepo.update).toHaveBeenCalledWith(
         {
           id: 'one-piece',
-          statusChangedAt: new Date('2000-01-01T12:00:00.000Z'),
-          statusChangedById: 'user-id',
-          statusDetail: 'REPLIED',
           updatedAt: new Date('2000-01-01T12:00:00.000Z'),
           updatedById: 'user-id',
+        },
+        undefined
+      );
+    });
+  });
+
+  describe('snooze', () => {
+    const ticketRepo = {
+      find: vi.fn(() => ({
+        id: 'one-piece',
+        status: TicketStatus.Todo,
+      })),
+      update: vi.fn(() => ({
+        id: 'one-piece',
+        title: 'One Piece',
+      })),
+    };
+    const ticketTimelineRepo = {
+      create: vi.fn(() => ({
+        id: 'one-piece-timeline',
+      })),
+    };
+    const unitOfWork = {
+      transaction: vi.fn((cb: () => void) => cb()),
+    };
+
+    const ticketService = new TicketService({
+      unitOfWork: unitOfWork as unknown as UnitOfWork,
+      ticketRepository: ticketRepo as unknown as TicketRepository,
+      ticketMentionRepository: new TicketMentionRepository(),
+      ticketTimelineRepository:
+        ticketTimelineRepo as unknown as TicketTimelineRepository,
+    });
+
+    it('should successfully snooze a ticket', async () => {
+      const date = new Date('2000-01-01T12:00:00.000Z');
+      vi.setSystemTime(date);
+
+      await ticketService.snooze(
+        {
+          ticketId: 'one-piece',
+        },
+        'user-id'
+      );
+
+      expect(unitOfWork.transaction).toHaveBeenCalledTimes(1);
+
+      expect(ticketRepo.update).toHaveBeenCalledTimes(1);
+      expect(ticketRepo.update).toHaveBeenCalledWith(
+        {
+          id: 'one-piece',
+          status: 'SNOOZED',
+          statusChangedAt: new Date('2000-01-01T12:00:00.000Z'),
+          statusChangedById: 'user-id',
+          statusDetail: 'WAITING_FOR_CUSTOMER',
+          updatedAt: new Date('2000-01-01T12:00:00.000Z'),
+          updatedById: 'user-id',
+        },
+        undefined
+      );
+
+      expect(ticketTimelineRepo.create).toHaveBeenCalledTimes(1);
+      expect(ticketTimelineRepo.create).toHaveBeenCalledWith(
+        {
+          ticketId: 'one-piece',
+          customerId: undefined,
+          type: 'STATUS_CHANGED',
+          entry: {
+            newStatus: 'SNOOZED',
+            oldStatus: 'TODO',
+          },
+          userCreatedById: 'user-id',
+          createdAt: new Date('2000-01-01T12:00:00.000Z'),
         },
         undefined
       );

@@ -71,17 +71,6 @@ const resolvers: Resolvers = {
       });
     },
   },
-  LabelType: {
-    createdBy: async ({ createdBy }, _, { dataloaders }) => {
-      return dataloaders.userLoader.load(createdBy.id);
-    },
-    updatedBy: async ({ updatedBy }, _, { dataloaders }) => {
-      if (!updatedBy) {
-        return null;
-      }
-      return dataloaders.userLoader.load(updatedBy.id);
-    },
-  },
   Mutation: {
     archiveLabelType: async (
       _,
@@ -184,6 +173,17 @@ const resolvers: Resolvers = {
       } catch (error) {
         return handleErrors(error);
       }
+    },
+  },
+  LabelType: {
+    createdBy: async ({ createdBy }, _, { dataloaders }) => {
+      return dataloaders.userLoader.load(createdBy.id);
+    },
+    updatedBy: async ({ updatedBy }, _, { dataloaders }) => {
+      if (!updatedBy) {
+        return null;
+      }
+      return dataloaders.userLoader.load(updatedBy.id);
     },
   },
 };

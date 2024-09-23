@@ -1,13 +1,14 @@
 import { relations } from 'drizzle-orm';
 import { pgEnum, pgTable, timestamp, varchar } from 'drizzle-orm/pg-core';
 
-import {
-  TicketPriority,
-  TicketStatus,
-  TicketStatusDetail,
-} from '@cs/kyaku/models';
+import { TicketPriority, TicketStatus } from '@cs/kyaku/models';
 import { generateEntityId } from '@cs/kyaku/utils';
 
+import {
+  DoneTicketStatusDetail,
+  SnoozeTicketStatusDetail,
+  TodoTicketStatusDetail,
+} from '../../kyaku/models/ticket';
 import { users } from './auth';
 import { lifecycleFields } from './common';
 import { customers } from './customer';
@@ -16,14 +17,21 @@ import { ticketMentions } from './ticket-mentions';
 import { ticketTimelineEntries } from './ticket-timeline-entry';
 
 export const ticketStatus = pgEnum('ticketStatus', [
-  TicketStatus.Open,
+  TicketStatus.Todo,
+  TicketStatus.Snoozed,
   TicketStatus.Done,
 ]);
 
 export const ticketStatusDetail = pgEnum('ticketStatusDetail', [
-  TicketStatusDetail.Created,
-  TicketStatusDetail.NewReply,
-  TicketStatusDetail.Replied,
+  DoneTicketStatusDetail.DoneAutomaticallySet,
+  DoneTicketStatusDetail.DoneManuallySet,
+  DoneTicketStatusDetail.Ignored,
+  SnoozeTicketStatusDetail.WaitingForCustomer,
+  SnoozeTicketStatusDetail.WaitingForDuration,
+  TodoTicketStatusDetail.CloseTheLoop,
+  TodoTicketStatusDetail.Created,
+  TodoTicketStatusDetail.InProgress,
+  TodoTicketStatusDetail.NewReply,
 ]);
 
 export const ticketPriority = pgEnum('ticketPriority', [

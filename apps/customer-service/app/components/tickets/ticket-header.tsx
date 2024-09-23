@@ -6,7 +6,7 @@ import { Button } from '@cs/ui/button';
 
 import { TicketStatus, useTicketQuery } from '~/graphql/generated/client';
 import { useMarkAsDoneTicket } from '~/hooks/use-mark-as-done-ticket';
-import { useMarkAsOpenTicket } from '~/hooks/use-mark-as-open-ticket';
+import { useMarkAsTodoTicket } from '~/hooks/use-mark-as-todo-ticket';
 
 export const TicketHeader: FC<{ ticketId: string }> = ({ ticketId }) => {
   const { data: ticketData } = useTicketQuery(
@@ -17,7 +17,7 @@ export const TicketHeader: FC<{ ticketId: string }> = ({ ticketId }) => {
   );
 
   const { mutate: markAsDoneTicket } = useMarkAsDoneTicket();
-  const { mutate: markAsOpenTicket } = useMarkAsOpenTicket();
+  const { mutate: markAsOpenTicket } = useMarkAsTodoTicket();
 
   if (!ticketData) {
     return null;

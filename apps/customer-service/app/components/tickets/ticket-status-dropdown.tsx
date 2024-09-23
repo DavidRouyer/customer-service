@@ -13,7 +13,7 @@ import {
 } from '@cs/ui/dropdown-menu';
 
 import { useMarkAsDoneTicket } from '~/hooks/use-mark-as-done-ticket';
-import { useMarkAsOpenTicket } from '~/hooks/use-mark-as-open-ticket';
+import { useMarkAsTodoTicket } from '~/hooks/use-mark-as-todo-ticket';
 
 interface TicketChangeAssignmentProps {
   status?: TicketStatus;
@@ -25,7 +25,7 @@ export const TicketStatusDropdowm: FC<TicketChangeAssignmentProps> = ({
   ticketId,
 }) => {
   const { mutate: markAsDoneTicket } = useMarkAsDoneTicket();
-  const { mutate: markAsOpenTicket } = useMarkAsOpenTicket();
+  const { mutate: markAsOpenTicket } = useMarkAsTodoTicket();
 
   return (
     <DropdownMenu>
@@ -36,7 +36,7 @@ export const TicketStatusDropdowm: FC<TicketChangeAssignmentProps> = ({
           className="flex h-auto items-center justify-between gap-x-1 px-2 text-sm leading-6"
         >
           <div className="flex items-center gap-x-2">
-            {status === TicketStatus.Open ? (
+            {status === TicketStatus.Todo ? (
               <>
                 <CircleDot className="size-4 text-warning" />
                 <p className="text-xs text-muted-foreground">
@@ -59,7 +59,7 @@ export const TicketStatusDropdowm: FC<TicketChangeAssignmentProps> = ({
           <DropdownMenuItem
             key="open"
             onClick={() => markAsOpenTicket({ input: { ticketId: ticketId } })}
-            disabled={status === TicketStatus.Open}
+            disabled={status === TicketStatus.Todo}
           >
             <div className="flex items-center gap-x-2">
               <CircleDot className="size-5 text-warning" />

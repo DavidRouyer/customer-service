@@ -5,14 +5,14 @@ import { TicketStatus } from '@cs/kyaku/models';
 import type { TicketQuery } from '~/graphql/generated/client';
 import {
   useInfiniteTicketTimelineQuery,
-  useMarkTicketAsOpenMutation,
+  useMarkTicketAsTodoMutation,
   useTicketQuery,
 } from '~/graphql/generated/client';
 
-export const useMarkAsOpenTicket = () => {
+export const useMarkAsTodoTicket = () => {
   const queryClient = useQueryClient();
 
-  const mutationResult = useMarkTicketAsOpenMutation({
+  const mutationResult = useMarkTicketAsTodoMutation({
     onMutate: async ({ input }) => {
       // Cancel any outgoing refetches
       // (so they don't overwrite our optimistic update)
@@ -32,7 +32,7 @@ export const useMarkAsOpenTicket = () => {
           oldQueryData
             ? {
                 ...oldQueryData,
-                status: TicketStatus.Open,
+                status: TicketStatus.Todo,
               }
             : undefined
       );

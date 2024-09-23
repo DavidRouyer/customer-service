@@ -17,12 +17,6 @@ export const mapLabel = (
 };
 
 const resolvers: Resolvers = {
-  Label: {
-    labelType: async ({ labelType }, _, { dataloaders }) => {
-      const lt = await dataloaders.labelTypeLoader.load(labelType.id);
-      return mapLabelType(lt);
-    },
-  },
   Mutation: {
     addLabels: async (_, { input }, { container, user }) => {
       const authorizedUser = authorize(user);
@@ -60,6 +54,12 @@ const resolvers: Resolvers = {
       } catch (error) {
         return handleErrors(error);
       }
+    },
+  },
+  Label: {
+    labelType: async ({ labelType }, _, { dataloaders }) => {
+      const lt = await dataloaders.labelTypeLoader.load(labelType.id);
+      return mapLabelType(lt);
     },
   },
 };

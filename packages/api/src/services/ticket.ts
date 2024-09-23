@@ -8,15 +8,16 @@ import type {
   TicketPriorityChanged,
   TicketStatusChanged,
 } from '@cs/kyaku/models';
-import {
-  TicketStatus,
-  TicketStatusDetail,
-  TimelineEntryType,
-} from '@cs/kyaku/models';
+import { TicketStatus, TimelineEntryType } from '@cs/kyaku/models';
 import type { FindConfig, GetConfig } from '@cs/kyaku/types';
 import { Direction } from '@cs/kyaku/types';
 import { KyakuError } from '@cs/kyaku/utils';
 
+import {
+  DoneTicketStatusDetail,
+  SnoozeTicketStatusDetail,
+  TodoTicketStatusDetail,
+} from '../../../kyaku/models/ticket';
 import type { Ticket, TicketFilters, TicketWith } from '../entities/ticket';
 import { TicketSortField } from '../entities/ticket';
 import type { User } from '../entities/user';
@@ -223,8 +224,8 @@ export default class TicketService extends BaseService {
       const newTicket = await this.ticketRepository.create(
         {
           ...data,
-          status: TicketStatus.Open,
-          statusDetail: TicketStatusDetail.Created,
+          status: TicketStatus.Todo,
+          statusDetail: TodoTicketStatusDetail.Created,
           statusChangedAt: createdAt,
           statusChangedById: userId,
           createdAt: createdAt,
@@ -312,7 +313,16 @@ export default class TicketService extends BaseService {
     });
   }
 
-  async markAsDone(ticketId: string, userId: string) {
+  async markAsDone(
+    {
+      ticketId,
+      statusDetail,
+    }: {
+      ticketId: string;
+      statusDetail?: DoneTicketStatusDetail;
+    },
+    userId: string
+  ) {
     const ticket = await this.retrieve(ticketId);
 
     if (!ticket)
@@ -331,7 +341,7 @@ export default class TicketService extends BaseService {
         {
           id: ticketId,
           status: TicketStatus.Done,
-          statusDetail: null,
+          statusDetail: statusDetail ?? DoneTicketStatusDetail.DoneManuallySet,
           statusChangedAt: updatedAt,
           statusChangedById: userId,
           updatedAt: updatedAt,
@@ -364,7 +374,16 @@ export default class TicketService extends BaseService {
     });
   }
 
-  async markAsOpen(ticketId: string, userId: string) {
+  async markAsTodo(
+    {
+      ticketId,
+      statusDetail,
+    }: {
+      ticketId: string;
+      statusDetail?: TodoTicketStatusDetail;
+    },
+    userId: string
+  ) {
     const ticket = await this.retrieve(ticketId);
 
     if (!ticket)
@@ -374,7 +393,7 @@ export default class TicketService extends BaseService {
         ['id']
       );
 
-    if (ticket.status === TicketStatus.Open) return;
+    if (ticket.status === TicketStatus.Todo) return;
 
     return await this.unitOfWork.transaction(async (tx) => {
       const updatedAt = new Date();
@@ -382,8 +401,8 @@ export default class TicketService extends BaseService {
       const updatedTicket = await this.ticketRepository.update(
         {
           id: ticketId,
-          status: TicketStatus.Open,
-          statusDetail: null,
+          status: TicketStatus.Todo,
+          statusDetail: statusDetail ?? TodoTicketStatusDetail.InProgress,
           statusChangedAt: updatedAt,
           statusChangedById: userId,
           updatedAt: updatedAt,
@@ -404,7 +423,7 @@ export default class TicketService extends BaseService {
           type: TimelineEntryType.StatusChanged,
           entry: {
             oldStatus: ticket.status,
-            newStatus: TicketStatus.Open,
+            newStatus: TicketStatus.Todo,
           } satisfies TicketStatusChanged,
           createdAt: updatedTicket.updatedAt ?? updatedAt,
           userCreatedById: userId,
@@ -460,9 +479,6 @@ export default class TicketService extends BaseService {
       await this.ticketRepository.update(
         {
           id: ticketId,
-          statusDetail: TicketStatusDetail.Replied,
-          statusChangedAt: newChat.createdAt,
-          statusChangedById: userId,
           updatedAt: newChat.createdAt,
           updatedById: userId,
         },
@@ -472,6 +488,68 @@ export default class TicketService extends BaseService {
       return {
         id: ticket.id,
       };
+    });
+  }
+
+  async snooze(
+    {
+      ticketId,
+      statusDetail,
+    }: {
+      ticketId: string;
+      statusDetail?: SnoozeTicketStatusDetail;
+    },
+    userId: string
+  ) {
+    const ticket = await this.retrieve(ticketId);
+
+    if (!ticket)
+      throw new KyakuError(
+        KyakuError.Types.NOT_FOUND,
+        `Ticket with id:${ticketId} not found`,
+        ['id']
+      );
+
+    if (ticket.status === TicketStatus.Snoozed) return;
+
+    return await this.unitOfWork.transaction(async (tx) => {
+      const updatedAt = new Date();
+
+      const updatedTicket = await this.ticketRepository.update(
+        {
+          id: ticketId,
+          status: TicketStatus.Snoozed,
+          statusDetail:
+            statusDetail ?? SnoozeTicketStatusDetail.WaitingForCustomer,
+          statusChangedAt: updatedAt,
+          statusChangedById: userId,
+          updatedAt: updatedAt,
+          updatedById: userId,
+        },
+        tx
+      );
+
+      if (!updatedTicket) {
+        tx.rollback();
+        return;
+      }
+
+      await this.ticketTimelineRepository.create(
+        {
+          ticketId: ticketId,
+          customerId: ticket.customerId,
+          type: TimelineEntryType.StatusChanged,
+          entry: {
+            oldStatus: ticket.status,
+            newStatus: TicketStatus.Snoozed,
+          } satisfies TicketStatusChanged,
+          createdAt: updatedTicket.updatedAt ?? updatedAt,
+          userCreatedById: userId,
+        },
+        tx
+      );
+
+      return updatedTicket;
     });
   }
 

@@ -17,6 +17,10 @@ const config: CodegenConfig = {
   },
   config: {
     contextType: '../graphql#Context',
+    useTypeImports: true,
+    enumValues: {
+      TicketStatusDetail: '@cs/kyaku/models#TicketStatusDetail',
+    },
   },
 };
 

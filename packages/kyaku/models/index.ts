@@ -1,9 +1,5 @@
-import {
-  TicketFilter,
-  TicketPriority,
-  TicketStatus,
-  TicketStatusDetail,
-} from './ticket';
+import type { TicketStatusDetail } from './ticket';
+import { TicketFilter, TicketPriority, TicketStatus } from './ticket';
 import type {
   TicketAssignmentChanged,
   TicketAssignmentChangedWithData,
@@ -26,10 +22,10 @@ export {
   type TicketNote,
   type TicketPriorityChanged,
   type TicketStatusChanged,
+  type TicketStatusDetail,
   type User,
   TicketFilter,
   TicketPriority,
   TicketStatus,
-  TicketStatusDetail,
   TimelineEntryType,
 };

@@ -1,4 +1,4 @@
-import { CheckCircle2, Circle } from 'lucide-react';
+import { CheckCircle2, Circle, CirclePause } from 'lucide-react';
 
 import { TicketPriority, TicketStatus } from '@cs/kyaku/models';
 import {
@@ -25,18 +25,33 @@ export const labels = [
 
 export const statuses = [
   {
-    value: TicketStatus.Open,
-    label: 'Open',
-    icon: Circle,
-  },
-  {
     value: TicketStatus.Done,
     label: 'Done',
     icon: CheckCircle2,
   },
+  {
+    value: TicketStatus.Snoozed,
+    label: 'Snoozed',
+    icon: CirclePause,
+  },
+  {
+    value: TicketStatus.Todo,
+    label: 'Todo',
+    icon: Circle,
+  },
 ];
 
 export const priorities = [
+  {
+    label: 'Critical',
+    value: TicketPriority.Critical,
+    icon: PriorityCritical,
+  },
+  {
+    label: 'High',
+    value: TicketPriority.High,
+    icon: PriorityHigh,
+  },
   {
     label: 'Low',
     value: TicketPriority.Low,
@@ -46,15 +61,5 @@ export const priorities = [
     label: 'Medium',
     value: TicketPriority.Medium,
     icon: PriorityMedium,
-  },
-  {
-    label: 'High',
-    value: TicketPriority.High,
-    icon: PriorityHigh,
-  },
-  {
-    label: 'Critical',
-    value: TicketPriority.Critical,
-    icon: PriorityCritical,
   },
 ];

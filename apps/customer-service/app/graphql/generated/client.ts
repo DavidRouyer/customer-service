@@ -196,6 +196,12 @@ export type Customer = Node & {
   updatedBy?: Maybe<User>;
 };
 
+export enum DoneTicketStatusDetail {
+  DoneAutomaticallySet = 'DONE_AUTOMATICALLY_SET',
+  DoneManuallySet = 'DONE_MANUALLY_SET',
+  Ignored = 'IGNORED'
+}
+
 /** A union of all possible entries that can appear in a timeline. */
 export type Entry = AssignmentChangedEntry | ChatEntry | LabelsChangedEntry | NoteEntry | PriorityChangedEntry | StatusChangedEntry;
 
@@ -263,6 +269,7 @@ export type LabelsChangedEntry = {
 
 /** Input type of MarkTicketAsDone. */
 export type MarkTicketAsDoneInput = {
+  statusDetail?: InputMaybe<DoneTicketStatusDetail>;
   /** The Node ID of the ticket to mark as done. */
   ticketId: Scalars['ID']['input'];
 };
@@ -276,18 +283,19 @@ export type MarkTicketAsDonePayload = {
   userErrors?: Maybe<Array<MutationError>>;
 };
 
-/** Input type of MarkTicketAsOpen. */
-export type MarkTicketAsOpenInput = {
-  /** The Node ID of the ticket to mark as open. */
+/** Input type of MarkTicketAsTodo. */
+export type MarkTicketAsTodoInput = {
+  statusDetail?: InputMaybe<TodoTicketStatusDetail>;
+  /** The Node ID of the ticket to mark as todo. */
   ticketId: Scalars['ID']['input'];
 };
 
-/** Return type of MarkTicketAsOpen. */
-export type MarkTicketAsOpenPayload = {
-  __typename?: 'MarkTicketAsOpenPayload';
+/** Return type of MarkTicketAsTodo. */
+export type MarkTicketAsTodoPayload = {
+  __typename?: 'MarkTicketAsTodoPayload';
   /** The ticket with the new status. */
   ticket?: Maybe<Ticket>;
-  /** Errors when marking the ticket as open. */
+  /** Errors when marking the ticket as todo. */
   userErrors?: Maybe<Array<MutationError>>;
 };
 
@@ -310,8 +318,8 @@ export type Mutation = {
   createTicket?: Maybe<CreateTicketPayload>;
   /** Mark a ticket as done. */
   markTicketAsDone?: Maybe<MarkTicketAsDonePayload>;
-  /** Mark a ticket as open. */
-  markTicketAsOpen?: Maybe<MarkTicketAsOpenPayload>;
+  /** Mark a ticket as todo. */
+  markTicketAsTodo?: Maybe<MarkTicketAsTodoPayload>;
   /** Remove labels to a ticket. */
   removeLabels?: Maybe<RemoveLabelsPayload>;
   /** Create a chat for a ticket. */
@@ -374,8 +382,8 @@ export type MutationMarkTicketAsDoneArgs = {
 
 
 /** The mutation root of Kyaku's GraphQL interface. */
-export type MutationMarkTicketAsOpenArgs = {
-  input: MarkTicketAsOpenInput;
+export type MutationMarkTicketAsTodoArgs = {
+  input: MarkTicketAsTodoInput;
 };
 
 
@@ -558,6 +566,11 @@ export type SendChatPayload = {
   userErrors?: Maybe<Array<MutationError>>;
 };
 
+export enum SnoozeTicketStatusDetail {
+  WaitingForCustomer = 'WAITING_FOR_CUSTOMER',
+  WaitingForDuration = 'WAITING_FOR_DURATION'
+}
+
 /** Represents a status change in the timeline. */
 export type StatusChangedEntry = {
   __typename?: 'StatusChangedEntry';
@@ -645,14 +658,21 @@ export enum TicketPriority {
 /** Possible statuses a ticket may have. */
 export enum TicketStatus {
   Done = 'DONE',
-  Open = 'OPEN'
+  Snoozed = 'SNOOZED',
+  Todo = 'TODO'
 }
 
 /** Possible status details a ticket may have. */
 export enum TicketStatusDetail {
+  CloseTheLoop = 'CLOSE_THE_LOOP',
   Created = 'CREATED',
+  DoneAutomaticallySet = 'DONE_AUTOMATICALLY_SET',
+  DoneManuallySet = 'DONE_MANUALLY_SET',
+  Ignored = 'IGNORED',
+  InProgress = 'IN_PROGRESS',
   NewReply = 'NEW_REPLY',
-  Replied = 'REPLIED'
+  WaitingForCustomer = 'WAITING_FOR_CUSTOMER',
+  WaitingForDuration = 'WAITING_FOR_DURATION'
 }
 
 /** An entry of the timeline. */
@@ -691,6 +711,13 @@ export type TimelineEntryEdge = {
   /** The item at the end of the edge. */
   node: TimelineEntry;
 };
+
+export enum TodoTicketStatusDetail {
+  CloseTheLoop = 'CLOSE_THE_LOOP',
+  Created = 'CREATED',
+  InProgress = 'IN_PROGRESS',
+  NewReply = 'NEW_REPLY'
+}
 
 /** Input type of UnarchiveLabelType. */
 export type UnarchiveLabelTypeInput = {
@@ -855,12 +882,12 @@ export type MarkTicketAsDoneMutationVariables = Exact<{
 
 export type MarkTicketAsDoneMutation = { __typename?: 'Mutation', markTicketAsDone?: { __typename?: 'MarkTicketAsDonePayload', ticket?: { __typename?: 'Ticket', id: string } | null, userErrors?: Array<{ __typename?: 'MutationError', message: string }> | null } | null };
 
-export type MarkTicketAsOpenMutationVariables = Exact<{
-  input: MarkTicketAsOpenInput;
+export type MarkTicketAsTodoMutationVariables = Exact<{
+  input: MarkTicketAsTodoInput;
 }>;
 
 
-export type MarkTicketAsOpenMutation = { __typename?: 'Mutation', markTicketAsOpen?: { __typename?: 'MarkTicketAsOpenPayload', ticket?: { __typename?: 'Ticket', id: string } | null, userErrors?: Array<{ __typename?: 'MutationError', message: string }> | null } | null };
+export type MarkTicketAsTodoMutation = { __typename?: 'Mutation', markTicketAsTodo?: { __typename?: 'MarkTicketAsTodoPayload', ticket?: { __typename?: 'Ticket', id: string } | null, userErrors?: Array<{ __typename?: 'MutationError', message: string }> | null } | null };
 
 export type SendChatMutationVariables = Exact<{
   input: SendChatInput;
@@ -1567,9 +1594,9 @@ export const useMarkTicketAsDoneMutation = <
 
 useMarkTicketAsDoneMutation.fetcher = (variables: MarkTicketAsDoneMutationVariables) => fetcher<MarkTicketAsDoneMutation, MarkTicketAsDoneMutationVariables>(MarkTicketAsDoneDocument, variables);
 
-export const MarkTicketAsOpenDocument = `
-    mutation markTicketAsOpen($input: MarkTicketAsOpenInput!) {
-  markTicketAsOpen(input: $input) {
+export const MarkTicketAsTodoDocument = `
+    mutation markTicketAsTodo($input: MarkTicketAsTodoInput!) {
+  markTicketAsTodo(input: $input) {
     ticket {
       id
     }
@@ -1580,21 +1607,21 @@ export const MarkTicketAsOpenDocument = `
 }
     `;
 
-export const useMarkTicketAsOpenMutation = <
+export const useMarkTicketAsTodoMutation = <
       TError = unknown,
       TContext = unknown
-    >(options?: UseMutationOptions<MarkTicketAsOpenMutation, TError, MarkTicketAsOpenMutationVariables, TContext>) => {
+    >(options?: UseMutationOptions<MarkTicketAsTodoMutation, TError, MarkTicketAsTodoMutationVariables, TContext>) => {
     
-    return useMutation<MarkTicketAsOpenMutation, TError, MarkTicketAsOpenMutationVariables, TContext>(
+    return useMutation<MarkTicketAsTodoMutation, TError, MarkTicketAsTodoMutationVariables, TContext>(
       {
-    mutationKey: ['markTicketAsOpen'],
-    mutationFn: (variables?: MarkTicketAsOpenMutationVariables) => fetcher<MarkTicketAsOpenMutation, MarkTicketAsOpenMutationVariables>(MarkTicketAsOpenDocument, variables)(),
+    mutationKey: ['markTicketAsTodo'],
+    mutationFn: (variables?: MarkTicketAsTodoMutationVariables) => fetcher<MarkTicketAsTodoMutation, MarkTicketAsTodoMutationVariables>(MarkTicketAsTodoDocument, variables)(),
     ...options
   }
     )};
 
 
-useMarkTicketAsOpenMutation.fetcher = (variables: MarkTicketAsOpenMutationVariables) => fetcher<MarkTicketAsOpenMutation, MarkTicketAsOpenMutationVariables>(MarkTicketAsOpenDocument, variables);
+useMarkTicketAsTodoMutation.fetcher = (variables: MarkTicketAsTodoMutationVariables) => fetcher<MarkTicketAsTodoMutation, MarkTicketAsTodoMutationVariables>(MarkTicketAsTodoDocument, variables);
 
 export const SendChatDocument = `
     mutation sendChat($input: SendChatInput!) {
