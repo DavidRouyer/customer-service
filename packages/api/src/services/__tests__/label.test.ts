@@ -12,7 +12,8 @@ import type { LabelRepository } from '@cs/database';
 import type { UnitOfWork } from '../../unit-of-work';
 import { LabelService } from '../label';
 
-vi.mock('@cs/database', () => ({
+vi.mock('@cs/database', async (importOriginal) => ({
+  ...(await importOriginal()),
   LabelTypeRepository: class LabelTypeRepository {},
   TicketRepository: class TicketRepository {},
   TicketTimelineRepository: class TicketTimelineRepository {},
