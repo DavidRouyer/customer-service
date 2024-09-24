@@ -81,7 +81,7 @@ const getUser = async (request: Request) => {
 
   const data = await response.json();
   if (status === 200 && data && Object.keys(data).length && data.user) {
-    return data.user;
+    return data.user as User;
   }
 
   const header = request.headers.get('authorization');
