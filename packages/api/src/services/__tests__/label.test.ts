@@ -12,9 +12,11 @@ import type { LabelRepository } from '@cs/database';
 import type { UnitOfWork } from '../../unit-of-work';
 import { LabelService } from '../label';
 
-vi.mock('../../repositories/label-type');
-vi.mock('../../repositories/ticket');
-vi.mock('../../repositories/ticket-timeline');
+vi.mock('@cs/database', () => ({
+  LabelTypeRepository: class LabelTypeRepository {},
+  TicketRepository: class TicketRepository {},
+  TicketTimelineRepository: class TicketTimelineRepository {},
+}));
 
 describe('LabelService', () => {
   beforeEach(() => {

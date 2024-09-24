@@ -33,13 +33,6 @@ describe('UserService', () => {
 
       expect(userRepo.find).toHaveBeenCalledTimes(1);
       expect(userRepo.find).toHaveBeenCalledWith({
-        columns: {
-          email: true,
-          emailVerified: true,
-          id: true,
-          image: true,
-          name: true,
-        },
         where: eq(schema.users.id, 'john-doe'),
       });
 
@@ -66,13 +59,6 @@ describe('UserService', () => {
 
       expect(userRepo.findMany).toHaveBeenCalledTimes(1);
       expect(userRepo.findMany).toHaveBeenCalledWith({
-        columns: {
-          email: true,
-          emailVerified: true,
-          id: true,
-          image: true,
-          name: true,
-        },
         limit: 50,
         orderBy: [asc(schema.users.name), asc(schema.users.id)],
         where: undefined,

@@ -5,9 +5,6 @@ import { TimelineEntryType } from '@cs/kyaku/models';
 import type { UnitOfWork } from '../../unit-of-work';
 import { TicketTimelineService } from '../ticket-timeline';
 
-vi.mock('../../repositories/label');
-vi.mock('../../repositories/user');
-
 describe('TicketTimelineService', () => {
   beforeEach(() => {
     vi.clearAllMocks();

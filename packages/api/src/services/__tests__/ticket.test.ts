@@ -6,7 +6,9 @@ import { DoneTicketStatusDetail } from '../../../../kyaku/models/ticket';
 import type { UnitOfWork } from '../../unit-of-work';
 import { TicketService } from '../ticket';
 
-vi.mock('../../repositories/ticket-timeline');
+vi.mock('@cs/database', () => ({
+  TicketTimelineRepository: class TicketTimelineRepository {},
+}));
 
 describe('TicketService', () => {
   beforeEach(() => {
