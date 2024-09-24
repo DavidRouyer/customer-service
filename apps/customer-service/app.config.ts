@@ -8,7 +8,7 @@ dotenv.config({
 });
 
 const app = defineConfig({
-  deployment: {
+  server: {
     preset: 'vercel',
   },
   vite: {
