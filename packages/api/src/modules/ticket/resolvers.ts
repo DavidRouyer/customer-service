@@ -338,6 +338,29 @@ const resolvers: Resolvers = {
         return handleErrors(error);
       }
     },
+    snoozeTicket: async (_, { input }, { container, dataloaders, user }) => {
+      const authorizedUser = authorize(user);
+
+      const ticketService = container.resolve('ticketService');
+
+      try {
+        const ticket = await ticketService.snooze(
+          {
+            ticketId: input.ticketId,
+            statusDetail: input.statusDetail ?? undefined,
+          },
+          authorizedUser.id
+        );
+
+        return {
+          ticket: ticket
+            ? mapTicket(await dataloaders.ticketLoader.load(ticket.id))
+            : null,
+        };
+      } catch (error) {
+        return handleErrors(error);
+      }
+    },
     unassignTicket: async (_, { input }, { container, dataloaders, user }) => {
       const authorizedUser = authorize(user);
 

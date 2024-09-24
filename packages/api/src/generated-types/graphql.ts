@@ -310,6 +310,7 @@ export type Mutation = {
   removeLabels?: Maybe<RemoveLabelsPayload>;
   /** Create a chat for a ticket. */
   sendChat?: Maybe<SendChatPayload>;
+  snoozeTicket?: Maybe<SnoozeTicketPayload>;
   /** Unarchive a label type. */
   unarchiveLabelType?: Maybe<UnarchiveLabelTypePayload>;
   /** Unassign a ticket. */
@@ -382,6 +383,12 @@ export type MutationRemoveLabelsArgs = {
 /** The mutation root of Kyaku's GraphQL interface. */
 export type MutationSendChatArgs = {
   input: SendChatInput;
+};
+
+
+/** The mutation root of Kyaku's GraphQL interface. */
+export type MutationSnoozeTicketArgs = {
+  input: SnoozeTicketInput;
 };
 
 
@@ -549,6 +556,22 @@ export type SendChatPayload = {
   /** The ticket with the new chat. */
   ticket?: Maybe<Ticket>;
   /** Errors when creating the chat. */
+  userErrors?: Maybe<Array<MutationError>>;
+};
+
+/** Input type of SendChat. */
+export type SnoozeTicketInput = {
+  statusDetail?: InputMaybe<SnoozeTicketStatusDetail>;
+  /** The Node ID of the ticket to snooze. */
+  ticketId: Scalars['ID']['input'];
+};
+
+/** Return type of SnoozeTicket. */
+export type SnoozeTicketPayload = {
+  __typename?: 'SnoozeTicketPayload';
+  /** The ticket with the new status. */
+  ticket?: Maybe<Ticket>;
+  /** Errors when snoozing the ticket. */
   userErrors?: Maybe<Array<MutationError>>;
 };
 
@@ -896,6 +919,8 @@ export type ResolversTypes = {
   RemoveLabelsPayload: ResolverTypeWrapper<RemoveLabelsPayload>;
   SendChatInput: SendChatInput;
   SendChatPayload: ResolverTypeWrapper<Omit<SendChatPayload, 'ticket'> & { ticket?: Maybe<ResolversTypes['Ticket']> }>;
+  SnoozeTicketInput: SnoozeTicketInput;
+  SnoozeTicketPayload: ResolverTypeWrapper<Omit<SnoozeTicketPayload, 'ticket'> & { ticket?: Maybe<ResolversTypes['Ticket']> }>;
   SnoozeTicketStatusDetail: SnoozeTicketStatusDetail;
   StatusChangedEntry: ResolverTypeWrapper<StatusChangedEntry>;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
@@ -966,6 +991,8 @@ export type ResolversParentTypes = {
   RemoveLabelsPayload: RemoveLabelsPayload;
   SendChatInput: SendChatInput;
   SendChatPayload: Omit<SendChatPayload, 'ticket'> & { ticket?: Maybe<ResolversParentTypes['Ticket']> };
+  SnoozeTicketInput: SnoozeTicketInput;
+  SnoozeTicketPayload: Omit<SnoozeTicketPayload, 'ticket'> & { ticket?: Maybe<ResolversParentTypes['Ticket']> };
   StatusChangedEntry: StatusChangedEntry;
   String: Scalars['String']['output'];
   Ticket: Omit<Ticket, 'customer' | 'timelineEntries'> & { customer: ResolversParentTypes['Customer'], timelineEntries: ResolversParentTypes['TimelineEntryConnection'] };
@@ -1123,6 +1150,7 @@ export type MutationResolvers<ContextType = Context, ParentType extends Resolver
   markTicketAsTodo?: Resolver<Maybe<ResolversTypes['MarkTicketAsTodoPayload']>, ParentType, ContextType, RequireFields<MutationMarkTicketAsTodoArgs, 'input'>>;
   removeLabels?: Resolver<Maybe<ResolversTypes['RemoveLabelsPayload']>, ParentType, ContextType, RequireFields<MutationRemoveLabelsArgs, 'input'>>;
   sendChat?: Resolver<Maybe<ResolversTypes['SendChatPayload']>, ParentType, ContextType, RequireFields<MutationSendChatArgs, 'input'>>;
+  snoozeTicket?: Resolver<Maybe<ResolversTypes['SnoozeTicketPayload']>, ParentType, ContextType, RequireFields<MutationSnoozeTicketArgs, 'input'>>;
   unarchiveLabelType?: Resolver<Maybe<ResolversTypes['UnarchiveLabelTypePayload']>, ParentType, ContextType, RequireFields<MutationUnarchiveLabelTypeArgs, 'input'>>;
   unassignTicket?: Resolver<Maybe<ResolversTypes['UnassignTicketPayload']>, ParentType, ContextType, RequireFields<MutationUnassignTicketArgs, 'input'>>;
   updateLabelType?: Resolver<Maybe<ResolversTypes['UpdateLabelTypePayload']>, ParentType, ContextType, RequireFields<MutationUpdateLabelTypeArgs, 'input'>>;
@@ -1177,6 +1205,12 @@ export type RemoveLabelsPayloadResolvers<ContextType = Context, ParentType exten
 };
 
 export type SendChatPayloadResolvers<ContextType = Context, ParentType extends ResolversParentTypes['SendChatPayload'] = ResolversParentTypes['SendChatPayload']> = {
+  ticket?: Resolver<Maybe<ResolversTypes['Ticket']>, ParentType, ContextType>;
+  userErrors?: Resolver<Maybe<Array<ResolversTypes['MutationError']>>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type SnoozeTicketPayloadResolvers<ContextType = Context, ParentType extends ResolversParentTypes['SnoozeTicketPayload'] = ResolversParentTypes['SnoozeTicketPayload']> = {
   ticket?: Resolver<Maybe<ResolversTypes['Ticket']>, ParentType, ContextType>;
   userErrors?: Resolver<Maybe<Array<ResolversTypes['MutationError']>>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -1312,6 +1346,7 @@ export type Resolvers<ContextType = Context> = {
   Query?: QueryResolvers<ContextType>;
   RemoveLabelsPayload?: RemoveLabelsPayloadResolvers<ContextType>;
   SendChatPayload?: SendChatPayloadResolvers<ContextType>;
+  SnoozeTicketPayload?: SnoozeTicketPayloadResolvers<ContextType>;
   StatusChangedEntry?: StatusChangedEntryResolvers<ContextType>;
   Ticket?: TicketResolvers<ContextType>;
   TicketConnection?: TicketConnectionResolvers<ContextType>;

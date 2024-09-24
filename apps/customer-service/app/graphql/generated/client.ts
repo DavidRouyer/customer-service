@@ -324,6 +324,7 @@ export type Mutation = {
   removeLabels?: Maybe<RemoveLabelsPayload>;
   /** Create a chat for a ticket. */
   sendChat?: Maybe<SendChatPayload>;
+  snoozeTicket?: Maybe<SnoozeTicketPayload>;
   /** Unarchive a label type. */
   unarchiveLabelType?: Maybe<UnarchiveLabelTypePayload>;
   /** Unassign a ticket. */
@@ -396,6 +397,12 @@ export type MutationRemoveLabelsArgs = {
 /** The mutation root of Kyaku's GraphQL interface. */
 export type MutationSendChatArgs = {
   input: SendChatInput;
+};
+
+
+/** The mutation root of Kyaku's GraphQL interface. */
+export type MutationSnoozeTicketArgs = {
+  input: SnoozeTicketInput;
 };
 
 
@@ -563,6 +570,22 @@ export type SendChatPayload = {
   /** The ticket with the new chat. */
   ticket?: Maybe<Ticket>;
   /** Errors when creating the chat. */
+  userErrors?: Maybe<Array<MutationError>>;
+};
+
+/** Input type of SendChat. */
+export type SnoozeTicketInput = {
+  statusDetail?: InputMaybe<SnoozeTicketStatusDetail>;
+  /** The Node ID of the ticket to snooze. */
+  ticketId: Scalars['ID']['input'];
+};
+
+/** Return type of SnoozeTicket. */
+export type SnoozeTicketPayload = {
+  __typename?: 'SnoozeTicketPayload';
+  /** The ticket with the new status. */
+  ticket?: Maybe<Ticket>;
+  /** Errors when snoozing the ticket. */
   userErrors?: Maybe<Array<MutationError>>;
 };
 
