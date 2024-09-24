@@ -1,9 +1,12 @@
-import type { KnownKeysOnly } from '@cs/database';
-import { eq, inArray, schema } from '@cs/database';
+import type {
+  InferInsertModel,
+  InferSelectModel,
+  KnownKeysOnly,
+} from '@cs/database';
+import { eq, schema } from '@cs/database';
 
+import type { IncludeRelation } from '../build-query';
 import type { DbTransactionScope } from '../db-transaction';
-import type { User, UserInsert } from '../entities/user';
-import type { IncludeRelation } from '../services/build-query';
 import { BaseRepository } from './base-repository';
 
 export default class UserRepository extends BaseRepository {
@@ -24,7 +27,10 @@ export default class UserRepository extends BaseRepository {
     return this.dbConnection.query.users.findMany(config);
   }
 
-  create(entity: UserInsert, transactionScope: DbTransactionScope) {
+  create(
+    entity: InferInsertModel<typeof schema.users>,
+    transactionScope: DbTransactionScope
+  ) {
     return transactionScope
       .insert(schema.users)
       .values(entity)
@@ -33,7 +39,8 @@ export default class UserRepository extends BaseRepository {
   }
 
   update(
-    entity: Partial<UserInsert> & NonNullable<Pick<User, 'id'>>,
+    entity: Partial<InferInsertModel<typeof schema.users>> &
+      NonNullable<Pick<InferSelectModel<typeof schema.users>, 'id'>>,
     transactionScope: DbTransactionScope
   ) {
     return transactionScope
@@ -42,16 +49,5 @@ export default class UserRepository extends BaseRepository {
       .where(eq(schema.users.id, entity.id))
       .returning()
       .then((res) => res[0]);
-  }
-
-  updateMany(
-    entityIds: User['id'][],
-    entity: Omit<Partial<UserInsert>, 'id'>,
-    transactionScope: DbTransactionScope
-  ) {
-    return transactionScope
-      .update(schema.users)
-      .set(entity)
-      .where(inArray(schema.users.id, entityIds));
   }
 }

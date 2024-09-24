@@ -1,4 +1,5 @@
 import { eq, schema } from '@cs/database';
+import type { InferSelectModel, TicketTimelineRepository } from '@cs/database';
 import type {
   TicketAssignmentChanged,
   TicketChat,
@@ -12,17 +13,14 @@ import { TimelineEntryType } from '@cs/kyaku/models';
 import type { FindConfig } from '@cs/kyaku/types';
 import { Direction } from '@cs/kyaku/types';
 
+import { sortByDirection } from '../../../database/build-query';
 import type {
-  TicketTimeline,
   TicketTimelineUnion,
   TicketTimelineWith,
 } from '../entities/ticket-timeline';
 import { TicketTimelineSortField } from '../entities/ticket-timeline';
-import { USER_COLUMNS } from '../entities/user';
-import type TicketTimelineRepository from '../repositories/ticket-timeline';
 import type { UnitOfWork } from '../unit-of-work';
 import { BaseService } from './base-service';
-import { sortByDirection } from './build-query';
 
 export default class TicketTimelineService extends BaseService {
   private readonly ticketTimelineRepository: TicketTimelineRepository;
@@ -58,7 +56,9 @@ export default class TicketTimelineService extends BaseService {
     return ticketTimelineEntries.map((entry) => this.mapEntry(entry));
   }
 
-  private mapEntry(entry: TicketTimeline): TicketTimelineUnion {
+  private mapEntry(
+    entry: InferSelectModel<typeof schema.ticketTimelineEntries>
+  ): TicketTimelineUnion {
     switch (entry.type) {
       case TimelineEntryType.AssignmentChanged:
         return {
@@ -128,9 +128,7 @@ export default class TicketTimelineService extends BaseService {
         ? true
         : undefined,
       userCreatedBy: (relations?.userCreatedBy
-        ? {
-            columns: USER_COLUMNS,
-          }
+        ? true
         : undefined) as T extends { userCreatedBy: true }
         ? { columns: { [K in keyof User]: true } }
         : undefined,

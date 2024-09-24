@@ -1,6 +1,6 @@
 import type { DbConnection } from '@cs/database';
 
-import type { DbTransactionScope } from './db-transaction';
+import type { DbTransactionScope } from '../../database/db-transaction';
 
 export class UnitOfWork {
   private readonly _dbConnection: DbConnection;

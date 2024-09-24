@@ -1,9 +1,12 @@
-import type { KnownKeysOnly } from '@cs/database';
+import type {
+  InferInsertModel,
+  InferSelectModel,
+  KnownKeysOnly,
+} from '@cs/database';
 import { eq, schema } from '@cs/database';
 
+import type { IncludeRelation } from '../build-query';
 import type { DbTransactionScope } from '../db-transaction';
-import type { Ticket, TicketInsert } from '../entities/ticket';
-import type { IncludeRelation } from '../services/build-query';
 import { BaseRepository } from './base-repository';
 
 export default class TicketRepository extends BaseRepository {
@@ -24,7 +27,10 @@ export default class TicketRepository extends BaseRepository {
     return this.dbConnection.query.tickets.findMany(config);
   }
 
-  create(entity: TicketInsert, transactionScope: DbTransactionScope) {
+  create(
+    entity: InferInsertModel<typeof schema.tickets>,
+    transactionScope: DbTransactionScope
+  ) {
     return transactionScope
       .insert(schema.tickets)
       .values(entity)
@@ -33,7 +39,8 @@ export default class TicketRepository extends BaseRepository {
   }
 
   update(
-    entity: Partial<TicketInsert> & NonNullable<Pick<Ticket, 'id'>>,
+    entity: Partial<InferInsertModel<typeof schema.tickets>> &
+      NonNullable<Pick<InferSelectModel<typeof schema.tickets>, 'id'>>,
     transactionScope: DbTransactionScope
   ) {
     return transactionScope

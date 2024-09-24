@@ -1,9 +1,12 @@
-import type { KnownKeysOnly } from '@cs/database';
+import type {
+  InferInsertModel,
+  InferSelectModel,
+  KnownKeysOnly,
+} from '@cs/database';
 import { eq, inArray, schema } from '@cs/database';
 
+import type { IncludeRelation } from '../build-query';
 import type { DbTransactionScope } from '../db-transaction';
-import type { Label, LabelInsert } from '../entities/label';
-import type { IncludeRelation } from '../services/build-query';
 import { BaseRepository } from './base-repository';
 
 export default class LabelRepository extends BaseRepository {
@@ -24,7 +27,10 @@ export default class LabelRepository extends BaseRepository {
     return this.dbConnection.query.labels.findMany(config);
   }
 
-  create(entity: LabelInsert, transactionScope: DbTransactionScope) {
+  create(
+    entity: InferInsertModel<typeof schema.labels>,
+    transactionScope: DbTransactionScope
+  ) {
     return transactionScope
       .insert(schema.labels)
       .values(entity)
@@ -32,7 +38,10 @@ export default class LabelRepository extends BaseRepository {
       .then((res) => res[0]);
   }
 
-  createMany(entities: LabelInsert[], transactionScope: DbTransactionScope) {
+  createMany(
+    entities: InferInsertModel<typeof schema.labels>[],
+    transactionScope: DbTransactionScope
+  ) {
     return transactionScope
       .insert(schema.labels)
       .values(entities)
@@ -41,7 +50,8 @@ export default class LabelRepository extends BaseRepository {
   }
 
   update(
-    entity: Partial<LabelInsert> & NonNullable<Pick<Label, 'id'>>,
+    entity: Partial<InferInsertModel<typeof schema.labels>> &
+      NonNullable<Pick<InferSelectModel<typeof schema.labels>, 'id'>>,
     transactionScope: DbTransactionScope
   ) {
     return transactionScope
@@ -53,8 +63,8 @@ export default class LabelRepository extends BaseRepository {
   }
 
   updateMany(
-    entityIds: Label['id'][],
-    entity: Omit<Partial<LabelInsert>, 'id'>,
+    entityIds: InferSelectModel<typeof schema.labels>['id'][],
+    entity: Omit<Partial<InferInsertModel<typeof schema.labels>>, 'id'>,
     transactionScope: DbTransactionScope
   ) {
     return transactionScope

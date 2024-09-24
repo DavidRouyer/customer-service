@@ -1,9 +1,12 @@
-import type { KnownKeysOnly } from '@cs/database';
+import type {
+  InferInsertModel,
+  InferSelectModel,
+  KnownKeysOnly,
+} from '@cs/database';
 import { eq, schema } from '@cs/database';
 
+import type { IncludeRelation } from '../build-query';
 import type { DbTransactionScope } from '../db-transaction';
-import type { LabelType, LabelTypeInsert } from '../entities/label-type';
-import type { IncludeRelation } from '../services/build-query';
 import { BaseRepository } from './base-repository';
 
 export default class LabelTypeRepository extends BaseRepository {
@@ -24,7 +27,10 @@ export default class LabelTypeRepository extends BaseRepository {
     return this.dbConnection.query.labelTypes.findMany(config);
   }
 
-  create(entity: LabelTypeInsert, transactionScope: DbTransactionScope) {
+  create(
+    entity: InferInsertModel<typeof schema.labelTypes>,
+    transactionScope: DbTransactionScope
+  ) {
     return transactionScope
       .insert(schema.labelTypes)
       .values(entity)
@@ -33,7 +39,8 @@ export default class LabelTypeRepository extends BaseRepository {
   }
 
   update(
-    entity: Partial<LabelTypeInsert> & NonNullable<Pick<LabelType, 'id'>>,
+    entity: Partial<InferInsertModel<typeof schema.labelTypes>> &
+      NonNullable<Pick<InferSelectModel<typeof schema.labelTypes>, 'id'>>,
     transactionScope: DbTransactionScope
   ) {
     return transactionScope

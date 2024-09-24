@@ -1,6 +1,6 @@
 import { asc, eq, schema } from '@cs/database';
+import type { UserRepository } from '@cs/database';
 
-import type UserRepository from '../../repositories/user';
 import type { UnitOfWork } from '../../unit-of-work';
 import UserService from '../user';
 

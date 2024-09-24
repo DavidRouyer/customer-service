@@ -1,17 +1,17 @@
 import { and, eq, schema } from '@cs/database';
+import type { UserRepository } from '@cs/database';
 import type { FindConfig } from '@cs/kyaku/types';
 import { Direction } from '@cs/kyaku/types';
 
-import type { UserFilters } from '../entities/user';
-import { USER_COLUMNS, UserSortField } from '../entities/user';
-import type UserRepository from '../repositories/user';
-import type { UnitOfWork } from '../unit-of-work';
-import { BaseService } from './base-service';
 import {
   filterByDirection,
   inclusionFilterOperator,
   sortByDirection,
-} from './build-query';
+} from '../../../database/build-query';
+import type { UserFilters } from '../entities/user';
+import { UserSortField } from '../entities/user';
+import type { UnitOfWork } from '../unit-of-work';
+import { BaseService } from './base-service';
 
 export default class UserService extends BaseService {
   private readonly userRepository: UserRepository;
@@ -26,7 +26,6 @@ export default class UserService extends BaseService {
 
   async retrieve(userId: string) {
     return await this.userRepository.find({
-      columns: USER_COLUMNS,
       where: eq(schema.users.id, userId),
     });
   }
@@ -40,7 +39,6 @@ export default class UserService extends BaseService {
     }
   ) {
     return await this.userRepository.findMany({
-      columns: USER_COLUMNS,
       limit: config.limit,
       orderBy: [
         ...this.getOrderByClause(config),

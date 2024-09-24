@@ -1,5 +1,10 @@
 import { and, eq, isNull, schema } from '@cs/database';
-import { extractMentions } from '@cs/kyaku/editor';
+import type {
+  InferInsertModel,
+  InferSelectModel,
+  TicketRepository,
+  TicketTimelineRepository,
+} from '@cs/database';
 import type {
   TicketAssignmentChanged,
   TicketChat,
@@ -14,43 +19,34 @@ import { Direction } from '@cs/kyaku/types';
 import { KyakuError } from '@cs/kyaku/utils';
 
 import {
+  filterByDirection,
+  inclusionFilterOperator,
+  sortByDirection,
+} from '../../../database/build-query';
+import {
   DoneTicketStatusDetail,
   SnoozeTicketStatusDetail,
   TodoTicketStatusDetail,
 } from '../../../kyaku/models/ticket';
-import type { Ticket, TicketFilters, TicketWith } from '../entities/ticket';
+import type { TicketFilters, TicketWith } from '../entities/ticket';
 import { TicketSortField } from '../entities/ticket';
-import type { User } from '../entities/user';
-import { USER_COLUMNS } from '../entities/user';
-import type TicketRepository from '../repositories/ticket';
-import type TicketMentionRepository from '../repositories/ticket-mention';
-import type TicketTimelineRepository from '../repositories/ticket-timeline';
 import type { UnitOfWork } from '../unit-of-work';
 import { BaseService } from './base-service';
-import {
-  filterByDirection,
-  inclusionFilterOperator,
-  sortByDirection,
-} from './build-query';
 
 export default class TicketService extends BaseService {
   private readonly ticketRepository: TicketRepository;
-  private readonly ticketMentionRepository: TicketMentionRepository;
   private readonly ticketTimelineRepository: TicketTimelineRepository;
 
   constructor({
     ticketRepository,
-    ticketMentionRepository,
     ticketTimelineRepository,
   }: {
     ticketRepository: TicketRepository;
-    ticketMentionRepository: TicketMentionRepository;
     ticketTimelineRepository: TicketTimelineRepository;
   } & { unitOfWork: UnitOfWork }) {
     // eslint-disable-next-line prefer-rest-params, @typescript-eslint/no-unsafe-argument
     super(arguments[0]);
     this.ticketRepository = ticketRepository;
-    this.ticketMentionRepository = ticketMentionRepository;
     this.ticketTimelineRepository = ticketTimelineRepository;
   }
 
@@ -86,6 +82,7 @@ export default class TicketService extends BaseService {
       with: this.getWithClause(config.relations),
     });
   }
+
   async assign(
     {
       ticketId,
@@ -204,7 +201,7 @@ export default class TicketService extends BaseService {
 
   async create(
     data: Omit<
-      Ticket,
+      InferInsertModel<typeof schema.tickets>,
       | 'id'
       | 'assignedToId'
       | 'status'
@@ -264,8 +261,6 @@ export default class TicketService extends BaseService {
         ['id']
       );
 
-    const mentionIds = await extractMentions(rawContent);
-
     return await this.unitOfWork.transaction(async (tx) => {
       const createdAt = new Date();
 
@@ -287,17 +282,6 @@ export default class TicketService extends BaseService {
       if (!newNote) {
         tx.rollback();
         return;
-      }
-
-      if (mentionIds.length > 0) {
-        await this.ticketMentionRepository.createMany(
-          mentionIds.map((mentionId) => ({
-            ticketTimelineEntryId: newNote.id,
-            userId: mentionId,
-            ticketId: ticket.id,
-          })),
-          tx
-        );
       }
 
       await this.ticketRepository.update(
@@ -607,7 +591,9 @@ export default class TicketService extends BaseService {
   ): {
     assignedTo: T extends { assignedTo: true } ? true : undefined;
     createdBy: T extends { createdBy: true }
-      ? { columns: { [K in keyof User]: true } }
+      ? {
+          columns: { [K in keyof InferSelectModel<typeof schema.users>]: true };
+        }
       : undefined;
     customer: T extends { customer: true } ? true : undefined;
     labels: T extends { labels: true }
@@ -616,7 +602,9 @@ export default class TicketService extends BaseService {
         }
       : undefined;
     updatedBy: T extends { updatedBy: true }
-      ? { columns: { [K in keyof User]: true } }
+      ? {
+          columns: { [K in keyof InferSelectModel<typeof schema.users>]: true };
+        }
       : undefined;
   } {
     return {
@@ -625,12 +613,14 @@ export default class TicketService extends BaseService {
       }
         ? true
         : undefined,
-      createdBy: (relations?.createdBy
+      createdBy: (relations?.createdBy ? true : undefined) as T extends {
+        createdBy: true;
+      }
         ? {
-            columns: USER_COLUMNS,
+            columns: {
+              [K in keyof InferSelectModel<typeof schema.users>]: true;
+            };
           }
-        : undefined) as T extends { createdBy: true }
-        ? { columns: { [K in keyof User]: true } }
         : undefined,
       customer: (relations?.customer ? true : undefined) as T extends {
         customer: true;
@@ -652,12 +642,14 @@ export default class TicketService extends BaseService {
             with: { labelType: true };
           }
         : undefined,
-      updatedBy: (relations?.updatedBy
+      updatedBy: (relations?.updatedBy ? true : undefined) as T extends {
+        updatedBy: true;
+      }
         ? {
-            columns: USER_COLUMNS,
+            columns: {
+              [K in keyof InferSelectModel<typeof schema.users>]: true;
+            };
           }
-        : undefined) as T extends { updatedBy: true }
-        ? { columns: { [K in keyof User]: true } }
         : undefined,
     };
   }

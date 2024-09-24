@@ -1,4 +1,4 @@
-import type { InferInsertModel, InferSelectModel, schema } from '@cs/database';
+import type { InferSelectModel, schema } from '@cs/database';
 import type {
   TicketAssignmentChanged,
   TicketChat,
@@ -9,39 +9,40 @@ import type {
   TimelineEntryType,
 } from '@cs/kyaku/models';
 
-export type TicketTimeline = InferSelectModel<
+type TicketTimelineSelectModel = InferSelectModel<
   typeof schema.ticketTimelineEntries
 >;
 
-export type TicketTimelineInsert = InferInsertModel<
-  typeof schema.ticketTimelineEntries
->;
-
-export type TicketTimelineUnion =
-  | (Omit<TicketTimeline, 'entry' | 'type'> & {
-      type: TimelineEntryType.AssignmentChanged;
-      entry: TicketAssignmentChanged;
-    })
-  | (Omit<TicketTimeline, 'entry' | 'type'> & {
-      type: TimelineEntryType.Chat;
-      entry: TicketChat;
-    })
-  | (Omit<TicketTimeline, 'entry' | 'type'> & {
-      type: TimelineEntryType.LabelsChanged;
-      entry: TicketLabelsChanged;
-    })
-  | (Omit<TicketTimeline, 'entry' | 'type'> & {
-      type: TimelineEntryType.Note;
-      entry: TicketNote;
-    })
-  | (Omit<TicketTimeline, 'entry' | 'type'> & {
-      type: TimelineEntryType.PriorityChanged;
-      entry: TicketPriorityChanged;
-    })
-  | (Omit<TicketTimeline, 'entry' | 'type'> & {
-      type: TimelineEntryType.StatusChanged;
-      entry: TicketStatusChanged;
-    });
+export type TicketTimelineUnion = Omit<
+  TicketTimelineSelectModel,
+  'entry' | 'type'
+> &
+  (
+    | {
+        type: TimelineEntryType.AssignmentChanged;
+        entry: TicketAssignmentChanged;
+      }
+    | {
+        type: TimelineEntryType.Chat;
+        entry: TicketChat;
+      }
+    | {
+        type: TimelineEntryType.LabelsChanged;
+        entry: TicketLabelsChanged;
+      }
+    | {
+        type: TimelineEntryType.Note;
+        entry: TicketNote;
+      }
+    | {
+        type: TimelineEntryType.PriorityChanged;
+        entry: TicketPriorityChanged;
+      }
+    | {
+        type: TimelineEntryType.StatusChanged;
+        entry: TicketStatusChanged;
+      }
+  );
 
 export interface TicketTimelineWith<T> {
   assignedTo?: [T] extends [{ assignedTo: true }] ? true : undefined;

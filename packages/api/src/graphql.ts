@@ -6,26 +6,23 @@ import type { YogaInitialContext } from 'graphql-yoga';
 import { default as jwt } from 'jsonwebtoken';
 
 import { Auth, authOptions } from '@cs/auth';
-import { dbConnection } from '@cs/database';
+import {
+  CustomerRepository,
+  dbConnection,
+  LabelRepository,
+  LabelTypeRepository,
+  TicketRepository,
+  TicketTimelineRepository,
+  UserRepository,
+} from '@cs/database';
 import type { User } from '@cs/kyaku/models';
 
-import type { Customer } from './entities/customer';
-import type { Label } from './entities/label';
-import type { LabelType } from './entities/label-type';
-import type { Ticket } from './entities/ticket';
 import { commonModule } from './modules/common/resolvers';
 import { customerModule } from './modules/customer/resolvers';
 import { labelTypeModule } from './modules/label-type/resolvers';
 import { labelModule } from './modules/label/resolvers';
 import { ticketModule } from './modules/ticket/resolvers';
 import { userModule } from './modules/user/resolvers';
-import CustomerRepository from './repositories/customer';
-import LabelRepository from './repositories/label';
-import LabelTypeRepository from './repositories/label-type';
-import TicketRepository from './repositories/ticket';
-import TicketMentionRepository from './repositories/ticket-mention';
-import TicketTimelineRepository from './repositories/ticket-timeline';
-import UserRepository from './repositories/user';
 import CustomerService from './services/customer';
 import LabelService from './services/label';
 import LabelTypeService from './services/label-type';
@@ -41,7 +38,6 @@ interface Services {
   labelRepository: LabelRepository;
   labelTypeRepository: LabelTypeRepository;
   ticketRepository: TicketRepository;
-  ticketMentionRepository: TicketMentionRepository;
   ticketTimelineRepository: TicketTimelineRepository;
   userRepository: UserRepository;
   customerService: CustomerService;
@@ -60,7 +56,6 @@ container.register({
   labelRepository: asClass(LabelRepository).scoped(),
   labelTypeRepository: asClass(LabelTypeRepository).scoped(),
   ticketRepository: asClass(TicketRepository).scoped(),
-  ticketMentionRepository: asClass(TicketMentionRepository).scoped(),
   ticketTimelineRepository: asClass(TicketTimelineRepository).scoped(),
   userRepository: asClass(UserRepository).scoped(),
   customerService: asClass(CustomerService).scoped(),
@@ -109,7 +104,7 @@ const getUser = async (request: Request) => {
 const getContext = async (initialContext: YogaInitialContext) => ({
   container,
   dataloaders: {
-    customerLoader: new DataLoader<string, Customer, string>(async (ids) => {
+    customerLoader: new DataLoader(async (ids: readonly string[]) => {
       const customerService = container.resolve('customerService');
       const rows = await customerService.list({
         customerIds: {
@@ -121,7 +116,7 @@ const getContext = async (initialContext: YogaInitialContext) => ({
           rows.find((row) => row.id === id) ?? new Error(`Row not found: ${id}`)
       );
     }),
-    labelLoader: new DataLoader<string, Label, string>(async (ids) => {
+    labelLoader: new DataLoader(async (ids: readonly string[]) => {
       const labelService = container.resolve('labelService');
       const rows = await labelService.list({
         labelIds: {
@@ -133,7 +128,7 @@ const getContext = async (initialContext: YogaInitialContext) => ({
           rows.find((row) => row.id === id) ?? new Error(`Row not found: ${id}`)
       );
     }),
-    labelTypeLoader: new DataLoader<string, LabelType, string>(async (ids) => {
+    labelTypeLoader: new DataLoader(async (ids: readonly string[]) => {
       const labelTypeService = container.resolve('labelTypeService');
       const rows = await labelTypeService.list({
         labelTypeIds: {
@@ -145,7 +140,7 @@ const getContext = async (initialContext: YogaInitialContext) => ({
           rows.find((row) => row.id === id) ?? new Error(`Row not found: ${id}`)
       );
     }),
-    ticketLoader: new DataLoader<string, Ticket, string>(async (ids) => {
+    ticketLoader: new DataLoader(async (ids: readonly string[]) => {
       const ticketService = container.resolve('ticketService');
       const rows = await ticketService.list({
         ticketIds: {
@@ -157,7 +152,7 @@ const getContext = async (initialContext: YogaInitialContext) => ({
           rows.find((row) => row.id === id) ?? new Error(`Row not found: ${id}`)
       );
     }),
-    userLoader: new DataLoader<string, User, string>(async (ids) => {
+    userLoader: new DataLoader(async (ids: readonly string[]) => {
       const userService = container.resolve('userService');
       const rows = await userService.list({
         userIds: {

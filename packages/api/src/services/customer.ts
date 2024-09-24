@@ -1,19 +1,17 @@
 import { and, eq, schema } from '@cs/database';
+import type { CustomerRepository, InferSelectModel } from '@cs/database';
 import type { FindConfig, GetConfig } from '@cs/kyaku/types';
 import { Direction } from '@cs/kyaku/types';
 
-import type { CustomerFilters, CustomerWith } from '../entities/customer';
-import { CustomerSortField } from '../entities/customer';
-import type { User } from '../entities/user';
-import { USER_COLUMNS } from '../entities/user';
-import type CustomerRepository from '../repositories/customer';
-import type { UnitOfWork } from '../unit-of-work';
-import { BaseService } from './base-service';
 import {
   filterByDirection,
   inclusionFilterOperator,
   sortByDirection,
-} from './build-query';
+} from '../../../database/build-query';
+import type { CustomerFilters, CustomerWith } from '../entities/customer';
+import { CustomerSortField } from '../entities/customer';
+import type { UnitOfWork } from '../unit-of-work';
+import { BaseService } from './base-service';
 
 export default class CustomerService extends BaseService {
   private readonly customerRepository: CustomerRepository;
@@ -65,26 +63,34 @@ export default class CustomerService extends BaseService {
     relations: T | undefined
   ): {
     createdBy: T extends { createdBy: true }
-      ? { columns: { [K in keyof User]: true } }
+      ? {
+          columns: { [K in keyof InferSelectModel<typeof schema.users>]: true };
+        }
       : undefined;
     updatedBy: T extends { updatedBy: true }
-      ? { columns: { [K in keyof User]: true } }
+      ? {
+          columns: { [K in keyof InferSelectModel<typeof schema.users>]: true };
+        }
       : undefined;
   } {
     return {
-      createdBy: (relations?.createdBy
+      createdBy: (relations?.createdBy ? true : undefined) as T extends {
+        createdBy: true;
+      }
         ? {
-            columns: USER_COLUMNS,
+            columns: {
+              [K in keyof InferSelectModel<typeof schema.users>]: true;
+            };
           }
-        : undefined) as T extends { createdBy: true }
-        ? { columns: { [K in keyof User]: true } }
         : undefined,
-      updatedBy: (relations?.updatedBy
+      updatedBy: (relations?.updatedBy ? true : undefined) as T extends {
+        updatedBy: true;
+      }
         ? {
-            columns: USER_COLUMNS,
+            columns: {
+              [K in keyof InferSelectModel<typeof schema.users>]: true;
+            };
           }
-        : undefined) as T extends { updatedBy: true }
-        ? { columns: { [K in keyof User]: true } }
         : undefined,
     };
   }

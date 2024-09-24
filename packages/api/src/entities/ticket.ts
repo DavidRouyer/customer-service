@@ -1,10 +1,6 @@
-import type { InferInsertModel, InferSelectModel, schema } from '@cs/database';
+import type { InferSelectModel, schema } from '@cs/database';
 
-import type { InclusionFilterOperator } from '../services/build-query';
-
-export type Ticket = InferSelectModel<typeof schema.tickets>;
-
-export type TicketInsert = InferInsertModel<typeof schema.tickets>;
+import type { InclusionFilterOperator } from '../../../database/build-query';
 
 export interface TicketWith<T> {
   assignedTo?: [T] extends [{ assignedTo: true }] ? true : undefined;
@@ -14,13 +10,17 @@ export interface TicketWith<T> {
   updatedBy?: [T] extends [{ updatedBy: true }] ? true : undefined;
 }
 
+type TicketSelectModel = InferSelectModel<typeof schema.tickets>;
+
 export interface TicketFilters {
   isAssigned?: boolean;
-  assignedToUser?: InclusionFilterOperator<NonNullable<Ticket['assignedToId']>>;
-  customerIds?: InclusionFilterOperator<Ticket['customerId']>;
-  ticketIds?: InclusionFilterOperator<Ticket['id']>;
-  priority?: InclusionFilterOperator<Ticket['priority']>;
-  statuses?: InclusionFilterOperator<Ticket['status']>;
+  assignedToUser?: InclusionFilterOperator<
+    NonNullable<TicketSelectModel['assignedToId']>
+  >;
+  customerIds?: InclusionFilterOperator<TicketSelectModel['customerId']>;
+  ticketIds?: InclusionFilterOperator<TicketSelectModel['id']>;
+  priority?: InclusionFilterOperator<TicketSelectModel['priority']>;
+  statuses?: InclusionFilterOperator<TicketSelectModel['status']>;
 }
 
 export enum TicketSortField {

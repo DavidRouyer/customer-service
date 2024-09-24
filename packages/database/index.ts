@@ -1,13 +1,18 @@
 import { drizzle } from 'drizzle-orm/node-postgres';
 import pg from 'pg';
 
-import * as auth from './schema/auth';
-import * as customer from './schema/customer';
-import * as labels from './schema/label';
-import * as labelTypes from './schema/label-type';
-import * as ticket from './schema/ticket';
-import * as ticketMentions from './schema/ticket-mentions';
-import * as ticketTimelineEntries from './schema/ticket-timeline-entry';
+import CustomerRepository from './repositories/customer';
+import LabelRepository from './repositories/label';
+import LabelTypeRepository from './repositories/label-type';
+import TicketRepository from './repositories/ticket';
+import TicketTimelineRepository from './repositories/ticket-timeline';
+import UserRepository from './repositories/user';
+import * as auth from './schemas/auth';
+import * as customer from './schemas/customer';
+import * as labels from './schemas/label';
+import * as labelTypes from './schemas/label-type';
+import * as ticket from './schemas/ticket';
+import * as ticketTimelineEntries from './schemas/ticket-timeline-entry';
 
 export const schema = {
   ...auth,
@@ -15,8 +20,16 @@ export const schema = {
   ...labels,
   ...labelTypes,
   ...ticket,
-  ...ticketMentions,
   ...ticketTimelineEntries,
+};
+
+export {
+  CustomerRepository,
+  LabelRepository,
+  LabelTypeRepository,
+  TicketTimelineRepository,
+  TicketRepository,
+  UserRepository,
 };
 
 export * from 'drizzle-orm';

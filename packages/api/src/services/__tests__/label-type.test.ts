@@ -1,6 +1,6 @@
 import { and, asc, eq, isNull, schema } from '@cs/database';
+import type { LabelTypeRepository } from '@cs/database';
 
-import type LabelTypeRepository from '../../repositories/label-type';
 import type { UnitOfWork } from '../../unit-of-work';
 import LabelTypeService from '../label-type';
 

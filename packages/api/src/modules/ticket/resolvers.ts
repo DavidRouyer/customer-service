@@ -7,7 +7,6 @@ import {
 } from '@cs/kyaku/utils';
 
 import { authorize } from '../../authorize';
-import type { Label } from '../../entities/label';
 import { TicketSortField } from '../../entities/ticket';
 import type { TicketTimelineUnion } from '../../entities/ticket-timeline';
 import type {
@@ -95,18 +94,12 @@ const mapEntry = (entry: TicketTimelineUnion) => {
       return {
         ...entry,
         entry: {
-          oldLabels: entry.entry.oldLabelIds.map(
-            (labelId) =>
-              ({
-                id: labelId,
-              }) as Label
-          ),
-          newLabels: entry.entry.newLabelIds.map(
-            (labelId) =>
-              ({
-                id: labelId,
-              }) as Label
-          ),
+          oldLabels: entry.entry.oldLabelIds.map((labelId) => ({
+            id: labelId,
+          })),
+          newLabels: entry.entry.newLabelIds.map((labelId) => ({
+            id: labelId,
+          })),
         },
       };
     case TimelineEntryType.Chat:
@@ -467,7 +460,8 @@ const resolvers: Resolvers = {
         throw new GraphQLError('Failed to load labels');
       }
       const filteredLabels = labels.filter(
-        (label): label is Label => !(label instanceof Error)
+        (label): label is Exclude<typeof label, Error> =>
+          !(label instanceof Error)
       );
       return filteredLabels.map((label) => mapLabel(label));
     },
@@ -479,7 +473,8 @@ const resolvers: Resolvers = {
         throw new GraphQLError('Failed to load labels');
       }
       const filteredLabels = labels.filter(
-        (label): label is Label => !(label instanceof Error)
+        (label): label is Exclude<typeof label, Error> =>
+          !(label instanceof Error)
       );
       return filteredLabels.map((label) => mapLabel(label));
     },

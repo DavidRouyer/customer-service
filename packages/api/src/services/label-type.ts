@@ -1,27 +1,24 @@
 import { z } from 'zod';
 
 import { and, eq, isNotNull, isNull, schema } from '@cs/database';
+import type {
+  InferInsertModel,
+  InferSelectModel,
+  LabelTypeRepository,
+} from '@cs/database';
 import { Direction } from '@cs/kyaku/types';
 import type { FindConfig, GetConfig } from '@cs/kyaku/types';
 import { KyakuError } from '@cs/kyaku/utils';
 
-import type {
-  CreateLabelType,
-  LabelTypeFilters,
-  LabelTypeWith,
-  UpdateLabelType,
-} from '../entities/label-type';
-import { LabelTypeSortField } from '../entities/label-type';
-import type { User } from '../entities/user';
-import { USER_COLUMNS } from '../entities/user';
-import type LabelTypeRepository from '../repositories/label-type';
-import type { UnitOfWork } from '../unit-of-work';
-import { BaseService } from './base-service';
 import {
   filterByDirection,
   inclusionFilterOperator,
   sortByDirection,
-} from './build-query';
+} from '../../../database/build-query';
+import type { LabelTypeFilters, LabelTypeWith } from '../entities/label-type';
+import { LabelTypeSortField } from '../entities/label-type';
+import type { UnitOfWork } from '../unit-of-work';
+import { BaseService } from './base-service';
 
 export default class LabelTypeService extends BaseService {
   private readonly labelTypeRepository: LabelTypeRepository;
@@ -81,7 +78,18 @@ export default class LabelTypeService extends BaseService {
     });
   }
 
-  async create(data: CreateLabelType, userId: string) {
+  async create(
+    data: Omit<
+      InferInsertModel<typeof schema.labelTypes>,
+      | 'id'
+      | 'createdAt'
+      | 'createdById'
+      | 'updatedAt'
+      | 'updatedById'
+      | 'archivedAt'
+    >,
+    userId: string
+  ) {
     const createLabelTypeSchema = z
       .object({
         name: z.string().min(1),
@@ -125,7 +133,12 @@ export default class LabelTypeService extends BaseService {
     });
   }
 
-  async update(data: UpdateLabelType, userId: string) {
+  async update(
+    data: Partial<InferInsertModel<typeof schema.labelTypes>> & {
+      id: NonNullable<InferSelectModel<typeof schema.labelTypes>['id']>;
+    },
+    userId: string
+  ) {
     const labelType = await this.retrieve(data.id);
 
     if (!labelType)
@@ -238,26 +251,34 @@ export default class LabelTypeService extends BaseService {
     relations: T | undefined
   ): {
     createdBy: T extends { createdBy: true }
-      ? { columns: { [K in keyof User]: true } }
+      ? {
+          columns: { [K in keyof InferSelectModel<typeof schema.users>]: true };
+        }
       : undefined;
     updatedBy: T extends { updatedBy: true }
-      ? { columns: { [K in keyof User]: true } }
+      ? {
+          columns: { [K in keyof InferSelectModel<typeof schema.users>]: true };
+        }
       : undefined;
   } {
     return {
-      createdBy: (relations?.createdBy
+      createdBy: (relations?.createdBy ? true : undefined) as T extends {
+        createdBy: true;
+      }
         ? {
-            columns: USER_COLUMNS,
+            columns: {
+              [K in keyof InferSelectModel<typeof schema.users>]: true;
+            };
           }
-        : undefined) as T extends { createdBy: true }
-        ? { columns: { [K in keyof User]: true } }
         : undefined,
-      updatedBy: (relations?.updatedBy
+      updatedBy: (relations?.updatedBy ? true : undefined) as T extends {
+        updatedBy: true;
+      }
         ? {
-            columns: USER_COLUMNS,
+            columns: {
+              [K in keyof InferSelectModel<typeof schema.users>]: true;
+            };
           }
-        : undefined) as T extends { updatedBy: true }
-        ? { columns: { [K in keyof User]: true } }
         : undefined,
     };
   }

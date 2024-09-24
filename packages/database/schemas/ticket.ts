@@ -13,7 +13,6 @@ import { users } from './auth';
 import { lifecycleFields } from './common';
 import { customers } from './customer';
 import { labels } from './label';
-import { ticketMentions } from './ticket-mentions';
 import { ticketTimelineEntries } from './ticket-timeline-entry';
 
 export const ticketStatus = pgEnum('ticketStatus', [
@@ -90,6 +89,5 @@ export const ticketsRelations = relations(tickets, ({ one, many }) => ({
     references: [users.id],
   }),
   timelineEntries: many(ticketTimelineEntries),
-  ticketMentions: many(ticketMentions),
   labels: many(labels),
 }));

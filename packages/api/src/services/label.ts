@@ -1,23 +1,25 @@
 import { and, eq, inArray, isNotNull, isNull, schema } from '@cs/database';
+import type {
+  LabelRepository,
+  LabelTypeRepository,
+  TicketRepository,
+  TicketTimelineRepository,
+} from '@cs/database';
 import type { TicketLabelsChanged } from '@cs/kyaku/models';
 import { TimelineEntryType } from '@cs/kyaku/models';
 import type { FindConfig, GetConfig } from '@cs/kyaku/types';
 import { Direction } from '@cs/kyaku/types';
 import { KyakuError } from '@cs/kyaku/utils';
 
-import type { LabelFilters, LabelWith } from '../entities/label';
-import { LabelSortField } from '../entities/label';
-import type LabelRepository from '../repositories/label';
-import type LabelTypeRepository from '../repositories/label-type';
-import type TicketRepository from '../repositories/ticket';
-import type TicketTimelineRepository from '../repositories/ticket-timeline';
-import type { UnitOfWork } from '../unit-of-work';
-import { BaseService } from './base-service';
 import {
   filterByDirection,
   inclusionFilterOperator,
   sortByDirection,
-} from './build-query';
+} from '../../../database/build-query';
+import type { LabelFilters, LabelWith } from '../entities/label';
+import { LabelSortField } from '../entities/label';
+import type { UnitOfWork } from '../unit-of-work';
+import { BaseService } from './base-service';
 
 export default class LabelService extends BaseService {
   private readonly labelRepository: LabelRepository;

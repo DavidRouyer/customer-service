@@ -1,14 +1,11 @@
-import { and, asc, eq, schema } from '@cs/database';
+import { and, asc, eq, schema, TicketTimelineRepository } from '@cs/database';
+import type { TicketRepository } from '@cs/database';
 import { TicketPriority, TicketStatus } from '@cs/kyaku/models';
 
 import { DoneTicketStatusDetail } from '../../../../kyaku/models/ticket';
-import type TicketRepository from '../../repositories/ticket';
-import TicketMentionRepository from '../../repositories/ticket-mention';
-import TicketTimelineRepository from '../../repositories/ticket-timeline';
 import type { UnitOfWork } from '../../unit-of-work';
 import TicketService from '../ticket';
 
-vi.mock('../../repositories/ticket-mention');
 vi.mock('../../repositories/ticket-timeline');
 
 describe('TicketService', () => {
@@ -33,7 +30,6 @@ describe('TicketService', () => {
     const ticketService = new TicketService({
       unitOfWork: {} as unknown as UnitOfWork,
       ticketRepository: ticketRepo as unknown as TicketRepository,
-      ticketMentionRepository: new TicketMentionRepository(),
       ticketTimelineRepository: new TicketTimelineRepository(),
     });
 
@@ -69,7 +65,6 @@ describe('TicketService', () => {
     const ticketService = new TicketService({
       unitOfWork: {} as unknown as UnitOfWork,
       ticketRepository: ticketRepo as unknown as TicketRepository,
-      ticketMentionRepository: new TicketMentionRepository(),
       ticketTimelineRepository: new TicketTimelineRepository(),
     });
 
@@ -108,7 +103,6 @@ describe('TicketService', () => {
     const ticketService = new TicketService({
       unitOfWork: unitOfWork as unknown as UnitOfWork,
       ticketRepository: ticketRepo as unknown as TicketRepository,
-      ticketMentionRepository: new TicketMentionRepository(),
       ticketTimelineRepository: new TicketTimelineRepository(),
     });
 
@@ -170,7 +164,6 @@ describe('TicketService', () => {
     const ticketService = new TicketService({
       unitOfWork: unitOfWork as unknown as UnitOfWork,
       ticketRepository: ticketRepo as unknown as TicketRepository,
-      ticketMentionRepository: new TicketMentionRepository(),
       ticketTimelineRepository:
         ticketTimelineRepo as unknown as TicketTimelineRepository,
     });
@@ -241,7 +234,6 @@ describe('TicketService', () => {
     const ticketService = new TicketService({
       unitOfWork: unitOfWork as unknown as UnitOfWork,
       ticketRepository: ticketRepo as unknown as TicketRepository,
-      ticketMentionRepository: new TicketMentionRepository(),
       ticketTimelineRepository:
         ticketTimelineRepo as unknown as TicketTimelineRepository,
     });
@@ -306,7 +298,6 @@ describe('TicketService', () => {
     const ticketService = new TicketService({
       unitOfWork: unitOfWork as unknown as UnitOfWork,
       ticketRepository: ticketRepo as unknown as TicketRepository,
-      ticketMentionRepository: new TicketMentionRepository(),
       ticketTimelineRepository:
         ticketTimelineRepo as unknown as TicketTimelineRepository,
     });
@@ -378,7 +369,6 @@ describe('TicketService', () => {
     const ticketService = new TicketService({
       unitOfWork: unitOfWork as unknown as UnitOfWork,
       ticketRepository: ticketRepo as unknown as TicketRepository,
-      ticketMentionRepository: new TicketMentionRepository(),
       ticketTimelineRepository:
         ticketTimelineRepo as unknown as TicketTimelineRepository,
     });
@@ -451,7 +441,6 @@ describe('TicketService', () => {
     const ticketService = new TicketService({
       unitOfWork: unitOfWork as unknown as UnitOfWork,
       ticketRepository: ticketRepo as unknown as TicketRepository,
-      ticketMentionRepository: new TicketMentionRepository(),
       ticketTimelineRepository:
         ticketTimelineRepo as unknown as TicketTimelineRepository,
     });
@@ -524,7 +513,6 @@ describe('TicketService', () => {
     const ticketService = new TicketService({
       unitOfWork: unitOfWork as unknown as UnitOfWork,
       ticketRepository: ticketRepo as unknown as TicketRepository,
-      ticketMentionRepository: new TicketMentionRepository(),
       ticketTimelineRepository:
         ticketTimelineRepo as unknown as TicketTimelineRepository,
     });
@@ -598,7 +586,6 @@ describe('TicketService', () => {
     const ticketService = new TicketService({
       unitOfWork: unitOfWork as unknown as UnitOfWork,
       ticketRepository: ticketRepo as unknown as TicketRepository,
-      ticketMentionRepository: new TicketMentionRepository(),
       ticketTimelineRepository:
         ticketTimelineRepo as unknown as TicketTimelineRepository,
     });
@@ -667,7 +654,6 @@ describe('TicketService', () => {
     const ticketService = new TicketService({
       unitOfWork: unitOfWork as unknown as UnitOfWork,
       ticketRepository: ticketRepo as unknown as TicketRepository,
-      ticketMentionRepository: new TicketMentionRepository(),
       ticketTimelineRepository:
         ticketTimelineRepo as unknown as TicketTimelineRepository,
     });

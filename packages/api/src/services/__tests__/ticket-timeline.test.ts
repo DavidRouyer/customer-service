@@ -1,7 +1,7 @@
 import { asc, eq, schema } from '@cs/database';
+import type { TicketTimelineRepository } from '@cs/database';
 import { TimelineEntryType } from '@cs/kyaku/models';
 
-import type TicketTimelineRepository from '../../repositories/ticket-timeline';
 import type { UnitOfWork } from '../../unit-of-work';
 import TicketTimelineService from '../ticket-timeline';
 
