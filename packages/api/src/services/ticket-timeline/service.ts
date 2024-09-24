@@ -13,16 +13,13 @@ import { TimelineEntryType } from '@cs/kyaku/models';
 import type { FindConfig } from '@cs/kyaku/types';
 import { Direction } from '@cs/kyaku/types';
 
-import { sortByDirection } from '../../../database/build-query';
-import type {
-  TicketTimelineUnion,
-  TicketTimelineWith,
-} from '../entities/ticket-timeline';
-import { TicketTimelineSortField } from '../entities/ticket-timeline';
-import type { UnitOfWork } from '../unit-of-work';
-import { BaseService } from './base-service';
+import { sortByDirection } from '../../../../database/build-query';
+import type { UnitOfWork } from '../../unit-of-work';
+import { BaseService } from '../base-service';
+import type { TicketTimelineWith } from './common';
+import { TicketTimelineSortField } from './common';
 
-export default class TicketTimelineService extends BaseService {
+export class TicketTimelineService extends BaseService {
   private readonly ticketTimelineRepository: TicketTimelineRepository;
 
   constructor({
@@ -58,42 +55,42 @@ export default class TicketTimelineService extends BaseService {
 
   private mapEntry(
     entry: InferSelectModel<typeof schema.ticketTimelineEntries>
-  ): TicketTimelineUnion {
+  ) {
     switch (entry.type) {
       case TimelineEntryType.AssignmentChanged:
         return {
           ...entry,
-          type: TimelineEntryType.AssignmentChanged,
+          type: TimelineEntryType.AssignmentChanged as const,
           entry: entry.entry as TicketAssignmentChanged,
         };
       case TimelineEntryType.Chat:
         return {
           ...entry,
-          type: TimelineEntryType.Chat,
+          type: TimelineEntryType.Chat as const,
           entry: entry.entry as TicketChat,
         };
       case TimelineEntryType.LabelsChanged:
         return {
           ...entry,
-          type: TimelineEntryType.LabelsChanged,
+          type: TimelineEntryType.LabelsChanged as const,
           entry: entry.entry as TicketLabelsChanged,
         };
       case TimelineEntryType.Note:
         return {
           ...entry,
-          type: TimelineEntryType.Note,
+          type: TimelineEntryType.Note as const,
           entry: entry.entry as TicketNote,
         };
       case TimelineEntryType.PriorityChanged:
         return {
           ...entry,
-          type: TimelineEntryType.PriorityChanged,
+          type: TimelineEntryType.PriorityChanged as const,
           entry: entry.entry as TicketPriorityChanged,
         };
       case TimelineEntryType.StatusChanged:
         return {
           ...entry,
-          type: TimelineEntryType.StatusChanged,
+          type: TimelineEntryType.StatusChanged as const,
           entry: entry.entry as TicketStatusChanged,
         };
       default:

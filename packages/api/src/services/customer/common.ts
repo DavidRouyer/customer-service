@@ -1,6 +1,8 @@
-import type { InferSelectModel, schema } from '@cs/database';
-
-import type { InclusionFilterOperator } from '../../../database/build-query';
+import type {
+  InclusionFilterOperator,
+  InferSelectModel,
+  schema,
+} from '@cs/database';
 
 export interface CustomerWith<T> {
   createdBy?: [T] extends [{ createdBy: true }] ? true : undefined;

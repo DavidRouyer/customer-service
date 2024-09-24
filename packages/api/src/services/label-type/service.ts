@@ -1,6 +1,15 @@
 import { z } from 'zod';
 
-import { and, eq, isNotNull, isNull, schema } from '@cs/database';
+import {
+  and,
+  eq,
+  filterByDirection,
+  inclusionFilterOperator,
+  isNotNull,
+  isNull,
+  schema,
+  sortByDirection,
+} from '@cs/database';
 import type {
   InferInsertModel,
   InferSelectModel,
@@ -10,17 +19,12 @@ import { Direction } from '@cs/kyaku/types';
 import type { FindConfig, GetConfig } from '@cs/kyaku/types';
 import { KyakuError } from '@cs/kyaku/utils';
 
-import {
-  filterByDirection,
-  inclusionFilterOperator,
-  sortByDirection,
-} from '../../../database/build-query';
-import type { LabelTypeFilters, LabelTypeWith } from '../entities/label-type';
-import { LabelTypeSortField } from '../entities/label-type';
-import type { UnitOfWork } from '../unit-of-work';
-import { BaseService } from './base-service';
+import type { UnitOfWork } from '../../unit-of-work';
+import { BaseService } from '../base-service';
+import { LabelTypeSortField } from './common';
+import type { LabelTypeFilters, LabelTypeWith } from './common';
 
-export default class LabelTypeService extends BaseService {
+export class LabelTypeService extends BaseService {
   private readonly labelTypeRepository: LabelTypeRepository;
 
   constructor({

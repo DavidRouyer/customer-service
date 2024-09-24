@@ -2,7 +2,7 @@ import { asc, eq, schema } from '@cs/database';
 import type { UserRepository } from '@cs/database';
 
 import type { UnitOfWork } from '../../unit-of-work';
-import UserService from '../user';
+import { UserService } from '../user';
 
 describe('UserService', () => {
   beforeEach(() => {

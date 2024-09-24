@@ -3,7 +3,7 @@ import type { TicketTimelineRepository } from '@cs/database';
 import { TimelineEntryType } from '@cs/kyaku/models';
 
 import type { UnitOfWork } from '../../unit-of-work';
-import TicketTimelineService from '../ticket-timeline';
+import { TicketTimelineService } from '../ticket-timeline';
 
 vi.mock('../../repositories/label');
 vi.mock('../../repositories/user');

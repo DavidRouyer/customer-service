@@ -1,19 +1,21 @@
-import { and, eq, schema } from '@cs/database';
+import {
+  and,
+  eq,
+  filterByDirection,
+  inclusionFilterOperator,
+  schema,
+  sortByDirection,
+} from '@cs/database';
 import type { CustomerRepository, InferSelectModel } from '@cs/database';
 import type { FindConfig, GetConfig } from '@cs/kyaku/types';
 import { Direction } from '@cs/kyaku/types';
 
-import {
-  filterByDirection,
-  inclusionFilterOperator,
-  sortByDirection,
-} from '../../../database/build-query';
-import type { CustomerFilters, CustomerWith } from '../entities/customer';
-import { CustomerSortField } from '../entities/customer';
-import type { UnitOfWork } from '../unit-of-work';
-import { BaseService } from './base-service';
+import type { UnitOfWork } from '../../unit-of-work';
+import { BaseService } from '../base-service';
+import type { CustomerFilters, CustomerWith } from './common';
+import { CustomerSortField } from './common';
 
-export default class CustomerService extends BaseService {
+export class CustomerService extends BaseService {
   private readonly customerRepository: CustomerRepository;
 
   constructor({
@@ -21,7 +23,7 @@ export default class CustomerService extends BaseService {
   }: {
     customerRepository: CustomerRepository;
   } & { unitOfWork: UnitOfWork }) {
-    // eslint-disable-next-line prefer-rest-params, @typescript-eslint/no-unsafe-argument
+    // eslint-disable-next-line prefer-rest-params
     super(arguments[0]);
     this.customerRepository = customerRepository;
   }

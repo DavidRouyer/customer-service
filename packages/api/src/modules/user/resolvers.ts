@@ -4,9 +4,9 @@ import {
 } from '@cs/kyaku/utils';
 
 import { authorize } from '../../authorize';
-import { UserSortField } from '../../entities/user';
 import type { Resolvers } from '../../generated-types/graphql';
-import type UserService from '../../services/user';
+import { UserSortField } from '../../services/user';
+import type { UserService } from '../../services/user';
 import typeDefs from './typeDefs';
 
 const resolvers: Resolvers = {

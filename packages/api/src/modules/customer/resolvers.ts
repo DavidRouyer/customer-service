@@ -1,5 +1,5 @@
 import type { Resolvers, User } from '../../generated-types/graphql';
-import type CustomerService from '../../services/customer';
+import type { CustomerService } from '../../services/customer';
 import typeDefs from './typeDefs';
 
 export const mapCustomer = (

@@ -1,6 +1,8 @@
-import type { InferSelectModel, schema } from '@cs/database';
-
-import type { InclusionFilterOperator } from '../../../database/build-query';
+import type {
+  InclusionFilterOperator,
+  InferSelectModel,
+  schema,
+} from '@cs/database';
 
 export interface LabelWith<T> {
   ticket?: [T] extends [{ assignedTo: true }] ? true : undefined;

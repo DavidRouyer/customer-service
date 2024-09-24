@@ -22,18 +22,18 @@ import {
   filterByDirection,
   inclusionFilterOperator,
   sortByDirection,
-} from '../../../database/build-query';
+} from '../../../../database/build-query';
 import {
   DoneTicketStatusDetail,
   SnoozeTicketStatusDetail,
   TodoTicketStatusDetail,
-} from '../../../kyaku/models/ticket';
-import type { TicketFilters, TicketWith } from '../entities/ticket';
-import { TicketSortField } from '../entities/ticket';
-import type { UnitOfWork } from '../unit-of-work';
-import { BaseService } from './base-service';
+} from '../../../../kyaku/models/ticket';
+import type { UnitOfWork } from '../../unit-of-work';
+import { BaseService } from '../base-service';
+import type { TicketFilters, TicketWith } from './common';
+import { TicketSortField } from './common';
 
-export default class TicketService extends BaseService {
+export class TicketService extends BaseService {
   private readonly ticketRepository: TicketRepository;
   private readonly ticketTimelineRepository: TicketTimelineRepository;
 

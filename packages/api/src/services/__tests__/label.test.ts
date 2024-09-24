@@ -10,7 +10,7 @@ import {
 import type { LabelRepository } from '@cs/database';
 
 import type { UnitOfWork } from '../../unit-of-work';
-import LabelService from '../label';
+import { LabelService } from '../label';
 
 vi.mock('../../repositories/label-type');
 vi.mock('../../repositories/ticket');

@@ -15,13 +15,13 @@ import {
   filterByDirection,
   inclusionFilterOperator,
   sortByDirection,
-} from '../../../database/build-query';
-import type { LabelFilters, LabelWith } from '../entities/label';
-import { LabelSortField } from '../entities/label';
-import type { UnitOfWork } from '../unit-of-work';
-import { BaseService } from './base-service';
+} from '../../../../database/build-query';
+import type { UnitOfWork } from '../../unit-of-work';
+import { BaseService } from '../base-service';
+import type { LabelFilters, LabelWith } from './common';
+import { LabelSortField } from './common';
 
-export default class LabelService extends BaseService {
+export class LabelService extends BaseService {
   private readonly labelRepository: LabelRepository;
   private readonly labelTypeRepository: LabelTypeRepository;
   private readonly ticketRepository: TicketRepository;

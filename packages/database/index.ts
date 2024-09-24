@@ -33,6 +33,7 @@ export {
 };
 
 export * from 'drizzle-orm';
+export * from './build-query';
 
 const { Pool } = pg;
 

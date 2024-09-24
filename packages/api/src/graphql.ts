@@ -23,12 +23,12 @@ import { labelTypeModule } from './modules/label-type/resolvers';
 import { labelModule } from './modules/label/resolvers';
 import { ticketModule } from './modules/ticket/resolvers';
 import { userModule } from './modules/user/resolvers';
-import CustomerService from './services/customer';
-import LabelService from './services/label';
-import LabelTypeService from './services/label-type';
-import TicketService from './services/ticket';
-import TicketTimelineService from './services/ticket-timeline';
-import UserService from './services/user';
+import { CustomerService } from './services/customer';
+import { LabelService } from './services/label';
+import { LabelTypeService } from './services/label-type';
+import { TicketService } from './services/ticket';
+import { TicketTimelineService } from './services/ticket-timeline';
+import { UserService } from './services/user';
 import { UnitOfWork } from './unit-of-work';
 
 interface Services {

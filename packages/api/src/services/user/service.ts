@@ -1,19 +1,21 @@
-import { and, eq, schema } from '@cs/database';
+import {
+  and,
+  eq,
+  filterByDirection,
+  inclusionFilterOperator,
+  schema,
+  sortByDirection,
+} from '@cs/database';
 import type { UserRepository } from '@cs/database';
 import type { FindConfig } from '@cs/kyaku/types';
 import { Direction } from '@cs/kyaku/types';
 
-import {
-  filterByDirection,
-  inclusionFilterOperator,
-  sortByDirection,
-} from '../../../database/build-query';
-import type { UserFilters } from '../entities/user';
-import { UserSortField } from '../entities/user';
-import type { UnitOfWork } from '../unit-of-work';
-import { BaseService } from './base-service';
+import type { UnitOfWork } from '../../unit-of-work';
+import { BaseService } from '../base-service';
+import type { UserFilters } from './common';
+import { UserSortField } from './common';
 
-export default class UserService extends BaseService {
+export class UserService extends BaseService {
   private readonly userRepository: UserRepository;
 
   constructor({
@@ -70,7 +72,6 @@ export default class UserService extends BaseService {
     )
       return undefined;
 
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     if (config.sortBy === UserSortField.name) {
       return filterByDirection(config.direction)(
         schema.users.name,
@@ -93,7 +94,6 @@ export default class UserService extends BaseService {
   private getOrderByClause(config: FindConfig<object, UserSortField>) {
     if (!config.sortBy) return [];
 
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     if (config.sortBy === UserSortField.name) {
       return [sortByDirection(config.direction)(schema.users.name)];
     }

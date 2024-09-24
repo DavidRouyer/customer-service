@@ -4,7 +4,7 @@ import { TicketPriority, TicketStatus } from '@cs/kyaku/models';
 
 import { DoneTicketStatusDetail } from '../../../../kyaku/models/ticket';
 import type { UnitOfWork } from '../../unit-of-work';
-import TicketService from '../ticket';
+import { TicketService } from '../ticket';
 
 vi.mock('../../repositories/ticket-timeline');
 

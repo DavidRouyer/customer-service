@@ -7,8 +7,6 @@ import {
 } from '@cs/kyaku/utils';
 
 import { authorize } from '../../authorize';
-import { TicketSortField } from '../../entities/ticket';
-import type { TicketTimelineUnion } from '../../entities/ticket-timeline';
 import type {
   AssignmentChangedEntry,
   ChatEntry,
@@ -21,8 +19,9 @@ import type {
   Ticket,
   User,
 } from '../../generated-types/graphql';
-import type TicketService from '../../services/ticket';
-import type TicketTimelineService from '../../services/ticket-timeline';
+import type { TicketService } from '../../services/ticket';
+import type { TicketTimelineService } from '../../services/ticket-timeline';
+import { TicketSortField } from '../../services/ticket/common';
 import { mapCustomer } from '../customer/resolvers';
 import { handleErrors } from '../error';
 import { mapLabel } from '../label/resolvers';
@@ -76,7 +75,9 @@ const mapTimelineEntry = (
   };
 };
 
-const mapEntry = (entry: TicketTimelineUnion) => {
+const mapEntry = (
+  entry: Awaited<ReturnType<TicketTimelineService['list']>>[number]
+) => {
   switch (entry.type) {
     case TimelineEntryType.AssignmentChanged:
       return {
