@@ -40,7 +40,7 @@ export const TicketStatusDropdowm: FC<TicketChangeAssignmentProps> = ({
               <>
                 <CircleDot className="size-4 text-warning" />
                 <p className="text-xs text-muted-foreground">
-                  <FormattedMessage id="ticket.statuses.open" />
+                  <FormattedMessage id="ticket.statuses.todo" />
                 </p>
               </>
             ) : (
@@ -64,7 +64,7 @@ export const TicketStatusDropdowm: FC<TicketChangeAssignmentProps> = ({
             <div className="flex items-center gap-x-2">
               <CircleDot className="size-5 text-warning" />
               <p className="text-xs text-muted-foreground">
-                <FormattedMessage id="ticket.statuses.open" />
+                <FormattedMessage id="ticket.statuses.todo" />
               </p>
             </div>
           </DropdownMenuItem>
