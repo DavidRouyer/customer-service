@@ -13,7 +13,6 @@ import { FormattedMessage } from 'react-intl';
 import { messageModeAtom } from '~/components/messages/message-mode-atom';
 import editorConfig from '~/components/text-editor/editorConfig';
 import EmoticonPlugin from '~/components/text-editor/plugins/emoticon-plugin';
-import NewMentionsPlugin from '~/components/text-editor/plugins/mentions-plugin';
 import MyCustomAutoFocusPlugin from '~/components/text-editor/plugins/my-custom-auto-focus-plugin';
 import MyCustomCommandHandlerPlugin from '~/components/text-editor/plugins/my-custom-command-handler-plugin';
 import MyCustomOnChangePlugin from '~/components/text-editor/plugins/my-custom-on-change-plugin';
@@ -44,7 +43,6 @@ const TextEditor: FC<TextEditorProps> = ({ value, onChange }) => {
         <EmoticonPlugin />
         <ClearEditorPlugin />
         <MyCustomAutoFocusPlugin />
-        <NewMentionsPlugin />
         <MyCustomCommandHandlerPlugin />
       </div>
     </LexicalComposer>

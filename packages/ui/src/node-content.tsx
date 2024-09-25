@@ -30,12 +30,6 @@ const deserializeChildren = (children: SerializedLexicalNode[]) => {
 
 const dezerializeNode = (node: SerializedLexicalNode) => {
   switch (node.type) {
-    case 'mention':
-      return (
-        <span className="font-semibold text-foreground">
-          @{(node as SerializedTextNode).text}
-        </span>
-      );
     case 'linebreak':
       return <br />;
     case 'text':

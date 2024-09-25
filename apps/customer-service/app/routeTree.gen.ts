@@ -22,7 +22,6 @@ import { Route as AuthedLayoutUnassignedImport } from './routes/_authed/_layout.
 import { Route as AuthedLayoutSettingsImport } from './routes/_authed/_layout.settings'
 import { Route as AuthedLayoutReportsImport } from './routes/_authed/_layout.reports'
 import { Route as AuthedLayoutMyInboxImport } from './routes/_authed/_layout.my-inbox'
-import { Route as AuthedLayoutMentionsImport } from './routes/_authed/_layout.mentions'
 import { Route as AuthedTicketLayoutTicketIdImport } from './routes/_authed/ticket/_layout.$ticketId'
 
 // Create Virtual Routes
@@ -81,11 +80,6 @@ const AuthedLayoutMyInboxRoute = AuthedLayoutMyInboxImport.update({
   getParentRoute: () => AuthedLayoutRoute,
 } as any)
 
-const AuthedLayoutMentionsRoute = AuthedLayoutMentionsImport.update({
-  path: '/mentions',
-  getParentRoute: () => AuthedLayoutRoute,
-} as any)
-
 const AuthedTicketLayoutTicketIdRoute = AuthedTicketLayoutTicketIdImport.update(
   {
     path: '/$ticketId',
@@ -117,13 +111,6 @@ declare module '@tanstack/react-router' {
       fullPath: ''
       preLoaderRoute: typeof AuthedLayoutImport
       parentRoute: typeof AuthedImport
-    }
-    '/_authed/_layout/mentions': {
-      id: '/_authed/_layout/mentions'
-      path: '/mentions'
-      fullPath: '/mentions'
-      preLoaderRoute: typeof AuthedLayoutMentionsImport
-      parentRoute: typeof AuthedLayoutImport
     }
     '/_authed/_layout/my-inbox': {
       id: '/_authed/_layout/my-inbox'
@@ -187,7 +174,6 @@ declare module '@tanstack/react-router' {
 // Create and export the route tree
 
 interface AuthedLayoutRouteChildren {
-  AuthedLayoutMentionsRoute: typeof AuthedLayoutMentionsRoute
   AuthedLayoutMyInboxRoute: typeof AuthedLayoutMyInboxRoute
   AuthedLayoutReportsRoute: typeof AuthedLayoutReportsRoute
   AuthedLayoutSettingsRoute: typeof AuthedLayoutSettingsRoute
@@ -196,7 +182,6 @@ interface AuthedLayoutRouteChildren {
 }
 
 const AuthedLayoutRouteChildren: AuthedLayoutRouteChildren = {
-  AuthedLayoutMentionsRoute: AuthedLayoutMentionsRoute,
   AuthedLayoutMyInboxRoute: AuthedLayoutMyInboxRoute,
   AuthedLayoutReportsRoute: AuthedLayoutReportsRoute,
   AuthedLayoutSettingsRoute: AuthedLayoutSettingsRoute,
@@ -247,7 +232,6 @@ const AuthedRouteWithChildren =
 export interface FileRoutesByFullPath {
   '': typeof AuthedLayoutRouteWithChildren
   '/sign-in': typeof SignInRoute
-  '/mentions': typeof AuthedLayoutMentionsRoute
   '/my-inbox': typeof AuthedLayoutMyInboxRoute
   '/reports': typeof AuthedLayoutReportsRoute
   '/settings': typeof AuthedLayoutSettingsRoute
@@ -260,7 +244,6 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '': typeof AuthedRouteWithChildren
   '/sign-in': typeof SignInRoute
-  '/mentions': typeof AuthedLayoutMentionsRoute
   '/my-inbox': typeof AuthedLayoutMyInboxRoute
   '/reports': typeof AuthedLayoutReportsRoute
   '/settings': typeof AuthedLayoutSettingsRoute
@@ -275,7 +258,6 @@ export interface FileRoutesById {
   '/_authed': typeof AuthedRouteWithChildren
   '/sign-in': typeof SignInRoute
   '/_authed/_layout': typeof AuthedLayoutRouteWithChildren
-  '/_authed/_layout/mentions': typeof AuthedLayoutMentionsRoute
   '/_authed/_layout/my-inbox': typeof AuthedLayoutMyInboxRoute
   '/_authed/_layout/reports': typeof AuthedLayoutReportsRoute
   '/_authed/_layout/settings': typeof AuthedLayoutSettingsRoute
@@ -291,7 +273,6 @@ export interface FileRouteTypes {
   fullPaths:
     | ''
     | '/sign-in'
-    | '/mentions'
     | '/my-inbox'
     | '/reports'
     | '/settings'
@@ -303,7 +284,6 @@ export interface FileRouteTypes {
   to:
     | ''
     | '/sign-in'
-    | '/mentions'
     | '/my-inbox'
     | '/reports'
     | '/settings'
@@ -316,7 +296,6 @@ export interface FileRouteTypes {
     | '/_authed'
     | '/sign-in'
     | '/_authed/_layout'
-    | '/_authed/_layout/mentions'
     | '/_authed/_layout/my-inbox'
     | '/_authed/_layout/reports'
     | '/_authed/_layout/settings'
@@ -368,17 +347,12 @@ export const routeTree = rootRoute
       "filePath": "_authed/_layout.tsx",
       "parent": "/_authed",
       "children": [
-        "/_authed/_layout/mentions",
         "/_authed/_layout/my-inbox",
         "/_authed/_layout/reports",
         "/_authed/_layout/settings",
         "/_authed/_layout/unassigned",
         "/_authed/_layout/"
       ]
-    },
-    "/_authed/_layout/mentions": {
-      "filePath": "_authed/_layout.mentions.tsx",
-      "parent": "/_authed/_layout"
     },
     "/_authed/_layout/my-inbox": {
       "filePath": "_authed/_layout.my-inbox.tsx",

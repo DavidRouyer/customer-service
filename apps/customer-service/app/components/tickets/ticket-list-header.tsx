@@ -13,8 +13,6 @@ export const TicketListHeader = () => {
     inboxName = <FormattedMessage id="layout.tickets.my_tickets" />;
   } else if (searchParams.filter === TicketFilter.Unassigned) {
     inboxName = <FormattedMessage id="layout.tickets.unassigned_tickets" />;
-  } else if (searchParams.filter === TicketFilter.Mentions) {
-    inboxName = <FormattedMessage id="layout.tickets.mentions" />;
   } else {
     inboxName = <FormattedMessage id="layout.tickets.all_tickets" />;
   }

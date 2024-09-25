@@ -108,7 +108,3 @@
 .typeahead-popover .item.selected {
   @apply bg-accent text-accent-foreground;
 }
-
-.mentions-menu {
-  width: max-content;
-}

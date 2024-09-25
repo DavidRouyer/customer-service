@@ -37,6 +37,5 @@ export type TicketStatusDetail =
 export enum TicketFilter {
   All = 'all',
   Me = 'me',
-  Mentions = 'mentions',
   Unassigned = 'unassigned',
 }
