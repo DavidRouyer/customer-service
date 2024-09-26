@@ -4,17 +4,17 @@
   "private": true,
   "type": "module",
   "exports": {
-    "./editor": "./editor/index.ts",
-    "./models": "./models/index.ts",
-    "./types": "./types/index.ts",
-    "./utils": "./utils/index.ts"
+    "./editor": "./src/editor/index.ts",
+    "./models": "./src/models/index.ts",
+    "./types": "./src/types/index.ts",
+    "./utils": "./src/utils/index.ts"
   },
   "license": "MIT",
   "scripts": {
     "build": "tsc",
-    "clean": "rm -rf .turbo node_modules",
+    "clean": "git clean -xdf .cache .turbo node_modules",
     "lint": "eslint",
-    "format": "prettier --check \"**/*.{mjs,ts,md,json}\"",
+    "format": "prettier --check . --ignore-path ../../.gitignore",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {

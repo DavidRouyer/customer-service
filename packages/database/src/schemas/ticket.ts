@@ -1,14 +1,15 @@
 import { relations } from 'drizzle-orm';
 import { pgEnum, pgTable, timestamp, varchar } from 'drizzle-orm/pg-core';
 
-import { TicketPriority, TicketStatus } from '@kyaku/kyaku/models';
-import { generateEntityId } from '@kyaku/kyaku/utils';
-
 import {
   DoneTicketStatusDetail,
   SnoozeTicketStatusDetail,
+  TicketPriority,
+  TicketStatus,
   TodoTicketStatusDetail,
-} from '../../kyaku/models/ticket';
+} from '@kyaku/kyaku/models';
+
+import { generateEntityId } from '../../../kyaku/src/utils';
 import { users } from './auth';
 import { lifecycleFields } from './common';
 import { customers } from './customer';

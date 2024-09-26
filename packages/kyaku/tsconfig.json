@@ -1,10 +1,9 @@
 {
   "extends": "@kyaku/tsconfig/base.json",
   "compilerOptions": {
-    "lib": ["es2022", "ES2023.Array", "dom", "dom.iterable"],
-    "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json",
+    "lib": ["ES2022", "ES2023.Array", "dom", "dom.iterable"],
     "types": ["vitest/globals"]
   },
-  "include": ["."],
+  "include": ["src"],
   "exclude": ["node_modules"]
 }

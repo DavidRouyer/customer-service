@@ -1,5 +1,8 @@
-import { eq, schema } from '@kyaku/database';
-import type { InferSelectModel, TicketTimelineRepository } from '@kyaku/database';
+import { eq, schema, sortByDirection } from '@kyaku/database';
+import type {
+  InferSelectModel,
+  TicketTimelineRepository,
+} from '@kyaku/database';
 import type {
   TicketAssignmentChanged,
   TicketChat,
@@ -13,7 +16,6 @@ import { TimelineEntryType } from '@kyaku/kyaku/models';
 import type { FindConfig } from '@kyaku/kyaku/types';
 import { Direction } from '@kyaku/kyaku/types';
 
-import { sortByDirection } from '../../../../database/build-query';
 import type { UnitOfWork } from '../../unit-of-work';
 import { BaseService } from '../base-service';
 import type { TicketTimelineWith } from './common';

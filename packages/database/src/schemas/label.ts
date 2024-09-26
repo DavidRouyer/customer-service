@@ -1,8 +1,7 @@
 import { relations } from 'drizzle-orm';
 import { pgTable, timestamp, varchar } from 'drizzle-orm/pg-core';
 
-import { generateEntityId } from '@kyaku/kyaku/utils';
-
+import { generateEntityId } from '../../../kyaku/src/utils';
 import { labelTypes } from './label-type';
 import { tickets } from './ticket';
 

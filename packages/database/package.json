@@ -4,16 +4,16 @@
   "private": true,
   "type": "module",
   "exports": {
-    ".": "./index.ts"
+    ".": "./src/index.ts"
   },
   "license": "MIT",
   "scripts": {
     "build": "tsc",
     "db:push": "drizzle-kit push",
-    "db:seed": "dotenv -e ../../.env tsx seed.ts",
-    "clean": "rm -rf .turbo node_modules",
+    "db:seed": "dotenv -e ../../.env tsx src/seed.ts",
+    "clean": "git clean -xdf .cache .turbo node_modules",
     "lint": "eslint",
-    "format": "prettier --check \"**/*.{mjs,ts,md,json}\"",
+    "format": "prettier --check . --ignore-path ../../.gitignore",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {

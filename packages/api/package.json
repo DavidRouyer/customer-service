@@ -10,11 +10,11 @@
   "license": "MIT",
   "scripts": {
     "build": "tsc",
-    "clean": "rm -rf .turbo node_modules",
+    "clean": "git clean -xdf .cache .turbo node_modules",
     "codegen:graphql": "graphql-codegen",
     "codegen:graphql:watch": "graphql-codegen --watch",
     "lint": "eslint",
-    "format": "prettier --check \"**/*.{mjs,ts,md,json}\"",
+    "format": "prettier --check . --ignore-path ../../.gitignore",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {

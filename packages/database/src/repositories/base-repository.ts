@@ -1,4 +1,4 @@
-import type { DbConnection } from '@kyaku/database';
+import type { DbConnection } from '..';
 
 export abstract class BaseRepository {
   protected readonly dbConnection: DbConnection;

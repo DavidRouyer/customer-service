@@ -10,8 +10,8 @@ import type {
   TicketStatusChanged,
 } from '@kyaku/kyaku/models';
 import { TimelineEntryType } from '@kyaku/kyaku/models';
-import { generateEntityId } from '@kyaku/kyaku/utils';
 
+import { generateEntityId } from '../../../kyaku/src/utils';
 import { users } from './auth';
 import { customers } from './customer';
 import { tickets } from './ticket';

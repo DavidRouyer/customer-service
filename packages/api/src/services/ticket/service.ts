@@ -1,4 +1,12 @@
-import { and, eq, isNull, schema } from '@kyaku/database';
+import {
+  and,
+  eq,
+  filterByDirection,
+  inclusionFilterOperator,
+  isNull,
+  schema,
+  sortByDirection,
+} from '@kyaku/database';
 import type {
   InferInsertModel,
   InferSelectModel,
@@ -13,21 +21,17 @@ import type {
   TicketPriorityChanged,
   TicketStatusChanged,
 } from '@kyaku/kyaku/models';
-import { TicketStatus, TimelineEntryType } from '@kyaku/kyaku/models';
+import {
+  DoneTicketStatusDetail,
+  SnoozeTicketStatusDetail,
+  TicketStatus,
+  TimelineEntryType,
+  TodoTicketStatusDetail,
+} from '@kyaku/kyaku/models';
 import type { FindConfig, GetConfig } from '@kyaku/kyaku/types';
 import { Direction } from '@kyaku/kyaku/types';
 import { KyakuError } from '@kyaku/kyaku/utils';
 
-import {
-  filterByDirection,
-  inclusionFilterOperator,
-  sortByDirection,
-} from '../../../../database/build-query';
-import {
-  DoneTicketStatusDetail,
-  SnoozeTicketStatusDetail,
-  TodoTicketStatusDetail,
-} from '../../../../kyaku/models/ticket';
 import type { UnitOfWork } from '../../unit-of-work';
 import { BaseService } from '../base-service';
 import type { TicketFilters, TicketWith } from './common';

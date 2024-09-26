@@ -8,9 +8,9 @@ import {
   TicketStatus,
   TimelineEntryType,
 } from '@kyaku/kyaku/models';
-import { generateEntityId } from '@kyaku/kyaku/utils';
 
 import { dbConnection, eq, schema } from '.';
+import { generateEntityId } from '../../kyaku/src/utils';
 
 async function main() {
   let botUser = await dbConnection

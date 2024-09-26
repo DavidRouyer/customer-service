@@ -33,7 +33,7 @@ yarn-error.log*
 .env*.local
 
 # typescript
-*.tsbuildinfo
+.cache
 
 # turbo
 .turbo

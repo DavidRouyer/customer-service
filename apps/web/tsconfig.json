@@ -1,13 +1,12 @@
 {
   "extends": "@kyaku/tsconfig/base.json",
   "compilerOptions": {
-    "lib": ["es2022", "ES2023.Array", "dom", "dom.iterable"],
+    "lib": ["ES2022", "ES2023.Array", "dom", "dom.iterable"],
     "jsx": "react-jsx",
     "baseUrl": ".",
     "paths": {
       "~/*": ["./app/*"]
     },
-    "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json",
     "types": [
       "vinxi/client",
       "vitest/globals",

@@ -1,8 +1,7 @@
 import { GraphQLError } from 'graphql';
 
-import type { Cursor } from '@kyaku/kyaku/types';
-import { Direction } from '@kyaku/kyaku/types';
-
+import type { Cursor } from '../types';
+import { Direction } from '../types';
 import { base64, unbase64 } from './base64';
 
 export interface ConnectionArguments {

@@ -1,4 +1,14 @@
-import { and, eq, inArray, isNotNull, isNull, schema } from '@kyaku/database';
+import {
+  and,
+  eq,
+  filterByDirection,
+  inArray,
+  inclusionFilterOperator,
+  isNotNull,
+  isNull,
+  schema,
+  sortByDirection,
+} from '@kyaku/database';
 import type {
   LabelRepository,
   LabelTypeRepository,
@@ -11,11 +21,6 @@ import type { FindConfig, GetConfig } from '@kyaku/kyaku/types';
 import { Direction } from '@kyaku/kyaku/types';
 import { KyakuError } from '@kyaku/kyaku/utils';
 
-import {
-  filterByDirection,
-  inclusionFilterOperator,
-  sortByDirection,
-} from '../../../../database/build-query';
 import type { UnitOfWork } from '../../unit-of-work';
 import { BaseService } from '../base-service';
 import type { LabelFilters, LabelWith } from './common';

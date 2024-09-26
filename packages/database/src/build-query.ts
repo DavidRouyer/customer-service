@@ -5,9 +5,9 @@ import type {
   ExtractTablesWithRelations,
   GetColumnData,
   schema,
-} from '@kyaku/database';
-import { asc, desc, gt, inArray, lt, notInArray } from '@kyaku/database';
-import { Direction, SortDirection } from '@kyaku/kyaku/types';
+} from '.';
+import { asc, desc, gt, inArray, lt, notInArray } from '.';
+import { Direction, SortDirection } from '../../kyaku/src/types';
 
 type Schema = typeof schema;
 type TSchema = ExtractTablesWithRelations<Schema>;

@@ -1,11 +1,11 @@
 {
   "extends": "@kyaku/tsconfig/base.json",
   "compilerOptions": {
-    "lib": ["es2022", "ES2023.Array", "dom", "dom.iterable"],
+    "lib": ["ES2022", "ES2023.Array", "dom", "dom.iterable"],
     "jsx": "react-jsx",
-    "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json",
+    "rootDir": ".",
     "types": ["vitest/globals", "@testing-library/jest-dom/vitest"]
   },
-  "include": [".", ".vitest/setup.ts"],
+  "include": ["src", ".vitest/setup.ts"],
   "exclude": ["node_modules"]
 }

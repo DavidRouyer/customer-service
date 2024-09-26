@@ -1,5 +1,12 @@
 import type { TicketStatusDetail } from './ticket';
-import { TicketFilter, TicketPriority, TicketStatus } from './ticket';
+import {
+  DoneTicketStatusDetail,
+  SnoozeTicketStatusDetail,
+  TicketFilter,
+  TicketPriority,
+  TicketStatus,
+  TodoTicketStatusDetail,
+} from './ticket';
 import type {
   TicketAssignmentChanged,
   TicketAssignmentChangedWithData,
@@ -24,8 +31,11 @@ export {
   type TicketStatusChanged,
   type TicketStatusDetail,
   type User,
+  DoneTicketStatusDetail,
+  SnoozeTicketStatusDetail,
   TicketFilter,
   TicketPriority,
   TicketStatus,
   TimelineEntryType,
+  TodoTicketStatusDetail,
 };

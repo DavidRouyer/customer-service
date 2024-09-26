@@ -1,10 +1,5 @@
-import type {
-  InferInsertModel,
-  InferSelectModel,
-  KnownKeysOnly,
-} from '@kyaku/database';
-import { eq, schema } from '@kyaku/database';
-
+import type { InferInsertModel, InferSelectModel, KnownKeysOnly } from '..';
+import { eq, schema } from '..';
 import type { IncludeRelation } from '../build-query';
 import type { DbTransactionScope } from '../db-transaction';
 import { BaseRepository } from './base-repository';
