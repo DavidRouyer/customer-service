@@ -11,6 +11,7 @@
     { "pattern": "packages/*/" },
     { "pattern": "tooling/*/" }
   ],
+  "prettier.ignorePath": ".gitignore",
   "tailwindCSS.experimental.configFile": "./tooling/tailwind/index.ts",
   "typescript.enablePromptUseWorkspaceTsdk": true,
   "typescript.tsdk": "node_modules/typescript/lib"
