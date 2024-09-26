@@ -9,7 +9,7 @@ import type {
   SerializedTextNode,
 } from 'lexical';
 
-import type { SerializedEmojiNode } from '@cs/kyaku/editor';
+import type { SerializedEmojiNode } from '@kyaku/kyaku/editor';
 
 const deserializeChildren = (children: SerializedLexicalNode[]) => {
   const content: ReactNode[] = [];

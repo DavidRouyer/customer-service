@@ -1,7 +1,7 @@
-import { Timeline } from "@cs/ui/timeline";
-import { TimelineItem } from "@cs/ui/timeline-item";
+import { Timeline } from "@kyaku/ui/timeline";
+import { TimelineItem } from "@kyaku/ui/timeline-item";
 import type { Meta } from '@storybook/react';
-import { TicketPriority, TicketStatus } from '@cs/kyaku/models';
+import { TicketPriority, TicketStatus } from '@kyaku/kyaku/models';
 import { IntlProvider } from "react-intl";
 
 const meta = {

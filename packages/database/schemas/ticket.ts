@@ -1,8 +1,8 @@
 import { relations } from 'drizzle-orm';
 import { pgEnum, pgTable, timestamp, varchar } from 'drizzle-orm/pg-core';
 
-import { TicketPriority, TicketStatus } from '@cs/kyaku/models';
-import { generateEntityId } from '@cs/kyaku/utils';
+import { TicketPriority, TicketStatus } from '@kyaku/kyaku/models';
+import { generateEntityId } from '@kyaku/kyaku/utils';
 
 import {
   DoneTicketStatusDetail,

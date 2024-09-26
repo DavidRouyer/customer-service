@@ -2,7 +2,7 @@ import * as React from 'react';
 import type { LinkProps } from '@tanstack/react-router';
 import { Link } from '@tanstack/react-router';
 
-import { cn } from '@cs/ui';
+import { cn } from '@kyaku/ui';
 
 const Table = React.forwardRef<
   HTMLDivElement,

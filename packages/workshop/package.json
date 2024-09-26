@@ -10,16 +10,16 @@
     "lint": "eslint"
   },
   "dependencies": {
-    "@cs/kyaku": "*",
-    "@cs/ui": "*",
+    "@kyaku/kyaku": "*",
+    "@kyaku/ui": "*",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-intl": "^6.7.0"
   },
   "devDependencies": {
     "@chromatic-com/storybook": "^2.0.2",
-    "@cs/eslint-config": "*",
-    "@cs/prettier-config": "*",
+    "@kyaku/eslint-config": "*",
+    "@kyaku/prettier-config": "*",
     "@storybook/addon-essentials": "^8.3.3",
     "@storybook/addon-interactions": "^8.3.3",
     "@storybook/addon-links": "^8.3.3",

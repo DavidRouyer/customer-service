@@ -2,7 +2,7 @@ import type {
   InclusionFilterOperator,
   InferSelectModel,
   schema,
-} from '@cs/database';
+} from '@kyaku/database';
 
 type UserSelectModel = InferSelectModel<typeof schema.users>;
 

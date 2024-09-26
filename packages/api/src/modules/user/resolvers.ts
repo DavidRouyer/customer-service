@@ -1,7 +1,7 @@
 import {
   connectionFromArray,
   validatePaginationArguments,
-} from '@cs/kyaku/utils';
+} from '@kyaku/kyaku/utils';
 
 import { authorize } from '../../authorize';
 import type { Resolvers } from '../../generated-types/graphql';

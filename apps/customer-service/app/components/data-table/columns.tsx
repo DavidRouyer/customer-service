@@ -3,12 +3,12 @@
 import type { ColumnDef } from '@tanstack/react-table';
 import { CircleDashed } from 'lucide-react';
 
-import { getInitials } from '@cs/kyaku/utils';
-import { Avatar, AvatarFallback, AvatarImage } from '@cs/ui/avatar';
-import { Badge } from '@cs/ui/badge';
-import { Checkbox } from '@cs/ui/checkbox';
-import type { IconType } from '@cs/ui/icon';
-import { Icon } from '@cs/ui/icon';
+import { getInitials } from '@kyaku/kyaku/utils';
+import { Avatar, AvatarFallback, AvatarImage } from '@kyaku/ui/avatar';
+import { Badge } from '@kyaku/ui/badge';
+import { Checkbox } from '@kyaku/ui/checkbox';
+import type { IconType } from '@kyaku/ui/icon';
+import { Icon } from '@kyaku/ui/icon';
 
 import { TicketPriority } from '~/graphql/generated/client';
 import type { TicketsQuery } from '~/graphql/generated/client';

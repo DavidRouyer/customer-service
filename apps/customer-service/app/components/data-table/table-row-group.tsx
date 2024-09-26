@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { cn } from '@cs/ui';
+import { cn } from '@kyaku/ui';
 
 const TableRowGroup = React.forwardRef<
   HTMLDivElement,

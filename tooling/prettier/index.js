@@ -15,7 +15,7 @@ const config = {
     '^(react/(.*)$)|^(react$)',
     '<THIRD_PARTY_MODULES>',
     '',
-    '^@cs/(.*)$',
+    '^@kyaku/(.*)$',
     '',
     '^~/',
     '^[../]',

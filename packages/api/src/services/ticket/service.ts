@@ -1,10 +1,10 @@
-import { and, eq, isNull, schema } from '@cs/database';
+import { and, eq, isNull, schema } from '@kyaku/database';
 import type {
   InferInsertModel,
   InferSelectModel,
   TicketRepository,
   TicketTimelineRepository,
-} from '@cs/database';
+} from '@kyaku/database';
 import type {
   TicketAssignmentChanged,
   TicketChat,
@@ -12,11 +12,11 @@ import type {
   TicketPriority,
   TicketPriorityChanged,
   TicketStatusChanged,
-} from '@cs/kyaku/models';
-import { TicketStatus, TimelineEntryType } from '@cs/kyaku/models';
-import type { FindConfig, GetConfig } from '@cs/kyaku/types';
-import { Direction } from '@cs/kyaku/types';
-import { KyakuError } from '@cs/kyaku/utils';
+} from '@kyaku/kyaku/models';
+import { TicketStatus, TimelineEntryType } from '@kyaku/kyaku/models';
+import type { FindConfig, GetConfig } from '@kyaku/kyaku/types';
+import { Direction } from '@kyaku/kyaku/types';
+import { KyakuError } from '@kyaku/kyaku/utils';
 
 import {
   filterByDirection,

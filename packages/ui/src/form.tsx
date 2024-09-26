@@ -9,8 +9,8 @@ import {
   useFormState,
 } from 'react-hook-form';
 
-import { cn } from '@cs/ui';
-import { Label } from '@cs/ui/label';
+import { cn } from '@kyaku/ui';
+import { Label } from '@kyaku/ui/label';
 
 const Form = FormProvider;
 

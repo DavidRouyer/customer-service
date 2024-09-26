@@ -7,7 +7,7 @@ import { PartyPopper } from 'lucide-react';
 import { useInView } from 'react-intersection-observer';
 import { FormattedMessage } from 'react-intl';
 
-import type { TicketFilter, TicketStatus } from '@cs/kyaku/models';
+import type { TicketFilter, TicketStatus } from '@kyaku/kyaku/models';
 
 import { TicketListItem } from '~/components/tickets/ticket-list-item';
 import { useSuspenseInfiniteTicketsQuery } from '~/graphql/generated/client';

@@ -6,7 +6,7 @@ import { cva } from 'cva';
 import type { VariantProps } from 'cva';
 import { X } from 'lucide-react';
 
-import { cn } from '@cs/ui';
+import { cn } from '@kyaku/ui';
 
 const Sheet = SheetPrimitive.Root;
 

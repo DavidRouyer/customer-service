@@ -1,5 +1,5 @@
 {
-  "name": "@cs/api",
+  "name": "@kyaku/api",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -18,11 +18,11 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@cs/auth": "*",
-    "@cs/database": "*",
-    "@cs/kyaku": "*",
     "@graphql-tools/merge": "^9.0.7",
     "@graphql-tools/schema": "^10.0.6",
+    "@kyaku/auth": "*",
+    "@kyaku/database": "*",
+    "@kyaku/kyaku": "*",
     "@types/jsonwebtoken": "9.0.7",
     "awilix": "^11.0.0",
     "dataloader": "^2.2.2",
@@ -32,17 +32,17 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
-    "@cs/eslint-config": "*",
-    "@cs/prettier-config": "*",
-    "@cs/tsconfig": "*",
     "@graphql-codegen/cli": "^5.0.2",
     "@graphql-codegen/typescript": "^4.0.9",
     "@graphql-codegen/typescript-resolvers": "^4.2.1",
+    "@kyaku/eslint-config": "*",
+    "@kyaku/prettier-config": "*",
+    "@kyaku/tsconfig": "*",
     "@parcel/watcher": "^2.4.1",
     "eslint": "^9.11.1",
     "lexical": "^0.17.1",
     "prettier": "^3.3.3",
     "typescript": "^5.6.2"
   },
-  "prettier": "@cs/prettier-config"
+  "prettier": "@kyaku/prettier-config"
 }

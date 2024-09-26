@@ -1,7 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { z } from 'zod';
 
-import { TicketStatus } from '@cs/kyaku/models';
+import { TicketStatus } from '@kyaku/kyaku/models';
 
 import { TicketDataTable } from '~/components/data-table/ticket-data-table';
 

@@ -1,7 +1,7 @@
 import type { FC } from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import type { TicketPriorityChanged } from '@cs/kyaku/models';
+import type { TicketPriorityChanged } from '@kyaku/kyaku/models';
 
 import { RelativeTime } from './relative-time';
 import { TicketPriorityBadge } from './ticket-priority-badge';

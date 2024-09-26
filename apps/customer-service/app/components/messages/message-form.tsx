@@ -9,13 +9,13 @@ import { PaperclipIcon, SmilePlusIcon } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { FormattedMessage } from 'react-intl';
 
-import { parseTextFromEditorState } from '@cs/kyaku/editor';
-import type { TicketChat, TicketNote } from '@cs/kyaku/models';
-import { cn } from '@cs/ui';
-import { Button } from '@cs/ui/button';
-import { Form, FormField } from '@cs/ui/form';
-import { Label } from '@cs/ui/label';
-import { Switch } from '@cs/ui/switch';
+import { parseTextFromEditorState } from '@kyaku/kyaku/editor';
+import type { TicketChat, TicketNote } from '@kyaku/kyaku/models';
+import { cn } from '@kyaku/ui';
+import { Button } from '@kyaku/ui/button';
+import { Form, FormField } from '@kyaku/ui/form';
+import { Label } from '@kyaku/ui/label';
+import { Switch } from '@kyaku/ui/switch';
 
 import { messageModeAtom } from '~/components/messages/message-mode-atom';
 import TextEditor from '~/components/text-editor/text-editor';

@@ -5,10 +5,10 @@ import {
   inclusionFilterOperator,
   schema,
   sortByDirection,
-} from '@cs/database';
-import type { CustomerRepository, InferSelectModel } from '@cs/database';
-import type { FindConfig, GetConfig } from '@cs/kyaku/types';
-import { Direction } from '@cs/kyaku/types';
+} from '@kyaku/database';
+import type { CustomerRepository, InferSelectModel } from '@kyaku/database';
+import type { FindConfig, GetConfig } from '@kyaku/kyaku/types';
+import { Direction } from '@kyaku/kyaku/types';
 
 import type { UnitOfWork } from '../../unit-of-work';
 import { BaseService } from '../base-service';

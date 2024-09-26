@@ -1,7 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { useIntl } from 'react-intl';
 
-import { Button } from '@cs/ui/button';
+import { Button } from '@kyaku/ui/button';
 
 import { signIn } from '~/utils/sign-in';
 

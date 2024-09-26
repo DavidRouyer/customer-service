@@ -9,7 +9,7 @@ import {
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from '@cs/ui/accordion';
+} from '@kyaku/ui/accordion';
 
 import { CustomerInfo } from '~/components/infos/customer-info';
 import { LinkedTickets } from '~/components/infos/linked-tickets';

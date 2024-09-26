@@ -2,7 +2,7 @@
 
 import type { FC } from 'react';
 
-import { Timeline } from '@cs/ui/timeline';
+import { Timeline } from '@kyaku/ui/timeline';
 
 import { SmartTimelineItem } from '~/components/tickets/smart-timeline-item';
 import { useTimeline } from '~/components/tickets/use-timeline';

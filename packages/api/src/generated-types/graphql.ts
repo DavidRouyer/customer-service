@@ -1,5 +1,5 @@
 /* eslint-disable */
-import type { TicketStatusDetail } from '@cs/kyaku/models';
+import type { TicketStatusDetail } from '@kyaku/kyaku/models';
 import type { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
 import type { Context } from '../graphql';
 export type Maybe<T> = T | null;

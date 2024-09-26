@@ -1,5 +1,5 @@
 {
-  "name": "@cs/auth",
+  "name": "@kyaku/auth",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -17,8 +17,8 @@
   "dependencies": {
     "@auth/core": "^0.35.2",
     "@auth/drizzle-adapter": "^1.5.2",
-    "@cs/database": "*",
-    "@cs/kyaku": "*",
+    "@kyaku/database": "*",
+    "@kyaku/kyaku": "*",
     "bcrypt": "^5.1.1",
     "react": "18.3.1",
     "react-dom": "18.3.1",
@@ -26,13 +26,13 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
-    "@cs/eslint-config": "*",
-    "@cs/prettier-config": "*",
-    "@cs/tsconfig": "*",
+    "@kyaku/eslint-config": "*",
+    "@kyaku/prettier-config": "*",
+    "@kyaku/tsconfig": "*",
     "@types/bcrypt": "^5.0.2",
     "eslint": "^9.11.1",
     "prettier": "^3.3.3",
     "typescript": "^5.6.2"
   },
-  "prettier": "@cs/prettier-config"
+  "prettier": "@kyaku/prettier-config"
 }

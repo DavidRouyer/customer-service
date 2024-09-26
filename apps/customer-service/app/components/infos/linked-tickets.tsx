@@ -3,7 +3,7 @@
 import { Link, useParams } from '@tanstack/react-router';
 import { FormattedDate, FormattedMessage } from 'react-intl';
 
-import { Badge } from '@cs/ui/badge';
+import { Badge } from '@kyaku/ui/badge';
 
 import {
   TicketStatus,

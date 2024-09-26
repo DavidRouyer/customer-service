@@ -6,13 +6,13 @@ import {
   schema,
   TicketRepository,
   TicketTimelineRepository,
-} from '@cs/database';
-import type { LabelRepository } from '@cs/database';
+} from '@kyaku/database';
+import type { LabelRepository } from '@kyaku/database';
 
 import type { UnitOfWork } from '../../unit-of-work';
 import { LabelService } from '../label';
 
-vi.mock('@cs/database', async (importOriginal) => ({
+vi.mock('@kyaku/database', async (importOriginal) => ({
   ...(await importOriginal()),
   LabelTypeRepository: class LabelTypeRepository {},
   TicketRepository: class TicketRepository {},

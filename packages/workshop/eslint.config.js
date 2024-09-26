@@ -1,4 +1,4 @@
-import baseConfig from '@cs/eslint-config/base';
+import baseConfig from '@kyaku/eslint-config/base';
 import storybook from 'eslint-plugin-storybook'
 
 /** @type {import('@typescript-eslint/utils').TSESLint.FlatConfig.ConfigArray} */

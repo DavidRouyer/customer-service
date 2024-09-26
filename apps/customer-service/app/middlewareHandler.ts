@@ -1,7 +1,7 @@
 import type { AnyRouter } from '@tanstack/react-router';
 import type { EventHandler } from 'vinxi/http';
 
-import { authOptions } from '@cs/auth';
+import { authOptions } from '@kyaku/auth';
 
 import { authenticateRequest } from './authenticateRequest';
 

@@ -1,6 +1,6 @@
 import { useQueryClient } from '@tanstack/react-query';
 
-import { TicketStatus } from '@cs/kyaku/models';
+import { TicketStatus } from '@kyaku/kyaku/models';
 
 import type { TicketQuery } from '~/graphql/generated/client';
 import {

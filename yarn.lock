@@ -765,244 +765,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@cs/api@npm:*, @cs/api@workspace:packages/api":
-  version: 0.0.0-use.local
-  resolution: "@cs/api@workspace:packages/api"
-  dependencies:
-    "@cs/auth": "npm:*"
-    "@cs/database": "npm:*"
-    "@cs/eslint-config": "npm:*"
-    "@cs/kyaku": "npm:*"
-    "@cs/prettier-config": "npm:*"
-    "@cs/tsconfig": "npm:*"
-    "@graphql-codegen/cli": "npm:^5.0.2"
-    "@graphql-codegen/typescript": "npm:^4.0.9"
-    "@graphql-codegen/typescript-resolvers": "npm:^4.2.1"
-    "@graphql-tools/merge": "npm:^9.0.7"
-    "@graphql-tools/schema": "npm:^10.0.6"
-    "@parcel/watcher": "npm:^2.4.1"
-    "@types/jsonwebtoken": "npm:9.0.7"
-    awilix: "npm:^11.0.0"
-    dataloader: "npm:^2.2.2"
-    eslint: "npm:^9.11.1"
-    graphql: "npm:^16.9.0"
-    graphql-scalars: "npm:^1.23.0"
-    jsonwebtoken: "npm:9.0.2"
-    lexical: "npm:^0.17.1"
-    prettier: "npm:^3.3.3"
-    typescript: "npm:^5.6.2"
-    zod: "npm:^3.23.8"
-  languageName: unknown
-  linkType: soft
-
-"@cs/auth@npm:*, @cs/auth@workspace:packages/auth":
-  version: 0.0.0-use.local
-  resolution: "@cs/auth@workspace:packages/auth"
-  dependencies:
-    "@auth/core": "npm:^0.35.2"
-    "@auth/drizzle-adapter": "npm:^1.5.2"
-    "@cs/database": "npm:*"
-    "@cs/eslint-config": "npm:*"
-    "@cs/kyaku": "npm:*"
-    "@cs/prettier-config": "npm:*"
-    "@cs/tsconfig": "npm:*"
-    "@types/bcrypt": "npm:^5.0.2"
-    bcrypt: "npm:^5.1.1"
-    eslint: "npm:^9.11.1"
-    prettier: "npm:^3.3.3"
-    react: "npm:18.3.1"
-    react-dom: "npm:18.3.1"
-    typescript: "npm:^5.6.2"
-    vinxi: "npm:^0.4.3"
-    zod: "npm:^3.23.8"
-  languageName: unknown
-  linkType: soft
-
-"@cs/customer-service@workspace:apps/customer-service":
-  version: 0.0.0-use.local
-  resolution: "@cs/customer-service@workspace:apps/customer-service"
-  dependencies:
-    "@cs/api": "npm:*"
-    "@cs/auth": "npm:*"
-    "@cs/database": "npm:*"
-    "@cs/eslint-config": "npm:*"
-    "@cs/kyaku": "npm:*"
-    "@cs/prettier-config": "npm:*"
-    "@cs/tailwind-config": "npm:*"
-    "@cs/tsconfig": "npm:*"
-    "@cs/ui": "npm:*"
-    "@graphql-codegen/cli": "npm:^5.0.2"
-    "@graphql-codegen/typescript": "npm:^4.0.9"
-    "@graphql-codegen/typescript-react-query": "npm:^6.1.0"
-    "@lexical/react": "npm:^0.17.1"
-    "@tanstack/react-query": "npm:^5.56.2"
-    "@tanstack/react-query-devtools": "npm:^5.58.0"
-    "@tanstack/react-router": "npm:^1.58.9"
-    "@tanstack/react-router-with-query": "npm:^1.58.9"
-    "@tanstack/react-table": "npm:^8.20.5"
-    "@tanstack/router-devtools": "npm:^1.58.9"
-    "@tanstack/router-plugin": "npm:^1.58.4"
-    "@tanstack/start": "npm:^1.58.9"
-    "@testing-library/jest-dom": "npm:^6.5.0"
-    "@testing-library/react": "npm:^16.0.1"
-    "@types/google-libphonenumber": "npm:^7.4.30"
-    "@types/negotiator": "npm:^0.6.3"
-    "@types/node": "npm:^22.7.0"
-    "@types/react": "npm:^18.3.9"
-    "@types/react-dom": "npm:^18.3.0"
-    "@vitejs/plugin-react": "npm:^4.3.1"
-    autoprefixer: "npm:^10.4.20"
-    dotenv-cli: "npm:^7.4.2"
-    eslint: "npm:^9.11.1"
-    google-libphonenumber: "npm:^3.2.38"
-    graphql: "npm:^16.9.0"
-    graphql-yoga: "npm:^5.7.0"
-    jotai: "npm:^2.10.0"
-    jsdom: "npm:^25.0.1"
-    lexical: "npm:^0.17.1"
-    lucide-react: "npm:^0.446.0"
-    react: "npm:^18.3.1"
-    react-dom: "npm:^18.3.1"
-    react-hook-form: "npm:^7.53.0"
-    react-intersection-observer: "npm:^9.13.1"
-    react-intl: "npm:^6.7.0"
-    rollup-plugin-copy: "npm:^3.5.0"
-    superjson: "npm:^2.2.1"
-    tailwindcss: "npm:^3.4.13"
-    vinxi: "npm:^0.4.3"
-    vite-tsconfig-paths: "npm:^5.0.1"
-    zod: "npm:^3.23.8"
-  languageName: unknown
-  linkType: soft
-
-"@cs/database@npm:*, @cs/database@workspace:packages/database":
-  version: 0.0.0-use.local
-  resolution: "@cs/database@workspace:packages/database"
-  dependencies:
-    "@cs/eslint-config": "npm:*"
-    "@cs/kyaku": "npm:*"
-    "@cs/prettier-config": "npm:*"
-    "@cs/tsconfig": "npm:*"
-    "@types/pg": "npm:^8.11.10"
-    "@types/ws": "npm:^8.5.12"
-    dotenv-cli: "npm:^7.4.2"
-    drizzle-kit: "npm:^0.24.2"
-    drizzle-orm: "npm:^0.33.0"
-    eslint: "npm:^9.11.1"
-    lexical: "npm:^0.17.1"
-    pg: "npm:^8.13.0"
-    prettier: "npm:^3.3.3"
-    tsx: "npm:^4.19.1"
-    typescript: "npm:^5.6.2"
-  languageName: unknown
-  linkType: soft
-
-"@cs/eslint-config@npm:*, @cs/eslint-config@workspace:tooling/eslint":
-  version: 0.0.0-use.local
-  resolution: "@cs/eslint-config@workspace:tooling/eslint"
-  dependencies:
-    "@cs/prettier-config": "npm:*"
-    "@cs/tsconfig": "npm:*"
-    "@graphql-eslint/eslint-plugin": "npm:4.0.0-alpha.4"
-    "@typescript-eslint/eslint-plugin": "npm:^8.7.0"
-    "@typescript-eslint/parser": "npm:^8.7.0"
-    eslint: "npm:^9.11.1"
-    eslint-plugin-import: "npm:^2.30.0"
-    eslint-plugin-jsx-a11y: "npm:^6.10.0"
-    eslint-plugin-react: "npm:^7.36.1"
-    eslint-plugin-react-hooks: "npm:beta"
-    eslint-plugin-tailwindcss: "npm:^3.17.4"
-    eslint-plugin-turbo: "npm:^2.1.2"
-    typescript: "npm:^5.6.2"
-    typescript-eslint: "npm:^8.7.0"
-  languageName: unknown
-  linkType: soft
-
-"@cs/kyaku@npm:*, @cs/kyaku@workspace:packages/kyaku":
-  version: 0.0.0-use.local
-  resolution: "@cs/kyaku@workspace:packages/kyaku"
-  dependencies:
-    "@cs/eslint-config": "npm:*"
-    "@cs/prettier-config": "npm:*"
-    "@cs/tsconfig": "npm:*"
-    "@lexical/headless": "npm:^0.17.1"
-    eslint: "npm:^9.11.1"
-    lexical: "npm:^0.17.1"
-    prettier: "npm:^3.3.3"
-    typescript: "npm:^5.6.2"
-    ulid: "npm:^2.3.0"
-  languageName: unknown
-  linkType: soft
-
-"@cs/prettier-config@npm:*, @cs/prettier-config@workspace:tooling/prettier":
-  version: 0.0.0-use.local
-  resolution: "@cs/prettier-config@workspace:tooling/prettier"
-  dependencies:
-    "@cs/tsconfig": "npm:*"
-    "@ianvs/prettier-plugin-sort-imports": "npm:^4.3.1"
-    prettier: "npm:^3.3.3"
-    prettier-plugin-tailwindcss: "npm:^0.6.8"
-    typescript: "npm:^5.6.2"
-  languageName: unknown
-  linkType: soft
-
-"@cs/tailwind-config@npm:*, @cs/tailwind-config@workspace:tooling/tailwind":
-  version: 0.0.0-use.local
-  resolution: "@cs/tailwind-config@workspace:tooling/tailwind"
-  dependencies:
-    "@cs/eslint-config": "npm:*"
-    "@cs/prettier-config": "npm:*"
-    "@cs/tsconfig": "npm:*"
-    eslint: "npm:^9.11.1"
-    postcss: "npm:^8.4.47"
-    prettier: "npm:^3.3.3"
-    tailwindcss: "npm:^3.4.13"
-    tailwindcss-animate: "npm:^1.0.7"
-    typescript: "npm:^5.6.2"
-  languageName: unknown
-  linkType: soft
-
-"@cs/tsconfig@npm:*, @cs/tsconfig@workspace:tooling/typescript":
-  version: 0.0.0-use.local
-  resolution: "@cs/tsconfig@workspace:tooling/typescript"
-  languageName: unknown
-  linkType: soft
-
-"@cs/ui@npm:*, @cs/ui@workspace:packages/ui":
-  version: 0.0.0-use.local
-  resolution: "@cs/ui@workspace:packages/ui"
-  dependencies:
-    "@cs/eslint-config": "npm:*"
-    "@cs/prettier-config": "npm:*"
-    "@cs/tsconfig": "npm:*"
-    "@radix-ui/react-accordion": "npm:^1.2.0"
-    "@radix-ui/react-avatar": "npm:^1.1.0"
-    "@radix-ui/react-checkbox": "npm:^1.1.1"
-    "@radix-ui/react-dialog": "npm:^1.1.1"
-    "@radix-ui/react-dropdown-menu": "npm:^2.1.1"
-    "@radix-ui/react-label": "npm:^2.1.0"
-    "@radix-ui/react-popover": "npm:^1.1.1"
-    "@radix-ui/react-radio-group": "npm:^1.2.0"
-    "@radix-ui/react-select": "npm:^2.1.1"
-    "@radix-ui/react-separator": "npm:^1.1.0"
-    "@radix-ui/react-slot": "npm:^1.1.0"
-    "@radix-ui/react-switch": "npm:^1.1.0"
-    "@radix-ui/react-tooltip": "npm:^1.1.2"
-    "@testing-library/jest-dom": "npm:^6.5.0"
-    "@testing-library/react": "npm:^16.0.1"
-    "@types/react": "npm:^18.3.9"
-    "@types/react-dom": "npm:^18.3.0"
-    cmdk: "npm:^1.0.0"
-    copy-to-clipboard: "npm:^3.3.3"
-    cva: "npm:1.0.0-beta.1"
-    eslint: "npm:^9.11.1"
-    lucide-react: "npm:^0.446.0"
-    react: "npm:^18.3.1"
-    react-dom: "npm:^18.3.1"
-    tailwind-merge: "npm:^2.5.2"
-  languageName: unknown
-  linkType: soft
-
 "@deno/shim-deno-test@npm:^0.5.0":
   version: 0.5.0
   resolution: "@deno/shim-deno-test@npm:0.5.0"
@@ -2991,6 +2753,244 @@ __metadata:
   checksum: 10c0/2c85202cb4924720ac812c8bc06967fd5df4db759a68aa3acc2962b8cf9e2b3bc131de863f00473c0b0602df13891b35140f667a87eea04c9b897b6c1ae89c4a
   languageName: node
   linkType: hard
+
+"@kyaku/api@npm:*, @kyaku/api@workspace:packages/api":
+  version: 0.0.0-use.local
+  resolution: "@kyaku/api@workspace:packages/api"
+  dependencies:
+    "@graphql-codegen/cli": "npm:^5.0.2"
+    "@graphql-codegen/typescript": "npm:^4.0.9"
+    "@graphql-codegen/typescript-resolvers": "npm:^4.2.1"
+    "@graphql-tools/merge": "npm:^9.0.7"
+    "@graphql-tools/schema": "npm:^10.0.6"
+    "@kyaku/auth": "npm:*"
+    "@kyaku/database": "npm:*"
+    "@kyaku/eslint-config": "npm:*"
+    "@kyaku/kyaku": "npm:*"
+    "@kyaku/prettier-config": "npm:*"
+    "@kyaku/tsconfig": "npm:*"
+    "@parcel/watcher": "npm:^2.4.1"
+    "@types/jsonwebtoken": "npm:9.0.7"
+    awilix: "npm:^11.0.0"
+    dataloader: "npm:^2.2.2"
+    eslint: "npm:^9.11.1"
+    graphql: "npm:^16.9.0"
+    graphql-scalars: "npm:^1.23.0"
+    jsonwebtoken: "npm:9.0.2"
+    lexical: "npm:^0.17.1"
+    prettier: "npm:^3.3.3"
+    typescript: "npm:^5.6.2"
+    zod: "npm:^3.23.8"
+  languageName: unknown
+  linkType: soft
+
+"@kyaku/auth@npm:*, @kyaku/auth@workspace:packages/auth":
+  version: 0.0.0-use.local
+  resolution: "@kyaku/auth@workspace:packages/auth"
+  dependencies:
+    "@auth/core": "npm:^0.35.2"
+    "@auth/drizzle-adapter": "npm:^1.5.2"
+    "@kyaku/database": "npm:*"
+    "@kyaku/eslint-config": "npm:*"
+    "@kyaku/kyaku": "npm:*"
+    "@kyaku/prettier-config": "npm:*"
+    "@kyaku/tsconfig": "npm:*"
+    "@types/bcrypt": "npm:^5.0.2"
+    bcrypt: "npm:^5.1.1"
+    eslint: "npm:^9.11.1"
+    prettier: "npm:^3.3.3"
+    react: "npm:18.3.1"
+    react-dom: "npm:18.3.1"
+    typescript: "npm:^5.6.2"
+    vinxi: "npm:^0.4.3"
+    zod: "npm:^3.23.8"
+  languageName: unknown
+  linkType: soft
+
+"@kyaku/customer-service@workspace:apps/customer-service":
+  version: 0.0.0-use.local
+  resolution: "@kyaku/customer-service@workspace:apps/customer-service"
+  dependencies:
+    "@graphql-codegen/cli": "npm:^5.0.2"
+    "@graphql-codegen/typescript": "npm:^4.0.9"
+    "@graphql-codegen/typescript-react-query": "npm:^6.1.0"
+    "@kyaku/api": "npm:*"
+    "@kyaku/auth": "npm:*"
+    "@kyaku/database": "npm:*"
+    "@kyaku/eslint-config": "npm:*"
+    "@kyaku/kyaku": "npm:*"
+    "@kyaku/prettier-config": "npm:*"
+    "@kyaku/tailwind-config": "npm:*"
+    "@kyaku/tsconfig": "npm:*"
+    "@kyaku/ui": "npm:*"
+    "@lexical/react": "npm:^0.17.1"
+    "@tanstack/react-query": "npm:^5.56.2"
+    "@tanstack/react-query-devtools": "npm:^5.58.0"
+    "@tanstack/react-router": "npm:^1.58.9"
+    "@tanstack/react-router-with-query": "npm:^1.58.9"
+    "@tanstack/react-table": "npm:^8.20.5"
+    "@tanstack/router-devtools": "npm:^1.58.9"
+    "@tanstack/router-plugin": "npm:^1.58.4"
+    "@tanstack/start": "npm:^1.58.9"
+    "@testing-library/jest-dom": "npm:^6.5.0"
+    "@testing-library/react": "npm:^16.0.1"
+    "@types/google-libphonenumber": "npm:^7.4.30"
+    "@types/negotiator": "npm:^0.6.3"
+    "@types/node": "npm:^22.7.0"
+    "@types/react": "npm:^18.3.9"
+    "@types/react-dom": "npm:^18.3.0"
+    "@vitejs/plugin-react": "npm:^4.3.1"
+    autoprefixer: "npm:^10.4.20"
+    dotenv-cli: "npm:^7.4.2"
+    eslint: "npm:^9.11.1"
+    google-libphonenumber: "npm:^3.2.38"
+    graphql: "npm:^16.9.0"
+    graphql-yoga: "npm:^5.7.0"
+    jotai: "npm:^2.10.0"
+    jsdom: "npm:^25.0.1"
+    lexical: "npm:^0.17.1"
+    lucide-react: "npm:^0.446.0"
+    react: "npm:^18.3.1"
+    react-dom: "npm:^18.3.1"
+    react-hook-form: "npm:^7.53.0"
+    react-intersection-observer: "npm:^9.13.1"
+    react-intl: "npm:^6.7.0"
+    rollup-plugin-copy: "npm:^3.5.0"
+    superjson: "npm:^2.2.1"
+    tailwindcss: "npm:^3.4.13"
+    vinxi: "npm:^0.4.3"
+    vite-tsconfig-paths: "npm:^5.0.1"
+    zod: "npm:^3.23.8"
+  languageName: unknown
+  linkType: soft
+
+"@kyaku/database@npm:*, @kyaku/database@workspace:packages/database":
+  version: 0.0.0-use.local
+  resolution: "@kyaku/database@workspace:packages/database"
+  dependencies:
+    "@kyaku/eslint-config": "npm:*"
+    "@kyaku/kyaku": "npm:*"
+    "@kyaku/prettier-config": "npm:*"
+    "@kyaku/tsconfig": "npm:*"
+    "@types/pg": "npm:^8.11.10"
+    "@types/ws": "npm:^8.5.12"
+    dotenv-cli: "npm:^7.4.2"
+    drizzle-kit: "npm:^0.24.2"
+    drizzle-orm: "npm:^0.33.0"
+    eslint: "npm:^9.11.1"
+    lexical: "npm:^0.17.1"
+    pg: "npm:^8.13.0"
+    prettier: "npm:^3.3.3"
+    tsx: "npm:^4.19.1"
+    typescript: "npm:^5.6.2"
+  languageName: unknown
+  linkType: soft
+
+"@kyaku/eslint-config@npm:*, @kyaku/eslint-config@workspace:tooling/eslint":
+  version: 0.0.0-use.local
+  resolution: "@kyaku/eslint-config@workspace:tooling/eslint"
+  dependencies:
+    "@graphql-eslint/eslint-plugin": "npm:4.0.0-alpha.4"
+    "@kyaku/prettier-config": "npm:*"
+    "@kyaku/tsconfig": "npm:*"
+    "@typescript-eslint/eslint-plugin": "npm:^8.7.0"
+    "@typescript-eslint/parser": "npm:^8.7.0"
+    eslint: "npm:^9.11.1"
+    eslint-plugin-import: "npm:^2.30.0"
+    eslint-plugin-jsx-a11y: "npm:^6.10.0"
+    eslint-plugin-react: "npm:^7.36.1"
+    eslint-plugin-react-hooks: "npm:beta"
+    eslint-plugin-tailwindcss: "npm:^3.17.4"
+    eslint-plugin-turbo: "npm:^2.1.2"
+    typescript: "npm:^5.6.2"
+    typescript-eslint: "npm:^8.7.0"
+  languageName: unknown
+  linkType: soft
+
+"@kyaku/kyaku@npm:*, @kyaku/kyaku@workspace:packages/kyaku":
+  version: 0.0.0-use.local
+  resolution: "@kyaku/kyaku@workspace:packages/kyaku"
+  dependencies:
+    "@kyaku/eslint-config": "npm:*"
+    "@kyaku/prettier-config": "npm:*"
+    "@kyaku/tsconfig": "npm:*"
+    "@lexical/headless": "npm:^0.17.1"
+    eslint: "npm:^9.11.1"
+    lexical: "npm:^0.17.1"
+    prettier: "npm:^3.3.3"
+    typescript: "npm:^5.6.2"
+    ulid: "npm:^2.3.0"
+  languageName: unknown
+  linkType: soft
+
+"@kyaku/prettier-config@npm:*, @kyaku/prettier-config@workspace:tooling/prettier":
+  version: 0.0.0-use.local
+  resolution: "@kyaku/prettier-config@workspace:tooling/prettier"
+  dependencies:
+    "@ianvs/prettier-plugin-sort-imports": "npm:^4.3.1"
+    "@kyaku/tsconfig": "npm:*"
+    prettier: "npm:^3.3.3"
+    prettier-plugin-tailwindcss: "npm:^0.6.8"
+    typescript: "npm:^5.6.2"
+  languageName: unknown
+  linkType: soft
+
+"@kyaku/tailwind-config@npm:*, @kyaku/tailwind-config@workspace:tooling/tailwind":
+  version: 0.0.0-use.local
+  resolution: "@kyaku/tailwind-config@workspace:tooling/tailwind"
+  dependencies:
+    "@kyaku/eslint-config": "npm:*"
+    "@kyaku/prettier-config": "npm:*"
+    "@kyaku/tsconfig": "npm:*"
+    eslint: "npm:^9.11.1"
+    postcss: "npm:^8.4.47"
+    prettier: "npm:^3.3.3"
+    tailwindcss: "npm:^3.4.13"
+    tailwindcss-animate: "npm:^1.0.7"
+    typescript: "npm:^5.6.2"
+  languageName: unknown
+  linkType: soft
+
+"@kyaku/tsconfig@npm:*, @kyaku/tsconfig@workspace:tooling/typescript":
+  version: 0.0.0-use.local
+  resolution: "@kyaku/tsconfig@workspace:tooling/typescript"
+  languageName: unknown
+  linkType: soft
+
+"@kyaku/ui@npm:*, @kyaku/ui@workspace:packages/ui":
+  version: 0.0.0-use.local
+  resolution: "@kyaku/ui@workspace:packages/ui"
+  dependencies:
+    "@kyaku/eslint-config": "npm:*"
+    "@kyaku/prettier-config": "npm:*"
+    "@kyaku/tsconfig": "npm:*"
+    "@radix-ui/react-accordion": "npm:^1.2.0"
+    "@radix-ui/react-avatar": "npm:^1.1.0"
+    "@radix-ui/react-checkbox": "npm:^1.1.1"
+    "@radix-ui/react-dialog": "npm:^1.1.1"
+    "@radix-ui/react-dropdown-menu": "npm:^2.1.1"
+    "@radix-ui/react-label": "npm:^2.1.0"
+    "@radix-ui/react-popover": "npm:^1.1.1"
+    "@radix-ui/react-radio-group": "npm:^1.2.0"
+    "@radix-ui/react-select": "npm:^2.1.1"
+    "@radix-ui/react-separator": "npm:^1.1.0"
+    "@radix-ui/react-slot": "npm:^1.1.0"
+    "@radix-ui/react-switch": "npm:^1.1.0"
+    "@radix-ui/react-tooltip": "npm:^1.1.2"
+    "@testing-library/jest-dom": "npm:^6.5.0"
+    "@testing-library/react": "npm:^16.0.1"
+    "@types/react": "npm:^18.3.9"
+    "@types/react-dom": "npm:^18.3.0"
+    cmdk: "npm:^1.0.0"
+    copy-to-clipboard: "npm:^3.3.3"
+    cva: "npm:1.0.0-beta.1"
+    eslint: "npm:^9.11.1"
+    lucide-react: "npm:^0.446.0"
+    react: "npm:^18.3.1"
+    react-dom: "npm:^18.3.1"
+    tailwind-merge: "npm:^2.5.2"
+  languageName: unknown
+  linkType: soft
 
 "@lexical/clipboard@npm:0.17.1":
   version: 0.17.1
@@ -14869,7 +14869,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "root@workspace:."
   dependencies:
-    "@cs/prettier-config": "npm:*"
+    "@kyaku/prettier-config": "npm:*"
     "@vitejs/plugin-react": "npm:^4.3.1"
     "@vitest/coverage-v8": "npm:^2.1.1"
     "@vitest/ui": "npm:^2.1.1"
@@ -17144,10 +17144,10 @@ __metadata:
   resolution: "workshop@workspace:packages/workshop"
   dependencies:
     "@chromatic-com/storybook": "npm:^2.0.2"
-    "@cs/eslint-config": "npm:*"
-    "@cs/kyaku": "npm:*"
-    "@cs/prettier-config": "npm:*"
-    "@cs/ui": "npm:*"
+    "@kyaku/eslint-config": "npm:*"
+    "@kyaku/kyaku": "npm:*"
+    "@kyaku/prettier-config": "npm:*"
+    "@kyaku/ui": "npm:*"
     "@storybook/addon-essentials": "npm:^8.3.3"
     "@storybook/addon-interactions": "npm:^8.3.3"
     "@storybook/addon-links": "npm:^8.3.3"

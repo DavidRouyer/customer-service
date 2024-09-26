@@ -2,7 +2,7 @@ import type { FC } from 'react';
 import { EyeOff } from 'lucide-react';
 import { FormattedMessage } from 'react-intl';
 
-import { getInitials } from '@cs/kyaku/utils';
+import { getInitials } from '@kyaku/kyaku/utils';
 
 import { Avatar, AvatarFallback, AvatarImage } from './avatar';
 import { NodeContent } from './node-content';

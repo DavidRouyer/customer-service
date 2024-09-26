@@ -1,4 +1,4 @@
-import type { DbConnection } from '@cs/database';
+import type { DbConnection } from '@kyaku/database';
 
 import type { DbTransactionScope } from '../../database/db-transaction';
 

@@ -1,6 +1,6 @@
 import type { FC } from 'react';
 
-import { getInitials } from '@cs/kyaku/utils';
+import { getInitials } from '@kyaku/kyaku/utils';
 
 import { Avatar, AvatarFallback, AvatarImage } from './avatar';
 import { RelativeTime } from './relative-time';

@@ -3,8 +3,8 @@ import { Link, useRouteContext } from '@tanstack/react-router';
 import { BarChart3, BookmarkX, Users } from 'lucide-react';
 import { FormattedMessage } from 'react-intl';
 
-import { getInitials } from '@cs/kyaku/utils';
-import { Avatar, AvatarFallback, AvatarImage } from '@cs/ui/avatar';
+import { getInitials } from '@kyaku/kyaku/utils';
+import { Avatar, AvatarFallback, AvatarImage } from '@kyaku/ui/avatar';
 
 export const InboxList: FC = () => {
   const { session } = useRouteContext({ from: '__root__' });

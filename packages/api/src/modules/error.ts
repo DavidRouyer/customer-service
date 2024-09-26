@@ -1,8 +1,8 @@
 import { GraphQLError } from 'graphql';
 import { ZodError } from 'zod';
 
-import { DrizzleError } from '@cs/database';
-import { KyakuError, KyakuErrorTypes } from '@cs/kyaku/utils';
+import { DrizzleError } from '@kyaku/database';
+import { KyakuError, KyakuErrorTypes } from '@kyaku/kyaku/utils';
 
 export const handleErrors = (error: unknown) => {
   if (error instanceof KyakuError) {

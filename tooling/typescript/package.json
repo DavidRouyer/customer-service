@@ -1,5 +1,5 @@
 {
-  "name": "@cs/tsconfig",
+  "name": "@kyaku/tsconfig",
   "version": "0.0.0",
   "private": true,
   "license": "MIT",

@@ -5,14 +5,14 @@ import { useNavigate } from '@tanstack/react-router';
 import { ChevronDown } from 'lucide-react';
 import { FormattedMessage } from 'react-intl';
 
-import { Button } from '@cs/ui/button';
+import { Button } from '@kyaku/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@cs/ui/dropdown-menu';
+} from '@kyaku/ui/dropdown-menu';
 
 import { Route } from '~/routes/_authed/ticket/_layout';
 

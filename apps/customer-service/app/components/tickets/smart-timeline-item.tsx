@@ -1,6 +1,6 @@
 import type { FC } from 'react';
 
-import { TimelineItem } from '@cs/ui/timeline-item';
+import { TimelineItem } from '@kyaku/ui/timeline-item';
 
 import { useTimeline } from '~/components/tickets/use-timeline';
 

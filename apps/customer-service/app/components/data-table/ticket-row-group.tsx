@@ -1,6 +1,6 @@
 import type { Row } from '@tanstack/react-table';
 
-import { TicketPriorityBadge } from '@cs/ui/ticket-priority-badge';
+import { TicketPriorityBadge } from '@kyaku/ui/ticket-priority-badge';
 
 export function TicketRowGroup<TData>({ row }: { row: Row<TData> }) {
   if (row.groupingColumnId === 'priority') {

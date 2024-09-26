@@ -1,13 +1,13 @@
 import type { FC } from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import type { TicketPriority } from '@cs/kyaku/models';
+import type { TicketPriority } from '@kyaku/kyaku/models';
 import {
   PriorityCritical,
   PriorityHigh,
   PriorityLow,
   PriorityMedium,
-} from '@cs/ui/icons';
+} from '@kyaku/ui/icons';
 
 export const TicketPriorityBadge: FC<{
   priority: TicketPriority;

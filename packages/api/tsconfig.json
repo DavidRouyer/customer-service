@@ -1,5 +1,5 @@
 {
-  "extends": "@cs/tsconfig/base.json",
+  "extends": "@kyaku/tsconfig/base.json",
   "compilerOptions": {
     "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json",
     "types": ["vitest/globals"]

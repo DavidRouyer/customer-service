@@ -2,13 +2,13 @@ import type {
   TicketAssignmentChanged,
   TicketChat,
   TicketStatusChanged,
-} from '@cs/kyaku/models';
+} from '@kyaku/kyaku/models';
 import {
   TicketPriority,
   TicketStatus,
   TimelineEntryType,
-} from '@cs/kyaku/models';
-import { generateEntityId } from '@cs/kyaku/utils';
+} from '@kyaku/kyaku/models';
+import { generateEntityId } from '@kyaku/kyaku/utils';
 
 import { dbConnection, eq, schema } from '.';
 

@@ -1,5 +1,5 @@
 {
-  "name": "@cs/prettier-config",
+  "name": "@kyaku/prettier-config",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -18,8 +18,8 @@
     "prettier-plugin-tailwindcss": "^0.6.8"
   },
   "devDependencies": {
-    "@cs/tsconfig": "*",
+    "@kyaku/tsconfig": "*",
     "typescript": "^5.6.2"
   },
-  "prettier": "@cs/prettier-config"
+  "prettier": "@kyaku/prettier-config"
 }

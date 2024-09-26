@@ -3,7 +3,7 @@
 import * as React from 'react';
 import * as RadioGroupPrimitive from '@radix-ui/react-radio-group';
 
-import { cn } from '@cs/ui';
+import { cn } from '@kyaku/ui';
 
 const StatusRadioGroup = React.forwardRef<
   React.ElementRef<typeof RadioGroupPrimitive.Root>,

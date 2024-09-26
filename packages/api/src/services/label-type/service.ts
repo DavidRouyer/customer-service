@@ -9,15 +9,15 @@ import {
   isNull,
   schema,
   sortByDirection,
-} from '@cs/database';
+} from '@kyaku/database';
 import type {
   InferInsertModel,
   InferSelectModel,
   LabelTypeRepository,
-} from '@cs/database';
-import { Direction } from '@cs/kyaku/types';
-import type { FindConfig, GetConfig } from '@cs/kyaku/types';
-import { KyakuError } from '@cs/kyaku/utils';
+} from '@kyaku/database';
+import { Direction } from '@kyaku/kyaku/types';
+import type { FindConfig, GetConfig } from '@kyaku/kyaku/types';
+import { KyakuError } from '@kyaku/kyaku/utils';
 
 import type { UnitOfWork } from '../../unit-of-work';
 import { BaseService } from '../base-service';

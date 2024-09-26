@@ -1,7 +1,7 @@
 import type { FC } from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import type { TicketAssignmentChangedWithData } from '@cs/kyaku/models';
+import type { TicketAssignmentChangedWithData } from '@kyaku/kyaku/models';
 
 import { RelativeTime } from './relative-time';
 import type {

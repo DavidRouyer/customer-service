@@ -1,12 +1,12 @@
 import { CheckCircle2, Circle, CirclePause } from 'lucide-react';
 
-import { TicketPriority, TicketStatus } from '@cs/kyaku/models';
+import { TicketPriority, TicketStatus } from '@kyaku/kyaku/models';
 import {
   PriorityCritical,
   PriorityHigh,
   PriorityLow,
   PriorityMedium,
-} from '@cs/ui/icons';
+} from '@kyaku/ui/icons';
 
 export const labels = [
   {

@@ -2,7 +2,7 @@ import type {
   InclusionFilterOperator,
   InferSelectModel,
   schema,
-} from '@cs/database';
+} from '@kyaku/database';
 
 export interface LabelTypeWith<T> {
   createdBy?: [T] extends [{ createdBy: true }] ? true : undefined;

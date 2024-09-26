@@ -4,7 +4,7 @@ import { useNavigate } from '@tanstack/react-router';
 import { CheckCircle2, CircleDot } from 'lucide-react';
 import { FormattedMessage } from 'react-intl';
 
-import { TicketStatus } from '@cs/kyaku/models';
+import { TicketStatus } from '@kyaku/kyaku/models';
 
 import {
   StatusRadioGroup,

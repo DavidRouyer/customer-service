@@ -2,15 +2,15 @@ import type { FC } from 'react';
 import { CheckCircle2, CircleDot } from 'lucide-react';
 import { FormattedMessage } from 'react-intl';
 
-import { TicketStatus } from '@cs/kyaku/models';
-import { Button } from '@cs/ui/button';
+import { TicketStatus } from '@kyaku/kyaku/models';
+import { Button } from '@kyaku/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@cs/ui/dropdown-menu';
+} from '@kyaku/ui/dropdown-menu';
 
 import { useMarkAsDoneTicket } from '~/hooks/use-mark-as-done-ticket';
 import { useMarkAsTodoTicket } from '~/hooks/use-mark-as-todo-ticket';

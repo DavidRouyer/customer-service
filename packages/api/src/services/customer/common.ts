@@ -2,7 +2,7 @@ import type {
   InclusionFilterOperator,
   InferSelectModel,
   schema,
-} from '@cs/database';
+} from '@kyaku/database';
 
 export interface CustomerWith<T> {
   createdBy?: [T] extends [{ createdBy: true }] ? true : undefined;

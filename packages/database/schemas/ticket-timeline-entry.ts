@@ -8,9 +8,9 @@ import type {
   TicketNote,
   TicketPriorityChanged,
   TicketStatusChanged,
-} from '@cs/kyaku/models';
-import { TimelineEntryType } from '@cs/kyaku/models';
-import { generateEntityId } from '@cs/kyaku/utils';
+} from '@kyaku/kyaku/models';
+import { TimelineEntryType } from '@kyaku/kyaku/models';
+import { generateEntityId } from '@kyaku/kyaku/utils';
 
 import { users } from './auth';
 import { customers } from './customer';

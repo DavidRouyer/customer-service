@@ -1,5 +1,5 @@
 {
-  "name": "@cs/ui",
+  "name": "@kyaku/ui",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -64,14 +64,14 @@
     "tailwind-merge": "^2.5.2"
   },
   "devDependencies": {
-    "@cs/eslint-config": "*",
-    "@cs/prettier-config": "*",
-    "@cs/tsconfig": "*",
+    "@kyaku/eslint-config": "*",
+    "@kyaku/prettier-config": "*",
+    "@kyaku/tsconfig": "*",
     "@testing-library/jest-dom": "^6.5.0",
     "@testing-library/react": "^16.0.1",
     "@types/react": "^18.3.9",
     "@types/react-dom": "^18.3.0",
     "eslint": "^9.11.1"
   },
-  "prettier": "@cs/prettier-config"
+  "prettier": "@kyaku/prettier-config"
 }

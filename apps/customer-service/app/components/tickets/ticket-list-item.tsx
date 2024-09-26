@@ -3,9 +3,9 @@
 import type { FC } from 'react';
 import { Link } from '@tanstack/react-router';
 
-import { getInitials } from '@cs/kyaku/utils';
-import { Avatar, AvatarFallback, AvatarImage } from '@cs/ui/avatar';
-import { RelativeTime } from '@cs/ui/relative-time';
+import { getInitials } from '@kyaku/kyaku/utils';
+import { Avatar, AvatarFallback, AvatarImage } from '@kyaku/ui/avatar';
+import { RelativeTime } from '@kyaku/ui/relative-time';
 
 import type { TicketsQuery } from '~/graphql/generated/client';
 

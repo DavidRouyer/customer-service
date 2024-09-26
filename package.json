@@ -10,8 +10,8 @@
   "scripts": {
     "build": "turbo run build",
     "clean:workspaces": "turbo run clean",
-    "db:push": "turbo -F @cs/database db:push",
-    "db:seed": "turbo -F @cs/database db:seed",
+    "db:push": "turbo -F @kyaku/database db:push",
+    "db:seed": "turbo -F @kyaku/database db:seed",
     "dev": "turbo watch dev",
     "test": "LC_ALL=en_US.UTF-8 vitest",
     "test:ui": "LC_ALL=en_US.UTF-8 vitest --ui",
@@ -19,7 +19,7 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@cs/prettier-config": "*",
+    "@kyaku/prettier-config": "*",
     "@vitejs/plugin-react": "^4.3.1",
     "@vitest/coverage-v8": "^2.1.1",
     "@vitest/ui": "^2.1.1",
@@ -29,6 +29,6 @@
     "vite": "^5.4.8",
     "vitest": "^2.1.1"
   },
-  "prettier": "@cs/prettier-config",
+  "prettier": "@kyaku/prettier-config",
   "packageManager": "yarn@4.5.0"
 }

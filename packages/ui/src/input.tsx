@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { cn } from '@cs/ui';
+import { cn } from '@kyaku/ui';
 
 export type InputProps = {} & React.InputHTMLAttributes<HTMLInputElement>;
 

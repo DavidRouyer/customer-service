@@ -5,7 +5,7 @@ import DataLoader from 'dataloader';
 import type { YogaInitialContext } from 'graphql-yoga';
 import { default as jwt } from 'jsonwebtoken';
 
-import { Auth, authOptions } from '@cs/auth';
+import { Auth, authOptions } from '@kyaku/auth';
 import {
   CustomerRepository,
   dbConnection,
@@ -14,8 +14,8 @@ import {
   TicketRepository,
   TicketTimelineRepository,
   UserRepository,
-} from '@cs/database';
-import type { User } from '@cs/kyaku/models';
+} from '@kyaku/database';
+import type { User } from '@kyaku/kyaku/models';
 
 import { commonModule } from './modules/common/resolvers';
 import { customerModule } from './modules/customer/resolvers';

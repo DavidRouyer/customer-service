@@ -1,7 +1,7 @@
 import { useSearch } from '@tanstack/react-router';
 import { FormattedMessage } from 'react-intl';
 
-import { TicketFilter } from '@cs/kyaku/models';
+import { TicketFilter } from '@kyaku/kyaku/models';
 
 import { TicketDropdownSort } from '~/components/tickets/ticket-dropdown-sort';
 

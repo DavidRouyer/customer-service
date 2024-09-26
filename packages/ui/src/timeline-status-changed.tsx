@@ -2,8 +2,8 @@ import type { FC } from 'react';
 import { CheckCircle2, CircleDot } from 'lucide-react';
 import { FormattedMessage } from 'react-intl';
 
-import type { TicketStatusChanged } from '@cs/kyaku/models';
-import { TicketStatus } from '@cs/kyaku/models';
+import type { TicketStatusChanged } from '@kyaku/kyaku/models';
+import { TicketStatus } from '@kyaku/kyaku/models';
 
 import { RelativeTime } from './relative-time';
 import type { TimelineItemNarrowed } from './timeline-item';

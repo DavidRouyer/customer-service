@@ -2,23 +2,23 @@ import type { FC } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { FormattedMessage } from 'react-intl';
 
-import type { TicketPriority } from '@cs/kyaku/models';
-import { TicketPriority as TicketPriorityType } from '@cs/kyaku/models';
-import { Button } from '@cs/ui/button';
+import type { TicketPriority } from '@kyaku/kyaku/models';
+import { TicketPriority as TicketPriorityType } from '@kyaku/kyaku/models';
+import { Button } from '@kyaku/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@cs/ui/dropdown-menu';
+} from '@kyaku/ui/dropdown-menu';
 import {
   PriorityCritical,
   PriorityHigh,
   PriorityLow,
   PriorityMedium,
-} from '@cs/ui/icons';
-import { TicketPriorityBadge } from '@cs/ui/ticket-priority-badge';
+} from '@kyaku/ui/icons';
+import { TicketPriorityBadge } from '@kyaku/ui/ticket-priority-badge';
 
 import type { TicketQuery } from '~/graphql/generated/client';
 import {

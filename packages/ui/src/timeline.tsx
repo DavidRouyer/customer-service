@@ -3,7 +3,7 @@
 import type { ReactNode } from 'react';
 import { useRef, useState } from 'react';
 
-import { cn } from '@cs/ui';
+import { cn } from '@kyaku/ui';
 
 import { createScrollerLock, ScrollerLockContext } from './use-scroll-lock';
 

@@ -1,5 +1,5 @@
 {
-  "name": "@cs/tailwind-config",
+  "name": "@kyaku/tailwind-config",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -19,9 +19,9 @@
     "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
-    "@cs/eslint-config": "*",
-    "@cs/prettier-config": "*",
-    "@cs/tsconfig": "*",
+    "@kyaku/eslint-config": "*",
+    "@kyaku/prettier-config": "*",
+    "@kyaku/tsconfig": "*",
     "eslint": "^9.11.1",
     "prettier": "^3.3.3",
     "typescript": "^5.6.2"
@@ -29,8 +29,8 @@
   "eslintConfig": {
     "root": true,
     "extends": [
-      "@cs/eslint-config/base"
+      "@kyaku/eslint-config/base"
     ]
   },
-  "prettier": "@cs/prettier-config"
+  "prettier": "@kyaku/prettier-config"
 }

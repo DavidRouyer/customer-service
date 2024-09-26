@@ -1,10 +1,10 @@
 import { GraphQLError } from 'graphql';
 
-import { TicketPriority, TimelineEntryType } from '@cs/kyaku/models';
+import { TicketPriority, TimelineEntryType } from '@kyaku/kyaku/models';
 import {
   connectionFromArray,
   validatePaginationArguments,
-} from '@cs/kyaku/utils';
+} from '@kyaku/kyaku/utils';
 
 import { authorize } from '../../authorize';
 import type {

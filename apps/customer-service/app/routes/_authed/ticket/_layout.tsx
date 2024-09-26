@@ -2,7 +2,7 @@ import { Suspense } from 'react';
 import { createFileRoute, Outlet } from '@tanstack/react-router';
 import { z } from 'zod';
 
-import { TicketFilter, TicketStatus } from '@cs/kyaku/models';
+import { TicketFilter, TicketStatus } from '@kyaku/kyaku/models';
 
 import { TicketList } from '~/components/tickets/ticket-list';
 import { TicketListHeader } from '~/components/tickets/ticket-list-header';

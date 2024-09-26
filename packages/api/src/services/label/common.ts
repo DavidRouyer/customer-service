@@ -2,7 +2,7 @@ import type {
   InclusionFilterOperator,
   InferSelectModel,
   schema,
-} from '@cs/database';
+} from '@kyaku/database';
 
 export interface LabelWith<T> {
   ticket?: [T] extends [{ assignedTo: true }] ? true : undefined;

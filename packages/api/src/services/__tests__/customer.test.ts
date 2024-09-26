@@ -1,5 +1,5 @@
-import { asc, eq, schema } from '@cs/database';
-import type { CustomerRepository } from '@cs/database';
+import { asc, eq, schema } from '@kyaku/database';
+import type { CustomerRepository } from '@kyaku/database';
 
 import type { UnitOfWork } from '../../unit-of-work';
 import { CustomerService } from '../customer';

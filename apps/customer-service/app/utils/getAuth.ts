@@ -1,6 +1,6 @@
 import type { Session } from '@auth/core/types';
 
-import { authOptions } from '@cs/auth';
+import { authOptions } from '@kyaku/auth';
 
 import { authenticateRequest } from '../authenticateRequest';
 

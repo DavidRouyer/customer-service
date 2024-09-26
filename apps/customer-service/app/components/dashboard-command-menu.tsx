@@ -10,7 +10,7 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from '@cs/ui/command';
+} from '@kyaku/ui/command';
 
 export function DashboardCommandMenu() {
   const { formatMessage } = useIntl();

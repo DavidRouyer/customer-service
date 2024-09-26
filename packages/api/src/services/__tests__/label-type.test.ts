@@ -1,5 +1,5 @@
-import { and, asc, eq, isNull, schema } from '@cs/database';
-import type { LabelTypeRepository } from '@cs/database';
+import { and, asc, eq, isNull, schema } from '@kyaku/database';
+import type { LabelTypeRepository } from '@kyaku/database';
 
 import type { UnitOfWork } from '../../unit-of-work';
 import { LabelTypeService } from '../label-type';

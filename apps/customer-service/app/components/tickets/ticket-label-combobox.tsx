@@ -4,9 +4,9 @@ import { useQueryClient } from '@tanstack/react-query';
 import { Check, Plus } from 'lucide-react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
-import { cn } from '@cs/ui';
-import { Badge } from '@cs/ui/badge';
-import { Button } from '@cs/ui/button';
+import { cn } from '@kyaku/ui';
+import { Badge } from '@kyaku/ui/badge';
+import { Button } from '@kyaku/ui/button';
 import {
   Command,
   CommandEmpty,
@@ -14,8 +14,8 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from '@cs/ui/command';
-import { Popover, PopoverContent, PopoverTrigger } from '@cs/ui/popover';
+} from '@kyaku/ui/command';
+import { Popover, PopoverContent, PopoverTrigger } from '@kyaku/ui/popover';
 
 import type { TicketQuery } from '~/graphql/generated/client';
 import {

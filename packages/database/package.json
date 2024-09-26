@@ -1,5 +1,5 @@
 {
-  "name": "@cs/database",
+  "name": "@kyaku/database",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -17,14 +17,14 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@cs/kyaku": "*",
+    "@kyaku/kyaku": "*",
     "drizzle-orm": "^0.33.0",
     "pg": "^8.13.0"
   },
   "devDependencies": {
-    "@cs/eslint-config": "*",
-    "@cs/prettier-config": "*",
-    "@cs/tsconfig": "*",
+    "@kyaku/eslint-config": "*",
+    "@kyaku/prettier-config": "*",
+    "@kyaku/tsconfig": "*",
     "@types/pg": "^8.11.10",
     "@types/ws": "^8.5.12",
     "dotenv-cli": "^7.4.2",
@@ -35,5 +35,5 @@
     "tsx": "^4.19.1",
     "typescript": "^5.6.2"
   },
-  "prettier": "@cs/prettier-config"
+  "prettier": "@kyaku/prettier-config"
 }

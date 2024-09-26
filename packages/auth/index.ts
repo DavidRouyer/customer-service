@@ -3,7 +3,7 @@ import { Auth } from '@auth/core';
 import GitHub from '@auth/core/providers/github';
 import { DrizzleAdapter } from '@auth/drizzle-adapter';
 
-import { dbConnection, schema } from '@cs/database';
+import { dbConnection, schema } from '@kyaku/database';
 
 const authOptions: AuthConfig = {
   trustHost: process.env.AUTH_TRUST_HOST === 'true',

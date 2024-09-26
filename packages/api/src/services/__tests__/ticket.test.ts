@@ -1,12 +1,12 @@
-import { and, asc, eq, schema, TicketTimelineRepository } from '@cs/database';
-import type { TicketRepository } from '@cs/database';
-import { TicketPriority, TicketStatus } from '@cs/kyaku/models';
+import { and, asc, eq, schema, TicketTimelineRepository } from '@kyaku/database';
+import type { TicketRepository } from '@kyaku/database';
+import { TicketPriority, TicketStatus } from '@kyaku/kyaku/models';
 
 import { DoneTicketStatusDetail } from '../../../../kyaku/models/ticket';
 import type { UnitOfWork } from '../../unit-of-work';
 import { TicketService } from '../ticket';
 
-vi.mock('@cs/database', async (importOriginal) => ({
+vi.mock('@kyaku/database', async (importOriginal) => ({
   ...(await importOriginal()),
   TicketTimelineRepository: class TicketTimelineRepository {},
 }));

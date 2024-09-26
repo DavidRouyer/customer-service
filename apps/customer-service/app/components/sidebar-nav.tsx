@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { AlignJustify } from 'lucide-react';
 import { FormattedMessage } from 'react-intl';
 
-import { Sheet, SheetContent } from '@cs/ui/sheet';
+import { Sheet, SheetContent } from '@kyaku/ui/sheet';
 
 import { DashboardCommandMenu } from '~/components/dashboard-command-menu';
 import { Logo } from '~/components/logo';

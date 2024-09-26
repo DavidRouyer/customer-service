@@ -1,4 +1,4 @@
-import type { Cursor } from '@cs/kyaku/types';
+import type { Cursor } from '@kyaku/kyaku/types';
 
 import { composeCursor, parseCursor } from '../pagination.js';
 

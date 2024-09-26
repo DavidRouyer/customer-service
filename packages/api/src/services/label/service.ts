@@ -1,15 +1,15 @@
-import { and, eq, inArray, isNotNull, isNull, schema } from '@cs/database';
+import { and, eq, inArray, isNotNull, isNull, schema } from '@kyaku/database';
 import type {
   LabelRepository,
   LabelTypeRepository,
   TicketRepository,
   TicketTimelineRepository,
-} from '@cs/database';
-import type { TicketLabelsChanged } from '@cs/kyaku/models';
-import { TimelineEntryType } from '@cs/kyaku/models';
-import type { FindConfig, GetConfig } from '@cs/kyaku/types';
-import { Direction } from '@cs/kyaku/types';
-import { KyakuError } from '@cs/kyaku/utils';
+} from '@kyaku/database';
+import type { TicketLabelsChanged } from '@kyaku/kyaku/models';
+import { TimelineEntryType } from '@kyaku/kyaku/models';
+import type { FindConfig, GetConfig } from '@kyaku/kyaku/types';
+import { Direction } from '@kyaku/kyaku/types';
+import { KyakuError } from '@kyaku/kyaku/utils';
 
 import {
   filterByDirection,

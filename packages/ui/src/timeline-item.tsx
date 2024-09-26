@@ -9,8 +9,8 @@ import type {
   TicketNote,
   TicketPriorityChanged,
   TicketStatusChanged,
-} from '@cs/kyaku/models';
-import { cn } from '@cs/ui';
+} from '@kyaku/kyaku/models';
+import { cn } from '@kyaku/ui';
 
 import { TimelineAssigmentChanged } from './timeline-assignment-changed';
 import { TimelineChat } from './timeline-chat';

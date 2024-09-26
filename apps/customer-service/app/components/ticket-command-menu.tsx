@@ -11,7 +11,7 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from '@cs/ui/command';
+} from '@kyaku/ui/command';
 
 import { messageModeAtom } from '~/components/messages/message-mode-atom';
 

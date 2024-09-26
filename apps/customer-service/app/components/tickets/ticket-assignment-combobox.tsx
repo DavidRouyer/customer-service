@@ -5,10 +5,10 @@ import { useRouteContext } from '@tanstack/react-router';
 import { Check, Plus } from 'lucide-react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
-import { getInitials } from '@cs/kyaku/utils';
-import { cn } from '@cs/ui';
-import { Avatar, AvatarFallback, AvatarImage } from '@cs/ui/avatar';
-import { Button } from '@cs/ui/button';
+import { getInitials } from '@kyaku/kyaku/utils';
+import { cn } from '@kyaku/ui';
+import { Avatar, AvatarFallback, AvatarImage } from '@kyaku/ui/avatar';
+import { Button } from '@kyaku/ui/button';
 import {
   Command,
   CommandEmpty,
@@ -16,8 +16,8 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from '@cs/ui/command';
-import { Popover, PopoverContent, PopoverTrigger } from '@cs/ui/popover';
+} from '@kyaku/ui/command';
+import { Popover, PopoverContent, PopoverTrigger } from '@kyaku/ui/popover';
 
 import type { TicketQuery, UsersQuery } from '~/graphql/generated/client';
 import {

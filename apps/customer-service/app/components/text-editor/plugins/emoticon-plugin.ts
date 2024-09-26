@@ -3,7 +3,7 @@ import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext
 import type { LexicalEditor } from 'lexical';
 import { TextNode } from 'lexical';
 
-import { $createEmojiNode } from '@cs/kyaku/editor';
+import { $createEmojiNode } from '@kyaku/kyaku/editor';
 
 function emoticonTransform(node: TextNode) {
   const textContent = node.getTextContent();

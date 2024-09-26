@@ -4,9 +4,9 @@ import { useRef } from 'react';
 import { useRouteContext } from '@tanstack/react-router';
 import { FormattedMessage } from 'react-intl';
 
-import { getInitials } from '@cs/kyaku/utils';
-import { Avatar, AvatarFallback, AvatarImage } from '@cs/ui/avatar';
-import { Button } from '@cs/ui/button';
+import { getInitials } from '@kyaku/kyaku/utils';
+import { Avatar, AvatarFallback, AvatarImage } from '@kyaku/ui/avatar';
+import { Button } from '@kyaku/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -15,7 +15,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuShortcut,
   DropdownMenuTrigger,
-} from '@cs/ui/dropdown-menu';
+} from '@kyaku/ui/dropdown-menu';
 
 interface UserNavProps {
   showLabel?: boolean;

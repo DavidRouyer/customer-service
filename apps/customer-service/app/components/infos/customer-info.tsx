@@ -1,7 +1,7 @@
 import { useParams } from '@tanstack/react-router';
 import { FormattedMessage, useIntl } from 'react-intl';
 
-import { Copy } from '@cs/ui/copy';
+import { Copy } from '@kyaku/ui/copy';
 
 import { PhoneNumber } from '~/components/infos/phone-number';
 import { useSuspenseTicketQuery } from '~/graphql/generated/client';
