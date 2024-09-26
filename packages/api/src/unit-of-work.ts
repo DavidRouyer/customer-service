@@ -1,6 +1,4 @@
-import type { DbConnection } from '@kyaku/database';
-
-import type { DbTransactionScope } from '../../database/db-transaction';
+import type { DbConnection, DbTransactionScope } from '@kyaku/database';
 
 export class UnitOfWork {
   private readonly _dbConnection: DbConnection;

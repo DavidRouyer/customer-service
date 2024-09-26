@@ -34,6 +34,7 @@ export {
 
 export * from 'drizzle-orm';
 export * from './build-query';
+export * from './db-transaction';
 
 const { Pool } = pg;
 
