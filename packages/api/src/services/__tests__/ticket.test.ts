@@ -1,8 +1,17 @@
-import { and, asc, eq, schema, TicketTimelineRepository } from '@kyaku/database';
+import {
+  and,
+  asc,
+  eq,
+  schema,
+  TicketTimelineRepository,
+} from '@kyaku/database';
 import type { TicketRepository } from '@kyaku/database';
-import { TicketPriority, TicketStatus } from '@kyaku/kyaku/models';
+import {
+  DoneTicketStatusDetail,
+  TicketPriority,
+  TicketStatus,
+} from '@kyaku/kyaku/models';
 
-import { DoneTicketStatusDetail } from '../../../../kyaku/models/ticket';
 import type { UnitOfWork } from '../../unit-of-work';
 import { TicketService } from '../ticket';
 
