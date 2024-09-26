@@ -55,6 +55,10 @@ export const columns: ColumnDef<TicketData>[] = [
     },
   },
   {
+    accessorKey: 'id',
+    accessorFn: (row) => row.id,
+  },
+  {
     accessorKey: 'priority',
     cell: ({ row }) => {
       const priority = priorities.find(

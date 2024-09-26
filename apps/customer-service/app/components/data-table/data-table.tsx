@@ -12,8 +12,6 @@ import {
   useReactTable,
 } from '@tanstack/react-table';
 
-import { TicketPriorityBadge } from '@cs/ui/ticket-priority-badge';
-
 import { StatusRadio } from '~/components/data-table/status-radio';
 import {
   Table,
@@ -22,6 +20,7 @@ import {
   TableRow,
 } from '~/components/data-table/table';
 import { TableRowGroup } from '~/components/data-table/table-row-group';
+import { TicketRowGroup } from '~/components/data-table/ticket-row-group';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -72,13 +71,13 @@ export function DataTable<TData, TValue>({
               table.getExpandedRowModel().rows.map((row) =>
                 row.getIsGrouped() ? (
                   <TableRowGroup key={row.id} className="flex space-x-2">
-                    <TicketPriorityBadge priority={row.original.priority} />
+                    <TicketRowGroup row={row} />
                   </TableRowGroup>
                 ) : (
                   <TableRow
                     key={row.id}
                     to="/ticket/$ticketId"
-                    params={{ ticketId: row.original.id }}
+                    params={{ ticketId: row.getValue('id') }}
                     data-state={row.getIsSelected() && 'selected'}
                   >
                     {row.getVisibleCells().map((cell) => (
