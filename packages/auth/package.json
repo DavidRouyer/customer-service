@@ -15,7 +15,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@auth/core": "^0.35.2",
+    "@auth/core": "^0.35.3",
     "@auth/drizzle-adapter": "^1.5.2",
     "@kyaku/database": "*",
     "@kyaku/kyaku": "*",
