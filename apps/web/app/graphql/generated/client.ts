@@ -222,6 +222,7 @@ export type Customer = Node & {
   updatedBy?: Maybe<User>;
 };
 
+/** Possible done status details a ticket may have. */
 export enum DoneTicketStatusDetail {
   DoneAutomaticallySet = 'DONE_AUTOMATICALLY_SET',
   DoneManuallySet = 'DONE_MANUALLY_SET',
@@ -599,6 +600,7 @@ export type SnoozeTicketPayload = {
   userErrors?: Maybe<Array<MutationError>>;
 };
 
+/** Possible snooze status details a ticket may have. */
 export enum SnoozeTicketStatusDetail {
   WaitingForCustomer = 'WAITING_FOR_CUSTOMER',
   WaitingForDuration = 'WAITING_FOR_DURATION',
@@ -744,6 +746,7 @@ export type TimelineEntryEdge = {
   node: TimelineEntry;
 };
 
+/** Possible todo status details a ticket may have. */
 export enum TodoTicketStatusDetail {
   CloseTheLoop = 'CLOSE_THE_LOOP',
   Created = 'CREATED',

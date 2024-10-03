@@ -16,6 +16,9 @@ const config: CodegenConfig = {
     },
   },
   config: {
+    scalars: {
+      DateTime: 'Date',
+    },
     contextType: '../graphql#Context',
     useTypeImports: true,
     enumValues: {
