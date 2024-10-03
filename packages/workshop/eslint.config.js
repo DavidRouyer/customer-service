@@ -1,7 +1,7 @@
 import baseConfig from '@kyaku/eslint-config/base';
 import storybook from 'eslint-plugin-storybook'
 
-/** @type {import('@typescript-eslint/utils').TSESLint.FlatConfig.ConfigArray} */
+/** @type {import('typescript-eslint').Config} */
 export default [
   ...baseConfig, {
     ignores: ['.storybook/**/*'],
