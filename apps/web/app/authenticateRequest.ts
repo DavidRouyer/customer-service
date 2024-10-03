@@ -15,9 +15,9 @@ export async function authenticateRequest(
 
   const { status = 200 } = response;
 
-  const data = await response.json();
+  const data = await (response.json() as Promise<Session | null>);
 
   if (!data || !Object.keys(data).length) return null;
   if (status === 200) return data;
-  throw new Error(data.message);
+  throw new Error('Auth: Invalid session');
 }
