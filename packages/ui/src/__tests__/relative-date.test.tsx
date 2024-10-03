@@ -1,6 +1,6 @@
 import { screen } from '@testing-library/react';
 
-import { RelativeDate } from './relative-date';
+import { RelativeDate } from '../relative-date';
 import { render } from './test-utils';
 
 describe('<RelativeDate />', () => {
