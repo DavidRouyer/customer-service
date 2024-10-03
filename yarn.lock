@@ -2771,7 +2771,7 @@ __metadata:
     "@kyaku/tsconfig": "npm:*"
     "@parcel/watcher": "npm:^2.4.1"
     "@types/jsonwebtoken": "npm:9.0.7"
-    awilix: "npm:^11.0.0"
+    awilix: "npm:^11.0.1"
     dataloader: "npm:^2.2.2"
     eslint: "npm:^9.11.1"
     graphql: "npm:^16.9.0"
@@ -7325,13 +7325,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"awilix@npm:^11.0.0":
-  version: 11.0.0
-  resolution: "awilix@npm:11.0.0"
+"awilix@npm:^11.0.1":
+  version: 11.0.1
+  resolution: "awilix@npm:11.0.1"
   dependencies:
     camel-case: "npm:^4.1.2"
     fast-glob: "npm:^3.3.2"
-  checksum: 10c0/b531f561198cba8dddbdbceaa4db38802beb89278f33f28019241644c4a8b0b077002e604f58b94b3a4039349257eab157dd34741d408b8a25073dcf45487bfa
+  checksum: 10c0/af56a467bb774fcbd4cccafad22c2c60f49f44ef976e52bcbaee47a298a0f45dcb03c06dbfe5966e29c7097579504234617445d5c21ac9b44c009bcb42a194e3
   languageName: node
   linkType: hard
 
