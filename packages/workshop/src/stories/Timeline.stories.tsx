@@ -144,7 +144,7 @@ const items: Record<number, TimelineItem> =
     customer: customer,
     entry: {
       __typename: 'StatusChangedEntry',
-      oldStatus: TicketStatus.Open,
+      oldStatus: TicketStatus.Todo,
       newStatus: TicketStatus.Done
     },
     customerCreatedBy: null,
