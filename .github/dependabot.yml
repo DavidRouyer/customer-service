@@ -19,6 +19,9 @@ updates:
         patterns:
           - 'lexical'
           - '@lexical/*'
+      radix:
+        patterns:
+          - '@radix-ui/*'
       storybook:
         patterns:
           - '@storybook*'
