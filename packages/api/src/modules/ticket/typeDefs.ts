@@ -23,17 +23,26 @@ const typeDefs = /* GraphQL */ `
     WAITING_FOR_DURATION
   }
 
+  """
+  Possible done status details a ticket may have.
+  """
   enum DoneTicketStatusDetail {
     DONE_AUTOMATICALLY_SET
     DONE_MANUALLY_SET
     IGNORED
   }
 
+  """
+  Possible snooze status details a ticket may have.
+  """
   enum SnoozeTicketStatusDetail {
     WAITING_FOR_CUSTOMER
     WAITING_FOR_DURATION
   }
 
+  """
+  Possible todo status details a ticket may have.
+  """
   enum TodoTicketStatusDetail {
     CLOSE_THE_LOOP
     CREATED
