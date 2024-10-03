@@ -23,6 +23,13 @@ export default [
   },
   {
     files: ['**/*.graphql'],
+    languageOptions: {
+      parserOptions: {
+        graphQLConfig: {
+          schema: '**/*.ts',
+        },
+      },
+    },
     rules: {
       ...graphqlESLint.configs['flat/schema-recommended'],
       '@graphql-eslint/naming-convention': [
