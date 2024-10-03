@@ -18,6 +18,8 @@
   },
   "dependencies": {
     "@graphql-eslint/eslint-plugin": "4.0.0-alpha.4",
+    "@tanstack/eslint-plugin-query": "^5.58.1",
+    "@tanstack/eslint-plugin-router": "^1.58.6",
     "@typescript-eslint/eslint-plugin": "^8.8.0",
     "@typescript-eslint/parser": "^8.8.0",
     "eslint-plugin-import": "^2.30.0",

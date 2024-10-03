@@ -1,3 +1,5 @@
+import queryPlugin from '@tanstack/eslint-plugin-query';
+import routerPlugin from '@tanstack/eslint-plugin-router';
 import reactPlugin from 'eslint-plugin-react';
 import hooksPlugin from 'eslint-plugin-react-hooks';
 
@@ -19,4 +21,6 @@ export default [
       },
     },
   },
+  ...queryPlugin.configs['flat/recommended'],
+  ...routerPlugin.configs['flat/recommended'],
 ];
