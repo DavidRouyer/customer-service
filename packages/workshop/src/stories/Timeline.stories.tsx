@@ -165,14 +165,14 @@ export const OldestToNewest = () => {
         renderItem={({ itemId }) => (
           <TimelineItem
             item={items[Number(itemId)]}
-            // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
             nextItemId={
+              // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
               items[Number(itemId) + 1] !== undefined
                 ? (Number(itemId) + 1).toString()
                 : undefined
             }
-            // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
             previousItemId={
+              // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
               items[Number(itemId) - 1] !== undefined
                 ? (Number(itemId) - 1).toString()
                 : undefined

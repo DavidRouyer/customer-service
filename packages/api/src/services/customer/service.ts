@@ -23,7 +23,7 @@ export class CustomerService extends BaseService {
   }: {
     customerRepository: CustomerRepository;
   } & { unitOfWork: UnitOfWork }) {
-    // eslint-disable-next-line prefer-rest-params
+    // eslint-disable-next-line prefer-rest-params, @typescript-eslint/no-unsafe-argument
     super(arguments[0]);
     this.customerRepository = customerRepository;
   }

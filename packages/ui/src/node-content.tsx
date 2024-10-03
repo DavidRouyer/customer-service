@@ -4,7 +4,6 @@ import type {
   SerializedEditorState,
   SerializedLexicalNode,
   SerializedParagraphNode,
-  SerializedTextNode,
 } from 'lexical';
 import type { FC, ReactNode } from 'react';
 import { Fragment } from 'react';
