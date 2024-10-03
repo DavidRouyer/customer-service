@@ -6,5 +6,5 @@ export default [
   ...baseConfig, {
     ignores: ['.storybook/**/*'],
   },
-  ...storybook.configs['flat/recommended']
+  //...storybook.configs['flat/recommended']
 ];
