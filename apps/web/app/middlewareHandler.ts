@@ -5,19 +5,19 @@ import { authOptions } from '@kyaku/auth';
 
 import { authenticateRequest } from './authenticateRequest';
 
-export type RequestHandler<TRouter extends AnyRouter> = (ctx: {
+export type HandlerCallback<TRouter extends AnyRouter> = (ctx: {
   request: Request;
   router: TRouter;
   responseHeaders: Headers;
-}) => Promise<Response>;
+}) => Response | Promise<Response>;
 export type CustomizeRequestHandler<TRouter extends AnyRouter> = (
-  cb: RequestHandler<TRouter>
+  cb: HandlerCallback<TRouter>
 ) => EventHandler;
 
 export function createAuthjsHandler<TRouter extends AnyRouter>(
   eventHandler: CustomizeRequestHandler<TRouter>
 ) {
-  return (cb: RequestHandler<TRouter>): EventHandler => {
+  return (cb: HandlerCallback<TRouter>): EventHandler => {
     return eventHandler(async ({ request, router, responseHeaders }) => {
       try {
         const requestState = await authenticateRequest(request, authOptions);
