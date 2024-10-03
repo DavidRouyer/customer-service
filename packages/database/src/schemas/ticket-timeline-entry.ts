@@ -61,7 +61,7 @@ export const ticketTimelineEntries = pgTable('ticketTimelineEntry', {
     {
       onDelete: 'restrict',
       onUpdate: 'cascade',
-    }
+    },
   ),
   userCreatedById: varchar('userCreatedById').references(() => users.id, {
     onDelete: 'restrict',
@@ -88,5 +88,5 @@ export const ticketTimelineEntriesRelations = relations(
       fields: [ticketTimelineEntries.ticketId],
       references: [tickets.id],
     }),
-  })
+  }),
 );

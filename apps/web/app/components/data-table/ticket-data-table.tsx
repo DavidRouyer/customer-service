@@ -25,7 +25,7 @@ export function TicketDataTable() {
           customer: ticket.node.customer.name,
         }));
       },
-    }
+    },
   );
 
   if (isLoading) {

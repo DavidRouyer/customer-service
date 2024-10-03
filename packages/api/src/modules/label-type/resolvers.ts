@@ -3,15 +3,15 @@ import {
   validatePaginationArguments,
 } from '@kyaku/kyaku/utils';
 
-import { authorize } from '../../authorize';
 import type { Resolvers, User } from '../../generated-types/graphql';
 import type { LabelTypeService } from '../../services/label-type';
+import { authorize } from '../../authorize';
 import { LabelTypeSortField } from '../../services/label-type';
 import { handleErrors } from '../error';
 import typeDefs from './typeDefs';
 
 export const mapLabelType = (
-  labelType: Awaited<ReturnType<LabelTypeService['list']>>[number]
+  labelType: Awaited<ReturnType<LabelTypeService['list']>>[number],
 ) => {
   return {
     ...labelType,
@@ -39,11 +39,11 @@ const resolvers: Resolvers = {
     labelTypes: async (
       _,
       { filters, before, after, first, last },
-      { container }
+      { container },
     ) => {
       const { cursor, direction, limit } = validatePaginationArguments(
         { before, after, first, last },
-        { min: 1, max: 100 }
+        { min: 1, max: 100 },
       );
 
       const labelTypeService = container.resolve('labelTypeService');
@@ -57,7 +57,7 @@ const resolvers: Resolvers = {
           direction: direction,
           limit: limit + 1,
           sortBy: LabelTypeSortField.name,
-        }
+        },
       );
 
       return connectionFromArray({
@@ -75,7 +75,7 @@ const resolvers: Resolvers = {
     archiveLabelType: async (
       _,
       { input },
-      { container, dataloaders, user }
+      { container, dataloaders, user },
     ) => {
       const authorizedUser = authorize(user);
 
@@ -84,13 +84,13 @@ const resolvers: Resolvers = {
       try {
         const archivedLabelType = await labelTypeService.archive(
           input.labelTypeId,
-          authorizedUser.id
+          authorizedUser.id,
         );
 
         return {
           labelType: archivedLabelType
             ? mapLabelType(
-                await dataloaders.labelTypeLoader.load(archivedLabelType.id)
+                await dataloaders.labelTypeLoader.load(archivedLabelType.id),
               )
             : null,
         };
@@ -109,13 +109,13 @@ const resolvers: Resolvers = {
             ...input,
             icon: input.icon ?? null,
           },
-          authorizedUser.id
+          authorizedUser.id,
         );
 
         return {
           labelType: createdLabelType
             ? mapLabelType(
-                await dataloaders.labelTypeLoader.load(createdLabelType.id)
+                await dataloaders.labelTypeLoader.load(createdLabelType.id),
               )
             : null,
         };
@@ -126,7 +126,7 @@ const resolvers: Resolvers = {
     unarchiveLabelType: async (
       _,
       { input },
-      { container, dataloaders, user }
+      { container, dataloaders, user },
     ) => {
       const authorizedUser = authorize(user);
 
@@ -135,13 +135,13 @@ const resolvers: Resolvers = {
       try {
         const unarchivedLabelType = await labelTypeService.unarchive(
           input.labelTypeId,
-          authorizedUser.id
+          authorizedUser.id,
         );
 
         return {
           labelType: unarchivedLabelType
             ? mapLabelType(
-                await dataloaders.labelTypeLoader.load(unarchivedLabelType.id)
+                await dataloaders.labelTypeLoader.load(unarchivedLabelType.id),
               )
             : null,
         };
@@ -160,13 +160,13 @@ const resolvers: Resolvers = {
             ...input,
             name: input.name ?? undefined,
           },
-          authorizedUser.id
+          authorizedUser.id,
         );
 
         return {
           labelType: updatedLabelType
             ? mapLabelType(
-                await dataloaders.labelTypeLoader.load(updatedLabelType.id)
+                await dataloaders.labelTypeLoader.load(updatedLabelType.id),
               )
             : null,
         };

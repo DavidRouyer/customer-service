@@ -13,7 +13,7 @@ export const TicketHeader: FC<{ ticketId: string }> = ({ ticketId }) => {
     { ticketId: ticketId },
     {
       select: (data) => data.ticket,
-    }
+    },
   );
 
   const { mutate: markAsDoneTicket } = useMarkAsDoneTicket();

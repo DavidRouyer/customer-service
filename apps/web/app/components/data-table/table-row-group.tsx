@@ -10,7 +10,7 @@ const TableRowGroup = React.forwardRef<
     ref={ref}
     className={cn(
       'flex h-[2.25rem] items-center border-b bg-muted/50 px-2 transition-colors',
-      className
+      className,
     )}
     {...props}
   />

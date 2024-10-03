@@ -6,7 +6,6 @@ import {
   validatePaginationArguments,
 } from '@kyaku/kyaku/utils';
 
-import { authorize } from '../../authorize';
 import type {
   AssignmentChangedEntry,
   ChatEntry,
@@ -21,6 +20,7 @@ import type {
 } from '../../generated-types/graphql';
 import type { TicketService } from '../../services/ticket';
 import type { TicketTimelineService } from '../../services/ticket-timeline';
+import { authorize } from '../../authorize';
 import { TicketSortField } from '../../services/ticket/common';
 import { mapCustomer } from '../customer/resolvers';
 import { handleErrors } from '../error';
@@ -28,7 +28,7 @@ import { mapLabel } from '../label/resolvers';
 import typeDefs from './typeDefs';
 
 const mapTicket = (
-  ticket: Awaited<ReturnType<TicketService['list']>>[number]
+  ticket: Awaited<ReturnType<TicketService['list']>>[number],
 ): Ticket => {
   return {
     ...ticket,
@@ -59,7 +59,7 @@ const mapTicket = (
 };
 
 const mapTimelineEntry = (
-  timelineEntry: Awaited<ReturnType<TicketTimelineService['list']>>[number]
+  timelineEntry: Awaited<ReturnType<TicketTimelineService['list']>>[number],
 ) => {
   return {
     ...mapEntry(timelineEntry),
@@ -76,7 +76,7 @@ const mapTimelineEntry = (
 };
 
 const mapEntry = (
-  entry: Awaited<ReturnType<TicketTimelineService['list']>>[number]
+  entry: Awaited<ReturnType<TicketTimelineService['list']>>[number],
 ) => {
   switch (entry.type) {
     case TimelineEntryType.AssignmentChanged:
@@ -128,11 +128,11 @@ const resolvers: Resolvers = {
     tickets: async (
       _,
       { filters, before, after, first, last },
-      { container }
+      { container },
     ) => {
       const { cursor, direction, limit } = validatePaginationArguments(
         { before, after, first, last },
-        { min: 1, max: 100 }
+        { min: 1, max: 100 },
       );
 
       const ticketService = container.resolve('ticketService');
@@ -156,7 +156,7 @@ const resolvers: Resolvers = {
           direction: direction,
           limit: limit + 1,
           sortBy: TicketSortField.createdAt,
-        }
+        },
       );
 
       return connectionFromArray({
@@ -182,7 +182,7 @@ const resolvers: Resolvers = {
             ticketId: input.ticketId,
             assignedToId: input.userId,
           },
-          authorizedUser.id
+          authorizedUser.id,
         );
 
         return {
@@ -197,7 +197,7 @@ const resolvers: Resolvers = {
     changeTicketPriority: async (
       _,
       { input },
-      { container, dataloaders, user }
+      { container, dataloaders, user },
     ) => {
       const authorizedUser = authorize(user);
 
@@ -209,7 +209,7 @@ const resolvers: Resolvers = {
             ticketId: input.ticketId,
             priority: input.priority,
           },
-          authorizedUser.id
+          authorizedUser.id,
         );
 
         return {
@@ -232,7 +232,7 @@ const resolvers: Resolvers = {
             ...input,
             priority: input.priority ?? TicketPriority.Medium,
           },
-          authorizedUser.id
+          authorizedUser.id,
         );
 
         return {
@@ -264,7 +264,7 @@ const resolvers: Resolvers = {
     markTicketAsDone: async (
       _,
       { input },
-      { container, dataloaders, user }
+      { container, dataloaders, user },
     ) => {
       const authorizedUser = authorize(user);
 
@@ -276,7 +276,7 @@ const resolvers: Resolvers = {
             ticketId: input.ticketId,
             statusDetail: input.statusDetail ?? undefined,
           },
-          authorizedUser.id
+          authorizedUser.id,
         );
 
         return {
@@ -291,7 +291,7 @@ const resolvers: Resolvers = {
     markTicketAsTodo: async (
       _,
       { input },
-      { container, dataloaders, user }
+      { container, dataloaders, user },
     ) => {
       const authorizedUser = authorize(user);
 
@@ -303,7 +303,7 @@ const resolvers: Resolvers = {
             ticketId: input.ticketId,
             statusDetail: input.statusDetail ?? undefined,
           },
-          authorizedUser.id
+          authorizedUser.id,
         );
 
         return {
@@ -343,7 +343,7 @@ const resolvers: Resolvers = {
             ticketId: input.ticketId,
             statusDetail: input.statusDetail ?? undefined,
           },
-          authorizedUser.id
+          authorizedUser.id,
         );
 
         return {
@@ -363,7 +363,7 @@ const resolvers: Resolvers = {
       try {
         const ticket = await ticketService.unassign(
           input.ticketId,
-          authorizedUser.id
+          authorizedUser.id,
         );
 
         return {
@@ -455,27 +455,27 @@ const resolvers: Resolvers = {
   LabelsChangedEntry: {
     oldLabels: async ({ oldLabels }, _, { dataloaders }) => {
       const labels = await dataloaders.labelLoader.loadMany(
-        oldLabels.map((label) => label.id)
+        oldLabels.map((label) => label.id),
       );
       if (labels.some((label) => label instanceof Error)) {
         throw new GraphQLError('Failed to load labels');
       }
       const filteredLabels = labels.filter(
         (label): label is Exclude<typeof label, Error> =>
-          !(label instanceof Error)
+          !(label instanceof Error),
       );
       return filteredLabels.map((label) => mapLabel(label));
     },
     newLabels: async ({ newLabels }, _, { dataloaders }) => {
       const labels = await dataloaders.labelLoader.loadMany(
-        newLabels.map((label) => label.id)
+        newLabels.map((label) => label.id),
       );
       if (labels.some((label) => label instanceof Error)) {
         throw new GraphQLError('Failed to load labels');
       }
       const filteredLabels = labels.filter(
         (label): label is Exclude<typeof label, Error> =>
-          !(label instanceof Error)
+          !(label instanceof Error),
       );
       return filteredLabels.map((label) => mapLabel(label));
     },
@@ -511,11 +511,11 @@ const resolvers: Resolvers = {
     timelineEntries: async (
       { id },
       { before, after, first, last },
-      { container }
+      { container },
     ) => {
       const { cursor, direction, limit } = validatePaginationArguments(
         { before, after, first, last },
-        { min: 1, max: 100 }
+        { min: 1, max: 100 },
       );
 
       const ticketTimelineService = container.resolve('ticketTimelineService');
@@ -528,12 +528,12 @@ const resolvers: Resolvers = {
           cursor: cursor ?? undefined,
           direction: direction,
           limit: limit + 1,
-        }
+        },
       );
 
       return connectionFromArray({
         array: timelineEntries.map((timelineEntry) =>
-          mapTimelineEntry(timelineEntry)
+          mapTimelineEntry(timelineEntry),
         ),
         args: { before, after, first, last },
         meta: {

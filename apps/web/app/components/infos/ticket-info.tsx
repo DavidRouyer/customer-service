@@ -15,7 +15,7 @@ export const TicketInfo = () => {
     },
     {
       select: (data) => data.ticket,
-    }
+    },
   );
 
   if (!ticketData) {

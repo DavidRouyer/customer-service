@@ -19,7 +19,7 @@ export const LinkedTickets = () => {
     },
     {
       select: (data) => data.ticket,
-    }
+    },
   );
   const { data: ticketsData } = useTicketsQuery(
     {
@@ -30,7 +30,7 @@ export const LinkedTickets = () => {
     {
       enabled: !!ticketData?.customer.id,
       select: (data) => data.tickets,
-    }
+    },
   );
 
   return (

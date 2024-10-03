@@ -9,17 +9,17 @@ import { PaperclipIcon, SmilePlusIcon } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { FormattedMessage } from 'react-intl';
 
-import { parseTextFromEditorState } from '@kyaku/kyaku/editor';
 import type { TicketChat, TicketNote } from '@kyaku/kyaku/models';
+import { parseTextFromEditorState } from '@kyaku/kyaku/editor';
 import { cn } from '@kyaku/ui';
 import { Button } from '@kyaku/ui/button';
 import { Form, FormField } from '@kyaku/ui/form';
 import { Label } from '@kyaku/ui/label';
 import { Switch } from '@kyaku/ui/switch';
 
+import type { TimelineEntry } from '~/graphql/generated/client';
 import { messageModeAtom } from '~/components/messages/message-mode-atom';
 import TextEditor from '~/components/text-editor/text-editor';
-import type { TimelineEntry } from '~/graphql/generated/client';
 import {
   useCreateNoteMutation,
   useInfiniteTicketTimelineQuery,
@@ -54,7 +54,7 @@ export const MessageForm: FC<{ ticketId: string }> = ({ ticketId }) => {
       const previousMessages = queryClient.getQueryData(
         useInfiniteTicketTimelineQuery.getKey({
           ticketId: input.ticketId,
-        })
+        }),
       );
 
       // Optimistically update to the new value
@@ -77,7 +77,7 @@ export const MessageForm: FC<{ ticketId: string }> = ({ ticketId }) => {
             customerCreatedById: null,
             customerCreatedBy: null,
           },
-        ]
+        ],
       );
 
       // Return a context object with the snapshotted value
@@ -89,7 +89,7 @@ export const MessageForm: FC<{ ticketId: string }> = ({ ticketId }) => {
         useInfiniteTicketTimelineQuery.getKey({
           ticketId: input.ticketId,
         }),
-        context?.previousMessages ?? []
+        context?.previousMessages ?? [],
       );
     },
     onSettled: (_, __, { input }) => {
@@ -114,7 +114,7 @@ export const MessageForm: FC<{ ticketId: string }> = ({ ticketId }) => {
       const previousTimelineItem = queryClient.getQueryData(
         useInfiniteTicketTimelineQuery.getKey({
           ticketId: input.ticketId,
-        })
+        }),
       );
 
       // Optimistically update to the new value
@@ -136,7 +136,7 @@ export const MessageForm: FC<{ ticketId: string }> = ({ ticketId }) => {
             customerCreatedById: null,
             customerCreatedBy: null,
           },
-        ]
+        ],
       );
 
       // Return a context object with the snapshotted value
@@ -146,7 +146,7 @@ export const MessageForm: FC<{ ticketId: string }> = ({ ticketId }) => {
       // TODO: handle failed queries
       queryClient.setQueryData(
         useInfiniteTicketTimelineQuery.getKey({ ticketId: input.ticketId }),
-        context?.previousNotes ?? []
+        context?.previousNotes ?? [],
       );
     },
     onSettled: (_, __, { input }) => {
@@ -199,7 +199,7 @@ export const MessageForm: FC<{ ticketId: string }> = ({ ticketId }) => {
                 'bg-warning/30 ring-warning/70 focus-within:ring-warning':
                   messageMode === 'note',
                 'focus-within:ring-foreground': messageMode === 'reply',
-              }
+              },
             )}
           >
             <FormField

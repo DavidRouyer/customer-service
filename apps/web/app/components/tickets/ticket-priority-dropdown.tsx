@@ -48,7 +48,7 @@ export const TicketPriorityDropdowm: FC<TicketChangePriorityProps> = ({
 
       // Snapshot the previous value
       const previousTicket = queryClient.getQueryData<TicketQuery['ticket']>(
-        useTicketQuery.getKey({ ticketId: input.ticketId })
+        useTicketQuery.getKey({ ticketId: input.ticketId }),
       );
 
       // Optimistically update to the new value
@@ -60,7 +60,7 @@ export const TicketPriorityDropdowm: FC<TicketChangePriorityProps> = ({
                 ...oldQueryData,
                 priority: input.priority,
               }
-            : undefined
+            : undefined,
       );
 
       // Return a context object with the snapshotted value
@@ -70,7 +70,7 @@ export const TicketPriorityDropdowm: FC<TicketChangePriorityProps> = ({
       // TODO: handle failed queries
       queryClient.setQueryData<TicketQuery['ticket']>(
         useTicketQuery.getKey({ ticketId: input.ticketId }),
-        context?.previousTicket
+        context?.previousTicket,
       );
     },
     onSettled: (_, __, { input }) => {

@@ -9,7 +9,7 @@ export class UnitOfWork {
 
   transaction<T>(
     transaction: (tx: DbTransactionScope) => Promise<T>,
-    config?: Parameters<(typeof this._dbConnection)['transaction']>[1]
+    config?: Parameters<(typeof this._dbConnection)['transaction']>[1],
   ): Promise<T> {
     return this._dbConnection.transaction(transaction, config);
   }

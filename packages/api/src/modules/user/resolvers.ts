@@ -3,10 +3,10 @@ import {
   validatePaginationArguments,
 } from '@kyaku/kyaku/utils';
 
-import { authorize } from '../../authorize';
 import type { Resolvers } from '../../generated-types/graphql';
-import { UserSortField } from '../../services/user';
 import type { UserService } from '../../services/user';
+import { authorize } from '../../authorize';
+import { UserSortField } from '../../services/user';
 import typeDefs from './typeDefs';
 
 const resolvers: Resolvers = {
@@ -30,7 +30,7 @@ const resolvers: Resolvers = {
     users: async (_, { before, after, first, last }, { container }) => {
       const { cursor, direction, limit } = validatePaginationArguments(
         { before, after, first, last },
-        { min: 1, max: 100 }
+        { min: 1, max: 100 },
       );
 
       const userService: UserService = container.resolve('userService');
@@ -42,7 +42,7 @@ const resolvers: Resolvers = {
           direction: direction,
           limit: limit + 1,
           sortBy: UserSortField.name,
-        }
+        },
       );
 
       return connectionFromArray({

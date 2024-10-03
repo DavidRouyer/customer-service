@@ -1,5 +1,5 @@
-import { OnChangePlugin } from '@lexical/react/LexicalOnChangePlugin';
 import type { EditorState } from 'lexical';
+import { OnChangePlugin } from '@lexical/react/LexicalOnChangePlugin';
 import { $getRoot, $getSelection } from 'lexical';
 
 interface MyCustomOnChangePluginProps {

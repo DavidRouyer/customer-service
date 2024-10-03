@@ -26,8 +26,8 @@ export default function MyCustomCommandHandlerPlugin() {
           }
           return false;
         },
-        COMMAND_PRIORITY_LOW
-      )
+        COMMAND_PRIORITY_LOW,
+      ),
     );
   }, [editor]);
 

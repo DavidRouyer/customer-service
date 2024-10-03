@@ -1,13 +1,13 @@
 'use client';
 
-import type { FC, ReactNode } from 'react';
-import { Fragment } from 'react';
 import type {
   SerializedEditorState,
   SerializedLexicalNode,
   SerializedParagraphNode,
   SerializedTextNode,
 } from 'lexical';
+import type { FC, ReactNode } from 'react';
+import { Fragment } from 'react';
 
 import type { SerializedEmojiNode } from '@kyaku/kyaku/editor';
 
@@ -18,7 +18,7 @@ const deserializeChildren = (children: SerializedLexicalNode[]) => {
       content.push(
         <Fragment key={index}>
           {deserializeChildren((child as SerializedParagraphNode).children)}
-        </Fragment>
+        </Fragment>,
       );
     } else {
       content.push(<Fragment key={index}>{dezerializeNode(child)}</Fragment>);

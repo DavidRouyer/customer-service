@@ -1,3 +1,4 @@
+import type { TicketRepository } from '@kyaku/database';
 import {
   and,
   asc,
@@ -5,7 +6,6 @@ import {
   schema,
   TicketTimelineRepository,
 } from '@kyaku/database';
-import type { TicketRepository } from '@kyaku/database';
 import {
   DoneTicketStatusDetail,
   TicketPriority,
@@ -128,7 +128,7 @@ describe('TicketService', () => {
           customerId: 'customer-id',
           priority: TicketPriority.Low,
         },
-        'user-id'
+        'user-id',
       );
 
       expect(unitOfWork.transaction).toHaveBeenCalledTimes(1);
@@ -146,7 +146,7 @@ describe('TicketService', () => {
           createdAt: new Date('2000-01-01T12:00:00.000Z'),
           statusChangedAt: new Date('2000-01-01T12:00:00.000Z'),
         },
-        undefined
+        undefined,
       );
 
       expect(result?.id).toEqual('one-piece');
@@ -189,7 +189,7 @@ describe('TicketService', () => {
           ticketId: 'one-piece',
           assignedToId: 'luffy',
         },
-        'user-id'
+        'user-id',
       );
 
       expect(unitOfWork.transaction).toHaveBeenCalledTimes(1);
@@ -202,7 +202,7 @@ describe('TicketService', () => {
           updatedAt: new Date('2000-01-01T12:00:00.000Z'),
           updatedById: 'user-id',
         },
-        undefined
+        undefined,
       );
 
       expect(ticketTimelineRepo.create).toHaveBeenCalledTimes(1);
@@ -218,7 +218,7 @@ describe('TicketService', () => {
           userCreatedById: 'user-id',
           createdAt: new Date('2000-01-01T12:00:00.000Z'),
         },
-        undefined
+        undefined,
       );
     });
   });
@@ -266,7 +266,7 @@ describe('TicketService', () => {
           updatedAt: new Date('2000-01-01T12:00:00.000Z'),
           updatedById: 'user-id',
         },
-        undefined
+        undefined,
       );
 
       expect(ticketTimelineRepo.create).toHaveBeenCalledTimes(1);
@@ -282,7 +282,7 @@ describe('TicketService', () => {
           userCreatedById: 'user-id',
           createdAt: new Date('2000-01-01T12:00:00.000Z'),
         },
-        undefined
+        undefined,
       );
     });
   });
@@ -323,7 +323,7 @@ describe('TicketService', () => {
           ticketId: 'one-piece',
           priority: TicketPriority.Critical,
         },
-        'user-id'
+        'user-id',
       );
 
       expect(unitOfWork.transaction).toHaveBeenCalledTimes(1);
@@ -336,7 +336,7 @@ describe('TicketService', () => {
           updatedAt: new Date('2000-01-01T12:00:00.000Z'),
           updatedById: 'user-id',
         },
-        undefined
+        undefined,
       );
 
       expect(ticketTimelineRepo.create).toHaveBeenCalledTimes(1);
@@ -352,7 +352,7 @@ describe('TicketService', () => {
           userCreatedById: 'user-id',
           createdAt: new Date('2000-01-01T12:00:00.000Z'),
         },
-        undefined
+        undefined,
       );
     });
   });
@@ -396,7 +396,7 @@ describe('TicketService', () => {
           rawContent:
             '{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"blabla","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}',
         },
-        'user-id'
+        'user-id',
       );
 
       expect(unitOfWork.transaction).toHaveBeenCalledTimes(1);
@@ -415,7 +415,7 @@ describe('TicketService', () => {
           userCreatedById: 'user-id',
           createdAt: new Date('2000-01-01T12:00:00.000Z'),
         },
-        undefined
+        undefined,
       );
 
       expect(ticketRepo.update).toHaveBeenCalledTimes(1);
@@ -425,7 +425,7 @@ describe('TicketService', () => {
           updatedAt: new Date('2000-01-01T12:00:00.000Z'),
           updatedById: 'user-id',
         },
-        undefined
+        undefined,
       );
     });
   });
@@ -465,7 +465,7 @@ describe('TicketService', () => {
         {
           ticketId: 'one-piece',
         },
-        'user-id'
+        'user-id',
       );
 
       expect(unitOfWork.transaction).toHaveBeenCalledTimes(1);
@@ -481,7 +481,7 @@ describe('TicketService', () => {
           updatedAt: new Date('2000-01-01T12:00:00.000Z'),
           updatedById: 'user-id',
         },
-        undefined
+        undefined,
       );
 
       expect(ticketTimelineRepo.create).toHaveBeenCalledTimes(1);
@@ -497,7 +497,7 @@ describe('TicketService', () => {
           userCreatedById: 'user-id',
           createdAt: new Date('2000-01-01T12:00:00.000Z'),
         },
-        undefined
+        undefined,
       );
     });
   });
@@ -537,7 +537,7 @@ describe('TicketService', () => {
         {
           ticketId: 'one-piece',
         },
-        'user-id'
+        'user-id',
       );
 
       expect(unitOfWork.transaction).toHaveBeenCalledTimes(1);
@@ -553,7 +553,7 @@ describe('TicketService', () => {
           updatedAt: new Date('2000-01-01T12:00:00.000Z'),
           updatedById: 'user-id',
         },
-        undefined
+        undefined,
       );
 
       expect(ticketTimelineRepo.create).toHaveBeenCalledTimes(1);
@@ -569,7 +569,7 @@ describe('TicketService', () => {
           userCreatedById: 'user-id',
           createdAt: new Date('2000-01-01T12:00:00.000Z'),
         },
-        undefined
+        undefined,
       );
     });
   });
@@ -611,7 +611,7 @@ describe('TicketService', () => {
           ticketId: 'one-piece',
           text: 'test chat',
         },
-        'user-id'
+        'user-id',
       );
 
       expect(unitOfWork.transaction).toHaveBeenCalledTimes(1);
@@ -628,7 +628,7 @@ describe('TicketService', () => {
           userCreatedById: 'user-id',
           createdAt: new Date('2000-01-01T12:00:00.000Z'),
         },
-        undefined
+        undefined,
       );
 
       expect(ticketRepo.update).toHaveBeenCalledTimes(1);
@@ -638,7 +638,7 @@ describe('TicketService', () => {
           updatedAt: new Date('2000-01-01T12:00:00.000Z'),
           updatedById: 'user-id',
         },
-        undefined
+        undefined,
       );
     });
   });
@@ -678,7 +678,7 @@ describe('TicketService', () => {
         {
           ticketId: 'one-piece',
         },
-        'user-id'
+        'user-id',
       );
 
       expect(unitOfWork.transaction).toHaveBeenCalledTimes(1);
@@ -694,7 +694,7 @@ describe('TicketService', () => {
           updatedAt: new Date('2000-01-01T12:00:00.000Z'),
           updatedById: 'user-id',
         },
-        undefined
+        undefined,
       );
 
       expect(ticketTimelineRepo.create).toHaveBeenCalledTimes(1);
@@ -710,7 +710,7 @@ describe('TicketService', () => {
           userCreatedById: 'user-id',
           createdAt: new Date('2000-01-01T12:00:00.000Z'),
         },
-        undefined
+        undefined,
       );
     });
   });

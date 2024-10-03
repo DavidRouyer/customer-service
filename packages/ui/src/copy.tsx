@@ -28,7 +28,7 @@ const Copy = React.forwardRef<
 >(
   (
     { children, className, content, translations, asChild = false, ...props },
-    ref
+    ref,
   ) => {
     const [done, setDone] = useState(false);
     const [open, setOpen] = useState(false);
@@ -74,7 +74,7 @@ const Copy = React.forwardRef<
         </Tooltip>
       </TooltipProvider>
     );
-  }
+  },
 );
 Copy.displayName = 'Copy';
 

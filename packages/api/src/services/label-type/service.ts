@@ -1,5 +1,11 @@
 import { z } from 'zod';
 
+import type {
+  InferInsertModel,
+  InferSelectModel,
+  LabelTypeRepository,
+} from '@kyaku/database';
+import type { FindConfig, GetConfig } from '@kyaku/kyaku/types';
 import {
   and,
   eq,
@@ -10,19 +16,13 @@ import {
   schema,
   sortByDirection,
 } from '@kyaku/database';
-import type {
-  InferInsertModel,
-  InferSelectModel,
-  LabelTypeRepository,
-} from '@kyaku/database';
 import { Direction } from '@kyaku/kyaku/types';
-import type { FindConfig, GetConfig } from '@kyaku/kyaku/types';
 import { KyakuError } from '@kyaku/kyaku/utils';
 
 import type { UnitOfWork } from '../../unit-of-work';
+import type { LabelTypeFilters, LabelTypeWith } from './common';
 import { BaseService } from '../base-service';
 import { LabelTypeSortField } from './common';
-import type { LabelTypeFilters, LabelTypeWith } from './common';
 
 export class LabelTypeService extends BaseService {
   private readonly labelTypeRepository: LabelTypeRepository;
@@ -39,7 +39,7 @@ export class LabelTypeService extends BaseService {
 
   async retrieve<T extends LabelTypeWith<T>>(
     labelTypeId: string,
-    config?: GetConfig<T>
+    config?: GetConfig<T>,
   ) {
     return await this.labelTypeRepository.find({
       where: eq(schema.labelTypes.id, labelTypeId),
@@ -49,7 +49,7 @@ export class LabelTypeService extends BaseService {
 
   async retrieveByName<T extends LabelTypeWith<T>>(
     labelTypeName: string,
-    config?: GetConfig<T>
+    config?: GetConfig<T>,
   ) {
     return await this.labelTypeRepository.find({
       where: eq(schema.labelTypes.name, labelTypeName),
@@ -65,7 +65,7 @@ export class LabelTypeService extends BaseService {
       direction: Direction.Forward,
       limit: 50,
       sortBy: LabelTypeSortField.name,
-    }
+    },
   ) {
     return await this.labelTypeRepository.findMany({
       limit: config.limit,
@@ -76,7 +76,7 @@ export class LabelTypeService extends BaseService {
       where: and(
         this.getFilterWhereClause(filters),
         this.getSortWhereClause(config),
-        this.getIdWhereClause(config)
+        this.getIdWhereClause(config),
       ),
       with: this.getWithClause(config.relations),
     });
@@ -92,7 +92,7 @@ export class LabelTypeService extends BaseService {
       | 'updatedById'
       | 'archivedAt'
     >,
-    userId: string
+    userId: string,
   ) {
     const createLabelTypeSchema = z
       .object({
@@ -102,14 +102,14 @@ export class LabelTypeService extends BaseService {
       .refine(
         async (dataToRefine) => {
           const labelTypeWithName = await this.retrieveByName(
-            dataToRefine.name
+            dataToRefine.name,
           );
           return !labelTypeWithName;
         },
         {
           message: `Label type with name:${data.name} already exists`,
           path: ['name'],
-        }
+        },
       );
 
     await createLabelTypeSchema.parseAsync(data);
@@ -123,7 +123,7 @@ export class LabelTypeService extends BaseService {
           createdAt: createdAt,
           createdById: userId,
         },
-        tx
+        tx,
       );
 
       if (!newLabelType) {
@@ -141,7 +141,7 @@ export class LabelTypeService extends BaseService {
     data: Partial<InferInsertModel<typeof schema.labelTypes>> & {
       id: NonNullable<InferSelectModel<typeof schema.labelTypes>['id']>;
     },
-    userId: string
+    userId: string,
   ) {
     const labelType = await this.retrieve(data.id);
 
@@ -149,7 +149,7 @@ export class LabelTypeService extends BaseService {
       throw new KyakuError(
         KyakuError.Types.NOT_FOUND,
         `Label type with id:${data.id} not found`,
-        ['id']
+        ['id'],
       );
 
     const updateLabelTypeSchema = z
@@ -162,14 +162,14 @@ export class LabelTypeService extends BaseService {
           if (!dataToRefine.name) return true;
 
           const labelTypeWithName = await this.retrieveByName(
-            dataToRefine.name
+            dataToRefine.name,
           );
           return !labelTypeWithName || labelTypeWithName.id === data.id;
         },
         {
           message: `Label type with name:${data.name} already exists`,
           path: ['name'],
-        }
+        },
       );
 
     await updateLabelTypeSchema.parseAsync(data);
@@ -183,7 +183,7 @@ export class LabelTypeService extends BaseService {
           updatedAt: updatedAt,
           updatedById: userId,
         },
-        tx
+        tx,
       );
 
       if (!updatedLabelType) {
@@ -204,7 +204,7 @@ export class LabelTypeService extends BaseService {
       throw new KyakuError(
         KyakuError.Types.NOT_FOUND,
         `Label type with id:${labelTypeId} not found`,
-        ['id']
+        ['id'],
       );
 
     if (labelType.archivedAt) return;
@@ -219,7 +219,7 @@ export class LabelTypeService extends BaseService {
           updatedById: userId,
           archivedAt: updatedAt,
         },
-        tx
+        tx,
       );
     });
   }
@@ -231,7 +231,7 @@ export class LabelTypeService extends BaseService {
       throw new KyakuError(
         KyakuError.Types.NOT_FOUND,
         `Label type with id:${labelTypeId} not found`,
-        ['id']
+        ['id'],
       );
 
     if (!labelType.archivedAt) return;
@@ -246,13 +246,13 @@ export class LabelTypeService extends BaseService {
           updatedById: userId,
           archivedAt: null,
         },
-        tx
+        tx,
       );
     });
   }
 
   private getWithClause<T extends LabelTypeWith<T>>(
-    relations: T | undefined
+    relations: T | undefined,
   ): {
     createdBy: T extends { createdBy: true }
       ? {
@@ -298,12 +298,12 @@ export class LabelTypeService extends BaseService {
         ? filters.isArchived
           ? isNotNull(schema.labelTypes.archivedAt)
           : isNull(schema.labelTypes.archivedAt)
-        : undefined
+        : undefined,
     );
   }
 
   private getSortWhereClause<T extends LabelTypeWith<T>>(
-    config: FindConfig<T, LabelTypeSortField>
+    config: FindConfig<T, LabelTypeSortField>,
   ) {
     if (
       !config.sortBy ||
@@ -315,14 +315,14 @@ export class LabelTypeService extends BaseService {
     if (config.sortBy === LabelTypeSortField.createdAt) {
       return filterByDirection(config.direction)(
         schema.labelTypes.createdAt,
-        new Date(config.cursor.lastValue)
+        new Date(config.cursor.lastValue),
       );
     }
 
     if (config.sortBy === LabelTypeSortField.name) {
       return filterByDirection(config.direction)(
         schema.labelTypes.name,
-        config.cursor.lastValue
+        config.cursor.lastValue,
       );
     }
 
@@ -330,18 +330,18 @@ export class LabelTypeService extends BaseService {
   }
 
   private getIdWhereClause<T extends LabelTypeWith<T>>(
-    config: FindConfig<T, LabelTypeSortField>
+    config: FindConfig<T, LabelTypeSortField>,
   ) {
     if (!config.cursor?.lastId) return undefined;
 
     return filterByDirection(config.direction)(
       schema.labelTypes.id,
-      config.cursor.lastId
+      config.cursor.lastId,
     );
   }
 
   private getOrderByClause<T extends LabelTypeWith<T>>(
-    config: FindConfig<T, LabelTypeSortField>
+    config: FindConfig<T, LabelTypeSortField>,
   ) {
     if (!config.sortBy) return [];
 

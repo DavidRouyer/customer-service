@@ -1,3 +1,4 @@
+import type { LabelRepository } from '@kyaku/database';
 import {
   and,
   asc,
@@ -7,7 +8,6 @@ import {
   TicketRepository,
   TicketTimelineRepository,
 } from '@kyaku/database';
-import type { LabelRepository } from '@kyaku/database';
 
 import type { UnitOfWork } from '../../unit-of-work';
 import { LabelService } from '../label';
@@ -161,7 +161,7 @@ describe('LabelService', () => {
           updatedAt: new Date('2000-01-01T12:00:00.000Z'),
           updatedById: 'user-id',
         },
-        undefined
+        undefined,
       );
 
       expect(ticketTimelineRepo.create).toHaveBeenCalledTimes(1);
@@ -177,7 +177,7 @@ describe('LabelService', () => {
           userCreatedById: 'user-id',
           createdAt: new Date('2000-01-01T12:00:00.000Z'),
         },
-        undefined
+        undefined,
       );
     });
   });
@@ -253,7 +253,7 @@ describe('LabelService', () => {
         {
           archivedAt: new Date('2000-01-01T12:00:00.000Z'),
         },
-        undefined
+        undefined,
       );
 
       expect(ticketRepo.update).toHaveBeenCalledTimes(1);
@@ -263,7 +263,7 @@ describe('LabelService', () => {
           updatedAt: new Date('2000-01-01T12:00:00.000Z'),
           updatedById: 'user-id',
         },
-        undefined
+        undefined,
       );
 
       expect(ticketTimelineRepo.create).toHaveBeenCalledTimes(1);
@@ -279,7 +279,7 @@ describe('LabelService', () => {
           userCreatedById: 'user-id',
           createdAt: new Date('2000-01-01T12:00:00.000Z'),
         },
-        undefined
+        undefined,
       );
     });
   });

@@ -1,12 +1,4 @@
 import type { TicketStatusDetail } from './ticket';
-import {
-  DoneTicketStatusDetail,
-  SnoozeTicketStatusDetail,
-  TicketFilter,
-  TicketPriority,
-  TicketStatus,
-  TodoTicketStatusDetail,
-} from './ticket';
 import type {
   TicketAssignmentChanged,
   TicketAssignmentChangedWithData,
@@ -17,8 +9,16 @@ import type {
   TicketPriorityChanged,
   TicketStatusChanged,
 } from './ticket-timeline-entry';
-import { TimelineEntryType } from './ticket-timeline-entry';
 import type { User } from './user';
+import {
+  DoneTicketStatusDetail,
+  SnoozeTicketStatusDetail,
+  TicketFilter,
+  TicketPriority,
+  TicketStatus,
+  TodoTicketStatusDetail,
+} from './ticket';
+import { TimelineEntryType } from './ticket-timeline-entry';
 
 export {
   type TicketAssignmentChanged,

@@ -1,5 +1,5 @@
-import libphonenumber from 'google-libphonenumber';
 import type { PhoneNumber } from 'google-libphonenumber';
+import libphonenumber from 'google-libphonenumber';
 
 const instance = libphonenumber.PhoneNumberUtil.getInstance();
 const { PhoneNumberFormat } = libphonenumber;
@@ -15,7 +15,7 @@ export type ParsedE164Type = Readonly<{
 export function parseAndFormatPhoneNumber(
   str: string,
   regionCode: string | undefined,
-  format = PhoneNumberFormat.E164
+  format = PhoneNumberFormat.E164,
 ): ParsedE164Type | undefined {
   let result: PhoneNumber;
   try {

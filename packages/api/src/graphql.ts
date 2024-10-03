@@ -1,10 +1,11 @@
+import type { YogaInitialContext } from 'graphql-yoga';
 import { mergeResolvers, mergeTypeDefs } from '@graphql-tools/merge';
 import { makeExecutableSchema } from '@graphql-tools/schema';
 import { asClass, asValue, createContainer } from 'awilix';
 import DataLoader from 'dataloader';
-import type { YogaInitialContext } from 'graphql-yoga';
 import { default as jwt } from 'jsonwebtoken';
 
+import type { User } from '@kyaku/kyaku/models';
 import { Auth, authOptions } from '@kyaku/auth';
 import {
   CustomerRepository,
@@ -15,7 +16,6 @@ import {
   TicketTimelineRepository,
   UserRepository,
 } from '@kyaku/database';
-import type { User } from '@kyaku/kyaku/models';
 
 import { commonModule } from './modules/common/resolvers';
 import { customerModule } from './modules/customer/resolvers';
@@ -70,7 +70,7 @@ const getUser = async (request: Request) => {
   const url = new URL('/api/auth/session', request.url);
   const response = await Auth(
     new Request(url, { headers: request.headers }),
-    authOptions
+    authOptions,
   );
   const { status = 200 } = response;
 
@@ -87,7 +87,7 @@ const getUser = async (request: Request) => {
     }
     const tokenPayload = jwt.verify(
       token,
-      process.env.JWT_SECRET
+      process.env.JWT_SECRET,
     ) as jwt.JwtPayload;
 
     const userId = tokenPayload.userId as string | undefined;
@@ -113,7 +113,8 @@ const getContext = async (initialContext: YogaInitialContext) => ({
       });
       return ids.map(
         (id) =>
-          rows.find((row) => row.id === id) ?? new Error(`Row not found: ${id}`)
+          rows.find((row) => row.id === id) ??
+          new Error(`Row not found: ${id}`),
       );
     }),
     labelLoader: new DataLoader(async (ids: readonly string[]) => {
@@ -125,7 +126,8 @@ const getContext = async (initialContext: YogaInitialContext) => ({
       });
       return ids.map(
         (id) =>
-          rows.find((row) => row.id === id) ?? new Error(`Row not found: ${id}`)
+          rows.find((row) => row.id === id) ??
+          new Error(`Row not found: ${id}`),
       );
     }),
     labelTypeLoader: new DataLoader(async (ids: readonly string[]) => {
@@ -137,7 +139,8 @@ const getContext = async (initialContext: YogaInitialContext) => ({
       });
       return ids.map(
         (id) =>
-          rows.find((row) => row.id === id) ?? new Error(`Row not found: ${id}`)
+          rows.find((row) => row.id === id) ??
+          new Error(`Row not found: ${id}`),
       );
     }),
     ticketLoader: new DataLoader(async (ids: readonly string[]) => {
@@ -149,7 +152,8 @@ const getContext = async (initialContext: YogaInitialContext) => ({
       });
       return ids.map(
         (id) =>
-          rows.find((row) => row.id === id) ?? new Error(`Row not found: ${id}`)
+          rows.find((row) => row.id === id) ??
+          new Error(`Row not found: ${id}`),
       );
     }),
     userLoader: new DataLoader(async (ids: readonly string[]) => {
@@ -161,7 +165,8 @@ const getContext = async (initialContext: YogaInitialContext) => ({
       });
       return ids.map(
         (id) =>
-          rows.find((row) => row.id === id) ?? new Error(`Row not found: ${id}`)
+          rows.find((row) => row.id === id) ??
+          new Error(`Row not found: ${id}`),
       );
     }),
   },

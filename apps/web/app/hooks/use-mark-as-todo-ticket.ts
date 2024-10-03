@@ -22,7 +22,7 @@ export const useMarkAsTodoTicket = () => {
 
       // Snapshot the previous value
       const previousTicket = queryClient.getQueryData<TicketQuery['ticket']>(
-        useTicketQuery.getKey({ ticketId: input.ticketId })
+        useTicketQuery.getKey({ ticketId: input.ticketId }),
       );
 
       // Optimistically update to the new value
@@ -34,7 +34,7 @@ export const useMarkAsTodoTicket = () => {
                 ...oldQueryData,
                 status: TicketStatus.Todo,
               }
-            : undefined
+            : undefined,
       );
 
       // Return a context object with the snapshotted value
@@ -44,7 +44,7 @@ export const useMarkAsTodoTicket = () => {
       // TODO: handle failed queries
       queryClient.setQueryData<TicketQuery['ticket']>(
         useTicketQuery.getKey({ ticketId: input.ticketId }),
-        context?.previousTicket
+        context?.previousTicket,
       );
     },
     onSettled: (_, __, { input }) => {

@@ -24,11 +24,13 @@ const AT_BOTTOM_THRESHOLD = 15;
 const AT_BOTTOM_DETECTOR_STYLE = { height: AT_BOTTOM_THRESHOLD };
 
 export const getScrollBottom = (
-  el: Readonly<Pick<HTMLElement, 'clientHeight' | 'scrollHeight' | 'scrollTop'>>
+  el: Readonly<
+    Pick<HTMLElement, 'clientHeight' | 'scrollHeight' | 'scrollTop'>
+  >,
 ): number => el.scrollHeight - el.scrollTop - el.clientHeight;
 
 export function clearTimeoutIfNecessary(
-  timeout: undefined | null | ReturnType<typeof setTimeout>
+  timeout: undefined | null | ReturnType<typeof setTimeout>,
 ): void {
   if (timeout) {
     clearTimeout(timeout);
@@ -78,7 +80,7 @@ export const Timeline = ({ items, renderItem, ticketId }: TimelineProps) => {
           nextItemId,
           ticketId,
         })}
-      </div>
+      </div>,
     );
   }
 
@@ -144,7 +146,7 @@ export const Timeline = ({ items, renderItem, ticketId }: TimelineProps) => {
               {
                 'timeline-list--have-newest': true,
                 'timeline-list--scroll-locked': state.scrollLocked,
-              }
+              },
             )}
           >
             {itemNodes}

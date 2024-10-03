@@ -1,5 +1,5 @@
-import { and, asc, eq, isNull, schema } from '@kyaku/database';
 import type { LabelTypeRepository } from '@kyaku/database';
+import { and, asc, eq, isNull, schema } from '@kyaku/database';
 
 import type { UnitOfWork } from '../../unit-of-work';
 import { LabelTypeService } from '../label-type';
@@ -130,7 +130,7 @@ describe('LabelTypeService', () => {
           name: 'One Piece',
           icon: 'icon',
         },
-        'user-id'
+        'user-id',
       );
 
       expect(unitOfWork.transaction).toHaveBeenCalledTimes(1);
@@ -152,7 +152,7 @@ describe('LabelTypeService', () => {
           createdAt: new Date('2000-01-01T12:00:00.000Z'),
           createdById: 'user-id',
         },
-        undefined
+        undefined,
       );
     });
 
@@ -181,8 +181,8 @@ describe('LabelTypeService', () => {
               name: 'One Piece',
               icon: 'icon',
             },
-            'user-id'
-          )
+            'user-id',
+          ),
       ).rejects.toThrowError(/Label type with name:One Piece already exists/);
 
       expect(unitOfWork.transaction).toHaveBeenCalledTimes(0);
@@ -225,7 +225,7 @@ describe('LabelTypeService', () => {
           id: 'one-piece',
           icon: 'new-icon',
         },
-        'user-id'
+        'user-id',
       );
 
       expect(unitOfWork.transaction).toHaveBeenCalledTimes(1);
@@ -247,7 +247,7 @@ describe('LabelTypeService', () => {
           updatedAt: new Date('2000-01-01T12:00:00.000Z'),
           updatedById: 'user-id',
         },
-        undefined
+        undefined,
       );
     });
 
@@ -277,8 +277,8 @@ describe('LabelTypeService', () => {
               name: 'One Piece',
               icon: 'new-icon',
             },
-            'user-id'
-          )
+            'user-id',
+          ),
       ).rejects.toThrowError(/Label type with name:One Piece already exists/);
 
       expect(unitOfWork.transaction).toHaveBeenCalledTimes(0);
@@ -344,7 +344,7 @@ describe('LabelTypeService', () => {
           updatedById: 'user-id',
           archivedAt: new Date('2000-01-01T12:00:00.000Z'),
         },
-        undefined
+        undefined,
       );
     });
   });
@@ -393,7 +393,7 @@ describe('LabelTypeService', () => {
           updatedById: 'user-id',
           archivedAt: null,
         },
-        undefined
+        undefined,
       );
     });
   });

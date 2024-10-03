@@ -1,7 +1,7 @@
 import type { InferInsertModel, InferSelectModel, KnownKeysOnly } from '..';
-import { eq, schema } from '..';
 import type { IncludeRelation } from '../build-query';
 import type { DbTransactionScope } from '../db-transaction';
+import { eq, schema } from '..';
 import { BaseRepository } from './base-repository';
 
 export default class LabelTypeRepository extends BaseRepository {
@@ -11,20 +11,20 @@ export default class LabelTypeRepository extends BaseRepository {
   }
 
   find<T extends Omit<IncludeRelation<'labelTypes'>, 'limit'>>(
-    config: KnownKeysOnly<T, Omit<IncludeRelation<'labelTypes'>, 'limit'>>
+    config: KnownKeysOnly<T, Omit<IncludeRelation<'labelTypes'>, 'limit'>>,
   ) {
     return this.dbConnection.query.labelTypes.findFirst(config);
   }
 
   findMany<T extends IncludeRelation<'labelTypes'>>(
-    config: KnownKeysOnly<T, IncludeRelation<'labelTypes'>>
+    config: KnownKeysOnly<T, IncludeRelation<'labelTypes'>>,
   ) {
     return this.dbConnection.query.labelTypes.findMany(config);
   }
 
   create(
     entity: InferInsertModel<typeof schema.labelTypes>,
-    transactionScope: DbTransactionScope
+    transactionScope: DbTransactionScope,
   ) {
     return transactionScope
       .insert(schema.labelTypes)
@@ -36,7 +36,7 @@ export default class LabelTypeRepository extends BaseRepository {
   update(
     entity: Partial<InferInsertModel<typeof schema.labelTypes>> &
       NonNullable<Pick<InferSelectModel<typeof schema.labelTypes>, 'id'>>,
-    transactionScope: DbTransactionScope
+    transactionScope: DbTransactionScope,
   ) {
     return transactionScope
       .update(schema.labelTypes)

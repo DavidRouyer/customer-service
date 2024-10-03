@@ -1,8 +1,8 @@
 'use client';
 
+import type { ColumnDef } from '@tanstack/react-table';
 import * as React from 'react';
 import { Fragment } from 'react';
-import type { ColumnDef } from '@tanstack/react-table';
 import {
   flexRender,
   getCoreRowModel,
@@ -84,12 +84,12 @@ export function DataTable<TData, TValue>({
                       <Fragment key={cell.id}>
                         {flexRender(
                           cell.column.columnDef.cell,
-                          cell.getContext()
+                          cell.getContext(),
                         )}
                       </Fragment>
                     ))}
                   </TableRow>
-                )
+                ),
               )
             ) : (
               <TableRow>

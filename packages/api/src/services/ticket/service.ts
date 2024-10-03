@@ -1,12 +1,3 @@
-import {
-  and,
-  eq,
-  filterByDirection,
-  inclusionFilterOperator,
-  isNull,
-  schema,
-  sortByDirection,
-} from '@kyaku/database';
 import type {
   InferInsertModel,
   InferSelectModel,
@@ -21,6 +12,16 @@ import type {
   TicketPriorityChanged,
   TicketStatusChanged,
 } from '@kyaku/kyaku/models';
+import type { FindConfig, GetConfig } from '@kyaku/kyaku/types';
+import {
+  and,
+  eq,
+  filterByDirection,
+  inclusionFilterOperator,
+  isNull,
+  schema,
+  sortByDirection,
+} from '@kyaku/database';
 import {
   DoneTicketStatusDetail,
   SnoozeTicketStatusDetail,
@@ -28,13 +29,12 @@ import {
   TimelineEntryType,
   TodoTicketStatusDetail,
 } from '@kyaku/kyaku/models';
-import type { FindConfig, GetConfig } from '@kyaku/kyaku/types';
 import { Direction } from '@kyaku/kyaku/types';
 import { KyakuError } from '@kyaku/kyaku/utils';
 
 import type { UnitOfWork } from '../../unit-of-work';
-import { BaseService } from '../base-service';
 import type { TicketFilters, TicketWith } from './common';
+import { BaseService } from '../base-service';
 import { TicketSortField } from './common';
 
 export class TicketService extends BaseService {
@@ -56,7 +56,7 @@ export class TicketService extends BaseService {
 
   async retrieve<T extends TicketWith<T>>(
     ticketId: string,
-    config?: GetConfig<T>
+    config?: GetConfig<T>,
   ) {
     return await this.ticketRepository.find({
       where: eq(schema.tickets.id, ticketId),
@@ -70,7 +70,7 @@ export class TicketService extends BaseService {
       direction: Direction.Forward,
       limit: 50,
       sortBy: TicketSortField.createdAt,
-    }
+    },
   ) {
     return await this.ticketRepository.findMany({
       limit: config.limit,
@@ -81,7 +81,7 @@ export class TicketService extends BaseService {
       where: and(
         this.getFilterWhereClause(filters),
         this.getSortWhereClause(config),
-        this.getIdWhereClause(config)
+        this.getIdWhereClause(config),
       ),
       with: this.getWithClause(config.relations),
     });
@@ -95,7 +95,7 @@ export class TicketService extends BaseService {
       ticketId: string;
       assignedToId: string;
     },
-    userId: string
+    userId: string,
   ) {
     const ticket = await this.retrieve(ticketId);
 
@@ -103,7 +103,7 @@ export class TicketService extends BaseService {
       throw new KyakuError(
         KyakuError.Types.NOT_FOUND,
         `Ticket with id:${ticketId} not found`,
-        ['id']
+        ['id'],
       );
 
     if (ticket.assignedToId === assignedToId) return;
@@ -118,7 +118,7 @@ export class TicketService extends BaseService {
           updatedAt: updatedAt,
           updatedById: userId,
         },
-        tx
+        tx,
       );
 
       if (!updatedTicket) {
@@ -138,7 +138,7 @@ export class TicketService extends BaseService {
           createdAt: updatedTicket.updatedAt ?? updatedAt,
           userCreatedById: userId,
         },
-        tx
+        tx,
       );
 
       return updatedTicket;
@@ -153,7 +153,7 @@ export class TicketService extends BaseService {
       ticketId: string;
       priority: TicketPriority;
     },
-    userId: string
+    userId: string,
   ) {
     const ticket = await this.retrieve(ticketId);
 
@@ -161,7 +161,7 @@ export class TicketService extends BaseService {
       throw new KyakuError(
         KyakuError.Types.NOT_FOUND,
         `Ticket with id:${ticketId} not found`,
-        ['id']
+        ['id'],
       );
 
     if (ticket.priority === priority) return;
@@ -176,7 +176,7 @@ export class TicketService extends BaseService {
           updatedAt: updatedAt,
           updatedById: userId,
         },
-        tx
+        tx,
       );
 
       if (!updatedTicket) {
@@ -196,7 +196,7 @@ export class TicketService extends BaseService {
           createdAt: updatedTicket.updatedAt ?? updatedAt,
           userCreatedById: userId,
         },
-        tx
+        tx,
       );
 
       return updatedTicket;
@@ -217,7 +217,7 @@ export class TicketService extends BaseService {
       | 'updatedById'
       | 'updatedAt'
     >,
-    userId: string
+    userId: string,
   ) {
     return await this.unitOfWork.transaction(async (tx) => {
       const createdAt = new Date();
@@ -232,7 +232,7 @@ export class TicketService extends BaseService {
           createdAt: createdAt,
           createdById: userId,
         },
-        tx
+        tx,
       );
 
       if (!newTicket) {
@@ -254,7 +254,7 @@ export class TicketService extends BaseService {
       text: string;
       rawContent: string;
     },
-    userId: string
+    userId: string,
   ) {
     const ticket = await this.retrieve(ticketId);
 
@@ -262,7 +262,7 @@ export class TicketService extends BaseService {
       throw new KyakuError(
         KyakuError.Types.NOT_FOUND,
         `Ticket with id:${ticketId} not found`,
-        ['id']
+        ['id'],
       );
 
     return await this.unitOfWork.transaction(async (tx) => {
@@ -280,7 +280,7 @@ export class TicketService extends BaseService {
           createdAt: createdAt,
           userCreatedById: userId,
         },
-        tx
+        tx,
       );
 
       if (!newNote) {
@@ -294,7 +294,7 @@ export class TicketService extends BaseService {
           updatedAt: newNote.createdAt,
           updatedById: userId,
         },
-        tx
+        tx,
       );
 
       return newNote;
@@ -309,7 +309,7 @@ export class TicketService extends BaseService {
       ticketId: string;
       statusDetail?: DoneTicketStatusDetail;
     },
-    userId: string
+    userId: string,
   ) {
     const ticket = await this.retrieve(ticketId);
 
@@ -317,7 +317,7 @@ export class TicketService extends BaseService {
       throw new KyakuError(
         KyakuError.Types.NOT_FOUND,
         `Ticket with id:${ticketId} not found`,
-        ['id']
+        ['id'],
       );
 
     if (ticket.status === TicketStatus.Done) return;
@@ -335,7 +335,7 @@ export class TicketService extends BaseService {
           updatedAt: updatedAt,
           updatedById: userId,
         },
-        tx
+        tx,
       );
 
       if (!updatedTicket) {
@@ -355,7 +355,7 @@ export class TicketService extends BaseService {
           createdAt: updatedTicket.updatedAt ?? updatedAt,
           userCreatedById: userId,
         },
-        tx
+        tx,
       );
 
       return updatedTicket;
@@ -370,7 +370,7 @@ export class TicketService extends BaseService {
       ticketId: string;
       statusDetail?: TodoTicketStatusDetail;
     },
-    userId: string
+    userId: string,
   ) {
     const ticket = await this.retrieve(ticketId);
 
@@ -378,7 +378,7 @@ export class TicketService extends BaseService {
       throw new KyakuError(
         KyakuError.Types.NOT_FOUND,
         `Ticket with id:${ticketId} not found`,
-        ['id']
+        ['id'],
       );
 
     if (ticket.status === TicketStatus.Todo) return;
@@ -396,7 +396,7 @@ export class TicketService extends BaseService {
           updatedAt: updatedAt,
           updatedById: userId,
         },
-        tx
+        tx,
       );
 
       if (!updatedTicket) {
@@ -416,7 +416,7 @@ export class TicketService extends BaseService {
           createdAt: updatedTicket.updatedAt ?? updatedAt,
           userCreatedById: userId,
         },
-        tx
+        tx,
       );
 
       return updatedTicket;
@@ -431,7 +431,7 @@ export class TicketService extends BaseService {
       ticketId: string;
       text: string;
     },
-    userId: string
+    userId: string,
   ) {
     const ticket = await this.retrieve(ticketId);
 
@@ -439,7 +439,7 @@ export class TicketService extends BaseService {
       throw new KyakuError(
         KyakuError.Types.NOT_FOUND,
         `Ticket with id:${ticketId} not found`,
-        ['id']
+        ['id'],
       );
 
     return await this.unitOfWork.transaction(async (tx) => {
@@ -456,7 +456,7 @@ export class TicketService extends BaseService {
           createdAt: createdAt,
           userCreatedById: userId,
         },
-        tx
+        tx,
       );
 
       if (!newChat) {
@@ -470,7 +470,7 @@ export class TicketService extends BaseService {
           updatedAt: newChat.createdAt,
           updatedById: userId,
         },
-        tx
+        tx,
       );
 
       return {
@@ -487,7 +487,7 @@ export class TicketService extends BaseService {
       ticketId: string;
       statusDetail?: SnoozeTicketStatusDetail;
     },
-    userId: string
+    userId: string,
   ) {
     const ticket = await this.retrieve(ticketId);
 
@@ -495,7 +495,7 @@ export class TicketService extends BaseService {
       throw new KyakuError(
         KyakuError.Types.NOT_FOUND,
         `Ticket with id:${ticketId} not found`,
-        ['id']
+        ['id'],
       );
 
     if (ticket.status === TicketStatus.Snoozed) return;
@@ -514,7 +514,7 @@ export class TicketService extends BaseService {
           updatedAt: updatedAt,
           updatedById: userId,
         },
-        tx
+        tx,
       );
 
       if (!updatedTicket) {
@@ -534,7 +534,7 @@ export class TicketService extends BaseService {
           createdAt: updatedTicket.updatedAt ?? updatedAt,
           userCreatedById: userId,
         },
-        tx
+        tx,
       );
 
       return updatedTicket;
@@ -548,7 +548,7 @@ export class TicketService extends BaseService {
       throw new KyakuError(
         KyakuError.Types.NOT_FOUND,
         `Ticket with id:${ticketId} not found`,
-        ['id']
+        ['id'],
       );
 
     if (!ticket.assignedToId) return;
@@ -563,7 +563,7 @@ export class TicketService extends BaseService {
           updatedAt: updatedAt,
           updatedById: userId,
         },
-        tx
+        tx,
       );
 
       if (!updatedTicket) {
@@ -583,7 +583,7 @@ export class TicketService extends BaseService {
           createdAt: updatedTicket.updatedAt ?? updatedAt,
           userCreatedById: userId,
         },
-        tx
+        tx,
       );
 
       return updatedTicket;
@@ -591,7 +591,7 @@ export class TicketService extends BaseService {
   }
 
   private getWithClause<T extends TicketWith<T>>(
-    relations: T | undefined
+    relations: T | undefined,
   ): {
     assignedTo: T extends { assignedTo: true } ? true : undefined;
     createdBy: T extends { createdBy: true }
@@ -665,13 +665,13 @@ export class TicketService extends BaseService {
       filters.assignedToUser
         ? inclusionFilterOperator(
             schema.tickets.assignedToId,
-            filters.assignedToUser
+            filters.assignedToUser,
           )
         : undefined,
       filters.customerIds
         ? inclusionFilterOperator(
             schema.tickets.customerId,
-            filters.customerIds
+            filters.customerIds,
           )
         : undefined,
       filters.priority
@@ -682,12 +682,12 @@ export class TicketService extends BaseService {
         : undefined,
       filters.ticketIds
         ? inclusionFilterOperator(schema.tickets.id, filters.ticketIds)
-        : undefined
+        : undefined,
     );
   }
 
   private getSortWhereClause<T extends TicketWith<T>>(
-    config: FindConfig<T, TicketSortField>
+    config: FindConfig<T, TicketSortField>,
   ) {
     if (
       !config.sortBy ||
@@ -699,14 +699,14 @@ export class TicketService extends BaseService {
     if (config.sortBy === TicketSortField.createdAt) {
       return filterByDirection(config.direction)(
         schema.tickets.createdAt,
-        new Date(config.cursor.lastValue)
+        new Date(config.cursor.lastValue),
       );
     }
 
     if (config.sortBy === TicketSortField.statusChangedAt) {
       return filterByDirection(config.direction)(
         schema.tickets.statusChangedAt,
-        new Date(config.cursor.lastValue)
+        new Date(config.cursor.lastValue),
       );
     }
 
@@ -714,18 +714,18 @@ export class TicketService extends BaseService {
   }
 
   private getIdWhereClause<T extends TicketWith<T>>(
-    config: FindConfig<T, TicketSortField>
+    config: FindConfig<T, TicketSortField>,
   ) {
     if (!config.cursor?.lastId) return undefined;
 
     return filterByDirection(config.direction)(
       schema.tickets.id,
-      config.cursor.lastId
+      config.cursor.lastId,
     );
   }
 
   private getOrderByClause<T extends TicketWith<T>>(
-    config: FindConfig<T, TicketSortField>
+    config: FindConfig<T, TicketSortField>,
   ) {
     if (!config.sortBy) return [];
 

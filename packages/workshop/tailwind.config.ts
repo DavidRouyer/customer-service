@@ -8,7 +8,7 @@ export default {
     path.resolve(
       path.dirname(require.resolve('@kyaku/ui')),
       '../..',
-      '**/*.{js,ts,jsx,tsx}'
+      '**/*.{js,ts,jsx,tsx}',
     ),
     './src/**/*.{ts,tsx}',
   ],

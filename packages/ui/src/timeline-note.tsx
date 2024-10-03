@@ -4,10 +4,10 @@ import { FormattedMessage } from 'react-intl';
 
 import { getInitials } from '@kyaku/kyaku/utils';
 
+import type { NoteEntry, TimelineItemNarrowed } from './timeline-item';
 import { Avatar, AvatarFallback, AvatarImage } from './avatar';
 import { NodeContent } from './node-content';
 import { RelativeTime } from './relative-time';
-import type { NoteEntry, TimelineItemNarrowed } from './timeline-item';
 
 interface TimelineNoteProps {
   item: TimelineItemNarrowed<NoteEntry>;
@@ -28,7 +28,7 @@ export const TimelineNote: FC<TimelineNoteProps> = ({ item }) => {
             />
             <AvatarFallback>
               {getInitials(
-                item.userCreatedBy?.name ?? item.customerCreatedBy?.name ?? ''
+                item.userCreatedBy?.name ?? item.customerCreatedBy?.name ?? '',
               )}
             </AvatarFallback>
           </Avatar>

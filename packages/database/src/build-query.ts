@@ -37,7 +37,7 @@ export type InclusionFilterOperator<T> =
 
 export const inclusionFilterOperator = <TCol extends Column>(
   column: TCol,
-  operator: InclusionFilterOperator<GetColumnData<TCol, 'raw'>>
+  operator: InclusionFilterOperator<GetColumnData<TCol, 'raw'>>,
 ) => {
   if ('in' in operator) return inArray(column, operator.in);
   if ('notIn' in operator) return notInArray(column, operator.notIn);
@@ -54,7 +54,7 @@ export const filterByDirection = (direction: Direction) => {
 
 export const filterBySortDirection = (
   sortBy: SortDirection,
-  direction: Direction
+  direction: Direction,
 ) => {
   return (sortBy === SortDirection.ASC && direction === Direction.Forward) ||
     (sortBy === SortDirection.DESC && direction === Direction.Backward)

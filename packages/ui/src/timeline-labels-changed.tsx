@@ -3,9 +3,9 @@ import { Tag } from 'lucide-react';
 import { FormattedMessage } from 'react-intl';
 
 import type { IconType } from './icon';
+import type { LabelsChangedEntry, TimelineItemNarrowed } from './timeline-item';
 import { Icon } from './icon';
 import { RelativeTime } from './relative-time';
-import type { LabelsChangedEntry, TimelineItemNarrowed } from './timeline-item';
 
 interface TimelineLabelsChangedProps {
   item: TimelineItemNarrowed<LabelsChangedEntry>;

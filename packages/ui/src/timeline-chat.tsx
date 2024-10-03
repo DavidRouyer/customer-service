@@ -2,9 +2,9 @@ import type { FC } from 'react';
 
 import { getInitials } from '@kyaku/kyaku/utils';
 
+import type { ChatEntry, TimelineItemNarrowed } from './timeline-item';
 import { Avatar, AvatarFallback, AvatarImage } from './avatar';
 import { RelativeTime } from './relative-time';
-import type { ChatEntry, TimelineItemNarrowed } from './timeline-item';
 
 interface TimelineChatProps {
   item: TimelineItemNarrowed<ChatEntry>;
@@ -25,7 +25,7 @@ export const TimelineChat: FC<TimelineChatProps> = ({ item }) => {
             />
             <AvatarFallback>
               {getInitials(
-                item.userCreatedBy?.name ?? item.customerCreatedBy?.name ?? ''
+                item.userCreatedBy?.name ?? item.customerCreatedBy?.name ?? '',
               )}
             </AvatarFallback>
           </Avatar>
@@ -46,7 +46,7 @@ export const TimelineChat: FC<TimelineChatProps> = ({ item }) => {
         <div className="grid grid-cols-[24px_auto] gap-x-3">
           <div></div>
           <div className="mt-3 border-t border-muted-foreground pt-3">
-            <div className="whitespace-pre-line text-sm leading-6 ">
+            <div className="whitespace-pre-line text-sm leading-6">
               {item.entry.text}
             </div>
           </div>

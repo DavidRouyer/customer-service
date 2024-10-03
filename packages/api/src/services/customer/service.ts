@@ -1,3 +1,5 @@
+import type { CustomerRepository, InferSelectModel } from '@kyaku/database';
+import type { FindConfig, GetConfig } from '@kyaku/kyaku/types';
 import {
   and,
   eq,
@@ -6,13 +8,11 @@ import {
   schema,
   sortByDirection,
 } from '@kyaku/database';
-import type { CustomerRepository, InferSelectModel } from '@kyaku/database';
-import type { FindConfig, GetConfig } from '@kyaku/kyaku/types';
 import { Direction } from '@kyaku/kyaku/types';
 
 import type { UnitOfWork } from '../../unit-of-work';
-import { BaseService } from '../base-service';
 import type { CustomerFilters, CustomerWith } from './common';
+import { BaseService } from '../base-service';
 import { CustomerSortField } from './common';
 
 export class CustomerService extends BaseService {
@@ -30,7 +30,7 @@ export class CustomerService extends BaseService {
 
   async retrieve<T extends CustomerWith<T>>(
     customerId: string,
-    config?: GetConfig<T>
+    config?: GetConfig<T>,
   ) {
     return await this.customerRepository.find({
       where: eq(schema.customers.id, customerId),
@@ -44,7 +44,7 @@ export class CustomerService extends BaseService {
       direction: Direction.Forward,
       limit: 50,
       sortBy: CustomerSortField.createdAt,
-    }
+    },
   ) {
     return this.customerRepository.findMany({
       limit: config.limit,
@@ -55,14 +55,14 @@ export class CustomerService extends BaseService {
       where: and(
         this.getFilterWhereClause(filters),
         this.getSortWhereClause(config),
-        this.getIdWhereClause(config)
+        this.getIdWhereClause(config),
       ),
       with: this.getWithClause(config.relations),
     });
   }
 
   private getWithClause<T extends CustomerWith<T>>(
-    relations: T | undefined
+    relations: T | undefined,
   ): {
     createdBy: T extends { createdBy: true }
       ? {
@@ -103,12 +103,12 @@ export class CustomerService extends BaseService {
     return and(
       filters.customerIds
         ? inclusionFilterOperator(schema.customers.id, filters.customerIds)
-        : undefined
+        : undefined,
     );
   }
 
   private getSortWhereClause<T extends CustomerWith<T>>(
-    config: FindConfig<T, CustomerSortField>
+    config: FindConfig<T, CustomerSortField>,
   ) {
     if (
       !config.sortBy ||
@@ -120,14 +120,14 @@ export class CustomerService extends BaseService {
     if (config.sortBy === CustomerSortField.createdAt) {
       return filterByDirection(config.direction)(
         schema.customers.createdAt,
-        new Date(config.cursor.lastValue)
+        new Date(config.cursor.lastValue),
       );
     }
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     if (config.sortBy === CustomerSortField.name) {
       return filterByDirection(config.direction)(
         schema.customers.name,
-        config.cursor.lastValue
+        config.cursor.lastValue,
       );
     }
 
@@ -135,18 +135,18 @@ export class CustomerService extends BaseService {
   }
 
   private getIdWhereClause<T extends CustomerWith<T>>(
-    config: FindConfig<T, CustomerSortField>
+    config: FindConfig<T, CustomerSortField>,
   ) {
     if (!config.cursor?.lastId) return undefined;
 
     return filterByDirection(config.direction)(
       schema.customers.id,
-      config.cursor.lastId
+      config.cursor.lastId,
     );
   }
 
   private getOrderByClause<T extends CustomerWith<T>>(
-    config: FindConfig<T, CustomerSortField>
+    config: FindConfig<T, CustomerSortField>,
   ) {
     if (!config.sortBy) return [];
 

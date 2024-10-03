@@ -1,7 +1,7 @@
+import type { VariantProps } from 'cva';
 import * as React from 'react';
 import { Slot } from '@radix-ui/react-slot';
 import { cva } from 'cva';
-import type { VariantProps } from 'cva';
 
 import { cn } from '@kyaku/ui';
 
@@ -46,7 +46,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         {...props}
       />
     );
-  }
+  },
 );
 Button.displayName = 'Button';
 

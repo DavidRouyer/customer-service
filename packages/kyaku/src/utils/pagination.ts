@@ -39,7 +39,7 @@ export function composeCursor(cursor: Cursor): string {
 
 export const validatePaginationArguments = (
   { before, after, first, last }: ConnectionArguments,
-  { min = 1, max = 100 }
+  { min = 1, max = 100 },
 ) => {
   let cursor: Cursor | null = null; // default cursor
   let direction = Direction.Forward; // default direction
@@ -47,23 +47,23 @@ export const validatePaginationArguments = (
 
   if (typeof first === 'number' && typeof last === 'number') {
     throw new GraphQLError(
-      'Passing both "first" and "last" to paginate is not supported'
+      'Passing both "first" and "last" to paginate is not supported',
     );
   }
   if (typeof first === 'number' && typeof before === 'string') {
     throw new GraphQLError(
-      'Passing both "first" and "before" to paginate is not supported'
+      'Passing both "first" and "before" to paginate is not supported',
     );
   }
   if (typeof last === 'number' && typeof after === 'string') {
     throw new GraphQLError(
-      'Passing both "last" and "after" to paginate is not supported'
+      'Passing both "last" and "after" to paginate is not supported',
     );
   }
   if (typeof first === 'number') {
     if (first < min || first > max) {
       throw new GraphQLError(
-        `"first" argument value is outside the valid range of '${min}' to '${max}'`
+        `"first" argument value is outside the valid range of '${min}' to '${max}'`,
       );
     }
     limit = first;
@@ -72,7 +72,7 @@ export const validatePaginationArguments = (
   if (typeof last === 'number') {
     if (last < min || last > max) {
       throw new GraphQLError(
-        `"last" argument value is outside the valid range of '${min}' to '${max}'`
+        `"last" argument value is outside the valid range of '${min}' to '${max}'`,
       );
     }
     limit = last;

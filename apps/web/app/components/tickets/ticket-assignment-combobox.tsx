@@ -54,7 +54,7 @@ export const TicketAssignmentCombobox: FC<TicketAssignmentComboboxProps> = ({
           let newUsers = data.users.edges.map((user) => user.node);
           if (session?.user?.id) {
             const loggedUser = newUsers.find(
-              (user) => user.id === session.user?.id
+              (user) => user.id === session.user?.id,
             );
             if (loggedUser) {
               newUsers = [
@@ -65,7 +65,7 @@ export const TicketAssignmentCombobox: FC<TicketAssignmentComboboxProps> = ({
           }
           if (assignedTo) {
             const assignedToUser = newUsers.find(
-              (user) => user.id === assignedTo.id
+              (user) => user.id === assignedTo.id,
             );
             if (assignedToUser) {
               newUsers = [
@@ -77,9 +77,9 @@ export const TicketAssignmentCombobox: FC<TicketAssignmentComboboxProps> = ({
 
           return newUsers;
         },
-        [assignedTo, session?.user]
+        [assignedTo, session?.user],
       ),
-    }
+    },
   );
 
   const { mutate: assign } = useAssignTicketMutation({
@@ -92,7 +92,7 @@ export const TicketAssignmentCombobox: FC<TicketAssignmentComboboxProps> = ({
 
       // Snapshot the previous value
       const previousTicket = queryClient.getQueryData<TicketQuery['ticket']>(
-        useTicketQuery.getKey({ ticketId: input.ticketId })
+        useTicketQuery.getKey({ ticketId: input.ticketId }),
       );
 
       // Optimistically update to the new value
@@ -104,7 +104,7 @@ export const TicketAssignmentCombobox: FC<TicketAssignmentComboboxProps> = ({
                 ...oldQueryData,
                 assignedTo: usersData?.find((user) => user.id === input.userId),
               }
-            : undefined
+            : undefined,
       );
 
       // Return a context object with the snapshotted value
@@ -114,7 +114,7 @@ export const TicketAssignmentCombobox: FC<TicketAssignmentComboboxProps> = ({
       // TODO: handle failed queries
       queryClient.setQueryData<TicketQuery['ticket']>(
         useTicketQuery.getKey({ ticketId: input.ticketId }),
-        context?.previousTicket
+        context?.previousTicket,
       );
     },
     onSettled: (_, __, { input }) => {
@@ -137,7 +137,7 @@ export const TicketAssignmentCombobox: FC<TicketAssignmentComboboxProps> = ({
 
       // Snapshot the previous value
       const previousTicket = queryClient.getQueryData<TicketQuery['ticket']>(
-        useTicketQuery.getKey({ ticketId: input.ticketId })
+        useTicketQuery.getKey({ ticketId: input.ticketId }),
       );
 
       // Optimistically update to the new value
@@ -149,7 +149,7 @@ export const TicketAssignmentCombobox: FC<TicketAssignmentComboboxProps> = ({
                 ...oldQueryData,
                 assignedTo: null,
               }
-            : undefined
+            : undefined,
       );
 
       // Return a context object with the snapshotted value
@@ -159,7 +159,7 @@ export const TicketAssignmentCombobox: FC<TicketAssignmentComboboxProps> = ({
       // TODO: handle failed queries
       queryClient.setQueryData<TicketQuery['ticket']>(
         useTicketQuery.getKey({ ticketId: input.ticketId }),
-        context?.previousTicket
+        context?.previousTicket,
       );
     },
     onSettled: (_, __, { input }) => {
@@ -231,7 +231,7 @@ export const TicketAssignmentCombobox: FC<TicketAssignmentComboboxProps> = ({
                   <Check
                     className={cn(
                       'mr-2 h-4 w-4 shrink-0',
-                      assignedTo?.id === user.id ? 'opacity-100' : 'opacity-0'
+                      assignedTo?.id === user.id ? 'opacity-100' : 'opacity-0',
                     )}
                   />
                   <div className="flex items-center gap-x-2 truncate">

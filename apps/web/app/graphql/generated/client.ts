@@ -1,17 +1,43 @@
-import { useQuery, useSuspenseQuery, useInfiniteQuery, useSuspenseInfiniteQuery, useMutation, UseQueryOptions, UseSuspenseQueryOptions, UseInfiniteQueryOptions, InfiniteData, UseSuspenseInfiniteQueryOptions, UseMutationOptions } from '@tanstack/react-query';
+import {
+  InfiniteData,
+  useInfiniteQuery,
+  UseInfiniteQueryOptions,
+  useMutation,
+  UseMutationOptions,
+  useQuery,
+  UseQueryOptions,
+  useSuspenseInfiniteQuery,
+  UseSuspenseInfiniteQueryOptions,
+  useSuspenseQuery,
+  UseSuspenseQueryOptions,
+} from '@tanstack/react-query';
+
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
-export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
-export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
-export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
-export type MakeEmpty<T extends { [key: string]: unknown }, K extends keyof T> = { [_ in K]?: never };
-export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
+export type Exact<T extends { [key: string]: unknown }> = {
+  [K in keyof T]: T[K];
+};
+export type MakeOptional<T, K extends keyof T> = Omit<T, K> & {
+  [SubKey in K]?: Maybe<T[SubKey]>;
+};
+export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & {
+  [SubKey in K]: Maybe<T[SubKey]>;
+};
+export type MakeEmpty<
+  T extends { [key: string]: unknown },
+  K extends keyof T,
+> = { [_ in K]?: never };
+export type Incremental<T> =
+  | T
+  | {
+      [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never;
+    };
 
 function fetcher<TData, TVariables>(query: string, variables?: TVariables) {
   return async (): Promise<TData> => {
     const res = await fetch(import.meta.env.VITE_API_ENDPOINT as string, {
-    method: "POST",
-    ...({"headers":{"content-type":"application/json"}}),
+      method: 'POST',
+      ...{ headers: { 'content-type': 'application/json' } },
       body: JSON.stringify({ query, variables }),
     });
 
@@ -24,17 +50,17 @@ function fetcher<TData, TVariables>(query: string, variables?: TVariables) {
     }
 
     return json.data;
-  }
+  };
 }
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
-  ID: { input: string; output: string; }
-  String: { input: string; output: string; }
-  Boolean: { input: boolean; output: boolean; }
-  Int: { input: number; output: number; }
-  Float: { input: number; output: number; }
+  ID: { input: string; output: string };
+  String: { input: string; output: string };
+  Boolean: { input: boolean; output: boolean };
+  Int: { input: number; output: number };
+  Float: { input: number; output: number };
   /** An ISO-8601 encoded UTC date string. */
-  DateTime: { input: string; output: string; }
+  DateTime: { input: string; output: string };
 };
 
 /** Input type of AddLabels. */
@@ -199,11 +225,17 @@ export type Customer = Node & {
 export enum DoneTicketStatusDetail {
   DoneAutomaticallySet = 'DONE_AUTOMATICALLY_SET',
   DoneManuallySet = 'DONE_MANUALLY_SET',
-  Ignored = 'IGNORED'
+  Ignored = 'IGNORED',
 }
 
 /** A union of all possible entries that can appear in a timeline. */
-export type Entry = AssignmentChangedEntry | ChatEntry | LabelsChangedEntry | NoteEntry | PriorityChangedEntry | StatusChangedEntry;
+export type Entry =
+  | AssignmentChangedEntry
+  | ChatEntry
+  | LabelsChangedEntry
+  | NoteEntry
+  | PriorityChangedEntry
+  | StatusChangedEntry;
 
 /** A label for categorizing tickets. */
 export type Label = Node & {
@@ -333,90 +365,75 @@ export type Mutation = {
   updateLabelType?: Maybe<UpdateLabelTypePayload>;
 };
 
-
 /** The mutation root of Kyaku's GraphQL interface. */
 export type MutationAddLabelsArgs = {
   input: AddLabelsInput;
 };
-
 
 /** The mutation root of Kyaku's GraphQL interface. */
 export type MutationArchiveLabelTypeArgs = {
   input: ArchiveLabelTypeInput;
 };
 
-
 /** The mutation root of Kyaku's GraphQL interface. */
 export type MutationAssignTicketArgs = {
   input: AssignTicketInput;
 };
-
 
 /** The mutation root of Kyaku's GraphQL interface. */
 export type MutationChangeTicketPriorityArgs = {
   input: ChangeTicketPriorityInput;
 };
 
-
 /** The mutation root of Kyaku's GraphQL interface. */
 export type MutationCreateLabelTypeArgs = {
   input: CreateLabelTypeInput;
 };
-
 
 /** The mutation root of Kyaku's GraphQL interface. */
 export type MutationCreateNoteArgs = {
   input: CreateNoteInput;
 };
 
-
 /** The mutation root of Kyaku's GraphQL interface. */
 export type MutationCreateTicketArgs = {
   input: CreateTicketInput;
 };
-
 
 /** The mutation root of Kyaku's GraphQL interface. */
 export type MutationMarkTicketAsDoneArgs = {
   input: MarkTicketAsDoneInput;
 };
 
-
 /** The mutation root of Kyaku's GraphQL interface. */
 export type MutationMarkTicketAsTodoArgs = {
   input: MarkTicketAsTodoInput;
 };
-
 
 /** The mutation root of Kyaku's GraphQL interface. */
 export type MutationRemoveLabelsArgs = {
   input: RemoveLabelsInput;
 };
 
-
 /** The mutation root of Kyaku's GraphQL interface. */
 export type MutationSendChatArgs = {
   input: SendChatInput;
 };
-
 
 /** The mutation root of Kyaku's GraphQL interface. */
 export type MutationSnoozeTicketArgs = {
   input: SnoozeTicketInput;
 };
 
-
 /** The mutation root of Kyaku's GraphQL interface. */
 export type MutationUnarchiveLabelTypeArgs = {
   input: UnarchiveLabelTypeInput;
 };
 
-
 /** The mutation root of Kyaku's GraphQL interface. */
 export type MutationUnassignTicketArgs = {
   input: UnassignTicketInput;
 };
-
 
 /** The mutation root of Kyaku's GraphQL interface. */
 export type MutationUpdateLabelTypeArgs = {
@@ -488,18 +505,15 @@ export type Query = {
   users: UserConnection;
 };
 
-
 /** The query root of Kyaku's GraphQL interface. */
 export type QueryCustomerArgs = {
   customerId: Scalars['ID']['input'];
 };
 
-
 /** The query root of Kyaku's GraphQL interface. */
 export type QueryLabelTypeArgs = {
   labelTypeId: Scalars['ID']['input'];
 };
-
 
 /** The query root of Kyaku's GraphQL interface. */
 export type QueryLabelTypesArgs = {
@@ -510,12 +524,10 @@ export type QueryLabelTypesArgs = {
   last?: InputMaybe<Scalars['Int']['input']>;
 };
 
-
 /** The query root of Kyaku's GraphQL interface. */
 export type QueryTicketArgs = {
   ticketId: Scalars['ID']['input'];
 };
-
 
 /** The query root of Kyaku's GraphQL interface. */
 export type QueryTicketsArgs = {
@@ -526,12 +538,10 @@ export type QueryTicketsArgs = {
   last?: InputMaybe<Scalars['Int']['input']>;
 };
 
-
 /** The query root of Kyaku's GraphQL interface. */
 export type QueryUserArgs = {
   userId: Scalars['ID']['input'];
 };
-
 
 /** The query root of Kyaku's GraphQL interface. */
 export type QueryUsersArgs = {
@@ -591,7 +601,7 @@ export type SnoozeTicketPayload = {
 
 export enum SnoozeTicketStatusDetail {
   WaitingForCustomer = 'WAITING_FOR_CUSTOMER',
-  WaitingForDuration = 'WAITING_FOR_DURATION'
+  WaitingForDuration = 'WAITING_FOR_DURATION',
 }
 
 /** Represents a status change in the timeline. */
@@ -636,7 +646,6 @@ export type Ticket = Node & {
   updatedBy?: Maybe<User>;
 };
 
-
 /** A ticket is a place to discuss ideas, enhancements, tasks and bugs. */
 export type TicketTimelineEntriesArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
@@ -675,14 +684,14 @@ export enum TicketPriority {
   Critical = 'CRITICAL',
   High = 'HIGH',
   Low = 'LOW',
-  Medium = 'MEDIUM'
+  Medium = 'MEDIUM',
 }
 
 /** Possible statuses a ticket may have. */
 export enum TicketStatus {
   Done = 'DONE',
   Snoozed = 'SNOOZED',
-  Todo = 'TODO'
+  Todo = 'TODO',
 }
 
 /** Possible status details a ticket may have. */
@@ -695,7 +704,7 @@ export enum TicketStatusDetail {
   InProgress = 'IN_PROGRESS',
   NewReply = 'NEW_REPLY',
   WaitingForCustomer = 'WAITING_FOR_CUSTOMER',
-  WaitingForDuration = 'WAITING_FOR_DURATION'
+  WaitingForDuration = 'WAITING_FOR_DURATION',
 }
 
 /** An entry of the timeline. */
@@ -739,7 +748,7 @@ export enum TodoTicketStatusDetail {
   CloseTheLoop = 'CLOSE_THE_LOOP',
   Created = 'CREATED',
   InProgress = 'IN_PROGRESS',
-  NewReply = 'NEW_REPLY'
+  NewReply = 'NEW_REPLY',
 }
 
 /** Input type of UnarchiveLabelType. */
@@ -821,9 +830,21 @@ export type UserEdge = {
   node: User;
 };
 
-export type CustomerPartsFragment = { __typename?: 'Customer', id: string, name?: string | null, email?: string | null, phone?: string | null, avatarUrl?: string | null };
+export type CustomerPartsFragment = {
+  __typename?: 'Customer';
+  id: string;
+  name?: string | null;
+  email?: string | null;
+  phone?: string | null;
+  avatarUrl?: string | null;
+};
 
-export type LabelTypePartsFragment = { __typename?: 'LabelType', id: string, name: string, icon?: string | null };
+export type LabelTypePartsFragment = {
+  __typename?: 'LabelType';
+  id: string;
+  name: string;
+  icon?: string | null;
+};
 
 export type LabelTypesQueryVariables = Exact<{
   filters?: InputMaybe<LabelTypeFilters>;
@@ -833,38 +854,210 @@ export type LabelTypesQueryVariables = Exact<{
   after?: InputMaybe<Scalars['String']['input']>;
 }>;
 
+export type LabelTypesQuery = {
+  __typename?: 'Query';
+  labelTypes: {
+    __typename?: 'LabelTypeConnection';
+    edges: Array<{
+      __typename?: 'LabelTypeEdge';
+      cursor: string;
+      node: {
+        __typename?: 'LabelType';
+        id: string;
+        name: string;
+        icon?: string | null;
+      };
+    }>;
+  };
+};
 
-export type LabelTypesQuery = { __typename?: 'Query', labelTypes: { __typename?: 'LabelTypeConnection', edges: Array<{ __typename?: 'LabelTypeEdge', cursor: string, node: { __typename?: 'LabelType', id: string, name: string, icon?: string | null } }> } };
-
-export type LabelPartsFragment = { __typename?: 'Label', id: string, archivedAt?: string | null, labelType: { __typename?: 'LabelType', archivedAt?: string | null, id: string, name: string, icon?: string | null } };
+export type LabelPartsFragment = {
+  __typename?: 'Label';
+  id: string;
+  archivedAt?: string | null;
+  labelType: {
+    __typename?: 'LabelType';
+    archivedAt?: string | null;
+    id: string;
+    name: string;
+    icon?: string | null;
+  };
+};
 
 export type AddLabelsMutationVariables = Exact<{
   input: AddLabelsInput;
 }>;
 
-
-export type AddLabelsMutation = { __typename?: 'Mutation', addLabels?: { __typename?: 'AddLabelsPayload', labels?: Array<{ __typename?: 'Label', id: string }> | null, userErrors?: Array<{ __typename?: 'MutationError', message: string }> | null } | null };
+export type AddLabelsMutation = {
+  __typename?: 'Mutation';
+  addLabels?: {
+    __typename?: 'AddLabelsPayload';
+    labels?: Array<{ __typename?: 'Label'; id: string }> | null;
+    userErrors?: Array<{
+      __typename?: 'MutationError';
+      message: string;
+    }> | null;
+  } | null;
+};
 
 export type RemoveLabelsMutationVariables = Exact<{
   input: RemoveLabelsInput;
 }>;
 
-
-export type RemoveLabelsMutation = { __typename?: 'Mutation', removeLabels?: { __typename?: 'RemoveLabelsPayload', userErrors?: Array<{ __typename?: 'MutationError', message: string }> | null } | null };
+export type RemoveLabelsMutation = {
+  __typename?: 'Mutation';
+  removeLabels?: {
+    __typename?: 'RemoveLabelsPayload';
+    userErrors?: Array<{
+      __typename?: 'MutationError';
+      message: string;
+    }> | null;
+  } | null;
+};
 
 export type TicketQueryVariables = Exact<{
   ticketId: Scalars['ID']['input'];
 }>;
 
-
-export type TicketQuery = { __typename?: 'Query', ticket?: { __typename?: 'Ticket', id: string, priority: TicketPriority, status: TicketStatus, assignedTo?: { __typename?: 'User', id: string, name?: string | null, email: string, image?: string | null } | null, customer: { __typename?: 'Customer', id: string, name?: string | null, email?: string | null, phone?: string | null, avatarUrl?: string | null }, labels: Array<{ __typename?: 'Label', id: string, archivedAt?: string | null, labelType: { __typename?: 'LabelType', archivedAt?: string | null, id: string, name: string, icon?: string | null } }> } | null };
+export type TicketQuery = {
+  __typename?: 'Query';
+  ticket?: {
+    __typename?: 'Ticket';
+    id: string;
+    priority: TicketPriority;
+    status: TicketStatus;
+    assignedTo?: {
+      __typename?: 'User';
+      id: string;
+      name?: string | null;
+      email: string;
+      image?: string | null;
+    } | null;
+    customer: {
+      __typename?: 'Customer';
+      id: string;
+      name?: string | null;
+      email?: string | null;
+      phone?: string | null;
+      avatarUrl?: string | null;
+    };
+    labels: Array<{
+      __typename?: 'Label';
+      id: string;
+      archivedAt?: string | null;
+      labelType: {
+        __typename?: 'LabelType';
+        archivedAt?: string | null;
+        id: string;
+        name: string;
+        icon?: string | null;
+      };
+    }>;
+  } | null;
+};
 
 export type TicketTimelineQueryVariables = Exact<{
   ticketId: Scalars['ID']['input'];
 }>;
 
-
-export type TicketTimelineQuery = { __typename?: 'Query', ticket?: { __typename?: 'Ticket', timelineEntries: { __typename?: 'TimelineEntryConnection', edges: Array<{ __typename?: 'TimelineEntryEdge', cursor: string, node: { __typename?: 'TimelineEntry', id: string, createdAt: string, customer: { __typename?: 'Customer', id: string, name?: string | null, email?: string | null, phone?: string | null, avatarUrl?: string | null }, entry: { __typename: 'AssignmentChangedEntry', oldAssignedTo?: { __typename?: 'User', id: string, name?: string | null, email: string, image?: string | null } | null, newAssignedTo?: { __typename?: 'User', id: string, name?: string | null, email: string, image?: string | null } | null } | { __typename: 'ChatEntry', text: string } | { __typename: 'LabelsChangedEntry', oldLabels: Array<{ __typename?: 'Label', id: string, archivedAt?: string | null, labelType: { __typename?: 'LabelType', archivedAt?: string | null, id: string, name: string, icon?: string | null } }>, newLabels: Array<{ __typename?: 'Label', id: string, archivedAt?: string | null, labelType: { __typename?: 'LabelType', archivedAt?: string | null, id: string, name: string, icon?: string | null } }> } | { __typename: 'NoteEntry', text: string, rawContent: string } | { __typename: 'PriorityChangedEntry', oldPriority?: TicketPriority | null, newPriority?: TicketPriority | null } | { __typename: 'StatusChangedEntry', oldStatus?: TicketStatus | null, newStatus?: TicketStatus | null }, userCreatedBy?: { __typename?: 'User', id: string, name?: string | null, email: string, image?: string | null } | null, customerCreatedBy?: { __typename?: 'Customer', id: string, name?: string | null, email?: string | null, phone?: string | null, avatarUrl?: string | null } | null } }> } } | null };
+export type TicketTimelineQuery = {
+  __typename?: 'Query';
+  ticket?: {
+    __typename?: 'Ticket';
+    timelineEntries: {
+      __typename?: 'TimelineEntryConnection';
+      edges: Array<{
+        __typename?: 'TimelineEntryEdge';
+        cursor: string;
+        node: {
+          __typename?: 'TimelineEntry';
+          id: string;
+          createdAt: string;
+          customer: {
+            __typename?: 'Customer';
+            id: string;
+            name?: string | null;
+            email?: string | null;
+            phone?: string | null;
+            avatarUrl?: string | null;
+          };
+          entry:
+            | {
+                __typename: 'AssignmentChangedEntry';
+                oldAssignedTo?: {
+                  __typename?: 'User';
+                  id: string;
+                  name?: string | null;
+                  email: string;
+                  image?: string | null;
+                } | null;
+                newAssignedTo?: {
+                  __typename?: 'User';
+                  id: string;
+                  name?: string | null;
+                  email: string;
+                  image?: string | null;
+                } | null;
+              }
+            | { __typename: 'ChatEntry'; text: string }
+            | {
+                __typename: 'LabelsChangedEntry';
+                oldLabels: Array<{
+                  __typename?: 'Label';
+                  id: string;
+                  archivedAt?: string | null;
+                  labelType: {
+                    __typename?: 'LabelType';
+                    archivedAt?: string | null;
+                    id: string;
+                    name: string;
+                    icon?: string | null;
+                  };
+                }>;
+                newLabels: Array<{
+                  __typename?: 'Label';
+                  id: string;
+                  archivedAt?: string | null;
+                  labelType: {
+                    __typename?: 'LabelType';
+                    archivedAt?: string | null;
+                    id: string;
+                    name: string;
+                    icon?: string | null;
+                  };
+                }>;
+              }
+            | { __typename: 'NoteEntry'; text: string; rawContent: string }
+            | {
+                __typename: 'PriorityChangedEntry';
+                oldPriority?: TicketPriority | null;
+                newPriority?: TicketPriority | null;
+              }
+            | {
+                __typename: 'StatusChangedEntry';
+                oldStatus?: TicketStatus | null;
+                newStatus?: TicketStatus | null;
+              };
+          userCreatedBy?: {
+            __typename?: 'User';
+            id: string;
+            name?: string | null;
+            email: string;
+            image?: string | null;
+          } | null;
+          customerCreatedBy?: {
+            __typename?: 'Customer';
+            id: string;
+            name?: string | null;
+            email?: string | null;
+            phone?: string | null;
+            avatarUrl?: string | null;
+          } | null;
+        };
+      }>;
+    };
+  } | null;
+};
 
 export type TicketsQueryVariables = Exact<{
   filters?: InputMaybe<TicketFilters>;
@@ -874,64 +1067,191 @@ export type TicketsQueryVariables = Exact<{
   before?: InputMaybe<Scalars['String']['input']>;
 }>;
 
-
-export type TicketsQuery = { __typename?: 'Query', tickets: { __typename?: 'TicketConnection', edges: Array<{ __typename?: 'TicketEdge', node: { __typename?: 'Ticket', id: string, title?: string | null, status: TicketStatus, statusChangedAt?: string | null, priority: TicketPriority, createdAt: string, assignedTo?: { __typename?: 'User', id: string, name?: string | null, email: string, image?: string | null } | null, customer: { __typename?: 'Customer', id: string, name?: string | null, email?: string | null, phone?: string | null, avatarUrl?: string | null }, labels: Array<{ __typename?: 'Label', id: string, archivedAt?: string | null, labelType: { __typename?: 'LabelType', archivedAt?: string | null, id: string, name: string, icon?: string | null } }> } }>, pageInfo: { __typename?: 'PageInfo', startCursor?: string | null, endCursor?: string | null, hasPreviousPage: boolean, hasNextPage: boolean } } };
+export type TicketsQuery = {
+  __typename?: 'Query';
+  tickets: {
+    __typename?: 'TicketConnection';
+    edges: Array<{
+      __typename?: 'TicketEdge';
+      node: {
+        __typename?: 'Ticket';
+        id: string;
+        title?: string | null;
+        status: TicketStatus;
+        statusChangedAt?: string | null;
+        priority: TicketPriority;
+        createdAt: string;
+        assignedTo?: {
+          __typename?: 'User';
+          id: string;
+          name?: string | null;
+          email: string;
+          image?: string | null;
+        } | null;
+        customer: {
+          __typename?: 'Customer';
+          id: string;
+          name?: string | null;
+          email?: string | null;
+          phone?: string | null;
+          avatarUrl?: string | null;
+        };
+        labels: Array<{
+          __typename?: 'Label';
+          id: string;
+          archivedAt?: string | null;
+          labelType: {
+            __typename?: 'LabelType';
+            archivedAt?: string | null;
+            id: string;
+            name: string;
+            icon?: string | null;
+          };
+        }>;
+      };
+    }>;
+    pageInfo: {
+      __typename?: 'PageInfo';
+      startCursor?: string | null;
+      endCursor?: string | null;
+      hasPreviousPage: boolean;
+      hasNextPage: boolean;
+    };
+  };
+};
 
 export type AssignTicketMutationVariables = Exact<{
   input: AssignTicketInput;
 }>;
 
-
-export type AssignTicketMutation = { __typename?: 'Mutation', assignTicket?: { __typename?: 'AssignTicketPayload', ticket?: { __typename?: 'Ticket', id: string } | null, userErrors?: Array<{ __typename?: 'MutationError', message: string }> | null } | null };
+export type AssignTicketMutation = {
+  __typename?: 'Mutation';
+  assignTicket?: {
+    __typename?: 'AssignTicketPayload';
+    ticket?: { __typename?: 'Ticket'; id: string } | null;
+    userErrors?: Array<{
+      __typename?: 'MutationError';
+      message: string;
+    }> | null;
+  } | null;
+};
 
 export type ChangeTicketPriorityMutationVariables = Exact<{
   input: ChangeTicketPriorityInput;
 }>;
 
-
-export type ChangeTicketPriorityMutation = { __typename?: 'Mutation', changeTicketPriority?: { __typename?: 'ChangeTicketPriorityPayload', ticket?: { __typename?: 'Ticket', id: string } | null, userErrors?: Array<{ __typename?: 'MutationError', message: string }> | null } | null };
+export type ChangeTicketPriorityMutation = {
+  __typename?: 'Mutation';
+  changeTicketPriority?: {
+    __typename?: 'ChangeTicketPriorityPayload';
+    ticket?: { __typename?: 'Ticket'; id: string } | null;
+    userErrors?: Array<{
+      __typename?: 'MutationError';
+      message: string;
+    }> | null;
+  } | null;
+};
 
 export type CreateNoteMutationVariables = Exact<{
   input: CreateNoteInput;
 }>;
 
-
-export type CreateNoteMutation = { __typename?: 'Mutation', createNote?: { __typename?: 'CreateNotePayload', ticket?: { __typename?: 'Ticket', id: string } | null, userErrors?: Array<{ __typename?: 'MutationError', message: string }> | null } | null };
+export type CreateNoteMutation = {
+  __typename?: 'Mutation';
+  createNote?: {
+    __typename?: 'CreateNotePayload';
+    ticket?: { __typename?: 'Ticket'; id: string } | null;
+    userErrors?: Array<{
+      __typename?: 'MutationError';
+      message: string;
+    }> | null;
+  } | null;
+};
 
 export type MarkTicketAsDoneMutationVariables = Exact<{
   input: MarkTicketAsDoneInput;
 }>;
 
-
-export type MarkTicketAsDoneMutation = { __typename?: 'Mutation', markTicketAsDone?: { __typename?: 'MarkTicketAsDonePayload', ticket?: { __typename?: 'Ticket', id: string } | null, userErrors?: Array<{ __typename?: 'MutationError', message: string }> | null } | null };
+export type MarkTicketAsDoneMutation = {
+  __typename?: 'Mutation';
+  markTicketAsDone?: {
+    __typename?: 'MarkTicketAsDonePayload';
+    ticket?: { __typename?: 'Ticket'; id: string } | null;
+    userErrors?: Array<{
+      __typename?: 'MutationError';
+      message: string;
+    }> | null;
+  } | null;
+};
 
 export type MarkTicketAsTodoMutationVariables = Exact<{
   input: MarkTicketAsTodoInput;
 }>;
 
-
-export type MarkTicketAsTodoMutation = { __typename?: 'Mutation', markTicketAsTodo?: { __typename?: 'MarkTicketAsTodoPayload', ticket?: { __typename?: 'Ticket', id: string } | null, userErrors?: Array<{ __typename?: 'MutationError', message: string }> | null } | null };
+export type MarkTicketAsTodoMutation = {
+  __typename?: 'Mutation';
+  markTicketAsTodo?: {
+    __typename?: 'MarkTicketAsTodoPayload';
+    ticket?: { __typename?: 'Ticket'; id: string } | null;
+    userErrors?: Array<{
+      __typename?: 'MutationError';
+      message: string;
+    }> | null;
+  } | null;
+};
 
 export type SendChatMutationVariables = Exact<{
   input: SendChatInput;
 }>;
 
-
-export type SendChatMutation = { __typename?: 'Mutation', sendChat?: { __typename?: 'SendChatPayload', ticket?: { __typename?: 'Ticket', id: string } | null, userErrors?: Array<{ __typename?: 'MutationError', message: string }> | null } | null };
+export type SendChatMutation = {
+  __typename?: 'Mutation';
+  sendChat?: {
+    __typename?: 'SendChatPayload';
+    ticket?: { __typename?: 'Ticket'; id: string } | null;
+    userErrors?: Array<{
+      __typename?: 'MutationError';
+      message: string;
+    }> | null;
+  } | null;
+};
 
 export type UnassignTicketMutationVariables = Exact<{
   input: UnassignTicketInput;
 }>;
 
+export type UnassignTicketMutation = {
+  __typename?: 'Mutation';
+  unassignTicket?: {
+    __typename?: 'UnassignTicketPayload';
+    ticket?: { __typename?: 'Ticket'; id: string } | null;
+    userErrors?: Array<{
+      __typename?: 'MutationError';
+      message: string;
+    }> | null;
+  } | null;
+};
 
-export type UnassignTicketMutation = { __typename?: 'Mutation', unassignTicket?: { __typename?: 'UnassignTicketPayload', ticket?: { __typename?: 'Ticket', id: string } | null, userErrors?: Array<{ __typename?: 'MutationError', message: string }> | null } | null };
+export type UserPartsFragment = {
+  __typename?: 'User';
+  id: string;
+  name?: string | null;
+  email: string;
+  image?: string | null;
+};
 
-export type UserPartsFragment = { __typename?: 'User', id: string, name?: string | null, email: string, image?: string | null };
+export type MyUserInfoQueryVariables = Exact<{ [key: string]: never }>;
 
-export type MyUserInfoQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type MyUserInfoQuery = { __typename?: 'Query', myUserInfo?: { __typename?: 'User', id: string, name?: string | null, email: string, image?: string | null } | null };
+export type MyUserInfoQuery = {
+  __typename?: 'Query';
+  myUserInfo?: {
+    __typename?: 'User';
+    id: string;
+    name?: string | null;
+    email: string;
+    image?: string | null;
+  } | null;
+};
 
 export type UsersQueryVariables = Exact<{
   first?: InputMaybe<Scalars['Int']['input']>;
@@ -940,9 +1260,23 @@ export type UsersQueryVariables = Exact<{
   after?: InputMaybe<Scalars['String']['input']>;
 }>;
 
-
-export type UsersQuery = { __typename?: 'Query', users: { __typename?: 'UserConnection', edges: Array<{ __typename?: 'UserEdge', cursor: string, node: { __typename?: 'User', id: string, name?: string | null, email: string, image?: string | null } }> } };
-
+export type UsersQuery = {
+  __typename?: 'Query';
+  users: {
+    __typename?: 'UserConnection';
+    edges: Array<{
+      __typename?: 'UserEdge';
+      cursor: string;
+      node: {
+        __typename?: 'User';
+        id: string;
+        name?: string | null;
+        email: string;
+        image?: string | null;
+      };
+    }>;
+  };
+};
 
 export const CustomerPartsFragmentDoc = `
     fragment CustomerParts on Customer {
@@ -997,86 +1331,150 @@ export const LabelTypesDocument = `
 }
     ${LabelTypePartsFragmentDoc}`;
 
-export const useLabelTypesQuery = <
-      TData = LabelTypesQuery,
-      TError = unknown
-    >(
-      variables?: LabelTypesQueryVariables,
-      options?: Omit<UseQueryOptions<LabelTypesQuery, TError, TData>, 'queryKey'> & { queryKey?: UseQueryOptions<LabelTypesQuery, TError, TData>['queryKey'] }
-    ) => {
-    
-    return useQuery<LabelTypesQuery, TError, TData>(
-      {
-    queryKey: variables === undefined ? ['labelTypes'] : ['labelTypes', variables],
-    queryFn: fetcher<LabelTypesQuery, LabelTypesQueryVariables>(LabelTypesDocument, variables),
-    ...options
-  }
-    )};
+export const useLabelTypesQuery = <TData = LabelTypesQuery, TError = unknown>(
+  variables?: LabelTypesQueryVariables,
+  options?: Omit<
+    UseQueryOptions<LabelTypesQuery, TError, TData>,
+    'queryKey'
+  > & {
+    queryKey?: UseQueryOptions<LabelTypesQuery, TError, TData>['queryKey'];
+  },
+) => {
+  return useQuery<LabelTypesQuery, TError, TData>({
+    queryKey:
+      variables === undefined ? ['labelTypes'] : ['labelTypes', variables],
+    queryFn: fetcher<LabelTypesQuery, LabelTypesQueryVariables>(
+      LabelTypesDocument,
+      variables,
+    ),
+    ...options,
+  });
+};
 
-useLabelTypesQuery.getKey = (variables?: LabelTypesQueryVariables) => variables === undefined ? ['labelTypes'] : ['labelTypes', variables];
+useLabelTypesQuery.getKey = (variables?: LabelTypesQueryVariables) =>
+  variables === undefined ? ['labelTypes'] : ['labelTypes', variables];
 
 export const useSuspenseLabelTypesQuery = <
-      TData = LabelTypesQuery,
-      TError = unknown
-    >(
-      variables?: LabelTypesQueryVariables,
-      options?: Omit<UseSuspenseQueryOptions<LabelTypesQuery, TError, TData>, 'queryKey'> & { queryKey?: UseSuspenseQueryOptions<LabelTypesQuery, TError, TData>['queryKey'] }
-    ) => {
-    
-    return useSuspenseQuery<LabelTypesQuery, TError, TData>(
-      {
-    queryKey: variables === undefined ? ['labelTypesSuspense'] : ['labelTypesSuspense', variables],
-    queryFn: fetcher<LabelTypesQuery, LabelTypesQueryVariables>(LabelTypesDocument, variables),
-    ...options
-  }
-    )};
+  TData = LabelTypesQuery,
+  TError = unknown,
+>(
+  variables?: LabelTypesQueryVariables,
+  options?: Omit<
+    UseSuspenseQueryOptions<LabelTypesQuery, TError, TData>,
+    'queryKey'
+  > & {
+    queryKey?: UseSuspenseQueryOptions<
+      LabelTypesQuery,
+      TError,
+      TData
+    >['queryKey'];
+  },
+) => {
+  return useSuspenseQuery<LabelTypesQuery, TError, TData>({
+    queryKey:
+      variables === undefined
+        ? ['labelTypesSuspense']
+        : ['labelTypesSuspense', variables],
+    queryFn: fetcher<LabelTypesQuery, LabelTypesQueryVariables>(
+      LabelTypesDocument,
+      variables,
+    ),
+    ...options,
+  });
+};
 
-useSuspenseLabelTypesQuery.getKey = (variables?: LabelTypesQueryVariables) => variables === undefined ? ['labelTypesSuspense'] : ['labelTypesSuspense', variables];
+useSuspenseLabelTypesQuery.getKey = (variables?: LabelTypesQueryVariables) =>
+  variables === undefined
+    ? ['labelTypesSuspense']
+    : ['labelTypesSuspense', variables];
 
 export const useInfiniteLabelTypesQuery = <
-      TData = InfiniteData<LabelTypesQuery>,
-      TError = unknown
-    >(
-      variables: LabelTypesQueryVariables,
-      options: Omit<UseInfiniteQueryOptions<LabelTypesQuery, TError, TData>, 'queryKey'> & { queryKey?: UseInfiniteQueryOptions<LabelTypesQuery, TError, TData>['queryKey'] }
-    ) => {
-    
-    return useInfiniteQuery<LabelTypesQuery, TError, TData>(
-      (() => {
-    const { queryKey: optionsQueryKey, ...restOptions } = options;
-    return {
-      queryKey: optionsQueryKey ?? variables === undefined ? ['labelTypes.infinite'] : ['labelTypes.infinite', variables],
-      queryFn: (metaData) => fetcher<LabelTypesQuery, LabelTypesQueryVariables>(LabelTypesDocument, {...variables, ...(metaData.pageParam ?? {})})(),
-      ...restOptions
-    }
-  })()
-    )};
+  TData = InfiniteData<LabelTypesQuery>,
+  TError = unknown,
+>(
+  variables: LabelTypesQueryVariables,
+  options: Omit<
+    UseInfiniteQueryOptions<LabelTypesQuery, TError, TData>,
+    'queryKey'
+  > & {
+    queryKey?: UseInfiniteQueryOptions<
+      LabelTypesQuery,
+      TError,
+      TData
+    >['queryKey'];
+  },
+) => {
+  return useInfiniteQuery<LabelTypesQuery, TError, TData>(
+    (() => {
+      const { queryKey: optionsQueryKey, ...restOptions } = options;
+      return {
+        queryKey:
+          (optionsQueryKey ?? variables === undefined)
+            ? ['labelTypes.infinite']
+            : ['labelTypes.infinite', variables],
+        queryFn: (metaData) =>
+          fetcher<LabelTypesQuery, LabelTypesQueryVariables>(
+            LabelTypesDocument,
+            { ...variables, ...(metaData.pageParam ?? {}) },
+          )(),
+        ...restOptions,
+      };
+    })(),
+  );
+};
 
-useInfiniteLabelTypesQuery.getKey = (variables?: LabelTypesQueryVariables) => variables === undefined ? ['labelTypes.infinite'] : ['labelTypes.infinite', variables];
+useInfiniteLabelTypesQuery.getKey = (variables?: LabelTypesQueryVariables) =>
+  variables === undefined
+    ? ['labelTypes.infinite']
+    : ['labelTypes.infinite', variables];
 
 export const useSuspenseInfiniteLabelTypesQuery = <
-      TData = InfiniteData<LabelTypesQuery>,
-      TError = unknown
-    >(
-      variables: LabelTypesQueryVariables,
-      options: Omit<UseSuspenseInfiniteQueryOptions<LabelTypesQuery, TError, TData>, 'queryKey'> & { queryKey?: UseSuspenseInfiniteQueryOptions<LabelTypesQuery, TError, TData>['queryKey'] }
-    ) => {
-    
-    return useSuspenseInfiniteQuery<LabelTypesQuery, TError, TData>(
-      (() => {
-    const { queryKey: optionsQueryKey, ...restOptions } = options;
-    return {
-      queryKey: optionsQueryKey ?? variables === undefined ? ['labelTypes.infiniteSuspense'] : ['labelTypes.infiniteSuspense', variables],
-      queryFn: (metaData) => fetcher<LabelTypesQuery, LabelTypesQueryVariables>(LabelTypesDocument, {...variables, ...(metaData.pageParam ?? {})})(),
-      ...restOptions
-    }
-  })()
-    )};
+  TData = InfiniteData<LabelTypesQuery>,
+  TError = unknown,
+>(
+  variables: LabelTypesQueryVariables,
+  options: Omit<
+    UseSuspenseInfiniteQueryOptions<LabelTypesQuery, TError, TData>,
+    'queryKey'
+  > & {
+    queryKey?: UseSuspenseInfiniteQueryOptions<
+      LabelTypesQuery,
+      TError,
+      TData
+    >['queryKey'];
+  },
+) => {
+  return useSuspenseInfiniteQuery<LabelTypesQuery, TError, TData>(
+    (() => {
+      const { queryKey: optionsQueryKey, ...restOptions } = options;
+      return {
+        queryKey:
+          (optionsQueryKey ?? variables === undefined)
+            ? ['labelTypes.infiniteSuspense']
+            : ['labelTypes.infiniteSuspense', variables],
+        queryFn: (metaData) =>
+          fetcher<LabelTypesQuery, LabelTypesQueryVariables>(
+            LabelTypesDocument,
+            { ...variables, ...(metaData.pageParam ?? {}) },
+          )(),
+        ...restOptions,
+      };
+    })(),
+  );
+};
 
-useSuspenseInfiniteLabelTypesQuery.getKey = (variables?: LabelTypesQueryVariables) => variables === undefined ? ['labelTypes.infiniteSuspense'] : ['labelTypes.infiniteSuspense', variables];
+useSuspenseInfiniteLabelTypesQuery.getKey = (
+  variables?: LabelTypesQueryVariables,
+) =>
+  variables === undefined
+    ? ['labelTypes.infiniteSuspense']
+    : ['labelTypes.infiniteSuspense', variables];
 
-
-useLabelTypesQuery.fetcher = (variables?: LabelTypesQueryVariables) => fetcher<LabelTypesQuery, LabelTypesQueryVariables>(LabelTypesDocument, variables);
+useLabelTypesQuery.fetcher = (variables?: LabelTypesQueryVariables) =>
+  fetcher<LabelTypesQuery, LabelTypesQueryVariables>(
+    LabelTypesDocument,
+    variables,
+  );
 
 export const AddLabelsDocument = `
     mutation addLabels($input: AddLabelsInput!) {
@@ -1091,21 +1489,35 @@ export const AddLabelsDocument = `
 }
     `;
 
-export const useAddLabelsMutation = <
-      TError = unknown,
-      TContext = unknown
-    >(options?: UseMutationOptions<AddLabelsMutation, TError, AddLabelsMutationVariables, TContext>) => {
-    
-    return useMutation<AddLabelsMutation, TError, AddLabelsMutationVariables, TContext>(
-      {
+export const useAddLabelsMutation = <TError = unknown, TContext = unknown>(
+  options?: UseMutationOptions<
+    AddLabelsMutation,
+    TError,
+    AddLabelsMutationVariables,
+    TContext
+  >,
+) => {
+  return useMutation<
+    AddLabelsMutation,
+    TError,
+    AddLabelsMutationVariables,
+    TContext
+  >({
     mutationKey: ['addLabels'],
-    mutationFn: (variables?: AddLabelsMutationVariables) => fetcher<AddLabelsMutation, AddLabelsMutationVariables>(AddLabelsDocument, variables)(),
-    ...options
-  }
-    )};
+    mutationFn: (variables?: AddLabelsMutationVariables) =>
+      fetcher<AddLabelsMutation, AddLabelsMutationVariables>(
+        AddLabelsDocument,
+        variables,
+      )(),
+    ...options,
+  });
+};
 
-
-useAddLabelsMutation.fetcher = (variables: AddLabelsMutationVariables) => fetcher<AddLabelsMutation, AddLabelsMutationVariables>(AddLabelsDocument, variables);
+useAddLabelsMutation.fetcher = (variables: AddLabelsMutationVariables) =>
+  fetcher<AddLabelsMutation, AddLabelsMutationVariables>(
+    AddLabelsDocument,
+    variables,
+  );
 
 export const RemoveLabelsDocument = `
     mutation removeLabels($input: RemoveLabelsInput!) {
@@ -1117,21 +1529,35 @@ export const RemoveLabelsDocument = `
 }
     `;
 
-export const useRemoveLabelsMutation = <
-      TError = unknown,
-      TContext = unknown
-    >(options?: UseMutationOptions<RemoveLabelsMutation, TError, RemoveLabelsMutationVariables, TContext>) => {
-    
-    return useMutation<RemoveLabelsMutation, TError, RemoveLabelsMutationVariables, TContext>(
-      {
+export const useRemoveLabelsMutation = <TError = unknown, TContext = unknown>(
+  options?: UseMutationOptions<
+    RemoveLabelsMutation,
+    TError,
+    RemoveLabelsMutationVariables,
+    TContext
+  >,
+) => {
+  return useMutation<
+    RemoveLabelsMutation,
+    TError,
+    RemoveLabelsMutationVariables,
+    TContext
+  >({
     mutationKey: ['removeLabels'],
-    mutationFn: (variables?: RemoveLabelsMutationVariables) => fetcher<RemoveLabelsMutation, RemoveLabelsMutationVariables>(RemoveLabelsDocument, variables)(),
-    ...options
-  }
-    )};
+    mutationFn: (variables?: RemoveLabelsMutationVariables) =>
+      fetcher<RemoveLabelsMutation, RemoveLabelsMutationVariables>(
+        RemoveLabelsDocument,
+        variables,
+      )(),
+    ...options,
+  });
+};
 
-
-useRemoveLabelsMutation.fetcher = (variables: RemoveLabelsMutationVariables) => fetcher<RemoveLabelsMutation, RemoveLabelsMutationVariables>(RemoveLabelsDocument, variables);
+useRemoveLabelsMutation.fetcher = (variables: RemoveLabelsMutationVariables) =>
+  fetcher<RemoveLabelsMutation, RemoveLabelsMutationVariables>(
+    RemoveLabelsDocument,
+    variables,
+  );
 
 export const TicketDocument = `
     query ticket($ticketId: ID!) {
@@ -1155,86 +1581,123 @@ ${CustomerPartsFragmentDoc}
 ${LabelPartsFragmentDoc}
 ${LabelTypePartsFragmentDoc}`;
 
-export const useTicketQuery = <
-      TData = TicketQuery,
-      TError = unknown
-    >(
-      variables: TicketQueryVariables,
-      options?: Omit<UseQueryOptions<TicketQuery, TError, TData>, 'queryKey'> & { queryKey?: UseQueryOptions<TicketQuery, TError, TData>['queryKey'] }
-    ) => {
-    
-    return useQuery<TicketQuery, TError, TData>(
-      {
+export const useTicketQuery = <TData = TicketQuery, TError = unknown>(
+  variables: TicketQueryVariables,
+  options?: Omit<UseQueryOptions<TicketQuery, TError, TData>, 'queryKey'> & {
+    queryKey?: UseQueryOptions<TicketQuery, TError, TData>['queryKey'];
+  },
+) => {
+  return useQuery<TicketQuery, TError, TData>({
     queryKey: ['ticket', variables],
-    queryFn: fetcher<TicketQuery, TicketQueryVariables>(TicketDocument, variables),
-    ...options
-  }
-    )};
+    queryFn: fetcher<TicketQuery, TicketQueryVariables>(
+      TicketDocument,
+      variables,
+    ),
+    ...options,
+  });
+};
 
-useTicketQuery.getKey = (variables: TicketQueryVariables) => ['ticket', variables];
+useTicketQuery.getKey = (variables: TicketQueryVariables) => [
+  'ticket',
+  variables,
+];
 
-export const useSuspenseTicketQuery = <
-      TData = TicketQuery,
-      TError = unknown
-    >(
-      variables: TicketQueryVariables,
-      options?: Omit<UseSuspenseQueryOptions<TicketQuery, TError, TData>, 'queryKey'> & { queryKey?: UseSuspenseQueryOptions<TicketQuery, TError, TData>['queryKey'] }
-    ) => {
-    
-    return useSuspenseQuery<TicketQuery, TError, TData>(
-      {
+export const useSuspenseTicketQuery = <TData = TicketQuery, TError = unknown>(
+  variables: TicketQueryVariables,
+  options?: Omit<
+    UseSuspenseQueryOptions<TicketQuery, TError, TData>,
+    'queryKey'
+  > & {
+    queryKey?: UseSuspenseQueryOptions<TicketQuery, TError, TData>['queryKey'];
+  },
+) => {
+  return useSuspenseQuery<TicketQuery, TError, TData>({
     queryKey: ['ticketSuspense', variables],
-    queryFn: fetcher<TicketQuery, TicketQueryVariables>(TicketDocument, variables),
-    ...options
-  }
-    )};
+    queryFn: fetcher<TicketQuery, TicketQueryVariables>(
+      TicketDocument,
+      variables,
+    ),
+    ...options,
+  });
+};
 
-useSuspenseTicketQuery.getKey = (variables: TicketQueryVariables) => ['ticketSuspense', variables];
+useSuspenseTicketQuery.getKey = (variables: TicketQueryVariables) => [
+  'ticketSuspense',
+  variables,
+];
 
 export const useInfiniteTicketQuery = <
-      TData = InfiniteData<TicketQuery>,
-      TError = unknown
-    >(
-      variables: TicketQueryVariables,
-      options: Omit<UseInfiniteQueryOptions<TicketQuery, TError, TData>, 'queryKey'> & { queryKey?: UseInfiniteQueryOptions<TicketQuery, TError, TData>['queryKey'] }
-    ) => {
-    
-    return useInfiniteQuery<TicketQuery, TError, TData>(
-      (() => {
-    const { queryKey: optionsQueryKey, ...restOptions } = options;
-    return {
-      queryKey: optionsQueryKey ?? ['ticket.infinite', variables],
-      queryFn: (metaData) => fetcher<TicketQuery, TicketQueryVariables>(TicketDocument, {...variables, ...(metaData.pageParam ?? {})})(),
-      ...restOptions
-    }
-  })()
-    )};
+  TData = InfiniteData<TicketQuery>,
+  TError = unknown,
+>(
+  variables: TicketQueryVariables,
+  options: Omit<
+    UseInfiniteQueryOptions<TicketQuery, TError, TData>,
+    'queryKey'
+  > & {
+    queryKey?: UseInfiniteQueryOptions<TicketQuery, TError, TData>['queryKey'];
+  },
+) => {
+  return useInfiniteQuery<TicketQuery, TError, TData>(
+    (() => {
+      const { queryKey: optionsQueryKey, ...restOptions } = options;
+      return {
+        queryKey: optionsQueryKey ?? ['ticket.infinite', variables],
+        queryFn: (metaData) =>
+          fetcher<TicketQuery, TicketQueryVariables>(TicketDocument, {
+            ...variables,
+            ...(metaData.pageParam ?? {}),
+          })(),
+        ...restOptions,
+      };
+    })(),
+  );
+};
 
-useInfiniteTicketQuery.getKey = (variables: TicketQueryVariables) => ['ticket.infinite', variables];
+useInfiniteTicketQuery.getKey = (variables: TicketQueryVariables) => [
+  'ticket.infinite',
+  variables,
+];
 
 export const useSuspenseInfiniteTicketQuery = <
-      TData = InfiniteData<TicketQuery>,
-      TError = unknown
-    >(
-      variables: TicketQueryVariables,
-      options: Omit<UseSuspenseInfiniteQueryOptions<TicketQuery, TError, TData>, 'queryKey'> & { queryKey?: UseSuspenseInfiniteQueryOptions<TicketQuery, TError, TData>['queryKey'] }
-    ) => {
-    
-    return useSuspenseInfiniteQuery<TicketQuery, TError, TData>(
-      (() => {
-    const { queryKey: optionsQueryKey, ...restOptions } = options;
-    return {
-      queryKey: optionsQueryKey ?? ['ticket.infiniteSuspense', variables],
-      queryFn: (metaData) => fetcher<TicketQuery, TicketQueryVariables>(TicketDocument, {...variables, ...(metaData.pageParam ?? {})})(),
-      ...restOptions
-    }
-  })()
-    )};
+  TData = InfiniteData<TicketQuery>,
+  TError = unknown,
+>(
+  variables: TicketQueryVariables,
+  options: Omit<
+    UseSuspenseInfiniteQueryOptions<TicketQuery, TError, TData>,
+    'queryKey'
+  > & {
+    queryKey?: UseSuspenseInfiniteQueryOptions<
+      TicketQuery,
+      TError,
+      TData
+    >['queryKey'];
+  },
+) => {
+  return useSuspenseInfiniteQuery<TicketQuery, TError, TData>(
+    (() => {
+      const { queryKey: optionsQueryKey, ...restOptions } = options;
+      return {
+        queryKey: optionsQueryKey ?? ['ticket.infiniteSuspense', variables],
+        queryFn: (metaData) =>
+          fetcher<TicketQuery, TicketQueryVariables>(TicketDocument, {
+            ...variables,
+            ...(metaData.pageParam ?? {}),
+          })(),
+        ...restOptions,
+      };
+    })(),
+  );
+};
 
-useSuspenseInfiniteTicketQuery.getKey = (variables: TicketQueryVariables) => ['ticket.infiniteSuspense', variables];
+useSuspenseInfiniteTicketQuery.getKey = (variables: TicketQueryVariables) => [
+  'ticket.infiniteSuspense',
+  variables,
+];
 
-
-useTicketQuery.fetcher = (variables: TicketQueryVariables) => fetcher<TicketQuery, TicketQueryVariables>(TicketDocument, variables);
+useTicketQuery.fetcher = (variables: TicketQueryVariables) =>
+  fetcher<TicketQuery, TicketQueryVariables>(TicketDocument, variables);
 
 export const TicketTimelineDocument = `
     query ticketTimeline($ticketId: ID!) {
@@ -1299,85 +1762,142 @@ ${LabelPartsFragmentDoc}
 ${LabelTypePartsFragmentDoc}`;
 
 export const useTicketTimelineQuery = <
-      TData = TicketTimelineQuery,
-      TError = unknown
-    >(
-      variables: TicketTimelineQueryVariables,
-      options?: Omit<UseQueryOptions<TicketTimelineQuery, TError, TData>, 'queryKey'> & { queryKey?: UseQueryOptions<TicketTimelineQuery, TError, TData>['queryKey'] }
-    ) => {
-    
-    return useQuery<TicketTimelineQuery, TError, TData>(
-      {
+  TData = TicketTimelineQuery,
+  TError = unknown,
+>(
+  variables: TicketTimelineQueryVariables,
+  options?: Omit<
+    UseQueryOptions<TicketTimelineQuery, TError, TData>,
+    'queryKey'
+  > & {
+    queryKey?: UseQueryOptions<TicketTimelineQuery, TError, TData>['queryKey'];
+  },
+) => {
+  return useQuery<TicketTimelineQuery, TError, TData>({
     queryKey: ['ticketTimeline', variables],
-    queryFn: fetcher<TicketTimelineQuery, TicketTimelineQueryVariables>(TicketTimelineDocument, variables),
-    ...options
-  }
-    )};
+    queryFn: fetcher<TicketTimelineQuery, TicketTimelineQueryVariables>(
+      TicketTimelineDocument,
+      variables,
+    ),
+    ...options,
+  });
+};
 
-useTicketTimelineQuery.getKey = (variables: TicketTimelineQueryVariables) => ['ticketTimeline', variables];
+useTicketTimelineQuery.getKey = (variables: TicketTimelineQueryVariables) => [
+  'ticketTimeline',
+  variables,
+];
 
 export const useSuspenseTicketTimelineQuery = <
-      TData = TicketTimelineQuery,
-      TError = unknown
-    >(
-      variables: TicketTimelineQueryVariables,
-      options?: Omit<UseSuspenseQueryOptions<TicketTimelineQuery, TError, TData>, 'queryKey'> & { queryKey?: UseSuspenseQueryOptions<TicketTimelineQuery, TError, TData>['queryKey'] }
-    ) => {
-    
-    return useSuspenseQuery<TicketTimelineQuery, TError, TData>(
-      {
+  TData = TicketTimelineQuery,
+  TError = unknown,
+>(
+  variables: TicketTimelineQueryVariables,
+  options?: Omit<
+    UseSuspenseQueryOptions<TicketTimelineQuery, TError, TData>,
+    'queryKey'
+  > & {
+    queryKey?: UseSuspenseQueryOptions<
+      TicketTimelineQuery,
+      TError,
+      TData
+    >['queryKey'];
+  },
+) => {
+  return useSuspenseQuery<TicketTimelineQuery, TError, TData>({
     queryKey: ['ticketTimelineSuspense', variables],
-    queryFn: fetcher<TicketTimelineQuery, TicketTimelineQueryVariables>(TicketTimelineDocument, variables),
-    ...options
-  }
-    )};
+    queryFn: fetcher<TicketTimelineQuery, TicketTimelineQueryVariables>(
+      TicketTimelineDocument,
+      variables,
+    ),
+    ...options,
+  });
+};
 
-useSuspenseTicketTimelineQuery.getKey = (variables: TicketTimelineQueryVariables) => ['ticketTimelineSuspense', variables];
+useSuspenseTicketTimelineQuery.getKey = (
+  variables: TicketTimelineQueryVariables,
+) => ['ticketTimelineSuspense', variables];
 
 export const useInfiniteTicketTimelineQuery = <
-      TData = InfiniteData<TicketTimelineQuery>,
-      TError = unknown
-    >(
-      variables: TicketTimelineQueryVariables,
-      options: Omit<UseInfiniteQueryOptions<TicketTimelineQuery, TError, TData>, 'queryKey'> & { queryKey?: UseInfiniteQueryOptions<TicketTimelineQuery, TError, TData>['queryKey'] }
-    ) => {
-    
-    return useInfiniteQuery<TicketTimelineQuery, TError, TData>(
-      (() => {
-    const { queryKey: optionsQueryKey, ...restOptions } = options;
-    return {
-      queryKey: optionsQueryKey ?? ['ticketTimeline.infinite', variables],
-      queryFn: (metaData) => fetcher<TicketTimelineQuery, TicketTimelineQueryVariables>(TicketTimelineDocument, {...variables, ...(metaData.pageParam ?? {})})(),
-      ...restOptions
-    }
-  })()
-    )};
+  TData = InfiniteData<TicketTimelineQuery>,
+  TError = unknown,
+>(
+  variables: TicketTimelineQueryVariables,
+  options: Omit<
+    UseInfiniteQueryOptions<TicketTimelineQuery, TError, TData>,
+    'queryKey'
+  > & {
+    queryKey?: UseInfiniteQueryOptions<
+      TicketTimelineQuery,
+      TError,
+      TData
+    >['queryKey'];
+  },
+) => {
+  return useInfiniteQuery<TicketTimelineQuery, TError, TData>(
+    (() => {
+      const { queryKey: optionsQueryKey, ...restOptions } = options;
+      return {
+        queryKey: optionsQueryKey ?? ['ticketTimeline.infinite', variables],
+        queryFn: (metaData) =>
+          fetcher<TicketTimelineQuery, TicketTimelineQueryVariables>(
+            TicketTimelineDocument,
+            { ...variables, ...(metaData.pageParam ?? {}) },
+          )(),
+        ...restOptions,
+      };
+    })(),
+  );
+};
 
-useInfiniteTicketTimelineQuery.getKey = (variables: TicketTimelineQueryVariables) => ['ticketTimeline.infinite', variables];
+useInfiniteTicketTimelineQuery.getKey = (
+  variables: TicketTimelineQueryVariables,
+) => ['ticketTimeline.infinite', variables];
 
 export const useSuspenseInfiniteTicketTimelineQuery = <
-      TData = InfiniteData<TicketTimelineQuery>,
-      TError = unknown
-    >(
-      variables: TicketTimelineQueryVariables,
-      options: Omit<UseSuspenseInfiniteQueryOptions<TicketTimelineQuery, TError, TData>, 'queryKey'> & { queryKey?: UseSuspenseInfiniteQueryOptions<TicketTimelineQuery, TError, TData>['queryKey'] }
-    ) => {
-    
-    return useSuspenseInfiniteQuery<TicketTimelineQuery, TError, TData>(
-      (() => {
-    const { queryKey: optionsQueryKey, ...restOptions } = options;
-    return {
-      queryKey: optionsQueryKey ?? ['ticketTimeline.infiniteSuspense', variables],
-      queryFn: (metaData) => fetcher<TicketTimelineQuery, TicketTimelineQueryVariables>(TicketTimelineDocument, {...variables, ...(metaData.pageParam ?? {})})(),
-      ...restOptions
-    }
-  })()
-    )};
+  TData = InfiniteData<TicketTimelineQuery>,
+  TError = unknown,
+>(
+  variables: TicketTimelineQueryVariables,
+  options: Omit<
+    UseSuspenseInfiniteQueryOptions<TicketTimelineQuery, TError, TData>,
+    'queryKey'
+  > & {
+    queryKey?: UseSuspenseInfiniteQueryOptions<
+      TicketTimelineQuery,
+      TError,
+      TData
+    >['queryKey'];
+  },
+) => {
+  return useSuspenseInfiniteQuery<TicketTimelineQuery, TError, TData>(
+    (() => {
+      const { queryKey: optionsQueryKey, ...restOptions } = options;
+      return {
+        queryKey: optionsQueryKey ?? [
+          'ticketTimeline.infiniteSuspense',
+          variables,
+        ],
+        queryFn: (metaData) =>
+          fetcher<TicketTimelineQuery, TicketTimelineQueryVariables>(
+            TicketTimelineDocument,
+            { ...variables, ...(metaData.pageParam ?? {}) },
+          )(),
+        ...restOptions,
+      };
+    })(),
+  );
+};
 
-useSuspenseInfiniteTicketTimelineQuery.getKey = (variables: TicketTimelineQueryVariables) => ['ticketTimeline.infiniteSuspense', variables];
+useSuspenseInfiniteTicketTimelineQuery.getKey = (
+  variables: TicketTimelineQueryVariables,
+) => ['ticketTimeline.infiniteSuspense', variables];
 
-
-useTicketTimelineQuery.fetcher = (variables: TicketTimelineQueryVariables) => fetcher<TicketTimelineQuery, TicketTimelineQueryVariables>(TicketTimelineDocument, variables);
+useTicketTimelineQuery.fetcher = (variables: TicketTimelineQueryVariables) =>
+  fetcher<TicketTimelineQuery, TicketTimelineQueryVariables>(
+    TicketTimelineDocument,
+    variables,
+  );
 
 export const TicketsDocument = `
     query tickets($filters: TicketFilters, $first: Int, $after: String, $last: Int, $before: String) {
@@ -1420,86 +1940,130 @@ ${CustomerPartsFragmentDoc}
 ${LabelPartsFragmentDoc}
 ${LabelTypePartsFragmentDoc}`;
 
-export const useTicketsQuery = <
-      TData = TicketsQuery,
-      TError = unknown
-    >(
-      variables?: TicketsQueryVariables,
-      options?: Omit<UseQueryOptions<TicketsQuery, TError, TData>, 'queryKey'> & { queryKey?: UseQueryOptions<TicketsQuery, TError, TData>['queryKey'] }
-    ) => {
-    
-    return useQuery<TicketsQuery, TError, TData>(
-      {
+export const useTicketsQuery = <TData = TicketsQuery, TError = unknown>(
+  variables?: TicketsQueryVariables,
+  options?: Omit<UseQueryOptions<TicketsQuery, TError, TData>, 'queryKey'> & {
+    queryKey?: UseQueryOptions<TicketsQuery, TError, TData>['queryKey'];
+  },
+) => {
+  return useQuery<TicketsQuery, TError, TData>({
     queryKey: variables === undefined ? ['tickets'] : ['tickets', variables],
-    queryFn: fetcher<TicketsQuery, TicketsQueryVariables>(TicketsDocument, variables),
-    ...options
-  }
-    )};
+    queryFn: fetcher<TicketsQuery, TicketsQueryVariables>(
+      TicketsDocument,
+      variables,
+    ),
+    ...options,
+  });
+};
 
-useTicketsQuery.getKey = (variables?: TicketsQueryVariables) => variables === undefined ? ['tickets'] : ['tickets', variables];
+useTicketsQuery.getKey = (variables?: TicketsQueryVariables) =>
+  variables === undefined ? ['tickets'] : ['tickets', variables];
 
-export const useSuspenseTicketsQuery = <
-      TData = TicketsQuery,
-      TError = unknown
-    >(
-      variables?: TicketsQueryVariables,
-      options?: Omit<UseSuspenseQueryOptions<TicketsQuery, TError, TData>, 'queryKey'> & { queryKey?: UseSuspenseQueryOptions<TicketsQuery, TError, TData>['queryKey'] }
-    ) => {
-    
-    return useSuspenseQuery<TicketsQuery, TError, TData>(
-      {
-    queryKey: variables === undefined ? ['ticketsSuspense'] : ['ticketsSuspense', variables],
-    queryFn: fetcher<TicketsQuery, TicketsQueryVariables>(TicketsDocument, variables),
-    ...options
-  }
-    )};
+export const useSuspenseTicketsQuery = <TData = TicketsQuery, TError = unknown>(
+  variables?: TicketsQueryVariables,
+  options?: Omit<
+    UseSuspenseQueryOptions<TicketsQuery, TError, TData>,
+    'queryKey'
+  > & {
+    queryKey?: UseSuspenseQueryOptions<TicketsQuery, TError, TData>['queryKey'];
+  },
+) => {
+  return useSuspenseQuery<TicketsQuery, TError, TData>({
+    queryKey:
+      variables === undefined
+        ? ['ticketsSuspense']
+        : ['ticketsSuspense', variables],
+    queryFn: fetcher<TicketsQuery, TicketsQueryVariables>(
+      TicketsDocument,
+      variables,
+    ),
+    ...options,
+  });
+};
 
-useSuspenseTicketsQuery.getKey = (variables?: TicketsQueryVariables) => variables === undefined ? ['ticketsSuspense'] : ['ticketsSuspense', variables];
+useSuspenseTicketsQuery.getKey = (variables?: TicketsQueryVariables) =>
+  variables === undefined
+    ? ['ticketsSuspense']
+    : ['ticketsSuspense', variables];
 
 export const useInfiniteTicketsQuery = <
-      TData = InfiniteData<TicketsQuery>,
-      TError = unknown
-    >(
-      variables: TicketsQueryVariables,
-      options: Omit<UseInfiniteQueryOptions<TicketsQuery, TError, TData>, 'queryKey'> & { queryKey?: UseInfiniteQueryOptions<TicketsQuery, TError, TData>['queryKey'] }
-    ) => {
-    
-    return useInfiniteQuery<TicketsQuery, TError, TData>(
-      (() => {
-    const { queryKey: optionsQueryKey, ...restOptions } = options;
-    return {
-      queryKey: optionsQueryKey ?? variables === undefined ? ['tickets.infinite'] : ['tickets.infinite', variables],
-      queryFn: (metaData) => fetcher<TicketsQuery, TicketsQueryVariables>(TicketsDocument, {...variables, ...(metaData.pageParam ?? {})})(),
-      ...restOptions
-    }
-  })()
-    )};
+  TData = InfiniteData<TicketsQuery>,
+  TError = unknown,
+>(
+  variables: TicketsQueryVariables,
+  options: Omit<
+    UseInfiniteQueryOptions<TicketsQuery, TError, TData>,
+    'queryKey'
+  > & {
+    queryKey?: UseInfiniteQueryOptions<TicketsQuery, TError, TData>['queryKey'];
+  },
+) => {
+  return useInfiniteQuery<TicketsQuery, TError, TData>(
+    (() => {
+      const { queryKey: optionsQueryKey, ...restOptions } = options;
+      return {
+        queryKey:
+          (optionsQueryKey ?? variables === undefined)
+            ? ['tickets.infinite']
+            : ['tickets.infinite', variables],
+        queryFn: (metaData) =>
+          fetcher<TicketsQuery, TicketsQueryVariables>(TicketsDocument, {
+            ...variables,
+            ...(metaData.pageParam ?? {}),
+          })(),
+        ...restOptions,
+      };
+    })(),
+  );
+};
 
-useInfiniteTicketsQuery.getKey = (variables?: TicketsQueryVariables) => variables === undefined ? ['tickets.infinite'] : ['tickets.infinite', variables];
+useInfiniteTicketsQuery.getKey = (variables?: TicketsQueryVariables) =>
+  variables === undefined
+    ? ['tickets.infinite']
+    : ['tickets.infinite', variables];
 
 export const useSuspenseInfiniteTicketsQuery = <
-      TData = InfiniteData<TicketsQuery>,
-      TError = unknown
-    >(
-      variables: TicketsQueryVariables,
-      options: Omit<UseSuspenseInfiniteQueryOptions<TicketsQuery, TError, TData>, 'queryKey'> & { queryKey?: UseSuspenseInfiniteQueryOptions<TicketsQuery, TError, TData>['queryKey'] }
-    ) => {
-    
-    return useSuspenseInfiniteQuery<TicketsQuery, TError, TData>(
-      (() => {
-    const { queryKey: optionsQueryKey, ...restOptions } = options;
-    return {
-      queryKey: optionsQueryKey ?? variables === undefined ? ['tickets.infiniteSuspense'] : ['tickets.infiniteSuspense', variables],
-      queryFn: (metaData) => fetcher<TicketsQuery, TicketsQueryVariables>(TicketsDocument, {...variables, ...(metaData.pageParam ?? {})})(),
-      ...restOptions
-    }
-  })()
-    )};
+  TData = InfiniteData<TicketsQuery>,
+  TError = unknown,
+>(
+  variables: TicketsQueryVariables,
+  options: Omit<
+    UseSuspenseInfiniteQueryOptions<TicketsQuery, TError, TData>,
+    'queryKey'
+  > & {
+    queryKey?: UseSuspenseInfiniteQueryOptions<
+      TicketsQuery,
+      TError,
+      TData
+    >['queryKey'];
+  },
+) => {
+  return useSuspenseInfiniteQuery<TicketsQuery, TError, TData>(
+    (() => {
+      const { queryKey: optionsQueryKey, ...restOptions } = options;
+      return {
+        queryKey:
+          (optionsQueryKey ?? variables === undefined)
+            ? ['tickets.infiniteSuspense']
+            : ['tickets.infiniteSuspense', variables],
+        queryFn: (metaData) =>
+          fetcher<TicketsQuery, TicketsQueryVariables>(TicketsDocument, {
+            ...variables,
+            ...(metaData.pageParam ?? {}),
+          })(),
+        ...restOptions,
+      };
+    })(),
+  );
+};
 
-useSuspenseInfiniteTicketsQuery.getKey = (variables?: TicketsQueryVariables) => variables === undefined ? ['tickets.infiniteSuspense'] : ['tickets.infiniteSuspense', variables];
+useSuspenseInfiniteTicketsQuery.getKey = (variables?: TicketsQueryVariables) =>
+  variables === undefined
+    ? ['tickets.infiniteSuspense']
+    : ['tickets.infiniteSuspense', variables];
 
-
-useTicketsQuery.fetcher = (variables?: TicketsQueryVariables) => fetcher<TicketsQuery, TicketsQueryVariables>(TicketsDocument, variables);
+useTicketsQuery.fetcher = (variables?: TicketsQueryVariables) =>
+  fetcher<TicketsQuery, TicketsQueryVariables>(TicketsDocument, variables);
 
 export const AssignTicketDocument = `
     mutation assignTicket($input: AssignTicketInput!) {
@@ -1514,21 +2078,35 @@ export const AssignTicketDocument = `
 }
     `;
 
-export const useAssignTicketMutation = <
-      TError = unknown,
-      TContext = unknown
-    >(options?: UseMutationOptions<AssignTicketMutation, TError, AssignTicketMutationVariables, TContext>) => {
-    
-    return useMutation<AssignTicketMutation, TError, AssignTicketMutationVariables, TContext>(
-      {
+export const useAssignTicketMutation = <TError = unknown, TContext = unknown>(
+  options?: UseMutationOptions<
+    AssignTicketMutation,
+    TError,
+    AssignTicketMutationVariables,
+    TContext
+  >,
+) => {
+  return useMutation<
+    AssignTicketMutation,
+    TError,
+    AssignTicketMutationVariables,
+    TContext
+  >({
     mutationKey: ['assignTicket'],
-    mutationFn: (variables?: AssignTicketMutationVariables) => fetcher<AssignTicketMutation, AssignTicketMutationVariables>(AssignTicketDocument, variables)(),
-    ...options
-  }
-    )};
+    mutationFn: (variables?: AssignTicketMutationVariables) =>
+      fetcher<AssignTicketMutation, AssignTicketMutationVariables>(
+        AssignTicketDocument,
+        variables,
+      )(),
+    ...options,
+  });
+};
 
-
-useAssignTicketMutation.fetcher = (variables: AssignTicketMutationVariables) => fetcher<AssignTicketMutation, AssignTicketMutationVariables>(AssignTicketDocument, variables);
+useAssignTicketMutation.fetcher = (variables: AssignTicketMutationVariables) =>
+  fetcher<AssignTicketMutation, AssignTicketMutationVariables>(
+    AssignTicketDocument,
+    variables,
+  );
 
 export const ChangeTicketPriorityDocument = `
     mutation changeTicketPriority($input: ChangeTicketPriorityInput!) {
@@ -1544,20 +2122,39 @@ export const ChangeTicketPriorityDocument = `
     `;
 
 export const useChangeTicketPriorityMutation = <
-      TError = unknown,
-      TContext = unknown
-    >(options?: UseMutationOptions<ChangeTicketPriorityMutation, TError, ChangeTicketPriorityMutationVariables, TContext>) => {
-    
-    return useMutation<ChangeTicketPriorityMutation, TError, ChangeTicketPriorityMutationVariables, TContext>(
-      {
+  TError = unknown,
+  TContext = unknown,
+>(
+  options?: UseMutationOptions<
+    ChangeTicketPriorityMutation,
+    TError,
+    ChangeTicketPriorityMutationVariables,
+    TContext
+  >,
+) => {
+  return useMutation<
+    ChangeTicketPriorityMutation,
+    TError,
+    ChangeTicketPriorityMutationVariables,
+    TContext
+  >({
     mutationKey: ['changeTicketPriority'],
-    mutationFn: (variables?: ChangeTicketPriorityMutationVariables) => fetcher<ChangeTicketPriorityMutation, ChangeTicketPriorityMutationVariables>(ChangeTicketPriorityDocument, variables)(),
-    ...options
-  }
-    )};
+    mutationFn: (variables?: ChangeTicketPriorityMutationVariables) =>
+      fetcher<
+        ChangeTicketPriorityMutation,
+        ChangeTicketPriorityMutationVariables
+      >(ChangeTicketPriorityDocument, variables)(),
+    ...options,
+  });
+};
 
-
-useChangeTicketPriorityMutation.fetcher = (variables: ChangeTicketPriorityMutationVariables) => fetcher<ChangeTicketPriorityMutation, ChangeTicketPriorityMutationVariables>(ChangeTicketPriorityDocument, variables);
+useChangeTicketPriorityMutation.fetcher = (
+  variables: ChangeTicketPriorityMutationVariables,
+) =>
+  fetcher<ChangeTicketPriorityMutation, ChangeTicketPriorityMutationVariables>(
+    ChangeTicketPriorityDocument,
+    variables,
+  );
 
 export const CreateNoteDocument = `
     mutation createNote($input: CreateNoteInput!) {
@@ -1572,21 +2169,35 @@ export const CreateNoteDocument = `
 }
     `;
 
-export const useCreateNoteMutation = <
-      TError = unknown,
-      TContext = unknown
-    >(options?: UseMutationOptions<CreateNoteMutation, TError, CreateNoteMutationVariables, TContext>) => {
-    
-    return useMutation<CreateNoteMutation, TError, CreateNoteMutationVariables, TContext>(
-      {
+export const useCreateNoteMutation = <TError = unknown, TContext = unknown>(
+  options?: UseMutationOptions<
+    CreateNoteMutation,
+    TError,
+    CreateNoteMutationVariables,
+    TContext
+  >,
+) => {
+  return useMutation<
+    CreateNoteMutation,
+    TError,
+    CreateNoteMutationVariables,
+    TContext
+  >({
     mutationKey: ['createNote'],
-    mutationFn: (variables?: CreateNoteMutationVariables) => fetcher<CreateNoteMutation, CreateNoteMutationVariables>(CreateNoteDocument, variables)(),
-    ...options
-  }
-    )};
+    mutationFn: (variables?: CreateNoteMutationVariables) =>
+      fetcher<CreateNoteMutation, CreateNoteMutationVariables>(
+        CreateNoteDocument,
+        variables,
+      )(),
+    ...options,
+  });
+};
 
-
-useCreateNoteMutation.fetcher = (variables: CreateNoteMutationVariables) => fetcher<CreateNoteMutation, CreateNoteMutationVariables>(CreateNoteDocument, variables);
+useCreateNoteMutation.fetcher = (variables: CreateNoteMutationVariables) =>
+  fetcher<CreateNoteMutation, CreateNoteMutationVariables>(
+    CreateNoteDocument,
+    variables,
+  );
 
 export const MarkTicketAsDoneDocument = `
     mutation markTicketAsDone($input: MarkTicketAsDoneInput!) {
@@ -1602,20 +2213,39 @@ export const MarkTicketAsDoneDocument = `
     `;
 
 export const useMarkTicketAsDoneMutation = <
-      TError = unknown,
-      TContext = unknown
-    >(options?: UseMutationOptions<MarkTicketAsDoneMutation, TError, MarkTicketAsDoneMutationVariables, TContext>) => {
-    
-    return useMutation<MarkTicketAsDoneMutation, TError, MarkTicketAsDoneMutationVariables, TContext>(
-      {
+  TError = unknown,
+  TContext = unknown,
+>(
+  options?: UseMutationOptions<
+    MarkTicketAsDoneMutation,
+    TError,
+    MarkTicketAsDoneMutationVariables,
+    TContext
+  >,
+) => {
+  return useMutation<
+    MarkTicketAsDoneMutation,
+    TError,
+    MarkTicketAsDoneMutationVariables,
+    TContext
+  >({
     mutationKey: ['markTicketAsDone'],
-    mutationFn: (variables?: MarkTicketAsDoneMutationVariables) => fetcher<MarkTicketAsDoneMutation, MarkTicketAsDoneMutationVariables>(MarkTicketAsDoneDocument, variables)(),
-    ...options
-  }
-    )};
+    mutationFn: (variables?: MarkTicketAsDoneMutationVariables) =>
+      fetcher<MarkTicketAsDoneMutation, MarkTicketAsDoneMutationVariables>(
+        MarkTicketAsDoneDocument,
+        variables,
+      )(),
+    ...options,
+  });
+};
 
-
-useMarkTicketAsDoneMutation.fetcher = (variables: MarkTicketAsDoneMutationVariables) => fetcher<MarkTicketAsDoneMutation, MarkTicketAsDoneMutationVariables>(MarkTicketAsDoneDocument, variables);
+useMarkTicketAsDoneMutation.fetcher = (
+  variables: MarkTicketAsDoneMutationVariables,
+) =>
+  fetcher<MarkTicketAsDoneMutation, MarkTicketAsDoneMutationVariables>(
+    MarkTicketAsDoneDocument,
+    variables,
+  );
 
 export const MarkTicketAsTodoDocument = `
     mutation markTicketAsTodo($input: MarkTicketAsTodoInput!) {
@@ -1631,20 +2261,39 @@ export const MarkTicketAsTodoDocument = `
     `;
 
 export const useMarkTicketAsTodoMutation = <
-      TError = unknown,
-      TContext = unknown
-    >(options?: UseMutationOptions<MarkTicketAsTodoMutation, TError, MarkTicketAsTodoMutationVariables, TContext>) => {
-    
-    return useMutation<MarkTicketAsTodoMutation, TError, MarkTicketAsTodoMutationVariables, TContext>(
-      {
+  TError = unknown,
+  TContext = unknown,
+>(
+  options?: UseMutationOptions<
+    MarkTicketAsTodoMutation,
+    TError,
+    MarkTicketAsTodoMutationVariables,
+    TContext
+  >,
+) => {
+  return useMutation<
+    MarkTicketAsTodoMutation,
+    TError,
+    MarkTicketAsTodoMutationVariables,
+    TContext
+  >({
     mutationKey: ['markTicketAsTodo'],
-    mutationFn: (variables?: MarkTicketAsTodoMutationVariables) => fetcher<MarkTicketAsTodoMutation, MarkTicketAsTodoMutationVariables>(MarkTicketAsTodoDocument, variables)(),
-    ...options
-  }
-    )};
+    mutationFn: (variables?: MarkTicketAsTodoMutationVariables) =>
+      fetcher<MarkTicketAsTodoMutation, MarkTicketAsTodoMutationVariables>(
+        MarkTicketAsTodoDocument,
+        variables,
+      )(),
+    ...options,
+  });
+};
 
-
-useMarkTicketAsTodoMutation.fetcher = (variables: MarkTicketAsTodoMutationVariables) => fetcher<MarkTicketAsTodoMutation, MarkTicketAsTodoMutationVariables>(MarkTicketAsTodoDocument, variables);
+useMarkTicketAsTodoMutation.fetcher = (
+  variables: MarkTicketAsTodoMutationVariables,
+) =>
+  fetcher<MarkTicketAsTodoMutation, MarkTicketAsTodoMutationVariables>(
+    MarkTicketAsTodoDocument,
+    variables,
+  );
 
 export const SendChatDocument = `
     mutation sendChat($input: SendChatInput!) {
@@ -1659,21 +2308,35 @@ export const SendChatDocument = `
 }
     `;
 
-export const useSendChatMutation = <
-      TError = unknown,
-      TContext = unknown
-    >(options?: UseMutationOptions<SendChatMutation, TError, SendChatMutationVariables, TContext>) => {
-    
-    return useMutation<SendChatMutation, TError, SendChatMutationVariables, TContext>(
-      {
+export const useSendChatMutation = <TError = unknown, TContext = unknown>(
+  options?: UseMutationOptions<
+    SendChatMutation,
+    TError,
+    SendChatMutationVariables,
+    TContext
+  >,
+) => {
+  return useMutation<
+    SendChatMutation,
+    TError,
+    SendChatMutationVariables,
+    TContext
+  >({
     mutationKey: ['sendChat'],
-    mutationFn: (variables?: SendChatMutationVariables) => fetcher<SendChatMutation, SendChatMutationVariables>(SendChatDocument, variables)(),
-    ...options
-  }
-    )};
+    mutationFn: (variables?: SendChatMutationVariables) =>
+      fetcher<SendChatMutation, SendChatMutationVariables>(
+        SendChatDocument,
+        variables,
+      )(),
+    ...options,
+  });
+};
 
-
-useSendChatMutation.fetcher = (variables: SendChatMutationVariables) => fetcher<SendChatMutation, SendChatMutationVariables>(SendChatDocument, variables);
+useSendChatMutation.fetcher = (variables: SendChatMutationVariables) =>
+  fetcher<SendChatMutation, SendChatMutationVariables>(
+    SendChatDocument,
+    variables,
+  );
 
 export const UnassignTicketDocument = `
     mutation unassignTicket($input: UnassignTicketInput!) {
@@ -1688,21 +2351,37 @@ export const UnassignTicketDocument = `
 }
     `;
 
-export const useUnassignTicketMutation = <
-      TError = unknown,
-      TContext = unknown
-    >(options?: UseMutationOptions<UnassignTicketMutation, TError, UnassignTicketMutationVariables, TContext>) => {
-    
-    return useMutation<UnassignTicketMutation, TError, UnassignTicketMutationVariables, TContext>(
-      {
+export const useUnassignTicketMutation = <TError = unknown, TContext = unknown>(
+  options?: UseMutationOptions<
+    UnassignTicketMutation,
+    TError,
+    UnassignTicketMutationVariables,
+    TContext
+  >,
+) => {
+  return useMutation<
+    UnassignTicketMutation,
+    TError,
+    UnassignTicketMutationVariables,
+    TContext
+  >({
     mutationKey: ['unassignTicket'],
-    mutationFn: (variables?: UnassignTicketMutationVariables) => fetcher<UnassignTicketMutation, UnassignTicketMutationVariables>(UnassignTicketDocument, variables)(),
-    ...options
-  }
-    )};
+    mutationFn: (variables?: UnassignTicketMutationVariables) =>
+      fetcher<UnassignTicketMutation, UnassignTicketMutationVariables>(
+        UnassignTicketDocument,
+        variables,
+      )(),
+    ...options,
+  });
+};
 
-
-useUnassignTicketMutation.fetcher = (variables: UnassignTicketMutationVariables) => fetcher<UnassignTicketMutation, UnassignTicketMutationVariables>(UnassignTicketDocument, variables);
+useUnassignTicketMutation.fetcher = (
+  variables: UnassignTicketMutationVariables,
+) =>
+  fetcher<UnassignTicketMutation, UnassignTicketMutationVariables>(
+    UnassignTicketDocument,
+    variables,
+  );
 
 export const MyUserInfoDocument = `
     query myUserInfo {
@@ -1712,86 +2391,150 @@ export const MyUserInfoDocument = `
 }
     ${UserPartsFragmentDoc}`;
 
-export const useMyUserInfoQuery = <
-      TData = MyUserInfoQuery,
-      TError = unknown
-    >(
-      variables?: MyUserInfoQueryVariables,
-      options?: Omit<UseQueryOptions<MyUserInfoQuery, TError, TData>, 'queryKey'> & { queryKey?: UseQueryOptions<MyUserInfoQuery, TError, TData>['queryKey'] }
-    ) => {
-    
-    return useQuery<MyUserInfoQuery, TError, TData>(
-      {
-    queryKey: variables === undefined ? ['myUserInfo'] : ['myUserInfo', variables],
-    queryFn: fetcher<MyUserInfoQuery, MyUserInfoQueryVariables>(MyUserInfoDocument, variables),
-    ...options
-  }
-    )};
+export const useMyUserInfoQuery = <TData = MyUserInfoQuery, TError = unknown>(
+  variables?: MyUserInfoQueryVariables,
+  options?: Omit<
+    UseQueryOptions<MyUserInfoQuery, TError, TData>,
+    'queryKey'
+  > & {
+    queryKey?: UseQueryOptions<MyUserInfoQuery, TError, TData>['queryKey'];
+  },
+) => {
+  return useQuery<MyUserInfoQuery, TError, TData>({
+    queryKey:
+      variables === undefined ? ['myUserInfo'] : ['myUserInfo', variables],
+    queryFn: fetcher<MyUserInfoQuery, MyUserInfoQueryVariables>(
+      MyUserInfoDocument,
+      variables,
+    ),
+    ...options,
+  });
+};
 
-useMyUserInfoQuery.getKey = (variables?: MyUserInfoQueryVariables) => variables === undefined ? ['myUserInfo'] : ['myUserInfo', variables];
+useMyUserInfoQuery.getKey = (variables?: MyUserInfoQueryVariables) =>
+  variables === undefined ? ['myUserInfo'] : ['myUserInfo', variables];
 
 export const useSuspenseMyUserInfoQuery = <
-      TData = MyUserInfoQuery,
-      TError = unknown
-    >(
-      variables?: MyUserInfoQueryVariables,
-      options?: Omit<UseSuspenseQueryOptions<MyUserInfoQuery, TError, TData>, 'queryKey'> & { queryKey?: UseSuspenseQueryOptions<MyUserInfoQuery, TError, TData>['queryKey'] }
-    ) => {
-    
-    return useSuspenseQuery<MyUserInfoQuery, TError, TData>(
-      {
-    queryKey: variables === undefined ? ['myUserInfoSuspense'] : ['myUserInfoSuspense', variables],
-    queryFn: fetcher<MyUserInfoQuery, MyUserInfoQueryVariables>(MyUserInfoDocument, variables),
-    ...options
-  }
-    )};
+  TData = MyUserInfoQuery,
+  TError = unknown,
+>(
+  variables?: MyUserInfoQueryVariables,
+  options?: Omit<
+    UseSuspenseQueryOptions<MyUserInfoQuery, TError, TData>,
+    'queryKey'
+  > & {
+    queryKey?: UseSuspenseQueryOptions<
+      MyUserInfoQuery,
+      TError,
+      TData
+    >['queryKey'];
+  },
+) => {
+  return useSuspenseQuery<MyUserInfoQuery, TError, TData>({
+    queryKey:
+      variables === undefined
+        ? ['myUserInfoSuspense']
+        : ['myUserInfoSuspense', variables],
+    queryFn: fetcher<MyUserInfoQuery, MyUserInfoQueryVariables>(
+      MyUserInfoDocument,
+      variables,
+    ),
+    ...options,
+  });
+};
 
-useSuspenseMyUserInfoQuery.getKey = (variables?: MyUserInfoQueryVariables) => variables === undefined ? ['myUserInfoSuspense'] : ['myUserInfoSuspense', variables];
+useSuspenseMyUserInfoQuery.getKey = (variables?: MyUserInfoQueryVariables) =>
+  variables === undefined
+    ? ['myUserInfoSuspense']
+    : ['myUserInfoSuspense', variables];
 
 export const useInfiniteMyUserInfoQuery = <
-      TData = InfiniteData<MyUserInfoQuery>,
-      TError = unknown
-    >(
-      variables: MyUserInfoQueryVariables,
-      options: Omit<UseInfiniteQueryOptions<MyUserInfoQuery, TError, TData>, 'queryKey'> & { queryKey?: UseInfiniteQueryOptions<MyUserInfoQuery, TError, TData>['queryKey'] }
-    ) => {
-    
-    return useInfiniteQuery<MyUserInfoQuery, TError, TData>(
-      (() => {
-    const { queryKey: optionsQueryKey, ...restOptions } = options;
-    return {
-      queryKey: optionsQueryKey ?? variables === undefined ? ['myUserInfo.infinite'] : ['myUserInfo.infinite', variables],
-      queryFn: (metaData) => fetcher<MyUserInfoQuery, MyUserInfoQueryVariables>(MyUserInfoDocument, {...variables, ...(metaData.pageParam ?? {})})(),
-      ...restOptions
-    }
-  })()
-    )};
+  TData = InfiniteData<MyUserInfoQuery>,
+  TError = unknown,
+>(
+  variables: MyUserInfoQueryVariables,
+  options: Omit<
+    UseInfiniteQueryOptions<MyUserInfoQuery, TError, TData>,
+    'queryKey'
+  > & {
+    queryKey?: UseInfiniteQueryOptions<
+      MyUserInfoQuery,
+      TError,
+      TData
+    >['queryKey'];
+  },
+) => {
+  return useInfiniteQuery<MyUserInfoQuery, TError, TData>(
+    (() => {
+      const { queryKey: optionsQueryKey, ...restOptions } = options;
+      return {
+        queryKey:
+          (optionsQueryKey ?? variables === undefined)
+            ? ['myUserInfo.infinite']
+            : ['myUserInfo.infinite', variables],
+        queryFn: (metaData) =>
+          fetcher<MyUserInfoQuery, MyUserInfoQueryVariables>(
+            MyUserInfoDocument,
+            { ...variables, ...(metaData.pageParam ?? {}) },
+          )(),
+        ...restOptions,
+      };
+    })(),
+  );
+};
 
-useInfiniteMyUserInfoQuery.getKey = (variables?: MyUserInfoQueryVariables) => variables === undefined ? ['myUserInfo.infinite'] : ['myUserInfo.infinite', variables];
+useInfiniteMyUserInfoQuery.getKey = (variables?: MyUserInfoQueryVariables) =>
+  variables === undefined
+    ? ['myUserInfo.infinite']
+    : ['myUserInfo.infinite', variables];
 
 export const useSuspenseInfiniteMyUserInfoQuery = <
-      TData = InfiniteData<MyUserInfoQuery>,
-      TError = unknown
-    >(
-      variables: MyUserInfoQueryVariables,
-      options: Omit<UseSuspenseInfiniteQueryOptions<MyUserInfoQuery, TError, TData>, 'queryKey'> & { queryKey?: UseSuspenseInfiniteQueryOptions<MyUserInfoQuery, TError, TData>['queryKey'] }
-    ) => {
-    
-    return useSuspenseInfiniteQuery<MyUserInfoQuery, TError, TData>(
-      (() => {
-    const { queryKey: optionsQueryKey, ...restOptions } = options;
-    return {
-      queryKey: optionsQueryKey ?? variables === undefined ? ['myUserInfo.infiniteSuspense'] : ['myUserInfo.infiniteSuspense', variables],
-      queryFn: (metaData) => fetcher<MyUserInfoQuery, MyUserInfoQueryVariables>(MyUserInfoDocument, {...variables, ...(metaData.pageParam ?? {})})(),
-      ...restOptions
-    }
-  })()
-    )};
+  TData = InfiniteData<MyUserInfoQuery>,
+  TError = unknown,
+>(
+  variables: MyUserInfoQueryVariables,
+  options: Omit<
+    UseSuspenseInfiniteQueryOptions<MyUserInfoQuery, TError, TData>,
+    'queryKey'
+  > & {
+    queryKey?: UseSuspenseInfiniteQueryOptions<
+      MyUserInfoQuery,
+      TError,
+      TData
+    >['queryKey'];
+  },
+) => {
+  return useSuspenseInfiniteQuery<MyUserInfoQuery, TError, TData>(
+    (() => {
+      const { queryKey: optionsQueryKey, ...restOptions } = options;
+      return {
+        queryKey:
+          (optionsQueryKey ?? variables === undefined)
+            ? ['myUserInfo.infiniteSuspense']
+            : ['myUserInfo.infiniteSuspense', variables],
+        queryFn: (metaData) =>
+          fetcher<MyUserInfoQuery, MyUserInfoQueryVariables>(
+            MyUserInfoDocument,
+            { ...variables, ...(metaData.pageParam ?? {}) },
+          )(),
+        ...restOptions,
+      };
+    })(),
+  );
+};
 
-useSuspenseInfiniteMyUserInfoQuery.getKey = (variables?: MyUserInfoQueryVariables) => variables === undefined ? ['myUserInfo.infiniteSuspense'] : ['myUserInfo.infiniteSuspense', variables];
+useSuspenseInfiniteMyUserInfoQuery.getKey = (
+  variables?: MyUserInfoQueryVariables,
+) =>
+  variables === undefined
+    ? ['myUserInfo.infiniteSuspense']
+    : ['myUserInfo.infiniteSuspense', variables];
 
-
-useMyUserInfoQuery.fetcher = (variables?: MyUserInfoQueryVariables) => fetcher<MyUserInfoQuery, MyUserInfoQueryVariables>(MyUserInfoDocument, variables);
+useMyUserInfoQuery.fetcher = (variables?: MyUserInfoQueryVariables) =>
+  fetcher<MyUserInfoQuery, MyUserInfoQueryVariables>(
+    MyUserInfoDocument,
+    variables,
+  );
 
 export const UsersDocument = `
     query users($first: Int, $last: Int, $before: String, $after: String) {
@@ -1806,83 +2549,117 @@ export const UsersDocument = `
 }
     ${UserPartsFragmentDoc}`;
 
-export const useUsersQuery = <
-      TData = UsersQuery,
-      TError = unknown
-    >(
-      variables?: UsersQueryVariables,
-      options?: Omit<UseQueryOptions<UsersQuery, TError, TData>, 'queryKey'> & { queryKey?: UseQueryOptions<UsersQuery, TError, TData>['queryKey'] }
-    ) => {
-    
-    return useQuery<UsersQuery, TError, TData>(
-      {
+export const useUsersQuery = <TData = UsersQuery, TError = unknown>(
+  variables?: UsersQueryVariables,
+  options?: Omit<UseQueryOptions<UsersQuery, TError, TData>, 'queryKey'> & {
+    queryKey?: UseQueryOptions<UsersQuery, TError, TData>['queryKey'];
+  },
+) => {
+  return useQuery<UsersQuery, TError, TData>({
     queryKey: variables === undefined ? ['users'] : ['users', variables],
     queryFn: fetcher<UsersQuery, UsersQueryVariables>(UsersDocument, variables),
-    ...options
-  }
-    )};
+    ...options,
+  });
+};
 
-useUsersQuery.getKey = (variables?: UsersQueryVariables) => variables === undefined ? ['users'] : ['users', variables];
+useUsersQuery.getKey = (variables?: UsersQueryVariables) =>
+  variables === undefined ? ['users'] : ['users', variables];
 
-export const useSuspenseUsersQuery = <
-      TData = UsersQuery,
-      TError = unknown
-    >(
-      variables?: UsersQueryVariables,
-      options?: Omit<UseSuspenseQueryOptions<UsersQuery, TError, TData>, 'queryKey'> & { queryKey?: UseSuspenseQueryOptions<UsersQuery, TError, TData>['queryKey'] }
-    ) => {
-    
-    return useSuspenseQuery<UsersQuery, TError, TData>(
-      {
-    queryKey: variables === undefined ? ['usersSuspense'] : ['usersSuspense', variables],
+export const useSuspenseUsersQuery = <TData = UsersQuery, TError = unknown>(
+  variables?: UsersQueryVariables,
+  options?: Omit<
+    UseSuspenseQueryOptions<UsersQuery, TError, TData>,
+    'queryKey'
+  > & {
+    queryKey?: UseSuspenseQueryOptions<UsersQuery, TError, TData>['queryKey'];
+  },
+) => {
+  return useSuspenseQuery<UsersQuery, TError, TData>({
+    queryKey:
+      variables === undefined
+        ? ['usersSuspense']
+        : ['usersSuspense', variables],
     queryFn: fetcher<UsersQuery, UsersQueryVariables>(UsersDocument, variables),
-    ...options
-  }
-    )};
+    ...options,
+  });
+};
 
-useSuspenseUsersQuery.getKey = (variables?: UsersQueryVariables) => variables === undefined ? ['usersSuspense'] : ['usersSuspense', variables];
+useSuspenseUsersQuery.getKey = (variables?: UsersQueryVariables) =>
+  variables === undefined ? ['usersSuspense'] : ['usersSuspense', variables];
 
 export const useInfiniteUsersQuery = <
-      TData = InfiniteData<UsersQuery>,
-      TError = unknown
-    >(
-      variables: UsersQueryVariables,
-      options: Omit<UseInfiniteQueryOptions<UsersQuery, TError, TData>, 'queryKey'> & { queryKey?: UseInfiniteQueryOptions<UsersQuery, TError, TData>['queryKey'] }
-    ) => {
-    
-    return useInfiniteQuery<UsersQuery, TError, TData>(
-      (() => {
-    const { queryKey: optionsQueryKey, ...restOptions } = options;
-    return {
-      queryKey: optionsQueryKey ?? variables === undefined ? ['users.infinite'] : ['users.infinite', variables],
-      queryFn: (metaData) => fetcher<UsersQuery, UsersQueryVariables>(UsersDocument, {...variables, ...(metaData.pageParam ?? {})})(),
-      ...restOptions
-    }
-  })()
-    )};
+  TData = InfiniteData<UsersQuery>,
+  TError = unknown,
+>(
+  variables: UsersQueryVariables,
+  options: Omit<
+    UseInfiniteQueryOptions<UsersQuery, TError, TData>,
+    'queryKey'
+  > & {
+    queryKey?: UseInfiniteQueryOptions<UsersQuery, TError, TData>['queryKey'];
+  },
+) => {
+  return useInfiniteQuery<UsersQuery, TError, TData>(
+    (() => {
+      const { queryKey: optionsQueryKey, ...restOptions } = options;
+      return {
+        queryKey:
+          (optionsQueryKey ?? variables === undefined)
+            ? ['users.infinite']
+            : ['users.infinite', variables],
+        queryFn: (metaData) =>
+          fetcher<UsersQuery, UsersQueryVariables>(UsersDocument, {
+            ...variables,
+            ...(metaData.pageParam ?? {}),
+          })(),
+        ...restOptions,
+      };
+    })(),
+  );
+};
 
-useInfiniteUsersQuery.getKey = (variables?: UsersQueryVariables) => variables === undefined ? ['users.infinite'] : ['users.infinite', variables];
+useInfiniteUsersQuery.getKey = (variables?: UsersQueryVariables) =>
+  variables === undefined ? ['users.infinite'] : ['users.infinite', variables];
 
 export const useSuspenseInfiniteUsersQuery = <
-      TData = InfiniteData<UsersQuery>,
-      TError = unknown
-    >(
-      variables: UsersQueryVariables,
-      options: Omit<UseSuspenseInfiniteQueryOptions<UsersQuery, TError, TData>, 'queryKey'> & { queryKey?: UseSuspenseInfiniteQueryOptions<UsersQuery, TError, TData>['queryKey'] }
-    ) => {
-    
-    return useSuspenseInfiniteQuery<UsersQuery, TError, TData>(
-      (() => {
-    const { queryKey: optionsQueryKey, ...restOptions } = options;
-    return {
-      queryKey: optionsQueryKey ?? variables === undefined ? ['users.infiniteSuspense'] : ['users.infiniteSuspense', variables],
-      queryFn: (metaData) => fetcher<UsersQuery, UsersQueryVariables>(UsersDocument, {...variables, ...(metaData.pageParam ?? {})})(),
-      ...restOptions
-    }
-  })()
-    )};
+  TData = InfiniteData<UsersQuery>,
+  TError = unknown,
+>(
+  variables: UsersQueryVariables,
+  options: Omit<
+    UseSuspenseInfiniteQueryOptions<UsersQuery, TError, TData>,
+    'queryKey'
+  > & {
+    queryKey?: UseSuspenseInfiniteQueryOptions<
+      UsersQuery,
+      TError,
+      TData
+    >['queryKey'];
+  },
+) => {
+  return useSuspenseInfiniteQuery<UsersQuery, TError, TData>(
+    (() => {
+      const { queryKey: optionsQueryKey, ...restOptions } = options;
+      return {
+        queryKey:
+          (optionsQueryKey ?? variables === undefined)
+            ? ['users.infiniteSuspense']
+            : ['users.infiniteSuspense', variables],
+        queryFn: (metaData) =>
+          fetcher<UsersQuery, UsersQueryVariables>(UsersDocument, {
+            ...variables,
+            ...(metaData.pageParam ?? {}),
+          })(),
+        ...restOptions,
+      };
+    })(),
+  );
+};
 
-useSuspenseInfiniteUsersQuery.getKey = (variables?: UsersQueryVariables) => variables === undefined ? ['users.infiniteSuspense'] : ['users.infiniteSuspense', variables];
+useSuspenseInfiniteUsersQuery.getKey = (variables?: UsersQueryVariables) =>
+  variables === undefined
+    ? ['users.infiniteSuspense']
+    : ['users.infiniteSuspense', variables];
 
-
-useUsersQuery.fetcher = (variables?: UsersQueryVariables) => fetcher<UsersQuery, UsersQueryVariables>(UsersDocument, variables);
+useUsersQuery.fetcher = (variables?: UsersQueryVariables) =>
+  fetcher<UsersQuery, UsersQueryVariables>(UsersDocument, variables);

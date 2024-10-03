@@ -1,5 +1,5 @@
-import { asc, eq, schema } from '@kyaku/database';
 import type { UserRepository } from '@kyaku/database';
+import { asc, eq, schema } from '@kyaku/database';
 
 import type { UnitOfWork } from '../../unit-of-work';
 import { UserService } from '../user';

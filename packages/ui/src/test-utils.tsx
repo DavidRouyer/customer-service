@@ -5,7 +5,7 @@ import { IntlProvider } from 'react-intl';
 
 function render(
   ui: React.ReactElement,
-  { locale = 'en', ...renderOptions } = {}
+  { locale = 'en', ...renderOptions } = {},
 ) {
   function Wrapper({ children }: { children: React.ReactNode }) {
     return <IntlProvider locale={locale}>{children}</IntlProvider>;

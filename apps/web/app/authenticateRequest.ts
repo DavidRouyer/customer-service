@@ -1,16 +1,16 @@
 import type { AuthConfig } from '@auth/core';
-import { Auth } from '@auth/core';
 import type { Session } from '@auth/core/types';
+import { Auth } from '@auth/core';
 
 export async function authenticateRequest(
   request: Request,
-  authOptions: AuthConfig
+  authOptions: AuthConfig,
 ): Promise<Session | null> {
   const url = new URL('/api/auth/session', request.url);
 
   const response = await Auth(
     new Request(url, { headers: request.headers }),
-    authOptions
+    authOptions,
   );
 
   const { status = 200 } = response;

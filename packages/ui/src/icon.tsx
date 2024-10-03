@@ -1,6 +1,6 @@
+import type { LucideProps } from 'lucide-react';
 import type { FC } from 'react';
 import { lazy, Suspense, useMemo } from 'react';
-import type { LucideProps } from 'lucide-react';
 import dynamicIconImports from 'lucide-react/dynamicIconImports';
 
 export type IconType = keyof typeof dynamicIconImports;

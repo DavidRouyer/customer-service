@@ -22,7 +22,7 @@ export const CustomerInfo = () => {
     },
     {
       select: (data) => data.ticket,
-    }
+    },
   );
 
   if (!ticketData) {

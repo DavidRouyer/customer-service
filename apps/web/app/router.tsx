@@ -29,7 +29,7 @@ export function createRouter() {
         return <Provider>{children}</Provider>;
       },
     }),
-    queryClient
+    queryClient,
   );
 }
 

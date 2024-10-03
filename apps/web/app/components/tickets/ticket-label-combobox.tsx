@@ -48,7 +48,7 @@ export const TicketLabelCombobox: FC<TicketLabelComboboxProps> = ({
     },
     {
       select: (data) => data.labelTypes,
-    }
+    },
   );
 
   const { mutate: addLabels } = useAddLabelsMutation({
@@ -63,7 +63,7 @@ export const TicketLabelCombobox: FC<TicketLabelComboboxProps> = ({
       const previousTicket = queryClient.getQueryData<TicketQuery>(
         useTicketQuery.getKey({
           ticketId: input.ticketId,
-        })
+        }),
       );
 
       // Optimistically update to the new value
@@ -79,18 +79,18 @@ export const TicketLabelCombobox: FC<TicketLabelComboboxProps> = ({
                     input.labelTypeIds.map((labelTypeId) => ({
                       id: `${input.ticketId}-${labelTypeId}`,
                       labelType: labelTypesData?.edges.find(
-                        (labelType) => labelType.node.id === labelTypeId
+                        (labelType) => labelType.node.id === labelTypeId,
                       )?.node ?? {
                         id: labelTypeId,
                         name: 'Unknown',
                         icon: null,
                       },
                       archivedAt: null,
-                    }))
+                    })),
                   ),
                 },
               }
-            : undefined
+            : undefined,
       );
 
       // Return a context object with the snapshotted value
@@ -100,7 +100,7 @@ export const TicketLabelCombobox: FC<TicketLabelComboboxProps> = ({
       // TODO: handle failed queries
       queryClient.setQueryData<TicketQuery>(
         useTicketQuery.getKey({ ticketId: input.ticketId }),
-        context?.previousTicket
+        context?.previousTicket,
       );
     },
     onSettled: (_, __, { input }) => {
@@ -127,7 +127,7 @@ export const TicketLabelCombobox: FC<TicketLabelComboboxProps> = ({
       const previousTicket = queryClient.getQueryData<TicketQuery>(
         useTicketQuery.getKey({
           ticketId: input.ticketId,
-        })
+        }),
       );
 
       // Optimistically update to the new value
@@ -140,11 +140,11 @@ export const TicketLabelCombobox: FC<TicketLabelComboboxProps> = ({
                 ticket: {
                   ...oldQueryData.ticket,
                   labels: oldQueryData.ticket.labels.filter(
-                    (label) => !input.labelIds.includes(label.id)
+                    (label) => !input.labelIds.includes(label.id),
                   ),
                 },
               }
-            : undefined
+            : undefined,
       );
 
       // Return a context object with the snapshotted value
@@ -154,7 +154,7 @@ export const TicketLabelCombobox: FC<TicketLabelComboboxProps> = ({
       // TODO: handle failed queries
       queryClient.setQueryData(
         useTicketQuery.getKey({ ticketId: input.ticketId }),
-        context?.previousTicket
+        context?.previousTicket,
       );
     },
     onSettled: (_, __, { input }) => {
@@ -212,7 +212,7 @@ export const TicketLabelCombobox: FC<TicketLabelComboboxProps> = ({
                   key={labelType.node.id}
                   onSelect={() => {
                     const labelWithLabelType = labels?.find(
-                      (label) => label.labelType.id === labelType.node.id
+                      (label) => label.labelType.id === labelType.node.id,
                     );
                     if (labelWithLabelType) {
                       removeLabels({
@@ -238,7 +238,7 @@ export const TicketLabelCombobox: FC<TicketLabelComboboxProps> = ({
                         ?.map((label) => label.labelType.id)
                         .includes(labelType.node.id)
                         ? 'opacity-100'
-                        : 'opacity-0'
+                        : 'opacity-0',
                     )}
                   />
                   <div className="flex items-center gap-x-2 truncate">

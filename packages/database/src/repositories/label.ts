@@ -1,7 +1,7 @@
 import type { InferInsertModel, InferSelectModel, KnownKeysOnly } from '..';
-import { eq, inArray, schema } from '..';
 import type { IncludeRelation } from '../build-query';
 import type { DbTransactionScope } from '../db-transaction';
+import { eq, inArray, schema } from '..';
 import { BaseRepository } from './base-repository';
 
 export default class LabelRepository extends BaseRepository {
@@ -11,20 +11,20 @@ export default class LabelRepository extends BaseRepository {
   }
 
   find<T extends Omit<IncludeRelation<'labels'>, 'limit'>>(
-    config: KnownKeysOnly<T, Omit<IncludeRelation<'labels'>, 'limit'>>
+    config: KnownKeysOnly<T, Omit<IncludeRelation<'labels'>, 'limit'>>,
   ) {
     return this.dbConnection.query.labels.findFirst(config);
   }
 
   findMany<T extends IncludeRelation<'labels'>>(
-    config: KnownKeysOnly<T, IncludeRelation<'labels'>>
+    config: KnownKeysOnly<T, IncludeRelation<'labels'>>,
   ) {
     return this.dbConnection.query.labels.findMany(config);
   }
 
   create(
     entity: InferInsertModel<typeof schema.labels>,
-    transactionScope: DbTransactionScope
+    transactionScope: DbTransactionScope,
   ) {
     return transactionScope
       .insert(schema.labels)
@@ -35,7 +35,7 @@ export default class LabelRepository extends BaseRepository {
 
   createMany(
     entities: InferInsertModel<typeof schema.labels>[],
-    transactionScope: DbTransactionScope
+    transactionScope: DbTransactionScope,
   ) {
     return transactionScope
       .insert(schema.labels)
@@ -47,7 +47,7 @@ export default class LabelRepository extends BaseRepository {
   update(
     entity: Partial<InferInsertModel<typeof schema.labels>> &
       NonNullable<Pick<InferSelectModel<typeof schema.labels>, 'id'>>,
-    transactionScope: DbTransactionScope
+    transactionScope: DbTransactionScope,
   ) {
     return transactionScope
       .update(schema.labels)
@@ -60,7 +60,7 @@ export default class LabelRepository extends BaseRepository {
   updateMany(
     entityIds: InferSelectModel<typeof schema.labels>['id'][],
     entity: Omit<Partial<InferInsertModel<typeof schema.labels>>, 'id'>,
-    transactionScope: DbTransactionScope
+    transactionScope: DbTransactionScope,
   ) {
     return transactionScope
       .update(schema.labels)

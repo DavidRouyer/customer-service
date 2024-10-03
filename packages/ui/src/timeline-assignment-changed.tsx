@@ -3,11 +3,11 @@ import { FormattedMessage } from 'react-intl';
 
 import type { TicketAssignmentChangedWithData } from '@kyaku/kyaku/models';
 
-import { RelativeTime } from './relative-time';
 import type {
   AssignmentChangedEntry,
   TimelineItemNarrowed,
 } from './timeline-item';
+import { RelativeTime } from './relative-time';
 
 interface TimelineAssigmentChangedProps {
   item: TimelineItemNarrowed<AssignmentChangedEntry>;

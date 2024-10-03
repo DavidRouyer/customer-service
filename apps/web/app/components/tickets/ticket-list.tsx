@@ -40,7 +40,7 @@ export const TicketList: FC<{
         return lastPage.tickets.pageInfo.endCursor;
       },
       select: (data) => data.pages.flatMap((page) => page.tickets.edges),
-    }
+    },
   );
 
   useEffect(() => {

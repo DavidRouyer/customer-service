@@ -3,7 +3,7 @@ import type { CustomerService } from '../../services/customer';
 import typeDefs from './typeDefs';
 
 export const mapCustomer = (
-  customer: Awaited<ReturnType<CustomerService['list']>>[number]
+  customer: Awaited<ReturnType<CustomerService['list']>>[number],
 ) => {
   return {
     ...customer,

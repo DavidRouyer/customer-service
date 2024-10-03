@@ -13,7 +13,7 @@ export const Ticket = () => {
     { ticketId: ticketId },
     {
       select: (data) => data.ticket,
-    }
+    },
   );
 
   if (!ticketData) return null;

@@ -7,7 +7,7 @@ export const useTimeline = (ticketId: string) => {
     },
     {
       select: (data) => data.ticket?.timelineEntries,
-    }
+    },
   );
 
   return timeline;

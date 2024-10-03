@@ -1,9 +1,9 @@
 'use client';
 
+import type { VariantProps } from 'cva';
 import * as React from 'react';
 import * as LabelPrimitive from '@radix-ui/react-label';
 import { cva } from 'cva';
-import type { VariantProps } from 'cva';
 
 import { cn } from '@kyaku/ui';
 

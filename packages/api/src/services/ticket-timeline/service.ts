@@ -1,4 +1,3 @@
-import { eq, schema, sortByDirection } from '@kyaku/database';
 import type {
   InferSelectModel,
   TicketTimelineRepository,
@@ -12,13 +11,14 @@ import type {
   TicketStatusChanged,
   User,
 } from '@kyaku/kyaku/models';
-import { TimelineEntryType } from '@kyaku/kyaku/models';
 import type { FindConfig } from '@kyaku/kyaku/types';
+import { eq, schema, sortByDirection } from '@kyaku/database';
+import { TimelineEntryType } from '@kyaku/kyaku/models';
 import { Direction } from '@kyaku/kyaku/types';
 
 import type { UnitOfWork } from '../../unit-of-work';
-import { BaseService } from '../base-service';
 import type { TicketTimelineWith } from './common';
+import { BaseService } from '../base-service';
 import { TicketTimelineSortField } from './common';
 
 export class TicketTimelineService extends BaseService {
@@ -40,7 +40,7 @@ export class TicketTimelineService extends BaseService {
       direction: Direction.Forward,
       limit: 50,
       sortBy: TicketTimelineSortField.createdAt,
-    }
+    },
   ) {
     const ticketTimelineEntries = await this.ticketTimelineRepository.findMany({
       limit: config.limit,
@@ -56,7 +56,7 @@ export class TicketTimelineService extends BaseService {
   }
 
   private mapEntry(
-    entry: InferSelectModel<typeof schema.ticketTimelineEntries>
+    entry: InferSelectModel<typeof schema.ticketTimelineEntries>,
   ) {
     switch (entry.type) {
       case TimelineEntryType.AssignmentChanged:
@@ -101,7 +101,7 @@ export class TicketTimelineService extends BaseService {
   }
 
   private getWithClause<T extends TicketTimelineWith<T>>(
-    relations: T | undefined
+    relations: T | undefined,
   ): {
     customer: T extends { customer: true } ? true : undefined;
     customerCreatedBy: T extends { customerCreatedBy: true } ? true : undefined;
@@ -135,7 +135,7 @@ export class TicketTimelineService extends BaseService {
   }
 
   private getOrderByClause<T extends TicketTimelineWith<T>>(
-    config: FindConfig<T, TicketTimelineSortField>
+    config: FindConfig<T, TicketTimelineSortField>,
   ) {
     if (!config.sortBy) return [];
 
@@ -143,7 +143,7 @@ export class TicketTimelineService extends BaseService {
     if (config.sortBy === TicketTimelineSortField.createdAt) {
       return [
         sortByDirection(config.direction)(
-          schema.ticketTimelineEntries.createdAt
+          schema.ticketTimelineEntries.createdAt,
         ),
       ];
     }

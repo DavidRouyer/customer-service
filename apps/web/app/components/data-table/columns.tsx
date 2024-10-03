@@ -3,15 +3,15 @@
 import type { ColumnDef } from '@tanstack/react-table';
 import { CircleDashed } from 'lucide-react';
 
+import type { IconType } from '@kyaku/ui/icon';
 import { getInitials } from '@kyaku/kyaku/utils';
 import { Avatar, AvatarFallback, AvatarImage } from '@kyaku/ui/avatar';
 import { Badge } from '@kyaku/ui/badge';
 import { Checkbox } from '@kyaku/ui/checkbox';
-import type { IconType } from '@kyaku/ui/icon';
 import { Icon } from '@kyaku/ui/icon';
 
-import { TicketPriority } from '~/graphql/generated/client';
 import type { TicketsQuery } from '~/graphql/generated/client';
+import { TicketPriority } from '~/graphql/generated/client';
 import { priorities, statuses } from './data';
 
 export interface TicketData {
@@ -62,7 +62,7 @@ export const columns: ColumnDef<TicketData>[] = [
     accessorKey: 'priority',
     cell: ({ row }) => {
       const priority = priorities.find(
-        (priority) => priority.value === row.getValue('priority')
+        (priority) => priority.value === row.getValue('priority'),
       );
 
       if (!priority) {
@@ -111,7 +111,7 @@ export const columns: ColumnDef<TicketData>[] = [
     accessorKey: 'status',
     cell: ({ row }) => {
       const status = statuses.find(
-        (status) => status.value === row.getValue('status')
+        (status) => status.value === row.getValue('status'),
       );
 
       if (!status) {

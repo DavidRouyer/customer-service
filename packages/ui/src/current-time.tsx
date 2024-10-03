@@ -17,7 +17,7 @@ export const CurrentTime: FC<CurrentTimeProps> = ({ timezone }) => {
       minute: 'numeric',
       timeZoneName: 'short',
       timeZone: timezone,
-    }).format(new Date())
+    }).format(new Date()),
   );
 
   useEffect(() => {
@@ -28,7 +28,7 @@ export const CurrentTime: FC<CurrentTimeProps> = ({ timezone }) => {
           minute: 'numeric',
           timeZoneName: 'short',
           timeZone: timezone,
-        }).format(new Date())
+        }).format(new Date()),
       );
     }, 1000);
 

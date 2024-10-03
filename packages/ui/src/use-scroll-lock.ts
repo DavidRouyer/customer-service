@@ -11,7 +11,7 @@ export type ScrollerLock = Readonly<{
 
 export function createScrollerLock(
   title: string,
-  onUpdate: () => void
+  onUpdate: () => void,
 ): ScrollerLock {
   const locks = new Set<() => void>();
 

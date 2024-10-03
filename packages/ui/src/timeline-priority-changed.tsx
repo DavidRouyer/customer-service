@@ -3,9 +3,9 @@ import { FormattedMessage } from 'react-intl';
 
 import type { TicketPriorityChanged } from '@kyaku/kyaku/models';
 
+import type { TimelineItemNarrowed } from './timeline-item';
 import { RelativeTime } from './relative-time';
 import { TicketPriorityBadge } from './ticket-priority-badge';
-import type { TimelineItemNarrowed } from './timeline-item';
 
 interface TimelinePriorityChangedProps {
   item: TimelineItemNarrowed<TicketPriorityChanged>;

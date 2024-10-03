@@ -1,6 +1,6 @@
+import type { VariantProps } from 'cva';
 import * as React from 'react';
 import { cva } from 'cva';
-import type { VariantProps } from 'cva';
 
 import { cn } from '@kyaku/ui';
 

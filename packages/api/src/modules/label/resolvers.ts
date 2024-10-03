@@ -1,12 +1,12 @@
-import { authorize } from '../../authorize';
 import type { LabelType, Resolvers } from '../../generated-types/graphql';
 import type { LabelService } from '../../services/label';
+import { authorize } from '../../authorize';
 import { handleErrors } from '../error';
 import { mapLabelType } from '../label-type/resolvers';
 import typeDefs from './typeDefs';
 
 export const mapLabel = (
-  label: Awaited<ReturnType<LabelService['list']>>[number]
+  label: Awaited<ReturnType<LabelService['list']>>[number],
 ) => {
   return {
     ...label,
@@ -26,7 +26,7 @@ const resolvers: Resolvers = {
         const addedLabels = await labelService.addLabels(
           input.ticketId,
           input.labelTypeIds,
-          authorizedUser.id
+          authorizedUser.id,
         );
 
         return {
@@ -47,7 +47,7 @@ const resolvers: Resolvers = {
         await labelService.removeLabels(
           input.ticketId,
           input.labelIds,
-          authorizedUser.id
+          authorizedUser.id,
         );
 
         return {};

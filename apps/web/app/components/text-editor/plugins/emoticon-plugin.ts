@@ -1,6 +1,6 @@
+import type { LexicalEditor } from 'lexical';
 import { useEffect } from 'react';
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
-import type { LexicalEditor } from 'lexical';
 import { TextNode } from 'lexical';
 
 import { $createEmojiNode } from '@kyaku/kyaku/editor';
@@ -17,7 +17,7 @@ function useEmoticons(editor: LexicalEditor) {
   useEffect(() => {
     const removeTransform = editor.registerNodeTransform(
       TextNode,
-      emoticonTransform
+      emoticonTransform,
     );
     return () => {
       removeTransform();

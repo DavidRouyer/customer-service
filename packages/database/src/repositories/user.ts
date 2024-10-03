@@ -1,7 +1,7 @@
 import type { InferInsertModel, InferSelectModel, KnownKeysOnly } from '..';
-import { eq, schema } from '..';
 import type { IncludeRelation } from '../build-query';
 import type { DbTransactionScope } from '../db-transaction';
+import { eq, schema } from '..';
 import { BaseRepository } from './base-repository';
 
 export default class UserRepository extends BaseRepository {
@@ -11,20 +11,20 @@ export default class UserRepository extends BaseRepository {
   }
 
   find<T extends Omit<IncludeRelation<'users'>, 'limit'>>(
-    config: KnownKeysOnly<T, Omit<IncludeRelation<'users'>, 'limit'>>
+    config: KnownKeysOnly<T, Omit<IncludeRelation<'users'>, 'limit'>>,
   ) {
     return this.dbConnection.query.users.findFirst(config);
   }
 
   findMany<T extends IncludeRelation<'users'>>(
-    config: KnownKeysOnly<T, IncludeRelation<'users'>>
+    config: KnownKeysOnly<T, IncludeRelation<'users'>>,
   ) {
     return this.dbConnection.query.users.findMany(config);
   }
 
   create(
     entity: InferInsertModel<typeof schema.users>,
-    transactionScope: DbTransactionScope
+    transactionScope: DbTransactionScope,
   ) {
     return transactionScope
       .insert(schema.users)
@@ -36,7 +36,7 @@ export default class UserRepository extends BaseRepository {
   update(
     entity: Partial<InferInsertModel<typeof schema.users>> &
       NonNullable<Pick<InferSelectModel<typeof schema.users>, 'id'>>,
-    transactionScope: DbTransactionScope
+    transactionScope: DbTransactionScope,
   ) {
     return transactionScope
       .update(schema.users)

@@ -5,8 +5,8 @@ import { FormattedMessage } from 'react-intl';
 import type { TicketStatusChanged } from '@kyaku/kyaku/models';
 import { TicketStatus } from '@kyaku/kyaku/models';
 
-import { RelativeTime } from './relative-time';
 import type { TimelineItemNarrowed } from './timeline-item';
+import { RelativeTime } from './relative-time';
 
 interface TimelineStatusChangedProps {
   item: TimelineItemNarrowed<TicketStatusChanged>;

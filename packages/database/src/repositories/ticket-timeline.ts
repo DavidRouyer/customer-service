@@ -1,7 +1,7 @@
 import type { InferInsertModel, InferSelectModel, KnownKeysOnly } from '..';
-import { eq, schema } from '..';
 import type { IncludeRelation } from '../build-query';
 import type { DbTransactionScope } from '../db-transaction';
+import { eq, schema } from '..';
 import { BaseRepository } from './base-repository';
 
 export default class TicketTimelineRepository extends BaseRepository {
@@ -14,20 +14,20 @@ export default class TicketTimelineRepository extends BaseRepository {
     config: KnownKeysOnly<
       T,
       Omit<IncludeRelation<'ticketTimelineEntries'>, 'limit'>
-    >
+    >,
   ) {
     return this.dbConnection.query.ticketTimelineEntries.findFirst(config);
   }
 
   findMany<T extends IncludeRelation<'ticketTimelineEntries'>>(
-    config: KnownKeysOnly<T, IncludeRelation<'ticketTimelineEntries'>>
+    config: KnownKeysOnly<T, IncludeRelation<'ticketTimelineEntries'>>,
   ) {
     return this.dbConnection.query.ticketTimelineEntries.findMany(config);
   }
 
   create(
     entity: InferInsertModel<typeof schema.ticketTimelineEntries>,
-    transactionScope: DbTransactionScope
+    transactionScope: DbTransactionScope,
   ) {
     return transactionScope
       .insert(schema.ticketTimelineEntries)
@@ -41,7 +41,7 @@ export default class TicketTimelineRepository extends BaseRepository {
       NonNullable<
         Pick<InferSelectModel<typeof schema.ticketTimelineEntries>, 'id'>
       >,
-    transactionScope: DbTransactionScope
+    transactionScope: DbTransactionScope,
   ) {
     return transactionScope
       .update(schema.ticketTimelineEntries)

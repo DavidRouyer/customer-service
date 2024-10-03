@@ -16,7 +16,7 @@ export const PhoneNumber: FC<{
         parseAndFormatPhoneNumber(
           value,
           undefined,
-          PhoneNumberFormat.INTERNATIONAL
+          PhoneNumberFormat.INTERNATIONAL,
         )?.e164
       }
     </>

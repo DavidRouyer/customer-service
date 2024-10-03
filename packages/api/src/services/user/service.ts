@@ -1,3 +1,5 @@
+import type { UserRepository } from '@kyaku/database';
+import type { FindConfig } from '@kyaku/kyaku/types';
 import {
   and,
   eq,
@@ -6,13 +8,11 @@ import {
   schema,
   sortByDirection,
 } from '@kyaku/database';
-import type { UserRepository } from '@kyaku/database';
-import type { FindConfig } from '@kyaku/kyaku/types';
 import { Direction } from '@kyaku/kyaku/types';
 
 import type { UnitOfWork } from '../../unit-of-work';
-import { BaseService } from '../base-service';
 import type { UserFilters } from './common';
+import { BaseService } from '../base-service';
 import { UserSortField } from './common';
 
 export class UserService extends BaseService {
@@ -38,7 +38,7 @@ export class UserService extends BaseService {
       direction: Direction.Forward,
       limit: 50,
       sortBy: UserSortField.name,
-    }
+    },
   ) {
     return await this.userRepository.findMany({
       limit: config.limit,
@@ -49,7 +49,7 @@ export class UserService extends BaseService {
       where: and(
         this.getFilterWhereClause(filters),
         this.getSortWhereClause(config),
-        this.getIdWhereClause(config)
+        this.getIdWhereClause(config),
       ),
     });
   }
@@ -60,7 +60,7 @@ export class UserService extends BaseService {
     return and(
       filters.userIds
         ? inclusionFilterOperator(schema.users.id, filters.userIds)
-        : undefined
+        : undefined,
     );
   }
 
@@ -75,7 +75,7 @@ export class UserService extends BaseService {
     if (config.sortBy === UserSortField.name) {
       return filterByDirection(config.direction)(
         schema.users.name,
-        config.cursor.lastValue
+        config.cursor.lastValue,
       );
     }
 
@@ -87,7 +87,7 @@ export class UserService extends BaseService {
 
     return filterByDirection(config.direction)(
       schema.users.id,
-      config.cursor.lastId
+      config.cursor.lastId,
     );
   }
 

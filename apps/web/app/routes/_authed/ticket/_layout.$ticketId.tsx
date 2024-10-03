@@ -17,7 +17,7 @@ export const Route = createFileRoute('/_authed/ticket/_layout/$ticketId')({
   },
   loader: (opts) =>
     opts.context.queryClient.ensureQueryData(
-      ticketQueryOptions(opts.params.ticketId)
+      ticketQueryOptions(opts.params.ticketId),
     ),
   component: TicketRoute,
 });

@@ -11,11 +11,11 @@ export type HandlerCallback<TRouter extends AnyRouter> = (ctx: {
   responseHeaders: Headers;
 }) => Response | Promise<Response>;
 export type CustomizeRequestHandler<TRouter extends AnyRouter> = (
-  cb: HandlerCallback<TRouter>
+  cb: HandlerCallback<TRouter>,
 ) => EventHandler;
 
 export function createAuthjsHandler<TRouter extends AnyRouter>(
-  eventHandler: CustomizeRequestHandler<TRouter>
+  eventHandler: CustomizeRequestHandler<TRouter>,
 ) {
   return (cb: HandlerCallback<TRouter>): EventHandler => {
     return eventHandler(async ({ request, router, responseHeaders }) => {
