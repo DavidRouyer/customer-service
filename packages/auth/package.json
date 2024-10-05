@@ -30,7 +30,7 @@
     "@kyaku/prettier-config": "*",
     "@kyaku/tsconfig": "*",
     "@types/bcrypt": "^5.0.2",
-    "eslint": "^9.11.1",
+    "eslint": "^9.12.0",
     "prettier": "^3.3.3",
     "typescript": "^5.6.2"
   },
