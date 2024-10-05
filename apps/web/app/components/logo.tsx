@@ -8,7 +8,7 @@ export const Logo: FC = () => {
       viewBox="0 0 64 64"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      className="h-8 w-auto text-black"
+      className="h-8 w-auto text-black dark:text-white"
     >
       <path
         fillRule="evenodd"

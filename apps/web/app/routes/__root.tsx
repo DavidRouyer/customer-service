@@ -81,6 +81,10 @@ export const Route = createRootRouteWithContext<{
       name: 'og:site_name',
       content: 'Kyaku',
     },
+    {
+      name: 'color-scheme',
+      content: 'dark light',
+    },
   ],
   links: () => [
     { rel: 'stylesheet', href: appCss },

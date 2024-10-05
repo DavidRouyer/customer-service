@@ -3,6 +3,7 @@ import { createRouter as createTanStackRouter } from '@tanstack/react-router';
 import { routerWithQueryClient } from '@tanstack/react-router-with-query';
 import { Provider } from 'jotai';
 import { Loader2 } from 'lucide-react';
+import { ThemeProvider } from 'next-themes';
 
 import NotFound from '~/components/not-found';
 // Import the generated route tree
@@ -26,7 +27,11 @@ export function createRouter() {
       ),
       defaultNotFoundComponent: NotFound,
       Wrap: function WrapComponent({ children }) {
-        return <Provider>{children}</Provider>;
+        return (
+          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+            <Provider>{children}</Provider>
+          </ThemeProvider>
+        );
       },
     }),
     queryClient,
