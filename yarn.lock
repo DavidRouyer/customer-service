@@ -3037,7 +3037,7 @@ __metadata:
   resolution: "@kyaku/api@workspace:packages/api"
   dependencies:
     "@graphql-codegen/cli": "npm:^5.0.2"
-    "@graphql-codegen/typescript": "npm:^4.0.9"
+    "@graphql-codegen/typescript": "npm:^4.1.0"
     "@graphql-codegen/typescript-resolvers": "npm:^4.3.0"
     "@graphql-tools/merge": "npm:^9.0.7"
     "@graphql-tools/schema": "npm:^10.0.6"
@@ -3220,7 +3220,7 @@ __metadata:
   resolution: "@kyaku/web@workspace:apps/web"
   dependencies:
     "@graphql-codegen/cli": "npm:^5.0.2"
-    "@graphql-codegen/typescript": "npm:^4.0.9"
+    "@graphql-codegen/typescript": "npm:^4.1.0"
     "@graphql-codegen/typescript-react-query": "npm:^6.1.0"
     "@kyaku/api": "npm:*"
     "@kyaku/auth": "npm:*"
