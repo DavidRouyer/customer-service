@@ -3061,8 +3061,8 @@ __metadata:
     "@types/pg": "npm:^8.11.10"
     "@types/ws": "npm:^8.5.12"
     dotenv-cli: "npm:^7.4.2"
-    drizzle-kit: "npm:^0.24.2"
-    drizzle-orm: "npm:^0.33.0"
+    drizzle-kit: "npm:^0.25.0"
+    drizzle-orm: "npm:^0.34.0"
     eslint: "npm:^9.12.0"
     lexical: "npm:^0.18.0"
     pg: "npm:^8.13.0"
@@ -9018,9 +9018,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"drizzle-kit@npm:^0.24.2":
-  version: 0.24.2
-  resolution: "drizzle-kit@npm:0.24.2"
+"drizzle-kit@npm:^0.25.0":
+  version: 0.25.0
+  resolution: "drizzle-kit@npm:0.25.0"
   dependencies:
     "@drizzle-team/brocli": "npm:^0.10.1"
     "@esbuild-kit/esm-loader": "npm:^2.5.5"
@@ -9028,18 +9028,18 @@ __metadata:
     esbuild-register: "npm:^3.5.0"
   bin:
     drizzle-kit: bin.cjs
-  checksum: 10c0/c5416749deaf3c3fc0ce2981dbca6fd100b1f1fcb7c4f0a2c170ab24b5431c792f59d46eed45fc82097de95fb6fdb58adb5fb0dafe0c76ccf879c25362a45635
+  checksum: 10c0/97bd2e2b3d30717ce99d274456b3eb998e83b34a529d2a5dbaee10658cf2d6154b16d872438d3e8f7fba45d203aeba6b12086a7aa39d6ba196110d1534de6944
   languageName: node
   linkType: hard
 
-"drizzle-orm@npm:^0.33.0":
-  version: 0.33.0
-  resolution: "drizzle-orm@npm:0.33.0"
+"drizzle-orm@npm:^0.34.0":
+  version: 0.34.0
+  resolution: "drizzle-orm@npm:0.34.0"
   peerDependencies:
     "@aws-sdk/client-rds-data": ">=3"
     "@cloudflare/workers-types": ">=3"
     "@electric-sql/pglite": ">=0.1.1"
-    "@libsql/client": "*"
+    "@libsql/client": ">=0.10.0"
     "@neondatabase/serverless": ">=0.1"
     "@op-engineering/op-sqlite": ">=2"
     "@opentelemetry/api": ^1.4.1
@@ -9120,7 +9120,7 @@ __metadata:
       optional: true
     sqlite3:
       optional: true
-  checksum: 10c0/62626e355c3962e963a62b3dbeb9279de709a7b00451ee6722b8b05605cf878bb54633f51d536a5df59d43efa1ae39645af7ddb4283bdbe66d9d467aee3d5b2e
+  checksum: 10c0/2d14dea14a5ea87123461a9aeb8bdd7ba41702f36177259542d585c0b0dfc99f4922cc1e53a062c850e3c4da590df9ff646944e29098506631d9236e54d8e249
   languageName: node
   linkType: hard
 
