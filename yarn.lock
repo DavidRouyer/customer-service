@@ -67,7 +67,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@auth/core@npm:0.36.0, @auth/core@npm:^0.36.0":
+"@auth/core@npm:0.36.0":
   version: 0.36.0
   resolution: "@auth/core@npm:0.36.0"
   dependencies:
@@ -90,6 +90,32 @@ __metadata:
     nodemailer:
       optional: true
   checksum: 10c0/02d2623de72674def4ad73289b43948e89e05638a9401d9667333b3a2fbf6924c5308287c642305cf8307ebc59264f18de77abbf06528a461e0c3c63d60ce2fd
+  languageName: node
+  linkType: hard
+
+"@auth/core@npm:^0.37.0":
+  version: 0.37.0
+  resolution: "@auth/core@npm:0.37.0"
+  dependencies:
+    "@panva/hkdf": "npm:^1.2.1"
+    "@types/cookie": "npm:0.6.0"
+    cookie: "npm:0.7.1"
+    jose: "npm:^5.9.3"
+    oauth4webapi: "npm:^3.0.0"
+    preact: "npm:10.11.3"
+    preact-render-to-string: "npm:5.2.3"
+  peerDependencies:
+    "@simplewebauthn/browser": ^9.0.1
+    "@simplewebauthn/server": ^9.0.2
+    nodemailer: ^6.8.0
+  peerDependenciesMeta:
+    "@simplewebauthn/browser":
+      optional: true
+    "@simplewebauthn/server":
+      optional: true
+    nodemailer:
+      optional: true
+  checksum: 10c0/f655b5459a0f4e61c054972acb2760138cf1299960eefffd18d359a9ad931cda003f326e1b5d67e35c1fd9eb43081ff0116437837b90ece757a60c59ec71c2b0
   languageName: node
   linkType: hard
 
@@ -3032,7 +3058,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@kyaku/auth@workspace:packages/auth"
   dependencies:
-    "@auth/core": "npm:^0.36.0"
+    "@auth/core": "npm:^0.37.0"
     "@auth/drizzle-adapter": "npm:^1.6.1"
     "@kyaku/database": "npm:*"
     "@kyaku/eslint-config": "npm:*"
@@ -13449,6 +13475,13 @@ __metadata:
   version: 2.17.0
   resolution: "oauth4webapi@npm:2.17.0"
   checksum: 10c0/a3be4f07f3050c982c9f47a899cb34eb4ce1b2072818eab37f241c7db932cf0dac31ed90b0913eaaaebfd7b23e8bf397ecef249a11aea699efb62c7657884ba5
+  languageName: node
+  linkType: hard
+
+"oauth4webapi@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "oauth4webapi@npm:3.0.0"
+  checksum: 10c0/d7ef88bbce51a097318d829759907611baae97132d327872083dc29320a385fb315d9850144762050106bafffb765a4ecdc30b88e7864455f43a0d5ff97bc796
   languageName: node
   linkType: hard
 
