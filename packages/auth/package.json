@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "@auth/core": "^0.37.0",
-    "@auth/drizzle-adapter": "^1.6.1",
+    "@auth/drizzle-adapter": "^1.7.0",
     "@kyaku/database": "*",
     "@kyaku/kyaku": "*",
     "bcrypt": "^5.1.1",
