@@ -61,7 +61,7 @@
     "lucide-react": "^0.452.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "tailwind-merge": "^2.5.3"
+    "tailwind-merge": "^2.5.4"
   },
   "devDependencies": {
     "@kyaku/eslint-config": "*",
