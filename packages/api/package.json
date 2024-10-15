@@ -18,7 +18,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@graphql-tools/merge": "^9.0.7",
+    "@graphql-tools/merge": "^9.0.8",
     "@graphql-tools/schema": "^10.0.6",
     "@kyaku/auth": "*",
     "@kyaku/database": "*",
