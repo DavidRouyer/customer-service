@@ -3220,8 +3220,8 @@ __metadata:
     "@kyaku/tsconfig": "npm:*"
     "@kyaku/ui": "npm:*"
     "@lexical/react": "npm:^0.18.0"
-    "@tanstack/react-query": "npm:^5.59.13"
-    "@tanstack/react-query-devtools": "npm:^5.59.13"
+    "@tanstack/react-query": "npm:^5.59.15"
+    "@tanstack/react-query-devtools": "npm:^5.59.15"
     "@tanstack/react-router": "npm:^1.67.0"
     "@tanstack/react-router-with-query": "npm:^1.67.0"
     "@tanstack/react-table": "npm:^8.20.5"
@@ -5697,26 +5697,26 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tanstack/react-query-devtools@npm:^5.59.13":
-  version: 5.59.13
-  resolution: "@tanstack/react-query-devtools@npm:5.59.13"
+"@tanstack/react-query-devtools@npm:^5.59.15":
+  version: 5.59.15
+  resolution: "@tanstack/react-query-devtools@npm:5.59.15"
   dependencies:
     "@tanstack/query-devtools": "npm:5.58.0"
   peerDependencies:
-    "@tanstack/react-query": ^5.59.13
+    "@tanstack/react-query": ^5.59.15
     react: ^18 || ^19
-  checksum: 10c0/1bcfc48634871263bd132e67e8b2044dce016bdaa4df641ad15e52ce7efbc356fa2b8660c344bf9c70ffd7a99c75fb7c24251afebff6087809499d122674e2f3
+  checksum: 10c0/2b83e6ccd971eb01c65d25723f58a95a549ea76802ef17fa66f796268f030ca8fa2dda847df3694900232e3853ae0d8a356997d660d6c0da021ad12d5f08d313
   languageName: node
   linkType: hard
 
-"@tanstack/react-query@npm:^5.59.13":
-  version: 5.59.13
-  resolution: "@tanstack/react-query@npm:5.59.13"
+"@tanstack/react-query@npm:^5.59.15":
+  version: 5.59.15
+  resolution: "@tanstack/react-query@npm:5.59.15"
   dependencies:
     "@tanstack/query-core": "npm:5.59.13"
   peerDependencies:
     react: ^18 || ^19
-  checksum: 10c0/b69b87ff61245f4ddc6c7fffd0b817b0fa24a3f2f79f70b3be8e0c861fb19430392c4df664f7d64f127b3ab8549e45acc4c65b652799494555762f050507fe2f
+  checksum: 10c0/7b697eee85ed40efb82b6609434e2580405a3c32844365a8bb876b354e3068b21e0fa4c8ed0f5a06af45dc68373f39873b046f104975a31204d9288e03bba0f5
   languageName: node
   linkType: hard
 
