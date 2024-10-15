@@ -12,7 +12,7 @@ const app = defineConfig({
     preset: 'vercel',
   },
   vite: {
-    plugins: () => [
+    plugins: [
       tsConfigPaths({
         projects: ['./tsconfig.json'],
       }),
