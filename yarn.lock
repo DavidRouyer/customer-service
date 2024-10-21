@@ -3117,7 +3117,7 @@ __metadata:
     "@kyaku/prettier-config": "npm:*"
     "@kyaku/tsconfig": "npm:*"
     "@tanstack/eslint-plugin-query": "npm:^5.59.7"
-    "@tanstack/eslint-plugin-router": "npm:^1.70.0"
+    "@tanstack/eslint-plugin-router": "npm:^1.74.5"
     "@typescript-eslint/eslint-plugin": "npm:^8.10.0"
     "@typescript-eslint/parser": "npm:^8.10.0"
     eslint: "npm:^9.12.0"
@@ -5669,14 +5669,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tanstack/eslint-plugin-router@npm:^1.70.0":
-  version: 1.70.0
-  resolution: "@tanstack/eslint-plugin-router@npm:1.70.0"
+"@tanstack/eslint-plugin-router@npm:^1.74.5":
+  version: 1.74.5
+  resolution: "@tanstack/eslint-plugin-router@npm:1.74.5"
   dependencies:
-    "@typescript-eslint/utils": "npm:^8.8.1"
+    "@typescript-eslint/utils": "npm:^8.10.0"
   peerDependencies:
     eslint: ^8.57.0 || ^9.0.0
-  checksum: 10c0/3e3f5f66639685d439e9c34d29559c4a87252e6c30b69fd71fe7774ca4cc76f16045e4dba68d283be6cd6388cc92991f7ad5077fd1fe3c53ad743e3fb5db6e55
+  checksum: 10c0/b44004d7b05c4559db3dcda6cb84a4c6951e00bfc112af1cec373ed20a30c7a8815487e0f488a41d8270e10d41e6d1bfda2c0a712fbb00c89d3dc8292bb95b5b
   languageName: node
   linkType: hard
 
@@ -6579,7 +6579,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@typescript-eslint/utils@npm:8.10.0":
+"@typescript-eslint/utils@npm:8.10.0, @typescript-eslint/utils@npm:^8.10.0":
   version: 8.10.0
   resolution: "@typescript-eslint/utils@npm:8.10.0"
   dependencies:
@@ -6611,7 +6611,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@typescript-eslint/utils@npm:^8.3.0, @typescript-eslint/utils@npm:^8.8.1":
+"@typescript-eslint/utils@npm:^8.3.0":
   version: 8.8.1
   resolution: "@typescript-eslint/utils@npm:8.8.1"
   dependencies:
