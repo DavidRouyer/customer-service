@@ -2382,12 +2382,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-eslint/eslint-plugin@npm:4.0.0-alpha.5":
-  version: 4.0.0-alpha.5
-  resolution: "@graphql-eslint/eslint-plugin@npm:4.0.0-alpha.5"
+"@graphql-eslint/eslint-plugin@npm:4.0.0-alpha.6":
+  version: 4.0.0-alpha.6
+  resolution: "@graphql-eslint/eslint-plugin@npm:4.0.0-alpha.6"
   dependencies:
     "@graphql-tools/code-file-loader": "npm:^8.0.0"
-    "@graphql-tools/graphql-tag-pluck": "npm:8.3.2"
+    "@graphql-tools/graphql-tag-pluck": "npm:8.3.3"
     "@graphql-tools/utils": "npm:^10.0.0"
     debug: "npm:^4.3.4"
     fast-glob: "npm:^3.2.12"
@@ -2397,7 +2397,7 @@ __metadata:
   peerDependencies:
     eslint: ">=8.44.0"
     graphql: ^16
-  checksum: 10c0/011fec6667e4ff24dc87f28f032aec2e0374efb8d169b5df7eba4afdb523f5e1c174b817230ebca8640c2692f50b971763ec225a285ae4738eca07598784e767
+  checksum: 10c0/040b4d497f01cc4d5eaae165353d28c9e8e7d4d85fbc72d8fc6b3665bd5b7f8597f381d979791ceaba982d1897e4cfe276ba258b119621a082e2d367f802ddc4
   languageName: node
   linkType: hard
 
@@ -2598,6 +2598,23 @@ __metadata:
   peerDependencies:
     graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
   checksum: 10c0/0c351cdaeca3cc1de9308414108be7d760930dfe1e4dbbb6270edd6e449daae27b997ab6fc8a1086302d6712be07f80bbe2e5455a8e66063ea39b50165d38b8f
+  languageName: node
+  linkType: hard
+
+"@graphql-tools/graphql-tag-pluck@npm:8.3.3":
+  version: 8.3.3
+  resolution: "@graphql-tools/graphql-tag-pluck@npm:8.3.3"
+  dependencies:
+    "@babel/core": "npm:^7.22.9"
+    "@babel/parser": "npm:^7.16.8"
+    "@babel/plugin-syntax-import-assertions": "npm:^7.20.0"
+    "@babel/traverse": "npm:^7.16.8"
+    "@babel/types": "npm:^7.16.8"
+    "@graphql-tools/utils": "npm:^10.5.5"
+    tslib: "npm:^2.4.0"
+  peerDependencies:
+    graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
+  checksum: 10c0/197094895ee350d5c2ebd9088396653a56d3d058f0f4b554aef01611d774473a3998083c43f01d9b2a419f91d71a3b80ab937b3d20797bc971317b99ce7ca0b5
   languageName: node
   linkType: hard
 
@@ -3113,7 +3130,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@kyaku/eslint-config@workspace:tooling/eslint"
   dependencies:
-    "@graphql-eslint/eslint-plugin": "npm:4.0.0-alpha.5"
+    "@graphql-eslint/eslint-plugin": "npm:4.0.0-alpha.6"
     "@kyaku/prettier-config": "npm:*"
     "@kyaku/tsconfig": "npm:*"
     "@tanstack/eslint-plugin-query": "npm:^5.59.7"
