@@ -67,33 +67,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@auth/core@npm:0.37.0":
-  version: 0.37.0
-  resolution: "@auth/core@npm:0.37.0"
-  dependencies:
-    "@panva/hkdf": "npm:^1.2.1"
-    "@types/cookie": "npm:0.6.0"
-    cookie: "npm:0.7.1"
-    jose: "npm:^5.9.3"
-    oauth4webapi: "npm:^3.0.0"
-    preact: "npm:10.11.3"
-    preact-render-to-string: "npm:5.2.3"
-  peerDependencies:
-    "@simplewebauthn/browser": ^9.0.1
-    "@simplewebauthn/server": ^9.0.2
-    nodemailer: ^6.8.0
-  peerDependenciesMeta:
-    "@simplewebauthn/browser":
-      optional: true
-    "@simplewebauthn/server":
-      optional: true
-    nodemailer:
-      optional: true
-  checksum: 10c0/f655b5459a0f4e61c054972acb2760138cf1299960eefffd18d359a9ad931cda003f326e1b5d67e35c1fd9eb43081ff0116437837b90ece757a60c59ec71c2b0
-  languageName: node
-  linkType: hard
-
-"@auth/core@npm:^0.37.2":
+"@auth/core@npm:0.37.2, @auth/core@npm:^0.37.2":
   version: 0.37.2
   resolution: "@auth/core@npm:0.37.2"
   dependencies:
@@ -119,12 +93,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@auth/drizzle-adapter@npm:^1.7.0":
-  version: 1.7.0
-  resolution: "@auth/drizzle-adapter@npm:1.7.0"
+"@auth/drizzle-adapter@npm:^1.7.2":
+  version: 1.7.2
+  resolution: "@auth/drizzle-adapter@npm:1.7.2"
   dependencies:
-    "@auth/core": "npm:0.37.0"
-  checksum: 10c0/dda45de3117acf097cc16b8c08864f4a70f9e51d3da162f69be1e1d8f39813531a35ddc3d8e0506c0ffd908adb3335032fe1442189e8704e7b0b649639b12342
+    "@auth/core": "npm:0.37.2"
+  checksum: 10c0/b635bfc413d2d08c21c2d1fa6e035c2bd1afaacf2b4ea92f9ad56d97e1eef23367f14007ddad05279f8305ad1f704f6208e846ed64c04047af898d272dcc313c
   languageName: node
   linkType: hard
 
@@ -3095,7 +3069,7 @@ __metadata:
   resolution: "@kyaku/auth@workspace:packages/auth"
   dependencies:
     "@auth/core": "npm:^0.37.2"
-    "@auth/drizzle-adapter": "npm:^1.7.0"
+    "@auth/drizzle-adapter": "npm:^1.7.2"
     "@kyaku/database": "npm:*"
     "@kyaku/eslint-config": "npm:*"
     "@kyaku/kyaku": "npm:*"
