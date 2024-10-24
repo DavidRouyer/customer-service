@@ -3007,7 +3007,7 @@ __metadata:
     react-dom: "npm:^18.3.1"
     react-hook-form: "npm:^7.53.1"
     react-intersection-observer: "npm:^9.13.1"
-    react-intl: "npm:^6.8.1"
+    react-intl: "npm:^6.8.2"
     rollup-plugin-copy: "npm:^3.5.0"
     superjson: "npm:^2.2.1"
     tailwindcss: "npm:^3.4.14"
@@ -5940,7 +5940,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/hoist-non-react-statics@npm:^3.3.1":
+"@types/hoist-non-react-statics@npm:3":
   version: 3.3.5
   resolution: "@types/hoist-non-react-statics@npm:3.3.5"
   dependencies:
@@ -10784,7 +10784,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"hoist-non-react-statics@npm:^3.3.0, hoist-non-react-statics@npm:^3.3.2":
+"hoist-non-react-statics@npm:3, hoist-non-react-statics@npm:^3.3.0":
   version: 3.3.2
   resolution: "hoist-non-react-statics@npm:3.3.2"
   dependencies:
@@ -14146,18 +14146,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-intl@npm:^6.8.1":
-  version: 6.8.1
-  resolution: "react-intl@npm:6.8.1"
+"react-intl@npm:^6.8.2":
+  version: 6.8.2
+  resolution: "react-intl@npm:6.8.2"
   dependencies:
     "@formatjs/ecma402-abstract": "npm:2.2.0"
     "@formatjs/icu-messageformat-parser": "npm:2.8.0"
     "@formatjs/intl": "npm:2.10.9"
     "@formatjs/intl-displaynames": "npm:6.7.0"
     "@formatjs/intl-listformat": "npm:7.6.0"
-    "@types/hoist-non-react-statics": "npm:^3.3.1"
+    "@types/hoist-non-react-statics": "npm:3"
     "@types/react": "npm:^18.3.11"
-    hoist-non-react-statics: "npm:^3.3.2"
+    hoist-non-react-statics: "npm:3"
     intl-messageformat: "npm:10.7.1"
     tslib: "npm:^2.7.0"
   peerDependencies:
@@ -14166,7 +14166,7 @@ __metadata:
   peerDependenciesMeta:
     typescript:
       optional: true
-  checksum: 10c0/4ffdf8fd6e82c10de7d1e195336c8bc98fab5f6bc7fde548f7df553caf05677d632977c3287e9b72915f8a01ed98ff8246fdfccea2f7048902f46a596a0db4b2
+  checksum: 10c0/7a37c600cb1159f0ad2c4ff7af0bcc118bdd7d1fd4848d7ed10988a6f2f2f2a0adcf30c6b55375b328532d1bbad5d68dfb36769c325f60b627238975e37ea680
   languageName: node
   linkType: hard
 
@@ -16971,7 +16971,7 @@ __metadata:
     postcss: "npm:^8.4.47"
     react: "npm:^18.3.1"
     react-dom: "npm:^18.3.1"
-    react-intl: "npm:^6.8.1"
+    react-intl: "npm:^6.8.2"
     storybook: "npm:^8.3.6"
     tailwindcss: "npm:^3.4.14"
     typescript: "npm:^5.6.3"
