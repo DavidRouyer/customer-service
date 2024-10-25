@@ -19,7 +19,7 @@
     "@tanstack/react-table": "^8.20.5",
     "@tanstack/router-devtools": "^1.76.1",
     "@tanstack/router-plugin": "^1.76.0",
-    "@tanstack/start": "^1.76.0",
+    "@tanstack/start": "^1.76.2",
     "google-libphonenumber": "^3.2.38",
     "graphql": "^16.9.0",
     "graphql-yoga": "^5.7.0",
