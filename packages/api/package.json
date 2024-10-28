@@ -40,7 +40,7 @@
     "@kyaku/tsconfig": "*",
     "@parcel/watcher": "^2.4.1",
     "eslint": "^9.13.0",
-    "lexical": "^0.18.0",
+    "lexical": "^0.19.0",
     "prettier": "^3.3.3",
     "typescript": "^5.6.3"
   },
