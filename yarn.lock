@@ -3108,7 +3108,7 @@ __metadata:
     eslint: "npm:^9.13.0"
     google-libphonenumber: "npm:^3.2.38"
     graphql: "npm:^16.9.0"
-    graphql-yoga: "npm:^5.7.0"
+    graphql-yoga: "npm:^5.8.0"
     jotai: "npm:^2.10.1"
     jsdom: "npm:^25.0.1"
     lexical: "npm:^0.19.0"
@@ -6774,7 +6774,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@whatwg-node/fetch@npm:^0.9.0, @whatwg-node/fetch@npm:^0.9.18, @whatwg-node/fetch@npm:^0.9.20, @whatwg-node/fetch@npm:^0.9.22":
+"@whatwg-node/fetch@npm:^0.9.0, @whatwg-node/fetch@npm:^0.9.20, @whatwg-node/fetch@npm:^0.9.22":
   version: 0.9.22
   resolution: "@whatwg-node/fetch@npm:0.9.22"
   dependencies:
@@ -6796,7 +6796,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@whatwg-node/server@npm:^0.9.44":
+"@whatwg-node/server@npm:^0.9.50":
   version: 0.9.50
   resolution: "@whatwg-node/server@npm:0.9.50"
   dependencies:
@@ -10792,9 +10792,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"graphql-yoga@npm:^5.7.0":
-  version: 5.7.0
-  resolution: "graphql-yoga@npm:5.7.0"
+"graphql-yoga@npm:^5.8.0":
+  version: 5.8.0
+  resolution: "graphql-yoga@npm:5.8.0"
   dependencies:
     "@envelop/core": "npm:^5.0.1"
     "@graphql-tools/executor": "npm:^1.3.0"
@@ -10802,14 +10802,14 @@ __metadata:
     "@graphql-tools/utils": "npm:^10.3.2"
     "@graphql-yoga/logger": "npm:^2.0.0"
     "@graphql-yoga/subscription": "npm:^5.0.1"
-    "@whatwg-node/fetch": "npm:^0.9.18"
-    "@whatwg-node/server": "npm:^0.9.44"
+    "@whatwg-node/fetch": "npm:^0.9.22"
+    "@whatwg-node/server": "npm:^0.9.50"
     dset: "npm:^3.1.1"
     lru-cache: "npm:^10.0.0"
     tslib: "npm:^2.5.2"
   peerDependencies:
     graphql: ^15.2.0 || ^16.0.0
-  checksum: 10c0/dc7524bd076bf336ca671a40a9765cf5ec66c0c6feda658bcd817966814010c849a7fa5b49ffdc3121ad9887b9791a460bf51ebdab3d0c7d2b9d5038230c6328
+  checksum: 10c0/8bcdb2a1620963aa4de21ec7bd6200747cc241ebb20f55c9615b076b37a3ebe37a6a5748cc050a08efb05b6dc96e28f4693c5a9eb1a0efb5f2cbb0d0708fe7b7
   languageName: node
   linkType: hard
 
