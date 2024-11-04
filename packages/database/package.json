@@ -26,7 +26,7 @@
     "@kyaku/prettier-config": "*",
     "@kyaku/tsconfig": "*",
     "@types/pg": "^8.11.10",
-    "@types/ws": "^8.5.12",
+    "@types/ws": "^8.5.13",
     "dotenv-cli": "^7.4.2",
     "drizzle-kit": "^0.27.1",
     "eslint": "^9.13.0",
