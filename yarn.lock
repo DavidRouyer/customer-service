@@ -3217,7 +3217,7 @@ __metadata:
     "@testing-library/react": "npm:^16.0.1"
     "@types/react": "npm:^18.3.12"
     "@types/react-dom": "npm:^18.3.1"
-    cmdk: "npm:^1.0.1"
+    cmdk: "npm:^1.0.4"
     copy-to-clipboard: "npm:^3.3.3"
     cva: "npm:1.0.0-beta.1"
     eslint: "npm:^9.13.0"
@@ -4026,7 +4026,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@radix-ui/react-dialog@npm:^1.1.1, @radix-ui/react-dialog@npm:^1.1.2":
+"@radix-ui/react-dialog@npm:^1.1.2":
   version: 1.1.2
   resolution: "@radix-ui/react-dialog@npm:1.1.2"
   dependencies:
@@ -7644,18 +7644,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cmdk@npm:^1.0.1":
-  version: 1.0.1
-  resolution: "cmdk@npm:1.0.1"
+"cmdk@npm:^1.0.4":
+  version: 1.0.4
+  resolution: "cmdk@npm:1.0.4"
   dependencies:
-    "@radix-ui/react-dialog": "npm:^1.1.1"
+    "@radix-ui/react-dialog": "npm:^1.1.2"
     "@radix-ui/react-id": "npm:^1.1.0"
     "@radix-ui/react-primitive": "npm:^2.0.0"
     use-sync-external-store: "npm:^1.2.2"
   peerDependencies:
     react: ^18 || ^19 || ^19.0.0-rc
     react-dom: ^18 || ^19 || ^19.0.0-rc
-  checksum: 10c0/cd43cc1ab607d9e21bc21bd830d3cbfa5816922fe0f987ebe22fe19368a29b087314c257532c287d044f654f01e155425e357956da19b5e20c0ab095a2880ee0
+  checksum: 10c0/8c37568c9b52cb44a7b8f1414d622100cea0368f564167f4a1bc5c97ba3ba2b392ab4871f691c60a9a414a7295fb702c2f941e6556d6861a48657bb4e82fd979
   languageName: node
   linkType: hard
 
